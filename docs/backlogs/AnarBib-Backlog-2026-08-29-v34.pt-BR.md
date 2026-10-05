@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 6
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **55 itens de 69** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **54 itens de 68** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1066,7 +1066,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
-| **G13** | Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA… | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
 | **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | A verificar |
 
@@ -1182,34 +1181,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Esclarecido por **G3** (o circuito de convite é o mesmo).
 
 *Remissões : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
-
-#### G13 — Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA…
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna, biblioteconomia
-
-**Estado.** **Pedido de Xavier em 07/09/2026**: restringir a exibição aos catálogos das bibliotecas que pertencem a uma rede constituída **antes** do AnarBib — FICEDL, RebAL, NORLA.
-
-**O modelo não conhece essas redes.** `libraries` não tem coluna nem tabela de afiliação externa — `network_mode`, `visibility_level='network'`, `catalog_mode='network_published'` falam todos da relação com a rede **AnarBib**, falsos amigos. Dois únicos portadores, em texto livre: **`cartography_entries.reseau`** (sem vocabulário controlado) e `library_commons.affiliation_label` (editorial). Nas 187 fichas do mapa: `FICEDL` 34, `RebAL ; FICEDL` 11, `RebAL` 6, `FAI Reggiana` 2 … — 130 vazias; separadores `;` e `,` misturados. **NORLA não aparece em lugar nenhum dos dados.** O campo só aparece no balão do mapa, nunca filtrável, ausente do formulário de edição, ausente das vistas públicas (`api.libraries_public_v1` serve `id, slug, name, short_name, city, state`).
-
-**No OPAC**, o filtro por biblioteca passa pelos **nomes curtos** (`p_filters.libraries` → `api.catalog_works_v1`), guardado em `localStorage` — nenhuma noção de rede.
-
-**Medido em produção em 07/09**: só três bibliotecas têm ficha de mapa ligada — BLMF (FICEDL, 248 exemplares), BTL (FICEDL, 2 184), MLEG (sem rede, 269). Um comutador «só FICEDL» mostraria hoje BLMF + BTL; «RebAL» ou «NORLA», nada: o item vale pelo que a rede se torna, não pelo que é.
-
-*Verificado : 07/09 — produção consultada em leitura (junção `cartography_entries` × `libraries`: três linhas); valores de `reseau` contados em `carte-reseau.umap`; repositório `eb790c33`.*
-
-**O que é.** Três passos. **(1) Normalizar**: um vocabulário controlado das redes (tabela `networks`: slug, rótulo, site) e uma coluna `reseaux text[]` — ou tabela de junção — em `cartography_entries`, preenchida a partir de `reseau` (cortar em `;` e `,`), o campo acrescentado ao `CartographyEditModal` com suas chaves i18n; a pertença continua declarada pela ficha do mapa, que já tem moderação — **nenhum circuito novo**. **(2) Expor**: uma coluna `networks` em `api.libraries_public_v1` por junção em `cartography_entries.library_id` — reescrevendo a vista **com** `security_invoker`. **(3) Filtrar**: em `CatalogPage.jsx`, ao lado do seletor de bibliotecas, um seletor de redes que reduz `libraryOptions` e alimenta `libraryShortNames` — **sem tocar no RPC** nem nas vistas materializadas; guardado em `localStorage`, visível em chip. **Decisão ao escrever**: um interruptor único «só redes constituídas» ou um filtro por rede (FICEDL / RebAL / NORLA) — o segundo custa o mesmo e responde a «onde estão os nossos catálogos?». Uma biblioteca sem ficha de mapa não aparece em rede nenhuma: dizê-lo na tela, não a fazer desaparecer em silêncio.
-
-**Por que importa.** Bolonha (13/09) reúne gente cujas redes existiam antes do AnarBib; a primeira coisa que procurarão na tela é a sua. As convenções de interoperabilidade dizem que «não há nada a que aderir»: mostrar as redes tal como existem, em vez de fundi-las num anuário AnarBib, é a tradução dessa frase na interface.
-
-**O que conta como terminado.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dependências.** **G8** enriquece o resultado sem o condicionar. **G9** está congelado: não esperar por ele, o passo (1) lhe servirá. Vizinho de **H6**. O passo (2) toca uma vista: reler as opções de `CREATE OR REPLACE VIEW` antes.
-
-*Remissões : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
 #### G15 — DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência
 
@@ -2232,6 +2203,7 @@ CI verde. |
 | G18 | 2026-10-05 | Um admin da rede sem biblioteca: cinco páginas carregavam sem fim, o link de um e-mail aberto sem sessão perdia a página, a etiqueta dizia « Leitor·a », faltava « Minha conta ». Corrigido e verificado em linha (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
 | E9 | 2026-10-05 | As grades encolhem com o contêiner e uma guarda lê toda grade de `src/` (`5865a281`); os cartões são sem objeto. As 25 media queries herdadas voltam à escala **ao sabor dos retoques** (`MOB-3`). Decisão de Xavier, 05/10. |
 | C10 | 2026-10-05 | **Fechado em 05/10** (`61c82d85`): o estado de revisão de `digital_assets` se chama `review_state`; seis funções reescritas a partir da definição real; saídas, aplicativo e Edge Functions acompanham, um pacote antigo continua legível; a armadilha `access_scope` é lembrada no formulário. Visibilidade inalterada (mesma impressão antes e depois). |
+| G13 | 2026-10-05 | **Entregue em 05/10** (`6fca3f3b`): vocabulário `public.networks` e leitura do campo `reseau` da ficha do mapa; função pública do catálogo; o catálogo filtra por rede (verificado em linha: « FICEDL (BLMF, BTL) »). **Para Xavier**: classificar ABABA, FAO, AFI, UK Social Centre Network e Radical Routes. |
 
 ---
 
@@ -2263,4 +2235,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

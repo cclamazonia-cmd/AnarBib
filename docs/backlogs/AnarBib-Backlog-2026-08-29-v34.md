@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -21,7 +21,7 @@
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 6
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **55 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **54 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1066,7 +1066,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G9** | Implémenter la cartographie du réseau selon la spec v1.0 | `P3` | Gelé |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
-| **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
 | **G15** | DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence | `P1` | Ouvert |
 | **G16** | Le vote des transitions (changer un mode de fonctionnement d'une bibliothèque) ne parle pas la langue de la base | `P2` | À vérifier |
 
@@ -1182,34 +1181,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Éclairé par **G3** (le circuit d'invitation est le même).
 
 *Renvois : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
-
-#### G13 — Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA…
-
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript, langue maternelle, bibliothéconomie
-
-**État.** **Demande de Xavier le 07/09/2026** : pouvoir restreindre l'affichage aux catalogues des bibliothèques qui appartiennent à un réseau constitué **avant** AnarBib — FICEDL, RebAL, NORLA (le corpus écrit NORLA, pas NORMA).
-
-**Le modèle ne connaît pas ces réseaux.** `libraries` n'a ni colonne ni table d'affiliation externe — `network_mode` (`isolated|observer|federated`), `visibility_level='network'`, `catalog_mode='network_published'` et `network_administrators` parlent tous du rapport au réseau **AnarBib**, faux amis. Deux seuls porteurs, en texte libre : **`cartography_entries.reseau`** (spec-cartographie, sans vocabulaire contrôlé) et `library_commons.affiliation_label` (éditorial : « CCLA »). Sur les 187 fiches de carte : `FICEDL` 34, `RebAL ; FICEDL` 11, `RebAL` 6, `FAI Reggiana` 2, `ABABA`, `RebAL, FAI`, `FAO, AFI`, `UK Social Centre Network, Radical Routes` — 130 vides ; séparateurs `;` et `,` mélangés ; fédérations de centres de documentation et organisations politiques dans le même champ. **NORLA n'apparaît nulle part dans les données** (seulement aux items G8, H6, D4). Le champ n'est affiché qu'en infobulle de la carte (`CartographyMap.jsx`), jamais filtrable, et absent du formulaire d'édition. Aucune vue publique ne l'expose : `api.libraries_public_v1` (celle de l'OPAC) sert `id, slug, name, short_name, city, state` ; `api.public_libraries` sert `affiliation_label` mais pas `reseau`.
-
-**Côté OPAC**, le filtre par bibliothèque passe par les **noms courts** (`p_filters.libraries` → `api.catalog_works_v1`, `holding_library_names_json`), mémorisé dans `localStorage` (`anarbib:catalog:filters`) — pas de `library_ids`, pas de notion de réseau.
-
-**Mesuré en production le 07/09** : trois bibliothèques seulement ont une fiche de carte rattachée (`library_id`) — BLMF (FICEDL, 248 exemplaires), BTL (FICEDL, 2 184), MLEG (aucun réseau, 269). Un commutateur « FICEDL seulement » montrerait donc aujourd'hui BLMF + BTL, et « RebAL » ou « NORLA » rien : l'item vaut pour ce que le réseau devient (Bologne, admissions), pas pour ce qu'il est.
-
-*Vérifié : 07/09 — production interrogée en lecture seule (jointure `cartography_entries` × `libraries` : trois lignes, réseaux et exemplaires ci-dessus) ; valeurs de `reseau` comptées sur `carte-reseau.umap` ; dépôt `eb790c33`.*
-
-**Ce que c'est.** Trois pas, dans cet ordre. **(1) Normaliser** : un vocabulaire contrôlé des réseaux (table `networks` : slug, libellé, site — `ficedl`, `rebal`, `norla`, `fai`…, en excluant ou en typant les organisations politiques) et une colonne `reseaux text[]` — ou une table de jointure — sur `cartography_entries`, remplie depuis `reseau` (couper sur `;` et `,`, normaliser la casse), le champ ajouté à `CartographyEditModal` avec ses clés i18n ; l'appartenance reste déclarée par la fiche de carte, qui a déjà sa modération — **aucun circuit nouveau**. **(2) Exposer** : une colonne `networks` dans `api.libraries_public_v1` par jointure sur `cartography_entries.library_id` — en réécrivant la vue **avec** `security_invoker` (un `CREATE OR REPLACE VIEW` sans `WITH` la ferait retomber en DEFINER). **(3) Filtrer** : dans `CatalogPage.jsx`, à côté du sélecteur de bibliothèques, un sélecteur de réseaux qui réduit `libraryOptions` et alimente `libraryShortNames` — **sans toucher au RPC** ni aux vues matérialisées `catalog_list_*` ; mémorisé dans `anarbib:catalog:filters`, visible en puce, remis à zéro par « effacer les filtres ». **Décision à prendre en écrivant** : un interrupteur unique « réseaux constitués seulement » ou un filtre par réseau (FICEDL / RebAL / NORLA) — le second coûte le même prix et répond à « où sont nos catalogues ? » posé par un réseau à la fois ; l'interrupteur peut être le raccourci « tous les réseaux ». Une biblio hors de toute fiche de carte n'apparaît dans aucun réseau : le dire à l'écran plutôt que la faire disparaître en silence.
-
-**Pourquoi ça compte.** Bologne (13/09) réunit des gens dont les réseaux existaient avant AnarBib ; la première chose qu'ils chercheront à l'écran, c'est le leur. Les conventions d'interopérabilité posent qu'il n'y a « rien à rejoindre » : montrer les réseaux tels qu'ils existent, plutôt que les fondre dans un annuaire AnarBib, est la traduction de cette phrase dans l'interface.
-
-**Ce qui compte comme fini.**
-
-- [object Object]
-- [object Object]
-- [object Object]
-
-**Dépendances.** **G8** (compléter la carte : les neuf archives NORLA) enrichit le résultat sans le conditionner. **G9** (cartographie v1.0) est gelé : ne pas l'attendre, le pas (1) lui servira. Voisin de **H6** (vocabulaires NORLA ↔ FICEDL). Le pas (2) touche une vue : relire `CREATE OR REPLACE VIEW` et ses options avant.
-
-*Renvois : `supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)` · `docs/specs/spec-cartographie-reseau.md` · `src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)` · `supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)` · `api.libraries_public_v1 (baseline)` · `src/pages/federacao/CartographyMap.jsx` · `docs/cartographie/carte-reseau.umap`*
 
 #### G15 — DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence
 
@@ -2242,6 +2213,7 @@ CI verte : lint et suite unitaire. |
 | G18 | 2026-10-05 | Un admin réseau rattaché à aucune bibliothèque (le camarade `ASR2026`, coopté le 05/10) : cinq pages chargeaient sans fin, dont la page Réseau — elles attendent désormais la fin de la résolution du contexte (`libraryResolved`) ; un lien de courriel ouvert sans session survit à la connexion (`?next=`, et `/cadastro` lit la location du routeur, pas celle du premier chargement) ; les chemins des courriels déjà reçus renvoient vers la bonne page ; l'étiquette de rôle ne dit plus « Lecteur·rice » à qui ne l'est nulle part (et le dit enfin aux lectrices, rôle `reader`) ; « Mon compte » est dans la barre pour toute personne connectée. Bancs `compte-sans-bibliotheque`, `etiquette-de-role`, `liens-des-courriels-menent-a-une-route`, mutants rouges ; vérifié en ligne (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
 | E9 | 2026-10-05 | Les grilles rétrécissent avec leur conteneur et une garde lit toute grille de `src/`, JSX et CSS (`5865a281`, MOB-Q1 clos) ; les cartes de Validações et Inventário sont sans objet, aucun tableau (MOB-Q3 clos). Les 25 requêtes de média sur des seuils hérités (MOB-Q2) se rapatrient **au fil des retouches**, comme le dit `MOB-3` — chaque bascule change le comportement entre deux seuils et se mesure sur la vraie page. Décision de Xavier, 05/10. |
 | C10 | 2026-10-05 | **Clos le 05/10, les deux critères tenus** (`61c82d85`, déployé à 18 h 37, migration `20261005162356` par la CI). *(1)* Deux sens, deux noms : l'état de revue de `digital_assets` s'appelle `review_state` (colonne, CHECK, index) ; six fonctions réécrites depuis leur définition réelle, occurrences comptées (`fn_list_verified_digital_assets` recréée, droits relus : ni PUBLIC ni anon) ; la liste des vérifiés, l'attachement, la confirmation et l'export des fonds disent `review_state`, l'application et `export-fonds-bundle` suivent, et les deux réceptions lisent encore un paquet d'avant (`rights_status`). Le vocabulaire des droits (`book_digital_resources`, brouillons) et le statut déclaré à la réception gardent leur nom. *(2)* Le piège `access_scope` (`conta_ativa` par défaut) est rappelé dans le formulaire de catalogage : sous une ressource libre restée réservée, dans la liste et à l'étape de l'accès (dix locales ; 0 cas en production au 05/10). Visibilité inchangée, vérifiée : empreinte (id, état, is_public, objet) des `digital_assets` identique avant et après (`f0e4d078…`). Suites `c10_etat_de_revue_tests.sql` (8) et `c10-etat-de-revue.test.jsx` (8), mutants rouges. |
+| G13 | 2026-10-05 | **Livré le 05/10, les trois pas du plan** (`6fca3f3b`, déployé à 19 h 47, migration `20261005173015` par la CI). *(1)* Le vocabulaire `public.networks` (FICEDL, RebAL, NORLA « documentation » ; FAI, FAI Reggiana « organisation politique ») et `cartography_entries.reseaux`, lecture du texte `reseau` tenue par déclencheur : 57 fiches lues, 0 divergence, 0 jeton hors vocabulaire, aucune `updated_at` touchée ; un champ « Réseaux » dans la fiche de carte (administration). *(2)* `api.fn_catalog_networks_v1()` : les réseaux « documentation » et leurs bibliothèques visibles par une fiche publique — DEFINER ouverte à anon par décision, la carte n'étant lisible que par fonction (la vue invoker prévue n'y aurait rien vu) ; listes T10/T12 et audit anon complétés. *(3)* Le catalogue public filtre par réseau : vérifié en ligne sans session — « FICEDL (BLMF, BTL) », MLEG nommée « sans réseau déclaré », puce, mémorisation, remise à zéro ; le RPC du catalogue ne bouge pas. Décision prise en écrivant : un filtre par réseau plutôt qu'un interrupteur. **À Xavier** : classer ABABA, FAO, AFI, UK Social Centre Network et Radical Routes (migration) ; RebAL et NORLA ne filtreront qu'avec une bibliothèque rattachée à une fiche de carte (G8, admissions). |
 
 ---
 
@@ -2273,4 +2245,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

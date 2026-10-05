@@ -2770,6 +2770,14 @@
           "fr": "**Clos le 05/10, les deux critères tenus** (`61c82d85`, déployé à 18 h 37, migration `20261005162356` par la CI). *(1)* Deux sens, deux noms : l'état de revue de `digital_assets` s'appelle `review_state` (colonne, CHECK, index) ; six fonctions réécrites depuis leur définition réelle, occurrences comptées (`fn_list_verified_digital_assets` recréée, droits relus : ni PUBLIC ni anon) ; la liste des vérifiés, l'attachement, la confirmation et l'export des fonds disent `review_state`, l'application et `export-fonds-bundle` suivent, et les deux réceptions lisent encore un paquet d'avant (`rights_status`). Le vocabulaire des droits (`book_digital_resources`, brouillons) et le statut déclaré à la réception gardent leur nom. *(2)* Le piège `access_scope` (`conta_ativa` par défaut) est rappelé dans le formulaire de catalogage : sous une ressource libre restée réservée, dans la liste et à l'étape de l'accès (dix locales ; 0 cas en production au 05/10). Visibilité inchangée, vérifiée : empreinte (id, état, is_public, objet) des `digital_assets` identique avant et après (`f0e4d078…`). Suites `c10_etat_de_revue_tests.sql` (8) et `c10-etat-de-revue.test.jsx` (8), mutants rouges.",
           "pt": "**Fechado em 05/10** (`61c82d85`): o estado de revisão de `digital_assets` se chama `review_state`; seis funções reescritas a partir da definição real; saídas, aplicativo e Edge Functions acompanham, um pacote antigo continua legível; a armadilha `access_scope` é lembrada no formulário. Visibilidade inalterada (mesma impressão antes e depois)."
         }
+      ],
+      [
+        "G13",
+        "2026-10-05",
+        {
+          "fr": "**Livré le 05/10, les trois pas du plan** (`6fca3f3b`, déployé à 19 h 47, migration `20261005173015` par la CI). *(1)* Le vocabulaire `public.networks` (FICEDL, RebAL, NORLA « documentation » ; FAI, FAI Reggiana « organisation politique ») et `cartography_entries.reseaux`, lecture du texte `reseau` tenue par déclencheur : 57 fiches lues, 0 divergence, 0 jeton hors vocabulaire, aucune `updated_at` touchée ; un champ « Réseaux » dans la fiche de carte (administration). *(2)* `api.fn_catalog_networks_v1()` : les réseaux « documentation » et leurs bibliothèques visibles par une fiche publique — DEFINER ouverte à anon par décision, la carte n'étant lisible que par fonction (la vue invoker prévue n'y aurait rien vu) ; listes T10/T12 et audit anon complétés. *(3)* Le catalogue public filtre par réseau : vérifié en ligne sans session — « FICEDL (BLMF, BTL) », MLEG nommée « sans réseau déclaré », puce, mémorisation, remise à zéro ; le RPC du catalogue ne bouge pas. Décision prise en écrivant : un filtre par réseau plutôt qu'un interrupteur. **À Xavier** : classer ABABA, FAO, AFI, UK Social Centre Network et Radical Routes (migration) ; RebAL et NORLA ne filtreront qu'avec une bibliothèque rattachée à une fiche de carte (G8, admissions).",
+          "pt": "**Entregue em 05/10** (`6fca3f3b`): vocabulário `public.networks` e leitura do campo `reseau` da ficha do mapa; função pública do catálogo; o catálogo filtra por rede (verificado em linha: « FICEDL (BLMF, BTL) »). **Para Xavier**: classificar ABABA, FAO, AFI, UK Social Centre Network e Radical Routes."
+        }
       ]
     ]
   },
@@ -4731,66 +4739,6 @@
           "pt": "28/09 — mais uma diferença entre o banco de CI `template0` e a plataforma, achada pelo B32 (`f4622aab`): ele não concedia `USAGE` no esquema `extensions` a `anon`, `authenticated` e `service_role`, como a produção concede. O cache de planos escondia isso até um REFRESH de fixture invalidá-lo (42501 em `opac_par_oeuvre` T8). `run-sql-suites.sh` concede agora esse direito antes das migrações. Não é o segundo critério: o vermelho veio do banco `template0`, não do job `rejeu-image`."
         }
       ]
-    },
-    {
-      "id": "G13",
-      "d": "G",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front",
-        "langue",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA…",
-        "pt": "Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA…"
-      },
-      "v": {
-        "fr": "**Demande de Xavier le 07/09/2026** : pouvoir restreindre l'affichage aux catalogues des bibliothèques qui appartiennent à un réseau constitué **avant** AnarBib — FICEDL, RebAL, NORLA (le corpus écrit NORLA, pas NORMA).\n\n**Le modèle ne connaît pas ces réseaux.** `libraries` n'a ni colonne ni table d'affiliation externe — `network_mode` (`isolated|observer|federated`), `visibility_level='network'`, `catalog_mode='network_published'` et `network_administrators` parlent tous du rapport au réseau **AnarBib**, faux amis. Deux seuls porteurs, en texte libre : **`cartography_entries.reseau`** (spec-cartographie, sans vocabulaire contrôlé) et `library_commons.affiliation_label` (éditorial : « CCLA »). Sur les 187 fiches de carte : `FICEDL` 34, `RebAL ; FICEDL` 11, `RebAL` 6, `FAI Reggiana` 2, `ABABA`, `RebAL, FAI`, `FAO, AFI`, `UK Social Centre Network, Radical Routes` — 130 vides ; séparateurs `;` et `,` mélangés ; fédérations de centres de documentation et organisations politiques dans le même champ. **NORLA n'apparaît nulle part dans les données** (seulement aux items G8, H6, D4). Le champ n'est affiché qu'en infobulle de la carte (`CartographyMap.jsx`), jamais filtrable, et absent du formulaire d'édition. Aucune vue publique ne l'expose : `api.libraries_public_v1` (celle de l'OPAC) sert `id, slug, name, short_name, city, state` ; `api.public_libraries` sert `affiliation_label` mais pas `reseau`.\n\n**Côté OPAC**, le filtre par bibliothèque passe par les **noms courts** (`p_filters.libraries` → `api.catalog_works_v1`, `holding_library_names_json`), mémorisé dans `localStorage` (`anarbib:catalog:filters`) — pas de `library_ids`, pas de notion de réseau.\n\n**Mesuré en production le 07/09** : trois bibliothèques seulement ont une fiche de carte rattachée (`library_id`) — BLMF (FICEDL, 248 exemplaires), BTL (FICEDL, 2 184), MLEG (aucun réseau, 269). Un commutateur « FICEDL seulement » montrerait donc aujourd'hui BLMF + BTL, et « RebAL » ou « NORLA » rien : l'item vaut pour ce que le réseau devient (Bologne, admissions), pas pour ce qu'il est.",
-        "pt": "**Pedido de Xavier em 07/09/2026**: restringir a exibição aos catálogos das bibliotecas que pertencem a uma rede constituída **antes** do AnarBib — FICEDL, RebAL, NORLA.\n\n**O modelo não conhece essas redes.** `libraries` não tem coluna nem tabela de afiliação externa — `network_mode`, `visibility_level='network'`, `catalog_mode='network_published'` falam todos da relação com a rede **AnarBib**, falsos amigos. Dois únicos portadores, em texto livre: **`cartography_entries.reseau`** (sem vocabulário controlado) e `library_commons.affiliation_label` (editorial). Nas 187 fichas do mapa: `FICEDL` 34, `RebAL ; FICEDL` 11, `RebAL` 6, `FAI Reggiana` 2 … — 130 vazias; separadores `;` e `,` misturados. **NORLA não aparece em lugar nenhum dos dados.** O campo só aparece no balão do mapa, nunca filtrável, ausente do formulário de edição, ausente das vistas públicas (`api.libraries_public_v1` serve `id, slug, name, short_name, city, state`).\n\n**No OPAC**, o filtro por biblioteca passa pelos **nomes curtos** (`p_filters.libraries` → `api.catalog_works_v1`), guardado em `localStorage` — nenhuma noção de rede.\n\n**Medido em produção em 07/09**: só três bibliotecas têm ficha de mapa ligada — BLMF (FICEDL, 248 exemplares), BTL (FICEDL, 2 184), MLEG (sem rede, 269). Um comutador «só FICEDL» mostraria hoje BLMF + BTL; «RebAL» ou «NORLA», nada: o item vale pelo que a rede se torna, não pelo que é."
-      },
-      "w": {
-        "fr": "Trois pas, dans cet ordre. **(1) Normaliser** : un vocabulaire contrôlé des réseaux (table `networks` : slug, libellé, site — `ficedl`, `rebal`, `norla`, `fai`…, en excluant ou en typant les organisations politiques) et une colonne `reseaux text[]` — ou une table de jointure — sur `cartography_entries`, remplie depuis `reseau` (couper sur `;` et `,`, normaliser la casse), le champ ajouté à `CartographyEditModal` avec ses clés i18n ; l'appartenance reste déclarée par la fiche de carte, qui a déjà sa modération — **aucun circuit nouveau**. **(2) Exposer** : une colonne `networks` dans `api.libraries_public_v1` par jointure sur `cartography_entries.library_id` — en réécrivant la vue **avec** `security_invoker` (un `CREATE OR REPLACE VIEW` sans `WITH` la ferait retomber en DEFINER). **(3) Filtrer** : dans `CatalogPage.jsx`, à côté du sélecteur de bibliothèques, un sélecteur de réseaux qui réduit `libraryOptions` et alimente `libraryShortNames` — **sans toucher au RPC** ni aux vues matérialisées `catalog_list_*` ; mémorisé dans `anarbib:catalog:filters`, visible en puce, remis à zéro par « effacer les filtres ». **Décision à prendre en écrivant** : un interrupteur unique « réseaux constitués seulement » ou un filtre par réseau (FICEDL / RebAL / NORLA) — le second coûte le même prix et répond à « où sont nos catalogues ? » posé par un réseau à la fois ; l'interrupteur peut être le raccourci « tous les réseaux ». Une biblio hors de toute fiche de carte n'apparaît dans aucun réseau : le dire à l'écran plutôt que la faire disparaître en silence.",
-        "pt": "Três passos. **(1) Normalizar**: um vocabulário controlado das redes (tabela `networks`: slug, rótulo, site) e uma coluna `reseaux text[]` — ou tabela de junção — em `cartography_entries`, preenchida a partir de `reseau` (cortar em `;` e `,`), o campo acrescentado ao `CartographyEditModal` com suas chaves i18n; a pertença continua declarada pela ficha do mapa, que já tem moderação — **nenhum circuito novo**. **(2) Expor**: uma coluna `networks` em `api.libraries_public_v1` por junção em `cartography_entries.library_id` — reescrevendo a vista **com** `security_invoker`. **(3) Filtrar**: em `CatalogPage.jsx`, ao lado do seletor de bibliotecas, um seletor de redes que reduz `libraryOptions` e alimenta `libraryShortNames` — **sem tocar no RPC** nem nas vistas materializadas; guardado em `localStorage`, visível em chip. **Decisão ao escrever**: um interruptor único «só redes constituídas» ou um filtro por rede (FICEDL / RebAL / NORLA) — o segundo custa o mesmo e responde a «onde estão os nossos catálogos?». Uma biblioteca sem ficha de mapa não aparece em rede nenhuma: dizê-lo na tela, não a fazer desaparecer em silêncio."
-      },
-      "y": {
-        "fr": "Bologne (13/09) réunit des gens dont les réseaux existaient avant AnarBib ; la première chose qu'ils chercheront à l'écran, c'est le leur. Les conventions d'interopérabilité posent qu'il n'y a « rien à rejoindre » : montrer les réseaux tels qu'ils existent, plutôt que les fondre dans un annuaire AnarBib, est la traduction de cette phrase dans l'interface.",
-        "pt": "Bolonha (13/09) reúne gente cujas redes existiam antes do AnarBib; a primeira coisa que procurarão na tela é a sua. As convenções de interoperabilidade dizem que «não há nada a que aderir»: mostrar as redes tal como existem, em vez de fundi-las num anuário AnarBib, é a tradução dessa frase na interface."
-      },
-      "f": [
-        {
-          "fr": "Plus une valeur de `reseau` hors vocabulaire ; la fiche de carte propose les réseaux dans une liste, dans les dix langues.",
-          "pt": "Nenhum valor de `reseau` fora do vocabulário; a ficha do mapa propõe as redes numa lista, nas dez línguas."
-        },
-        {
-          "fr": "À l'OPAC, un geste réduit la liste aux bibliothèques d'un ou plusieurs réseaux, survit au rechargement, s'affiche en puce et s'efface avec les autres filtres.",
-          "pt": "No OPAC, um gesto reduz a lista às bibliotecas de uma ou várias redes, sobrevive ao recarregamento, aparece em chip e apaga-se com os outros filtros."
-        },
-        {
-          "fr": "Vérifié à l'écran avec BLMF et BTL sous FICEDL et MLEG hors réseau, et sur mobile.",
-          "pt": "Verificado na tela com BLMF e BTL sob FICEDL e MLEG fora de rede, e no celular."
-        }
-      ],
-      "dep": {
-        "fr": "**G8** (compléter la carte : les neuf archives NORLA) enrichit le résultat sans le conditionner. **G9** (cartographie v1.0) est gelé : ne pas l'attendre, le pas (1) lui servira. Voisin de **H6** (vocabulaires NORLA ↔ FICEDL). Le pas (2) touche une vue : relire `CREATE OR REPLACE VIEW` et ses options avant.",
-        "pt": "**G8** enriquece o resultado sem o condicionar. **G9** está congelado: não esperar por ele, o passo (1) lhe servirá. Vizinho de **H6**. O passo (2) toca uma vista: reler as opções de `CREATE OR REPLACE VIEW` antes."
-      },
-      "r": [
-        "supabase/migrations/20260618142238_cartography_schema.sql (colonne reseau)",
-        "docs/specs/spec-cartographie-reseau.md",
-        "src/pages/public/CatalogPage.jsx (libraryFilter, libraryShortNames, FILTER_STORAGE_KEY)",
-        "supabase/migrations/20260904150000_l_opac_par_oeuvre_se_lit_sans_session.sql (p_filters.libraries)",
-        "api.libraries_public_v1 (baseline)",
-        "src/pages/federacao/CartographyMap.jsx",
-        "docs/cartographie/carte-reseau.umap"
-      ],
-      "verif": {
-        "fr": "07/09 — production interrogée en lecture seule (jointure `cartography_entries` × `libraries` : trois lignes, réseaux et exemplaires ci-dessus) ; valeurs de `reseau` comptées sur `carte-reseau.umap` ; dépôt `eb790c33`.",
-        "pt": "07/09 — produção consultada em leitura (junção `cartography_entries` × `libraries`: três linhas); valores de `reseau` contados em `carte-reseau.umap`; repositório `eb790c33`."
-      }
     },
     {
       "id": "H12",
