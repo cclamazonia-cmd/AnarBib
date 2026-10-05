@@ -4,8 +4,9 @@
 -- Date    : 2026-10-05
 -- Réf     : supabase/migrations/20261005173015_les_reseaux_constitues_ont_un_vocabulaire.sql
 --
---   · le vocabulaire : FICEDL, RebAL, NORLA en « documentation », FAI en
---     « organisation_politique », le reste à classer ;
+--   · le vocabulaire : FICEDL, RebAL, NORLA, ABABA en « documentation » ; FAI,
+--     FAI Reggiana, FAO, AFI en « organisation_politique » ; les centres sociaux
+--     et Radical Routes en « autre » ; plus rien à classer ;
 --   · la lecture d'un texte de réseaux (séparateurs, casse, doublons, ordre,
 --     jetons hors vocabulaire) ;
 --   · le déclencheur tient `reseaux` sur `reseau`, et l'emporte sur une
@@ -25,11 +26,13 @@ DECLARE
   v_pub uuid; v_isolee uuid; v_e1 uuid; v_e2 uuid; v_e3 uuid;
   v_arr text[]; v_res jsonb; v_n int;
 BEGIN
+  -- Classement complété le 05/10 (migration « les cinq réseaux à classer… »).
   v_t := 'T1 le vocabulaire et ses natures';
   IF (SELECT count(*) FROM public.networks) >= 10
-     AND (SELECT array_agg(slug ORDER BY slug) FROM public.networks WHERE kind = 'documentation') = ARRAY['ficedl','norla','rebal']
-     AND (SELECT array_agg(slug ORDER BY slug) FROM public.networks WHERE kind = 'organisation_politique') = ARRAY['fai','fai-reggiana']
-     AND (SELECT count(*) FROM public.networks WHERE kind IS NULL) = 5
+     AND (SELECT array_agg(slug ORDER BY slug) FROM public.networks WHERE kind = 'documentation') = ARRAY['ababa','ficedl','norla','rebal']
+     AND (SELECT array_agg(slug ORDER BY slug) FROM public.networks WHERE kind = 'organisation_politique') = ARRAY['afi','fai','fai-reggiana','fao']
+     AND (SELECT array_agg(slug ORDER BY slug) FROM public.networks WHERE kind = 'autre') = ARRAY['radical-routes','uk-social-centre-network']
+     AND (SELECT count(*) FROM public.networks WHERE kind IS NULL) = 0
     THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' KO'); END IF;
 
   v_t := 'T2 la lecture d''un texte : séparateurs, casse, doublons, ordre, jetons inconnus';
