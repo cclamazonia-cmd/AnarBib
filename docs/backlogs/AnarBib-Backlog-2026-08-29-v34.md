@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **56 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **55 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -738,7 +738,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E23** | Chaque HINT `error.*` posé par une fonction de la base a son libellé dans les dix locales | `P2` | Ouvert |
 | **E24** | Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur | `P3` | Ouvert |
 | **E25** | pt-BR : ce que la passe du 27/09 n'a pas touché | `P2` | Ouvert |
-| **E27** | Les suggestions de la recherche rapide ignorent encore les titres d'œuvre | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -963,26 +962,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
-
-#### E27 — Les suggestions de la recherche rapide ignorent encore les titres d'œuvre
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Constaté à l'écran le 01/10, après E26 : dans la barre « Rechercher un titre ou un·e auteur·rice… », « Vivre ma Vie » ne suggère que le livre d'Armand. Les suggestions passent par `api.search_catalog_v1` (`UnifiedSearchCombobox.jsx`), la recherche unifiée, qui n'a pas reçu les titres de l'œuvre que `catalog_search_ids_v1` lit désormais. La grille du catalogue, elle, trouve l'œuvre.
-
-*Vérifié : 01/10 — constaté dans le navigateur sur app.anarbib.org (anonyme) : suggestion unique « Est-ce cela que vous appelez vivre? … » (Armand).*
-
-**Ce que c'est.** Faire lire `work_titles` (toutes langues) à `api.search_catalog_v1`, comme `catalog_search_ids_v1` depuis `20261001190729` : même meule, même pli des sigles, garde md5 d'entrée, suite SQL qui cherche un titre présent seulement dans `work_titles`.
-
-**Pourquoi ça compte.** La barre de recherche rapide est la première chose qu'on touche : elle contredit la grille juste en dessous.
-
-**Ce qui compte comme fini.**
-
-- « Vivre ma vie » suggère l'œuvre 2101 dans la barre de recherche rapide, à l'écran.
-
-**Dépendances.** Aucune.
-
-*Renvois : `supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql`*
 
 ---
 
@@ -2321,6 +2300,7 @@ CI verte : lint et suite unitaire. |
 | C19 | 2026-10-03 | **Demandé et livré le 03/10 (Xavier).** Une reprise de notice, d'autorité ou d'exemplaire que ne suit aucun enregistrement ne reste plus en file éditoriale : `retake_untouched` la marque à la naissance, la première écriture le retire (ouvrir n'est pas modifier ; sujets, ressources numériques et contributeurs écrits en direct comptent). L'éditeur la fait oublier quand on la quitte (`discard_untouched_retake`), sans corbeille ni entrée au journal ; le job horaire `anarbib-purge-untouched-retakes` rattrape les onglets fermés (plus de 24 h). Cas d'origine : les brouillons 6276 et 6277, écartés à la main par `20260928114148`. Dans le même lot, tout enregistrement des trois éditeurs remonte jusqu'à son message de confirmation, doublé d'un toast temporaire. Migration `20261003202521` (`8ccfa02f`, déployée et vérifiée en production), écran `9419fda7` ; suites `reprises_vierges_tests` (7) et vitest `reprises-vierges`, `confirmation-enregistrement` (12). |
 | E28 | 2026-10-04 | **Ouvert et livré le 04/10 : une autorité corrigée ne changeait aucune fiche, et la fiche 2736 montrait deux fois le SNI.** Signalé par Xavier à l'écran (`/livro/2736`). Deux causes. (1) **Doublons** : le lot `conv_revue` du 03/09 avait créé l'autorité depuis la transcription `books.autor` (avec sa faute, « d Informações ») et **ajouté** une ligne de contributeur liée au lieu de rattacher la ligne d'origine ; même cas sur les livres 412, 1282, 1541 et 2316. Données corrigées le 04/10 (autorisé par Xavier) : ligne d'origine rattachée à l'autorité, doublon supprimé, « Russel » → « RUSSELL », faute de `books.autor` du 2736 corrigée, 3 liens `book_authors` orphelins de ces livres retirés. (2) **Affichage** : `get_book_contributors_public` rendait la transcription figée au rattachement, jamais `authors.preferred_name`. Doctrine `CAT-G4` : un contributeur lié s'affiche sous la forme autorisée (point d'accès), la transcription reste la mention de responsabilité (vue ISBD). La RPC rend `authority_name` en plus, `name` inchangé (le catalogage le recharge comme ligne éditable). Migration `20261004212710`, fiche `BookPage.jsx`. Le même soir (autorisé par Xavier), les **29 liens `book_authors` orphelins** des 22 autres livres sont retirés : chacun désignait une personne bien présente parmi les contributeurs du livre, sous un rôle ou une position périmés, et chaque contributeur lié gardait son lien exact (0 orphelin, 0 lien manquant après coup). **Reste, non tranché** : le lot `conv_revue` recréerait des doublons s'il était relancé tel quel. |
 | F20 | 2026-10-04 | **Clos le 04/10 sur pièces : livré, déployé, le critère tenu par une suite qui emprunte les crons.** `7a00b054` (migration `20261004210702`, appliquée par la CI, vérifiée en production le 04/10 à 23 h 31 : les trois crons font un LEFT JOIN). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` prennent les délais par défaut des colonnes (14 jours, 21 jours, 24 heures) quand une bibliothèque n'a pas de ligne de politique ; aucune ligne créée. Trois bibliothèques actives concernées le 04/10 : Solidaires, anarchief, blmf-teste. Suite `reservations_sans_politique` 6/6 (les trois crons empruntés sans ligne ; une ligne existante garde la main ; replis = DEFAULT des colonnes) ; mutant « INNER JOIN » : 3 rouges. |
+| E27 | 2026-10-04 | **Clos le 04/10 : livré, déployé, vérifié à l'écran le 05/10.** `5e97a77b` (migration `20261004211159`, appliquée par la CI, pipeline vert de bout en bout). `api.search_catalog_v1` reçoit une branche `work_title_candidates` : un titre d'œuvre (`work_titles`, toutes langues) qui répond à la requête — préfixe ou jetons, pas la proximité `%`, qui doublait le coût des mots fréquents — suggère les éditions de l'œuvre, une ligne par édition, libellé « Living my Life (Vivre ma vie) », même score et même filtre « préfixe d'abord » que les livres ; rien pour une édition que son propre titre fait déjà suggérer. Index trigramme `work_titles_title_norm_trgm_idx` sur `f_normalize_search(title)` : sans lui ~470 ms par frappe (mesuré en production, transaction annulée), avec lui le coût d'avant (« anarquia » 112 → ~120 ms). Réécriture chirurgicale gardée par md5, fins de ligne CRLF respectées comme B33. Banc local avant le push : rejeu sur image vierge 407/407, suites SQL 159/159, dont **T9** neuf dans `recherche_index_trigramme_tests` (une édition suggérée par le seul titre de son œuvre ; l'expression servie par l'index — le compteur ne tranche pas sur un jeu minuscule, le planificateur passe par la clé `(work_id, lang)`). À l'écran, sur app.anarbib.org sans compte : « Vivre ma Vie » suggère les trois *Living my Life* et *Viviendo mi vida*, le livre d'Armand ne l'est plus. |
 
 ---
 
@@ -2352,4 +2332,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

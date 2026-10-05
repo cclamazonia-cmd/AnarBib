@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **56 itens de 73** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **55 itens de 72** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -738,7 +738,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E23** | Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales | `P2` | Aberto |
 | **E24** | As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa | `P3` | Aberto |
 | **E25** | pt-BR: o que a revisão de 27/09 não alcançou | `P2` | Aberto |
-| **E27** | As sugestões da busca rápida ainda ignoram os títulos da obra | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -963,26 +962,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/governance/guide-gouvernance-pt-BR.md` · `docs/governance/guide-gouvernance-pt-BR.docx` · `docs/notes-audit/anarbib-charte-langage-inclusif-v2-pt-BR.md` · `docs/legal/dpa-pt-BR.md` · `src/tests/helpers/ptbr-pt-europeu.js` · `src/tests/helpers/ptbr-frances.js` · `src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)` · `REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e`*
-
-#### E27 — As sugestões da busca rápida ainda ignoram os títulos da obra
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado na tela em 01/10, depois de E26: na barra de busca rápida, «Vivre ma Vie» só sugere o livro de Armand. As sugestões passam por `api.search_catalog_v1`, que não lê os títulos da obra. A grade do catálogo acha a obra.
-
-*Verificado : 01/10 — constatado no navegador em app.anarbib.org (anônimo): sugestão única do livro de Armand.*
-
-**O que é.** Fazer `api.search_catalog_v1` ler `work_titles`, como `catalog_search_ids_v1` desde `20261001190729`, com guarda md5 e suíte SQL.
-
-**Por que importa.** A barra de busca rápida é a primeira coisa que se usa, e contradiz a grade logo abaixo.
-
-**O que conta como terminado.**
-
-- «Vivre ma vie» sugere a obra 2101 na busca rápida, na tela.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql`*
 
 ---
 
@@ -2311,6 +2290,7 @@ CI verde. |
 | C19 | 2026-10-03 | **Pedido e entregue em 03/10 (Xavier).** Uma retomada de registro, autoridade ou exemplar sem nenhuma gravação depois não fica mais na fila editorial: `retake_untouched` a marca ao nascer, a primeira escrita o retira. O editor a faz esquecer ao sair (`discard_untouched_retake`), sem lixeira nem entrada no diário; o job horário `anarbib-purge-untouched-retakes` cobre as abas fechadas (mais de 24 h). No mesmo lote, toda gravação dos três editores sobe até a mensagem de confirmação, com um toast temporário. Migração `20261003202521` (`8ccfa02f`), tela `9419fda7`. |
 | E28 | 2026-10-04 | **Aberto e entregue em 04/10: uma autoridade corrigida não mudava nenhuma ficha, e a ficha 2736 mostrava o SNI duas vezes.** (1) Duplicatas criadas pelo lote `conv_revue` de 03/09 em 5 livros (2736, 412, 1282, 1541, 2316), corrigidas nos dados em 04/10. (2) `get_book_contributors_public` passa a devolver `authority_name`: um contribuidor vinculado aparece pela forma autorizada da autoridade (doutrina `CAT-G4`), a transcrição continua na menção de responsabilidade (visão ISBD). Migração `20261004212710`. Os 29 vínculos `book_authors` órfãos de outros 22 livros também foram retirados (papel ou posição vencidos; nenhum vínculo real perdido). |
 | F20 | 2026-10-04 | **Encerrado em 04/10.** `7a00b054`, migração aplicada pela CI, verificada em produção: os três crons de reserva usam LEFT JOIN e os prazos padrão das colunas (14 d, 21 d, 24 h) quando a biblioteca não tem linha de política. Suíte 6/6, mutante morto. |
+| E27 | 2026-10-04 | **Encerrado em 04/10, verificado na tela em 05/10.** `5e97a77b` (migração `20261004211159`, CI verde). As sugestões da busca rápida (`api.search_catalog_v1`) leem os títulos da obra (`work_titles`), rótulo «Living my Life (Vivre ma vie)»; índice trigrama em `f_normalize_search(title)` mantém o custo de antes. Bancada local: 407/407 migrações, 159/159 suítes (T9 nova). |
 
 ---
 
@@ -2342,4 +2322,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

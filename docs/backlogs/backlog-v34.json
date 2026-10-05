@@ -2658,6 +2658,14 @@
           "fr": "**Clos le 04/10 sur pièces : livré, déployé, le critère tenu par une suite qui emprunte les crons.** `7a00b054` (migration `20261004210702`, appliquée par la CI, vérifiée en production le 04/10 à 23 h 31 : les trois crons font un LEFT JOIN). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` prennent les délais par défaut des colonnes (14 jours, 21 jours, 24 heures) quand une bibliothèque n'a pas de ligne de politique ; aucune ligne créée. Trois bibliothèques actives concernées le 04/10 : Solidaires, anarchief, blmf-teste. Suite `reservations_sans_politique` 6/6 (les trois crons empruntés sans ligne ; une ligne existante garde la main ; replis = DEFAULT des colonnes) ; mutant « INNER JOIN » : 3 rouges.",
           "pt": "**Encerrado em 04/10.** `7a00b054`, migração aplicada pela CI, verificada em produção: os três crons de reserva usam LEFT JOIN e os prazos padrão das colunas (14 d, 21 d, 24 h) quando a biblioteca não tem linha de política. Suíte 6/6, mutante morto."
         }
+      ],
+      [
+        "E27",
+        "2026-10-04",
+        {
+          "fr": "**Clos le 04/10 : livré, déployé, vérifié à l'écran le 05/10.** `5e97a77b` (migration `20261004211159`, appliquée par la CI, pipeline vert de bout en bout). `api.search_catalog_v1` reçoit une branche `work_title_candidates` : un titre d'œuvre (`work_titles`, toutes langues) qui répond à la requête — préfixe ou jetons, pas la proximité `%`, qui doublait le coût des mots fréquents — suggère les éditions de l'œuvre, une ligne par édition, libellé « Living my Life (Vivre ma vie) », même score et même filtre « préfixe d'abord » que les livres ; rien pour une édition que son propre titre fait déjà suggérer. Index trigramme `work_titles_title_norm_trgm_idx` sur `f_normalize_search(title)` : sans lui ~470 ms par frappe (mesuré en production, transaction annulée), avec lui le coût d'avant (« anarquia » 112 → ~120 ms). Réécriture chirurgicale gardée par md5, fins de ligne CRLF respectées comme B33. Banc local avant le push : rejeu sur image vierge 407/407, suites SQL 159/159, dont **T9** neuf dans `recherche_index_trigramme_tests` (une édition suggérée par le seul titre de son œuvre ; l'expression servie par l'index — le compteur ne tranche pas sur un jeu minuscule, le planificateur passe par la clé `(work_id, lang)`). À l'écran, sur app.anarbib.org sans compte : « Vivre ma Vie » suggère les trois *Living my Life* et *Viviendo mi vida*, le livre d'Armand ne l'est plus.",
+          "pt": "**Encerrado em 04/10, verificado na tela em 05/10.** `5e97a77b` (migração `20261004211159`, CI verde). As sugestões da busca rápida (`api.search_catalog_v1`) leem os títulos da obra (`work_titles`), rótulo «Living my Life (Vivre ma vie)»; índice trigrama em `f_normalize_search(title)` mantém o custo de antes. Bancada local: 407/407 migrações, 159/159 suítes (T9 nova)."
+        }
       ]
     ]
   },
@@ -5425,51 +5433,6 @@
         "src/lib/docLinks.js (recueil `Guia_de_governanca_AnarBib.pdf`)",
         "REGISTRE §0 DOC-ADDR-1 ; commits dfa622f5, faae6e0e"
       ]
-    },
-    {
-      "id": "E27",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Les suggestions de la recherche rapide ignorent encore les titres d'œuvre",
-        "pt": "As sugestões da busca rápida ainda ignoram os títulos da obra"
-      },
-      "v": {
-        "fr": "Constaté à l'écran le 01/10, après E26 : dans la barre « Rechercher un titre ou un·e auteur·rice… », « Vivre ma Vie » ne suggère que le livre d'Armand. Les suggestions passent par `api.search_catalog_v1` (`UnifiedSearchCombobox.jsx`), la recherche unifiée, qui n'a pas reçu les titres de l'œuvre que `catalog_search_ids_v1` lit désormais. La grille du catalogue, elle, trouve l'œuvre.",
-        "pt": "Constatado na tela em 01/10, depois de E26: na barra de busca rápida, «Vivre ma Vie» só sugere o livro de Armand. As sugestões passam por `api.search_catalog_v1`, que não lê os títulos da obra. A grade do catálogo acha a obra."
-      },
-      "w": {
-        "fr": "Faire lire `work_titles` (toutes langues) à `api.search_catalog_v1`, comme `catalog_search_ids_v1` depuis `20261001190729` : même meule, même pli des sigles, garde md5 d'entrée, suite SQL qui cherche un titre présent seulement dans `work_titles`.",
-        "pt": "Fazer `api.search_catalog_v1` ler `work_titles`, como `catalog_search_ids_v1` desde `20261001190729`, com guarda md5 e suíte SQL."
-      },
-      "y": {
-        "fr": "La barre de recherche rapide est la première chose qu'on touche : elle contredit la grille juste en dessous.",
-        "pt": "A barra de busca rápida é a primeira coisa que se usa, e contradiz a grade logo abaixo."
-      },
-      "f": {
-        "fr": [
-          "« Vivre ma vie » suggère l'œuvre 2101 dans la barre de recherche rapide, à l'écran."
-        ],
-        "pt": [
-          "«Vivre ma vie» sugere a obra 2101 na busca rápida, na tela."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "supabase/migrations/20261001190729_la_recherche_trouve_l_auteur_dans_tous_les_sens_et_le_titre_de_l_oeuvre.sql"
-      ],
-      "verif": {
-        "fr": "01/10 — constaté dans le navigateur sur app.anarbib.org (anonyme) : suggestion unique « Est-ce cela que vous appelez vivre? … » (Armand).",
-        "pt": "01/10 — constatado no navegador em app.anarbib.org (anônimo): sugestão única do livro de Armand."
-      }
     },
     {
       "id": "G15",
