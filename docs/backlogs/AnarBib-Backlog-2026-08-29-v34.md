@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,7 +18,7 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 6
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **54 items sur 68** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **53 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -608,7 +608,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Ouvert |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
-| **D6** | Reprendre ou remplacer le lecteur EPUB | `P3` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
@@ -676,27 +675,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Le dimensionnement annoncé (20 Go pour démarrer, jusqu'à 50 Go sur 3-5 ans) dépend du choix d'outil.
 
 *Renvois : `DECISION_profil_numerisation_2026-08-20 §9`*
-
-#### D6 — Reprendre ou remplacer le lecteur EPUB
-
-`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, Deno / TypeScript
-
-**État.** `epubjs ^0.3.93` est la seule dépendance clairement pré-1.0 sur un chemin critique — le lecteur EPUB, `src/lib/reader/epubEngine.js` et `src/components/viewers/EpubReader.jsx`. La bibliothèque n'a pas connu de publication majeure depuis des années.
-
-*Vérifié : 31/08 — `package.json` : `epubjs ^0.3.93`, inchangé.*
-
-**Ce que c'est.** Évaluer ce qui casse aujourd'hui, ce qui cassera avec les navigateurs à venir, et s'il existe une alternative libre maintenue. Décider entre épingler et assumer, ou remplacer.
-
-**Pourquoi ça compte.** Le lecteur est ce qui rend un fonds numérisé consultable sans téléchargement. S'il tombe, ce n'est pas un confort qui disparaît, c'est l'accès. Rien ne presse aujourd'hui — mais il vaut mieux savoir.
-
-**Ce qui compte comme fini.**
-
-- Un verdict écrit : conserver et épingler, ou remplacer par quoi.
-- Si conservation : un test qui vérifie l'ouverture d'un EPUB réel.
-
-**Dépendances.** Aucune.
-
-*Renvois : `package.json` · `Relevé du 29/08/2026`*
 
 #### D8 — Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD
 
@@ -2214,6 +2192,7 @@ CI verte : lint et suite unitaire. |
 | E9 | 2026-10-05 | Les grilles rétrécissent avec leur conteneur et une garde lit toute grille de `src/`, JSX et CSS (`5865a281`, MOB-Q1 clos) ; les cartes de Validações et Inventário sont sans objet, aucun tableau (MOB-Q3 clos). Les 25 requêtes de média sur des seuils hérités (MOB-Q2) se rapatrient **au fil des retouches**, comme le dit `MOB-3` — chaque bascule change le comportement entre deux seuils et se mesure sur la vraie page. Décision de Xavier, 05/10. |
 | C10 | 2026-10-05 | **Clos le 05/10, les deux critères tenus** (`61c82d85`, déployé à 18 h 37, migration `20261005162356` par la CI). *(1)* Deux sens, deux noms : l'état de revue de `digital_assets` s'appelle `review_state` (colonne, CHECK, index) ; six fonctions réécrites depuis leur définition réelle, occurrences comptées (`fn_list_verified_digital_assets` recréée, droits relus : ni PUBLIC ni anon) ; la liste des vérifiés, l'attachement, la confirmation et l'export des fonds disent `review_state`, l'application et `export-fonds-bundle` suivent, et les deux réceptions lisent encore un paquet d'avant (`rights_status`). Le vocabulaire des droits (`book_digital_resources`, brouillons) et le statut déclaré à la réception gardent leur nom. *(2)* Le piège `access_scope` (`conta_ativa` par défaut) est rappelé dans le formulaire de catalogage : sous une ressource libre restée réservée, dans la liste et à l'étape de l'accès (dix locales ; 0 cas en production au 05/10). Visibilité inchangée, vérifiée : empreinte (id, état, is_public, objet) des `digital_assets` identique avant et après (`f0e4d078…`). Suites `c10_etat_de_revue_tests.sql` (8) et `c10-etat-de-revue.test.jsx` (8), mutants rouges. |
 | G13 | 2026-10-05 | **Livré le 05/10, les trois pas du plan** (`6fca3f3b`, déployé à 19 h 47, migration `20261005173015` par la CI). *(1)* Le vocabulaire `public.networks` (FICEDL, RebAL, NORLA « documentation » ; FAI, FAI Reggiana « organisation politique ») et `cartography_entries.reseaux`, lecture du texte `reseau` tenue par déclencheur : 57 fiches lues, 0 divergence, 0 jeton hors vocabulaire, aucune `updated_at` touchée ; un champ « Réseaux » dans la fiche de carte (administration). *(2)* `api.fn_catalog_networks_v1()` : les réseaux « documentation » et leurs bibliothèques visibles par une fiche publique — DEFINER ouverte à anon par décision, la carte n'étant lisible que par fonction (la vue invoker prévue n'y aurait rien vu) ; listes T10/T12 et audit anon complétés. *(3)* Le catalogue public filtre par réseau : vérifié en ligne sans session — « FICEDL (BLMF, BTL) », MLEG nommée « sans réseau déclaré », puce, mémorisation, remise à zéro ; le RPC du catalogue ne bouge pas. Décision prise en écrivant : un filtre par réseau plutôt qu'un interrupteur. **À Xavier** : classer ABABA, FAO, AFI, UK Social Centre Network et Radical Routes (migration) ; RebAL et NORLA ne filtreront qu'avec une bibliothèque rattachée à une fiche de carte (G8, admissions). |
+| D6 | 2026-10-05 | **Clos le 05/10, les deux critères tenus** (`5bbdaaf4`). *(1)* Verdict écrit (`docs/journal/audits/AUDIT_lecteur_epub_D6_2026-10-05.md`) : epub.js **conservé**, épinglé à `0.3.93` — plus de publication npm depuis le 26/09/2023, mais un dépôt qui fusionne encore (24/03/2026) ; sa dépendance `@xmldom/xmldom` (failles « high » en 0.7) n'est employée qu'en l'absence des parseurs natifs, jamais dans un navigateur, et elle est forcée en 0.8.15 (`overrides`) — l'audit npm ne la signale plus. **foliate-js** (MIT, sans dépendance, actif) est le remplaçant désigné ; Readium ts-toolkit serait un changement d'architecture. *(2)* `src/tests/lecteur-epub-ouvre-un-epub.test.js` ouvre un EPUB 3 complet avec l'epub.js embarqué : métadonnées, ordre de lecture, table des matières, texte d'un chapitre. |
 
 ---
 
@@ -2245,4 +2224,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
