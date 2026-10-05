@@ -69,10 +69,25 @@ Deno.serve(async (req) => {
   });
 
   let runId: number | null = null;
+  // H30 : vrai tant qu'un RETRAITEMENT n'a pas encore effacé les lignes du run
+  // (posé dès la lecture de la demande : force_reparse ; un premier import
+  // n'est jamais concerné, son échec reste « échoué » comme avant).
+  let lignesGardees = false;
+  // Ajoute une entrée au journal du run sans jamais l'écraser : si sa lecture
+  // échoue, rien n'est écrit (et l'erreur remonte).
+  const journaliser = async (msg: string) => {
+    const { data: runLog, error: lectureErr } = await admin.schema('ingest').from('partner_catalog_import_runs').select('error_log').eq('id', runId).maybeSingle();
+    if (lectureErr) throw lectureErr;
+    const log = Array.isArray(runLog?.error_log) ? runLog!.error_log : [];
+    log.push({ at: new Date().toISOString(), error: msg });
+    const { error: ecritureErr } = await admin.schema('ingest').from('partner_catalog_import_runs').update({ error_log: log }).eq('id', runId);
+    if (ecritureErr) throw ecritureErr;
+  };
   try {
     const body = await req.json();
     runId = Number(body?.run_id);
     const forceReparse = body?.force_reparse === true;
+    lignesGardees = forceReparse;
     if (!Number.isInteger(runId) || runId <= 0) return json({ error: 'Body must contain a positive integer run_id.' }, 400);
 
     const { data: run, error: runError } = await admin.schema('ingest')
@@ -85,15 +100,38 @@ Deno.serve(async (req) => {
     if (!storagePath) return json({ error: `Run ${runId} has no storage_path.` }, 400);
 
     // Garde idempotence : ne pas ré-empiler des staging rows sans force_reparse.
-    const { count: existingCount } = await admin.schema('ingest')
+    const { count: existingCount, error: countErr } = await admin.schema('ingest')
       .from('partner_catalog_staging_rows').select('*', { count: 'exact', head: true }).eq('run_id', runId);
+    if (countErr) throw countErr;
+    lignesGardees = forceReparse && (existingCount ?? 0) > 0;
     if ((existingCount ?? 0) > 0 && !forceReparse) {
       return json({ error: `Run ${runId} already has staging rows.`, hint: 'Use {"force_reparse": true} to replace.' }, 409);
     }
 
-    await admin.schema('ingest').from('partner_catalog_import_runs').update({
-      run_status: 'processing', started_at: new Date().toISOString(), finished_at: null, parser_version: PARSER_VERSION,
-    }).eq('id', runId);
+    // ── Déballage du ZIP ──────────────────────────────────────────────────
+    // H30 (04/10/2026) : le paquet est lu et son manifeste validé AVANT tout
+    // effacement. Illisible alors que le run a déjà des lignes : rien n'est
+    // touché, le refus va au journal du run (fn_import_dispatch refuse déjà
+    // un run sans fichier à l'envoi).
+    let zip: any;
+    let manifest: any;
+    try {
+      const { data: blob, error: dlErr } = await admin.storage.from(bucketId).download(storagePath);
+      if (dlErr) throw dlErr;
+      if (!blob) throw new Error('Storage download returned no file.');
+      zip = await JSZip.loadAsync(await blob.arrayBuffer());
+      const manifestEntry = zip.file('manifest.json');
+      if (!manifestEntry) throw new Error('manifest.json absent du ZIP : ce n\'est pas un paquet de fonds.');
+      try { manifest = JSON.parse(await manifestEntry.async('string')); }
+      catch { throw new Error('manifest.json illisible (JSON invalide).'); }
+      if (manifest?.schema !== MANIFEST_SCHEMA) throw new Error(`Schéma de manifeste inattendu : ${manifest?.schema ?? '—'} (attendu ${MANIFEST_SCHEMA}).`);
+    } catch (lecture) {
+      if (!((existingCount ?? 0) > 0)) throw lecture;
+      const msg = `Paquet illisible (${(lecture as any)?.message ?? String(lecture)}) : les lignes sont gardées, rien n'est retraité.`;
+      await journaliser(msg);
+      return json({ ok: false, run_id: runId, error: msg, rows_kept: true }, 409);
+    }
+
     if ((existingCount ?? 0) > 0 && forceReparse) {
       // H21 lot 0 (30/09/2026) : un effacement refusé (ligne retenue par un
       // exemplaire rapproché non publié) arrête tout AVANT de toucher aux
@@ -101,22 +139,17 @@ Deno.serve(async (req) => {
       // butait ensuite sur (run_id, row_no).
       const { error: delRowsErr } = await admin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
       if (delRowsErr) throw delRowsErr;
+      lignesGardees = false;
       const { error: delAssetsErr } = await admin.schema('ingest').from('partner_catalog_received_assets').delete().eq('run_id', runId);
       if (delAssetsErr) throw delAssetsErr;
     }
+    // H30 : « en cours » seulement une fois les lignes effacées (un effacement
+    // refusé laisse le run tel quel).
+    const { error: enCoursErr } = await admin.schema('ingest').from('partner_catalog_import_runs').update({
+      run_status: 'processing', started_at: new Date().toISOString(), finished_at: null, parser_version: PARSER_VERSION,
+    }).eq('id', runId);
+    if (enCoursErr) throw enCoursErr;
 
-    // ── Déballage du ZIP ──────────────────────────────────────────────────
-    const { data: blob, error: dlErr } = await admin.storage.from(bucketId).download(storagePath);
-    if (dlErr) throw dlErr;
-    if (!blob) throw new Error('Storage download returned no file.');
-    const zip = await JSZip.loadAsync(await blob.arrayBuffer());
-
-    const manifestEntry = zip.file('manifest.json');
-    if (!manifestEntry) throw new Error('manifest.json absent du ZIP : ce n\'est pas un paquet de fonds.');
-    let manifest: any;
-    try { manifest = JSON.parse(await manifestEntry.async('string')); }
-    catch { throw new Error('manifest.json illisible (JSON invalide).'); }
-    if (manifest?.schema !== MANIFEST_SCHEMA) throw new Error(`Schéma de manifeste inattendu : ${manifest?.schema ?? '—'} (attendu ${MANIFEST_SCHEMA}).`);
     const sourceLibraryId = manifest?.library_id ?? null;
     const records: any[] = Array.isArray(manifest?.records) ? manifest.records : [];
 
@@ -235,13 +268,19 @@ Deno.serve(async (req) => {
       next_step: 'Editorial review, then promote to drafts. Files parked for the asset-attach chantier.',
     });
   } catch (e) {
+    if (runId && lignesGardees) {
+      // H30 : échec AVANT l'effacement — lignes, fichiers reçus et état du run
+      // intacts ; le refus (et sa HINT) va au journal.
+      const hint = (e as any)?.hint ? ` [${(e as any).hint}]` : '';
+      const msg = `${String((e as Error)?.message || e)}${hint} (lignes gardées, rien n'est retraité)`;
+      try { await journaliser(msg); } catch (_) { /* la trace d'erreur ne bloque jamais */ }
+      return json({ ok: false, run_id: runId, error: msg, rows_kept: true }, 409);
+    }
     if (runId) {
+      try { await journaliser(String((e as Error)?.message || e)); } catch (_) { /* la trace d'erreur ne bloque jamais */ }
       try {
-        const { data: run } = await admin.schema('ingest').from('partner_catalog_import_runs').select('error_log').eq('id', runId).maybeSingle();
-        const log = Array.isArray(run?.error_log) ? run!.error_log : [];
-        log.push({ at: new Date().toISOString(), error: String((e as Error)?.message || e) });
-        await admin.schema('ingest').from('partner_catalog_import_runs').update({ run_status: 'failed', error_log: log }).eq('id', runId);
-      } catch (_) { /* la trace d'erreur ne bloque jamais */ }
+        await admin.schema('ingest').from('partner_catalog_import_runs').update({ run_status: 'failed' }).eq('id', runId);
+      } catch (_) { /* idem */ }
     }
     return json({ error: String((e as Error)?.message || e) }, 500);
   }

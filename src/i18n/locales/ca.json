@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Només la publicació posa un esborrany en estat «publicat».",
   "importacoes.fila.rejectedPartial": "{rejected} fila(es) rebutjada(es) de {asked}: les altres ja havien estat tractades, rebutjades o retirades en un altre lloc mentrestant. La llista s’ha recarregat.",
   "error.import.rows_held_by_items": "Hi ha exemplars vinculats des d’aquest fitxer que encara no s’han publicat (paperera inclosa): les seves files d’importació no es poden esborrar.",
-  "importacoes.fila.reconciledPartial": "{skipped} fila(es) de {asked} ignorada(es): ja tractades, rebutjades, descartades o retirades en un altre lloc mentrestant. La llista s’ha recarregat."
+  "importacoes.fila.reconciledPartial": "{skipped} fila(es) de {asked} ignorada(es): ja tractades, rebutjades, descartades o retirades en un altre lloc mentrestant. La llista s’ha recarregat.",
+  "error.import.reparse_no_file": "El fitxer d’aquesta importació no és a l’emmagatzematge (desaparegut, o mai dipositat: collita OAI, candidat, dipòsit directe): no es pot reprocessar, i les seves files queden com estan. Importa de nou el fitxer si cal."
 }

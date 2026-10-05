@@ -523,11 +523,16 @@ Deno.serve(async (req)=>{
     }
   });
   let runId = null;
+  // H30 : vrai tant qu'un RETRAITEMENT n'a pas encore effacé les lignes du run
+  // (posé dès la lecture de la demande : force_reparse ; un premier import
+  // n'est jamais concerné, son échec reste « échoué » comme avant).
+  let lignesGardees = false;
   let parserVersion = GENERIC_PARSER_VERSION;
   try {
     const body = await req.json();
     runId = Number(body?.run_id);
     const forceReparse = body?.force_reparse === true;
+    lignesGardees = forceReparse;
     if (!Number.isInteger(runId) || runId <= 0) {
       return json({
         error: 'Body must contain a positive integer run_id.'
@@ -567,6 +572,7 @@ Deno.serve(async (req)=>{
       head: true
     }).eq('run_id', runId);
     if (existingCountError) throw existingCountError;
+    lignesGardees = forceReparse && (existingCount ?? 0) > 0;
     if ((existingCount ?? 0) > 0 && !forceReparse) {
       return json({
         error: `Run ${runId} already has staging rows.`,
@@ -598,20 +604,31 @@ Deno.serve(async (req)=>{
       profileDefaults = profileRow.default_values || null;
       profileItemsMapping = profileRow.items_mapping || null;
     }
-    const { error: runProcessingError } = await supabaseAdmin.schema('ingest').from('partner_catalog_import_runs').update({
-      run_status: 'processing',
-      started_at: new Date().toISOString(),
-      finished_at: null,
-      parser_version: GENERIC_PARSER_VERSION
-    }).eq('id', runId);
-    if (runProcessingError) throw runProcessingError;
-    if ((existingCount ?? 0) > 0 && forceReparse) {
-      const { error: deleteError } = await supabaseAdmin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
-      if (deleteError) throw deleteError;
-    }
+    // H30 (04/10/2026) : le fichier est lu AVANT tout effacement. Sans lui
+    // (moisson OAI, candidat, dépôt direct, fichier disparu du seau), un
+    // retraitement effaçait les lignes puis échouait : run « échoué », 0 ligne.
+    // Des lignes à protéger : le run garde son état, le refus va au journal
+    // (comme un profil supprimé) ; fn_import_dispatch refuse déjà à l'envoi.
     const { data: fileBlob, error: downloadError } = await supabaseAdmin.storage.from(bucketId).download(storagePath);
+    if ((downloadError || !fileBlob) && (existingCount ?? 0) > 0) {
+      const fileProblem = `Import file unreadable (${downloadError?.message ?? 'no file'}): the rows were kept, nothing was reprocessed.`;
+      await appendRunError(supabaseAdmin, runId, fileProblem);
+      return json({ ok: false, run_id: runId, error: fileProblem }, 409);
+    }
     if (downloadError) throw downloadError;
     if (!fileBlob) throw new Error('Storage download returned no file.');
+    const marquerEnCours = async ()=>{
+      const { error: runProcessingError } = await supabaseAdmin.schema('ingest').from('partner_catalog_import_runs').update({
+        run_status: 'processing',
+        started_at: new Date().toISOString(),
+        finished_at: null,
+        parser_version: GENERIC_PARSER_VERSION
+      }).eq('id', runId);
+      if (runProcessingError) throw runProcessingError;
+    };
+    // H30 : un run qui a déjà des lignes ne passe « en cours » qu'au moment
+    // d'effacer ; jusque-là, un échec ne le touche pas (journal seulement).
+    if (!lignesGardees) await marquerEnCours();
     // Overrides de l'adaptateur (axes orthogonaux) : forced_format saute la detection
     // de structure ; forced_vocabulary force le dialecte MARC (sinon detectDialect, auto) ;
     // forced_encoding impose l'encodage (sinon UTF-8 strict, puis windows-1252 SUPPOSE).
@@ -780,6 +797,19 @@ Deno.serve(async (req)=>{
       fallback: decoded.fallback,
       declared_unimarc: declaredCharsets
     };
+    // H30 (04/10/2026) : l'effacement vient APRÈS la lecture, le décodage et
+    // l'analyse du fichier, juste avant l'insertion : un fichier vide ou
+    // illisible ne coûte plus les lignes du run.
+    if ((existingCount ?? 0) > 0 && forceReparse) {
+      if (!stagingRows.length) throw new Error('Parsed file produced no rows.');
+      // L'effacement d'abord : refusé (ligne retenue par un exemplaire
+      // rapproché, délai…), il laisse le run tel quel ; réussi, le run passe
+      // « en cours ».
+      const { error: deleteError } = await supabaseAdmin.schema('ingest').from('partner_catalog_staging_rows').delete().eq('run_id', runId);
+      if (deleteError) throw deleteError;
+      lignesGardees = false;
+      await marquerEnCours();
+    }
     await insertInBatches(supabaseAdmin, stagingRows);
     const parsedAt = new Date().toISOString();
     const { matchingResult, counterRefreshResult } = await runMatchingAndRefreshCounters(supabaseIngestRpc, runId);
@@ -873,6 +903,13 @@ Deno.serve(async (req)=>{
     };
     const message = error instanceof Error ? error.message : error?.message ?? JSON.stringify(errorPayload);
     try {
+      if (runId && Number.isInteger(runId) && lignesGardees) {
+        // H30 : le retraitement a échoué AVANT d'effacer — les lignes et l'état
+        // du run sont intacts ; le refus (et sa HINT) va au journal.
+        const hintTxt = error?.hint ? ` [${error.hint}]` : '';
+        await appendRunError(supabaseAdmin, runId, `${message}${hintTxt} (rows kept, nothing reprocessed)`);
+        return json({ ok: false, run_id: runId, error: message, rows_kept: true }, 409);
+      }
       if (runId && Number.isInteger(runId)) {
         await appendRunError(supabaseAdmin, runId, message);
         await supabaseAdmin.schema('ingest').from('partner_catalog_import_runs').update({

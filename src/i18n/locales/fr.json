@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Seule la publication met un brouillon à l’état « publié ».",
   "importacoes.fila.rejectedPartial": "{rejected} ligne(s) rejetée(s) sur {asked} : les autres étaient déjà traitées, rejetées ou retirées ailleurs entre-temps. La liste est rechargée.",
   "error.import.rows_held_by_items": "Des exemplaires rapprochés depuis ce fichier ne sont pas encore publiés (corbeille comprise) : leurs lignes d’import ne peuvent pas être effacées.",
-  "importacoes.fila.reconciledPartial": "{skipped} ligne(s) sur {asked} ignorée(s) : déjà traitées, rejetées, écartées ou retirées ailleurs entre-temps. La liste est rechargée."
+  "importacoes.fila.reconciledPartial": "{skipped} ligne(s) sur {asked} ignorée(s) : déjà traitées, rejetées, écartées ou retirées ailleurs entre-temps. La liste est rechargée.",
+  "error.import.reparse_no_file": "Le fichier de cet import n’est pas dans le stockage (disparu, ou jamais déposé : moisson OAI, candidat, dépôt direct) : il ne peut pas être retraité, et ses lignes restent telles quelles. Importe de nouveau le fichier si besoin."
 }

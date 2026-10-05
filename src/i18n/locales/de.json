@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Nur das Veröffentlichen setzt einen Entwurf auf „veröffentlicht“.",
   "importacoes.fila.rejectedPartial": "{rejected} von {asked} Zeile(n) abgelehnt: Die übrigen waren inzwischen schon anderswo bearbeitet, abgelehnt oder entfernt worden. Die Liste wurde neu geladen.",
   "error.import.rows_held_by_items": "Aus dieser Datei zugeordnete Exemplare sind noch nicht veröffentlicht (Papierkorb eingeschlossen): Die zugehörigen Importzeilen können nicht gelöscht werden.",
-  "importacoes.fila.reconciledPartial": "{skipped} von {asked} Zeile(n) übergangen: inzwischen anderswo bearbeitet, abgelehnt, verworfen oder entfernt. Die Liste wurde neu geladen."
+  "importacoes.fila.reconciledPartial": "{skipped} von {asked} Zeile(n) übergangen: inzwischen anderswo bearbeitet, abgelehnt, verworfen oder entfernt. Die Liste wurde neu geladen.",
+  "error.import.reparse_no_file": "Die Datei dieses Imports liegt nicht im Speicher (verschwunden oder nie hochgeladen: OAI-Ernte, Kandidat, Direkteinlieferung): Er kann nicht neu verarbeitet werden, und seine Zeilen bleiben, wie sie sind. Importiere die Datei bei Bedarf erneut."
 }

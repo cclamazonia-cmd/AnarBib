@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Nur la publikigo metas malneton en la staton «publikigita».",
   "importacoes.fila.rejectedPartial": "{rejected} el {asked} linio(j) malakceptita(j): la aliaj jam estis traktitaj, malakceptitaj aŭ forigitaj aliloke intertempe. La listo estas reŝargita.",
   "error.import.rows_held_by_items": "Ekzempleroj ligitaj el ĉi tiu dosiero ankoraŭ ne estas publikigitaj (inkluzive de la rubujo): iliaj importaj linioj ne povas esti forigitaj.",
-  "importacoes.fila.reconciledPartial": "{skipped} el {asked} linio(j) preterlasita(j): jam traktitaj, malakceptitaj, forĵetitaj aŭ forigitaj aliloke intertempe. La listo estas reŝargita."
+  "importacoes.fila.reconciledPartial": "{skipped} el {asked} linio(j) preterlasita(j): jam traktitaj, malakceptitaj, forĵetitaj aŭ forigitaj aliloke intertempe. La listo estas reŝargita.",
+  "error.import.reparse_no_file": "La dosiero de ĉi tiu importo ne estas en la konservejo (malaperinta, aŭ neniam deponita: OAI-rikolto, kandidato, rekta deponaĵo): ĝi ne povas esti repritraktata, kaj ĝiaj linioj restas kiel ili estas. Importu la dosieron denove, se necese."
 }

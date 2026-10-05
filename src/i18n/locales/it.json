@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Solo la pubblicazione porta una bozza allo stato «pubblicata».",
   "importacoes.fila.rejectedPartial": "{rejected} riga/e rifiutata/e su {asked}: le altre erano già state trattate, rifiutate o rimosse altrove nel frattempo. L’elenco è stato ricaricato.",
   "error.import.rows_held_by_items": "Ci sono esemplari collegati da questo file non ancora pubblicati (cestino compreso): le loro righe d’importazione non possono essere cancellate.",
-  "importacoes.fila.reconciledPartial": "{skipped} riga/e su {asked} ignorata/e: già trattate, rifiutate, scartate o rimosse altrove nel frattempo. L’elenco è stato ricaricato."
+  "importacoes.fila.reconciledPartial": "{skipped} riga/e su {asked} ignorata/e: già trattate, rifiutate, scartate o rimosse altrove nel frattempo. L’elenco è stato ricaricato.",
+  "error.import.reparse_no_file": "Il file di questa importazione non è nell’archivio (sparito, o mai depositato: raccolta OAI, candidato, deposito diretto): non può essere rielaborata, e le sue righe restano come sono. Importa di nuovo il file se serve."
 }

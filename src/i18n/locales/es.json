@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Solo la publicación pone un borrador en estado «publicado».",
   "importacoes.fila.rejectedPartial": "{rejected} fila(s) rechazada(s) de {asked}: las demás ya habían sido tratadas, rechazadas o retiradas en otro lugar mientras tanto. La lista se ha recargado.",
   "error.import.rows_held_by_items": "Hay ejemplares vinculados desde este archivo que aún no se han publicado (papelera incluida): sus filas de importación no se pueden borrar.",
-  "importacoes.fila.reconciledPartial": "{skipped} fila(s) de {asked} ignorada(s): ya tratadas, rechazadas, descartadas o retiradas en otro lugar mientras tanto. La lista se ha recargado."
+  "importacoes.fila.reconciledPartial": "{skipped} fila(s) de {asked} ignorada(s): ya tratadas, rechazadas, descartadas o retiradas en otro lugar mientras tanto. La lista se ha recargado.",
+  "error.import.reparse_no_file": "El archivo de esta importación no está en el almacenamiento (desaparecido, o nunca depositado: cosecha OAI, candidato, depósito directo): no se puede reprocesar, y sus filas quedan como están. Importa de nuevo el archivo si hace falta."
 }

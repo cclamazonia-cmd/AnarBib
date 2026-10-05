@@ -18,7 +18,10 @@
 //   * forced_encoding inconnu → ignoré, dit ;
 //   * un CSV enregistré en Windows-1252 → accents exacts, avertissement ;
 //   * H19 : les exemplaires 995 jusqu'aux lignes importées ; le profil de la
-//     bibliothèque décide des sous-zones ; un profil illisible arrête l'import.
+//     bibliothèque décide des sous-zones ; un profil illisible arrête l'import ;
+//   * H30 : le fichier est lu avant 'processing', l'effacement vient après
+//     l'analyse ; illisible ou sans contenu pendant un « Retraiter », les lignes
+//     restent et le refus va au journal.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -31,20 +34,35 @@ const FIX = path.resolve(here, '..', '..', 'tests', 'pmb', 'fixtures');
 const octets = (nom) => new Uint8Array(readFileSync(path.join(FIX, nom)));
 const SECRET = 'banc-secret';
 
-function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = null, existantes = 0, retraiter = false }) {
+// `telechargement` (H30) : remplace la réponse du Storage (défaut : la fixture).
+// `gestes` : lectures, écritures et téléchargements dans l'ordre où la fonction
+// les fait ; un UPDATE du run porte son run_status (« update runs:processing »).
+// `refusDelete` : l'erreur PostgREST que rend le DELETE des lignes du run ;
+// `refusComptage` : celle du comptage des lignes.
+function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = null, existantes = 0, retraiter = false, telechargement = null, refusDelete = null, refusComptage = null }) {
   const run = {
     id: 42, source_id: 7, library_id: 'lib-1', bucket_id: 'catalogos_parceiros_raw',
     storage_path: `lib-1/${nom}`, original_filename: nom, detected_format: 'marc_iso2709',
     adapter_overrides, error_log: [],
   };
+  const gestes = [];
+  const court = { partner_catalog_import_runs: 'runs', partner_catalog_staging_rows: 'lignes', partner_catalog_import_files: 'fichiers' };
   const ef = monterEF({
     entree: 'process-partner-catalog-import/index.ts',
     env: { ANARBIB_PARTNER_IMPORT_SECRET: SECRET },
-    stockage: () => ({ data: new Blob([fichier]), error: null }),
+    stockage: () => {
+      gestes.push('download');
+      return telechargement ? telechargement() : { data: new Blob([fichier]), error: null };
+    },
     repondre: (schema, table, a) => {
+      const geste = ['insert', 'update', 'upsert', 'delete'].find((op) => a(op)) ?? 'select';
+      const statut = geste === 'update' && a('update').args[0]?.run_status;
+      gestes.push(`${geste} ${court[table] ?? table}${statut ? `:${statut}` : ''}`);
       if (table === 'partner_catalog_import_runs' && a('select')) return { data: run, error: null };
       if (table === 'partner_catalog_import_files' && a('select')) return { data: { id: 5, file_role: 'uploaded' }, error: null };
+      if (table === 'partner_catalog_staging_rows' && a('select') && refusComptage) return { data: null, count: null, error: refusComptage, status: 500 };
       if (table === 'partner_catalog_staging_rows' && a('select')) return { data: null, count: existantes, error: null };
+      if (table === 'partner_catalog_staging_rows' && a('delete') && refusDelete) return { data: null, error: refusDelete, status: 400 };
       if (table === 'import_profiles' && profil) return profil(a);
       return { data: null, error: null };
     },
@@ -65,7 +83,9 @@ function banc({ fichier, nom = 'export.marc', adapter_overrides = {}, profil = n
     const touche = ef.ecrits.some((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && 'run_status' in e.donnees);
     const journal = ef.ecrits.filter((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && e.donnees.error_log)
       .flatMap((e) => e.donnees.error_log);
-    return { ...r, lignes, finale, fichierMaj, echec, efface, touche, journal };
+    const statuts = ef.ecrits.filter((e) => e.table === 'partner_catalog_import_runs' && e.op === 'update' && e.donnees.run_status)
+      .map((e) => e.donnees.run_status);
+    return { ...r, lignes, finale, fichierMaj, echec, efface, touche, journal, statuts, gestes, ef };
   };
 }
 
@@ -191,5 +211,170 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
     // La ligne « ;;;livro » n'a aucun contenu bibliographique : écartée, et comptée.
     expect(r.lignes).toHaveLength(2);
     expect(r.finale.summary.skipped_rows).toBe(1);
+  });
+});
+
+// H30 (04/10/2026) — « Retraiter » exige le fichier. Le fichier est lu AVANT le
+// passage en 'processing' et AVANT l'effacement des lignes ; illisible alors que
+// le run a des lignes : rien n'est touché, le refus va au journal du run, 409.
+// Passes suivantes (même jour) : l'effacement est déplacé juste avant l'insertion,
+// APRÈS le décodage et l'analyse, et un run qui a des lignes ne passe en
+// 'processing' qu'à ce moment-là. Un échec avant (fichier vide, CSV sans donnée,
+// MARC sans notice, aucune ligne retenue) ou le DELETE refusé par le déclencheur
+// H21 gardent les lignes : journal « … [HINT] (rows kept, nothing reprocessed) »,
+// 409 { rows_kept: true }, aucun 'failed', aucune RPC.
+// Contre-épreuve (04/10/2026, miroir hors dépôt, index.ts du commit 07111e3d) :
+// les deux « téléchargement en échec », les quatre « analyse en échec », le
+// DELETE refusé et l'ordre du témoin lisible tombent (500 au lieu de 409 :
+// processing, DELETE des lignes, puis 'failed') ; les trois témoins du premier
+// import passent (même issue avant et après), comme les neuf tests d'avant H30.
+describe('process-partner-catalog-import — « Retraiter » sans fichier lisible (H30)', () => {
+  const ECHECS = [
+    ['le Storage rend une erreur', () => ({ data: null, error: { message: 'Object not found' } }), 'Object not found'],
+    ['le Storage ne rend rien', () => ({ data: null, error: null }), 'no file'],
+  ];
+
+  it.each(ECHECS)('force_reparse, run avec lignes, %s : ni processing ni DELETE, une entrée au journal, 409', async (_cas, telechargement, motif) => {
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true, telechargement })();
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: 42 });
+    expect(r.corps.error).toContain(motif);
+    // Lu avant tout geste d'écriture ; après le refus, la seule trace au journal.
+    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'download', 'select runs', 'update runs']);
+    expect(r.touche).toBe(false);
+    expect(r.statuts).toEqual([]);
+    expect(r.efface).toBe(false);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.fichierMaj).toBeUndefined();
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toContain(motif);
+    expect(r.journal[0].message).toContain('the rows were kept');
+  });
+
+  it.each(ECHECS)('TÉMOIN — premier import (aucune ligne), %s : comme avant, le run passe en échec, 500', async (_cas, telechargement, motif) => {
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 0, telechargement })();
+    expect(r.statut).toBe(500);
+    expect(r.corps.ok).toBe(false);
+    expect(r.echec).toBe(true);
+    expect(r.statuts.at(-1)).toBe('failed');
+    expect(r.statuts).not.toContain('ready_for_review');
+    expect(r.efface).toBe(false);
+    expect(r.lignes).toHaveLength(0);
+    expect(r.fichierMaj).toEqual({ parse_status: 'error' });
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toContain(motif === 'no file' ? 'returned no file' : motif);
+  });
+
+  // Le fichier se lit mais ne donne rien : l'échec vient de l'analyse, AVANT
+  // 'processing' (un run qui a des lignes n'y passe qu'au moment d'effacer) et
+  // AVANT l'effacement, déplacé juste avant l'insertion.
+  const ANALYSES_EN_ECHEC = [
+    ['fichier vide', { fichier: new TextEncoder().encode(' \r\n  \r\n'), nom: 'catalogue.csv' }, 'Import file is empty.'],
+    ['CSV à en-tête seul', { fichier: new TextEncoder().encode('titulo;autor\r\n'), nom: 'catalogue.csv' }, 'CSV contains a header row but no data rows.'],
+    ['MARC (forcé) sans notice', {
+      fichier: new TextEncoder().encode('<?xml version="1.0" encoding="UTF-8"?>\n<collection xmlns="http://www.loc.gov/MARC21/slim"></collection>\n'),
+      nom: 'export.xml', adapter_overrides: { forced_format: 'marc' },
+    }, 'Format MARC force'],
+    // Analysé, mais aucune colonne bibliographique : aucune ligne retenue.
+    ['CSV sans aucune ligne retenue', { fichier: new TextEncoder().encode('tipo_material;cote\r\nlivro;320 BAK\r\nfolheto;320 MAL\r\n'), nom: 'catalogue.csv' }, 'Parsed file produced no rows.'],
+  ];
+
+  it.each(ANALYSES_EN_ECHEC)('force_reparse, run avec lignes, %s : ni run_status ni DELETE ni RPC, une entrée au journal, 409 rows_kept', async (_cas, o, motif) => {
+    const r = await banc({ ...o, existantes: 50, retraiter: true })();
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: 42, rows_kept: true });
+    expect(r.corps.error).toContain(motif);
+    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'download', 'select runs', 'update runs']);
+    expect(r.touche).toBe(false);
+    expect(r.statuts).toEqual([]);
+    expect(r.efface).toBe(false);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.fichierMaj).toBeUndefined();
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toBe(`${motif.endsWith('force') ? r.corps.error : motif} (rows kept, nothing reprocessed)`);
+  });
+
+  it('force_reparse, run avec lignes, DELETE refusé par le déclencheur (rows_held_by_items) : 409 rows_kept, la HINT au journal, aucun failed', async () => {
+    const refus = {
+      code: 'P0001', details: null, hint: 'error.import.rows_held_by_items',
+      message: 'Ligne d\'import 901 retenue par un exemplaire rapproche non publie.',
+    };
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true, refusDelete: refus })();
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: 42, rows_kept: true, error: refus.message });
+    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'download', 'delete lignes', 'select runs', 'update runs']);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.fichierMaj).toBeUndefined();
+    expect(r.echec).toBe(false);
+    // 'processing' ne vient qu'après un DELETE réussi : refusé, le run est intact.
+    expect(r.touche).toBe(false);
+    expect(r.statuts).toEqual([]);
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toBe(`${refus.message} [error.import.rows_held_by_items] (rows kept, nothing reprocessed)`);
+  });
+
+  it('comptage des lignes en échec : rien n\'a bougé — 409 rows_kept, l\'erreur au journal, ni run_status ni téléchargement ni DELETE', async () => {
+    const delai = { code: '57014', details: null, hint: null, message: 'canceling statement due to statement timeout' };
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true, refusComptage: delai })();
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: 42, rows_kept: true, error: delai.message });
+    expect(r.gestes).toEqual(['select runs', 'select fichiers', 'select lignes', 'select runs', 'update runs']);
+    expect(r.ef.telechargements).toHaveLength(0);
+    expect(r.touche).toBe(false);
+    expect(r.statuts).toEqual([]);
+    expect(r.echec).toBe(false);
+    expect(r.efface).toBe(false);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.fichierMaj).toBeUndefined();
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toBe(`${delai.message} (rows kept, nothing reprocessed)`);
+  });
+
+  it('TÉMOIN — premier import (sans « Retraiter »), comptage en échec : le run passe en échec, 500 — jamais « en cours » sans fin', async () => {
+    // Revue sceptique du 04/10 : avec une garde des lignes vraie d'emblée, ce
+    // run restait « uploaded/queued », affiché « en cours » sans fin. La garde
+    // ne vaut que pour un retraitement (force_reparse).
+    const delai = { code: '57014', details: null, hint: null, message: 'canceling statement due to statement timeout' };
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), refusComptage: delai })();
+    expect(r.statut).toBe(500);
+    expect(r.corps.rows_kept).toBeUndefined();
+    expect(r.statuts).toEqual(['failed']);
+    expect(r.efface).toBe(false);
+  });
+
+  it('TÉMOIN — premier import (aucune ligne), échec d\'analyse (CSV à en-tête seul) : comme avant, le run passe en échec, 500', async () => {
+    const r = await banc({ fichier: new TextEncoder().encode('titulo;autor\r\n'), nom: 'catalogue.csv' })();
+    expect(r.statut).toBe(500);
+    expect(r.corps.ok).toBe(false);
+    expect(r.corps.rows_kept).toBeUndefined();
+    expect(r.echec).toBe(true);
+    expect(r.statuts).toEqual(['processing', 'failed']);
+    expect(r.efface).toBe(false);
+    expect(r.lignes).toHaveLength(0);
+    expect(r.fichierMaj).toEqual({ parse_status: 'error' });
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.journal).toHaveLength(1);
+    expect(r.journal[0].message).toBe('CSV contains a header row but no data rows.');
+  });
+
+  it('TÉMOIN — fichier lisible : lecture, (analyse), effacement des lignes du run, processing, réinsertion, d\'un seul tenant', async () => {
+    const r = await banc({ fichier: octets(`${V}.unimarc.iso`), existantes: 50, retraiter: true })();
+    expect(r.statut).toBe(200);
+    expect(r.lignes).toHaveLength(50);
+    const i = (g) => r.gestes.indexOf(g);
+    expect(r.gestes.filter((g) => g === 'download')).toHaveLength(1);
+    expect(r.gestes.filter((g) => g === 'delete lignes')).toHaveLength(1);
+    expect(r.gestes.filter((g) => g === 'update runs:processing')).toHaveLength(1);
+    expect(r.gestes.slice(0, i('download') + 1)).toEqual(['select runs', 'select fichiers', 'select lignes', 'download']);
+    // L'analyse (invisible ici) se fait entre la lecture et l'effacement : les cas
+    // « analyse en échec » plus haut le prouvent (ni DELETE ni 'processing').
+    expect(r.gestes.slice(i('download'), i('download') + 4)).toEqual(['download', 'delete lignes', 'update runs:processing', 'insert lignes']);
+    const [d] = r.ef.ecrits.filter((e) => e.table === 'partner_catalog_staging_rows' && e.op === 'delete');
+    expect(d.chaine.filter((c) => c.op === 'eq').map((c) => c.args)).toEqual([['run_id', 42]]);
+    expect(r.statuts).toEqual(['processing', 'ready_for_review']);
   });
 });

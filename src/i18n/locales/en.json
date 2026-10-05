@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Only publishing sets a draft to “published”.",
   "importacoes.fila.rejectedPartial": "{rejected} of {asked} row(s) rejected: the others had already been handled, rejected or removed elsewhere in the meantime. The list has been reloaded.",
   "error.import.rows_held_by_items": "Copies matched from this file are not published yet (trash included): their import rows cannot be deleted.",
-  "importacoes.fila.reconciledPartial": "{skipped} of {asked} row(s) skipped: already handled, rejected, discarded or removed elsewhere in the meantime. The list has been reloaded."
+  "importacoes.fila.reconciledPartial": "{skipped} of {asked} row(s) skipped: already handled, rejected, discarded or removed elsewhere in the meantime. The list has been reloaded.",
+  "error.import.reparse_no_file": "This import’s file is not in storage (gone, or never uploaded: OAI harvest, candidate, direct deposit): it cannot be reprocessed, and its rows stay as they are. Import the file anew if needed."
 }

@@ -222,6 +222,16 @@
 --     (une conversion faite pendant ces secondes, second onglet ou API) est
 --     consignée — antérieure (H15) —, ni corrigée par ce lot ni couverte par
 --     cette suite.
+--     H30 (04/10/2026) : « Retraiter » exige désormais aussi le FICHIER du run
+--     dans le seau (fn_import_dispatch, HINT error.import.reparse_no_file,
+--     garde placée APRÈS celle que T30 juge). Le bouchon storage de la CI
+--     (_ci_setup_storage_stub.sql) a une table storage.objects VIDE : T30
+--     dépose, dans sa sous-transaction, un objet (seau du run, nom =
+--     storage_path) pour CHACUN de ses quatre runs. (c) et (d) restent ainsi
+--     des témoins d'acceptation ; (a) et (b) sont refusés par la garde jugée
+--     ici et non faute de fichier — les mutants A5 décrits plus bas gardent
+--     l'effet décrit (« accepté jusqu'au témoin »). L'absence de fichier et
+--     l'ordre des gardes se jugent dans h30_retraiter_exige_le_fichier_tests.sql.
 --
 -- Contre-épreuves (suite.sh <suite> <fichier joué avant> ; fichiers hors
 -- dépôt ; toutes rejouées de nouveau le 30/09 sur la cinquième passe, 30/30
@@ -1958,6 +1968,11 @@ BEGIN
       DELETE FROM public.exemplar_drafts WHERE id = v_x4;
       GET DIAGNOSTICS v_k = ROW_COUNT;
       EXECUTE 'RESET ROLE';
+      -- H30 (04/10/2026) : le fichier de chacun des quatre runs est dans son
+      -- seau (le bouchon storage est vide) — seule la garde jugée ici parle
+      INSERT INTO storage.objects (bucket_id, name)
+      SELECT r.bucket_id, r.storage_path FROM ingest.partner_catalog_import_runs r
+       WHERE r.id IN (v_run, v_run2, v_run3, v_run4);
       -- le décor est bien celui qu'on croit : (a) retenu par SON seul exemplaire
       -- à la corbeille, (b) par SA seule ligne écartée ; rien d'autre ne retient
       -- aucun des quatre runs (aucun lien, aucun autre exemplaire, aucune autre
@@ -1975,7 +1990,10 @@ BEGIN
               WHERE run_id IN (v_run, v_run2, v_run3, v_run4) AND discarded_draft_id IS NOT NULL) <> 1
          OR EXISTS (SELECT 1 FROM public.book_drafts WHERE id = v_d)
          OR EXISTS (SELECT 1 FROM ingest.partner_catalog_import_dispatch_log
-                     WHERE run_id IN (v_run, v_run2, v_run3, v_run4)) THEN
+                     WHERE run_id IN (v_run, v_run2, v_run3, v_run4))
+         OR (SELECT count(*) FROM ingest.partner_catalog_import_runs r
+               JOIN storage.objects o ON o.bucket_id = r.bucket_id AND o.name = r.storage_path
+              WHERE r.id IN (v_run, v_run2, v_run3, v_run4)) <> 4 THEN
         RAISE EXCEPTION 'decor : rapprochement=% exemplaire=% corbeille=% promotion=% brouillon=% purge=% ligne ecartee=% exemplaire purge=%/%',
           left(coalesce(v_res::text,'NULL'), 120), v_x, v_n, left(coalesce(v_res8::text,'NULL'), 120), v_d, v_m,
           (SELECT row(editorial_decision, discarded_draft_id, created_book_draft_id)::text FROM ingest.partner_catalog_staging_rows WHERE id = v_row2),

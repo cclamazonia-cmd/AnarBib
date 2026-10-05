@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Só a publicação coloca um rascunho no estado «publicado».",
   "importacoes.fila.rejectedPartial": "{rejected} linha(s) rejeitada(s) de {asked}: as demais já tinham sido tratadas, rejeitadas ou removidas em outro lugar nesse meio-tempo. A lista foi recarregada.",
   "error.import.rows_held_by_items": "Há exemplares vinculados a partir deste arquivo que ainda não foram publicados (inclusive na lixeira): as linhas de importação deles não podem ser apagadas.",
-  "importacoes.fila.reconciledPartial": "{skipped} linha(s) de {asked} ignorada(s): já tratadas, rejeitadas, descartadas ou removidas em outro lugar nesse meio-tempo. A lista foi recarregada."
+  "importacoes.fila.reconciledPartial": "{skipped} linha(s) de {asked} ignorada(s): já tratadas, rejeitadas, descartadas ou removidas em outro lugar nesse meio-tempo. A lista foi recarregada.",
+  "error.import.reparse_no_file": "O arquivo desta importação não está no armazenamento (sumiu, ou nunca foi depositado: coleta OAI, candidato, depósito direto): ela não pode ser reprocessada, e as linhas ficam como estão. Importe o arquivo de novo, se precisar."
 }

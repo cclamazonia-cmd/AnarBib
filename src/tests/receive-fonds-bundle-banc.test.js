@@ -21,15 +21,23 @@
 //   1. run qui a déjà des lignes, force_reparse, le DELETE des lignes rend l'erreur
 //      de trg_staging_rows_retenue_par_rapproche (message et HINT LUS dans la
 //      migration H21, P0001) : aucun DELETE de partner_catalog_received_assets,
-//      aucun téléchargement, aucune insertion ; les fichiers reçus restent. Le run
-//      finit comme le catch le décide — CONSTAT, pas souhait : 'processing' puis
-//      'failed', finished_at laissé à NULL, le message seul ajouté au journal
-//      (le HINT n'y va pas), réponse 500 { error: message } ;
-//   2. rien ne part non plus quand c'est le DELETE des fichiers reçus qui échoue
-//      (les lignes, elles, sont déjà effacées : constat) ;
-//   3. TÉMOIN : DELETE accepté → les deux effacements (filtrés sur le run), puis la
-//      relecture du paquet (téléchargement, lignes, relecture de leurs ids,
-//      fichiers reçus rattachés aux NOUVELLES lignes), run 'ready_for_review'.
+//      aucune insertion ; les fichiers reçus restent (depuis H30, le paquet est
+//      téléchargé une fois, avant tout effacement, et n'est pas relu). Depuis
+//      H30 aussi, les lignes sont gardées : aucun statut écrit, le message ET
+//      sa HINT au journal, 409 { ok: false, rows_kept: true } ;
+//   2. rien ne part non plus quand c'est le DELETE des fichiers reçus qui échoue ;
+//      les lignes, elles, sont déjà effacées : 'failed', 500, comme avant ;
+//   3. TÉMOIN : DELETE accepté → lecture du paquet, les deux effacements (filtrés
+//      sur le run), 'processing', puis les lignes, relecture de leurs ids,
+//      fichiers reçus rattachés aux NOUVELLES lignes, run 'ready_for_review' ;
+//   4. H30 (04/10/2026) : paquet illisible (Storage, pas un ZIP, sans manifeste,
+//      JSON invalide, autre schéma) pendant un « Retraiter » → rien n'est touché,
+//      le refus va au journal du run, 409 rows_kept ; premier import → 'failed'
+//      comme avant ;
+//   5. H30 : journal jamais écrasé quand sa relecture échoue, chemin « failed »
+//      compris ; comptage des lignes en échec → 409 rows_kept, rien n'a bougé.
+//   Les journaux exacts de 1, 2 et 3 ont été adaptés le 04/10 au nouvel ordre :
+//   comptage, lecture du paquet, effacements, 'processing'.
 //
 // Contre-épreuves (30/09/2026, miroir hors dépôt, P5/D) : l'index.ts du commit
 // 817c68c8 (les deux DELETE sans lire leur erreur) fait tomber 1 et 2 — il efface
@@ -94,9 +102,22 @@ const zipDuPaquet = (() => {
   return z.generateAsync({ type: 'uint8array' });
 })();
 
-async function retraiter({ refusLignes = false, refusRecus = null } = {}) {
+// H30 : `paquet` remplace la réponse du Storage (async () → { data, error }) ;
+// `premier` = premier import (run en file, aucune ligne, aucun fichier reçu,
+// sans force_reparse).
+// `refusLecture` : erreur de la relecture du journal (select('error_log')) ;
+// `refusComptage` : erreur du comptage des lignes du run.
+async function retraiter({ refusLignes = false, refusRecus = null, paquet = null, premier = false, refusLecture = null, refusComptage = null } = {}) {
   const zip = await zipDuPaquet;
-  const base = {
+  const base = premier ? {
+    run: {
+      id: RUN, library_id: 'lib-1', bucket_id: 'catalogos_parceiros_raw', storage_path: 'lib-1/fonds.zip',
+      detected_format: 'zip', run_status: 'queued', parser_version: null, imported_rows: 0,
+      started_at: null, finished_at: null, error_log: [],
+    },
+    lignes: [],
+    recus: [],
+  } : {
     run: {
       id: RUN, library_id: 'lib-1', bucket_id: 'catalogos_parceiros_raw', storage_path: 'lib-1/fonds.zip',
       detected_format: 'zip', run_status: 'ready_for_review', parser_version: 'fonds_receive_v1', imported_rows: 2,
@@ -116,7 +137,7 @@ async function retraiter({ refusLignes = false, refusRecus = null } = {}) {
     remplacements: { 'npm:jszip@3': JSZip },
     stockage: (bucket, chemin) => {
       journal.push(`download ${bucket}/${chemin}`);
-      return { data: new Blob([zip]), error: null };
+      return paquet ? paquet() : { data: new Blob([zip]), error: null };
     },
     rpc: (_schema, nom) => {
       journal.push(`rpc ${nom}`);
@@ -130,9 +151,11 @@ async function retraiter({ refusLignes = false, refusRecus = null } = {}) {
       if (geste !== 'insert' && (valeur !== RUN || colonne !== (cible === RUNS ? 'id' : 'run_id'))) {
         throw new Error(`filtre inattendu sur ${cible} : ${colonne} = ${valeur}`);
       }
+      if (cible === RUNS && geste === 'select' && refusLecture && a('select').args[0] === 'error_log') return { data: null, error: refusLecture, status: 500 };
       if (cible === RUNS && geste === 'select') return { data: structuredClone(base.run), error: null };
       if (cible === RUNS && geste === 'update') { Object.assign(base.run, structuredClone(a('update').args[0])); return { data: null, error: null, status: 204 }; }
       if (cible === LIGNES && geste === 'select') {
+        if (refusComptage && a('select').args[1]?.head) return { data: null, count: null, error: refusComptage, status: 500 };
         return a('select').args[1]?.head
           ? { data: null, count: base.lignes.length, error: null }
           : { data: base.lignes.map(({ id, row_no }) => ({ id, row_no })), error: null };
@@ -160,7 +183,7 @@ async function retraiter({ refusLignes = false, refusRecus = null } = {}) {
   const r = await ef.appeler(new Request('http://ef.local/', {
     method: 'POST',
     headers: { 'x-import-secret': SECRET, 'content-type': 'application/json' },
-    body: JSON.stringify({ run_id: RUN, force_reparse: true }),
+    body: JSON.stringify(premier ? { run_id: RUN } : { run_id: RUN, force_reparse: true }),
   }));
   const ecrits = (table, op) => ef.ecrits.filter((e) => `${e.schema}.${e.table}` === table && e.op === op);
   const statuts = ecrits(RUNS, 'update').map((e) => e.donnees.run_status).filter(Boolean);
@@ -168,74 +191,77 @@ async function retraiter({ refusLignes = false, refusRecus = null } = {}) {
 }
 
 describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H21 lot 0, cinquième passe)', () => {
-  it('le DELETE des lignes refusé par la garde : aucun effacement des fichiers reçus, aucune relecture, le run finit comme le catch le décide', async () => {
+  it('le DELETE des lignes refusé par la garde : aucun statut écrit, fichiers reçus intacts, la HINT au journal, 409 rows_kept', async () => {
     const r = await retraiter({ refusLignes: true });
     // L'erreur est bien celle de la garde (lue dans la migration).
     expect(r.refus.hint).toBe('error.import.rows_held_by_items');
     expect(r.refus.message).toContain('901');
 
-    // Rien après le refus, sinon la trace de l'échec.
+    // Le paquet est lu AVANT (H30) ; rien après le refus, sinon la trace au journal.
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
-      `update ${RUNS}`,
+      `download ${PAQUET}`,
       `delete ${LIGNES}`,
       `select ${RUNS}`,
       `update ${RUNS}`,
     ]);
     expect(r.ecrits(RECUS, 'delete')).toHaveLength(0);
     expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
-    expect(r.ef.telechargements).toHaveLength(0);
+    expect(r.ef.telechargements).toHaveLength(1);
     expect(r.ef.rpcs).toHaveLength(0);
     // Les fichiers reçus (et les lignes, refusées) sont restés.
     expect(r.base.recus).toEqual(r.avant.recus);
     expect(r.base.lignes).toEqual(r.avant.lignes);
 
-    // Constat du catch — ni plus ni moins.
-    expect(r.statut).toBe(500);
-    expect(r.corps).toEqual({ error: r.refus.message });
-    expect(r.statuts).toEqual(['processing', 'failed']);
+    // Lignes gardées : le run tel quel, sa HINT au journal, 409 rows_kept.
+    const attendu = `${r.refus.message} [error.import.rows_held_by_items] (lignes gardées, rien n'est retraité)`;
+    expect(r.statut).toBe(409);
+    expect(r.corps).toEqual({ ok: false, run_id: RUN, error: attendu, rows_kept: true });
+    expect(r.statuts).toEqual([]);
     expect(r.base.run).toEqual({
       ...r.avant.run,
-      run_status: 'failed',
-      started_at: expect.any(String),
-      finished_at: null,
-      parser_version: 'fonds_receive_v1',
-      error_log: [...r.avant.run.error_log, { at: expect.any(String), error: r.refus.message }],
+      error_log: [...r.avant.run.error_log, { at: expect.any(String), error: attendu }],
     });
   });
 
-  it('le DELETE des fichiers reçus en échec : levé aussi, rien n\'est relu ni inséré (les lignes, elles, sont parties)', async () => {
+  it('le DELETE des fichiers reçus en échec (lignes déjà effacées) : comme avant, le run passe en échec, 500', async () => {
     const r = await retraiter({ refusRecus: DELAI });
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
-      `update ${RUNS}`,
+      `download ${PAQUET}`,
       `delete ${LIGNES}`,
       `delete ${RECUS}`,
       `select ${RUNS}`,
       `update ${RUNS}`,
+      `update ${RUNS}`,
     ]);
     expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
-    expect(r.ef.telechargements).toHaveLength(0);
+    expect(r.ef.telechargements).toHaveLength(1);
     expect(r.base.recus).toEqual(r.avant.recus);
     expect(r.base.lignes).toEqual([]);
     expect(r.statut).toBe(500);
-    expect(r.statuts).toEqual(['processing', 'failed']);
-    expect(r.base.run.error_log.at(-1)).toEqual({ at: expect.any(String), error: DELAI.message });
+    expect(r.corps.rows_kept).toBeUndefined();
+    expect(r.statuts).toEqual(['failed']);
+    // Le journal (journaliser) puis le statut, séparément : l'UPDATE du statut
+    // ne porte jamais error_log.
+    const majs = r.ecrits(RUNS, 'update').map((e) => e.donnees);
+    expect(majs.map((d) => Object.keys(d).sort())).toEqual([['error_log'], ['run_status']]);
+    expect(r.base.run.error_log).toEqual([...r.avant.run.error_log, { at: expect.any(String), error: DELAI.message }]);
   });
 
-  it('TÉMOIN — DELETE accepté : les deux effacements du run, puis la relecture du paquet, les fichiers suivent les nouvelles lignes', async () => {
+  it('TÉMOIN — DELETE accepté : lecture du paquet (H30), les deux effacements du run, processing, puis les nouvelles lignes, les fichiers les suivent', async () => {
     const r = await retraiter();
     expect(r.statut).toBe(200);
     expect(r.corps).toMatchObject({ ok: true, run_id: RUN, inserted_rows: 2, received_metadata_only: 1, received_failed: 0 });
     expect(r.journal).toEqual([
       `select ${RUNS}`,
       `select ${LIGNES}`,
-      `update ${RUNS}`,
+      `download ${PAQUET}`,
       `delete ${LIGNES}`,
       `delete ${RECUS}`,
-      `download ${PAQUET}`,
+      `update ${RUNS}`,
       `insert ${LIGNES}`,
       `select ${LIGNES}`,
       `insert ${RECUS}`,
@@ -256,5 +282,158 @@ describe('receive-fonds-bundle — « Retraiter » face à une ligne retenue (H2
     expect(r.base.recus[0]).toMatchObject({ run_id: RUN, staging_row_id: 1001, source_asset_id: 71, deposit_status: 'metadata_only' });
     expect(r.statuts).toEqual(['processing', 'ready_for_review']);
     expect(r.base.run).toMatchObject({ run_status: 'ready_for_review', imported_rows: 2, error_log: r.avant.run.error_log });
+  });
+});
+
+// H30 (04/10/2026) — « Retraiter » exige un paquet lisible. Téléchargement,
+// déballage, manifest.json présent, JSON valide, schéma attendu : tout est vérifié
+// AVANT 'processing' et avant les deux effacements. Illisible alors que le run a
+// des lignes : rien n'est touché, le refus va au journal du run, 409 rows_kept.
+// Contre-épreuve (04/10/2026, miroir hors dépôt, index.ts du commit 07111e3d) :
+// les six cas « Retraiter » (500 au lieu de 409), les trois cas H21 plus haut
+// (ordre, statuts) et les quatre cas « journal et comptage » (HEAD passe en
+// 'processing' avant d'effacer et ignore l'erreur du comptage) tombent ; les deux
+// témoins du premier import passent : 13 tombent, 2 passent.
+const zipDe = (fichiers) => {
+  const z = new JSZip();
+  for (const [nom, contenu] of Object.entries(fichiers)) z.file(nom, contenu);
+  return z.generateAsync({ type: 'uint8array' });
+};
+const blob = async (octets) => ({ data: new Blob([await octets]), error: null });
+const PAQUETS_ILLISIBLES = [
+  ['le Storage rend une erreur', async () => ({ data: null, error: { message: 'Object not found' } }), /Object not found/],
+  ['le Storage ne rend rien', async () => ({ data: null, error: null }), /returned no file/],
+  ['ce n\'est pas un ZIP', () => blob(new TextEncoder().encode('titulo;autor\r\nO Estado;Bakunin\r\n')), /zip/i],
+  ['ZIP sans manifest.json', () => blob(zipDe({ 'records.json': JSON.stringify(MANIFESTE) })), /manifest\.json absent/],
+  ['manifest.json en JSON invalide', () => blob(zipDe({ 'manifest.json': '{"schema": "anarbib-fonds-export/v1", records: [' })), /manifest\.json illisible/],
+  ['manifeste d\'un autre schéma', () => blob(zipDe({ 'manifest.json': JSON.stringify({ ...MANIFESTE, schema: 'anarbib-fonds-export/v0' }) })), /Schéma de manifeste inattendu : anarbib-fonds-export\/v0/],
+];
+
+describe('receive-fonds-bundle — « Retraiter » sans paquet lisible (H30)', () => {
+  it.each(PAQUETS_ILLISIBLES)('run avec lignes, %s : ni processing ni DELETE (lignes, fichiers reçus), une entrée au journal, 409', async (_cas, paquet, motif) => {
+    const r = await retraiter({ paquet });
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: RUN, rows_kept: true });
+    expect(r.corps.error).toMatch(motif);
+    expect(r.corps.error).toContain('les lignes sont gardées');
+    // La lecture, puis la seule trace au journal.
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `download ${PAQUET}`,
+      `select ${RUNS}`,
+      `update ${RUNS}`,
+    ]);
+    expect(r.statuts).toEqual([]);
+    expect(r.ecrits(LIGNES, 'delete')).toHaveLength(0);
+    expect(r.ecrits(RECUS, 'delete')).toHaveLength(0);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.base.lignes).toEqual(r.avant.lignes);
+    expect(r.base.recus).toEqual(r.avant.recus);
+    // Le run tel quel, une entrée de plus à son journal (le message de la réponse).
+    expect(r.base.run).toEqual({
+      ...r.avant.run,
+      error_log: [...r.avant.run.error_log, { at: expect.any(String), error: r.corps.error }],
+    });
+  });
+
+  it.each([PAQUETS_ILLISIBLES[0], PAQUETS_ILLISIBLES[3]])('TÉMOIN — premier import (aucune ligne), %s : comme avant, le run passe en échec, 500', async (_cas, paquet, motif) => {
+    const r = await retraiter({ paquet, premier: true });
+    expect(r.statut).toBe(500);
+    expect(r.corps.error).toMatch(motif);
+    expect(r.statuts.at(-1)).toBe('failed');
+    expect(r.base.run.run_status).toBe('failed');
+    expect(r.base.run.error_log).toEqual([{ at: expect.any(String), error: r.corps.error }]);
+    expect(r.ecrits(LIGNES, 'delete')).toHaveLength(0);
+    expect(r.ecrits(RECUS, 'delete')).toHaveLength(0);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.base.lignes).toEqual([]);
+  });
+});
+
+// H30, troisième passe (04/10/2026) : le journal du run n'est jamais écrasé
+// (journaliser lit puis écrit, et lève si la lecture échoue) ; le comptage des
+// lignes lit son erreur, et tant qu'elles ne sont pas comptées rien n'a bougé
+// (lignes gardées) ; le catch « failed » journalise puis écrit le statut à part.
+// Reste un CONSTAT : journal illisible, la réponse perd le motif du paquet.
+describe('receive-fonds-bundle — journal et comptage en échec (H30)', () => {
+  it('paquet illisible, run avec lignes, relecture du journal en échec : rien n\'est écrit (error_log non écrasé), 409 rows_kept', async () => {
+    const r = await retraiter({ paquet: PAQUETS_ILLISIBLES[0][1], refusLecture: DELAI });
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `download ${PAQUET}`,
+      `select ${RUNS}`,
+      `select ${RUNS}`,
+    ]);
+    expect(r.ef.ecrits).toEqual([]);
+    expect(r.base.run).toEqual(r.avant.run);
+    expect(r.base.lignes).toEqual(r.avant.lignes);
+    expect(r.base.recus).toEqual(r.avant.recus);
+    expect(r.statut).toBe(409);
+    expect(r.corps).toMatchObject({ ok: false, run_id: RUN, rows_kept: true });
+    // CONSTAT : la réponse dit l'échec du journal, plus celui du paquet.
+    expect(r.corps.error).toBe(`${DELAI.message} (lignes gardées, rien n'est retraité)`);
+  });
+
+  it('DELETE des lignes refusé, relecture du journal en échec : rien n\'est écrit, 409 rows_kept avec la HINT', async () => {
+    const r = await retraiter({ refusLignes: true, refusLecture: DELAI });
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `download ${PAQUET}`,
+      `delete ${LIGNES}`,
+      `select ${RUNS}`,
+    ]);
+    expect(r.ef.ecrits.filter((e) => e.op !== 'delete')).toEqual([]);
+    expect(r.base.run).toEqual(r.avant.run);
+    expect(r.base.recus).toEqual(r.avant.recus);
+    expect(r.statut).toBe(409);
+    expect(r.corps).toEqual({
+      ok: false, run_id: RUN, rows_kept: true,
+      error: `${r.refus.message} [error.import.rows_held_by_items] (lignes gardées, rien n'est retraité)`,
+    });
+  });
+
+  it('DELETE des fichiers reçus en échec (lignes effacées), relecture du journal en échec : error_log non écrasé, le run passe en failed, 500', async () => {
+    const r = await retraiter({ refusRecus: DELAI, refusLecture: DELAI });
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `download ${PAQUET}`,
+      `delete ${LIGNES}`,
+      `delete ${RECUS}`,
+      `select ${RUNS}`,
+      `update ${RUNS}`,
+    ]);
+    expect(r.statut).toBe(500);
+    expect(r.statuts).toEqual(['failed']);
+    expect(r.ecrits(RUNS, 'update').map((e) => e.donnees)).toEqual([{ run_status: 'failed' }]);
+    // L'entrée d'avant (« essai précédent ») est toujours là, seule.
+    expect(r.base.run.error_log).toEqual(r.avant.run.error_log);
+    expect(r.base.run.run_status).toBe('failed');
+  });
+
+  it('comptage des lignes en échec : rien n\'a bougé — 409 rows_kept, l\'erreur au journal, aucun failed, ni téléchargement ni DELETE', async () => {
+    const r = await retraiter({ refusComptage: DELAI });
+    expect(r.journal).toEqual([
+      `select ${RUNS}`,
+      `select ${LIGNES}`,
+      `select ${RUNS}`,
+      `update ${RUNS}`,
+    ]);
+    expect(r.ef.telechargements).toHaveLength(0);
+    expect(r.ecrits(LIGNES, 'delete')).toHaveLength(0);
+    expect(r.ecrits(RECUS, 'delete')).toHaveLength(0);
+    expect(r.ef.ecrits.filter((e) => e.op === 'insert')).toHaveLength(0);
+    expect(r.ef.rpcs).toHaveLength(0);
+    expect(r.base.lignes).toEqual(r.avant.lignes);
+    expect(r.base.recus).toEqual(r.avant.recus);
+    const attendu = `${DELAI.message} (lignes gardées, rien n'est retraité)`;
+    expect(r.statut).toBe(409);
+    expect(r.corps).toEqual({ ok: false, run_id: RUN, error: attendu, rows_kept: true });
+    expect(r.statuts).toEqual([]);
+    expect(r.base.run).toEqual({ ...r.avant.run, error_log: [...r.avant.run.error_log, { at: expect.any(String), error: attendu }] });
   });
 });

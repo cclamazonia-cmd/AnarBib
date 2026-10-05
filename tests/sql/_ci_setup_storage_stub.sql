@@ -21,10 +21,11 @@
 -- Les seize identifiants ci-dessous sont ceux relevés en production le
 -- 2026-08-20 — huit publics, huit privés.
 --
--- CE QUE CE STUB N'EST PAS. Une reproduction du service Storage : ni objets, ni
--- policies, ni upload. Uniquement l'INTERFACE que les migrations lisent et
--- écrivent — id, name, public, file_size_limit, allowed_mime_types. Si une
--- migration future a besoin de `storage.objects`, c'est ici qu'on l'ajoutera.
+-- CE QUE CE STUB N'EST PAS. Une reproduction du service Storage : ni policies,
+-- ni upload, ni RLS. Uniquement l'INTERFACE que les migrations lisent et
+-- écrivent — les buckets (id, name, public, file_size_limit,
+-- allowed_mime_types) et, depuis le 04/10/2026 (H30), une table
+-- `storage.objects` VIDE (voir plus bas).
 --
 -- Si un bucket est créé ou renommé en production, l'ajouter ici : sinon la
 -- migration des plafonds lèvera « Buckets introuvables » en CI — ce qui est le
@@ -66,3 +67,23 @@ VALUES
   -- 17e bucket (07/09/2026) : fond de carte PMTiles, cf. 20260907234500.
   ('map-tiles',                  'map-tiles',                  true)
 ON CONFLICT (id) DO NOTHING;
+
+-- storage.objects (04/10/2026, H30) : « Retraiter » (fn_import_dispatch)
+-- vérifie que le fichier du run est dans le seau ; d'autres fonctions lisent
+-- ou effacent déjà des objets (lecture restreinte, suppression d'un run). Table
+-- VIDE : une suite qui veut un fichier présent l'insère elle-même. Seules les
+-- colonnes que le code lit ; (bucket_id, name) unique, comme le vrai service.
+CREATE TABLE IF NOT EXISTS storage.objects (
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  bucket_id        text REFERENCES storage.buckets (id),
+  name             text,
+  owner            uuid,
+  owner_id         text,
+  metadata         jsonb,
+  user_metadata    jsonb,
+  version          text,
+  created_at       timestamptz DEFAULT now(),
+  updated_at       timestamptz DEFAULT now(),
+  last_accessed_at timestamptz DEFAULT now(),
+  UNIQUE (bucket_id, name)
+);

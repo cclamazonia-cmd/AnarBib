@@ -6949,5 +6949,6 @@
   "error.publish.status_reserved": "Alleen publiceren zet een concept op ‘gepubliceerd’.",
   "importacoes.fila.rejectedPartial": "{rejected} van {asked} regel(s) afgewezen: de andere waren intussen al elders behandeld, afgewezen of verwijderd. De lijst is opnieuw geladen.",
   "error.import.rows_held_by_items": "Uit dit bestand gekoppelde exemplaren zijn nog niet gepubliceerd (prullenbak inbegrepen): hun importregels kunnen niet worden gewist.",
-  "importacoes.fila.reconciledPartial": "{skipped} van {asked} regel(s) overgeslagen: intussen elders behandeld, afgewezen, verworpen of verwijderd. De lijst is opnieuw geladen."
+  "importacoes.fila.reconciledPartial": "{skipped} van {asked} regel(s) overgeslagen: intussen elders behandeld, afgewezen, verworpen of verwijderd. De lijst is opnieuw geladen.",
+  "error.import.reparse_no_file": "Het bestand van deze import staat niet in de opslag (verdwenen, of nooit geüpload: OAI-oogst, kandidaat, rechtstreekse inzending): hij kan niet opnieuw verwerkt worden, en zijn regels blijven zoals ze zijn. Importeer het bestand zo nodig opnieuw."
 }
