@@ -507,12 +507,12 @@ export default function CatalogacaoPage() {
 
           {/* 2. Autoria */}
           <div className={`cat-panel${activeTab === 'authorsPanel' ? ' active' : ''}`}>
-            <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} />
+            <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} onNavigateTab={switchTab} />
           </div>
 
           {/* 3. Indexação (exemplar + rótulo) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
-            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} />
+            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} onNavigateTab={switchTab} />
           </div>
 
           {/* 3b. Etiquetas (impressão das etiquetas de cote) */}

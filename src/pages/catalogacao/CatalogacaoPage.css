@@ -188,6 +188,39 @@
 .cat-status--info  { border-left-color: #60a5fa; }
 .cat-status--info  .cat-status__icon { background: #60a5fa; }
 
+/* ── « Publié — et maintenant ? » (AfterPublishPanel, 04/10/2026) ── */
+.cat-next {
+  margin-bottom: 16px; padding: 14px 16px; border-radius: 10px;
+  border: 1px solid rgba(74,222,128,.35); background: rgba(74,222,128,.06);
+}
+.cat-next__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.cat-next__check {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-ok, #4ade80); color: #111; font-weight: 800; font-size: .85rem;
+}
+.cat-next__title { flex: 1; min-width: 0; margin: 0; font-size: 1rem; line-height: 1.35; overflow-wrap: anywhere; }
+.cat-next__close {
+  flex-shrink: 0; border: none; background: transparent; cursor: pointer;
+  color: var(--brand-muted, #aaa); font-size: 1.3rem; line-height: 1; padding: 0 4px;
+}
+.cat-next__close:hover { color: var(--brand-text, #fff); }
+.cat-next__actions {
+  display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+}
+.cat-next__action {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  padding: 10px 12px; border-radius: 8px; cursor: pointer; text-align: left;
+  border: 1px solid var(--brand-panel-border-strong, rgba(255,255,255,.15));
+  background: var(--brand-panel-bg-strong, rgba(0,0,0,.25)); color: inherit;
+  font: inherit;
+}
+.cat-next__action:hover, .cat-next__action:focus-visible { border-color: var(--color-ok, #4ade80); }
+.cat-next__action.is-primary { border-color: rgba(74,222,128,.55); background: rgba(74,222,128,.12); }
+.cat-next__label { font-weight: 700; font-size: .9rem; }
+.cat-next__hint { font-size: .78rem; color: var(--brand-muted, #aaa); line-height: 1.35; }
+
 /* ── Button styles : .cat-btn est défini dans components/ui/ui.css ── */
 
 /* ── Placeholder panels ──────────────────────────────────── */

@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import AfterPublishPanel from './AfterPublishPanel';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, lotsProposables, libelleLot } from '@/lib/useStaffLibraries';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -70,7 +71,7 @@ function buildSortName(preferredName, authorityType) {
 // authors.structured_meta / author_drafts.structured_meta (jsonb).
 // The pack/extract helpers are removed; we read/write the column directly.
 
-export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed, onChanged }) {
+export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed, onChanged, onNavigateTab }) {
   const { formatMessage: t, locale } = useIntl();
   const confirmer = useConfirm();
   // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
@@ -94,6 +95,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   });
   const [assistRaw, setAssistRaw] = useState('');
   const [draftState, setDraftState] = useState('new');
+  const [afterPublish, setAfterPublish] = useState(null); // { name, authorId } — « Publié — et maintenant ? »
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -181,6 +183,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     setAssistRaw('');
     setDraftState('new');
     setMsg({ text: '', kind: '' });
+    setAfterPublish(null);
     setPhotoFile(null);
     setPhotoPreviewUrl('');
   }
@@ -476,7 +479,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setDraftState('published');
       await loadDrafts();
       onChanged?.();
-      confirmSaved(t({ id: 'catalogacao.author.publishSuccess' }));
+      setMsg({ text: '', kind: '' });
+      setAfterPublish({ name: f('preferred_name'), authorId: newAuthorId ? Number(newAuthorId) : null });
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setPublishing(false); }
@@ -686,6 +690,26 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
       {/* ── Message ──────────────────────────────────── */}
       <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
+      {afterPublish && (
+        <AfterPublishPanel
+          title={t({ id: 'catalogacao.next.titleAuthor' }, { name: afterPublish.name })}
+          onClose={() => setAfterPublish(null)}
+          actions={[
+            { id: 'new', primary: true,
+              label: t({ id: 'catalogacao.next.newAuthority' }), hint: t({ id: 'catalogacao.next.newAuthorityHint' }),
+              onClick: () => resetForm() },
+            afterPublish.authorId && { id: 'open',
+              label: t({ id: 'catalogacao.next.authorPage' }), hint: t({ id: 'catalogacao.next.openInNewTab' }),
+              onClick: () => window.open(`/autor/${afterPublish.authorId}`, '_blank') },
+            onNavigateTab && { id: 'document',
+              label: t({ id: 'catalogacao.next.newDocument' }), hint: t({ id: 'catalogacao.next.newDocumentHint' }),
+              onClick: () => { setAfterPublish(null); onNavigateTab('booksPanel'); } },
+            onNavigateTab && { id: 'queue',
+              label: t({ id: 'catalogacao.next.queue' }), hint: t({ id: 'catalogacao.next.queueHint' }),
+              onClick: () => { setAfterPublish(null); onNavigateTab('queuePanel'); } },
+          ]}
+        />
+      )}
 
       {/* ── Existing drafts list ──────────────────────── */}
       {drafts.length > 0 && (

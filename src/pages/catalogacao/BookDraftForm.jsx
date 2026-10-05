@@ -21,6 +21,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import AfterPublishPanel from './AfterPublishPanel';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -105,7 +106,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const showMsg = useCallback((text, kind) => setMsg({ text, kind }), []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [dupModal, setDupModal] = useState(null); // { kind, detail, bookId } | null — modale d'avertissement doublon AVANT sauvegarde du brouillon
-  const [lastPublished, setLastPublished] = useState(null); // { bookId, title } | null — raccourci post-publication (ajouter un exemplaire au document publié)
+  const [lastPublished, setLastPublished] = useState(null); // { bookId, title, workId, autor } | null — « Publié — et maintenant ? » (AfterPublishPanel)
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
   // Doublons de documents (detection + fusion, P2a/P2b)
@@ -1496,18 +1497,29 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       // UX catalogage en série (2026-07) : après publication, on repart aussitôt
       // sur une fiche vierge pour enchaîner un nouveau brouillon. On capture le
-      // titre AVANT reset, puis on ré-affiche le message APRÈS (resetForm l'efface).
+      // titre et l'auteur·rice AVANT reset (resetForm les efface).
       const publishedTitle = f('titulo');
+      const publishedAutor = f('autor');
       onSaved?.();
       resetForm();
       setCoverCandidates([]);
       setDupBanner(null);
       setIsbnDupHint(null);
       setWork(null);
-      // Raccourci post-publication : ajouter un exemplaire au document publié
-      // (survit à la fiche vierge ; resetForm() ci-dessus l'a d'abord remis à null).
-      setLastPublished(publishedId ? { bookId: publishedId, title: publishedTitle } : null);
-      confirmSaved(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }));
+      // 04/10/2026 : un seul encadré « Publié — et maintenant ? » remplace le
+      // message, le toast, le bandeau « Ajouter un exemplaire ? » et la fenêtre
+      // œuvre/édition qui revenait à chaque publication. La fenêtre ne s'ouvre
+      // plus que sur « Nouveau document » (creationChoice non nul ici).
+      setCreationChoice('work');
+      let workId = null;
+      if (publishedId) {
+        try {
+          const { data: pub } = await supabase.from('books').select('work_id').eq('id', Number(publishedId)).maybeSingle();
+          workId = pub?.work_id || null;
+        } catch { /* l'action « autre édition » sera simplement omise */ }
+      }
+      setLastPublished(publishedId ? { bookId: publishedId, title: publishedTitle, autor: publishedAutor, workId } : null);
+      if (!publishedId) confirmSaved(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }));
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
       const code = raw.split(':', 1)[0].trim();
@@ -1780,32 +1792,33 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       {/* Message */}
       <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
-      {/* ── Raccourci post-publication : ajouter un exemplaire au document publié ──
-          Survit à la fiche vierge : la personne peut enchaîner un nouveau brouillon
-          OU cliquer pour indexer un exemplaire du document qui vient d'être publié. */}
+      {/* ── « Publié — et maintenant ? » ── survit à la fiche vierge : on peut
+          enchaîner un nouveau brouillon OU choisir une suite. */}
       {lastPublished && (
-        <div style={{ marginBottom: 14, padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(74,222,128,.35)', background: 'rgba(74,222,128,.07)', display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: 'min(200px, 100%)', fontSize: '.85rem' }}>
-            <b>{t({ id: 'catalogacao.postPublish.title' }, { title: lastPublished.title })}</b>
-            <div style={{ color: 'var(--brand-muted, #aaa)', marginTop: 2 }}>{t({ id: 'catalogacao.postPublish.body' })}</div>
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {onAttachToBook && (
-              <button type="button" className="ab-button ab-button--mini ab-button--secondary"
-                onClick={() => { onAttachToBook(lastPublished.bookId); setLastPublished(null); }}>
-                {t({ id: 'catalogacao.postPublish.addExemplar' })}
-              </button>
-            )}
-            {onOpenBook && (
-              <button type="button" className="ab-button ab-button--mini"
-                onClick={() => onOpenBook(lastPublished.bookId)}>
-                {t({ id: 'catalogacao.postPublish.openBook' })}
-              </button>
-            )}
-            <button type="button" className="ab-button ab-button--mini" aria-label={t({ id: 'common.close' })}
-              onClick={() => setLastPublished(null)}>×</button>
-          </div>
-        </div>
+        <AfterPublishPanel
+          title={t({ id: 'catalogacao.next.title' }, { title: lastPublished.title })}
+          onClose={() => setLastPublished(null)}
+          actions={[
+            onAttachToBook && { id: 'exemplar', primary: true,
+              label: t({ id: 'catalogacao.next.addExemplar' }), hint: t({ id: 'catalogacao.next.addExemplarHint' }),
+              onClick: () => { onAttachToBook(lastPublished.bookId); setLastPublished(null); } },
+            lastPublished.workId && { id: 'edition',
+              label: t({ id: 'catalogacao.next.otherEdition' }), hint: t({ id: 'catalogacao.next.otherEditionHint' }),
+              onClick: () => {
+                selectEditionAsWork({ work_id: lastPublished.workId, titulo: lastPublished.title, autor: lastPublished.autor });
+                setLastPublished(null);
+              } },
+            { id: 'new',
+              label: t({ id: 'catalogacao.next.newDocument' }), hint: t({ id: 'catalogacao.next.newDocumentHint' }),
+              onClick: () => { setLastPublished(null); setCreationChoice(null); } },
+            onOpenBook && { id: 'open',
+              label: t({ id: 'catalogacao.next.openBook' }), hint: t({ id: 'catalogacao.next.openInNewTab' }),
+              onClick: () => onOpenBook(lastPublished.bookId) },
+            onNavigateTab && { id: 'queue',
+              label: t({ id: 'catalogacao.next.queue' }), hint: t({ id: 'catalogacao.next.queueHint' }),
+              onClick: () => { setLastPublished(null); onNavigateTab('queuePanel'); } },
+          ]}
+        />
       )}
 
       {/* ── Bandeau doublon (Lot 6 anchor — logique dans CAT-B5) ── */}

@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import AfterPublishPanel from './AfterPublishPanel';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, bibliothequesProposables, lotsProposables, lotDeLaBibliotheque, libelleLot } from '@/lib/useStaffLibraries';
 import { parseShelfLocation, formatShelfLocation, emptyShelfLocation } from '@/lib/shelfLocation';
@@ -30,7 +31,7 @@ function getTrigram(name) {
   return clean ? clean.slice(0,3).padEnd(3,'X') : '---';
 }
 
-export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged }) {
+export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged, onNavigateTab }) {
   const { formatMessage: t } = useIntl();
   const confirmer = useConfirm();
   const { user } = useAuth();
@@ -141,6 +142,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [titleResults, setTitleResults] = useState([]);
   const [titleSearching, setTitleSearching] = useState(false);
   const [draftState, setDraftState] = useState('new');
+  const [afterPublish, setAfterPublish] = useState(null); // { tombo, bibRef, libraryId, batchId } — « Publié — et maintenant ? »
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -237,6 +239,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     setBibRefChecked(false);
     setDraftState('new');
     setMsg({ text: '', kind: '' });
+    setAfterPublish(null);
     setReassignTarget('');
   }
 
@@ -418,7 +421,9 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       setDraftState('published');
       await loadDrafts();
       onChanged?.();
-      confirmSaved(t({ id: 'catalogacao.exemplar.publishSuccess' }));
+      setMsg({ text: '', kind: '' });
+      setAfterPublish({ tombo: f('tombo') || f('target_bib_ref') || '', bibRef: f('target_bib_ref'),
+                        libraryId: f('target_library_id'), batchId: f('batch_id') });
     } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setPublishing(false); }
   }
@@ -513,6 +518,30 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
       {/* ── Messages ─────────────────────────────────── */}
       <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
+      {afterPublish && (
+        <AfterPublishPanel
+          title={t({ id: 'catalogacao.next.titleExemplar' }, { tombo: afterPublish.tombo })}
+          onClose={() => setAfterPublish(null)}
+          actions={[
+            afterPublish.bibRef && { id: 'same', primary: true,
+              label: t({ id: 'catalogacao.next.sameDocument' }), hint: t({ id: 'catalogacao.next.sameDocumentHint' }),
+              onClick: () => {
+                const garde = { target_bib_ref: afterPublish.bibRef, target_library_id: afterPublish.libraryId || '', batch_id: afterPublish.batchId || '' };
+                resetForm();
+                setForm((p) => ({ ...p, ...garde }));
+              } },
+            onNavigateTab && { id: 'labels',
+              label: t({ id: 'catalogacao.next.labels' }), hint: t({ id: 'catalogacao.next.labelsHint' }),
+              onClick: () => { setAfterPublish(null); onNavigateTab('labelsPanel'); } },
+            onNavigateTab && { id: 'document',
+              label: t({ id: 'catalogacao.next.newDocument' }), hint: t({ id: 'catalogacao.next.newDocumentHint' }),
+              onClick: () => { setAfterPublish(null); onNavigateTab('booksPanel'); } },
+            onNavigateTab && { id: 'queue',
+              label: t({ id: 'catalogacao.next.queue' }), hint: t({ id: 'catalogacao.next.queueHint' }),
+              onClick: () => { setAfterPublish(null); onNavigateTab('queuePanel'); } },
+          ]}
+        />
+      )}
 
       {/* ── Drafts list ──────────────────────────────── */}
       {drafts.length > 0 && (
