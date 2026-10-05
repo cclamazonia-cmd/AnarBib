@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery, SUPABASE_URL } from '@/lib/supabase';
+import { supabase, apiQuery, apiRpc, SUPABASE_URL } from '@/lib/supabase';
+import { bibliothequesDesReseaux, bibliothequesFiltrees } from '@/lib/reseaux';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
 import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, yearsLabel, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
@@ -318,6 +319,12 @@ export default function CatalogPage() {
   });
   const [libMenuOpen, setLibMenuOpen] = useState(false);
   const libMenuRef = useRef(null);
+  // G13 (05/10/2026) : les réseaux constitués (FICEDL, RebAL, NORLA…) — slugs de
+  // public.networks, mémorisés avec les autres filtres.
+  const [networkFilter, setNetworkFilter] = useState(() => (Array.isArray(filterState.networkFilter) ? filterState.networkFilter : []));
+  const [catalogNetworks, setCatalogNetworks] = useState([]);
+  const [netMenuOpen, setNetMenuOpen] = useState(false);
+  const netMenuRef = useRef(null);
   const [sortValue, setSortValue] = useState(filterState.sortValue || '__relevance__');
   // OPAC par œuvre (04/09/2026, décision 1) : regroupement ACTIF par défaut, côté
   // serveur (api.catalog_works_v1) ; « Liste plate » = l'ancien affichage par
@@ -371,8 +378,8 @@ export default function CatalogPage() {
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions, exploreOpen, filtersOpen });
-  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions, exploreOpen, filtersOpen]);
+    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, networkFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, groupByWork: collapseEditions, exploreOpen, filtersOpen });
+  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, networkFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, collapseEditions, exploreOpen, filtersOpen]);
 
   // ── Initialisation depuis l'URL (montage uniquement) ───────
   // Doctrine validée : l'URL est la source de vérité. Un lien profond
@@ -398,6 +405,9 @@ export default function CatalogPage() {
 
     // Filtre bibliothèque : URL prioritaire, sinon __all__.
     setLibraryFilter(libFromUrl ? [libFromUrl] : []);
+    // G13 : un lien profond ne garde pas un filtre de réseaux mémorisé, qui
+    // pourrait cacher la bibliothèque demandée.
+    setNetworkFilter([]);
     // Autres filtres : valeur de l'URL si présente, sinon remise à zéro.
     setSearch(urlSearchParams.get('q') || '');
     setAuthorFilter(urlSearchParams.get('autor') || '');
@@ -474,6 +484,26 @@ export default function CatalogPage() {
     })();
   }, []);
 
+  // G13 : les réseaux « documentation » qui ont au moins une bibliothèque visible
+  // par une fiche de carte publique. Vide → pas de sélecteur.
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await apiRpc('fn_catalog_networks_v1');
+      if (!error && Array.isArray(data)) setCatalogNetworks(data);
+    })();
+  }, []);
+  // Un réseau mémorisé qui n'a plus de bibliothèque visible ne filtre plus rien.
+  const reseauxActifs = useMemo(
+    () => networkFilter.filter((s) => catalogNetworks.some((n) => n.slug === s)),
+    [networkFilter, catalogNetworks]
+  );
+  const libsDesReseaux = useMemo(() => bibliothequesDesReseaux(reseauxActifs, catalogNetworks), [reseauxActifs, catalogNetworks]);
+  // Les bibliothèques qui n'appartiennent à aucun réseau déclaré : le dire, pas les faire disparaître.
+  const horsReseau = useMemo(() => {
+    const dans = bibliothequesDesReseaux(catalogNetworks.map((n) => n.slug), catalogNetworks);
+    return libraryOptions.filter((o) => o.value !== '__all__' && !dans.has(o.value)).map((o) => o.short_name || o.name || o.value);
+  }, [catalogNetworks, libraryOptions]);
+
   // Map biblio → ville (afficher la ville à côté du nom dans la liste — clarté lecteurs)
   const cityByLib = useMemo(() => {
     const m = {};
@@ -484,9 +514,11 @@ export default function CatalogPage() {
   }, [libraryOptions]);
 
   // Slugs sélectionnés → short_names (filtre sur holding_library_names_json, gère les multi-biblios)
+  // G13 : un filtre de réseaux réduit la sélection à ses bibliothèques, ou les prend toutes.
   const libraryShortNames = useMemo(
-    () => libraryFilter.map(slug => libraryOptions.find(o => o.value === slug)?.short_name).filter(Boolean),
-    [libraryFilter, libraryOptions]
+    () => bibliothequesFiltrees(libraryFilter, reseauxActifs, catalogNetworks)
+      .map(slug => libraryOptions.find(o => o.value === slug)?.short_name).filter(Boolean),
+    [libraryFilter, libraryOptions, reseauxActifs, catalogNetworks]
   );
   // Biblios a remonter en tete de la cellule Bibliotheque(s) (cf. orderLibraryNames).
   // libraryName vient du contexte et vaut deja short_name || name, soit la meme
@@ -504,6 +536,12 @@ export default function CatalogPage() {
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
   }, [libMenuOpen]);
+  useEffect(() => {
+    if (!netMenuOpen) return;
+    const onDown = (e) => { if (netMenuRef.current && !netMenuRef.current.contains(e.target)) setNetMenuOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [netMenuOpen]);
 
   // Fetch
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
@@ -932,7 +970,7 @@ export default function CatalogPage() {
   }, [isAuth]);
 
   // Stats
-  const hasActiveFilters = dSearch || dAuthor || alphaFilter || subjectFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter.length > 0 || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
+  const hasActiveFilters = dSearch || dAuthor || alphaFilter || subjectFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter.length > 0 || reseauxActifs.length > 0 || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
   // E17 : ce que le bloc « Explorer » replié cache d'actif — les cinq sortes de choix qu'il
   // propose (lettre, sujet, thème CDD, décennie, auteur·rice). Trois d'entre eux se règlent
   // aussi depuis la barre de filtres : un·e auteur·rice tapé·e à la main compte donc ici.
@@ -984,7 +1022,7 @@ export default function CatalogPage() {
 
   function clearFilters() {
     setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setSubjectFilter(''); setPublisherFilter(''); setYearFilter('');
-    setAvailabilityFilter('__all__'); setLibraryFilter([]); setSortValue('__relevance__');
+    setAvailabilityFilter('__all__'); setLibraryFilter([]); setNetworkFilter([]); setSortValue('__relevance__');
     setIsbnFilter(''); setLanguageFilter(''); setCddFilter(''); setSubjectsFilter('');
     setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
   }
@@ -1346,7 +1384,7 @@ export default function CatalogPage() {
                     <input type="checkbox" checked={libraryFilter.length === 0} onChange={() => setLibraryFilter([])} />
                     <span>{t({ id: 'catalog.avail.all' })}</span>
                   </label>
-                  {libraryOptions.filter(o => o.value !== '__all__').map(o => (
+                  {libraryOptions.filter(o => o.value !== '__all__' && (reseauxActifs.length === 0 || libsDesReseaux.has(o.value))).map(o => (
                     <label key={o.value} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', cursor: 'pointer', borderRadius: 6 }}>
                       <input type="checkbox" checked={libraryFilter.includes(o.value)}
                         onChange={() => setLibraryFilter(prev => prev.includes(o.value) ? prev.filter(v => v !== o.value) : [...prev, o.value])} />
@@ -1357,6 +1395,45 @@ export default function CatalogPage() {
               )}
             </div>
           </div>
+          {catalogNetworks.length > 0 && (
+          <div className="ab-field">
+            <label className="ab-field__label">{t({ id: 'catalog.filters.networkLabel' })}</label>
+            <div style={{ position: 'relative' }} ref={netMenuRef}>
+              <button type="button" className="ab-select" aria-expanded={netMenuOpen} aria-haspopup="true"
+                style={{ textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: 6, flexWrap: 'wrap' }}
+                onClick={() => setNetMenuOpen(o => !o)}>
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {reseauxActifs.length === 0
+                    ? t({ id: 'catalog.filters.networkAll' })
+                    : reseauxActifs.length === 1
+                      ? (catalogNetworks.find(n => n.slug === reseauxActifs[0])?.label || reseauxActifs[0])
+                      : t({ id: 'catalog.filters.networkNSelected' }, { n: reseauxActifs.length })}
+                </span>
+                <span aria-hidden="true">▾</span>
+              </button>
+              {netMenuOpen && (
+                <div style={{ position: 'absolute', zIndex: 30, top: '100%', left: 0, right: 0, marginTop: 2, background: 'var(--brand-surface, #1e1e1e)', border: '1px solid rgba(255,255,255,.15)', borderRadius: 8, maxHeight: 280, overflowY: 'auto', padding: 4, boxShadow: '0 8px 24px rgba(0,0,0,.45)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', cursor: 'pointer', borderRadius: 6 }}>
+                    <input type="checkbox" checked={reseauxActifs.length === 0} onChange={() => setNetworkFilter([])} />
+                    <span>{t({ id: 'catalog.filters.networkAll' })}</span>
+                  </label>
+                  {catalogNetworks.map(n => (
+                    <label key={n.slug} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', cursor: 'pointer', borderRadius: 6 }}>
+                      <input type="checkbox" checked={reseauxActifs.includes(n.slug)}
+                        onChange={() => setNetworkFilter(prev => prev.includes(n.slug) ? prev.filter(v => v !== n.slug) : [...prev.filter(v => catalogNetworks.some(c => c.slug === v)), n.slug])} />
+                      <span>{n.label} <small style={{ color: 'var(--brand-muted)' }}>({(n.libraries || []).map(l => l.short_name || l.name || l.slug).join(', ')})</small></span>
+                    </label>
+                  ))}
+                  {horsReseau.length > 0 && (
+                    <p style={{ margin: '6px 8px 4px', fontSize: '.78rem', color: 'var(--brand-muted)' }}>
+                      {t({ id: 'catalog.filters.networkOutside' }, { names: horsReseau.join(', ') })}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+          )}
           <div className="ab-field ab-field--action">
             <label className="ab-field__label">{t({ id: 'catalog.filters.clearAll' })}</label>
             <button className="ab-button ab-button--secondary" onClick={clearFilters} style={{ borderColor: 'var(--brand-action, #b32025)', color: 'var(--brand-action, #b32025)', fontWeight: 700 }}>↺ {t({ id: 'catalog.filters.clearButton' })}</button>
@@ -1436,6 +1513,7 @@ export default function CatalogPage() {
               {dPublisher && <span className="ab-filter-chip">{t({ id: 'catalog.chip.publisher' })}: <strong>{dPublisher}</strong> <button onClick={() => setPublisherFilter('')}>✕</button></span>}
               {dYear && <span className="ab-filter-chip">{t({ id: 'catalog.chip.year' })}: <strong>{dYear}</strong> <button onClick={() => setYearFilter('')}>✕</button></span>}
               {availabilityFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.avail' })}: <strong>{availabilityOptions.find(o => o.value === availabilityFilter)?.label}</strong> <button onClick={() => setAvailabilityFilter('__all__')}>✕</button></span>}
+              {reseauxActifs.map(slug => <span key={`net-${slug}`} className="ab-filter-chip">{t({ id: 'catalog.chip.network' })}: <strong>{catalogNetworks.find(n => n.slug === slug)?.label || slug}</strong> <button onClick={() => setNetworkFilter(prev => prev.filter(v => v !== slug))}>✕</button></span>)}
               {libraryFilter.map(slug => <span key={slug} className="ab-filter-chip">{t({ id: 'catalog.chip.library' })}: <strong>{libraryOptions.find(o => o.value === slug)?.label || slug}</strong> <button onClick={() => setLibraryFilter(prev => prev.filter(v => v !== slug))}>✕</button></span>)}
               {dIsbn && <span className="ab-filter-chip">{t({ id: 'catalog.chip.isbn' })}: <strong>{dIsbn}</strong> <button onClick={() => setIsbnFilter('')}>✕</button></span>}
               {dLanguage && <span className="ab-filter-chip">{t({ id: 'catalog.chip.language' })}: <strong>{dLanguage}</strong> <button onClick={() => setLanguageFilter('')}>✕</button></span>}

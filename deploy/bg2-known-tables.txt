@@ -147,6 +147,7 @@ network_administrator_cooptation_proposals
 network_administrator_cooptation_votes
 network_administrators
 network_contributors
+networks
 network_reviewers
 network_staff
 oai_opening_requests

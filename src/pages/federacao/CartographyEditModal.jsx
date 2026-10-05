@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiRpc, supabase } from '@/lib/supabase';
 import { addBasemap } from '@/lib/mapTiles';
+import { lireReseau, ecrireReseau } from '@/lib/reseaux';
 
 // Modale d'édition d'une fiche cartographique (Phase 3, MAP-D). Ouverte depuis la
 // carte interne (clic « Éditer » sur un marqueur éditable). Pré-remplie via
@@ -27,6 +28,8 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
   const [saving, setSaving] = useState(false);
   const [geoBusy, setGeoBusy] = useState(false);
   const [geoMsg, setGeoMsg] = useState('');
+  // G13 (05/10/2026) : le vocabulaire des réseaux constitués (public.networks).
+  const [networks, setNetworks] = useState(null);
   const pickerDivRef = useRef(null);
   const pickerMapRef = useRef(null);
   const pickerMarkerRef = useRef(null);
@@ -54,6 +57,7 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
         categorie: r.categorie,
         statut_anarbib: r.statut_anarbib,
         lat: Number(r.lat), lon: Number(r.lon),
+        reseau: r.reseau || '',
       });
     })();
     return () => { cancel = true; };
@@ -80,7 +84,25 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     return () => { try { map.remove(); } catch { /* ignore */ } pickerMapRef.current = null; pickerMarkerRef.current = null; };
   }, [row]);
 
+  useEffect(() => {
+    if (!row?.can_admin) return;
+    let cancel = false;
+    (async () => {
+      const { data } = await supabase.from('networks').select('slug, label, aliases, kind').order('label');
+      if (!cancel) setNetworks(Array.isArray(data) ? data : []);
+    })();
+    return () => { cancel = true; };
+  }, [row]);
+
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  // Cocher un réseau réécrit le texte de la fiche ; les jetons hors vocabulaire restent.
+  function basculerReseau(slug) {
+    setForm((f) => {
+      const { connus, inconnus } = lireReseau(f.reseau, networks);
+      const choix = connus.includes(slug) ? connus.filter((x) => x !== slug) : [...connus, slug];
+      return { ...f, reseau: ecrireReseau(choix, inconnus, networks) };
+    });
+  }
 
   async function save() {
     setSaving(true); setErr('');
@@ -100,6 +122,7 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     if (row.can_admin) {
       payload.categorie = form.categorie;
       payload.statut_anarbib = form.statut_anarbib;
+      if (networks) payload.reseau = form.reseau;
       if (Number.isFinite(form.lat) && Number.isFinite(form.lon)) {
         payload.lat = form.lat;
         payload.lon = form.lon;
@@ -234,6 +257,31 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
                 <select style={input} value={form.statut_anarbib} onChange={(e) => set('statut_anarbib', e.target.value)}>
                   {STATUTS.map((s) => <option key={s} value={s}>{t({ id: `federacao.carte.statut.${s}` })}</option>)}
                 </select>
+                {networks && (() => {
+                  const { connus, inconnus } = lireReseau(form.reseau, networks);
+                  return (
+                    <fieldset style={{ border: 'none', padding: 0, margin: '8px 0 0' }}>
+                      <legend style={label}>{t({ id: 'federacao.carte.edit.networks' })}</legend>
+                      <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginBottom: 4 }}>{t({ id: 'federacao.carte.edit.networksHint' })}</div>
+                      {networks.map((n) => (
+                        <label key={n.slug} style={{ ...checkRow, marginTop: 4 }}>
+                          <input type="checkbox" checked={connus.includes(n.slug)} onChange={() => basculerReseau(n.slug)} />
+                          {n.label}
+                          {n.kind !== 'documentation' && (
+                            <small style={{ color: 'var(--brand-muted)', marginLeft: 6 }}>
+                              {t({ id: n.kind ? `federacao.carte.networkKind.${n.kind}` : 'federacao.carte.networkKind.unclassified' })}
+                            </small>
+                          )}
+                        </label>
+                      ))}
+                      {inconnus.length > 0 && (
+                        <div role="note" style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginTop: 4 }}>
+                          {t({ id: 'federacao.carte.edit.networksOutside' }, { names: inconnus.join(', ') })}
+                        </div>
+                      )}
+                    </fieldset>
+                  );
+                })()}
                 <label style={label}>{t({ id: 'federacao.carte.edit.position' })}</label>
                 <button type="button" onClick={geocodeFromAddress} disabled={geoBusy}
                   style={{ ...input, width: 'auto', cursor: 'pointer', background: 'rgba(255,255,255,.06)', fontSize: '.8rem', padding: '6px 12px', marginBottom: 6 }}>

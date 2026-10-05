@@ -239,6 +239,9 @@ BEGIN
   BEGIN
     WITH nommees(fn) AS (VALUES
       ('api.audio_tracklist_public'),
+      -- 05/10/2026 (G13) : le filtre « réseau » du catalogue public — la carte
+      -- n'est lisible que par fonction ; verdict dans AUDIT_execute_anon_2026-08-30.md.
+      ('api.fn_catalog_networks_v1'),
       ('api.search_catalog_v1'),
       ('api.subject_related_v1'),
       -- 04/10/2026 (20261004215035) : l'indicateur numérique du catalogue public.
@@ -357,6 +360,7 @@ BEGIN
       ('api.catalog_facets_v1'),
       ('api.catalog_search_ids_v1'),
       ('api.catalog_works_v1'),
+      ('api.fn_catalog_networks_v1'),   -- G13, 05/10/2026
       ('api.search_catalog_v1'),
       ('api.serial_detail_v1'),
       ('api.serial_issues_v1'),

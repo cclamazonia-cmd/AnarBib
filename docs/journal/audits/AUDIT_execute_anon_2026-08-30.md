@@ -209,3 +209,9 @@ Les 21 policies de lecture qui appelaient `fn_library_visible_to_caller(<bibliot
 Elle rejoint donc la section A : appelée depuis 21 policies, dont celles évaluées sous `anon` ; lui retirer `EXECUTE` ferme la lecture publique avec `permission denied for function`. Les gardes le tiennent dans les deux sens : `grants_herites_tests` **T9** (fonctions que des policies évaluées sous `anon` appellent), **T10** et **T12** (listes nommées).
 
 **Remesuré après déploiement (28/09, 14:06 UTC)** : le lint 0028 affiche **27** (26 + `fn_visible_library_ids`), le lint 0029 **443** — `fn_visible_library_ids` y figure, attendue. Apparaît aussi un `function_search_path_mutable` (0011) sur `public.fn_locale_from_idioma` : voulu par B32 (`20260928122318`), la fonction est une expression SQL aux références qualifiées `pg_catalog`, sans `SET` pour que le planificateur l'insère en ligne ; `hygiene_search_path_et_initplan_tests` T1 la nomme comme seule exception. Un avertissement attendu n'est pas un avertissement.
+
+---
+
+## Addendum — 05/10/2026 : `api.fn_catalog_networks_v1()` (G13)
+
+Le filtre « réseau » du catalogue public lit l'appartenance des bibliothèques aux réseaux constitués (FICEDL, RebAL, NORLA…) dans les fiches de carte. Or `cartography_entries` n'est lisible que par fonction (politique `deny_direct_access_secdef_only`) : une vue `security_invoker` n'y verrait rien sous `anon`. La fonction est donc `DEFINER`, **ouverte à `anon` par décision**, et ne rend que ce que la carte publique montre déjà : les réseaux de nature « documentation » qui ont au moins une bibliothèque visible de l'appelant (`fn_library_visible_to_caller`, la règle de `api.libraries_public_v1`) **par une fiche publique**, avec le slug, le sigle et le nom de ces bibliothèques. Ni contact, ni coordonnées, ni fiche non publique. Elle entre dans les listes `T10` et `T12` de `grants_herites_tests.sql` ; le lint 0028 doit compter une fonction de plus.

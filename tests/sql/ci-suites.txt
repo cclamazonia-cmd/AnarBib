@@ -677,3 +677,6 @@ tests/sql/c10_etat_de_revue_tests.sql
 # CAT-G4 (05/10/2026) : la liste du catalogue nomme les responsables principaux —
 # auteur et coauteur, sinon l'organisation ; ni traduction, ni illustration.
 tests/sql/liste_coauteurs_tests.sql
+# G13 (05/10/2026) : les réseaux constitués ont un vocabulaire ; la carte le lit,
+# le catalogue public filtre par réseau (fiches publiques, bibliothèques visibles).
+tests/sql/g13_reseaux_constitues_tests.sql
