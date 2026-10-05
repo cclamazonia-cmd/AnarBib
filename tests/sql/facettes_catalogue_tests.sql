@@ -110,7 +110,7 @@ BEGIN
         coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'decade') x WHERE x->>'decade' = '1830'), 0),
         coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'decade') x WHERE x->>'decade' = '1840'), 0),
         coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'decade') x WHERE x->>'decade' = '1900'), 0),
-        coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'author') x WHERE x->>'label' = 'FACETTES, Autora'), 0),
+        coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'author') x WHERE x->>'label' = 'Facettes, Autora'), 0),
         coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'subjects') x WHERE x->>'slug' = 'facettes-test'), 0));
       IF v_txt = r.attendu THEN v_passed := v_passed + 1;
       ELSE v_failed := v_failed + 1; v_failures := v_failures || ('T2-5 ' || r.cas || ' : rendu « ' || v_txt || ' », attendu « ' || r.attendu || ' »'); END IF;
