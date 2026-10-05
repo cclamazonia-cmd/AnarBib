@@ -40,9 +40,9 @@ project_id = "anarbib"
 #       notify-weekly-report, notify-network-weekly-report,
 #       notify-document-permission-request,
 #       notify-interlibrary-loan, notify-oai-opening  (8 mailers via webhook secret)
-#     - read-pdf, bn_isbn_lookup, process-partner-catalog-import,
+#     - bn_isbn_lookup, process-partner-catalog-import,
 #       read-digital-asset, fetch-url-metadata, oai-pmh-provider
-#       (6 utilitaires publics ou avec auth interne custom ; oai-pmh-provider
+#       (5 utilitaires publics ou avec auth interne custom ; oai-pmh-provider
 #        = endpoint OAI-PMH moissonnable par des harvesters externes sans JWT,
 #        gate applicatif via fn_oai_harvestable_* — paquet OAI-O2, 12/06/2026)
 #
@@ -51,7 +51,6 @@ project_id = "anarbib"
 #     - probe-partner-catalog
 #     - catalog_metadata_lookup
 #     - cover_lookup (recherche de capas multi-sources, appel frontend authentifié)
-#     - mail-i18n-test
 #     - login (Edge wrapper d'auth)
 #
 # =============================================================================
@@ -104,8 +103,7 @@ verify_jwt = false
 # Utilitaires publics ou avec authentification custom
 # =============================================================================
 
-[functions.read-pdf]
-verify_jwt = false
+# read-pdf retirée le 05/10/2026 (F3) : remplacée par read-digital-asset, aucun appel.
 
 # Contributions ouvertes à la Gazette (réception publique, rate-limitée).
 [functions.submit-gazette-contribution]

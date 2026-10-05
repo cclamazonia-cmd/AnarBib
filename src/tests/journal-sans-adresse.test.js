@@ -92,8 +92,9 @@ describe('le filet : chaque fonction Edge charge le masque', () => {
   const fonctions = readdirSync(FONCTIONS).filter((n) => !n.startsWith('_') && existsSync(path.join(FONCTIONS, n, 'index.ts')));
 
   // 55 → 54 le 01/10/2026 : notify-mid-loan-reading retirée (F1, branche morte).
-  it('les 54 fonctions sont là', () => {
-    expect(fonctions.length).toBeGreaterThanOrEqual(54);
+  // 54 → 52 le 05/10/2026 : read-pdf et mail-i18n-test retirées (F3, sans appel).
+  it('les 52 fonctions sont là', () => {
+    expect(fonctions.length).toBeGreaterThanOrEqual(52);
   });
 
   it('aucune n’échappe au masque (par deps.ts, la couche d’envoi, ou un import direct)', () => {

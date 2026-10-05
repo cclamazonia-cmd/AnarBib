@@ -95,7 +95,8 @@ Une ressource n'est servie que si **les deux étages** passent. Conséquence imp
 - `viewer_kind` **inféré** (`pdf` / `audio` / `video` / `image` / `epub` / `external_link` / `generic`) à partir de `resource_type` + `mime_type` + extension.
 - En-têtes : `cache-control: no-store` (jamais de mise en cache d'un média gardé).
 
-### 5.2 `read-pdf` — proxy PDF restreint (historique, spécialisé)
+### 5.2 `read-pdf` — proxy PDF restreint (historique) — **retirée le 05/10/2026 (F3)**
+> Remplacée par `read-digital-asset` (§5.1), qui sert aussi les PDF réservés. Aucun appel depuis le front, la base ni une autre fonction ; zéro appel en production du 28/09 au 05/10. Ce qui suit décrit ce qu'elle faisait.
 - Exige un **Bearer token** (401 sinon). Entrée : `bib_ref`.
 - S'appuie sur `fn_book_restricted_pdf_state_for_current_user` : ne sert le flux PDF que si les conditions `conta_ativa` sont réunies (compte actif, ressource de lecture présente, fichier existant).
 - Sert le PDF **streamé** (jamais d'URL publique), `no-store`.
