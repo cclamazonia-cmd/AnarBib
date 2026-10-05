@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { erreurDeFonction } from '@/lib/edgeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -1029,7 +1030,7 @@ export default function ImportacoesPage() {
         }
       );
       const out = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      if (!res.ok) throw erreurDeFonction(out, res.status);   // E24 : le code, traduit
       setMsg({
         text: t({ id: 'importacoes.export.fonds.directSent' }, { count: out?.inserted_rows ?? 0, files: out?.received_files_deposited ?? 0 }),
         kind: 'ok',
@@ -1161,7 +1162,7 @@ export default function ImportacoesPage() {
         }
       );
       const out = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      if (!res.ok) throw erreurDeFonction(out, res.status);   // E24 : le code, traduit
       setRecvAssets((prev) => prev.filter((a) => a.received_asset_id !== asset.received_asset_id));
       setAttachTarget(null);
       setBookResults([]);
@@ -1209,7 +1210,7 @@ export default function ImportacoesPage() {
         }
       );
       const out = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      if (!res.ok) throw erreurDeFonction(out, res.status);   // E24 : le code, traduit
       setVerifiedAssets((prev) => prev.filter((a) => a.asset_id !== asset.asset_id));
       setMsg({
         text: t({ id: out?.file_removed ? 'importacoes.export.verified.revokedFile' : 'importacoes.export.verified.revoked' }, { title: asset.book_title || '—' }),

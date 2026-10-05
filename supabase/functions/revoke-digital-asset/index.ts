@@ -26,24 +26,31 @@ function json(body: unknown, status = 200) {
   });
 }
 
+// E24 (05/10/2026) : chaque refus porte un `code` stable que l'écran traduit
+// (src/lib/edgeError.js → clé error.edge.<code>, dix locales) ; le texte reste
+// en repli. Un refus de la base relaie son HINT (clé error.*, E23).
+function refus(code: string, error: string, status: number, extra: Record<string, unknown> = {}) {
+  return json({ error, code, ...extra }, status);
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
-  if (req.method !== 'POST') return json({ error: 'Method not allowed. Use POST.' }, 405);
+  if (req.method !== 'POST') return refus('bad_request', 'Method not allowed. Use POST.', 405);
 
   const authHeader = req.headers.get('Authorization');
-  if (!authHeader) return json({ error: 'Missing Authorization header.' }, 401);
+  if (!authHeader) return refus('auth_required', 'Missing Authorization header.', 401);
 
   let body: any;
-  try { body = await req.json(); } catch { return json({ error: 'Body must be valid JSON.' }, 400); }
+  try { body = await req.json(); } catch { return refus('bad_request', 'Body must be valid JSON.', 400); }
   const assetId = Number(body?.asset_id);
   if (!Number.isInteger(assetId) || assetId <= 0) {
-    return json({ error: 'Body must contain a positive integer asset_id.' }, 400);
+    return refus('bad_request', 'Body must contain a positive integer asset_id.', 400);
   }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
   const serviceKey = secretKey();
-  if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: 'Server misconfigured.' }, 500);
+  if (!supabaseUrl || !anonKey || !serviceKey) return refus('server_error', 'Server misconfigured.', 500);
 
   const userClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authHeader } },
@@ -55,7 +62,7 @@ Deno.serve(async (req) => {
   const { data: rec, error: recErr } = await userClient.rpc('fn_revoke_digital_asset_record', { p_asset_id: assetId });
   if (recErr) {
     const restricted = /coordenador|restrito|acesso|obrigatorio/i.test(recErr.message || '');
-    return json({ error: recErr.message }, restricted ? 403 : 500);
+    return refus(restricted ? 'forbidden' : 'server_error', recErr.message, restricted ? 403 : 500, { hint: recErr.hint ?? null });
   }
 
   // 2. Retrait du fichier physique SEULEMENT s'il est devenu orphelin (best-effort).

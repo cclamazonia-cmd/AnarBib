@@ -46,25 +46,32 @@ function basename(path: string) {
   return String(path || '').split('/').pop() || 'fichier';
 }
 
+// E24 (05/10/2026) : chaque refus porte un `code` stable que l'écran traduit
+// (src/lib/edgeError.js → clé error.edge.<code>, dix locales) ; le texte reste
+// en repli. Un refus de la base relaie son HINT (clé error.*, E23).
+function refus(code: string, error: string, status: number, extra: Record<string, unknown> = {}) {
+  return json({ error, code, ...extra }, status);
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
-  if (req.method !== 'POST') return json({ error: 'Method not allowed. Use POST.' }, 405);
+  if (req.method !== 'POST') return refus('bad_request', 'Method not allowed. Use POST.', 405);
 
   const authHeader = req.headers.get('Authorization');
-  if (!authHeader) return json({ error: 'Missing Authorization header.' }, 401);
+  if (!authHeader) return refus('auth_required', 'Missing Authorization header.', 401);
 
   let body: any;
-  try { body = await req.json(); } catch { return json({ error: 'Body must be valid JSON.' }, 400); }
+  try { body = await req.json(); } catch { return refus('bad_request', 'Body must be valid JSON.', 400); }
   const sourceLibraryId = body?.source_library_id;
   const targetLibraryId = body?.target_library_id;
   const bookIds = Array.isArray(body?.book_ids) && body.book_ids.length ? body.book_ids : null;
-  if (!sourceLibraryId || !targetLibraryId) return json({ error: 'source_library_id et target_library_id requis.' }, 400);
-  if (sourceLibraryId === targetLibraryId) return json({ error: 'Origem e destino identicos.' }, 400);
+  if (!sourceLibraryId || !targetLibraryId) return refus('bad_request', 'source_library_id et target_library_id requis.', 400);
+  if (sourceLibraryId === targetLibraryId) return refus('same_library', "La bibliothèque d'origine et la destinataire sont la même.", 400);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
   const serviceKey = secretKey();
-  if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: 'Server misconfigured.' }, 500);
+  if (!supabaseUrl || !anonKey || !serviceKey) return refus('server_error', 'Server misconfigured.', 500);
 
   const userClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authHeader } },
@@ -81,10 +88,10 @@ Deno.serve(async (req) => {
   });
   if (recErr) {
     const restricted = /coordenador|restrito|obrigatorio|mutualiza/i.test(recErr.message || '');
-    return json({ error: recErr.message }, restricted ? 403 : 500);
+    return refus(restricted ? 'forbidden' : 'server_error', recErr.message, restricted ? 403 : 500, { hint: recErr.hint ?? null });
   }
   const records: any[] = Array.isArray(recData?.records) ? recData.records : [];
-  if (!records.length) return json({ error: 'Aucune notice éligible (public_domain_confirmed).' }, 422);
+  if (!records.length) return refus('no_eligible_record', 'Aucune notice éligible (domaine public confirmé).', 422);
 
   // 2. Prépare le run côté RÉCEPTRICE + gate mutualisation (EX-4, cross-tenant gaté).
   const { data: prep, error: prepErr } = await userClient.rpc('fn_deposit_fonds_direct_prepare', {
@@ -92,11 +99,11 @@ Deno.serve(async (req) => {
   });
   if (prepErr) {
     const restricted = /coordenador|restrito|mutualiza|inativo|obrigatorio|identicos/i.test(prepErr.message || '');
-    return json({ error: prepErr.message }, restricted ? 403 : 500);
+    return refus(restricted ? 'forbidden' : 'server_error', prepErr.message, restricted ? 403 : 500, { hint: prepErr.hint ?? null });
   }
   const runId = prep?.run_id;
   const sourceName = prep?.source_name ?? null;
-  if (!runId) return json({ error: 'Run de réception non créé.' }, 500);
+  if (!runId) return refus('server_error', 'Run de réception non créé.', 500);
 
   try {
     // 3. Notices → staging rows (mappe la forme serialize.ts), côté réceptrice.
@@ -227,6 +234,6 @@ Deno.serve(async (req) => {
       log.push({ at: new Date().toISOString(), error: String((e as Error)?.message || e) });
       await service.schema('ingest').from('partner_catalog_import_runs').update({ run_status: 'failed', error_log: log }).eq('id', runId);
     } catch (_) { /* la trace d'erreur ne bloque jamais */ }
-    return json({ error: String((e as Error)?.message || e) }, 500);
+    return refus('server_error', String((e as Error)?.message || e), 500);
   }
 });
