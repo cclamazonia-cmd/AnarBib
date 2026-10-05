@@ -425,7 +425,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Decisão coletiva |
 | **C10** | Renomear a coluna de revisão `digital_assets.rights_status` | `P2` | Aberto |
-| **C14** | Um exemplar que muda de biblioteca leva tudo consigo | `P2` | Em curso |
+| **C14** | Um exemplar que muda de biblioteca leva tudo consigo | `P2` | A verificar |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Decisão coletiva |
@@ -497,11 +497,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C14 — Um exemplar que muda de biblioteca leva tudo consigo
 
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Levantado em 29/09 ao corrigir a reatribuição (`CAT-E19`): três caminhos deixam para trás de um exemplar deslocado coisas que ainda apontam para a biblioteca ou o acervo de origem. Nenhum foi visto na tela; todos se leem no código.
 
-*Verificado : **04/10 — decisões do Xavier e lote escrito, ainda não enviado.** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. PEB declarado devolvido à mão agora fecha suas linhas; as linhas dos EEB 24 e 25 serão reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar. Lixeira sem 23503. Falta: bancada, mutantes, testes e envio.*
+*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto.*
 
 **O que é.** (1) Um rascunho de exemplar ABERTO (`draft`, `ready`) sobre um exemplar reatribuído guarda a biblioteca de origem: publicado, levaria o exemplar de volta, sem avisar — decidir se ele acompanha o exemplar (mudaria de fila, `B29`) ou se é recusado na publicação. (2) Reservas e EEB em curso continuam contados no acervo de origem após o deslocamento (`fn_v2_recompute_holdings_availability` conta por `holding_id`): a disponibilidade do destino fica superestimada. (3) A mudança de biblioteca de um exemplar isolado (`publish_exemplar_draft`) e o descarte (`discard_exemplar`) também deixam acervos vazios, que a ficha pública mostra com «0 exemplar». (4) Restaurar da lixeira um rascunho de exemplar que visava um acervo apagado depois levanta 23503 bruto (`fn_restore_deleted_draft` reinsere seu `target_holding_id`) — consequência direta de `CAT-E19`. (5) O painel de reatribuição não diz que um acervo de origem foi mantido (`holdings_kept`), vazio, porque um histórico o referencia.
 
@@ -514,7 +514,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Dependências.** Nenhuma.
 
-*Remissões : `REGISTRE CAT-E19` · `migration 20260929151902`*
+*Remissões : `REGISTRE CAT-E19` · `migration 20260929151902` · `migration 20261005074236` · `commit 07ad68af`*
 
 #### C15 — Corrigir oito registros da BTL, com o livro na mão
 
