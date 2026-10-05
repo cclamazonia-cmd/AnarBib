@@ -34,7 +34,12 @@ const STEPS = [
 // match_status indiquant une correspondance avec une notice DEJA au catalogue
 // (doublon potentiel) -> sur un catalogue mutualise, ne JAMAIS promouvoir a
 // l'aveugle. Ces lignes sont surlignees + jamais auto-promues.
-const DUP_STATUSES = new Set(['possible_duplicate', 'matched_book', 'matched_draft']);
+// H21 lot 1 (REGISTRE IMP-28, 05/10/2026) : 'known_record' (« Deja importee » :
+// l'identifiant d'import de la ligne est connu pour la bibliotheque, sur une
+// seule notice) en fait partie. L'assistant la surligne, la compte dans
+// l'alerte et parmi les lignes retenues, et ne la promeut JAMAIS : elle reste
+// en attente, a rapprocher (ou rejeter) depuis la page Importations.
+const DUP_STATUSES = new Set(['possible_duplicate', 'matched_book', 'matched_draft', 'known_record']);
 
 export default function ImportWizard() {
   const { role, isNetworkAdmin } = useLibrary();
@@ -129,7 +134,8 @@ export default function ImportWizard() {
     ? rows.filter((r) => ingestedRowIds.includes(Number(r.id)))
     : rows;
   // Promouvables : les nouveautés sans brouillon. Les doublons potentiels
-  // restent en attente, jamais promus à l'aveugle.
+  // restent en attente, jamais promus à l'aveugle ; une ligne « Déjà importée »
+  // (known_record, H21 lot 1) non plus : seule new_record se promeut.
   const aPromouvoir = (r) => r.match_status === 'new_record' && !r.created_book_draft_id;
 
   // ── Handlers ──────────────────────────────────────────────
@@ -410,7 +416,9 @@ export default function ImportWizard() {
                         {r.title || '—'}
                         {isDup && (
                           <span style={{ marginLeft: 8, fontSize: '.7rem', fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '.03em' }}>
-                            {t({ id: 'importacoes.wizard.preview.dupBadge' })}
+                            {r.match_status === 'known_record'
+                              ? t({ id: 'importacoes.fila.match.known_record' })
+                              : t({ id: 'importacoes.wizard.preview.dupBadge' })}
                           </span>
                         )}
                       </strong>
@@ -460,6 +468,7 @@ export default function ImportWizard() {
       );
     }
     const newCount = lignesDeLAssistant.filter(aPromouvoir).length;
+    // Retenues : tout ce qui n'est pas une nouveauté, « Déjà importée » comprise.
     const heldBack = lignesDeLAssistant.filter((r) => r.match_status !== 'new_record').length;
     return (
       <div className="imp-sheet">

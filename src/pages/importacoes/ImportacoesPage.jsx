@@ -53,6 +53,11 @@ const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh', 'own_catalog']
 //    il lui reste « Rapprocher » ou « Rejeter ».
 // Un seul prédicat, pour la case « tout cocher » (selectableIds) et pour la
 // case de chaque ligne (reviewable).
+// H21 lot 1 (REGISTRE IMP-28, 05/10/2026) : une ligne « Déjà importée »
+// (known_record) se coche tant qu'elle n'est pas décidée (en attente) ou
+// qu'elle est rattachée sans exemplaire ; jamais en « Accepté (nouveau) » :
+// elle ne devient jamais une notice neuve (seulement « Rapprocher » ou
+// « Rejeter »). La règle accept_new ne vaut que pour new_record.
 function estSelectionnable(r) {
   if (!r || r.created_book_draft_id || r.created_exemplar_draft_id) return false;
   const ed = r.editorial_decision;
@@ -280,6 +285,12 @@ export default function ImportacoesPage() {
       rows = rows.filter(r => r.match_status === 'new_record');
     } else if (filaMatchFilter === 'dup') {
       rows = rows.filter(r => ['possible_duplicate', 'matched_book', 'matched_draft'].includes(r.match_status));
+    } else if (filaMatchFilter === 'known') {
+      // H21 lot 1 : les lignes « Déjà importées » à part. Ce ne sont pas des
+      // doublons à vérifier (l'identifiant d'import les a reconnues, sans
+      // passe floue) : on les rapproche ou on les rejette en bloc, sans les
+      // mêler aux doublons possibles qu'il faut lire un par un.
+      rows = rows.filter(r => r.match_status === 'known_record');
     }
     return rows;
   }, [runRows, filaStateFilter, filaMatchFilter]);
@@ -310,11 +321,13 @@ export default function ImportacoesPage() {
     [filteredRunRows, selectedRows]
   );
   // Combien de sélectionnées sont des doublons rapprochables (livre publié) — bouton Rapprocher.
+  // H21 lot 1 : une ligne « Déjà importée » (known_record) se rapproche de la
+  // notice reconnue, comme un doublon (même prédicat que handleReconcileSelected).
   const selectedDupCount = useMemo(
     () => filteredRunRows.filter(r => selectedRows.has(r.id)
       && r.proposed_book_id
       && !r.created_exemplar_draft_id
-      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book')).length,
+      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'known_record')).length,
     [filteredRunRows, selectedRows]
   );
 
@@ -595,6 +608,7 @@ export default function ImportacoesPage() {
     // On ne promeut QUE les nouveautés sélectionnées (les doublons ne se créent
     // pas à l'aveugle — ils s'écartent via Rejeter, ou se rapprochent par
     // l'Adaptador). On filtre donc la sélection sur match_status='new_record'.
+    // H21 lot 1 : une ligne « Déjà importée » (known_record) n'y entre jamais.
     const ids = filteredRunRows
       .filter(r => selectedRows.has(r.id) && r.match_status === 'new_record' && !r.created_book_draft_id)
       .map(r => r.id);
@@ -636,11 +650,14 @@ export default function ImportacoesPage() {
   }
   // Rapprocher des doublons (livre déjà publié au catalogue) : crée un brouillon
   // d'exemplaire pour la biblio, rattaché au proposed_book_id (pas un book_draft).
+  // H21 lot 1 (IMP-28) : une ligne « Déjà importée » (known_record) part aussi,
+  // vers la notice reconnue (proposed_book_id) ; fn_import_reconcile_duplicates
+  // l'accepte. C'est son seul chemin vers le catalogue : jamais « Créer ».
   async function handleReconcileSelected() {
     if (!selectedRunId) return;
     const ids = filteredRunRows
       .filter(r => selectedRows.has(r.id) && r.proposed_book_id && !r.created_exemplar_draft_id
-        && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book'))
+        && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'known_record'))
       .map(r => r.id);
     if (!ids.length) return;
     setPromotingSel(true);
@@ -690,8 +707,11 @@ export default function ImportacoesPage() {
     // ── Filet de sécurité : ne jamais jeter un exemplaire réel par mégarde ──
     // Une ligne en doublon = la biblio déclare détenir un exemplaire de ce
     // document. « Rejeter » NE l'enregistre PAS (≠ « Rapprocher »).
+    // H21 lot 1 : une ligne « Déjà importée » (known_record) aussi — la notice
+    // reconnue est au catalogue, et le fichier déclare un exemplaire.
     const heldDupCount = filteredRunRows.filter(r => selectedRows.has(r.id)
-      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'matched_draft')).length;
+      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'matched_draft'
+        || r.match_status === 'known_record')).length;
     if (heldDupCount > 0 && !window.confirm(t({ id: 'importacoes.fila.rejectHoldingsWarn' }, { n: heldDupCount }))) {
       return;
     }
@@ -1748,6 +1768,7 @@ export default function ImportacoesPage() {
                   <option value="">{t({ id: 'importacoes.fila.allMatches' })}</option>
                   <option value="new">{t({ id: 'importacoes.fila.filterNew' })}</option>
                   <option value="dup">{t({ id: 'importacoes.fila.filterDup' })}</option>
+                  <option value="known">{t({ id: 'importacoes.fila.filterKnown' })}</option>
                 </select>
               </div>
 
@@ -1859,6 +1880,11 @@ export default function ImportacoesPage() {
                           const isNew = ms === 'new_record';
                           const isMatched = ms === 'matched_book' || ms === 'matched_draft';
                           const isDup = ms === 'possible_duplicate' || isMatched;
+                          // H21 lot 1 : « Déjà importée » — l'identifiant d'import de la
+                          // ligne est connu pour ta bibliothèque, sur une seule notice.
+                          // Ton « info », comme « Déjà au catalogue » : une reconnaissance
+                          // sûre, pas un doublon à vérifier (« warn »).
+                          const isKnown = ms === 'known_record';
                           const ed = row.editorial_decision || 'pending';
                           // Sélectionnable : même prédicat que « tout cocher ».
                           const reviewable = estSelectionnable(row);
@@ -1876,7 +1902,7 @@ export default function ImportacoesPage() {
                               </td>
                               <td><Pill>{runs.find(r => r.id === row.run_id)?.source_name || '—'}</Pill></td>
                               <td>
-                                <Pill variant={isNew ? 'ok' : isMatched ? 'info' : isDup ? 'warn' : 'muted'}>
+                                <Pill variant={isNew ? 'ok' : isMatched || isKnown ? 'info' : isDup ? 'warn' : 'muted'}>
                                   {t({ id: 'importacoes.fila.match.' + ms })}
                                 </Pill>
                                 {Number(row.confidence) > 0 && (
@@ -1891,7 +1917,17 @@ export default function ImportacoesPage() {
                                       : t({ id: 'importacoes.fila.matchVerify' })}
                                   </div>
                                 )}
-                                {isDup && row.proposed_book_id && !row.created_exemplar_draft_id && (
+                                {isKnown && (
+                                  <div className="imp-note imp-known-of" style={{ marginTop: 3, fontSize: '.72rem' }}>
+                                    {t({ id: 'importacoes.fila.knownRecordOf' }, { title: row.proposed_title || (row.proposed_book_id ? `#${row.proposed_book_id}` : '—') })}
+                                  </div>
+                                )}
+                                {isKnown && row.proposed_book_held === false && (
+                                  <div className="imp-note imp-known-not-held" style={{ marginTop: 2, fontSize: '.72rem', color: 'var(--brand-warning, #fbbf24)' }}>
+                                    {t({ id: 'importacoes.fila.knownRecordNotHeld' })}
+                                  </div>
+                                )}
+                                {(isDup || isKnown) && row.proposed_book_id && !row.created_exemplar_draft_id && (
                                   <div className="imp-note" style={{ marginTop: 2, fontSize: '.7rem', color: 'var(--brand-info, #60a5fa)' }}>
                                     {t({ id: 'importacoes.fila.reconcileRowHint' })}
                                   </div>
