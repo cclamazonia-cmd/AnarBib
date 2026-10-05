@@ -44,6 +44,7 @@ vi.mock('@/lib/supabase', () => {
 
 import { LibraryProvider, useLibrary } from '@/contexts/LibraryContext';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
+import { CadastroVersLogin } from '@/components/layout/CadastroVersLogin';
 
 afterEach(() => { cleanup(); sessionStorage.clear(); localStorage.clear(); });
 
@@ -86,20 +87,33 @@ describe('le lien d’un courriel ouvert sans session', () => {
     etat.auth = { user: null, profile: null, loading: false, recovery: false };
     let vu = null;
     const Ici = () => { const l = useLocation(); vu = l.pathname + l.search; return null; };
-    // /cadastro tel qu'App.jsx le déclare (window.location n'existe pas dans un
-    // MemoryRouter : on rejoue la même règle sur la location du routeur).
-    const Cadastro = () => { const l = useLocation(); return h(Navigate, { to: `/login${l.search}${l.hash}`, replace: true }); };
-    render(h(MemoryRouter, { initialEntries: ['/rede#tab=admins'] },
+    // Le parcours réel, ancien lien compris : ancien chemin → /rede#tab=admins →
+    // ProtectedRoute → /cadastro?next=… → /login?next=…, avec les VRAIS éléments.
+    render(h(MemoryRouter, { initialEntries: ['/painel/admin-rede/cooptation/8f1c'] },
       h(Routes, null,
+        h(Route, { path: '/painel/admin-rede/cooptation/:id', element: h(Navigate, { to: '/rede#tab=admins', replace: true }) }),
         h(Route, { path: '/rede', element: h(ProtectedRoute, null, h('p', null, 'rede')) }),
-        h(Route, { path: '/cadastro', element: h(Cadastro) }),
+        h(Route, { path: '/cadastro', element: h(CadastroVersLogin) }),
         h(Route, { path: '/login', element: h(Ici) }))));
     expect(vu).toBe('/login?next=%2Frede%23tab%3Dadmins');
     expect(new URLSearchParams(vu.split('?')[1]).get('next')).toBe('/rede#tab=admins');
   });
 
-  it('/cadastro transmet la requête (?next=) en plus du hash des liens de récupération', () => {
-    expect(lire('src/App.jsx')).toContain(
-      "element={<Navigate to={`/login${window.location.search || ''}${window.location.hash || ''}`} replace />}");
+  it('/cadastro garde le hash des liens de récupération', () => {
+    let vu = null;
+    const Ici = () => { const l = useLocation(); vu = l.pathname + l.search + l.hash; return null; };
+    render(h(MemoryRouter, { initialEntries: ['/cadastro#access_token=x&type=recovery'] },
+      h(Routes, null,
+        h(Route, { path: '/cadastro', element: h(CadastroVersLogin) }),
+        h(Route, { path: '/login', element: h(Ici) }))));
+    expect(vu).toBe('/login#access_token=x&type=recovery');
+  });
+
+  // Constaté en ligne le 05/10 : un élément de <Route> est construit quand App
+  // se monte ; s'il lit window.location, il voit l'URL du PREMIER chargement.
+  it('App.jsx déclare /cadastro par le composant, sans lire window.location', () => {
+    const app = lire('src/App.jsx');
+    expect(app).toContain('<Route path="/cadastro" element={<CadastroVersLogin />} />');
+    expect(app).not.toMatch(/<Route[^>]*element=\{[^}]*window\.location/);
   });
 });

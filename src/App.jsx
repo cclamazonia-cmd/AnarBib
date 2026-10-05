@@ -8,6 +8,7 @@ import { ToastProvider } from '@/contexts/ToastContext';
 import { ConfirmProvider } from '@/contexts/ConfirmContext';
 import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupported, applyDocumentLanguage } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
+import { CadastroVersLogin } from '@/components/layout/CadastroVersLogin';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
 import AccessibilityWidget from '@/components/AccessibilityWidget';
@@ -199,11 +200,8 @@ export default function App() {
                   {/* ── Inscription / Login / Solicitation ───── */}
                   <Route path="/criar-conta" element={<CriarContaPage />} />
                   <Route path="/login" element={<LoginPage />} />
-                  {/* Legacy redirect — preserves recovery email links sent before the rename */}
-                  <Route
-                    path="/cadastro"
-                    element={<Navigate to={`/login${window.location.search || ''}${window.location.hash || ''}`} replace />}
-                  />
+                  {/* Legacy redirect — preserves recovery email links sent before the rename, and ?next= */}
+                  <Route path="/cadastro" element={<CadastroVersLogin />} />
                   {/* Liens des courriels envoyés avant le 05/10/2026 (d186da59) : ces chemins
                       n'ont jamais été des routes (404) ; les courriels déjà reçus les portent encore. */}
                   <Route path="/painel/admin-rede/cooptation/:id" element={<Navigate to="/rede#tab=admins" replace />} />
