@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-04** · 74 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 11
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 8
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 3
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-04.** **55 items sur 74** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **56 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, E27, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -425,7 +425,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants des fiches d'autorité (674 sur 1 505 au 27/09) | `P2` | Décision collective |
 | **C10** | Renommer la colonne de revue `digital_assets.rights_status` | `P2` | Ouvert |
-| **C14** | Un exemplaire qui change de bibliothèque emmène tout avec lui | `P2` | Ouvert |
+| **C14** | Un exemplaire qui change de bibliothèque emmène tout avec lui | `P2` | En cours |
 | **C15** | Corriger huit notices BTL, livre en main | `P2` | Ouvert |
 | **C16** | Attribuer les couvertures posées avant le 27/09 | `P2` | Ouvert |
 | **C17** | Décider si un numéro d'inventaire supprimé peut être redonné | `P2` | Décision collective |
@@ -497,11 +497,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C14 — Un exemplaire qui change de bibliothèque emmène tout avec lui
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Relevé le 29/09 en corrigeant la réattribution (`CAT-E19`) : trois chemins laissent derrière un exemplaire déplacé des choses qui pointent encore vers sa bibliothèque ou son fonds d'origine. Aucun n'a été vu à l'écran ; tous se lisent dans le code.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : **04/10 — décisions de Xavier et lot écrit, pas encore poussé.** (1) Un brouillon ouvert avant le départ de son exemplaire est **refusé** à la publication : marqueur `exemplar_drafts.exemplar_moved_at`, posé par les deux réattributions et par la publication qui change un exemplaire de bibliothèque (ses autres brouillons ouverts) ; un changement de bibliothèque voulu reste possible (sinon on ne pourrait refuser sur le seul écart). Clé `error.publish.exemplar_moved`, dix langues. (2) Disponibilité : un PEB compte là où est son exemplaire, et un PEB clos ne retient plus rien. **Décision de Xavier pour les réservations** (posées sur un fonds, pas sur un exemplaire) : la réattribution est **refusée** tant qu'une réservation active porte sur un fonds qu'elle viderait (`error.reassign.active_reservation`, dix langues). **PEB, cause trouvée** : un PEB déclaré « devolvido » à la main (`fn_peb_update_status`, menu de l'onglet PEB) passait par `fn_peb_propagate_status`, qui posait la date de retour sans clore les lignes ; il les clôt désormais (devolvido, ou cancelado pour un PEB annulé). Les PEB 24 et 25 (mai, rendus et archivés) ont ainsi gardé des lignes « emprestado », qui affichent « 0 disponible » sur deux fonds de BTL (173, 2426) : la migration répare ces deux lignes, trace dans leur metadata (autorisation de Xavier du 04/10). (3) Désherbage et déplacement d'un exemplaire isolé : la règle de CAT-E19 (fonds vidé supprimé sauf renvoi, gardé entier au journal), une seule implémentation `private.fn_fonds_vides_menage`. (4) Corbeille : un brouillon dont le fonds a disparu revient sans lui (plus de 23503). (5) Le panneau de réattribution dit les fonds vides gardés (`catalogacao.reassign.keptHoldings`, dix langues). Migration `…_un_exemplaire_qui_change_de_bibliotheque_n_emporte_que_lui` (sept fonctions réécrites depuis leurs définitions réelles, empreintes gardées) et suite `brouillon_perime_exemplaire_deplace` (17 tests) écrites ; la suite de CAT-E19 adaptée (sa réservation de T11 passe à l'état clos), verte 18/18. **Reste avant de pousser** : la suite C14 au banc (ses fixtures PEB viennent d'être corrigées), les mutants, vitest et le lint, redater la migration après celles du 04/10 au soir, puis la vérification en production (deux lignes de PEB réparées attendues).*
 
 **Ce que c'est.** (1) Un brouillon d'exemplaire OUVERT (`draft`, `ready`) sur un exemplaire réattribué garde sa bibliothèque d'origine : publié, il ramènerait l'exemplaire là d'où il vient, sans rien dire — décider s'il suit l'exemplaire (il changerait alors de file, `B29`) ou s'il est refusé à la publication. (2) Les réservations et PEB en cours restent comptés sur le fonds source après un déplacement (`fn_v2_recompute_holdings_availability` compte par `holding_id`, pas par exemplaire) : la disponibilité de la cible est surestimée. (3) Le changement de bibliothèque d'un exemplaire isolé (`publish_exemplar_draft`) et le désherbage (`discard_exemplar`) laissent, eux aussi, des fonds vides que la fiche publique affiche « 0 exemplaire ». (4) Restaurer depuis la corbeille un brouillon d'exemplaire qui visait un fonds supprimé depuis lève 23503 brut (`fn_restore_deleted_draft` réinsère son `target_holding_id`) — conséquence directe de `CAT-E19` : le mettre à NULL s'il n'existe plus, comme `import_staging_row_id`. (5) Le panneau de réattribution ne dit pas qu'un fonds source a été gardé (`holdings_kept`), vide, parce qu'un historique y renvoie.
 
@@ -998,7 +998,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
 | **F16** | L'invitation à une tâche n'a jamais créé d'invitation | `P1` | À vérifier |
 | **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
-| **F20** | Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée | `P2` | Ouvert |
 | **F21** | Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues | `P2` | À vérifier |
 
 #### F3 — Consolider les fonctions de notification redondantes
@@ -1144,26 +1143,6 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 **Ce qui compte comme fini.**
 
 - Plus aucune adresse complète dans les journaux d'envoi (relevé sur une semaine de journaux après le correctif).
-
-**Dépendances.** Aucune.
-
-*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
-
-#### F20 — Sans ligne de politique, une bibliothèque ne voit jamais une réservation expirer ni une non-venue détectée
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Relevé par la contre-vérification de la carte F1 (30/09). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` font un INNER JOIN sur `library_notification_policies` : dans les deux bibliothèques actives sans ligne de politique, rien n'expire et aucune non-venue n'est détectée, alors que les déclencheurs de notification y sont ouverts par défaut. Latent (aucune réservation hors BLMF).
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** LEFT JOIN avec les délais par défaut, ou création des lignes de politique manquantes (et d'une ligne à chaque bibliothèque admise) ; suite SQL qui emprunte l'expiration dans une bibliothèque sans ligne.
-
-**Pourquoi ça compte.** La première bibliothèque qui ouvre les réservations sans passer par ses réglages aura des réservations éternelles.
-
-**Ce qui compte comme fini.**
-
-- Une réservation expire et une non-venue est détectée dans une bibliothèque sans ligne de politique (suite SQL).
 
 **Dépendances.** Aucune.
 
@@ -2341,6 +2320,7 @@ CI verte : lint et suite unitaire. |
 | F1 | 2026-10-03 | **Clos le 03/10, décision de Xavier, les trois critères tenus.** (1) La carte est écrite : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`, environ 96 chaînes mesurées en production. (2) Les quatre courriels signalés ont leur verdict : `retirada_efetivada` part sous `reserva_convertida_em_emprestimo`, `retirada_no_show` part, `retirada_reagendada` était un fossile (supprimé), `liberada_para_circulacao` est coupé par réglage. (3) Les branches mortes sont supprimées ou documentées : `57a4aafc` (migration `20261001194818`, déployé et vérifié le 01/10 à 22 h 40) et `e897fb26` (échéance de 60 jours des consultations, décision de Xavier) ; `team.promoted_to_librarian` émis ; colonnes et table sans lecteur gardées par COMMENT (aucune donnée supprimée) ; `notify-mid-loan-reading` retirée de la plateforme par Xavier. Tirs des 02 et 03/10 relus : expiration des consultations sans effet (aucune échéance encore posée), `notify-loan-cycle` en 200. Défauts trouvés en route, traités à part : F16, F17, F19 (livrés), F18 (constat faux), F20, F21. |
 | C19 | 2026-10-03 | **Demandé et livré le 03/10 (Xavier).** Une reprise de notice, d'autorité ou d'exemplaire que ne suit aucun enregistrement ne reste plus en file éditoriale : `retake_untouched` la marque à la naissance, la première écriture le retire (ouvrir n'est pas modifier ; sujets, ressources numériques et contributeurs écrits en direct comptent). L'éditeur la fait oublier quand on la quitte (`discard_untouched_retake`), sans corbeille ni entrée au journal ; le job horaire `anarbib-purge-untouched-retakes` rattrape les onglets fermés (plus de 24 h). Cas d'origine : les brouillons 6276 et 6277, écartés à la main par `20260928114148`. Dans le même lot, tout enregistrement des trois éditeurs remonte jusqu'à son message de confirmation, doublé d'un toast temporaire. Migration `20261003202521` (`8ccfa02f`, déployée et vérifiée en production), écran `9419fda7` ; suites `reprises_vierges_tests` (7) et vitest `reprises-vierges`, `confirmation-enregistrement` (12). |
 | E28 | 2026-10-04 | **Ouvert et livré le 04/10 : une autorité corrigée ne changeait aucune fiche, et la fiche 2736 montrait deux fois le SNI.** Signalé par Xavier à l'écran (`/livro/2736`). Deux causes. (1) **Doublons** : le lot `conv_revue` du 03/09 avait créé l'autorité depuis la transcription `books.autor` (avec sa faute, « d Informações ») et **ajouté** une ligne de contributeur liée au lieu de rattacher la ligne d'origine ; même cas sur les livres 412, 1282, 1541 et 2316. Données corrigées le 04/10 (autorisé par Xavier) : ligne d'origine rattachée à l'autorité, doublon supprimé, « Russel » → « RUSSELL », faute de `books.autor` du 2736 corrigée, 3 liens `book_authors` orphelins de ces livres retirés. (2) **Affichage** : `get_book_contributors_public` rendait la transcription figée au rattachement, jamais `authors.preferred_name`. Doctrine `CAT-G4` : un contributeur lié s'affiche sous la forme autorisée (point d'accès), la transcription reste la mention de responsabilité (vue ISBD). La RPC rend `authority_name` en plus, `name` inchangé (le catalogage le recharge comme ligne éditable). Migration `20261004212710`, fiche `BookPage.jsx`. Le même soir (autorisé par Xavier), les **29 liens `book_authors` orphelins** des 22 autres livres sont retirés : chacun désignait une personne bien présente parmi les contributeurs du livre, sous un rôle ou une position périmés, et chaque contributeur lié gardait son lien exact (0 orphelin, 0 lien manquant après coup). **Reste, non tranché** : le lot `conv_revue` recréerait des doublons s'il était relancé tel quel. |
+| F20 | 2026-10-04 | **Clos le 04/10 sur pièces : livré, déployé, le critère tenu par une suite qui emprunte les crons.** `7a00b054` (migration `20261004210702`, appliquée par la CI, vérifiée en production le 04/10 à 23 h 31 : les trois crons font un LEFT JOIN). `fn_expire_solicitada_reservations`, `fn_expire_negotiation_timeout` et `fn_detect_no_show_reservations` prennent les délais par défaut des colonnes (14 jours, 21 jours, 24 heures) quand une bibliothèque n'a pas de ligne de politique ; aucune ligne créée. Trois bibliothèques actives concernées le 04/10 : Solidaires, anarchief, blmf-teste. Suite `reservations_sans_politique` 6/6 (les trois crons empruntés sans ligne ; une ligne existante garde la main ; replis = DEFAULT des colonnes) ; mutant « INNER JOIN » : 3 rouges. |
 
 ---
 
@@ -2372,4 +2352,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-04. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 74 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-09-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `75ccb035` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
