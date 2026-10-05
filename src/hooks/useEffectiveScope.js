@@ -100,8 +100,13 @@ export function useEffectiveScope() {
       effectiveRole = 'coordenador';
     }
 
-    // Si pas de rôle staff mais connecté·e : on est lectrice·eur.
-    if (isAuthenticated && !effectiveRole) {
+    // 05/10/2026 : le rôle d'une lectrice s'écrit 'reader' en base, ce mapping
+    // ne connaissait que 'leitor' — une vraie lectrice n'avait pas d'étiquette.
+    // À l'inverse, tout compte connecté SANS rôle recevait « Lecteur·rice » :
+    // l'admin réseau rattaché à aucune bibliothèque lisait ce rôle partout hors
+    // de /rede, et croyait avoir perdu ses droits. Sans bibliothèque active (ou
+    // tant que le contexte n'est pas chargé), pas d'étiquette de rôle.
+    if (effectiveRole === 'reader') {
       effectiveRole = 'leitor';
     }
 
