@@ -16,6 +16,13 @@
 //      elles-mêmes, notice par notice, sont figées dans
 //      tests/pmb/aller-retour-pertes.json : toute perte nouvelle fait échouer
 //      le test, même sur une clé déjà acceptée.
+// H21 lot 2 (05/10/2026) : les BROUILLONS que la promotion crée de ces lignes
+// sont figés eux aussi (tests/pmb/aller-retour-brouillons.json, capturés avec
+// la définition d'avant le lot 2) : la correspondance fichier → colonnes,
+// devenue la fonction ingest.fn_import_row_as_book, ne doit rien changer à la
+// création (T5) ; la création l'appelle (T6) ; la publication pose la base de
+// chaque identifiant d'origine (T7) ; l'export lit l'enregistrement d'origine
+// dans cette base, au même résultat que le repli sur marc_json.ingest (T8).
 // Le test exige la suite SQL à jour. Pour l'engendrer, puis refaire l'attendu
 // quand l'import ou l'export change EXPRÈS (et relire le diff de l'attendu) :
 //   REGENERER_H27=1 npx vitest run src/tests/pmb-aller-retour-base.test.js
@@ -39,6 +46,7 @@ const FIX = path.join(RACINE, 'tests', 'pmb', 'fixtures');
 const SUITE = path.join(RACINE, 'tests', 'sql', 'aller_retour_pmb_tests.sql');
 const ATTENDU = path.join(RACINE, 'tests', 'pmb', 'aller-retour-attendu.json');
 const PERTES = path.join(RACINE, 'tests', 'pmb', 'aller-retour-pertes.json');
+const BROUILLONS = path.join(RACINE, 'tests', 'pmb', 'aller-retour-brouillons.json');
 const FICHIERS = ['pmb-8.1.1.1_jeu-de-test.unimarc.iso', 'pmb-8.1.1.1_cas-difficiles.unimarc.iso'];
 const SECRET = 'banc-secret';
 
@@ -71,7 +79,7 @@ const TYPES_SQL = { row_no: 'integer', authors: 'jsonb', subjects: 'jsonb', raw_
 const dollar = (s) => { if (s.includes('$j$')) throw new Error('$j$ dans les données'); return `$j$${s}$j$`; };
 const nExemplaires = (lignes) => lignes.reduce((n, l) => n + (l.normalized_payload?.items?.length ?? 0), 0);
 
-function suiteSql(lignes, attendu) {
+function suiteSql(lignes, attendu, brouillons) {
   const donnees = JSON.stringify(lignes.map((l) => Object.fromEntries(COLONNES.map((c) => [c, l[c] ?? null]))));
   const nx = nExemplaires(lignes);
   const vides = lignes.filter((l) => !(l.normalized_payload?.items?.length)).length;
@@ -91,9 +99,19 @@ function suiteSql(lignes, attendu) {
 --    identifiants internes, tombos et id de la source mis à part.
 -- T4 la réémission (IMP-22) : l'enregistrement d'origine revient tel quel, sans
 --    ses zones d'exemplaire, pour la bibliothèque qui l'a importé.
+-- T5 (H21 lot 2, juste après T1) la création est inchangée : les brouillons et
+--    leurs responsabilités sont, champ par champ, ceux que la définition d'avant
+--    le lot 2 créait (tests/pmb/aller-retour-brouillons.json), identifiants
+--    internes et horodatages mis à part.
+-- T6 (H21 lot 2) une seule règle : chaque brouillon est ce que
+--    ingest.fn_import_row_as_book dit de sa ligne, et la création l'appelle.
+-- T7 (H21 lot 2) la publication pose la base de chaque identifiant d'origine,
+--    exacte (correspondance, enregistrement d'origine, ligne, run, confirmée).
+-- T8 (H21 lot 2) l'export lu dans la base est identique à l'export par le
+--    repli sur marc_json.ingest (le chemin d'avant), et lit bien la base.
 --
 -- Capture de l'attendu : avec anarbib.h27_capture = on, la suite émet l'export
--- projeté en NOTICE (tests/pmb/capturer-attendu-h27.sh) ; avec
+-- projeté et les brouillons projetés en NOTICE (tests/pmb/capturer-attendu-h27.sh) ; avec
 -- anarbib.h27_export = on, l'export complet et les autorités (le fichier du
 -- réimport dans PMB : tests/pmb/banc/essai-reimport-pmb.sh).
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
@@ -107,6 +125,7 @@ DECLARE
   v_lib   uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';  -- BLMF de test (seed)
   v_src bigint; v_run bigint; v_lot bigint; v_res jsonb; v_exp jsonb; v_proj jsonb; v_ecarts text[];
   v_attendu jsonb := ${attendu ? `${dollar(JSON.stringify(attendu))}::jsonb` : 'NULL'};
+  v_brouillons jsonb := ${brouillons ? `${dollar(JSON.stringify(brouillons))}::jsonb` : 'NULL'};
 BEGIN
   PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
   INSERT INTO public.network_administrators (user_id, status) VALUES (v_admin, 'active');
@@ -152,6 +171,93 @@ BEGIN
        AND (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot) = ${nx}
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce(v_res::text, 'NULL'), 300)); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T5 (H21 lot 2) ──────────────────────────────────────────────────
+  -- La correspondance fichier → colonnes est devenue une fonction
+  -- (ingest.fn_import_row_as_book), que la création appelle : les brouillons
+  -- doivent rester ceux que la définition d'avant créait. Projection : toute la
+  -- ligne du brouillon, sans ce qui dépend du banc (identifiants internes,
+  -- horodatages, référence posée en T1, numéro du run dans la note de
+  -- provenance et dans la trace marc_json.ingest) ; ses responsabilités. Les
+  -- deux copies volumineuses de marc_json (la ligne normalisée, l'enregistrement
+  -- d'origine) sont comparées par leur empreinte.
+  v_t := 'T5 la création est inchangée : brouillons et responsabilités identiques aux brouillons figés';
+  BEGIN
+    SELECT jsonb_agg(jsonb_build_object(
+             'row_no', s.row_no,
+             'brouillon', (to_jsonb(d) - 'id' - 'batch_id' - 'bib_ref' - 'created_at' - 'updated_at' - 'last_opened_at'
+                                       - 'publisher_id' - 'marc_json' - 'provenance_note')
+                          || jsonb_build_object(
+                               'provenance_note', regexp_replace(d.provenance_note, 'run [0-9]+', 'run #'),
+                               'marc_json', jsonb_build_object(
+                                 'normalise_md5', md5((d.marc_json - 'ingest' - 'anarbib_provenance')::text),
+                                 'anarbib_provenance', (d.marc_json->'anarbib_provenance') - 'provenance_note',
+                                 'ingest', (d.marc_json->'ingest') - 'run_id' - 'source_id' - 'staging_row_id' - 'source_file_id' - 'raw_payload',
+                                 'raw_payload_md5', md5((d.marc_json->'ingest'->'raw_payload')::text))),
+             'responsabilites', (SELECT jsonb_agg(to_jsonb(c) - 'id' - 'draft_id' - 'created_at' - 'updated_at' ORDER BY c.position)
+                                   FROM public.book_draft_contributors c WHERE c.draft_id = d.id))
+             ORDER BY s.row_no)
+      INTO v_proj
+      FROM public.book_drafts d
+      JOIN ingest.partner_catalog_row_to_draft m ON m.draft_id = d.id
+      JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id
+     WHERE d.batch_id = v_lot;
+    IF current_setting('anarbib.h27_capture', true) = 'on' THEN
+      RAISE NOTICE 'H27-BROUILLONS %', v_proj::text;
+    END IF;
+    IF v_brouillons IS NULL THEN
+      v_failed := v_failed+1; v_failures := v_failures||(v_t||' : pas de brouillons figés (tests/pmb/capturer-attendu-h27.sh)');
+    ELSIF v_proj = v_brouillons THEN
+      v_passed := v_passed+1;
+    ELSE
+      SELECT array_agg(format('ligne %s %s : %s <> figé %s', coalesce(p->>'row_no', a->>'row_no'), k,
+                              left(coalesce((p->'brouillon'->k)::text, (p->k)::text, '∅'), 120),
+                              left(coalesce((a->'brouillon'->k)::text, (a->k)::text, '∅'), 120)) ORDER BY n, k)
+        INTO v_ecarts
+        FROM jsonb_array_elements(v_proj) WITH ORDINALITY x(p, n)
+        FULL JOIN jsonb_array_elements(v_brouillons) WITH ORDINALITY y(a, m) ON m = n
+        CROSS JOIN LATERAL jsonb_object_keys(coalesce(p->'brouillon', '{}'::jsonb) || coalesce(a->'brouillon', '{}'::jsonb)
+                                             || jsonb_build_object('responsabilites', 1, 'row_no', 1)) k
+       WHERE CASE WHEN k IN ('responsabilites', 'row_no') THEN p->k IS DISTINCT FROM a->k
+                  ELSE p->'brouillon'->k IS DISTINCT FROM a->'brouillon'->k END;
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||coalesce(cardinality(v_ecarts), 0)||' écart(s) — '||array_to_string(v_ecarts[1:15], ' | '));
+    END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T6 (H21 lot 2) ──────────────────────────────────────────────────
+  -- Une seule règle : chaque brouillon est, colonne par colonne, ce que
+  -- ingest.fn_import_row_as_book dit de sa ligne (colonnes, provenance, trace
+  -- marc_json — sans les miroirs anarbib_* que pose un déclencheur —,
+  -- responsabilités).
+  v_t := 'T6 une seule règle : chaque brouillon est ce que fn_import_row_as_book dit de sa ligne';
+  BEGIN
+    SELECT array_agg(format('ligne %s : %s', x.row_no, x.k) ORDER BY x.row_no, x.k) INTO v_ecarts
+      FROM (
+        SELECT s.row_no, k.k
+          FROM public.book_drafts d
+          JOIN ingest.partner_catalog_row_to_draft m ON m.draft_id = d.id
+          JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id
+          CROSS JOIN LATERAL (SELECT ingest.fn_import_row_as_book(s, ingest.fn_h21_contexte_du_run(s.run_id)) AS v) f
+          CROSS JOIN LATERAL (
+            SELECT c.k FROM jsonb_each(f.v->'mapped' || f.v->'provenance') c(k, val)
+             WHERE to_jsonb(d)->c.k IS DISTINCT FROM c.val
+            UNION ALL
+            SELECT 'marc_json' WHERE (d.marc_json - 'anarbib_provenance' - 'anarbib_acquisition' - 'anarbib_network') IS DISTINCT FROM f.v->'marc_json'
+            UNION ALL
+            SELECT 'responsabilites'
+             WHERE coalesce((SELECT jsonb_agg(jsonb_build_object('position', c.position, 'name', c.name, 'role', c.role,
+                                                                'is_primary', c.is_primary, 'nature', c.nature, 'role_code', c.role_code)
+                                             ORDER BY c.position)
+                               FROM public.book_draft_contributors c WHERE c.draft_id = d.id), '[]'::jsonb)
+                   IS DISTINCT FROM f.v->'contributors') k
+         WHERE d.batch_id = v_lot) x;
+    IF v_ecarts IS NULL AND (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot) = ${lignes.length}
+       AND position('ingest.fn_import_row_as_book(' IN pg_get_functiondef(
+             'ingest.fn_create_book_drafts_from_import_rows(bigint, bigint[], text, text, uuid)'::regprocedure)) > 0
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(array_to_string(v_ecarts[1:15], ', '), 'la création n''appelle pas la fonction')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T2 ──────────────────────────────────────────────────────────────
@@ -255,6 +361,72 @@ BEGIN
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(array_to_string(v_ecarts[1:15], ', '), 'notices sans source')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ── T7 (H21 lot 2) ──────────────────────────────────────────────────
+  -- La publication pose, pour chaque notice, la base de son identifiant
+  -- d'origine (BLMF, import:<source>, 001) : ce que fn_import_row_as_book dit
+  -- de la ligne, l'enregistrement d'origine, la ligne et le run, confirmée.
+  v_t := 'T7 la publication pose la base de chaque identifiant d''origine, exacte';
+  BEGIN
+    SELECT array_agg(s.external_key ORDER BY s.row_no) INTO v_ecarts
+      FROM public.book_drafts d
+      JOIN ingest.partner_catalog_row_to_draft m ON m.draft_id = d.id
+      JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id
+      CROSS JOIN LATERAL (SELECT ingest.fn_import_row_as_book(s, ingest.fn_h21_contexte_du_run(s.run_id)) AS v) f
+      LEFT JOIN public.book_external_ids e
+             ON e.book_id = d.published_book_id AND e.library_id = v_lib AND e.scheme = 'import:' || v_src
+            AND e.value = btrim(s.external_key)
+      LEFT JOIN ingest.book_import_baselines bl ON bl.external_id_id = e.id
+     WHERE d.batch_id = v_lot
+       AND NOT (bl.id IS NOT NULL
+                AND bl.mapped = f.v->'mapped' AND bl.contributors = f.v->'contributors'
+                AND bl.subjects = f.v->'subjects' AND bl.raw_payload = s.raw_payload
+                AND bl.payload_hash = f.v->>'payload_hash' AND bl.mapping_version = f.v->>'mapping_version'
+                AND bl.staging_row_id = s.id AND bl.run_id = v_run
+                AND bl.origine = 'import' AND bl.confirmed_at IS NOT NULL AND bl.reprise_champs_douteux = '{}'::text[]);
+    IF v_ecarts IS NULL
+       AND (SELECT count(*) FROM ingest.book_import_baselines bl
+              JOIN public.book_external_ids e ON e.id = bl.external_id_id
+              JOIN public.book_drafts d ON d.published_book_id = e.book_id AND d.batch_id = v_lot) = ${lignes.length}
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(array_to_string(v_ecarts[1:15], ', '), 'nombre de bases')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T8 (H21 lot 2) ──────────────────────────────────────────────────
+  -- L'export lit l'enregistrement d'origine d'abord dans la base : sans les
+  -- bases (repli sur marc_json.ingest, le chemin d'avant), il est IDENTIQUE,
+  -- au caractère près ; une base altérée se voit dans l'export (preuve qu'il
+  -- la lit). Les deux essais sont annulés.
+  v_t := 'T8 l''export lu dans la base est identique à l''export par le repli, et lit bien la base';
+  DECLARE v_sans jsonb; v_altere jsonb; v_cle text;
+  BEGIN
+    BEGIN
+      DELETE FROM ingest.book_import_baselines bl
+       USING public.book_external_ids e, public.book_drafts d
+       WHERE e.id = bl.external_id_id AND d.published_book_id = e.book_id AND d.batch_id = v_lot;
+      v_sans := public.fn_export_catalog_lote(v_lib);
+      RAISE EXCEPTION 'annuler' USING ERRCODE = 'P0099';
+    EXCEPTION WHEN SQLSTATE 'P0099' THEN NULL; END;
+    BEGIN
+      SELECT e.value INTO v_cle FROM ingest.book_import_baselines bl
+        JOIN public.book_external_ids e ON e.id = bl.external_id_id
+        JOIN public.book_drafts d ON d.published_book_id = e.book_id AND d.batch_id = v_lot
+       ORDER BY e.id LIMIT 1;
+      UPDATE ingest.book_import_baselines bl SET raw_payload = jsonb_set(bl.raw_payload, '{leader}', '"H21L2-BASE"')
+        FROM public.book_external_ids e WHERE e.id = bl.external_id_id AND e.library_id = v_lib AND e.value = v_cle;
+      v_altere := public.fn_export_catalog_lote(v_lib);
+      RAISE EXCEPTION 'annuler' USING ERRCODE = 'P0099';
+    EXCEPTION WHEN SQLSTATE 'P0099' THEN NULL; END;
+    IF v_sans = v_exp
+       AND (SELECT count(*) FROM ingest.book_import_baselines bl
+              JOIN public.book_external_ids e ON e.id = bl.external_id_id
+              JOIN public.book_drafts d ON d.published_book_id = e.book_id AND d.batch_id = v_lot) = ${lignes.length}
+       AND (SELECT r->'source'->>'leader' FROM jsonb_array_elements(v_altere->'records') r WHERE r->>'originId' = v_cle) = 'H21L2-BASE'
+       AND (SELECT count(*) FROM jsonb_array_elements(v_altere->'records') r WHERE r->'source'->>'leader' = 'H21L2-BASE') = 1
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : sans base '||(v_sans = v_exp)::text||', base lue '
+                    ||coalesce((SELECT r->'source'->>'leader' FROM jsonb_array_elements(v_altere->'records') r WHERE r->>'originId' = v_cle), '∅')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'ALLER-RETOUR-PMB OK : %/% tests passés', v_passed, v_passed;
   ELSE
@@ -290,12 +462,20 @@ describe('H27 — la preuve de l\'aller-retour PMB, par la base', async () => {
   for (const f of FICHIERS) lignes.push(...await lignesDe(f));
   lignes.forEach((l, i) => { l.row_no = i + 1; });
   const attendu = existsSync(ATTENDU) ? JSON.parse(readFileSync(ATTENDU, 'utf8')) : null;
+  const brouillons = existsSync(BROUILLONS) ? JSON.parse(readFileSync(BROUILLONS, 'utf8')) : null;
 
   it('la suite SQL engendrée est à jour', () => {
-    const sql = suiteSql(lignes, attendu);
+    const sql = suiteSql(lignes, attendu, brouillons);
     if (process.env.REGENERER_H27 === '1') writeFileSync(SUITE, sql);
     expect(existsSync(SUITE)).toBe(true);
     expect(readFileSync(SUITE, 'utf8') === sql, 'suite SQL périmée : REGENERER_H27=1').toBe(true);
+  });
+
+  // H21 lot 2 : un brouillon figé par ligne des fixtures, dans l'ordre du fichier.
+  it('les brouillons figés couvrent chaque ligne des fixtures, dans l\'ordre', () => {
+    expect(brouillons, 'brouillons figés absents : tests/pmb/capturer-attendu-h27.sh').not.toBeNull();
+    expect(brouillons.map((b) => b.row_no)).toEqual(lignes.map((l) => l.row_no));
+    expect(brouillons.map((b) => b.brouillon.titulo)).toEqual(lignes.map((l) => (l.title ?? '').replace(/^ +| +$/g, '') || null));
   });
 
   it('l\'attendu figé couvre chaque notice des fixtures, dans l\'ordre', () => {

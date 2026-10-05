@@ -645,6 +645,13 @@ tests/sql/h21_republier_hors_lot_tests.sql
 # d'origine reste à la bibliothèque qui a importé (c) ; un exemplaire rattaché sorti de la
 # corbeille après la demande attend un nouveau tour (d).
 tests/sql/h21_lot1_reconnaitre_tests.sql
+# 05/10/2026 — H21 lot 2 (REGISTRE IMP-23, IMP-28) : la base de ce que l'import a apporté
+# (ingest.book_import_baselines, une par identifiant d'origine) ; la correspondance
+# ingest.fn_import_row_as_book, que la création appelle, ne change rien aux brouillons
+# (définition d'avant rejouée) ; base posée à la publication, à l'absorption, au
+# rapprochement (créée seulement si absente), à la bibliothèque qui a importé ; suit
+# l'identifiant ; reprise ; l'export lit la base d'abord ; l'API n'y a pas accès.
+tests/sql/h21_lot2_la_base_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

@@ -1,6 +1,7 @@
 #!/bin/bash
 # =====================================================================
-# Refait tests/pmb/aller-retour-attendu.json (H27) depuis le banc SQL local.
+# Refait tests/pmb/aller-retour-attendu.json (H27) et
+# tests/pmb/aller-retour-brouillons.json (H21 lot 2) depuis le banc SQL local.
 #
 # L'attendu est ce que la base exporte des deux fixtures PMB après import,
 # promotion et publication (tests/sql/aller_retour_pmb_tests.sql, T3). On ne
@@ -35,4 +36,16 @@ sed -n 's/.*NOTICE:  H27-CAPTURE //p' "$TMP" \
   > "$TMP.json" || { grep -E '(OK|ECHEC) :' "$TMP" | tail -1 | cut -c1-2000; rm -f "$TMP.json"; exit 1; }
 mv "$TMP.json" "$SORTIE"
 echo "attendu écrit : $SORTIE ($(wc -c < "$SORTIE") octets)"
+# H21 lot 2 (05/10/2026) : les brouillons que la promotion crée (T5). On ne les
+# refait que quand la correspondance fichier → colonnes (ingest.fn_import_row_as_book)
+# change EXPRÈS — et on relit leur diff : le lot 2 les a figés avec la définition
+# d'avant pour prouver qu'il ne changeait rien à la création.
+BROUILLONS=tests/pmb/aller-retour-brouillons.json
+sed -n 's/.*NOTICE:  H27-BROUILLONS //p' "$TMP" \
+  | node -e 'const s = require("fs").readFileSync(0, "utf8"); const a = JSON.parse(s);
+      if (!Array.isArray(a) || !a.length) { console.error("brouillons vides : promotion en échec"); process.exit(1); }
+      process.stdout.write(JSON.stringify(a, null, 1) + "\n");' \
+  > "$TMP.b.json" || { rm -f "$TMP.b.json"; echo "brouillons non capturés"; exit 1; }
+mv "$TMP.b.json" "$BROUILLONS"
+echo "brouillons écrits : $BROUILLONS ($(wc -c < "$BROUILLONS") octets)"
 grep -E '(OK|ECHEC) :' "$TMP" | tail -1 | cut -c1-800
