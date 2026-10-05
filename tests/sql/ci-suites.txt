@@ -617,6 +617,9 @@ tests/sql/taches_invitation_tests.sql
 tests/sql/branches_mortes_courriel_tests.sql
 # F20 (04/10/2026) : les crons de réservation tournent aussi dans une bibliothèque sans ligne de politique.
 tests/sql/reservations_sans_politique_tests.sql
+# C14 lot A (04/10/2026) : un brouillon ouvert avant le départ de son exemplaire est refusé à la publication ;
+# la corbeille rend un brouillon dont le fonds a disparu.
+tests/sql/brouillon_perime_exemplaire_deplace_tests.sql
 # 29/09/2026 — H21 lot 0 (REGISTRE IMP-26 h, IMP-27) : une notice née d'un import ne
 # se publie que dans un lot révisé (a) ; l'approbation couvre ce que le tour a soumis
 # (b) ; un lot de rapprochement passe par la révision (c) ; une sélection rejoint le

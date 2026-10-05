@@ -133,10 +133,11 @@ BEGIN
     -- 5 : un brouillon d'exemplaire ouvert, par l'identifiant du fonds
     INSERT INTO public.exemplar_drafts (action, status, target_library_id, target_holding_id, tombo)
     VALUES ('create', 'draft', v_libA, v_hk[3], 'REAT-' || v_suf || '-b5');
-    -- 6 : une ligne de réservation
+    -- 6 : une ligne de réservation — close : une réservation ACTIVE refuse
+    -- désormais la réattribution (C14, 04/10/2026) ; son historique garde le fonds.
     INSERT INTO public.reservas_v2 (user_id, library_id, status_global) VALUES (v_autre, v_libA, 'ativa') RETURNING id INTO v_res_id;
-    INSERT INTO public.reserva_linhas_v2 (reserva_id, line_no, book_id, holding_id, bib_ref, item_status)
-    VALUES (v_res_id, 1, v_bk[4], v_hk[4], 'REAT-6-' || v_suf, 'ativa');
+    INSERT INTO public.reserva_linhas_v2 (reserva_id, line_no, book_id, holding_id, bib_ref, item_status, cancelled_at)
+    VALUES (v_res_id, 1, v_bk[4], v_hk[4], 'REAT-6-' || v_suf, 'cancelada_biblioteca', now());
     -- 7 : une ligne de consultation (colonne sans clé étrangère)
     INSERT INTO public.consultas_locais_v2 (user_id, library_id, status_global, notes)
     VALUES (v_autre, v_libA, 'ativa', 'réattribution (essai)') RETURNING id INTO v_cons;

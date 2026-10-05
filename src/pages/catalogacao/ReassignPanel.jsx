@@ -47,7 +47,11 @@ export default function ReassignPanel({ bookId, catalogLibraries, setMsg, onSave
         : { p_book_id: Number(bookId), p_target_library_id: reassignTarget };
       const { data, error } = await supabase.rpc(rpc, params);
       if (error) throw error;
-      setMsg({ text: t({ id: 'catalogacao.reassign.done' }, { library: data?.target_library || lib?.name || '', count: data?.exemplares_moved ?? 0 }), kind: 'ok' });
+      // C14 (5) : un fonds source vidé mais gardé (un historique ou un brouillon
+      // ouvert y renvoie) est dit, sinon la fiche affiche « 0 exemplaire » sans raison.
+      const kept = Array.isArray(data?.holdings_kept) ? data.holdings_kept.length : 0;
+      const done = t({ id: 'catalogacao.reassign.done' }, { library: data?.target_library || lib?.name || '', count: data?.exemplares_moved ?? 0 });
+      setMsg({ text: kept ? `${done} ${t({ id: 'catalogacao.reassign.keptHoldings' }, { count: kept })}` : done, kind: 'ok' });
       setReassignTarget(''); setReassignSource('');
       onSaved?.();
     } catch (err) {
