@@ -13,8 +13,8 @@
     },
     "maj": "2026-10-05",
     "releve": {
-      "date": "2026-09-29",
-      "commit": "75ccb035"
+      "date": "2026-10-05",
+      "commit": "16962c55"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 29 septembre 2026 au soir** (`75ccb035`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 28/09 au soir, `f36b4638`). Une journée à deux sessions : **7 migrations** (398 appliquées = 398 au dépôt, toutes par la CI), 33 commits, 1 531 tests JS et 150 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — sept réécrites depuis leur définition réelle, aucune créée : les cinq des tâches internes, qui écrivaient depuis le 31/08 un état que la base refusait (aucune tâche ne pouvait naître), et les deux de réattribution (**CAT-E19** : une réattribution ne laisse plus de fonds vide, garde le fonds supprimé entier au journal du catalogue et le rend tel quel s'il revient) ; **le catalogue** — inchangé en nombre, mais **plus aucun fonds sans exemplaire** dans le réseau (le fonds BLMF 2747, laissé par l'aller-retour de la notice 771, supprimé) ; **la circulation** — les trois PEB rendus et archivés, les essais du jour effacés ; **le dépôt** — `BibliotecaPage.jsx` passe de 152 à 84 Ko (E6, sections cotisation, dépôt et tâches), le contexte de session suit enfin les réglages changés à l'écran, `robots.txt` refuse les robots d'IA. **Tous les lots du découpage E6 sont vus à l'écran par Xavier** — deux essais y ont fait trouver trois défauts antérieurs (le contexte, les tâches, la réattribution), corrigés le jour même, et un message de PEB en jargon. **Mis à jour dans cette version, après un inventaire des 193 commits du 26 au 29/09 contre le backlog** : huit clôtures qui manquaient (couvertures CAPAS-1 à 6, pt-BR brésilien, fusion de notices DEDUP-11 à 14, sujets effacés THES-5, sigles OPAC-F3, OPAC-OEU7, onglet du catalogue publié, `robots.txt`), sept items ouverts (B36, C14 à C17, E23 à E25), E3 passé en cours (le tu dans les dix langues, quatre valeurs italiennes au « Lei » restantes), F6 à vérifier, et les journaux de vérification remis à jour là où ils s'arrêtaient trop tôt (A3, B29, C3, C4, C10, E2, E6, F3, G1, G6, G15, H17, H18, H19, H21, H23, H24, H28, I18, I21). **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, F6, F15, H15 à H20, H22 à H26, H28, J9, K10) et C17 (à décider) ; *sans code* : A1 (une seule administration réseau), A3 (la machine du runner).",
-      "pt": "**Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código)."
+      "fr": "**Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).",
+      "pt": "**Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código)."
     },
     "photo": [
       {
@@ -377,8 +377,8 @@
             },
             "197",
             {
-              "fr": "toutes avec RLS activé, **359 policies** tous schémas confondus (`public` 310, `storage` 47, `cron` 2). Inchangé depuis le relevé du 28/09 : les migrations du 29/09 réécrivent des fonctions, aucune ne crée de table ni de policy. 27 tables ont la RLS sans policy (avis 0008, `ingest` et des tables techniques de `public`) : fermées, voulu.",
-              "pt": "todas com RLS, **359 políticas** (`public` 310, `storage` 47, `cron` 2); inalterado desde 28/09. 27 tabelas com RLS sem política (aviso 0008): fechadas, deliberado."
+              "fr": "toutes avec RLS activé, **359 policies** tous schémas confondus (`public` 310, `storage` 47, `cron` 2). Inchangé depuis le relevé du 29/09 : les 18 migrations du 30/09 au 05/10 réécrivent des fonctions ou corrigent des données, aucune ne crée de table ni de policy.",
+              "pt": "todas com RLS ativado, **359 policies** em todos os esquemas (`public` 310, `storage` 47, `cron` 2). Inalterado desde 29/09: as 18 migrações de 30/09 a 05/10 reescrevem funções ou corrigem dados, nenhuma cria tabela nem policy."
             }
           ],
           [
@@ -389,7 +389,7 @@
             "10",
             {
               "fr": "toutes avec RLS ; aucune n'a de policy (avis 0008, les 10) — le schéma n'a jamais été exposé, ni `anon` ni `authenticated` n'y a `USAGE`. Inchangé depuis le 29/08 (B1).",
-              "pt": "todas com RLS, nenhuma política (aviso 0008): o esquema nunca foi exposto. Inalterado desde 29/08."
+              "pt": "todas com RLS; nenhuma tem policy (aviso 0008, as 10) — o esquema nunca foi exposto. Inalterado desde 29/08 (B1)."
             }
           ],
           [
@@ -400,7 +400,7 @@
             "68",
             {
               "fr": "**67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, la seule tolérée par la suite `vues_api_definer_tests`). Inchangé depuis le 24/09.",
-              "pt": "**67 SECURITY INVOKER, 1 DEFINER**. Inalterado desde 24/09."
+              "pt": "**67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Inalterado desde 24/09."
             }
           ],
           [
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "998",
+            "1 016",
             {
-              "fr": "`public` 735 · `api` 201 · `ingest` 42 · `private` 20. Dont **755 SECURITY DEFINER** (inchangé). +1 depuis le 28/09 : `public.f_normalize_search`, la normalisation qui fait lire les sigles sans leurs points à la recherche unifiée (`20260928191324`). Le 29/09 a **réécrit** sept fonctions sans en créer : les cinq des tâches internes (`20260929095411`), les deux de réattribution (`20260929151902`, CAT-E19), par `pg_get_functiondef` et remplacements comptés — droits et options conservés. Une seule a un `search_path` non figé, **voulu** : `public.fn_locale_from_idioma` (avis 0011, B32).",
-              "pt": "`public` 735 · `api` 201 · `ingest` 42 · `private` 20; **755 SECURITY DEFINER**; +1 desde 28/09 (`f_normalize_search`). Em 29/09, sete funções reescritas sem criar nenhuma (tarefas internas, reatribuição)."
+              "fr": "`public` 745 · `api` 201 · `ingest` 45 · `private` 25. Dont **766 SECURITY DEFINER** (755 le 29/09, +11). +18 depuis le 29/09 : la recherche qui trouve l'auteur dans tous les sens (E26), le lot 0 de H21 (révision qui couvre ce que le tour a soumis), l'expiration des consultations (F1), les reprises vierges qui s'oublient (C19), l'accès numérique au catalogue (C20), la règle de CAT-E19 au désherbage (`private.fn_fonds_vides_menage`, C14).",
+              "pt": "`public` 745 · `api` 201 · `ingest` 45 · `private` 25. Das quais **766 SECURITY DEFINER** (755 em 29/09, +11). +18 desde 29/09: busca de autor em todos os sentidos (E26), lote 0 do H21, expiração das consultas (F1), retomadas virgens (C19), acesso digital ao catálogo (C20), regra CAT-E19 no descarte (C14)."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "398",
+            "416",
             {
-              "fr": "**398 appliquées en production = 398 numérotées au dépôt**, toutes par la CI (`created_by` NULL ; aucune hors CI depuis le 26/09). +7 depuis le relevé du 28/09 : la recherche unifiée et les sigles (28/09 au soir), puis le 29/09 les tâches internes et leurs sept états, le rapprochement ISSN qui distingue le fascicule de sa revue, IMP-25 (une notice MARC sans exemplaire n'en reçoit pas), et la réattribution qui ne laisse plus de fonds vide (CAT-E19). Les 8 fichiers de plus dans `supabase/migrations/` sont le gabarit et sept scripts de retour arrière.",
-              "pt": "**398 aplicadas = 398 numeradas**, todas pela CI; +7 desde 28/09 (tarefas internas, ISSN, IMP-25, CAT-E19, siglas)."
+              "fr": "**416 appliquées en production = 416 numérotées au dépôt**, toutes par la CI (`created_by` NULL ; aucune hors CI depuis le 26/09). +18 depuis le relevé du 29/09 : 2 le 30/09 (invitation à une tâche F16, rappel qui suit la prorogation F17), 5 le 01/10 (recherche E26 ×2, branches mortes du courriel et expiration des consultations F1, lot 0 de H21), 1 le 03/10 (reprises vierges C19), 4 le 04/10 (réservations sans politique F20, suggestions E27, contributeurs par forme autorisée E28, accès numérique C20), 6 le 05/10 (« Retraiter » exige le fichier H30, lot des auteurs sans doublon, œuvres réunies et deux doublons de notices C18, C14, C23).",
+              "pt": "**416 aplicadas em produção = 416 numeradas no repositório**, todas pela CI (`created_by` NULL). +18 desde 29/09: 2 em 30/09 (F16, F17), 5 em 01/10 (E26 ×2, F1 ×2, H21 lote 0), 1 em 03/10 (C19), 4 em 04/10 (F20, E27, E28, C20), 6 em 05/10 (H30, lote de autores, C18 ×2, C14, C23)."
             }
           ],
           [
@@ -430,10 +430,10 @@
               "fr": "Jobs `pg_cron`",
               "pt": "Jobs `pg_cron`"
             },
-            "41",
+            "43",
             {
-              "fr": "actifs — inchangé depuis le 28/09. Une instance restaurée les retrouve par `private.fn_crons_replanifier()` (I26). La sonde des récurrences de tâches (`fn_cron_tasks_detect_stale_recurrence`) regarde depuis le 29/09 les quatre états vivants.",
-              "pt": "ativos — inalterado desde 28/09."
+              "fr": "actifs — +2 depuis le 29/09 : `anarbib-consultas-expire-daily` (03 h 10, une demande de consultation expire 60 jours après sa création, F1) et `anarbib-purge-untouched-retakes` (une reprise jamais enregistrée s'oublie, C19). Une instance restaurée les retrouve par `private.fn_crons_replanifier()` (I26).",
+              "pt": "ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26)."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "500",
+            "503",
             {
-              "fr": "0 ERROR · **445** WARN sur les DEFINER exposées à `authenticated` (0029 ; 444 le 28/09, +1), **27** sur celles exposées à `anon` (0028, inchangé), **1** `search_path` non figé (0011, `fn_locale_from_idioma`, voulu, B32), 27 INFO « RLS sans policy » (0008). Les deux fonctions de réattribution réécrites gardent exactement leurs droits (`authenticated` et `service_role`, jamais `anon` — vérifié en production après le déploiement et gardé par la suite `grants_herites`).",
-              "pt": "0 ERROR · **445** WARN 0029 (+1), **27** 0028, 1 0011 (deliberado), 27 INFO 0008. As funções de reatribuição mantêm exatamente seus direitos."
+              "fr": "0 ERROR · **447** WARN sur les DEFINER exposées à `authenticated` (0029 ; 445 le 29/09, +2 : `discard_untouched_retake` du 03/10 et `catalog_digital_access_v1` du 04/10 ; **tous justifiés** — le complément du 05/10 de `AUDIT_execute_authenticated_2026-09-01` porte les cinq verdicts qui manquaient depuis le 28/09, aucune faille, une forme à noter : le refus de `fn_export_authorities_lote` n'a pas de HINT), **28** sur celles exposées à `anon` (0028 ; 27 le 29/09, +1 : `catalog_digital_access_v1`, ouverte exprès au catalogue public, justifiée dans sa migration et gardée par sa suite), **1** `search_path` non figé (0011, `fn_locale_from_idioma`, voulu, B32), **27** INFO « RLS sans policy » (0008 : les 10 tables `ingest` et 17 tables `public` fermées exprès).",
+              "pt": "0 ERROR · **447** WARN sobre DEFINER expostas a `authenticated` (0029; 445 em 29/09, +2: `discard_untouched_retake` e `catalog_digital_access_v1`; **todos justificados** — complemento de 05/10 da auditoria, cinco vereditos, nenhuma falha), **28** expostas a `anon` (0028; +1: `catalog_digital_access_v1`, aberta de propósito ao catálogo público), **1** `search_path` não fixado (0011, voluntário, B32), **27** INFO (0008)."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "262",
+            "257",
             {
-              "fr": "**236 « index inutilisés »** (246 le 28/09, −10 : des index sont empruntés depuis — les compteurs repartent du redémarrage du 02/09), **17** clés étrangères sans index (tables techniques, gardées par la suite à liste fermée), **8** tables sans clé primaire (`conv_backup` et deux tables de lignes d'import BLMF), 1 note sur les connexions `auth`.",
-              "pt": "**236 índices sem uso** (−10 desde 28/09), 17 chaves estrangeiras sem índice, 8 tabelas sem chave primária."
+              "fr": "**231 « index inutilisés »** (236 le 29/09, −5 : des index sont empruntés — les compteurs repartent du redémarrage du 02/09), **17** clés étrangères sans index (tables techniques, gardées par la suite à liste fermée), **8** tables sans clé primaire (le schéma de mai), **1** avis sur les connexions d'Auth en nombre absolu (réglage de plateforme).",
+              "pt": "**231 « índices não usados »** (236 em 29/09, −5), **17** chaves estrangeiras sem índice (guardadas pela suíte de lista fechada), **8** tabelas sem chave primária, **1** aviso sobre as conexões do Auth em número absoluto."
             }
           ],
           [
@@ -465,8 +465,8 @@
             },
             "1",
             {
-              "fr": "`conv_backup` seul — il porte les six tables de revue humaine de C3/C5 et **ne se purge pas** tant que les fiches ne sont pas relues. Inchangé.",
-              "pt": "só `conv_backup`, inalterado."
+              "fr": "`conv_backup` seul — **sept tables**, toutes du 20/08 (copies de `authors`, `author_drafts`, `books`, `book_drafts` et trois listes de revue : casse, patronymes, titres) ; « six » dans les relevés précédents était un compte faux. Elles portent la revue humaine de C3/C5 et **ne se purgent pas** tant que les fiches ne sont pas relues.",
+              "pt": "`conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas."
             }
           ]
         ]
@@ -482,10 +482,10 @@
               "fr": "Dossiers au dépôt",
               "pt": "Pastas no repositório"
             },
-            "55",
+            "54",
             {
-              "fr": "+ `_shared` ; inchangé depuis le 28/09. Dont le routeur `main`, jamais déployé (I3). Toutes déployées par la CI (marqueur `deployed-functions`), plus jamais à la main.",
-              "pt": "+ `_shared`; inalterado desde 28/09. Todas implantadas pela CI."
+              "fr": "+ `_shared` ; **−1 depuis le 29/09** : `notify-mid-loan-reading` supprimée (F1, branche morte ; retirée de la plateforme par Xavier le 01/10). Dont le routeur `main`, jamais déployé (I3). Toutes déployées par la CI (marqueur `deployed-functions`).",
+              "pt": "+ `_shared`; **−1 desde 29/09**: `notify-mid-loan-reading` suprimida (F1; retirada da plataforma por Xavier em 01/10). Inclui o roteador `main`, nunca implantado (I3)."
             }
           ],
           [
@@ -493,10 +493,10 @@
               "fr": "Déclarations `verify_jwt`",
               "pt": "Declarações `verify_jwt`"
             },
-            "40",
+            "39",
             {
-              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = ` dans `supabase/config.toml` ; inchangé. Le Bearer ne prouve donc rien : chaque fonction vérifie son appelant elle-même (secret partagé ou session relue).",
-              "pt": "**todas `false`**; inalterado."
+              "fr": "**toutes à `false`** — compte des lignes `^verify_jwt = ` dans `supabase/config.toml` (−1 avec la fonction supprimée). Le Bearer ne prouve donc rien : chaque fonction vérifie son appelant elle-même (secret partagé ou session relue).",
+              "pt": "**todas `false`** — linhas `^verify_jwt = ` em `supabase/config.toml` (−1 com a função suprimida). Cada função verifica quem a chama."
             }
           ]
         ]
@@ -512,10 +512,10 @@
               "fr": "Notices",
               "pt": "Fichas"
             },
-            "2 609",
+            "2 605",
             {
-              "fr": "2 759 exemplaires, **2 380 œuvres** (+1), **1 508 autorités** — le catalogue n'a pas bougé depuis le 28/09 au soir : la notice d'essai « Je suis une légende » (29/09) a été créée, publiée puis retirée. **2 661 fonds, et plus aucun sans exemplaire** dans tout le réseau (bibliothèques privées comprises) : le seul, le fonds BLMF 2747 laissé par l'aller-retour de la notice 771, a été supprimé le 29/09 avec sa trace au journal (CAT-E19).",
-              "pt": "2 759 exemplares, **2 380 obras**, **1 508 autoridades**; **2 661 acervos, nenhum vazio** desde a correção da reatribuição (CAT-E19)."
+              "fr": "2 759 exemplaires, **2 366 œuvres** (−14), **1 506 autorités** (−2), **2 660 fonds, aucun vide**. −4 notices depuis le 29/09, toutes par fusion (`merge_log`) : deux faites par Xavier à l'écran (02/10 et 04/10) et les deux doublons de C18 (Nettlau, Kropotkine, 05/10, sa demande). −2 autorités : deux formes de Jean Grave réunies le 01/10. −14 œuvres : les réunions de C18 (05/10, décisions de Xavier) et les œuvres laissées vides par les fusions de notices.",
+              "pt": "2 759 exemplares, **2 366 obras** (−14), **1 506 autoridades** (−2), **2 660 fundos, nenhum vazio**. −4 notícias desde 29/09, todas por fusão: duas por Xavier na tela (02/10, 04/10) e os dois duplicados do C18 (05/10). −2 autoridades: duas formas de Jean Grave unidas em 01/10. −14 obras: reuniões do C18 e obras esvaziadas pelas fusões."
             }
           ],
           [
@@ -523,10 +523,10 @@
               "fr": "Brouillons de catalogage",
               "pt": "Rascunhos de catalogação"
             },
-            "2 298",
+            "2 362",
             {
-              "fr": "`draft` 1 823, `published` 475 (+3 et +1 depuis le 28/09). **Chaque brouillon a sa bibliothèque** (B29) et **chaque lot la sienne** (B30 ; 3 lots : MLEG, BLMF, Solidaires). Le lot Solidaires reste à réviser et publier. Depuis le 29/09, un brouillon d'exemplaire publié suit son exemplaire quand une réattribution le déplace.",
-              "pt": "`draft` 1 823, `published` 475; cada rascunho e cada lote têm biblioteca (B29/B30). O lote Solidaires continua a rever e publicar."
+              "fr": "`draft` 1 820, `published` 538, `cancelled` 4 (2 298 le 29/09 : +64, surtout des reprises publiées — le catalogage de la semaine, les vérifications à l'écran de C19 à C22). **Chaque brouillon a sa bibliothèque** (B29) et **chaque lot la sienne** (B30 ; 3 lots : MLEG, BLMF, Solidaires). Le lot Solidaires reste à réviser et publier. Depuis le 03/10, une reprise jamais enregistrée ne reste plus en file (C19).",
+              "pt": "`draft` 1 820, `published` 538, `cancelled` 4 (+64 desde 29/09). **Cada rascunho tem sua biblioteca** (B29) e **cada lote a sua** (B30; 3 lotes). O lote Solidaires segue por revisar. Desde 03/10, uma retomada nunca salva sai da fila (C19)."
             }
           ],
           [
@@ -534,10 +534,10 @@
               "fr": "Indexation matière",
               "pt": "Indexação de assunto"
             },
-            "2 146 / 2 609",
+            "2 143 / 2 605",
             {
-              "fr": "notices avec au moins un sujet — **463 sans aucun**, inchangé depuis le 28/09 (1 472 le 24/09) : C7 a indexé 851 notices le 27/09 ; THES-5 (28/09) a rendu leurs sujets à 19 des 20 notices qu'une reprise sans sujets avait désindexées (136 brouillons de reprise en cause depuis juin ; BTL-TL-001242 laissée sans matière, sur arbitrage de Xavier). Les 463 restantes sont pour l'essentiel des notices sans vedette d'origine.",
-              "pt": "registros com pelo menos um assunto — **463 sem nenhum**, inalterado desde 28/09; THES-5 devolveu os assuntos a 19 dos 20 registros desindexados."
+              "fr": "notices avec au moins un sujet — **462 sans aucun** (463 le 29/09). Les quatre notices fondues ont rendu leurs sujets à la notice gardée. C7 a indexé 851 notices le 27/09 ; THES-5 (28/09) a rendu leurs sujets aux notices qu'une reprise avait désindexées.",
+              "pt": "notícias com ao menos um assunto — **462 sem nenhum** (463 em 29/09). C7 indexou 851 notícias em 27/09."
             }
           ],
           [
@@ -547,8 +547,8 @@
             },
             "621",
             {
-              "fr": "termes, **10 locales complètes**, 159 dates ; **110 alignements** vers les sujets locaux. Inchangé depuis le 28/09 ; l'esquisse SKOS révisée et le racleur hors ligne attendent Bologne (H13).",
-              "pt": "termos, **10 locales**, **110 alinhamentos**; inalterado."
+              "fr": "termes, **10 locales complètes**, 159 dates ; **110 alignements** vers les sujets locaux. Inchangé depuis le 28/09 ; l'esquisse SKOS révisée et le racleur hors ligne attendent (H13).",
+              "pt": "termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09."
             }
           ],
           [
@@ -558,8 +558,8 @@
             },
             "4",
             {
-              "fr": "titres, **5 fascicules rattachés**, inchangé. Depuis le 29/09, le rapprochement d'import par ISSN ne prend plus un article pour sa revue (`20260929102719`).",
-              "pt": "títulos, **5 fascículos**; desde 29/09 a aproximação por ISSN não confunde mais o artigo com a revista."
+              "fr": "titres, **5 fascicules rattachés**, inchangé depuis le 29/09.",
+              "pt": "títulos, **5 fascículos ligados**, inalterado."
             }
           ]
         ]
@@ -575,10 +575,10 @@
               "fr": "Bibliothèques",
               "pt": "Bibliotecas"
             },
-            "5",
+            "6",
             {
-              "fr": "**actives, sur 6 lignes** (la sixième est la bibliothèque de formation `blmf-teste`, inactive, fixtures en production). Inchangé. Les essais de cotisation et de dépôt de garantie du 29/09 (E6, vus à l'écran par Xavier) ont été faits sur la BLMF, revenue ensuite à l'état qu'elle veut : cotisation désactivée.",
-              "pt": "**ativas, de 6 linhas**; inalterado. Os ensaios de cotização e depósito de 29/09 foram feitos na BLMF, que voltou ao estado desejado (cotização desativada)."
+              "fr": "**actives, sur 6 lignes** : BTL, BLMF, MLEG, Solidaires, anarchief.org et la bibliothèque de formation `blmf-teste` (fixtures en production). Le relevé du 29/09 la disait inactive et comptait « 5 actives » : sa ligne n'a pas changé depuis le 26/08 (`updated_at`), l'erreur était dans le relevé.",
+              "pt": "**ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. O levantamento de 29/09 a dizia inativa: sua linha não muda desde 26/08, o erro estava no levantamento."
             }
           ],
           [
@@ -588,8 +588,8 @@
             },
             "22",
             {
-              "fr": "**25** appartenances actives ; **22 lignes** dans `auth.users`, **20 confirmées** (deux invitations jamais honorées). Inchangé depuis le 28/09.",
-              "pt": "**25** adesões ativas; **22 linhas** em `auth.users`, **20 confirmadas**; inalterado."
+              "fr": "**25** appartenances actives ; **22 lignes** dans `auth.users`, **20 confirmées** (deux invitations jamais honorées). Inchangé depuis le 28/09 — le compte du camarade (`ASR2026`) n'est pas encore créé.",
+              "pt": "**25** filiações ativas; **22 linhas** em `auth.users`, **20 confirmadas**. Inalterado desde 28/09 — a conta do camarada (`ASR2026`) ainda não foi criada."
             }
           ],
           [
@@ -599,8 +599,8 @@
             },
             "1",
             {
-              "fr": "**c'est l'item A1, et il commande tout le reste** — inchangé depuis le 29/08.",
-              "pt": "**é o item A1, e comanda todo o resto**."
+              "fr": "**c'est l'item A1, et il commande tout le reste** — inchangé depuis le 29/08. Le second compte (le camarade, `ASR2026`) attend son inscription, puis la cooptation dans Réseau › Admins.",
+              "pt": "**é o item A1, e comanda todo o resto** — inalterado desde 29/08. A segunda conta (o camarada, `ASR2026`) aguarda inscrição e cooptação."
             }
           ],
           [
@@ -610,8 +610,8 @@
             },
             "6 / 20 / 22 / 0",
             {
-              "fr": "emprunts / réservations / consultations / PEB **non archivés** — et **aucun n'est ouvert** : les 6 emprunts, 20 réservations et 22 consultations sont « encerrado ». **Les trois PEB sont rendus et archivés depuis le 29/09** : les deux de mai 2026 (n° 24 et 25) et le PEB d'essai de Xavier (n° 35 : créé, retour pointé en deux fois, archivé — l'onglet PEB découpé par E6, vu à l'écran). **Tâches internes : 0** — celles des essais du 29/09 ont été supprimées. La circulation réelle du réseau se fait hors AnarBib.",
-              "pt": "empréstimos / reservas / consultas / EEB **não arquivados** — nenhum aberto; os três EEB devolvidos e arquivados em 29/09 (dois de maio e o de ensaio de Xavier). Tarefas internas: 0."
+              "fr": "emprunts / réservations / consultations / PEB **non archivés** — et **aucun n'est ouvert** : les 6 emprunts, 20 réservations et 22 consultations sont « encerrado ». Les trois PEB sont rendus et archivés ; depuis le 05/10 (C14), leurs lignes le sont aussi (les deux lignes des PEB 24 et 25, restées « prêtées » depuis mai, réparées par migration).",
+              "pt": "empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**. Os três EEB estão devolvidos e arquivados; desde 05/10 (C14), suas linhas também (PEB 24 e 25 reparados)."
             }
           ]
         ]
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "3 043",
+            "3 099",
             {
-              "fr": "+33 depuis le relevé du 28/09 au soir, en une journée et deux sessions : E6 (`BibliotecaPage` lots 2 et 3, les vérifications à l'écran), le contexte de session et ses réglages, les tâches internes, le PEB, la réattribution (CAT-E19), IMP-25 et le rapprochement ISSN, H27 clos et H29 ouvert, le rouge d'action unique, le `robots.txt`. Codeberg, miroir nu, WSL et GitHub alignés à chaque push.",
-              "pt": "+33 desde 28/09, num dia e duas sessões."
+              "fr": "+56 depuis le relevé du 29/09 au soir (`75ccb035`), en six jours et deux sessions, plus la PR #31 du camarade (`ASR2026`, fusionnée le 01/10) : la chaîne de courriel (F1, F16 à F21), les sauvegardes (I24), la recherche (E26, E27), H21 lot 0 et H30, les reprises vierges (C19), le numérique et le catalogage (C20 à C22), F20, C14, C18, C23.",
+              "pt": "+56 desde 29/09 (`75ccb035`), em seis dias e duas sessões, mais a PR #31 do camarada (`ASR2026`): cadeia de e-mail (F1, F16–F21), backups (I24), busca (E26, E27), H21 lote 0 e H30, C19, C20–C22, F20, C14, C18, C23."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "453",
+            "477",
             {
-              "fr": "+13 depuis le 28/09 : `TasksSection.jsx`, `MembershipSection.jsx`, `DepositSection.jsx` et `styles.js` sortis de `BibliotecaPage.jsx` (**152 → 84 Ko**, E6), `contexts/libraryPatch.js` (les réglages que le contexte porte), `lib/taskStatus.js` (le vocabulaire des tâches), et leurs tests de source. `BookDraftForm.jsx` : 131 Ko. Le critère d'E6 (aucun fichier `src/` au-dessus de 60 Ko) reste loin : `AccountPage.jsx` 154, `PanelPage.jsx` 114, `ImportacoesPage.jsx` 109.",
-              "pt": "+13 desde 28/09: seções extraídas de `BibliotecaPage.jsx` (152 → 84 Ko, E6), `libraryPatch.js`, `taskStatus.js`."
+              "fr": "+24 depuis le 29/09 : `ConfirmContext.jsx`, `CatalogStatusBar.jsx`, `AfterPublishPanel.jsx` et les crochets `useDigitalAccess`, `useSaveConfirmation`, `useUntouchedRetake` (C19 à C22), et dix-huit fichiers de tests.",
+              "pt": "+24 desde 29/09: `ConfirmContext.jsx`, `CatalogStatusBar.jsx`, `AfterPublishPanel.jsx`, três hooks (C19–C22) e dezoito arquivos de teste."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "6 939",
+            "7 004",
             {
-              "fr": "parité stricte sur les dix locales (6 939 chacune, gardée en CI). +7 depuis le 28/09 : quatre états de tâche (`task.status.*`), le refus clair d'une suppression de PEB sorti, le message d'IMP-25 (« aucun exemplaire ne sera créé ») et un conseil pour l'export vers PMB.",
-              "pt": "paridade estrita nas dez locales (6 939 cada); +7 desde 28/09."
+              "fr": "parité stricte sur les dix locales (7 004 chacune, gardée en CI). +65 depuis le 29/09 : les courriels sans résidu portugais (F21), le catalogage (barre d'état, confirmations, « Publié — et maintenant ? »), le numérique au catalogue (C20), H21 lot 0 et H30, les refus de C14, le message d'une bibliothèque sans série d'inventaire (C23).",
+              "pt": "paridade estrita nas dez locales (7 004 cada). +65 desde 29/09: e-mails (F21), catalogação (C19–C22), digital (C20), H21/H30, recusas do C14, biblioteca sem série de tombos (C23)."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "1 531 + 150",
+            "1 871 + 164",
             {
-              "fr": "**1 531 tests JS** (vitest, gate bloquant, 128 fichiers ; relancés en entier le 29/09 au soir, tous verts ; 1 454 le 28/09 : +77, dont les tests de source des sections de `BibliotecaPage`, du vocabulaire des tâches, du contexte de session, du PEB et du `robots.txt`) + **150 suites SQL** dans `ci-suites.txt` (+4 depuis le 28/09 : `taches_sept_etats`, `import_sans_exemplaire`, `import_rapprochement_issn`, `reattribution_fonds_vide` — cette dernière éprouvée par 13 mutants, chacun tué par le test qui le garde), toutes vertes au dernier run.",
-              "pt": "**1 531 testes JS** (+77) + **150 suítes SQL** (+4 desde 28/09), todos verdes."
+              "fr": "**1 871 tests JS** (vitest, gate bloquant, 147 fichiers dont 3 sautés ; relancés en entier le 05/10 à 11 h 30, tous verts ; 1 531 le 29/09 : +340) et **164 suites SQL** en CI (150 le 29/09 : +14 — branches mortes du courriel, réservations sans politique, H21 lot 0, reprises vierges, accès numérique, C14, C23…).",
+              "pt": "**1 871 testes JS** (vitest, 147 arquivos; relançados por inteiro em 05/10, todos verdes; +340 desde 29/09) e **164 suítes SQL** na CI (+14)."
             }
           ],
           [
@@ -674,7 +674,7 @@
             "18",
             {
               "fr": "dont 4 dans `src/` — méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) : 18, comme à chaque relevé depuis le 15/09. Aucun n'est une tâche ouverte ; ils nomment des choix assumés.",
-              "pt": "dos quais 4 em `src/`; 18 como em 28/09."
+              "pt": "dos quais 4 em `src/` — método fixo: 18, como desde 15/09. Nenhum é tarefa aberta."
             }
           ]
         ]
@@ -3181,6 +3181,56 @@
       }
     },
     {
+      "id": "C23",
+      "d": "C",
+      "p": "P2",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "sql",
+        "langue"
+      ],
+      "t": {
+        "fr": "Un exemplaire déplacé par sa publication trouve, ou crée, le fonds de sa notice dans la bibliothèque visée",
+        "pt": "Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino"
+      },
+      "v": {
+        "fr": "Vu le 05/10 en livrant C14 : publier le brouillon d'un exemplaire déjà publié vers une bibliothèque où la notice n'a pas de fonds trouvé par la cote échouait en `exemplar_library_holding_mismatch` — la republication écrivait la nouvelle bibliothèque avec l'ancien fonds (`holding_id = coalesce(…, ancien)`). L'écran traduisait l'erreur par « ce brouillon pointe vers les exemplaires d'une autre bibliothèque » : faux. Au même endroit, une bibliothèque sans série d'inventaire affichait le code brut `tombo_pattern_not_configured`.",
+        "pt": "Visto em 05/10 ao entregar C14: publicar o rascunho de um exemplar já publicado para uma biblioteca sem fundo da notícia falhava em `exemplar_library_holding_mismatch`; e uma biblioteca sem série de tombos mostrava o código bruto `tombo_pattern_not_configured`."
+      },
+      "w": {
+        "fr": "`publish_exemplar_draft` prend le fonds de la même notice dans la cible, sinon le crée ; supprimé là par une réattribution (CAT-E19), il revient tel qu'il était. Clé `panel.apiError.tombo_pattern_not_configured` dans les dix locales, qui nomme l'onglet de la numérotation.",
+        "pt": "`publish_exemplar_draft` usa o fundo da mesma notícia no destino, senão o cria (restaurado se uma reatribuição o apagou). Chave `panel.apiError.tombo_pattern_not_configured` nas dez locales."
+      },
+      "y": {
+        "fr": "Déplacer un exemplaire isolé vers une bibliothèque qui n'a pas encore la notice est le geste normal d'un don ou d'un transfert ; il échouait sans dire pourquoi.",
+        "pt": "Mover um exemplar para uma biblioteca que ainda não tem a notícia é o gesto normal de uma doação ou transferência; falhava sem dizer por quê."
+      },
+      "f": {
+        "fr": [
+          "La suite `exemplaire_deplace_cree_son_fonds` (6 tests) passe ; le mutant qui retire le correctif rend l'erreur d'origine.",
+          "Un déplacement réel vu à l'écran, puis clôture."
+        ],
+        "pt": [
+          "A suíte `exemplaire_deplace_cree_son_fonds` (6 testes) passa; o mutante reproduz o erro original.",
+          "Um deslocamento real visto na tela, depois fechamento."
+        ]
+      },
+      "dep": {
+        "fr": "Après C14.",
+        "pt": "Depois de C14."
+      },
+      "r": [
+        "migration 20261005092748",
+        "commit 16962c55",
+        "REGISTRE CAT-E19"
+      ],
+      "verif": {
+        "fr": "**05/10 — livré** (`16962c55`, migration `20261005092748`). Fonction réécrite depuis sa définition réelle (empreinte relevée après C14), ancre comptée. Suite 6/6 et dix suites voisines vertes au banc ; le mutant fait tomber 5 tests sur 6 avec l'erreur d'origine ; vitest 1 871, lint 0 erreur. Déployé par la CI et vérifié en production (migration appliquée, `created_by` NULL). Reste un déplacement vu à l'écran.",
+        "pt": "**05/10 — entregue** (`16962c55`). Suíte 6/6, mutante morto, vitest 1 871. Falta um deslocamento visto na tela."
+      }
+    },
+    {
       "id": "C15",
       "d": "C",
       "p": "P2",
@@ -5308,7 +5358,7 @@
       "id": "E23",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "sql",
@@ -5352,7 +5402,11 @@
         "src/tests/brouillons-par-bibliotheque.test.js (B29)",
         "src/tests/lot-bibliotheque.test.js (B30)",
         "REGISTRE §0 DOC-GRANT-2 (un rejeu n'est pas la production)"
-      ]
+      ],
+      "verif": {
+        "fr": "**05/10 — mesuré et commencé.** Recompté sur les définitions de production (`pg_proc.prosrc`, commentaires retirés) : **210 clés** `error.*` posées en HINT par les fonctions en service ; la garde (lecture des migrations, dernière définition de chaque fonction, réécritures en bloc DO comprises) en trouve **exactement les mêmes 210**, comparées une à une. **74 n'ont de libellé dans aucune des dix locales** (les 20 du 29/09 et 54 autres : partenariats, transitions de profil, désarchivage, invitations de bibliothèque, demandes d'adhésion, partage numérique, périodiques). La garde est écrite, pas encore commitée : elle rougirait la CI tant que les 740 libellés manquent. En lisant les refus pour les traduire, un défaut a été trouvé et ouvert à part (G16).",
+        "pt": "**05/10 — medido e iniciado.** 210 chaves `error.*` em produção; a guarda encontra exatamente as mesmas 210. **74 sem rótulo em nenhuma das dez locales.** Guarda escrita, ainda não commitada (enquanto faltarem os 740 rótulos). Defeito encontrado e aberto à parte (G16)."
+      }
     },
     {
       "id": "E24",
@@ -5512,6 +5566,53 @@
         "fr": "**29/09** — l'envoi de la réponse à DIRA n'est daté nulle part dans le dépôt (critère 1). L'aller-retour que la réponse du 26/09 ne promettait pas est depuis éprouvé au banc : **H27** clos le 29/09 (l'export tiré de la base, réimporté dans un PMB vide, rend 46 exemplaires sur 46). Deux pièces existent pour le compte rendu : le CSV de couverture d'un import (**H16**, `4be5fee9`) et le tableau de l'aller-retour (`docs/interop/couverture-pmb.md`).",
         "pt": "**29/09** — o envio da resposta à DIRA não está datado em lugar nenhum do repositório (critério 1). O ida-e-volta que a resposta de 26/09 não prometia foi desde então provado no banco: **H27** fechado em 29/09 (o export tirado da base, reimportado num PMB vazio, devolve 46 exemplares de 46). Duas peças existem para o relatório: o CSV de cobertura de uma importação (**H16**, `4be5fee9`) e a tabela do ida-e-volta (`docs/interop/couverture-pmb.md`)."
       }
+    },
+    {
+      "id": "G16",
+      "d": "G",
+      "p": "P2",
+      "s": "decision",
+      "e": "S",
+      "sk": [
+        "front",
+        "sql",
+        "collectif"
+      ],
+      "t": {
+        "fr": "Le vote des transitions (changer un mode de fonctionnement d'une bibliothèque) ne parle pas la langue de la base",
+        "pt": "O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco"
+      },
+      "v": {
+        "fr": "Relevé le 05/10 en traduisant les refus de la base (E23). `TransitionsPanel.jsx` envoie à `fn_vote_library_profile_change` un vote `pro`, `contre` ou `abstain` ; la base n'accepte que `for` ou `against` (refus `VOTE_INVALID_VALUE`, et la CHECK de `library_profile_votes` aussi) : **tout vote serait refusé**. L'écran demande 5 caractères pour justifier un vote contre, la base 20. La base ne connaît pas l'abstention. Le circuit n'a **jamais servi** : 0 proposition, 0 vote en production (05/10). C'est un cas de G1.",
+        "pt": "Levantado em 05/10 (E23). `TransitionsPanel.jsx` envia um voto `pro`, `contre` ou `abstain`; o banco só aceita `for` ou `against`: **todo voto seria recusado**. A tela pede 5 caracteres para justificar um voto contra, o banco 20. O banco não conhece a abstenção. Circuito **nunca usado**: 0 proposta, 0 voto (05/10). Caso de G1."
+      },
+      "w": {
+        "fr": "Décider l'abstention (Xavier, gouvernance collégiale) : la retirer de l'écran, ou l'ajouter à la base (CHECK, décompte du quorum et de l'unanimité). Puis traduire les valeurs à l'envoi et à l'affichage du vote, aligner le minimum de justification sur la base, et emprunter le circuit de bout en bout sur une bibliothèque d'essai (proposer, voter, appliquer).",
+        "pt": "Decidir a abstenção (Xavier): retirá-la da tela ou acrescentá-la ao banco. Depois traduzir os valores no envio e na exibição, alinhar o mínimo de justificativa e percorrer o circuito de ponta a ponta numa biblioteca de teste."
+      },
+      "y": {
+        "fr": "Changer de mode (catalogue, circulation, réseau, gouvernance) est la décision collégiale par excellence ; le jour où une équipe s'en servira, son premier vote échouera.",
+        "pt": "Mudar de modo é a decisão colegiada por excelência; no dia em que uma equipe usar, seu primeiro voto falhará."
+      },
+      "f": {
+        "fr": [
+          "L'abstention est décidée.",
+          "Un vote pour, un vote contre et (si retenue) une abstention passent par l'écran ; une suite emprunte la proposition, le vote et l'application."
+        ],
+        "pt": [
+          "A abstenção está decidida.",
+          "Votos a favor, contra e (se mantida) abstenção passam pela tela; uma suíte percorre proposta, voto e aplicação."
+        ]
+      },
+      "dep": {
+        "fr": "Décision de Xavier sur l'abstention.",
+        "pt": "Decisão de Xavier sobre a abstenção."
+      },
+      "r": [
+        "src/components/TransitionsPanel.jsx",
+        "fn_vote_library_profile_change",
+        "G1"
+      ]
     },
     {
       "id": "H28",

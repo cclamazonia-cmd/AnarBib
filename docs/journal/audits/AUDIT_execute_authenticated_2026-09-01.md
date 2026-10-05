@@ -1845,3 +1845,23 @@ poussé, les 133 autres suites sont vertes, dont `brouillons_par_bibliotheque`
 31/31. La suite B33 a été corrigée en amont le 28/09 au matin (`8eaa180c`). Le lint
 0029 continuera de croître avec chaque RPC — il compte l'API elle-même ;
 c'est ce complément, pas le chiffre, qui doit suivre.
+
+## Complément du 05/10/2026 — cinq DEFINER ouvertes à `authenticated` depuis le 28/09
+
+Recette : `has_function_privilege('authenticated', …)` sur les DEFINER de `public`,
+`api`, `ingest` et `private`, croisé avec les fonctions dont la première
+définition est postérieure à `20260927200627` (dernier compte de ce document).
+Cinq, lues corps par corps en production le 05/10.
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `fn_batch_contributor_candidates(bigint, integer)` | 28/09 | `fn_caller_owns_batch` : staff de la bibliothèque du lot, ou administration (B30) ; sinon `error.batch.other_libraries` | **Saine.** Ne rend que les contributeurs non liés des brouillons vivants du lot et les autorités homonymes (données de catalogue) ; plafond 2 000 lignes. |
+| `fn_visible_library_ids()` | 28/09 (B32) | aucune, et c'est voulu | **Saine.** Agrège `fn_library_visible_to_caller` : ne rend que ce que l'appelant voit déjà, sous la règle même des politiques RLS qu'elle sert. |
+| `fn_export_authorities_lote(uuid)` | 28/09 | coordination active de la bibliothèque, ou administration du réseau | **Saine.** Exporte les autorités liées aux notices détenues par la bibliothèque. *Forme à noter* : le refus n'a pas de HINT (message portugais brut à l'écran) — à reprendre avec E23. |
+| `discard_untouched_retake(text, bigint)` | 03/10 (C19) | `auth.uid()` non nul ; ne supprime qu'un brouillon de reprise **jamais enregistré** (`retake_untouched`), au statut `draft`, **créé par l'appelant** (ou par n'importe qui pour l'administration) ; une reprise de notice qui porte déjà un brouillon d'exemplaire reste | **Saine.** Le drapeau `anarbib.retake_oubli`, local à la transaction, n'est posé que par elle et remis à vide avant de rendre la main. |
+| `catalog_digital_access_v1(bigint[])` | 04/10 (C20) | aucune ; ouverte aussi à `anon`, exprès (le catalogue public) | **Saine.** Ne répond que pour des notices détenues par une bibliothèque visible de l'appelant ; rend des usages, des booléens et des noms de bibliothèques visibles — jamais un chemin de fichier ; plafond 500 notices. Justifiée dans sa migration (`20261004215035`), gardée par `acces_numerique_catalogue_tests`. |
+
+**Compte au 05/10.** 0029 = **447** (advisor, format groupé), tous justifiés : 443
+au 28/09, +5 ci-dessus, −1 fermée entre-temps et non identifiée (même écart
+d'une unité qu'au 06/09). 0028 = **28** : 27 au relevé du 29/09, +1 `catalog_digital_access_v1` (04/10,
+ouverte au catalogue public, voir ci-dessus).

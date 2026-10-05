@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 74 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,18 +10,18 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 29 de setembro de 2026](#o-estado-real-em-29-de-setembro-de-2026)
+- [O estado real em 5 de outubro de 2026](#o-estado-real-em-5-de-outubro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 3
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
@@ -58,61 +58,61 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 29 de setembro de 2026
+## O estado real em 5 de outubro de 2026
 
-**Levantamento de 29 de setembro de 2026 à noite** (`75ccb035`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 28/09, `f36b4638`). Um dia com duas sessões: **7 migrações** (398 = 398, todas pela CI), 33 commits, 1 531 testes JS e 150 suítes SQL, todos verdes. Sete funções reescritas a partir da definição real: as cinco das tarefas internas (nenhuma tarefa podia nascer desde 31/08) e as duas de reatribuição (**CAT-E19**: nenhum acervo vazio, o acervo apagado guardado inteiro no diário do catálogo e devolvido se voltar). Nenhum acervo sem exemplar na rede; os três EEB devolvidos e arquivados; `BibliotecaPage.jsx` 152 → 84 Ko (E6); o contexto de sessão segue as configurações; `robots.txt` recusa os robôs de IA. **Todos os lotes de E6 vistos na tela por Xavier.** Nesta versão, após um inventário dos 193 commits de 26 a 29/09: oito fechamentos que faltavam, sete itens abertos (B36, C14 a C17, E23 a E25), E3 em curso, F6 a verificar, e os diários de verificação atualizados onde paravam cedo demais. Falta fechar: os itens «a verificar» e C17 (Xavier); A1, A3 (sem código).
+**Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **55 itens de 72** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **57 itens de 74** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, E23, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **197** | todas com RLS, **359 políticas** (`public` 310, `storage` 47, `cron` 2); inalterado desde 28/09. 27 tabelas com RLS sem política (aviso 0008): fechadas, deliberado. |
-| Tabelas `ingest` | **10** | todas com RLS, nenhuma política (aviso 0008): o esquema nunca foi exposto. Inalterado desde 29/08. |
-| Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER**. Inalterado desde 24/09. |
-| Funções aplicativas | **998** | `public` 735 · `api` 201 · `ingest` 42 · `private` 20; **755 SECURITY DEFINER**; +1 desde 28/09 (`f_normalize_search`). Em 29/09, sete funções reescritas sem criar nenhuma (tarefas internas, reatribuição). |
-| Migrações aplicadas | **398** | **398 aplicadas = 398 numeradas**, todas pela CI; +7 desde 28/09 (tarefas internas, ISSN, IMP-25, CAT-E19, siglas). |
-| Jobs `pg_cron` | **41** | ativos — inalterado desde 28/09. |
-| Avisos de segurança | **500** | 0 ERROR · **445** WARN 0029 (+1), **27** 0028, 1 0011 (deliberado), 27 INFO 0008. As funções de reatribuição mantêm exatamente seus direitos. |
-| Avisos de desempenho | **262** | **236 índices sem uso** (−10 desde 28/09), 17 chaves estrangeiras sem índice, 8 tabelas sem chave primária. |
-| Esquemas de refugo | **1** | só `conv_backup`, inalterado. |
+| Tabelas `public` | **197** | todas com RLS ativado, **359 policies** em todos os esquemas (`public` 310, `storage` 47, `cron` 2). Inalterado desde 29/09: as 18 migrações de 30/09 a 05/10 reescrevem funções ou corrigem dados, nenhuma cria tabela nem policy. |
+| Tabelas `ingest` | **10** | todas com RLS; nenhuma tem policy (aviso 0008, as 10) — o esquema nunca foi exposto. Inalterado desde 29/08 (B1). |
+| Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Inalterado desde 24/09. |
+| Funções aplicativas | **1 016** | `public` 745 · `api` 201 · `ingest` 45 · `private` 25. Das quais **766 SECURITY DEFINER** (755 em 29/09, +11). +18 desde 29/09: busca de autor em todos os sentidos (E26), lote 0 do H21, expiração das consultas (F1), retomadas virgens (C19), acesso digital ao catálogo (C20), regra CAT-E19 no descarte (C14). |
+| Migrações aplicadas | **416** | **416 aplicadas em produção = 416 numeradas no repositório**, todas pela CI (`created_by` NULL). +18 desde 29/09: 2 em 30/09 (F16, F17), 5 em 01/10 (E26 ×2, F1 ×2, H21 lote 0), 1 em 03/10 (C19), 4 em 04/10 (F20, E27, E28, C20), 6 em 05/10 (H30, lote de autores, C18 ×2, C14, C23). |
+| Jobs `pg_cron` | **43** | ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26). |
+| Avisos de segurança | **503** | 0 ERROR · **447** WARN sobre DEFINER expostas a `authenticated` (0029; 445 em 29/09, +2: `discard_untouched_retake` e `catalog_digital_access_v1`; **todos justificados** — complemento de 05/10 da auditoria, cinco vereditos, nenhuma falha), **28** expostas a `anon` (0028; +1: `catalog_digital_access_v1`, aberta de propósito ao catálogo público), **1** `search_path` não fixado (0011, voluntário, B32), **27** INFO (0008). |
+| Avisos de desempenho | **257** | **231 « índices não usados »** (236 em 29/09, −5), **17** chaves estrangeiras sem índice (guardadas pela suíte de lista fechada), **8** tabelas sem chave primária, **1** aviso sobre as conexões do Auth em número absoluto. |
+| Esquemas de refugo | **1** | `conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **55** | + `_shared`; inalterado desde 28/09. Todas implantadas pela CI. |
-| Declarações `verify_jwt` | **40** | **todas `false`**; inalterado. |
+| Pastas no repositório | **54** | + `_shared`; **−1 desde 29/09**: `notify-mid-loan-reading` suprimida (F1; retirada da plataforma por Xavier em 01/10). Inclui o roteador `main`, nunca implantado (I3). |
+| Declarações `verify_jwt` | **39** | **todas `false`** — linhas `^verify_jwt = ` em `supabase/config.toml` (−1 com a função suprimida). Cada função verifica quem a chama. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 609** | 2 759 exemplares, **2 380 obras**, **1 508 autoridades**; **2 661 acervos, nenhum vazio** desde a correção da reatribuição (CAT-E19). |
-| Rascunhos de catalogação | **2 298** | `draft` 1 823, `published` 475; cada rascunho e cada lote têm biblioteca (B29/B30). O lote Solidaires continua a rever e publicar. |
-| Indexação de assunto | **2 146 / 2 609** | registros com pelo menos um assunto — **463 sem nenhum**, inalterado desde 28/09; THES-5 devolveu os assuntos a 19 dos 20 registros desindexados. |
-| Tesauro FICEDL | **621** | termos, **10 locales**, **110 alinhamentos**; inalterado. |
-| Periódicos | **4** | títulos, **5 fascículos**; desde 29/09 a aproximação por ISSN não confunde mais o artigo com a revista. |
+| Fichas | **2 605** | 2 759 exemplares, **2 366 obras** (−14), **1 506 autoridades** (−2), **2 660 fundos, nenhum vazio**. −4 notícias desde 29/09, todas por fusão: duas por Xavier na tela (02/10, 04/10) e os dois duplicados do C18 (05/10). −2 autoridades: duas formas de Jean Grave unidas em 01/10. −14 obras: reuniões do C18 e obras esvaziadas pelas fusões. |
+| Rascunhos de catalogação | **2 362** | `draft` 1 820, `published` 538, `cancelled` 4 (+64 desde 29/09). **Cada rascunho tem sua biblioteca** (B29) e **cada lote a sua** (B30; 3 lotes). O lote Solidaires segue por revisar. Desde 03/10, uma retomada nunca salva sai da fila (C19). |
+| Indexação de assunto | **2 143 / 2 605** | notícias com ao menos um assunto — **462 sem nenhum** (463 em 29/09). C7 indexou 851 notícias em 27/09. |
+| Tesauro FICEDL | **621** | termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09. |
+| Periódicos | **4** | títulos, **5 fascículos ligados**, inalterado. |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **5** | **ativas, de 6 linhas**; inalterado. Os ensaios de cotização e depósito de 29/09 foram feitos na BLMF, que voltou ao estado desejado (cotização desativada). |
-| Contas | **22** | **25** adesões ativas; **22 linhas** em `auth.users`, **20 confirmadas**; inalterado. |
-| Administrador(a/e)s da rede | **1** | **é o item A1, e comanda todo o resto**. |
-| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — nenhum aberto; os três EEB devolvidos e arquivados em 29/09 (dois de maio e o de ensaio de Xavier). Tarefas internas: 0. |
+| Bibliotecas | **6** | **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. O levantamento de 29/09 a dizia inativa: sua linha não muda desde 26/08, o erro estava no levantamento. |
+| Contas | **22** | **25** filiações ativas; **22 linhas** em `auth.users`, **20 confirmadas**. Inalterado desde 28/09 — a conta do camarada (`ASR2026`) ainda não foi criada. |
+| Administrador(a/e)s da rede | **1** | **é o item A1, e comanda todo o resto** — inalterado desde 29/08. A segunda conta (o camarada, `ASR2026`) aguarda inscrição e cooptação. |
+| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**. Os três EEB estão devolvidos e arquivados; desde 05/10 (C14), suas linhas também (PEB 24 e 25 reparados). |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **3 043** | +33 desde 28/09, num dia e duas sessões. |
-| Arquivos `src/` | **453** | +13 desde 28/09: seções extraídas de `BibliotecaPage.jsx` (152 → 84 Ko, E6), `libraryPatch.js`, `taskStatus.js`. |
-| Chaves i18n | **6 939** | paridade estrita nas dez locales (6 939 cada); +7 desde 28/09. |
-| Testes | **1 531 + 150** | **1 531 testes JS** (+77) + **150 suítes SQL** (+4 desde 28/09), todos verdes. |
-| Marcadores de dívida | **18** | dos quais 4 em `src/`; 18 como em 28/09. |
+| Commits | **3 099** | +56 desde 29/09 (`75ccb035`), em seis dias e duas sessões, mais a PR #31 do camarada (`ASR2026`): cadeia de e-mail (F1, F16–F21), backups (I24), busca (E26, E27), H21 lote 0 e H30, C19, C20–C22, F20, C14, C18, C23. |
+| Arquivos `src/` | **477** | +24 desde 29/09: `ConfirmContext.jsx`, `CatalogStatusBar.jsx`, `AfterPublishPanel.jsx`, três hooks (C19–C22) e dezoito arquivos de teste. |
+| Chaves i18n | **7 004** | paridade estrita nas dez locales (7 004 cada). +65 desde 29/09: e-mails (F21), catalogação (C19–C22), digital (C20), H21/H30, recusas do C14, biblioteca sem série de tombos (C23). |
+| Testes | **1 871 + 164** | **1 871 testes JS** (vitest, 147 arquivos; relançados por inteiro em 05/10, todos verdes; +340 desde 29/09) e **164 suítes SQL** na CI (+14). |
+| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18, como desde 15/09. Nenhum é tarefa aberta. |
 
 ---
 
@@ -426,6 +426,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Decisão coletiva |
 | **C10** | Renomear a coluna de revisão `digital_assets.rights_status` | `P2` | Aberto |
 | **C14** | Um exemplar que muda de biblioteca leva tudo consigo | `P2` | A verificar |
+| **C23** | Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino | `P2` | A verificar |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Decisão coletiva |
@@ -515,6 +516,27 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `REGISTRE CAT-E19` · `migration 20260929151902` · `migration 20261005074236` · `commit 07ad68af`*
+
+#### C23 — Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino
+
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, língua materna
+
+**Estado.** Visto em 05/10 ao entregar C14: publicar o rascunho de um exemplar já publicado para uma biblioteca sem fundo da notícia falhava em `exemplar_library_holding_mismatch`; e uma biblioteca sem série de tombos mostrava o código bruto `tombo_pattern_not_configured`.
+
+*Verificado : **05/10 — entregue** (`16962c55`). Suíte 6/6, mutante morto, vitest 1 871. Falta um deslocamento visto na tela.*
+
+**O que é.** `publish_exemplar_draft` usa o fundo da mesma notícia no destino, senão o cria (restaurado se uma reatribuição o apagou). Chave `panel.apiError.tombo_pattern_not_configured` nas dez locales.
+
+**Por que importa.** Mover um exemplar para uma biblioteca que ainda não tem a notícia é o gesto normal de uma doação ou transferência; falhava sem dizer por quê.
+
+**O que conta como terminado.**
+
+- A suíte `exemplaire_deplace_cree_son_fonds` (6 testes) passa; o mutante reproduz o erro original.
+- Um deslocamento real visto na tela, depois fechamento.
+
+**Dependências.** Depois de C14.
+
+*Remissões : `migration 20261005092748` · `commit 16962c55` · `REGISTRE CAT-E19`*
 
 #### C15 — Corrigir oito registros da BTL, com o livro na mão
 
@@ -735,7 +757,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
-| **E23** | Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales | `P2` | Aberto |
+| **E23** | Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales | `P2` | Em curso |
 | **E24** | As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa | `P3` | Aberto |
 | **E25** | pt-BR: o que a revisão de 27/09 não alcançou | `P2` | Aberto |
 
@@ -897,11 +919,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E23 — Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** Uma função SQL que recusa põe uma chave no HINT (`USING HINT = 'error.x.y'`), e `localizeError` a traduz (caso 1). Se a chave falta na locale, a tela mostra a mensagem SQL tal qual (caso 3) ou a chave de reserva de quem chamou. Nenhuma guarda compara essas chaves com as locales: a guarda i18n lê o código do front, não as migrations, e o script de auditoria anunciado no cabeçalho de `localizeError.js` (PN-1, 27/05) não existe no repositório. Em 27/09, H19 (`02000b89`) achou assim dois HINT de julho sem rótulo (`error.catalog.staff_only`, `error.catalog.holding_library_mismatch`), porque seu teste relê os HINT da própria migration; B29 e B30 fazem o mesmo, cada um com a sua. **Contado no repositório em 29/09**: 198 chaves `error.*` em HINT, todas as definições incluídas (comentários excluídos), 74 sem rótulo fr; 20 dessas 74 posteriores ao baseline (`error.serial.*` ×5, `error.library_invitation.*` ×6, `error.catalog.merge*` ×3, `error.conv.review.*` ×2, `error.membership.*` ×2, `error.forbidden`, `error.catalog.notDuplicate.invalidPair`).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : **05/10 — medido e iniciado.** 210 chaves `error.*` em produção; a guarda encontra exatamente as mesmas 210. **74 sem rótulo em nenhuma das dez locales.** Guarda escrita, ainda não commitada (enquanto faltarem os 740 rótulos). Defeito encontrado e aberto à parte (G16).*
 
 **O que é.** Uma guarda vitest que lê as migrations, guarda a última definição de cada função (uma função suprimida sai), extrai os HINT `error.*`, comentários excluídos (`error.foo.bar` é só um exemplo num comentário), e falha em toda chave ausente de uma das dez locales. Antes de traduzir, recontar nas definições reais da produção (`pg_proc.prosrc`): o baseline nem sempre diz o que está rodando. Depois escrever os rótulos que faltam, no registro de cada língua (`DOC-ADDR-1`).
 
@@ -1162,6 +1184,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G13** | Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA… | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
+| **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | Decisão coletiva |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1326,6 +1349,27 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` e `IMP-27` de 29/09, lote 0 entregue em 01/10, depois **H30** e **H31**). Arquivos: **D7** (fechado em 27/09; realização: **D8**).
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### G16 — O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco
+
+`P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL, deliberação coletiva
+
+**Estado.** Levantado em 05/10 (E23). `TransitionsPanel.jsx` envia um voto `pro`, `contre` ou `abstain`; o banco só aceita `for` ou `against`: **todo voto seria recusado**. A tela pede 5 caracteres para justificar um voto contra, o banco 20. O banco não conhece a abstenção. Circuito **nunca usado**: 0 proposta, 0 voto (05/10). Caso de G1.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Decidir a abstenção (Xavier): retirá-la da tela ou acrescentá-la ao banco. Depois traduzir os valores no envio e na exibição, alinhar o mínimo de justificativa e percorrer o circuito de ponta a ponta numa biblioteca de teste.
+
+**Por que importa.** Mudar de modo é a decisão colegiada por excelência; no dia em que uma equipe usar, seu primeiro voto falhará.
+
+**O que conta como terminado.**
+
+- A abstenção está decidida.
+- Votos a favor, contra e (se mantida) abstenção passam pela tela; uma suíte percorre proposta, voto e aplicação.
+
+**Dependências.** Decisão de Xavier sobre a abstenção.
+
+*Remissões : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1`*
 
 ---
 
@@ -2325,4 +2369,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-09-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `75ccb035`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 74 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
