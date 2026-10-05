@@ -1352,7 +1352,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H25** | Exporter les autorités (UNIMARC Autorités), pour que les liens $3 de l'export mènent quelque part | `P2` | À vérifier |
 | **H26** | L'export d'un gros catalogue ne dépend plus de la mémoire d'une edge function | `P2` | À vérifier |
 | **H29** | Au retour dans PMB, un exemplaire garde son type, sa section et son code statistique | `P2` | Ouvert |
-| **H30** | « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes | `P1` | Ouvert |
+| **H30** | « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes | `P1` | À vérifier |
 | **H31** | « Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi | `P2` | Ouvert |
 
 #### H2 — Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus
@@ -1718,11 +1718,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H30 — « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
+`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript
 
 **État.** **Prouvé au banc le 01/10** (revue de H21 lot 0, sonde `P5/SK2/sk2p5-sonde-retraiter.sql` de la session 23c4e409) : pour un run dont le chemin de stockage est une convention sans fichier (`oai/…`, `lookup/…`, `direct/…`), l’écran offre « Retraiter » et `fn_import_dispatch` l’accepte ; l’edge function `process-partner-catalog-import` efface toutes les lignes, puis échoue au téléchargement : run « échoué », 0 ligne ; les fichiers reçus d’un dépôt direct perdent leur ligne ; une moisson OAI incrémentale ne ramène pas les notices effacées. Antérieur au lot 0 (H15, EX-4).
 
-*Vérifié : 01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc).*
+*Vérifié : 01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc). **05/10 — livré** (`324a49a5`, migration `20261005064758` appliquée par la CI, `created_by` vide ; edge functions déployées, `deployed-functions` = `324a49a5`) : `fn_import_dispatch` refuse tout de suite « Retraiter » quand le fichier n’est pas dans `storage.objects` (HINT `error.import.reparse_no_file`, 10 locales ; le propriétaire contourne la RLS, vérifié en production) ; les deux edge functions lisent et analysent le fichier avant d’effacer, effacent avant de passer « en cours », et un retraitement qui échoue avant l’effacement garde lignes, fichiers reçus et état du run (journal, 409 `rows_kept`) ; un premier import qui échoue reste « échoué ». Mesuré le 04/10 : 4 runs sur 8 sans fichier en production (des essais déjà promus). SQL 161/161 (suite `h30_retraiter_exige_le_fichier`), vitest 1 854 ; bouchon CI : `storage.objects` ajouté. **Consigné** : l’écran ne lit pas `error_log`, un refus différé de l’edge function reste invisible ; un échec APRÈS l’effacement (insertion partielle, rapprochement) perd encore les lignes ; le dépôt de fonds n’a pas la garde « analyse sans ligne » ; la fenêtre de course de **H31** s’élargit (un run à lignes ne passe « en cours » qu’après l’analyse).*
 
 **Ce que c'est.** Refuser le retraitement dans `fn_import_dispatch` quand `detected_format` vaut `oai_pmh` ou `lookup`, ou que le chemin commence par `direct/` (HINT traduite `error.import.reparse_no_file`, 10 locales), masquer le bouton dans `RunEncodingPanel` pour ces runs ; et, dans l’edge function, lire le fichier AVANT d’effacer les lignes. Correctif candidat prouvé : `sk2p5-mutant-dispatch-chemins-de-convention.sql` (suites voisines vertes).
 

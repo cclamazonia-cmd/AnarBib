@@ -6185,7 +6185,7 @@
       ],
       "id": "H30",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "t": {
         "fr": "« Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes",
@@ -6223,8 +6223,8 @@
         "claude/h21-reimport"
       ],
       "verif": {
-        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc).",
-        "pt": "01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada)."
+        "fr": "01/10 — ouvert à la livraison du lot 0 de H21 (constat de revue, prouvé au banc). **05/10 — livré** (`324a49a5`, migration `20261005064758` appliquée par la CI, `created_by` vide ; edge functions déployées, `deployed-functions` = `324a49a5`) : `fn_import_dispatch` refuse tout de suite « Retraiter » quand le fichier n’est pas dans `storage.objects` (HINT `error.import.reparse_no_file`, 10 locales ; le propriétaire contourne la RLS, vérifié en production) ; les deux edge functions lisent et analysent le fichier avant d’effacer, effacent avant de passer « en cours », et un retraitement qui échoue avant l’effacement garde lignes, fichiers reçus et état du run (journal, 409 `rows_kept`) ; un premier import qui échoue reste « échoué ». Mesuré le 04/10 : 4 runs sur 8 sans fichier en production (des essais déjà promus). SQL 161/161 (suite `h30_retraiter_exige_le_fichier`), vitest 1 854 ; bouchon CI : `storage.objects` ajouté. **Consigné** : l’écran ne lit pas `error_log`, un refus différé de l’edge function reste invisible ; un échec APRÈS l’effacement (insertion partielle, rapprochement) perd encore les lignes ; le dépôt de fonds n’a pas la garde « analyse sans ligne » ; la fenêtre de course de **H31** s’élargit (un run à lignes ne passe « en cours » qu’après l’analyse).",
+        "pt": "01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada). **05/10 — entregue** (`324a49a5`, migração `20261005064758` aplicada pela CI; edge functions implantadas): `fn_import_dispatch` recusa na hora «Reprocessar» quando o arquivo não está em `storage.objects` (HINT traduzida, 10 locales); as duas edge functions leem e analisam o arquivo antes de apagar e, se falharem antes do apagamento, mantêm linhas e estado (diário, 409). **Registrado**: a tela não lê `error_log`; uma falha DEPOIS do apagamento ainda perde as linhas; a janela de **H31** aumenta."
       }
     },
     {

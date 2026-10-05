@@ -1352,7 +1352,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | A verificar |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
-| **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | Aberto |
+| **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | A verificar |
 | **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | Aberto |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
@@ -1718,11 +1718,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H30 — «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
 
 **Estado.** **Provado na bancada em 01/10** (revisão do lote 0 de H21): para uma importação cujo caminho é uma convenção sem arquivo (`oai/…`, `lookup/…`, `direct/…`), a tela oferece «Reprocessar» e `fn_import_dispatch` aceita; a edge function apaga todas as linhas e depois falha no download: importação «falhou», 0 linha. Anterior ao lote 0 (H15, EX-4).
 
-*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada).*
+*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada). **05/10 — entregue** (`324a49a5`, migração `20261005064758` aplicada pela CI; edge functions implantadas): `fn_import_dispatch` recusa na hora «Reprocessar» quando o arquivo não está em `storage.objects` (HINT traduzida, 10 locales); as duas edge functions leem e analisam o arquivo antes de apagar e, se falharem antes do apagamento, mantêm linhas e estado (diário, 409). **Registrado**: a tela não lê `error_log`; uma falha DEPOIS do apagamento ainda perde as linhas; a janela de **H31** aumenta.*
 
 **O que é.** Recusar o reprocessamento em `fn_import_dispatch` para `oai_pmh`, `lookup` ou caminho `direct/` (HINT traduzida, 10 locales), esconder o botão nesses casos, e na edge function ler o arquivo ANTES de apagar as linhas.
 
