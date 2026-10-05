@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import AppIcon from '@/components/ui/AppIcon';
 
 // ═══════════════════════════════════════════════════════════
 // CatalogacaoWizard — Guide de découverte pas-à-pas
@@ -33,13 +34,13 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
       bodyKey:  'catalogacao.wizard.step.welcome.body',
     },
     {
-      icon: '📝',
+      icon: 'notebookPen',
       titleKey: 'catalogacao.wizard.step.documento.title',
       bodyKey:  'catalogacao.wizard.step.documento.body',
       tipKey:   'catalogacao.wizard.step.documento.tip',
     },
     {
-      icon: '🧩',
+      icon: 'puzzle',
       titleKey: 'catalogacao.wizard.step.oeuvres.title',
       bodyKey:  'catalogacao.wizard.step.oeuvres.body',
       tipKey:   'catalogacao.wizard.step.oeuvres.tip',
@@ -68,7 +69,7 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
       bodyKey:  'catalogacao.wizard.step.fila.body',
     },
     {
-      icon: '💡',
+      icon: 'lightbulb',
       titleKey: 'catalogacao.wizard.step.dicas.title',
       bodyKey:  'catalogacao.wizard.step.dicas.body',
     },
@@ -179,7 +180,7 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
         </div>
 
         {/* Content */}
-        <span style={iconStyle}>{current.icon}</span>
+        <AppIcon style={iconStyle} name={current.icon} size={24} />
         <div style={titleStyle}>{t({ id: current.titleKey })}</div>
         <div style={bodyStyle}>{t({ id: current.bodyKey })}</div>
         {current.tipKey && (

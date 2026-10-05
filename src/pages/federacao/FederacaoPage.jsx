@@ -10,6 +10,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { isCoord } from '@/lib/roles';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import AppIcon from '@/components/ui/AppIcon';
 import SubjectMultiSelect from '@/components/forms/SubjectMultiSelect';
 // Onglets en lazy : chacun (et ses deps lourdes — ex. react-markdown dans
 // CommunsTab) part dans son propre chunk, chargé À L'OUVERTURE de l'onglet, pas
@@ -223,7 +224,7 @@ export default function FederacaoPage() {
           {TABS.map(tb => (
             <button key={tb.id} className={`ab-tabbar__tab${tab === tb.id ? ' active' : ''}`}
               onClick={() => setTab(tb.id)} role="tab" aria-selected={tab === tb.id}>
-              <span className="ab-tabbar__icon" aria-hidden="true">{tb.icon}</span>
+              <AppIcon className="ab-tabbar__icon" name={tb.icon} size="1em" />
               {tb.label}
             </button>
           ))}

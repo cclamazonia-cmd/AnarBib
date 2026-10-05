@@ -18,6 +18,7 @@ import InvitationsPanel from '@/components/rede/InvitationsPanel';
 import BatchReviewsPanel from '@/components/rede/BatchReviewsPanel'; /* revision des lots importes (05/09/2026) */
 import LibraryNumberingSection from '@/components/library/LibraryNumberingSection'; /* E21 : numerotation d'une biblio par l'admin (15/09/2026) */
 import UserHeroBadge from '@/components/UserHeroBadge';
+import AppIcon from '@/components/ui/AppIcon';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { normalizePublicId } from '@/lib/publicId';
 import '../catalogacao/CatalogacaoPage.css';
@@ -457,7 +458,7 @@ export default function RedePage() {
             return (
               <button key={t.id} className={`ab-tabbar__tab${tab===t.id?' active':''}`}
                 onClick={()=>setTab(t.id)} role="tab" aria-selected={tab===t.id}>
-                <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
+                <AppIcon className="ab-tabbar__icon" name={t.icon} size="1em" />
                 {t.label}
                 {pendentes > 0 && <span className="ab-tabbar__badge ab-tabbar__badge--alert">{pendentes}</span>}
               </button>

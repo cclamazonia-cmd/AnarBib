@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import AppIcon from '@/components/ui/AppIcon';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
@@ -1277,12 +1278,12 @@ export default function ImportacoesPage() {
         <nav className="ab-tabbar" role="tablist" aria-label={t({ id: 'importacoes.sentido.label' })} style={{ marginBottom: 10 }}>
           <button className={`ab-tabbar__tab${sentido === 'import' ? ' active' : ''}`}
             role="tab" aria-selected={sentido === 'import'} onClick={() => setSentido('import')}>
-            <span className="ab-tabbar__icon" aria-hidden="true">📥</span>
+            <AppIcon className="ab-tabbar__icon" name="inbox" size="1em" />
             {t({ id: 'importacoes.sentido.import' })}
           </button>
           <button className={`ab-tabbar__tab${sentido === 'export' ? ' active' : ''}`}
             role="tab" aria-selected={sentido === 'export'} onClick={() => setSentido('export')}>
-            <span className="ab-tabbar__icon" aria-hidden="true">📤</span>
+            <AppIcon className="ab-tabbar__icon" name="arrowUp" size="1em" />
             {t({ id: 'importacoes.sentido.export' })}
           </button>
         </nav>
@@ -1685,13 +1686,13 @@ export default function ImportacoesPage() {
                           aria-label={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
                           style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
                           onClick={e => { e.stopPropagation(); handleArchiveRun(r.id, !r.archived_at); }}>
-                          {r.archived_at ? '↩' : '🗄'}
+                          <AppIcon name={r.archived_at ? "archiveRestore" : "archive"} size={15} />
                         </button>
                         <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
                           aria-label={t({ id: 'importacoes.deleteRun' })}
                           style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
                           onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>
-                          🗑
+                          <AppIcon name="trash" size={15} />
                         </button>
                       </div>
                     </div>
@@ -1807,7 +1808,7 @@ export default function ImportacoesPage() {
               {/* Barrière : import échoué */}
               {selectedRunId && runFailed && (
                 <div className="imp-sheet" style={{ textAlign: 'center', padding: '28px 20px' }}>
-                  <div style={{ fontSize: '1.6rem', marginBottom: 8 }}>⚠️</div>
+                  <AppIcon name="warning" size={26} style={{ marginBottom: 8 }} />
                   <p style={{ fontWeight: 600, margin: '0 0 6px' }}>{t({ id: 'importacoes.fila.failed.title' })}</p>
                   <p className="imp-note" style={{ maxWidth: 520, margin: '0 auto' }}>{t({ id: 'importacoes.fila.failed.desc' })}</p>
                 </div>

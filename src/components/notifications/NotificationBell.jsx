@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotifications } from '@/hooks/useNotifications';
+import { stripEmoji } from '@/lib/stripEmoji';
 
 // Cloche de notifications in-app (MVP) : badge non-lus + panneau déroulant.
 // Backend : user_notifications (RLS « read own ») + RPC fn_mark_notifications_read.
@@ -71,7 +72,7 @@ export default function NotificationBell() {
   // à traduire au rendu ; les anciennes/ponctuelles stockent du texte littéral. On ne traduit
   // que si ça ressemble à une clé (mot.mot, sans espace) — sinon on rend le littéral tel quel.
   // Même règle que l'onglet « Avisos » d'AccountPage (tNotifText).
-  const tNotifText = (s) => (s && /^[\w.]+$/.test(s) && s.includes('.')) ? t({ id: s, defaultMessage: s }) : s;
+  const tNotifText = (s) => stripEmoji((s && /^[\w.]+$/.test(s) && s.includes('.')) ? t({ id: s, defaultMessage: s }) : s);
 
   const badge = unreadCount > 9 ? '9+' : String(unreadCount);
 

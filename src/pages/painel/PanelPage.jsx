@@ -10,6 +10,7 @@ import LibraryContextBanner from '@/components/LibraryContextBanner';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { useParams } from 'react-router-dom';
 import { Button, Pill, Spinner, Skeleton } from '@/components/ui';
+import AppIcon from '@/components/ui/AppIcon';
 import { parseAddressText } from '@/lib/addressFormat';
 import Modal from '@/components/ui/Modal';
 import { useToast } from '@/contexts/ToastContext';
@@ -1578,17 +1579,17 @@ function PanelPageInner() {
   // sous-titre du panneau juste en dessous — mais devient l'infobulle et le nom
   // accessible du bouton.
   const ALL_TABS = [
-    { key: 'trabalho-do-dia', icon: '🎯', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
+    { key: 'trabalho-do-dia', icon: 'target', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
     // `group` ouvre le bloc des vues de detail : « Travail du jour » est la vue
     // d'ensemble, tout ce qui suit est consulte au besoin (EA-01).
-    { key: 'acoes', icon: '⚡', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }), group: true },
-    { key: 'reservas', icon: '📌', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
-    { key: 'consultas-locais', icon: '📖', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
+    { key: 'acoes', icon: 'zap', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }), group: true },
+    { key: 'reservas', icon: 'pin', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
+    { key: 'consultas-locais', icon: 'book', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
     { key: 'emprestimos', icon: '📚', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
     { key: 'leitor', icon: '👤', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
-    { key: 'historico', icon: '🕘', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
+    { key: 'historico', icon: 'history', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin ? [
-      { key: 'contribuicoes', icon: '🎟️', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
+      { key: 'contribuicoes', icon: 'ticket', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
     // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
     ...(isLibrarian ? [
@@ -1863,7 +1864,7 @@ function PanelPageInner() {
               /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
                  et le nom accessible du bouton. */
               title={t.hint} aria-label={`${t.label} — ${t.hint}`}>
-              <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
+                <AppIcon className="ab-tabbar__icon" name={t.icon} size="1em" />
               {t.label}
               {t.count > 0 && (
                 <span className={`ab-tabbar__badge${t.alert ? ' ab-tabbar__badge--alert' : ''}`}>{t.count}</span>
