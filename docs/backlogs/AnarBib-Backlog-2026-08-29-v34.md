@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-05** · 74 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-05** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 19
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026, midi** (`16962c55`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé complet : 29/09 au soir, `75ccb035`). Six jours à deux sessions et une contribution extérieure (PR #31 du camarade, `ASR2026`) : **18 migrations** (416 appliquées = 416 au dépôt, toutes par la CI), 56 commits, 1 871 tests JS et 164 suites SQL, tous verts. Ce qui a bougé et pourquoi : **les fonctions** — +18, dont la recherche par auteur·rice et par œuvre (E26, E27), le lot 0 de H21 et H30 côté import, les branches mortes du courriel supprimées (F1 : une Edge Function et une branche de moins, deux crons de plus avec les reprises vierges de C19) ; **le catalogue** — quatre notices fondues (deux par Xavier à l'écran, deux pour C18), huit réunions d'œuvres (C18), deux autorités réunies ; toujours **aucun fonds sans exemplaire**, et désormais aucun déplacement d'exemplaire qui en laisse un (C14) ni qui échoue faute de fonds (C23) ; **la circulation** — les lignes des PEB 24 et 25, restées « prêtées » depuis mai, closes (C14) ; **le dépôt** — +340 tests JS, +14 suites, +65 clés. **Deux lignes du relevé du 29/09 étaient fausses**, corrigées ici : la bibliothèque de formation est active (6 sur 6), le schéma de rebut a sept tables. **Mis à jour dans cette version, après l'inventaire des 56 commits depuis le 29/09 contre le backlog** : C23 ouvert et livré, G16 ouvert (le vote des transitions refuserait tout vote — vu en traduisant les refus de la base pour E23), E23 passé en cours (210 clés posées par la base, 74 sans libellé), tous les autres chantiers de la période y étaient déjà notés. **Ce qui reste à clore, et par qui** — *par Xavier* : les items « à vérifier » (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) et les décisions (A1, C4, C17, G16) ; *sans code* : A1 (une seule administration réseau, le camarade `ASR2026` attend son inscription), A3 (la machine du runner).
 
-**Fraîcheur des constats au 2026-10-05.** **57 items sur 74** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, E23, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-05.** **57 items sur 73** portent une vérification datée qui leur est propre (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -757,7 +757,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E9** | Finir la mise en page mobile : trois lots identifiés | `P2` | Ouvert |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
-| **E23** | Chaque HINT `error.*` posé par une fonction de la base a son libellé dans les dix locales | `P2` | En cours |
 | **E24** | Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur | `P3` | Ouvert |
 | **E25** | pt-BR : ce que la passe du 27/09 n'a pas touché | `P2` | Ouvert |
 
@@ -916,28 +915,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après **E9** (mobile) de préférence, ou avec lui ; même exigence de regard extérieur que **E1**. **Ne pas livrer pendant la formation BLMF** (sept soirées à partir du 08/09) : la barre est sur les diapositives — à dater après la dernière soirée, ou à montrer aux coordinations comme changement annoncé. Gel du code jusqu'au 14/09.
 
 *Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
-
-#### E23 — Chaque HINT `error.*` posé par une fonction de la base a son libellé dans les dix locales
-
-`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
-
-**État.** Une fonction SQL qui refuse pose une clé dans son HINT (`USING HINT = 'error.x.y'`), et `localizeError` la traduit (cas 1). Si la clé manque dans la locale, l'écran montre le message SQL tel quel (cas 3) ou le repli de l'appelant. Aucune garde ne compare ces clés aux locales : la garde i18n lit le code du front, pas les migrations, et le script d'audit annoncé dans l'en-tête de `localizeError.js` (PN-1, 27/05) n'existe pas dans le dépôt. Le 27/09, H19 (`02000b89`) a ainsi trouvé deux HINT posés en juillet sans libellé (`error.catalog.staff_only`, `error.catalog.holding_library_mismatch`), parce que son test relit les HINT de sa migration ; B29 et B30 font de même, chacun pour la sienne. **Compté au dépôt le 29/09** : 198 clés `error.*` posées en HINT, toutes définitions comprises (commentaires exclus), dont 74 sans libellé fr ; 20 de ces 74 ont été posées après le baseline : `error.serial.*` ×5, `error.library_invitation.*` ×6, `error.catalog.merge*` ×3, `error.conv.review.*` ×2, `error.membership.*` ×2, `error.forbidden`, `error.catalog.notDuplicate.invalidPair`.
-
-*Vérifié : **05/10 — mesuré et commencé.** Recompté sur les définitions de production (`pg_proc.prosrc`, commentaires retirés) : **210 clés** `error.*` posées en HINT par les fonctions en service ; la garde (lecture des migrations, dernière définition de chaque fonction, réécritures en bloc DO comprises) en trouve **exactement les mêmes 210**, comparées une à une. **74 n'ont de libellé dans aucune des dix locales** (les 20 du 29/09 et 54 autres : partenariats, transitions de profil, désarchivage, invitations de bibliothèque, demandes d'adhésion, partage numérique, périodiques). La garde est écrite, pas encore commitée : elle rougirait la CI tant que les 740 libellés manquent. En lisant les refus pour les traduire, un défaut a été trouvé et ouvert à part (G16).*
-
-**Ce que c'est.** Une garde vitest qui lit les migrations, garde la dernière définition de chaque fonction (une fonction supprimée sort), en extrait les HINT `error.*`, commentaires exclus (`error.foo.bar` n'est qu'un exemple dans un commentaire), et échoue sur toute clé absente d'une des dix locales. Avant de traduire, recompter sur les définitions réelles de la production (`pg_proc.prosrc`) : le baseline ne dit pas toujours ce qui tourne. Puis écrire les libellés manquants, au registre de chaque langue (`DOC-ADDR-1`).
-
-**Pourquoi ça compte.** Un refus bien expliqué par la base ne sert à rien s'il arrive à l'écran en message SQL brut, ou en « erreur inconnue ». Et chaque nouvelle fonction peut ajouter une clé sans libellé sans que rien ne rougisse : H19 n'a trouvé les siennes que parce que son propre test relisait sa migration.
-
-**Ce qui compte comme fini.**
-
-- Une garde vitest lit les HINT `error.*` de la dernière définition de chaque fonction des migrations, commentaires exclus, et échoue sur toute clé absente d'une des dix locales.
-- Le compte est refait sur les définitions de production et noté dans la verif.
-- Toutes les clés encore posées par une fonction en service ont leur libellé dans les dix locales.
-
-**Dépendances.** Aucune.
-
-*Renvois : `src/lib/localizeError.js (cas 1 et 3 ; en-tête PN-1)` · `src/tests/import-exemplaires-ecran.test.jsx (H19)` · `src/tests/brouillons-par-bibliotheque.test.js (B29)` · `src/tests/lot-bibliotheque.test.js (B30)` · `REGISTRE §0 DOC-GRANT-2 (un rejeu n'est pas la production)`*
 
 #### E24 — Les refus des Edge Functions portent un code que l'écran traduit, pas une phrase en dur
 
@@ -1184,7 +1161,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
 | **G13** | Un commutateur « réseaux constitués » à l'OPAC : ne voir que les catalogues FICEDL, RebAL, NORLA… | `P2` | Ouvert |
 | **G15** | DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence | `P1` | Ouvert |
-| **G16** | Le vote des transitions (changer un mode de fonctionnement d'une bibliothèque) ne parle pas la langue de la base | `P2` | Décision collective |
+| **G16** | Le vote des transitions (changer un mode de fonctionnement d'une bibliothèque) ne parle pas la langue de la base | `P2` | À vérifier |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1352,11 +1329,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### G16 — Le vote des transitions (changer un mode de fonctionnement d'une bibliothèque) ne parle pas la langue de la base
 
-`P2` Courant · État : **Décision collective** · Charge : une soirée · Ce que ça demande : React / JavaScript, SQL / PostgreSQL, délibération collective
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : React / JavaScript, SQL / PostgreSQL, délibération collective
 
 **État.** Relevé le 05/10 en traduisant les refus de la base (E23). `TransitionsPanel.jsx` envoie à `fn_vote_library_profile_change` un vote `pro`, `contre` ou `abstain` ; la base n'accepte que `for` ou `against` (refus `VOTE_INVALID_VALUE`, et la CHECK de `library_profile_votes` aussi) : **tout vote serait refusé**. L'écran demande 5 caractères pour justifier un vote contre, la base 20. La base ne connaît pas l'abstention. Le circuit n'a **jamais servi** : 0 proposition, 0 vote en production (05/10). C'est un cas de G1.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : **05/10 — livré, déployé et vérifié en production à 12 h 39** (`f93667ac`, migration `20261005101029` passée par la CI, marqueur des fonctions sur le commit). Décision de Xavier : **garder l'abstention**, règle de la cooptation (ni opposition ni « pour », sans motif ; en majorité elle ne s'ajoute pas aux « pour » ; en unanimité elle la rend impossible et la proposition est close « rejetée »). En empruntant le circuit au banc, **deux défauts de plus** que le constat : une transition de **type 4** (`unanimous_extended`) ne se fermait jamais (la fonction ne connaissait que `majority` et `unanimous` — elle suit maintenant la doctrine : unanimité et carence de 14 jours) ; une transition de **type 2** acceptée à la majorité ne se fermait pas non plus (sans carence, le verrou finissait à l'instant même et `chk_lpgl_grace_after_lock` refusait le vote gagnant — sans carence, plus de verrou). Écran : valeurs traduites, 20 caractères pour un vote contre, historique avec les acceptées en carence et les rejetées ; courriel de vote : un « pour » affichait la clé `lp.vote.for`. Suite `vote_des_transitions` 12/12 (dont l'application par la tâche planifiée), trois mutants tués ; banc des courriels +3 ; garde écran ↔ base +4. **Reste** : un vote réel vu à l'écran sur une bibliothèque en `staff_roles` ou `full_governance`.*
 
 **Ce que c'est.** Décider l'abstention (Xavier, gouvernance collégiale) : la retirer de l'écran, ou l'ajouter à la base (CHECK, décompte du quorum et de l'unanimité). Puis traduire les valeurs à l'envoi et à l'affichage du vote, aligner le minimum de justification sur la base, et emprunter le circuit de bout en bout sur une bibliothèque d'essai (proposer, voter, appliquer).
 
@@ -1367,9 +1344,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - L'abstention est décidée.
 - Un vote pour, un vote contre et (si retenue) une abstention passent par l'écran ; une suite emprunte la proposition, le vote et l'application.
 
-**Dépendances.** Décision de Xavier sur l'abstention.
+**Dépendances.** Aucune (décision de Xavier prise le 05/10 : garder l'abstention).
 
-*Renvois : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1`*
+*Renvois : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1` · `migration 20261005101029` · `commit f93667ac`*
 
 ---
 
@@ -2348,6 +2325,7 @@ CI verte : lint et suite unitaire. |
 | C20 | 2026-10-05 | **Constaté et livré du 04 au 05/10 (Xavier) : le catalogue dit ce qui se lit en ligne.** Mesuré en production : 19 livres avaient un PDF public actif et aucun ne portait l’indicateur du catalogue — `has_online_reading` des vues matérialisées ne comptait que les PDF réservés. `catalog_digital_access_v1` sert l’accès réel des livres affichés (usages publics, ressource réservée, droit de lecture, bibliothèques détentrices), sans toucher aux vues ; badges « Lire / Écouter / Voir en ligne » et « Réservé aux lecteur·rices de … » sur les lignes d’édition et d’œuvre ; la fiche dit « RÉSERVÉ » et propose de se connecter au lieu de « NON », et traduit les droits. Décision de Xavier : l’administration du réseau lit aussi les PDF réservés aux détentrices. Migration `20261004215035` (`6738b02f`), écrans `d8a5b5f4`, `14cdd0db` ; suite `acces_numerique_catalogue_tests` (6) ; vérifié en production le 05/10 (anonyme : 4 livres publics « Lire en ligne », le 1434 « Réservé aux lecteur·rices de Biblioteca Terra Livre »). Le défaut de lecture réservée signalé par Xavier n’est pas reproduit en base (la règle accorde l’accès à 4 des 5 membres actifs de la BTL ; le 5e doit changer son mot de passe) : piste de la session staff, propre à l’onglet, à confirmer à l’écran. La refonte du formulaire de dépôt (droits, choix de la bibliothèque, seau déduit) reste à faire. |
 | C21 | 2026-10-05 | **Livré le 05/10 (Xavier : « barre collante + toast »).** Une barre d’état collante en haut des onze panneaux du catalogage remplace huit boîtes de message recopiées (avertissements sans style ou en rouge, erreurs d’étiquettes en vert) ; une fenêtre de confirmation de l’application remplace les 34 `confirm()`/`alert()` du navigateur, le bouton nommant l’action (« Publier », « Fusionner », « Supprimer définitivement »…), en rouge si elle est irréversible ; fermer, archiver, supprimer ou publier un lot se confirme au lieu de réussir en silence ; « Publier » se désactive après publication d’une autorité ou d’un exemplaire. `9da1ad76`. À vérifier à l’écran avec une session staff. |
 | C22 | 2026-10-05 | **Livré le 05/10 (Xavier : le message après publication « fait double emploi »).** Un seul encadré « Publié — et maintenant ? » remplace le message, le toast, le bandeau « Ajouter un exemplaire ? » et la fenêtre œuvre/édition qui revenait à chaque publication (elle ne s’ouvre plus que sur « Nouveau document »). Document : ajouter un exemplaire, une autre édition de la même œuvre (titre et auteur·rice repris), nouveau document, fiche publique, file éditoriale ; autorité : nouvelle autorité, sa page, nouveau document, file ; exemplaire : un autre exemplaire du même document, étiquettes, nouveau document, file. `b0f60399`. Non fait : « compléter les autorités non liées » (la liaison ne se fait qu’à la publication). À vérifier à l’écran, notamment le numéro d’inventaire après « un autre exemplaire du même document ». |
+| E23 | 2026-10-05 | Chaque HINT `error.*` posé par la base a son libellé dans les dix locales : garde `hints-sql-ont-leur-libelle` (les mêmes 210 clés que la production), 780 libellés écrits dont quatre trouvés par la garde le jour même (`2414246c`). |
 
 ---
 
@@ -2379,4 +2357,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 74 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-05. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `16962c55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-05** · 74 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-05** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 7
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 19
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, meio-dia** (`16962c55`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 29/09, `75ccb035`). Seis dias com duas sessões e uma contribuição externa (PR #31 do camarada `ASR2026`): **18 migrações** (416 = 416, todas pela CI), 56 commits, 1 871 testes JS e 164 suítes SQL, todos verdes. Quatro notícias fundidas, oito obras reunidas (C18), linhas dos EEB 24 e 25 fechadas (C14), nenhum fundo sem exemplar. **Duas linhas do levantamento de 29/09 estavam erradas** (a biblioteca de formação está ativa; o esquema de descarte tem sete tabelas). Nesta versão, após o inventário dos 56 commits: C23 aberto e entregue, G16 aberto (o voto das transições recusaria todo voto), E23 em curso (210 chaves, 74 sem rótulo). Falta fechar: os itens «a verificar» (B29, B30, C14, C23, F6, K10, F15, F16, F19, F21, J9, H28, H15, H16, H17, H18, H19, H20, H22, H23, H24, H25, H26, H30) e as decisões (A1, C4, C17, G16) — Xavier; A1, A3 (sem código).
 
-**Frescor dos constatos em 2026-10-05.** **57 itens de 74** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, E23, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-05.** **57 itens de 73** trazem uma verificação datada própria (A1, A3, B29, B30, C3, C4, C10, C14, C18, C23, D3, D6, D8, E1, E2, E4, E6, E9, E20, F3, F6, F10, F15, F16, F19, F21, G1, G6, G8, G10, G13, G15, G16, H2, H15, H16, H17, H18, H19, H20, H21, H22, H23, H24, H25, H26, H28, H29, H30, H31, I2, I18, I21, J9, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -757,7 +757,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E9** | Terminar o layout móvel: três lotes identificados | `P2` | Aberto |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
-| **E23** | Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales | `P2` | Em curso |
 | **E24** | As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa | `P3` | Aberto |
 | **E25** | pt-BR: o que a revisão de 27/09 não alcançou | `P2` | Aberto |
 
@@ -916,28 +915,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **E9** de preferência ; mesma exigência de olhar externo que **E1**. **Não entregar durante a formação BLMF** (sete noites a partir de 08/09). Congelamento até 14/09.
 
 *Remissões : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
-
-#### E23 — Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales
-
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
-
-**Estado.** Uma função SQL que recusa põe uma chave no HINT (`USING HINT = 'error.x.y'`), e `localizeError` a traduz (caso 1). Se a chave falta na locale, a tela mostra a mensagem SQL tal qual (caso 3) ou a chave de reserva de quem chamou. Nenhuma guarda compara essas chaves com as locales: a guarda i18n lê o código do front, não as migrations, e o script de auditoria anunciado no cabeçalho de `localizeError.js` (PN-1, 27/05) não existe no repositório. Em 27/09, H19 (`02000b89`) achou assim dois HINT de julho sem rótulo (`error.catalog.staff_only`, `error.catalog.holding_library_mismatch`), porque seu teste relê os HINT da própria migration; B29 e B30 fazem o mesmo, cada um com a sua. **Contado no repositório em 29/09**: 198 chaves `error.*` em HINT, todas as definições incluídas (comentários excluídos), 74 sem rótulo fr; 20 dessas 74 posteriores ao baseline (`error.serial.*` ×5, `error.library_invitation.*` ×6, `error.catalog.merge*` ×3, `error.conv.review.*` ×2, `error.membership.*` ×2, `error.forbidden`, `error.catalog.notDuplicate.invalidPair`).
-
-*Verificado : **05/10 — medido e iniciado.** 210 chaves `error.*` em produção; a guarda encontra exatamente as mesmas 210. **74 sem rótulo em nenhuma das dez locales.** Guarda escrita, ainda não commitada (enquanto faltarem os 740 rótulos). Defeito encontrado e aberto à parte (G16).*
-
-**O que é.** Uma guarda vitest que lê as migrations, guarda a última definição de cada função (uma função suprimida sai), extrai os HINT `error.*`, comentários excluídos (`error.foo.bar` é só um exemplo num comentário), e falha em toda chave ausente de uma das dez locales. Antes de traduzir, recontar nas definições reais da produção (`pg_proc.prosrc`): o baseline nem sempre diz o que está rodando. Depois escrever os rótulos que faltam, no registro de cada língua (`DOC-ADDR-1`).
-
-**Por que importa.** Uma recusa bem explicada pelo banco não serve se chega à tela como mensagem SQL crua ou «erro desconhecido». E cada nova função pode acrescentar uma chave sem rótulo sem que nada fique vermelho: H19 só achou as suas porque seu próprio teste relia sua migration.
-
-**O que conta como terminado.**
-
-- Uma guarda vitest lê os HINT `error.*` da última definição de cada função das migrations, comentários excluídos, e falha em toda chave ausente de uma das dez locales.
-- A contagem é refeita nas definições de produção e anotada na verificação.
-- Todas as chaves ainda lançadas por uma função em serviço têm rótulo nas dez locales.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `src/lib/localizeError.js (cas 1 et 3 ; en-tête PN-1)` · `src/tests/import-exemplaires-ecran.test.jsx (H19)` · `src/tests/brouillons-par-bibliotheque.test.js (B29)` · `src/tests/lot-bibliotheque.test.js (B30)` · `REGISTRE §0 DOC-GRANT-2 (un rejeu n'est pas la production)`*
 
 #### E24 — As recusas das Edge Functions levam um código que a tela traduz, não uma frase fixa
 
@@ -1184,7 +1161,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G13** | Um comutador «redes constituídas» no OPAC: ver só os catálogos FICEDL, RebAL, NORLA… | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
-| **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | Decisão coletiva |
+| **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | A verificar |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1352,11 +1329,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### G16 — O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco
 
-`P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL, deliberação coletiva
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL, deliberação coletiva
 
 **Estado.** Levantado em 05/10 (E23). `TransitionsPanel.jsx` envia um voto `pro`, `contre` ou `abstain`; o banco só aceita `for` ou `against`: **todo voto seria recusado**. A tela pede 5 caracteres para justificar um voto contra, o banco 20. O banco não conhece a abstenção. Circuito **nunca usado**: 0 proposta, 0 voto (05/10). Caso de G1.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : **05/10 — entregue, implantado e verificado em produção às 12h39** (`f93667ac`). Decisão de Xavier: manter a abstenção (regra da cooptação). Dois defeitos a mais: o tipo 4 nunca fechava, e o tipo 2 aceito por maioria falhava no voto vencedor. Suíte 12/12, três mutantes mortos. **Falta**: um voto real visto na tela.*
 
 **O que é.** Decidir a abstenção (Xavier): retirá-la da tela ou acrescentá-la ao banco. Depois traduzir os valores no envio e na exibição, alinhar o mínimo de justificativa e percorrer o circuito de ponta a ponta numa biblioteca de teste.
 
@@ -1367,9 +1344,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - A abstenção está decidida.
 - Votos a favor, contra e (se mantida) abstenção passam pela tela; uma suíte percorre proposta, voto e aplicação.
 
-**Dependências.** Decisão de Xavier sobre a abstenção.
+**Dependências.** Nenhuma (decisão de Xavier em 05/10: manter a abstenção).
 
-*Remissões : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1`*
+*Remissões : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1` · `migration 20261005101029` · `commit f93667ac`*
 
 ---
 
@@ -2338,6 +2315,7 @@ CI verde. |
 | C20 | 2026-10-05 | **Constatado e entregue de 04 a 05/10 (Xavier): o catálogo diz o que se lê online.** 19 livros com PDF público ativo não tinham indicador; `catalog_digital_access_v1` serve o acesso real; selos « Ler / Ouvir / Ver online » e « Reservado a leitor(a/e)s de … »; a ficha diz « RESERVADO » em vez de « NÃO » e traduz os direitos; a administração da rede lê os PDF reservados. Migração `20261004215035` (`6738b02f`), telas `d8a5b5f4`, `14cdd0db`; verificado em produção em 05/10. |
 | C21 | 2026-10-05 | **Entregue em 05/10.** Barra de estado fixa nos onze painéis da catalogação; janela de confirmação do aplicativo no lugar dos 34 `confirm()`/`alert()`, com o botão nomeando a ação; gestos sobre os lotes confirmados. `9da1ad76`. A verificar na tela com sessão staff. |
 | C22 | 2026-10-05 | **Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela. |
+| E23 | 2026-10-05 | Cada HINT `error.*` do banco tem seu rótulo nas dez locales: guarda (as mesmas 210 chaves da produção), 780 rótulos, quatro achados pela guarda no mesmo dia (`2414246c`). |
 
 ---
 
@@ -2369,4 +2347,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 74 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-05. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `16962c55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

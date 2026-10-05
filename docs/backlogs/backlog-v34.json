@@ -2690,6 +2690,14 @@
           "fr": "**Livré le 05/10 (Xavier : le message après publication « fait double emploi »).** Un seul encadré « Publié — et maintenant ? » remplace le message, le toast, le bandeau « Ajouter un exemplaire ? » et la fenêtre œuvre/édition qui revenait à chaque publication (elle ne s’ouvre plus que sur « Nouveau document »). Document : ajouter un exemplaire, une autre édition de la même œuvre (titre et auteur·rice repris), nouveau document, fiche publique, file éditoriale ; autorité : nouvelle autorité, sa page, nouveau document, file ; exemplaire : un autre exemplaire du même document, étiquettes, nouveau document, file. `b0f60399`. Non fait : « compléter les autorités non liées » (la liaison ne se fait qu’à la publication). À vérifier à l’écran, notamment le numéro d’inventaire après « un autre exemplaire du même document ».",
           "pt": "**Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela."
         }
+      ],
+      [
+        "E23",
+        "2026-10-05",
+        {
+          "fr": "Chaque HINT `error.*` posé par la base a son libellé dans les dix locales : garde `hints-sql-ont-leur-libelle` (les mêmes 210 clés que la production), 780 libellés écrits dont quatre trouvés par la garde le jour même (`2414246c`).",
+          "pt": "Cada HINT `error.*` do banco tem seu rótulo nas dez locales: guarda (as mesmas 210 chaves da produção), 780 rótulos, quatro achados pela guarda no mesmo dia (`2414246c`)."
+        }
       ]
     ]
   },
@@ -5355,60 +5363,6 @@
       }
     },
     {
-      "id": "E23",
-      "d": "E",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Chaque HINT `error.*` posé par une fonction de la base a son libellé dans les dix locales",
-        "pt": "Cada HINT `error.*` lançado por uma função do banco tem seu rótulo nas dez locales"
-      },
-      "v": {
-        "fr": "Une fonction SQL qui refuse pose une clé dans son HINT (`USING HINT = 'error.x.y'`), et `localizeError` la traduit (cas 1). Si la clé manque dans la locale, l'écran montre le message SQL tel quel (cas 3) ou le repli de l'appelant. Aucune garde ne compare ces clés aux locales : la garde i18n lit le code du front, pas les migrations, et le script d'audit annoncé dans l'en-tête de `localizeError.js` (PN-1, 27/05) n'existe pas dans le dépôt. Le 27/09, H19 (`02000b89`) a ainsi trouvé deux HINT posés en juillet sans libellé (`error.catalog.staff_only`, `error.catalog.holding_library_mismatch`), parce que son test relit les HINT de sa migration ; B29 et B30 font de même, chacun pour la sienne. **Compté au dépôt le 29/09** : 198 clés `error.*` posées en HINT, toutes définitions comprises (commentaires exclus), dont 74 sans libellé fr ; 20 de ces 74 ont été posées après le baseline : `error.serial.*` ×5, `error.library_invitation.*` ×6, `error.catalog.merge*` ×3, `error.conv.review.*` ×2, `error.membership.*` ×2, `error.forbidden`, `error.catalog.notDuplicate.invalidPair`.",
-        "pt": "Uma função SQL que recusa põe uma chave no HINT (`USING HINT = 'error.x.y'`), e `localizeError` a traduz (caso 1). Se a chave falta na locale, a tela mostra a mensagem SQL tal qual (caso 3) ou a chave de reserva de quem chamou. Nenhuma guarda compara essas chaves com as locales: a guarda i18n lê o código do front, não as migrations, e o script de auditoria anunciado no cabeçalho de `localizeError.js` (PN-1, 27/05) não existe no repositório. Em 27/09, H19 (`02000b89`) achou assim dois HINT de julho sem rótulo (`error.catalog.staff_only`, `error.catalog.holding_library_mismatch`), porque seu teste relê os HINT da própria migration; B29 e B30 fazem o mesmo, cada um com a sua. **Contado no repositório em 29/09**: 198 chaves `error.*` em HINT, todas as definições incluídas (comentários excluídos), 74 sem rótulo fr; 20 dessas 74 posteriores ao baseline (`error.serial.*` ×5, `error.library_invitation.*` ×6, `error.catalog.merge*` ×3, `error.conv.review.*` ×2, `error.membership.*` ×2, `error.forbidden`, `error.catalog.notDuplicate.invalidPair`)."
-      },
-      "w": {
-        "fr": "Une garde vitest qui lit les migrations, garde la dernière définition de chaque fonction (une fonction supprimée sort), en extrait les HINT `error.*`, commentaires exclus (`error.foo.bar` n'est qu'un exemple dans un commentaire), et échoue sur toute clé absente d'une des dix locales. Avant de traduire, recompter sur les définitions réelles de la production (`pg_proc.prosrc`) : le baseline ne dit pas toujours ce qui tourne. Puis écrire les libellés manquants, au registre de chaque langue (`DOC-ADDR-1`).",
-        "pt": "Uma guarda vitest que lê as migrations, guarda a última definição de cada função (uma função suprimida sai), extrai os HINT `error.*`, comentários excluídos (`error.foo.bar` é só um exemplo num comentário), e falha em toda chave ausente de uma das dez locales. Antes de traduzir, recontar nas definições reais da produção (`pg_proc.prosrc`): o baseline nem sempre diz o que está rodando. Depois escrever os rótulos que faltam, no registro de cada língua (`DOC-ADDR-1`)."
-      },
-      "y": {
-        "fr": "Un refus bien expliqué par la base ne sert à rien s'il arrive à l'écran en message SQL brut, ou en « erreur inconnue ». Et chaque nouvelle fonction peut ajouter une clé sans libellé sans que rien ne rougisse : H19 n'a trouvé les siennes que parce que son propre test relisait sa migration.",
-        "pt": "Uma recusa bem explicada pelo banco não serve se chega à tela como mensagem SQL crua ou «erro desconhecido». E cada nova função pode acrescentar uma chave sem rótulo sem que nada fique vermelho: H19 só achou as suas porque seu próprio teste relia sua migration."
-      },
-      "f": {
-        "fr": [
-          "Une garde vitest lit les HINT `error.*` de la dernière définition de chaque fonction des migrations, commentaires exclus, et échoue sur toute clé absente d'une des dix locales.",
-          "Le compte est refait sur les définitions de production et noté dans la verif.",
-          "Toutes les clés encore posées par une fonction en service ont leur libellé dans les dix locales."
-        ],
-        "pt": [
-          "Uma guarda vitest lê os HINT `error.*` da última definição de cada função das migrations, comentários excluídos, e falha em toda chave ausente de uma das dez locales.",
-          "A contagem é refeita nas definições de produção e anotada na verificação.",
-          "Todas as chaves ainda lançadas por uma função em serviço têm rótulo nas dez locales."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "src/lib/localizeError.js (cas 1 et 3 ; en-tête PN-1)",
-        "src/tests/import-exemplaires-ecran.test.jsx (H19)",
-        "src/tests/brouillons-par-bibliotheque.test.js (B29)",
-        "src/tests/lot-bibliotheque.test.js (B30)",
-        "REGISTRE §0 DOC-GRANT-2 (un rejeu n'est pas la production)"
-      ],
-      "verif": {
-        "fr": "**05/10 — mesuré et commencé.** Recompté sur les définitions de production (`pg_proc.prosrc`, commentaires retirés) : **210 clés** `error.*` posées en HINT par les fonctions en service ; la garde (lecture des migrations, dernière définition de chaque fonction, réécritures en bloc DO comprises) en trouve **exactement les mêmes 210**, comparées une à une. **74 n'ont de libellé dans aucune des dix locales** (les 20 du 29/09 et 54 autres : partenariats, transitions de profil, désarchivage, invitations de bibliothèque, demandes d'adhésion, partage numérique, périodiques). La garde est écrite, pas encore commitée : elle rougirait la CI tant que les 740 libellés manquent. En lisant les refus pour les traduire, un défaut a été trouvé et ouvert à part (G16).",
-        "pt": "**05/10 — medido e iniciado.** 210 chaves `error.*` em produção; a guarda encontra exatamente as mesmas 210. **74 sem rótulo em nenhuma das dez locales.** Guarda escrita, ainda não commitada (enquanto faltarem os 740 rótulos). Defeito encontrado e aberto à parte (G16)."
-      }
-    },
-    {
       "id": "E24",
       "d": "E",
       "p": "P3",
@@ -5571,7 +5525,7 @@
       "id": "G16",
       "d": "G",
       "p": "P2",
-      "s": "decision",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "front",
@@ -5605,14 +5559,20 @@
         ]
       },
       "dep": {
-        "fr": "Décision de Xavier sur l'abstention.",
-        "pt": "Decisão de Xavier sobre a abstenção."
+        "fr": "Aucune (décision de Xavier prise le 05/10 : garder l'abstention).",
+        "pt": "Nenhuma (decisão de Xavier em 05/10: manter a abstenção)."
       },
       "r": [
         "src/components/TransitionsPanel.jsx",
         "fn_vote_library_profile_change",
-        "G1"
-      ]
+        "G1",
+        "migration 20261005101029",
+        "commit f93667ac"
+      ],
+      "verif": {
+        "fr": "**05/10 — livré, déployé et vérifié en production à 12 h 39** (`f93667ac`, migration `20261005101029` passée par la CI, marqueur des fonctions sur le commit). Décision de Xavier : **garder l'abstention**, règle de la cooptation (ni opposition ni « pour », sans motif ; en majorité elle ne s'ajoute pas aux « pour » ; en unanimité elle la rend impossible et la proposition est close « rejetée »). En empruntant le circuit au banc, **deux défauts de plus** que le constat : une transition de **type 4** (`unanimous_extended`) ne se fermait jamais (la fonction ne connaissait que `majority` et `unanimous` — elle suit maintenant la doctrine : unanimité et carence de 14 jours) ; une transition de **type 2** acceptée à la majorité ne se fermait pas non plus (sans carence, le verrou finissait à l'instant même et `chk_lpgl_grace_after_lock` refusait le vote gagnant — sans carence, plus de verrou). Écran : valeurs traduites, 20 caractères pour un vote contre, historique avec les acceptées en carence et les rejetées ; courriel de vote : un « pour » affichait la clé `lp.vote.for`. Suite `vote_des_transitions` 12/12 (dont l'application par la tâche planifiée), trois mutants tués ; banc des courriels +3 ; garde écran ↔ base +4. **Reste** : un vote réel vu à l'écran sur une bibliothèque en `staff_roles` ou `full_governance`.",
+        "pt": "**05/10 — entregue, implantado e verificado em produção às 12h39** (`f93667ac`). Decisão de Xavier: manter a abstenção (regra da cooptação). Dois defeitos a mais: o tipo 4 nunca fechava, e o tipo 2 aceito por maioria falhava no voto vencedor. Suíte 12/12, três mutantes mortos. **Falta**: um voto real visto na tela."
+      }
     },
     {
       "id": "H28",
