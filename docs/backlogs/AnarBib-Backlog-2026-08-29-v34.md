@@ -1127,7 +1127,7 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 Les six autres blocs sont inchangés au 31/08, vérifiés table par table : assemblées du réseau (3), propositions et objections d'autorité (3), référentiels `catalog_ref_*` (8), gouvernance des profils de bibliothèque (4, **et les deux crons tournent toujours dessus toutes les quinze minutes**), délibération des demandes d'adhésion (5). Tous à zéro insertion.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Choisir un bloc et l'emprunter pour de vrai, du premier geste au dernier : tenir une assemblée du réseau, déposer une note de lecture, proposer une autorité et laisser quelqu'un objecter, faire délibérer une demande d'adhésion. Consigner ce qui manque, ce qui surprend, ce qui bloque.
 
@@ -2284,6 +2284,7 @@ CI verte : lint et suite unitaire. |
 | G17 | 2026-10-05 | La cooptation ne trouvait pas un compte sans bibliothèque (« Aucun compte trouvé » : sous la RLS de `profiles`, l'admin ne voit que ses bibliothèques). Fonction `fn_network_admin_find_user_by_email` réservée à l'administration du réseau, adresse exacte ; suite de 5 tests (`4d417f98`). Le camarade est coopté. |
 | F22 | 2026-10-05 | Le lien de confirmation (et de désabonnement) de la Lettre affichait du code HTML aux accents abîmés : la plateforme sert les Edge Functions en text/plain. Les deux fonctions renvoient (303) vers la page `/lettre` de l'application, dans la langue de la personne ; garde contre les clés en double dans les locales (`9fc60a15`). |
 | E25 | 2026-10-05 | Le guide de gouvernance, la charte inclusive et le DPA pt-BR parlent brésilien (et le guide au « você ») ; 30 valeurs de `pt-BR.json` ; garde `ptbr-documents-e25` ; recueil PDF v1.3 dans le bucket ; décisions de vocabulaire du 27/09 au REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). Vu en passant, hors périmètre : le guide espagnol dit « concernida(s) » 22 fois — à faire relire. |
+| G18 | 2026-10-05 | Un admin réseau rattaché à aucune bibliothèque (le camarade `ASR2026`, coopté le 05/10) : cinq pages chargeaient sans fin, dont la page Réseau — elles attendent désormais la fin de la résolution du contexte (`libraryResolved`) ; un lien de courriel ouvert sans session survit à la connexion (`?next=`, et `/cadastro` lit la location du routeur, pas celle du premier chargement) ; les chemins des courriels déjà reçus renvoient vers la bonne page ; l'étiquette de rôle ne dit plus « Lecteur·rice » à qui ne l'est nulle part (et le dit enfin aux lectrices, rôle `reader`) ; « Mon compte » est dans la barre pour toute personne connectée. Bancs `compte-sans-bibliotheque`, `etiquette-de-role`, `liens-des-courriels-menent-a-une-route`, mutants rouges ; vérifié en ligne (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
 
 ---
 

@@ -1127,7 +1127,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: assembleias da rede (3), propostas e objeções de autoridade (3), referenciais `catalog_ref_*` (8), governança dos perfis (4, **e os dois crons continuam a rodar sobre elas a cada quinze minutos**), deliberação dos pedidos de adesão (5). Todos a zero inserções.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Escolher um bloco e percorrê-lo de verdade, do primeiro ao último gesto: realizar uma assembleia da rede, depositar uma nota de leitura, propor uma autoridade e deixar alguém objetar, fazer deliberar um pedido de adesão. Registrar o que falta, o que surpreende, o que trava.
 
@@ -2274,6 +2274,7 @@ CI verde. |
 | G17 | 2026-10-05 | A cooptação não encontrava uma conta sem biblioteca (RLS de `profiles`). Função reservada à administração da rede, endereço exato; suíte de 5 testes (`4d417f98`). |
 | F22 | 2026-10-05 | O link de confirmação da Carta mostrava código HTML: as Edge Functions são servidas em text/plain. Redirecionam (303) para a página `/lettre` do aplicativo (`9fc60a15`). |
 | E25 | 2026-10-05 | O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). |
+| G18 | 2026-10-05 | Um admin da rede sem biblioteca: cinco páginas carregavam sem fim, o link de um e-mail aberto sem sessão perdia a página, a etiqueta dizia « Leitor·a », faltava « Minha conta ». Corrigido e verificado em linha (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`). |
 
 ---
 

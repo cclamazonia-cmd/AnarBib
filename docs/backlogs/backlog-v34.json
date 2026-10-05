@@ -2746,6 +2746,14 @@
           "fr": "Le guide de gouvernance, la charte inclusive et le DPA pt-BR parlent brésilien (et le guide au « você ») ; 30 valeurs de `pt-BR.json` ; garde `ptbr-documents-e25` ; recueil PDF v1.3 dans le bucket ; décisions de vocabulaire du 27/09 au REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`). Vu en passant, hors périmètre : le guide espagnol dit « concernida(s) » 22 fois — à faire relire.",
           "pt": "O guia de governança, a carta inclusiva e o DPA falam português do Brasil; 30 valores de `pt-BR.json`; coletânea PDF v1.3 no bucket; decisões de vocabulário no REGISTRE (`DOC-LEX-2`) (`0cc2b6d3`)."
         }
+      ],
+      [
+        "G18",
+        "2026-10-05",
+        {
+          "fr": "Un admin réseau rattaché à aucune bibliothèque (le camarade `ASR2026`, coopté le 05/10) : cinq pages chargeaient sans fin, dont la page Réseau — elles attendent désormais la fin de la résolution du contexte (`libraryResolved`) ; un lien de courriel ouvert sans session survit à la connexion (`?next=`, et `/cadastro` lit la location du routeur, pas celle du premier chargement) ; les chemins des courriels déjà reçus renvoient vers la bonne page ; l'étiquette de rôle ne dit plus « Lecteur·rice » à qui ne l'est nulle part (et le dit enfin aux lectrices, rôle `reader`) ; « Mon compte » est dans la barre pour toute personne connectée. Bancs `compte-sans-bibliotheque`, `etiquette-de-role`, `liens-des-courriels-menent-a-une-route`, mutants rouges ; vérifié en ligne (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`).",
+          "pt": "Um admin da rede sem biblioteca: cinco páginas carregavam sem fim, o link de um e-mail aberto sem sessão perdia a página, a etiqueta dizia « Leitor·a », faltava « Minha conta ». Corrigido e verificado em linha (`43f8481e`, `43359867`, `8a1d2663`, `26142551`, `d147224e`)."
+        }
       ]
     ]
   },
@@ -4085,6 +4093,10 @@
         {
           "fr": "29/09 — un circuit jamais emprunté, cassé depuis quatre semaines sans que personne le voie. Depuis le 31/08, aucune tâche interne ne pouvait naître : la CHECK des sept états posée au titre de F6 (`20260831073104`) refusait le `pendente` que quatre fonctions écrivaient encore (23514), et la sonde des récurrences filtrait sur l'ancien état. La table était vide, aucune suite n'empruntait ces chemins. Xavier l'a trouvé en créant une tâche à l'écran (revue d'E6) ; corrigé le jour même (`455c7f0b`, migration `20260929095411`, suite `taches_sept_etats_tests`, banc `task-status-vocabulaire`), puis créer, changer d'état, supprimer, instancier un modèle et adopter une suggestion ont passé. Le même passage à l'écran a trouvé trois autres défauts antérieurs : le contexte de session qui ne suivait pas un réglage (`0bf96cb8`), la réattribution qui laissait un fonds vide (`8ee37bde`, `CAT-E19`), « Supprimer » offert à un PEB déjà sorti (`b3ac9d13`). Les tâches d'essai ont été supprimées : la table est de nouveau vide.",
           "pt": "29/09 — um circuito nunca percorrido, quebrado havia quatro semanas sem que ninguém visse. Desde 31/08, nenhuma tarefa interna podia nascer: a CHECK dos sete estados posta no âmbito do F6 (`20260831073104`) recusava o `pendente` que quatro funções ainda escreviam (23514). A tabela estava vazia e nenhuma suíte passava por esses caminhos. Xavier achou o defeito ao criar uma tarefa na tela (revisão do E6); corrigido no mesmo dia (`455c7f0b`, migração `20260929095411`, suíte `taches_sept_etats_tests`). A mesma passagem pela tela achou outros três defeitos anteriores (`0bf96cb8`, `8ee37bde`, `b3ac9d13`). As tarefas de ensaio foram apagadas: a tabela está vazia de novo."
+        },
+        {
+          "fr": "**05/10 — la cooptation réseau empruntée pour la première fois, en réel** (le camarade `ASR2026`, A1). Cinq défauts trouvés et corrigés le jour même, tous invisibles tant que le seul admin était aussi membre de deux bibliothèques : la fenêtre ne trouvait pas un compte sans bibliothèque (G17, `4d417f98`) ; les boutons des courriels menaient à des chemins qui n'ont jamais été des routes (`d186da59`, puis `43f8481e` pour les courriels déjà reçus) ; un compte sans bibliothèque chargeait sans fin cinq pages, dont la page Réseau (`43359867`) ; un lien ouvert sans session perdait la page demandée (`43359867`, `8a1d2663`) ; l'étiquette de rôle lui disait « Lecteur·rice » et la barre du haut n'avait pas « Mon compte » (`26142551`, `d147224e`). Voir la clôture G18. La même leçon que le 29/09 : un circuit jamais emprunté ne marche pas.",
+          "pt": "**05/10 — a cooptação da rede percorrida pela primeira vez, no real** (o companheiro `ASR2026`). Cinco defeitos achados e corrigidos no mesmo dia (ver G18)."
         }
       ]
     },
