@@ -2708,6 +2708,14 @@
         }
       ],
       [
+        "C25",
+        "2026-10-05",
+        {
+          "fr": "**Ouvert et livré le 05/10 : un PDF restreint n'était pas lisible pour un membre d'une bibliothèque détentrice (`/livro/2287`, « História da anarquia »).** Signalé par Xavier à l'écran. Le fichier avait été versé dans le seau public quand la ressource était « PDF public », puis la ressource repassée en « restreint » sans que le fichier suive : la ressource 66 désignait un objet absent de `pdf-restrito` (`fn_book_restricted_pdf_state` : `file_exists` faux, pas de bouton « Lire »), et l'œuvre sous droits restait téléchargeable dans `anarbib-pdf-public`. **Réparé à la main** (autorisé par Xavier) : objet copié vers `pdf-restrito` par la CLI (taille identique), copie publique supprimée. **Cause retirée** (doctrine `CAT-E20`) : le trigger de cohérence de `C24` refuse désormais, depuis l'écran, une ressource dont le fichier n'existe pas au (seau, chemin) déclaré, et l'écran dit quand l'ancienne copie n'a pas pu être retirée lors d'un changement d'espace. Migration `20261005121942` (`3ee267fa`), suite `depot_numerique_droits_tests` portée à 7 tests (T7 : le cas vécu, un chemin changé vers un fichier absent), 2 clés × 10 locales. Les 32 fichiers sans ressource restés dans l'espace public (cf. `C24`) sont traités par une autre session.",
+          "pt": "**Aberto e entregue em 05/10: um PDF restrito não aparecia como legível para membro de uma biblioteca detentora (`/livro/2287`).** O arquivo tinha sido enviado ao balde público e o recurso repassado a « restrito » sem que o arquivo acompanhasse. Corrigido à mão (arquivo movido para `pdf-restrito`, cópia pública removida); a base passa a recusar um recurso cujo arquivo não existe no lugar declarado, e a tela avisa quando a cópia antiga não pôde ser removida. Migração `20261005121942` (`3ee267fa`)."
+        }
+      ],
+      [
         "E24",
         "2026-10-05",
         {
