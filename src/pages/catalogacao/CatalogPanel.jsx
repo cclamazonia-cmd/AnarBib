@@ -388,7 +388,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
                   border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: 10,
                   opacity: busy ? 0.5 : 1,
                 }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: 10 }}>
                     {[['a', sig.author_id_a, sig.nom_a, sig.tri_a, sig.oeuvres_a],
                       ['b', sig.author_id_b, sig.nom_b, sig.tri_b, sig.oeuvres_b]].map(([cote, id, nom, tri, n]) => (
                       <div key={cote} style={{ fontSize: '.85rem' }}>

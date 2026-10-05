@@ -441,7 +441,7 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
                         </button>
                       )}
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: ouvert ? 10 : 0 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 10, marginBottom: ouvert ? 10 : 0 }}>
                       {cotes.map((c) => (
                         <div key={c.id} style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: 10, fontSize: '.86rem' }}>
                           <div style={{ fontWeight: 600 }}>{c.title}</div>
@@ -512,7 +512,7 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
                   {/* ── TEMPS 1 : est-ce le même texte ? ───────────────── */}
                   {ouvert && ex.etape === 1 && (
                     <div>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: 10 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 10, marginBottom: 10 }}>
                         {carteCote(a)}{carteCote(b)}
                       </div>
                       <div style={{ fontWeight: 600, fontSize: '1.05rem', marginBottom: 8 }}>

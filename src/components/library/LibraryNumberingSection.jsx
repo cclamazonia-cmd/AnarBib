@@ -111,7 +111,7 @@ export default function LibraryNumberingSection({ libraryId, canEdit = false, co
 
       {!loading && form && (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))', gap: 10, marginBottom: 10 }}>
             <div className="cat-field" style={{ minWidth: 0 }}>
               <label style={ls}>{t({ id: 'biblioteca.numbering.tomboPrefix' })}</label>
               <input type="text" value={form.tombo_prefix} maxLength={24} disabled={!canEdit || frozen}
@@ -149,7 +149,7 @@ export default function LibraryNumberingSection({ libraryId, canEdit = false, co
           )}
 
           <h5 style={{ margin: '8px 0 6px', fontSize: '.85rem' }}>{t({ id: 'biblioteca.numbering.bibRefTitle' })}</h5>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))', gap: 10, marginBottom: 10 }}>
             <div className="cat-field" style={{ minWidth: 0 }}>
               <label style={ls}>{t({ id: 'biblioteca.numbering.bibRefPrefix' })}</label>
               <input type="text" value={form.bib_ref_prefix} maxLength={24} disabled={!canEdit}
