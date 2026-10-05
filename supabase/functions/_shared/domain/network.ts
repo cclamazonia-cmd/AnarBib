@@ -173,14 +173,16 @@ function displayName(p) {
   return fn || String(p.email || "").trim() || "";
 }
 
-// URL frontend vers la page de gestion réseau filtrée sur la proposition cooptation.
-function cooptationProposalUrl(proposalId) {
-  return appUrl(`/painel/admin-rede/cooptation/${proposalId}`);
+// 05/10/2026 : les deux liens menaient à /painel/admin-rede/…, une route qui n'a
+// jamais existé (404 au premier clic du camarade coopté). Les propositions de
+// cooptation et de retrait collectif vivent dans Réseau › Administrateur·rices.
+// L'identifiant reste en paramètre pour la trace ; l'onglet liste les propositions.
+function cooptationProposalUrl(_proposalId) {
+  return appUrl(`/rede#tab=admins`);
 }
 
-// URL frontend vers la page de gestion réseau filtrée sur la proposition retrait collectif.
-function collectiveRemovalProposalUrl(proposalId) {
-  return appUrl(`/painel/admin-rede/collective-removal/${proposalId}`);
+function collectiveRemovalProposalUrl(_proposalId) {
+  return appUrl(`/rede#tab=admins`);
 }
 
 // ─── Handler principal ────────────────────────────────────────────────────

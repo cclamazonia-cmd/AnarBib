@@ -80,7 +80,7 @@ describe('domain/network — le digest des demandes à évaluer', () => {
 describe('domain/network — les liens vers l\'application', () => {
   const COOPTATION = { id: 23, status: 'queued', attempts: 0, event: 'network.cooptation_proposed', payload: { proposal_id: 'c-1', proposed_user_id: 'u-2', proposed_by: 'u-1', motivation_preview: 'Tient la permanence.' } };
   const RETRAIT = { ...COOPTATION, id: 24, event: 'network.collective_removal_proposed', payload: { ...COOPTATION.payload, proposal_id: 'r-1' } };
-  const CHEMINS = [[DIGEST, 22, '/rede'], [COOPTATION, 23, '/painel/admin-rede/cooptation/c-1'], [RETRAIT, 24, '/painel/admin-rede/collective-removal/r-1']];
+  const CHEMINS = [[DIGEST, 22, '/rede'], [COOPTATION, 23, '/rede#tab=admins'], [RETRAIT, 24, '/rede#tab=admins']];
 
   async function liensDe(ligne, id, env) {
     const ef = monter({ ligne, env }).ef;

@@ -159,9 +159,10 @@ function displayName(p) {
   return fn || String(p.email || "").trim() || "";
 }
 
-function profilePageUrl(libraryId, proposalId) {
-  const q = proposalId ? `?proposal=${proposalId}` : "";
-  return appUrl(`/painel/biblioteca/${libraryId}/profil${q}`);
+// 05/10/2026 : /painel/biblioteca/<id>/profil n'a jamais été une route (404). Les
+// transitions vivent dans Bibliothèque › Transitions (onglet ouvert par #tab=).
+function profilePageUrl(_libraryId, _proposalId) {
+  return appUrl(`/biblioteca#tab=transicoes`);
 }
 
 function axisLabel(locale, axis) {

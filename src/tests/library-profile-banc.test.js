@@ -53,7 +53,7 @@ describe('domain/library_profile — une proposition de changement de profil', (
     const r = await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
     expect(r).toMatchObject({ ok: true, event: 'team.library_profile.proposed', recipients_count: 2 });
     expect(ef.envois.map((e) => e.to[0]).sort()).toEqual(['dois@exemplo.test', 'trois@exemplo.test']);
-    for (const m of ef.envois) expect(liens(m.html)).toContain('https://app.anarbib.org/painel/biblioteca/lib-1/profil?proposal=p-1');
+    for (const m of ef.envois) expect(liens(m.html)).toContain('https://app.anarbib.org/biblioteca#tab=transicoes');
     expect(mailA(ef.envois, 'trois@exemplo.test').html).toContain('Rejoindre la fédération.');
     expect(etat().map((d) => d.status)).toEqual(['sent']);
   });
@@ -103,7 +103,7 @@ describe('domain/library_profile — une proposition de changement de profil', (
     const { ef } = monter({ env: { APP_BASE_URL: 'https://app.anarbib.is/' } });
     await ef.charger('_shared/domain/library_profile.ts').handleLibraryProfileEvent(31);
     for (const m of ef.envois) {
-      expect(liens(m.html)).toContain('https://app.anarbib.is/painel/biblioteca/lib-1/profil?proposal=p-1');
+      expect(liens(m.html)).toContain('https://app.anarbib.is/biblioteca#tab=transicoes');
       expect(liens(m.html).filter((h) => h.startsWith('https://app.anarbib.org'))).toEqual([]);
     }
   });
