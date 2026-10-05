@@ -167,14 +167,17 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
 
   // L'accès a changé après le versement : le fichier change d'espace. Un
   // document passé en « réservé » ne doit pas rester lisible dans l'espace
-  // public — l'ancien objet est retiré.
+  // public — l'ancien objet est retiré. Rend faux si ce retrait a échoué : la
+  // personne doit le savoir (une copie peut rester lisible là où elle ne
+  // devrait plus l'être), pas seulement la console.
   async function deplacer(seauSource, chemin, seauCible) {
     const { data: blob, error: e1 } = await supabase.storage.from(seauSource).download(chemin);
     if (e1) throw e1;
     const { error: e2 } = await supabase.storage.from(seauCible).upload(chemin, blob, { upsert: true, contentType: blob.type || undefined });
     if (e2) throw e2;
-    const { error: e3 } = await supabase.storage.from(seauSource).remove([chemin]);
-    if (e3) console.warn('retrait de l’ancien fichier :', e3.message);
+    const { data: retires, error: e3 } = await supabase.storage.from(seauSource).remove([chemin]);
+    if (e3 || !retires?.length) { console.warn('retrait de l’ancien fichier :', e3?.message || 'aucun objet retiré'); return false; }
+    return true;
   }
 
   // ── Enregistrer ────────────────────────────────────────────────────────
@@ -193,9 +196,13 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
       const famille = df.kind === 'file' ? familleDe(df.mime_type, df.storage_path) : null;
       let seau = df.kind === 'file' ? df.storage_bucket : null;
       let deplace = false;
+      let copieRestee = null;   // « seau/chemin » d'une ancienne copie non retirée
       if (df.kind === 'file') {
         const attendu = seauPour(famille, df.access_scope);
-        if (attendu && seau && seau !== attendu) { await deplacer(seau, df.storage_path, attendu); seau = attendu; deplace = true; }
+        if (attendu && seau && seau !== attendu) {
+          if (!(await deplacer(seau, df.storage_path, attendu))) copieRestee = `${seau}/${df.storage_path}`;
+          seau = attendu; deplace = true;
+        }
       }
       const payload = {
         book_draft_id: Number(draftId),
@@ -225,6 +232,10 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
       if (error) throw error;
       setDfState(null);
       await onChanged();
+      if (copieRestee) {
+        setMsg({ text: t({ id: 'catalogacao.dep.oldCopyNotRemoved' }, { path: copieRestee }), kind: 'error' });
+        return;
+      }
       setMsg({ text: deplace
         ? t({ id: 'catalogacao.dep.moved' }, { space: t({ id: df.access_scope === 'conta_ativa' ? 'catalogacao.dep.storage.reserved' : 'catalogacao.dep.storage.public' }) })
         : t({ id: 'catalogacao.msg.digitalSaved' }), kind: 'ok' });

@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Já importada",
   "importacoes.fila.filterKnown": "Já importadas",
   "importacoes.fila.knownRecordOf": "Ficha já importada pela sua biblioteca: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Ficha que sua biblioteca não possui mais."
+  "importacoes.fila.knownRecordNotHeld": "Ficha que sua biblioteca não possui mais.",
+  "error.digital.file_not_in_bucket": "O arquivo não está no lugar que o recurso indica. Envie o arquivo de novo antes de salvar.",
+  "catalogacao.dep.oldCopyNotRemoved": "Recurso salvo, mas a cópia antiga do arquivo não pôde ser removida ({path}). Ela pode continuar acessível: avise a administração da rede."
 }

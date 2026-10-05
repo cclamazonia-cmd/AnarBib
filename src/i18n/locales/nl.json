@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Al geïmporteerd",
   "importacoes.fila.filterKnown": "Al geïmporteerd",
   "importacoes.fila.knownRecordOf": "Record dat jouw bibliotheek al heeft geïmporteerd: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Record dat jouw bibliotheek niet meer bezit."
+  "importacoes.fila.knownRecordNotHeld": "Record dat jouw bibliotheek niet meer bezit.",
+  "error.digital.file_not_in_bucket": "Het bestand staat niet op de plek die de bron aangeeft. Upload het opnieuw voordat je opslaat.",
+  "catalogacao.dep.oldCopyNotRemoved": "Bron opgeslagen, maar de oude kopie van het bestand kon niet worden verwijderd ({path}). Die kan nog toegankelijk zijn: laat het netwerkbeheer weten."
 }

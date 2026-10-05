@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Ja importada",
   "importacoes.fila.filterKnown": "Ja importades",
   "importacoes.fila.knownRecordOf": "Fitxa ja importada per la teva biblioteca: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Fitxa que la teva biblioteca ja no té."
+  "importacoes.fila.knownRecordNotHeld": "Fitxa que la teva biblioteca ja no té.",
+  "error.digital.file_not_in_bucket": "El fitxer no és on indica el recurs. Torna a pujar-lo abans de desar.",
+  "catalogacao.dep.oldCopyNotRemoved": "Recurs desat, però no s’ha pogut retirar la còpia antiga del fitxer ({path}). Pot continuar accessible: avisa l’administració de la xarxa."
 }

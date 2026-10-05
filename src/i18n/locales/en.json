@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Already imported",
   "importacoes.fila.filterKnown": "Already imported",
   "importacoes.fila.knownRecordOf": "Record already imported by your library: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Record no longer held by your library."
+  "importacoes.fila.knownRecordNotHeld": "Record no longer held by your library.",
+  "error.digital.file_not_in_bucket": "The file is not where the resource says it is. Upload it again before saving.",
+  "catalogacao.dep.oldCopyNotRemoved": "Resource saved, but the old copy of the file could not be removed ({path}). It may still be accessible: let the network administration know."
 }

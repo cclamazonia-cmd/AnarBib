@@ -16,6 +16,11 @@
 --    inséré, retiré supprimé, justification et empreinte audio conservées.
 -- T5 la reprise pose le lien vers le publié et recopie la justification.
 -- T6 un EPUB se dépose côté brouillon.
+-- T7 (20261005121942, session « Doublons SNI & forme autorisée des
+--    contributeurs ») une ressource désigne un fichier qui existe à l'endroit
+--    déclaré : réservée dans pdf-restrito alors que le fichier n'est que dans
+--    le seau public (cas vécu sur /livro/2287) → refus ; chemin changé vers un
+--    fichier absent → refus. Le décor pose les objets que T2 et T6 déclarent.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'DEPOT-NUMERIQUE-DROITS OK : N/N'
@@ -47,6 +52,12 @@ BEGIN
   INSERT INTO public.book_holdings (book_id, library_id) VALUES (v_book, v_libA);
   INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status, published_book_id, action)
   VALUES ('DN brouillon', 'livro', v_libA, v_coordA, 'draft', v_book, 'update') RETURNING id INTO v_draft;
+  -- Les fichiers que les ressources acceptées désignent (T2, T6, T7) ; k.pdf
+  -- n'existe QUE dans le seau public.
+  INSERT INTO storage.objects (bucket_id, name) VALUES
+    ('pdf-restrito', 'books/x/d.pdf'), ('anarbib-pdf-public', 'books/x/f.pdf'),
+    ('anarbib-epub-public', 'books/x/j.epub'), ('anarbib-pdf-public', 'books/x/k.pdf')
+  ON CONFLICT (bucket_id, name) DO NOTHING;
 
   -- ── T1 ──────────────────────────────────────────────────────────────
   v_t := 'T1 le reglage revient a la coordination';
@@ -190,6 +201,34 @@ BEGIN
     VALUES (v_draft, 'epub', 'leitura_online', 'publico', 'anarbib-epub-public', 'books/x/j.epub', 'application/epub+zip', 'dominio_publico');
     EXECUTE 'RESET ROLE';
     v_passed := v_passed+1;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T7 ──────────────────────────────────────────────────────────────
+  v_t := 'T7 une ressource designe un fichier qui existe';
+  BEGIN
+    v_txt := '';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    -- réservée dans pdf-restrito, fichier resté dans le seau public
+    v_hint := NULL;
+    BEGIN INSERT INTO public.book_draft_digital_resources (book_draft_id, resource_type, usage_type, access_scope, storage_bucket, storage_path, rights_status)
+          VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/x/k.pdf', 'sob_direitos');
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.digital.file_not_in_bucket' THEN v_txt := v_txt || 'absent-du-seau=' || coalesce(v_hint, 'accepte') || ' '; END IF;
+    -- une ressource valide dont on change le chemin vers un fichier absent
+    INSERT INTO public.book_draft_digital_resources (book_draft_id, resource_type, usage_type, access_scope, storage_bucket, storage_path, rights_status)
+    VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/x/d.pdf', 'sob_direitos') RETURNING id INTO v_r1;
+    v_hint := NULL;
+    BEGIN UPDATE public.book_draft_digital_resources SET storage_path = 'books/x/absent.pdf' WHERE id = v_r1;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.digital.file_not_in_bucket' THEN v_txt := v_txt || 'chemin-absent=' || coalesce(v_hint, 'accepte') || ' '; END IF;
+    -- un libellé seul ne rejuge pas le fichier
+    UPDATE public.book_draft_digital_resources SET label = 'Libellé seul' WHERE id = v_r1;
+    EXECUTE 'RESET ROLE';
+    IF (SELECT storage_path FROM public.book_draft_digital_resources WHERE id = v_r1) IS DISTINCT FROM 'books/x/d.pdf' THEN v_txt := v_txt || 'chemin-modifie '; END IF;
+    IF v_txt = ''
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

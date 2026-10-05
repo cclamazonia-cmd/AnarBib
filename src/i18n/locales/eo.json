@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Jam importita",
   "importacoes.fila.filterKnown": "Jam importitaj",
   "importacoes.fila.knownRecordOf": "Slipo jam importita de via biblioteko: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Slipo ne plu posedata de via biblioteko."
+  "importacoes.fila.knownRecordNotHeld": "Slipo ne plu posedata de via biblioteko.",
+  "error.digital.file_not_in_bucket": "La dosiero ne troviĝas tie, kie la rimedo indikas. Alŝutu ĝin denove antaŭ ol konservi.",
+  "catalogacao.dep.oldCopyNotRemoved": "Rimedo konservita, sed la malnova kopio de la dosiero ne povis esti forigita ({path}). Ĝi eble restas alirebla: sciigu la retan administradon."
 }

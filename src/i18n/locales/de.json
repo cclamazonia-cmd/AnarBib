@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Schon importiert",
   "importacoes.fila.filterKnown": "Schon importiert",
   "importacoes.fila.knownRecordOf": "Eintrag, den deine Bibliothek schon importiert hat: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Eintrag, den deine Bibliothek nicht mehr besitzt."
+  "importacoes.fila.knownRecordNotHeld": "Eintrag, den deine Bibliothek nicht mehr besitzt.",
+  "error.digital.file_not_in_bucket": "Die Datei liegt nicht dort, wo die Ressource sie angibt. Lade sie erneut hoch, bevor du speicherst.",
+  "catalogacao.dep.oldCopyNotRemoved": "Ressource gespeichert, aber die alte Kopie der Datei konnte nicht entfernt werden ({path}). Sie könnte weiter zugänglich sein: Gib der Netzwerkverwaltung Bescheid."
 }

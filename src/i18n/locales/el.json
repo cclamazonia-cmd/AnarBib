@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Ήδη εισαγμένη",
   "importacoes.fila.filterKnown": "Ήδη εισαγμένες",
   "importacoes.fila.knownRecordOf": "Εγγραφή που η βιβλιοθήκη σου έχει ήδη εισαγάγει: {title}",
-  "importacoes.fila.knownRecordNotHeld": "Εγγραφή που η βιβλιοθήκη σου δεν κατέχει πλέον."
+  "importacoes.fila.knownRecordNotHeld": "Εγγραφή που η βιβλιοθήκη σου δεν κατέχει πλέον.",
+  "error.digital.file_not_in_bucket": "Το αρχείο δεν βρίσκεται εκεί που δηλώνει ο πόρος. Ανέβασέ το ξανά πριν από την αποθήκευση.",
+  "catalogacao.dep.oldCopyNotRemoved": "Ο πόρος αποθηκεύτηκε, αλλά το παλιό αντίγραφο του αρχείου δεν αφαιρέθηκε ({path}). Μπορεί να παραμένει προσβάσιμο: ενημέρωσε τη διαχείριση του δικτύου."
 }

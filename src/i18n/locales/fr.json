@@ -7154,5 +7154,7 @@
   "importacoes.fila.match.known_record": "Déjà importée",
   "importacoes.fila.filterKnown": "Déjà importées",
   "importacoes.fila.knownRecordOf": "Notice déjà importée par ta bibliothèque : {title}",
-  "importacoes.fila.knownRecordNotHeld": "Notice plus détenue par ta bibliothèque."
+  "importacoes.fila.knownRecordNotHeld": "Notice plus détenue par ta bibliothèque.",
+  "error.digital.file_not_in_bucket": "Le fichier n’est pas à l’endroit que la ressource indique. Verse-le de nouveau avant d’enregistrer.",
+  "catalogacao.dep.oldCopyNotRemoved": "Ressource enregistrée, mais l’ancienne copie du fichier n’a pas pu être retirée ({path}). Elle peut rester accessible : préviens l’administration du réseau."
 }
