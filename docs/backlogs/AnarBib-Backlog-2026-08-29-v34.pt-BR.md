@@ -2316,6 +2316,7 @@ CI verde. |
 | C21 | 2026-10-05 | **Entregue em 05/10.** Barra de estado fixa nos onze painéis da catalogação; janela de confirmação do aplicativo no lugar dos 34 `confirm()`/`alert()`, com o botão nomeando a ação; gestos sobre os lotes confirmados. `9da1ad76`. A verificar na tela com sessão staff. |
 | C22 | 2026-10-05 | **Entregue em 05/10.** Um único quadro « Publicado — e agora? » substitui mensagem, toast, faixa e janela obra/edição; sequências propostas para documento, autoridade e exemplar. `b0f60399`. A verificar na tela. |
 | E23 | 2026-10-05 | Cada HINT `error.*` do banco tem seu rótulo nas dez locales: guarda (as mesmas 210 chaves da produção), 780 rótulos, quatro achados pela guarda no mesmo dia (`2414246c`). |
+| C24 | 2026-10-05 | **Entregue em 05/10.** Depósito digital em cinco etapas (o quê, direitos, quem lê, arquivo ou link, descrição); espaço de armazenamento deduzido; leitura pública de obra sob direitos só se a coordenação da biblioteca a abriu, com aviso e justificativa; publicação sem recriação (links estáveis). Migração `20261005092916` (`d1d72405`), tela `6c3ab382`. |
 
 ---
 

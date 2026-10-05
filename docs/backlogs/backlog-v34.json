@@ -2698,6 +2698,14 @@
           "fr": "Chaque HINT `error.*` posé par la base a son libellé dans les dix locales : garde `hints-sql-ont-leur-libelle` (les mêmes 210 clés que la production), 780 libellés écrits dont quatre trouvés par la garde le jour même (`2414246c`).",
           "pt": "Cada HINT `error.*` do banco tem seu rótulo nas dez locales: guarda (as mesmas 210 chaves da produção), 780 rótulos, quatro achados pela guarda no mesmo dia (`2414246c`)."
         }
+      ],
+      [
+        "C24",
+        "2026-10-05",
+        {
+          "fr": "**Livré le 05/10 (Xavier : « partir du statut des droits, puis du choix de la bibliothèque ; le seau doit en découler »).** Le dépôt numérique se fait en cinq étapes : quoi (fichier ou lien), droits, qui lit (proposé selon les droits), fichier ou lien, description ; l’espace de stockage et le type sont déduits, changer l’accès déplace le fichier. Une œuvre sous droits ne passe en lecture publique que si la coordination de sa bibliothèque l’a ouverte (Gestion de la bibliothèque), après un avertissement sur la responsabilité légale et avec une justification ; la base garde ces règles (`trg_draft_digital_resource_coherence`). La publication met à jour les ressources au lieu de les recréer : les liens de lecture restent stables, la justification et l’empreinte audio ne se perdent plus. Le dépôt depuis l’OCR part en accès réservé (il allait toujours en public). EPUB, vidéo et image déposables. Migration `20261005092916` (`d1d72405`), écran `6c3ab382` ; suites `depot_numerique_droits_tests` (6) et vitest `depot-numerique` (7). Restent : vérification à l’écran, 33 fichiers orphelins dans l’espace public (non supprimés), et la ressource posée par réception de fonds que retire la publication suivante d’un brouillon qui ne la contient pas (comportement antérieur conservé).",
+          "pt": "**Entregue em 05/10.** Depósito digital em cinco etapas (o quê, direitos, quem lê, arquivo ou link, descrição); espaço de armazenamento deduzido; leitura pública de obra sob direitos só se a coordenação da biblioteca a abriu, com aviso e justificativa; publicação sem recriação (links estáveis). Migração `20261005092916` (`d1d72405`), tela `6c3ab382`."
+        }
       ]
     ]
   },
