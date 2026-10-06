@@ -6207,7 +6207,7 @@
       "id": "J11",
       "d": "J",
       "p": "P3",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "front",
@@ -6245,7 +6245,12 @@
         "commits 9fc60a15, a64bd04f, 8f0d85a0, d7f65c54, 57a4aafc, 89a2b508",
         "scripts/purge-orphelins-covers.py"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**06/10 — quatre restes sur cinq réglés, le cinquième au geste de Xavier.** *(1)* La garde en double est retirée : on garde `locales-sans-cle-en-double` (elle décode la clé et ne lit que le premier niveau) ; *(2)* `scripts/merge-imp-deposit-keys.cjs` supprimé — à usage unique, déjà joué, nuisible à rejouer (`4b8ddebc`, vitest complet vert). *(4)* **Restes de F1, sur autorisation écrite de Xavier** (`fe10098d`, migration `20261006190649` par la CI, vérifiée en production à 21 h 22) : mesuré d'abord — `loan_midpoint_message_log` vide et sans écrivain ; deux des trois colonnes encore écrites par `upsert_library_notification_policies` (fermée aux comptes depuis le 02/09) et exposées par `v_library_notification_context`, que ni l'écran ni les fonctions Edge ne lisent pour elles. L'upsert est réécrite, la vue recréée sans les deux colonnes (security_invoker, commentaire et droits rejoués et comparés — identiques en production), colonnes et table supprimées, garde « table vide » ; suite `f1_restes_supprimes_tests` 4/4, banc complet vert. **Exploitation** : la table était dans `~/anarbib-ops/bg2-denylist.txt` (hors dépôt) — retirée avant le push (copie `.bak-20261006`, `check` : Filet OK), sinon la sauvegarde courte s'arrêtait ; retirée aussi de `deploy/bg2-known-tables.txt`. *(5)* **Les deux vues de travail du lot C5 ne sont pas mortes** : `v_author_alias_worklist` et `v_author_seed_candidates` alimentent `api.report_auteurs_non_resolus`, affiché dans l'onglet Rapports de la page Réseau — gardées ; l'écart assumé de la garde de doctrine reste juste. *(3)* **Couvertures** : passage à blanc refait en lecture seule, avec le classement du script — **7 originaux orphelins**, pas 358 (le premier compte prenait les 351 vignettes, qu'aucune notice ne désigne par construction) : A débris 2, B remplacées 3, D brouillon 1 à supprimer, C 1 gardée (notice 0000280) ; 12 objets avec leurs vignettes, ~740 Ko. Le script demande une clé secrète (Dashlane) : **à lancer par Xavier**, `--dry-run` d'abord.",
+          "pt": "**06/10 — quatro restos de cinco resolvidos.** Guarda duplicada e script morto retirados (`4b8ddebc`); restos do F1 suprimidos com autorização escrita de Xavier (`fe10098d`, migração `20261006190649`, verificada em produção; a tabela saiu também da denylist do backup, hors repositório); as duas views do lote C5 alimentam um relatório ativo: mantidas. Capas: 7 originais órfãos (não 358) — a purga cabe a Xavier."
+        }
+      ]
     },
     {
       "id": "F24",

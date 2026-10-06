@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-06.** **47 itens de 67** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, K2, K7, K10). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-06.** **48 itens de 67** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1703,7 +1703,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | Aberto |
+| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | Em curso |
 
 #### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
 
@@ -1748,11 +1748,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### J11 — Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5
 
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
+`P3` Adiado · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
 
 **Estado.** Cinco restos achados no caminho, sem item: (1) duas guardas iguais (`locales-sans-cle-en-double`, `i18n-cles-uniques`); (2) `scripts/merge-imp-deposit-keys.cjs`, script morto; (3) capas antigas no bucket até rodar `purge-orphelins-covers.py` (classe B); (4) colunas e tabela sem leitor do e-mail (`57a4aafc`); (5) duas views de trabalho do lote C5 (`89a2b508`).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Para cada um: retirar, ou escrever por que fica. Antes de qualquer `DROP`, procurar em `prosrc`, no front e nas Edge Functions.
 

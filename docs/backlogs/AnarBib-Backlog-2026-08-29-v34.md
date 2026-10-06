@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026 au soir** (`a387b46c`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le midi même, `16962c55`). Une journée chargée, à deux sessions et une contribution extérieure : **16 migrations** (432 appliquées = 432 au dépôt, toutes par la CI), 70 commits, 2 056 tests JS et 173 suites SQL, tous verts. Ce qui a bougé et pourquoi : **la base** — `public.networks` et sa policy (G13), une policy dans `ingest` (H21 lot 2), +18 fonctions dont 11 DEFINER, deux avis de sécurité de plus (G13, G17 ; le verdict de G17 reste à écrire) ; **les fonctions Edge** — `read-pdf` et `mail-i18n-test` retirées du dépôt (F3) ; **le catalogue** — le lot 66 de l'acervo CCLA (24 brouillons, 2 publiés) ; **le réseau** — un second administrateur, le camarade (`ASR2026`) ; **le dépôt** — +185 tests JS, +9 suites, +166 clés. **Mis à jour dans cette version, après l'inventaire des commits des dix derniers jours (26/09 → 05/10) contre le backlog** : I30 passe à vérifier ; dix items ouverts pour ce qui avait été trouvé en route sans être porté nulle part (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11) ; notes complétées sur A1, A3, B36, C3, C14, C18, E6, F21, G1, H21, H25 et sur douze clôtures (B32, C7, C20, C21, C22, C24, E25, E28, G13, G18, couvertures, « pt-BR parle brésilien ») ; calendrier réécrit (les gels de septembre sont passés) ; notes des domaines B, E, F et I remises à jour ; REGISTRE corrigé sur `OPAC-F3` (`alias_norm` plié sur place, pas recalculé). **Ce qui reste à clore, et par qui** — *par Xavier, critères relus et tenus sur pièces* : B29, B30, H17, H18, H19, H22, H23, H24, F16 et F21 — **clos par Xavier le 06/10** (leurs restes vont à H28, H29, E31 et F24, ouvert pour l'occasion) ; H20 (un test à vérifier d'abord) et H25 (un critère à trancher) ; *par Xavier, à l'écran* : E31, et avec lui C14, C23, G16 ; *les décisions* : A1, C4, C17 ; *sans code* : A1 (une troisième administration réseau), A3 (la machine du runner), F3 (supprimer deux fonctions de la plateforme).
 
-**Fraîcheur des constats au 2026-10-06.** **47 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, K2, K7, K10). Les **20** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-06.** **48 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1703,7 +1703,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **J9** | Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px | `P2` | À vérifier |
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
-| **J11** | Ménage : gardes en double, script mort, couvertures orphelines, restes du courriel et du lot C5 | `P3` | Ouvert |
+| **J11** | Ménage : gardes en double, script mort, couvertures orphelines, restes du courriel et du lot C5 | `P3` | En cours |
 
 #### J9 — Manuel v5 : le reliquat des captures — 180 emplacements en repli pt-BR, IMG-31 à refaire, IMG-08 à confirmer, tout à recapturer en 900-1000 px
 
@@ -1748,11 +1748,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### J11 — Ménage : gardes en double, script mort, couvertures orphelines, restes du courriel et du lot C5
 
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript, SQL / PostgreSQL
+`P3` Différé · État : **En cours** · Charge : une soirée · Ce que ça demande : React / JavaScript, SQL / PostgreSQL
 
 **État.** Cinq restes trouvés en route, chacun écrit dans un commit ou une clôture et porté par aucun item. (1) **Deux gardes font la même chose** : `locales-sans-cle-en-double.test.js` (`9fc60a15`) et `i18n-cles-uniques.test.js` (`a64bd04f`) cherchent toutes deux une clé en double dans le texte brut des locales. (2) **`scripts/merge-imp-deposit-keys.cjs`** porte deux valeurs fr au vouvoiement pour des clés qui n'existent plus (relevé par `8f0d85a0`) : script mort. (3) **Les anciennes couvertures** remplacées restent dans le bucket tant que `scripts/purge-orphelins-covers.py` (classe B) n'est pas lancé à la main (clôture des couvertures, `d7f65c54`). (4) **Les branches mortes du courriel** (`57a4aafc`, F1) : colonnes et table sans lecteur, décrites seulement par `COMMENT`. (5) **Deux vues de travail du lot C5**, sans `security_invoker` ni droit accordé, inscrites comme « écart assumé » dans la liste close de leur garde (`89a2b508`).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Pour chacun : retirer, ou écrire ici pourquoi on garde. Une seule des deux gardes ; le script supprimé ; la purge des couvertures lancée sur un mot de Xavier ; colonnes, table et vues retirées par migration si rien ne les lit (chercher dans `prosrc`, le front et les Edge Functions avant tout `DROP`).
 
