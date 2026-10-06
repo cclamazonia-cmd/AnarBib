@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-06** · 67 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-06** · 66 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 13
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 12
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-06.** **48 itens de 67** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-06.** **47 itens de 66** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -831,7 +831,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
 
-*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31).*
+*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31). **06/10 — `AccountPage.jsx`, lote 2** (`f025a469`, implantado): abas Avisos e Lista de desejos em `TabAvisos.jsx` e `TabDesejos.jsx`; 140 → 132 KB; bancada 7 casos. **Xavier deve ver na tela.***
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -1304,7 +1304,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H28** | Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base | `P1` | A verificar |
 | **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | A verificar |
 | **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | A verificar |
-| **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | A verificar |
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Em curso |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
@@ -1439,27 +1438,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Baixável; dez locales; teste.
 
 **Dependências.** Antes de **H17** (diz quais zonas importam).
-
-*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
-
-#### H20 — O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado
-
-`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib. **Entregue em 28/09** (`8c80de27`, migração `20260928111812`): tabela `book_external_ids` (única por biblioteca), gravada na publicação, na aproximação de exemplar e na absorção de rascunho; segue a notícia mantida numa fusão. O que não é identificador (número de linha, número de fascículo de CSV, chave repetida) é apagado na importação. Suíte `identifiant_origine_tests` (11).
-
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos. **05/10, inventário** — critérios cumpridos em bancada, tabela preenchida em produção (264 linhas). Verificar antes de propor o fechamento: que um teste cubra exatamente « uma notícia vinculada a uma notícia existente ». **06/10 — critérios verificados**: coberto por `identifiant_origine_tests` T10 e T3 (na CI); pronto para fechar por decisão de Xavier.*
-
-**O que é.** Tabela `book_external_ids (book_id, library_id, scheme, value)` com índice único, alimentada na publicação; ou coluna na detenção se bastar. Decidir depois de ler `publish_book_draft` no caso de registro existente.
-
-**Por que importa.** É a chave do ida-e-volta: sem ela, nem reimportação que atualiza (**H21**) nem export com os números do PMB (**H24**).
-
-**O que conta como terminado.**
-
-- Identificador PMB recuperável por biblioteca, inclusive em registro existente.
-- Teste SQL.
-
-**Dependências.** Antes de **H21** e **H24**.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1703,7 +1681,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | Em curso |
+| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | A verificar |
 
 #### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
 
@@ -1748,11 +1726,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### J11 — Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5
 
-`P3` Adiado · Estado : **Em curso** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
+`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
 
 **Estado.** Cinco restos achados no caminho, sem item: (1) duas guardas iguais (`locales-sans-cle-en-double`, `i18n-cles-uniques`); (2) `scripts/merge-imp-deposit-keys.cjs`, script morto; (3) capas antigas no bucket até rodar `purge-orphelins-covers.py` (classe B); (4) colunas e tabela sem leitor do e-mail (`57a4aafc`); (5) duas views de trabalho do lote C5 (`89a2b508`).
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Para cada um: retirar, ou escrever por que fica. Antes de qualquer `DROP`, procurar em `prosrc`, no front e nas Edge Functions.
 
@@ -2196,6 +2174,7 @@ CI verde. |
 | E29 | 2026-10-06 | As facetas de uma sessão contam o catálogo que a página mostra (`4b27b909`, migração `20261006170736`, verificada em produção às 19h27; suíte T8; impressão de 20 conjuntos de filtros idêntica). **Fechado em 06/10 por Xavier.** |
 | F23 | 2026-10-06 | As 22 consultas anteriores a 01/10 ficam sem prazo: estão todas encerradas; a regra dos 60 dias vale para os pedidos novos. Nenhuma migração. **Decisão de Xavier, 06/10.** |
 | H25 | 2026-10-06 | **Fechado em 06/10 por decisão de Xavier.** A exportação de autoridades reimporta-se no PMB 8.1.1.1 com «Não»: autores aproximados por nome e datas, nenhum recriado; o vínculo pelo `$3` não funciona por um defeito do PMB (a origem não é transmitida pelo formulário) — sinalização e correção para a DIRA em **H32**. |
+| H20 | 2026-10-06 | O identificador de origem é guardado por biblioteca (`book_external_ids`, `8c80de27`); critérios cobertos por `identifiant_origine_tests` T10 e T3 na CI. **Fechado em 06/10 por Xavier.** |
 
 ---
 
@@ -2227,4 +2206,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-06. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 67 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-06. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 66 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
