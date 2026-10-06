@@ -1187,12 +1187,19 @@ export default function CatalogPage() {
   // l'indice de session. Pour les AUTRES bibliothèques, le « pour vous » de
   // l'édition prime (Xavier, 04/09) : un exemplaire libre à MLEG n'est pas
   // disponible pour une lectrice de BTL, la ligne ne doit pas dire le contraire.
+  // Il n'y a pas de prêt entre bibliothèques : dès que la lectrice a une
+  // bibliothèque de session, l'exemplaire d'une AUTRE bibliothèque n'est pas
+  // pour elle — que la sienne détienne l'édition ou non. Le 06/10, un lecteur
+  // de BLMF lisait « Disponible (1) » sur la ligne BTL d'une édition que BLMF
+  // détient aussi : la règle ne visait que le cas « indisponible pour toi ».
+  // Sans bibliothèque de session, les lignes restent informatives.
   function copyStatus(l, book) {
     if (!isAuth) return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
     if (l.is_session_library && l.session_status_hint) {
       return getStatusInfo({ session_status_hint: l.session_status_hint, session_available_count: l.session_available_count, loanable: l.loanable }, isAuth, t);
     }
-    if (!l.is_session_library && (book?.session_status_hint || '').toLowerCase() === 'indisponivel_para_voce') {
+    const editionHint = (book?.session_status_hint || '').toLowerCase();
+    if (!l.is_session_library && editionHint && editionHint !== 'sem_biblioteca_de_sessao') {
       return { label: t({ id: 'catalog.avail.unavailUser' }), cls: 'bad' };
     }
     if (l.loanable === false) return { label: t({ id: 'catalog.avail.consult' }), cls: 'warn' };

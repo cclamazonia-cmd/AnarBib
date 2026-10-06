@@ -689,3 +689,4 @@ tests/sql/liste_coauteurs_tests.sql
 # le catalogue public filtre par réseau (fiches publiques, bibliothèques visibles).
 tests/sql/g13_reseaux_constitues_tests.sql
 tests/sql/f1_restes_supprimes_tests.sql
+tests/sql/nom_affiche_cherchable_tests.sql

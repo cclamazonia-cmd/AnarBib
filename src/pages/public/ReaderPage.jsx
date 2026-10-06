@@ -559,7 +559,9 @@ export default function ReaderPage() {
                 ? <a href={assetMeta.source_url} target="_blank" rel="noopener noreferrer">{assetMeta.source_name}</a>
                 : assetMeta.source_name})}</Pill>
             )}
-            {assetMeta.rights_status && <Pill>{assetMeta.rights_status}</Pill>}
+            {/* Le code de droits (sob_direitos…) se dit par le libellé que la fiche du
+                livre emploie déjà ; le code brut n'apparaît plus (06/10). */}
+            {assetMeta.rights_status && <Pill>{t({ id: `catalogacao.digital.rights.${assetMeta.rights_status}`, defaultMessage: assetMeta.rights_status })}</Pill>}
           </div>
         )}
       </div>

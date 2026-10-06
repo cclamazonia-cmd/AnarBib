@@ -52,11 +52,13 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
   else if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
   else if (authorFilter.trim()) {
     // Mot par mot (comme api.catalog_works_v1) : les notices écrivent « GOLDMAN,
-    // Emma », la saisie « Emma Goldman » doit la trouver. Un seul mot → clé
-    // `autor` directe ; plusieurs → une clause par mot dans le `and` consolidé.
+    // Emma », la saisie « Emma Goldman » doit la trouver. Chaque mot est cherché
+    // dans `autor` (la saisie libre) OU `author_display` (le nom d'autorité que
+    // la ligne affiche) : « Confederación » trouve la notice saisie « C.N.T. »
+    // et affichée « Confederación Nacional del Trabajo » (06/10). Un groupe or()
+    // par mot, dans le `and` consolidé.
     const words = authorFilter.split(/[\s,;]+/).map(w => w.replace(/[(),"]/g, '')).filter(Boolean).slice(0, 6);
-    if (words.length === 1) f['autor'] = `ilike.%${words[0]}%`;
-    else for (const w of words) andClauses.push(`autor.ilike.%${w}%`);
+    for (const w of words) andClauses.push(`or(autor.ilike.%${w}%,author_display.ilike.%${w}%)`);
   }
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
 
