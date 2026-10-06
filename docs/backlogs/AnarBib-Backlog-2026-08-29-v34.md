@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-06** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-06** · 67 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,8 +19,8 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 11
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 7
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 13
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026 au soir** (`a387b46c`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le midi même, `16962c55`). Une journée chargée, à deux sessions et une contribution extérieure : **16 migrations** (432 appliquées = 432 au dépôt, toutes par la CI), 70 commits, 2 056 tests JS et 173 suites SQL, tous verts. Ce qui a bougé et pourquoi : **la base** — `public.networks` et sa policy (G13), une policy dans `ingest` (H21 lot 2), +18 fonctions dont 11 DEFINER, deux avis de sécurité de plus (G13, G17 ; le verdict de G17 reste à écrire) ; **les fonctions Edge** — `read-pdf` et `mail-i18n-test` retirées du dépôt (F3) ; **le catalogue** — le lot 66 de l'acervo CCLA (24 brouillons, 2 publiés) ; **le réseau** — un second administrateur, le camarade (`ASR2026`) ; **le dépôt** — +185 tests JS, +9 suites, +166 clés. **Mis à jour dans cette version, après l'inventaire des commits des dix derniers jours (26/09 → 05/10) contre le backlog** : I30 passe à vérifier ; dix items ouverts pour ce qui avait été trouvé en route sans être porté nulle part (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11) ; notes complétées sur A1, A3, B36, C3, C14, C18, E6, F21, G1, H21, H25 et sur douze clôtures (B32, C7, C20, C21, C22, C24, E25, E28, G13, G18, couvertures, « pt-BR parle brésilien ») ; calendrier réécrit (les gels de septembre sont passés) ; notes des domaines B, E, F et I remises à jour ; REGISTRE corrigé sur `OPAC-F3` (`alias_norm` plié sur place, pas recalculé). **Ce qui reste à clore, et par qui** — *par Xavier, critères relus et tenus sur pièces* : B29, B30, H17, H18, H19, H22, H23, H24, F16 et F21 — **clos par Xavier le 06/10** (leurs restes vont à H28, H29, E31 et F24, ouvert pour l'occasion) ; H20 (un test à vérifier d'abord) et H25 (un critère à trancher) ; *par Xavier, à l'écran* : E31, et avec lui C14, C23, G16 ; *les décisions* : A1, C4, C17 ; *sans code* : A1 (une troisième administration réseau), A3 (la machine du runner), F3 (supprimer deux fonctions de la plateforme).
 
-**Fraîcheur des constats au 2026-10-06.** **46 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, E29, F3, F6, F10, F15, F19, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Les **23** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-06.** **47 items sur 67** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Les **20** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -630,7 +630,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
-| **D9** | Une ressource posée par réception de fonds disparaît à la publication suivante du brouillon | `P2` | Ouvert |
+| **D9** | Une ressource posée par réception de fonds disparaît à la publication suivante du brouillon | `P2` | À vérifier |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
@@ -722,11 +722,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### D9 — Une ressource posée par réception de fonds disparaît à la publication suivante du brouillon
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Relevé en livrant C24 (05/10, `d1d72405`, migration `20261005092916`) : la publication met désormais à jour les ressources numériques au lieu de les recréer, mais une ressource posée par la réception d'un fonds, et que le brouillon ne contient pas, est retirée par la publication suivante de ce brouillon — sans un mot. Comportement antérieur, conservé exprès par C24.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Décider : la publication garde une ressource qu'elle ne connaît pas (et ne la retire que sur un geste qui le dit), ou le brouillon reprend les ressources de la notice à sa création. Puis l'écrire, avec une suite SQL qui publie un brouillon après une réception de fonds.
 
@@ -755,7 +755,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E6** | Découper les cinq écrans qui pèsent plus de cent kilooctets | `P2` | En cours |
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
-| **E29** | Les facettes d'une personne membre comptent le catalogue public, pas celui qu'elle voit | `P2` | À vérifier |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
 | **E31** | Ce qui attend un regard à l'écran, connecté | `P2` | Ouvert |
 | **E32** | Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1) | `P3` | Ouvert |
@@ -894,27 +893,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `src/components/layout/index.jsx` · `src/lib/roles.js (canSee*)` · `src/pages/inicio (intentions.js)` · `anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)` · `K7 (formation BLMF)`*
 
-#### E29 — Les facettes d'une personne membre comptent le catalogue public, pas celui qu'elle voit
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Écrit dans la clôture de B32 et redit par `5f13ec86` (28/09) comme « limite connue, inchangée » : une personne membre voit la page sur le catalogue du réseau, mais `api.catalog_facets_v1` compte sur le catalogue public. Les compteurs des facettes peuvent donc différer des lignes affichées. Aucun item ne le portait.
-
-*Vérifié : [object Object]*
-
-**Ce que c'est.** Faire compter les facettes sur l'ensemble que la page affiche (vue réseau pour une session), en gardant en anonyme les 23 jeux de filtres de `facettes_catalogue_tests` au même résultat.
-
-**Pourquoi ça compte.** Une facette qui dit « 9 » quand la page en montre 12 apprend à ne plus croire les facettes.
-
-**Ce qui compte comme fini.**
-
-- Pour une session membre, chaque compteur de facette égale le nombre de lignes que la page affiche avec ce filtre.
-- En anonyme, rien ne change (même empreinte sur les 23 jeux).
-
-**Dépendances.** Aucune.
-
-*Renvois : `clôture B32` · `commit 5f13ec86` · `REGISTRE OPAC-F2` · `tests/sql/facettes_catalogue_tests.sql`*
-
 #### E30 — Faire relire le guide de gouvernance espagnol
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : langue maternelle
@@ -989,8 +967,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F15** | Les courriels institutionnels aux admins du réseau n'arrivaient que sur une boîte personnelle — une seule résolution des destinataires, avec la boîte collective | `P2` | À vérifier |
 | **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
-| **F23** | Vingt-deux demandes de consultation n'ont pas d'échéance | `P3` | Ouvert |
-| **F24** | Le nom d'expéditeur par défaut des courriels est en portugais | `P3` | Ouvert |
+| **F24** | Le nom d'expéditeur par défaut des courriels est en portugais | `P3` | À vérifier |
 
 #### F3 — Consolider les fonctions de notification redondantes
 
@@ -1119,33 +1096,13 @@ C'est exactement ce qui vient de se produire à l'échelle d'une seule colonne �
 
 *Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
-#### F23 — Vingt-deux demandes de consultation n'ont pas d'échéance
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Depuis le 01/10 (`e897fb26`, F1, décision de Xavier), une demande de consultation expire 60 jours après sa création. La règle ne vaut que pour les nouvelles : **mesuré le 05/10 au soir**, les 22 lignes de `consulta_linhas_v2` n'ont pas d'`expires_at` et n'expireront jamais. Rien ne dit si c'est voulu. Elles sont toutes closes (ligne « Circulation vivante » de L'état réel).
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Décider (Xavier) : poser une échéance aux 22 (création + 60 jours) ou n'en poser aucune puisqu'elles sont closes, et l'écrire ; une migration de données, si elle est décidée, demande une autorisation écrite.
-
-**Pourquoi ça compte.** Une règle qui laisse de côté les lignes d'avant est une règle à deux régimes, et personne ne s'en souviendra au moment d'une purge.
-
-**Ce qui compte comme fini.**
-
-- Les 22 lignes ont une échéance, ou son absence est décidée et écrite ici.
-
-**Dépendances.** Décision de Xavier.
-
-*Renvois : `commit e897fb26` · `F1 (clos le 03/10)`*
-
 #### F24 — Le nom d'expéditeur par défaut des courriels est en portugais
 
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+`P3` Différé · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
 
 **État.** Reste de F21 (clos le 06/10). `_shared/core/env.ts` (l. 12) donne à `SENDER_NAME`, à défaut du secret du même nom, la valeur « Biblioteca da rede AnarBib » ; le contexte d'une bibliothèque y retombe quand elle n'a ni nom d'expéditeur ni nom court (`library-mail-routing.ts`, `library-notification-context.ts`). Si le secret est posé en production, c'est sa valeur qui sert : non vérifié (la valeur des secrets ne se lit pas). Et le critère de F21 était un test de source : aucun vrai courriel en français n'a encore été lu en production pour s'assurer qu'il ne porte pas un mot de portugais.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Décider du défaut : le nom de la bibliothèque, « AnarBib » seul, ou une clé par langue ; l'écrire, avec un banc qui rend un courriel français sans nom de bibliothèque. Puis lire un vrai courriel de réservation en français reçu en production.
 
@@ -2244,6 +2201,8 @@ CI verte : lint et suite unitaire. |
 | H24 | 2026-10-06 | L'export d'une bibliothèque contient tout ce qu'elle a catalogué : critère 1 éprouvé le 29/09 par la preuve de H27 (46/46 exemplaires, 61/61 responsabilités, 42/42 notices indexées), critère 2 par `export_catalogue_tests` (10). Le type, la section et le code statistique des exemplaires sont portés par H29. **Clos le 06/10 par Xavier sur ces constats.** |
 | F16 | 2026-10-06 | L'invitation à une tâche crée enfin une invitation : `fn_task_invite` pose `convite:<adresse>` (`32cfea66`, migration `20260930195644`) ; suite `taches_invitation_tests` 6/6 (1/6 contre l'ancienne fonction) ; les marqueurs `convite:` ne s'affichent plus. Une invitation réelle reçue est portée par E31. **Clos le 06/10 par Xavier sur ces constats.** |
 | F21 | 2026-10-06 | Pied de page et statuts des courriels dans la langue de la bibliothèque : une clé `wf.stage.*` par étape dans les dix langues, plus de pied ni de signature en portugais par défaut (PR #31 du camarade `ASR2026`, `da034c83` — `9e298ea3`, `70233b98` — et `9bdce13a`) ; bancs `mail-status-footer-i18n` (9) et `mail-nom-equipe-repli-garde` (4). Un vrai courriel en français reçu en production et le nom d'expéditeur par défaut, encore en portugais, sont portés par F24. **Clos le 06/10 par Xavier sur ces constats.** |
+| E29 | 2026-10-06 | Les facettes d'une session comptent le catalogue que la page affiche : `api.catalog_facets_v1` lit `catalog_list_session_v1` pour une personne connectée, `catalog_list_anon_v1` sinon, comme `catalog_works_v1` — ce que `OPAC-F1` prévoyait (REGISTRE 0.72, `OPAC-F2` complété). `4b27b909`, migration `20261006170736` appliquée par la CI, vérifiée en production à 19 h 27 ; suite `facettes_catalogue_tests` T8 (membre 1/1, connecté sans appartenance 0/0, anonyme 0/0 ; sans la migration, membre 0/1) ; empreinte de 20 jeux de filtres identique avant et après (`a8aed78d…`). **Clos le 06/10 par Xavier sur ces constats.** |
+| F23 | 2026-10-06 | Les 22 demandes de consultation antérieures au 01/10 restent sans échéance : elles sont toutes closes, une échéance ne changerait rien à leur sort ; la règle des 60 jours (`e897fb26`, F1) vaut pour les demandes nouvelles. Aucune migration. **Décision de Xavier, 06/10.** |
 
 ---
 
@@ -2275,4 +2234,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `a387b46c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-06. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 67 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `a387b46c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

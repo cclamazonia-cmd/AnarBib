@@ -2874,6 +2874,22 @@
           "fr": "Pied de page et statuts des courriels dans la langue de la bibliothèque : une clé `wf.stage.*` par étape dans les dix langues, plus de pied ni de signature en portugais par défaut (PR #31 du camarade `ASR2026`, `da034c83` — `9e298ea3`, `70233b98` — et `9bdce13a`) ; bancs `mail-status-footer-i18n` (9) et `mail-nom-equipe-repli-garde` (4). Un vrai courriel en français reçu en production et le nom d'expéditeur par défaut, encore en portugais, sont portés par F24. **Clos le 06/10 par Xavier sur ces constats.**",
           "pt": "Rodapé e status dos e-mails na língua da biblioteca: uma chave `wf.stage.*` por etapa nas dez línguas, sem rodapé nem assinatura em português por padrão (PR #31 do camarada, `9bdce13a`); bancadas 9 + 4. E-mail real em francês e nome de remetente padrão: F24. **Fechado em 06/10 por Xavier com base nessas constatações.**"
         }
+      ],
+      [
+        "E29",
+        "2026-10-06",
+        {
+          "fr": "Les facettes d'une session comptent le catalogue que la page affiche : `api.catalog_facets_v1` lit `catalog_list_session_v1` pour une personne connectée, `catalog_list_anon_v1` sinon, comme `catalog_works_v1` — ce que `OPAC-F1` prévoyait (REGISTRE 0.72, `OPAC-F2` complété). `4b27b909`, migration `20261006170736` appliquée par la CI, vérifiée en production à 19 h 27 ; suite `facettes_catalogue_tests` T8 (membre 1/1, connecté sans appartenance 0/0, anonyme 0/0 ; sans la migration, membre 0/1) ; empreinte de 20 jeux de filtres identique avant et après (`a8aed78d…`). **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "As facetas de uma sessão contam o catálogo que a página mostra (`4b27b909`, migração `20261006170736`, verificada em produção às 19h27; suíte T8; impressão de 20 conjuntos de filtros idêntica). **Fechado em 06/10 por Xavier.**"
+        }
+      ],
+      [
+        "F23",
+        "2026-10-06",
+        {
+          "fr": "Les 22 demandes de consultation antérieures au 01/10 restent sans échéance : elles sont toutes closes, une échéance ne changerait rien à leur sort ; la règle des 60 jours (`e897fb26`, F1) vaut pour les demandes nouvelles. Aucune migration. **Décision de Xavier, 06/10.**",
+          "pt": "As 22 consultas anteriores a 01/10 ficam sem prazo: estão todas encerradas; a regra dos 60 dias vale para os pedidos novos. Nenhuma migração. **Decisão de Xavier, 06/10.**"
+        }
       ]
     ]
   },
@@ -5997,7 +6013,7 @@
       "id": "D9",
       "d": "D",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -6037,57 +6053,10 @@
         "commit d1d72405",
         "migration 20261005092916"
       ],
-      "verif": null
-    },
-    {
-      "id": "E29",
-      "d": "E",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Les facettes d'une personne membre comptent le catalogue public, pas celui qu'elle voit",
-        "pt": "As facetas de um membro contam o catálogo público, não o que ele vê"
-      },
-      "v": {
-        "fr": "Écrit dans la clôture de B32 et redit par `5f13ec86` (28/09) comme « limite connue, inchangée » : une personne membre voit la page sur le catalogue du réseau, mais `api.catalog_facets_v1` compte sur le catalogue public. Les compteurs des facettes peuvent donc différer des lignes affichées. Aucun item ne le portait.",
-        "pt": "Escrito no fechamento do B32 e repetido por `5f13ec86` (28/09): um membro vê a página sobre o catálogo da rede, mas `api.catalog_facets_v1` conta sobre o catálogo público. Nenhum item o carregava."
-      },
-      "w": {
-        "fr": "Faire compter les facettes sur l'ensemble que la page affiche (vue réseau pour une session), en gardant en anonyme les 23 jeux de filtres de `facettes_catalogue_tests` au même résultat.",
-        "pt": "Fazer as facetas contarem sobre o conjunto que a página mostra, mantendo em anônimo o mesmo resultado nos 23 conjuntos de filtros."
-      },
-      "y": {
-        "fr": "Une facette qui dit « 9 » quand la page en montre 12 apprend à ne plus croire les facettes.",
-        "pt": "Uma faceta que diz « 9 » quando a página mostra 12 ensina a não acreditar nas facetas."
-      },
-      "f": {
-        "fr": [
-          "Pour une session membre, chaque compteur de facette égale le nombre de lignes que la page affiche avec ce filtre.",
-          "En anonyme, rien ne change (même empreinte sur les 23 jeux)."
-        ],
-        "pt": [
-          "Para um membro, cada contador de faceta é igual ao número de linhas exibidas com esse filtro.",
-          "Em anônimo, nada muda."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "clôture B32",
-        "commit 5f13ec86",
-        "REGISTRE OPAC-F2",
-        "tests/sql/facettes_catalogue_tests.sql"
-      ],
       "verif": [
         {
-          "fr": "**06/10 — livré, déployé et vérifié en production à 19 h 27** (`4b27b909`, migration `20261006170736` appliquée par la CI, `created_by` vide). `api.catalog_facets_v1` choisit sa vue comme `catalog_works_v1` : `catalog_list_session_v1` pour une session, `catalog_list_anon_v1` sinon — ce que `OPAC-F1` (acté le 08/06) prévoyait déjà ; la phrase d'`OPAC-F2` qui disait le contraire décrivait un état, complétée (REGISTRE 0.72). Corps réécrit depuis `pg_get_functiondef`, trois ancres comptées, droits vérifiés après coup. *(1)* Suite `facettes_catalogue_tests` T8 (19/19 au banc) : une notice d'une bibliothèque en visibilité « network » est comptée pour une personne membre comme la page la montre (1/1), ni pour une personne connectée sans appartenance (0/0) ni pour un·e anonyme (0/0, INV-1) ; sans la migration, membre 0/1. *(2)* Empreinte de 20 jeux de filtres réels relevée en production avant et après : `a8aed78d…` en anonyme comme en session, inchangée. Aujourd'hui les deux catalogues coïncident (2 602 lignes, différence vide) : l'écart que l'item décrit n'apparaîtra qu'avec une bibliothèque en visibilité « network ». Coût en session, sans filtre : 47 ms. **Critères tenus ; clôture à décider par Xavier.**",
-          "pt": "**06/10 — entregue, implantado e verificado em produção às 19h27** (`4b27b909`, migração `20261006170736` pela CI). As facetas de uma sessão leem a view da página, como `OPAC-F1` previa. Suíte T8 19/19 (membro 1/1, conectado sem filiação 0/0, anônimo 0/0; sem a migração, membro 0/1); impressão de 20 conjuntos de filtros idêntica antes e depois (`a8aed78d…`). **Critérios cumpridos; fechamento a decidir por Xavier.**"
+          "fr": "**06/10 — décision de Xavier : « garder ce qu'elle ignore ». Livré, déployé et vérifié en production à 20 h 13** (`0dae3d10`, migration `20261006175037` par la CI). Une ressource publiée ne quitte le publié que si le brouillon la porte retirée ou inactive, ou s'il l'a supprimée : la suppression d'une ligne liée laisse une trace dans `book_drafts.digital_resources_removed` (déclencheur DEFINER fermé à tous) ; la reprise vide la trace. Réécritures depuis `pg_get_functiondef`, ancres comptées. Effet voisin, réglé du même geste : publier un brouillon créé sans reprise (mise à jour par import) vidait la notice de toutes ses ressources. Suite `depot_numerique_droits_tests` T8 : A gardée, B (supprimée) retirée, C (posée après la reprise) gardée, brouillon sans reprise 2/2, trace vidée ; avec la publication d'avant : C retirée, sans reprise 0. **`sql-tests` rouge après le déploiement** : `aller_retour_pmb_tests` T5 compare les brouillons d'import à une capture figée, où la colonne neuve n'existe pas (64 écarts, aucune donnée fausse) — mon banc n'avait joué que quatre suites ; exclue de la comparaison (`81c17016`) ; mais ce fichier est **engendré** par `src/tests/pmb-aller-retour-base.test.js`, et ma retouche à la main a fait rougir le job `app` (« la suite SQL engendrée est à jour »), aussi pour le commit voisin `e8101139` — je n'avais pas relancé vitest avant ce push. L'autre session a porté l'exclusion dans le générateur (`f6bb60e5`, le fichier redonné octet pour octet) : tout est vert depuis. **Critères tenus ; clôture à décider par Xavier.**",
+          "pt": "**06/10 — decisão de Xavier: « manter o que ela ignora ». Entregue e verificado em produção às 20h13** (`0dae3d10`, migração `20261006175037`). Um recurso publicado só sai se o rascunho o tiver retirado ou inativo, ou o tiver apagado (rastro em `book_drafts.digital_resources_removed`). Efeito vizinho resolvido: publicar um rascunho sem retomada (importação) esvaziava a notícia. Suíte T8; `sql-tests` vermelho por uma comparação com captura fixa (`aller_retour_pmb_tests` T5), corrigida (`81c17016`). **Critérios cumpridos; fechamento a decidir por Xavier.**"
         }
       ]
     },
@@ -6224,49 +6193,6 @@
       "verif": null
     },
     {
-      "id": "F23",
-      "d": "F",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Vingt-deux demandes de consultation n'ont pas d'échéance",
-        "pt": "Vinte e dois pedidos de consulta não têm prazo"
-      },
-      "v": {
-        "fr": "Depuis le 01/10 (`e897fb26`, F1, décision de Xavier), une demande de consultation expire 60 jours après sa création. La règle ne vaut que pour les nouvelles : **mesuré le 05/10 au soir**, les 22 lignes de `consulta_linhas_v2` n'ont pas d'`expires_at` et n'expireront jamais. Rien ne dit si c'est voulu. Elles sont toutes closes (ligne « Circulation vivante » de L'état réel).",
-        "pt": "Desde 01/10 (`e897fb26`), um pedido de consulta expira 60 dias após a criação. A regra só vale para os novos: **medido em 05/10**, as 22 linhas de `consulta_linhas_v2` não têm `expires_at`. Nada diz se é voluntário. Estão todas encerradas."
-      },
-      "w": {
-        "fr": "Décider (Xavier) : poser une échéance aux 22 (création + 60 jours) ou n'en poser aucune puisqu'elles sont closes, et l'écrire ; une migration de données, si elle est décidée, demande une autorisation écrite.",
-        "pt": "Decidir (Xavier): pôr um prazo às 22 ou nenhum, já que estão encerradas, e escrevê-lo."
-      },
-      "y": {
-        "fr": "Une règle qui laisse de côté les lignes d'avant est une règle à deux régimes, et personne ne s'en souviendra au moment d'une purge.",
-        "pt": "Uma regra que deixa de lado as linhas antigas tem dois regimes, e ninguém lembrará disso numa purga."
-      },
-      "f": {
-        "fr": [
-          "Les 22 lignes ont une échéance, ou son absence est décidée et écrite ici."
-        ],
-        "pt": [
-          "As 22 linhas têm prazo, ou sua ausência está decidida e escrita aqui."
-        ]
-      },
-      "dep": {
-        "fr": "Décision de Xavier.",
-        "pt": "Decisão de Xavier."
-      },
-      "r": [
-        "commit e897fb26",
-        "F1 (clos le 03/10)"
-      ],
-      "verif": null
-    },
-    {
       "id": "J11",
       "d": "J",
       "p": "P3",
@@ -6314,7 +6240,7 @@
       "id": "F24",
       "d": "F",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "deno"
@@ -6354,7 +6280,12 @@
         "supabase/functions/_shared/core/env.ts",
         "supabase/functions/_shared/context/library-mail-routing.ts"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**06/10 — décision de Xavier : « AnarBib » seul. Livré et déployé** (`7aa8e8c4`, puis `c952704a`) : `SENDER_NAME` vaut « AnarBib » sans secret ; `.env.example` aligné ; garde `mail-expediteur-par-defaut` (4 tests, l'ancien défaut en fait tomber 3). Le premier push a fait rougir le job `app` : la garde `mail-ptbr-voce` lisait `env.ts` dans sa liste fermée du texte en dur pt-BR et refusait un fichier sans phrase portugaise ; il en sort (`c952704a`). Vérifié en production : `notify-event` version 1742 (17:54 UTC) porte `|| \"AnarBib\"`. Le secret `SENDER_NAME`, posé dans Supabase, l'emportait sur ce défaut : **Xavier l'a mis à « AnarBib » le 06/10**. **Reste** : un vrai courriel de réservation en français reçu en production, sans un mot de portugais.",
+          "pt": "**06/10 — decisão de Xavier: « AnarBib » só. Entregue e implantado** (`7aa8e8c4`, `c952704a`); guarda `mail-expediteur-par-defaut`; `notify-event` v1742 com `|| \"AnarBib\"`. O segredo `SENDER_NAME` foi posto em « AnarBib » por Xavier em 06/10. **Falta**: ler um e-mail real em francês."
+        }
+      ]
     }
   ]
 }
