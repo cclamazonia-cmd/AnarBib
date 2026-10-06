@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-06.** **47 itens de 67** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-06.** **47 itens de 67** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, K2, K7, K10). Os **20** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1306,9 +1306,9 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | A verificar |
 | **H20** | O identificador de origem de um registro é guardado por biblioteca, não só no registro compartilhado | `P1` | A verificar |
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Em curso |
-| **H25** | Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar | `P2` | A verificar |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
+| **H32** | Sinalizar ao PMB que o formulário de importação não transmite a origem das autoridades, e dar à DIRA a correção de uma linha | `P3` | Aberto |
 | **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | A verificar |
 | **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | A verificar |
 
@@ -1448,7 +1448,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Medido em 26/09: o 001 vai até `books.source_record_id` (254 registros), mas `books` é **compartilhada pela rede**: quando a importação liga a um registro já existente, o identificador PMB não tem lugar da biblioteca que importa (a verificar). `book_holdings.local_bib_ref` carrega a referência local AnarBib. **Entregue em 28/09** (`8c80de27`, migração `20260928111812`): tabela `book_external_ids` (única por biblioteca), gravada na publicação, na aproximação de exemplar e na absorção de rascunho; segue a notícia mantida numa fusão. O que não é identificador (número de linha, número de fascículo de CSV, chave repetida) é apagado na importação. Suíte `identifiant_origine_tests` (11).
 
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos. **05/10, inventário** — critérios cumpridos em bancada, tabela preenchida em produção (264 linhas). Verificar antes de propor o fechamento: que um teste cubra exatamente « uma notícia vinculada a uma notícia existente ».*
+*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; `book_external_ids`: 264 linhas (MLEG); lote 63: 0 identificador falso em 1 673 rascunhos. **05/10, inventário** — critérios cumpridos em bancada, tabela preenchida em produção (264 linhas). Verificar antes de propor o fechamento: que um teste cubra exatamente « uma notícia vinculada a uma notícia existente ». **06/10 — critérios verificados**: coberto por `identifiant_origine_tests` T10 e T3 (na CI); pronto para fechar por decisão de Xavier.*
 
 **O que é.** Tabela `book_external_ids (book_id, library_id, scheme, value)` com índice único, alimentada na publicação; ou coluna na detenção se bastar. Decidir depois de ler `publish_book_draft` no caso de registro existente.
 
@@ -1469,7 +1469,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`.
 
-*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo). **05/10, à noite** — o ponto « o esquema `ingest` não tem backup » está resolvido: **I29**, fechado em 05/10 (`f5e3f5ed`); direitos e esquemas `private`/`api`: **I30**.*
+*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo). **05/10, à noite** — o ponto « o esquema `ingest` não tem backup » está resolvido: **I29**, fechado em 05/10 (`f5e3f5ed`); direitos e esquemas `private`/`api`: **I30**. **06/10 — lote 3 entregue** (`e8101139`, migração `20261006182421`; REGISTRO `IMP-30`): cada linha reconhecida compara 24 campos entre a base, o AnarBib e o arquivo, seis veredictos, nada aplicado; cálculo por páginas a partir da tela; valores do AnarBib mascarados para um registro fora da visão.*
 
 **O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8).
 
@@ -1481,26 +1481,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Conflito sinalizado, não sobrescrito.
 
 **Dependências.** Depois de **H20** e **H19**. Antes de qualquer migração.
-
-*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
-
-#### H25 — Exportar as autoridades (UNIMARC Autoridades), para que os vínculos $3 do export levem a algum lugar
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript, biblioteconomia
-
-**Estado.** Não existe export de autoridades. O PMB as importa à parte; sem elas, os $3 apontam para o vazio e o PMB recria uma autoridade por registro. **Entregue em 28/09** (`d83a7d0c`, revisão `a692a75e`): `fn_export_authorities_lote` e `_shared/marc/autorites.ts` (UNIMARC Autoridades); formato em Importações, com o passo a passo no PMB, em 10 línguas. No banco PMB: 61 responsabilidades de 61 ligadas pelo $3, 47 categorias de 47 pelo rótulo, 0 autor recriado. **Correção de 29/09**: essas 61 ligações supõem que o PMB receba a origem «AnarBib»; o formulário da aba «Exemplares UNIMARC» do PMB 8.1.1.1 não a transmite. Medido como um navegador envia: 61 responsabilidades → 57 autores, nenhum recriado, mas 44 vínculos para uma fonte ausente; com «Não», nenhum vínculo. O passo a passo diz agora «Não» no PMB 8.1.1.1.
-
-*Verificado : 28/09 — implantado (`a692a75e`), migrações `20260928170908`/`170909` aplicadas pela CI; em produção, as definições têm o md5 do banco; bateria: vitest 1 447, SQL 145/145. **05/10, inventário** — a decidir antes de fechar: o critério só se cumpre se o PMB receber a origem; com o PMB 8.1.1.1 como um navegador o envia, a resposta é « Não », logo nenhum vínculo (`2348cb86`).*
-
-**O que é.** Serializar as autoridades ligadas aos registros da biblioteca em UNIMARC Autoridades (200/210/250, 4xx, 5xx); o SKOS do tesauro já existe.
-
-**Por que importa.** Sem autoridades, o catálogo volta ao PMB achatado e o trabalho de deduplicação de nomes se perde.
-
-**O que conta como terminado.**
-
-- As autoridades da fixture se reimportam no PMB de banco, ligadas aos registros.
-
-**Dependências.** Depois de **H24**.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1545,6 +1525,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de **H27** (fechado em 29/09). Perguntar primeiro à DIRA: para que essas informações lhes servem, e se os códigos de importação de tipos e seções estão configurados no PMB delas.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
+
+#### H32 — Sinalizar ao PMB que o formulário de importação não transmite a origem das autoridades, e dar à DIRA a correção de uma linha
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, nenhuma competência técnica
+
+**Estado.** Constatado em **H25**: o formulário do PMB 8.1.1.1 envia `authorities_origin`, a importação lê `authorities_default_origin`; a origem escolhida nunca chega.
+
+*Verificado : 06/10 — aberto no fechamento de H25, por decisão de Xavier.*
+
+**O que é.** Redigir o relato para a equipe do PMB e o passo a passo para a DIRA corrigir a linha.
+
+**Por que importa.** O vínculo por número evita que o PMB funda dois homônimos.
+
+**O que conta como terminado.**
+
+- Relato redigido e entregue a Xavier.
+- Correção verificada na bancada PMB.
+- Passo a passo para a DIRA no README.
+
+**Dependências.** Depois de **H25** (fechado em 06/10).
+
+*Remissões : `tests/pmb/README.md`*
 
 #### H30 — «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas
 
@@ -2193,6 +2195,7 @@ CI verde. |
 | F21 | 2026-10-06 | Rodapé e status dos e-mails na língua da biblioteca: uma chave `wf.stage.*` por etapa nas dez línguas, sem rodapé nem assinatura em português por padrão (PR #31 do camarada, `9bdce13a`); bancadas 9 + 4. E-mail real em francês e nome de remetente padrão: F24. **Fechado em 06/10 por Xavier com base nessas constatações.** |
 | E29 | 2026-10-06 | As facetas de uma sessão contam o catálogo que a página mostra (`4b27b909`, migração `20261006170736`, verificada em produção às 19h27; suíte T8; impressão de 20 conjuntos de filtros idêntica). **Fechado em 06/10 por Xavier.** |
 | F23 | 2026-10-06 | As 22 consultas anteriores a 01/10 ficam sem prazo: estão todas encerradas; a regra dos 60 dias vale para os pedidos novos. Nenhuma migração. **Decisão de Xavier, 06/10.** |
+| H25 | 2026-10-06 | **Fechado em 06/10 por decisão de Xavier.** A exportação de autoridades reimporta-se no PMB 8.1.1.1 com «Não»: autores aproximados por nome e datas, nenhum recriado; o vínculo pelo `$3` não funciona por um defeito do PMB (a origem não é transmitida pelo formulário) — sinalização e correção para a DIRA em **H32**. |
 
 ---
 

@@ -1879,3 +1879,16 @@ comparées à la production (`pg_proc`, droits par `has_function_privilege`).
 
 **Compte au 06/10.** 0029 = **449**, tous justifiés ; 0028 = **29** (+1,
 `api.fn_catalog_networks_v1`).
+
+**Ajout du 06/10 au soir — H21 lot 3** (`e8101139`, migration `20261006182421`,
+appliquée par la CI après `f6bb60e5`). Deux DEFINER de plus pour
+`authenticated`, aucune pour `anon` (vérifié en production par
+`has_function_privilege`) ; la fonction de calcul `ingest.fn_import_trois_etats`
+reste fermée à `authenticated`.
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `public.fn_import_recomparer(bigint, bigint[])` | 06/10 (H21 lot 3) | mêmes contrôles que `fn_import_set_editorial` : coordination de la bibliothèque du run, ou administration du réseau avec cette bibliothèque active ; puis verrou du run (`FOR NO KEY UPDATE`, H31) | **Saine.** N'écrit que la comparaison des lignes de staging du run (colonnes `comparaison`, `comparaison_at`), jamais le catalogue ; rend des comptes par verdict. Le librarian est refusé (il lit, il ne recalcule pas). |
+| `public.fn_import_row_comparison(bigint, bigint)` | 06/10 (H21 lot 3) | staff de la bibliothèque du run (accès au panneau), ou administration du réseau | **Saine.** Rend, champ par champ, la base, AnarBib et le fichier d'une ligne du run de l'appelant. Les valeurs AnarBib d'une notice que l'appelant ne voit pas sous la règle de `books_select_authenticated` sont masquées (`a_masque`), les verdicts restent. *Forme à noter* : `proposed_title` de `fn_import_list_run_rows` montrait déjà, avant ce lot, le titre d'une telle notice. |
+
+Compte attendu au prochain relevé : 0029 = **451** (+2) ; 0028 inchangé.
