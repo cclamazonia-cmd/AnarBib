@@ -1951,3 +1951,18 @@ attrapé ; la prémisse était fausse, pas la fermeture.
 
 Compte attendu au prochain relevé : 0029 = **417** ; 0028 = **29** ; 0011 = **1**
 (voulu).
+
+### Complément du 06/10 — H21 lot 4 (`44ae324a`, migration `20261006203239`)
+
+Une seule porte nouvelle pour `authenticated`, aucune pour `anon` (vérifié en
+production par `has_function_privilege`) ; les aides `ingest.fn_h21_*`
+(garde, copie, avance de la base) restent fermées à `authenticated`.
+`publish_book_draft` et `api.merge_draft_into_book` gagnent des refus, pas de
+droits.
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `public.fn_import_preparer_mises_a_jour(bigint, bigint[])` | 06/10 (H21 lot 4) | mêmes contrôles que `fn_import_set_editorial` : coordination de la bibliothèque du run, ou administration du réseau ; dépôt et OAI à l'administration seule ; puis verrou du run (`FOR NO KEY UPDATE`, H31) ; 200 lignes au plus | **Saine.** Crée, pour les seules lignes reconnues dont la bibliothèque qui importe est la seule détentrice de la notice (`book_holdings`), un brouillon de mise à jour dans le lot du run ; n'écrit jamais `books` (la publication passe par la révision et par la garde de `publish_book_draft`). Les lignes écartées sont comptées par raison, jamais refusées en bloc. |
+
+Compte attendu au prochain relevé : 0029 = **418** (+1 sur le compte ci-dessus,
+mesuré avant ce lot) ; 0028 inchangé.
