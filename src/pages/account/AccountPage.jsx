@@ -10,7 +10,6 @@ import { useBookAvailability } from '@/hooks/useBookAvailability';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Skeleton } from '@/components/ui';
 import AppIcon from '@/components/ui/AppIcon';
-import BookAvailability from '@/components/BookAvailability';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
@@ -40,6 +39,8 @@ const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSect
 const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
 // MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 import TabHistorico from '@/pages/account/TabHistorico';
+import TabAvisos from '@/pages/account/TabAvisos';
+import TabDesejos from '@/pages/account/TabDesejos';
 const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 // Onglet « Événements » (agenda des biblios de la lectrice) en chunk lazy.
 const TabEventos = lazy(() => import('@/pages/account/TabEventos'));
@@ -2059,136 +2060,15 @@ export default function AccountPage() {
 
           {/* ═══ AVISOS ═══ */}
           {activeTab === 'avisos' && (
-            <div>
-              <ContaTabHeader
-                title={t({ id: 'account.notifications.title' })}
-                onRefresh={() => loadData({ silent: true })}
-                actions={(
-                  <>
-                    {/* #CL.6 — toggle vue active / archives */}
-                    <Button variant="mini" onClick={() => setNotifViewMode(m => m === 'active' ? 'archived' : 'active')}>
-                      {notifViewMode === 'active'
-                        ? t({ id: 'account.notifications.showArchives' })
-                        : t({ id: 'account.notifications.backToActive' })}
-                    </Button>
-                    {/* "Marquer tout comme lu" : actifs uniquement, et seulement
-                        s'il y a effectivement des non-lus à marquer */}
-                    {notifViewMode === 'active' && unreadCount > 0 && (
-                      <Button variant="mini" onClick={async () => {
-                        await supabase.rpc('fn_mark_notifications_read');
-                        loadData({ silent: true });
-                      }}>{t({ id: 'account.notifications.markAllRead' })}</Button>
-                    )}
-                  </>
-                )}
-              />
-              <p className="ab-conta-hint">{t({ id: 'account.tab.notifications.hint' })}</p>
-              {visibleNotifications.length === 0 ? (
-                <p className="ab-conta-empty">{
-                  notifViewMode === 'active'
-                    ? t({ id: 'account.notifications.empty' })
-                    : t({ id: 'account.notifications.archivesEmpty' })
-                }</p>
-              ) : (
-                <div className="ab-conta-items">
-                  {visibleNotifications.map((n) => (
-                    <div key={n.id} className="ab-conta-item" style={{
-                      borderLeft: `3px solid ${n.is_read ? 'rgba(255,255,255,.06)' : n.category === 'alerta' ? '#f87171' : n.category === 'reserva' ? '#60a5fa' : n.category === 'emprestimo' ? '#fbbf24' : '#4ade80'}`,
-                      opacity: n.is_read ? 0.6 : 1,
-                    }}>
-                      <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
-                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{tNotifText(n.title)}</span>
-                          {!n.is_read && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />}
-                        </div>
-                        {n.body && <span className="ab-conta-item__meta">{tNotifText(n.body)}</span>}
-                        <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>
-                          {new Date(n.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
-                          {n.category && <> · {n.category}</>}
-                        </span>
-                      </div>
-                      <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                        {n.link_type === 'livro' && n.link_id && <Link to={`/livro/${n.link_id}`}><Button variant="mini">{t({ id: 'account.notifications.seeBook' })}</Button></Link>}
-                        {(n.link_type || '').startsWith('rede_') && <Link to={n.link_type === 'rede_gazette' ? '/federacao/gazeta' : n.link_type === 'rede_circulo' ? '/federacao/circulos' : '/federacao/carta'}><Button variant="mini">{t({ id: 'account.notifications.openNetwork' })}</Button></Link>}
-                        {!n.is_read && (
-                          <Button variant="mini" onClick={async () => {
-                            await supabase.rpc('fn_mark_notifications_read', { p_ids: [n.id] });
-                            loadData({ silent: true });
-                          }}>✓</Button>
-                        )}
-                        {/* #CL.6 — archiver (vue active) ou restaurer (vue archives) */}
-                        {notifViewMode === 'active' ? (
-                          <Button variant="mini" onClick={async () => {
-                            const { error } = await supabase.rpc('fn_archive_notification', { p_notification_id: n.id });
-                            if (!error) loadData({ silent: true });
-                          }} title={t({ id: 'account.notifications.archive' })}><AppIcon name="archive" size={16} /></Button>
-                        ) : (
-                          <Button variant="mini" onClick={async () => {
-                            const { error } = await supabase.rpc('fn_unarchive_notification', { p_notification_id: n.id });
-                            if (!error) loadData({ silent: true });
-                          }} title={t({ id: 'account.notifications.unarchive' })}><AppIcon name="archiveRestore" size={16} /></Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <TabAvisos
+              notifViewMode={notifViewMode} setNotifViewMode={setNotifViewMode} unreadCount={unreadCount}
+              visibleNotifications={visibleNotifications} tNotifText={tNotifText} loadData={loadData}
+            />
           )}
 
           {/* ═══ LISTA DE DESEJOS ═══ */}
           {activeTab === 'desejos' && (
-            <div>
-              <h2 className="ab-conta-section-title">{t({ id: 'account.wishlist.title' })}</h2>
-              <p className="ab-conta-hint">{t({ id: 'account.tab.wishlist.hint' })}</p>
-              {wishlist.length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.wishlist.empty' })}</p>
-              ) : (
-                <div className="ab-conta-items">
-                  {wishlist.map((w) => {
-                    const b = w.books || {};
-                    const wAvail = w.book_id ? availabilityMap.get(Number(w.book_id)) : null;
-                    const canReserveFromWishlist =
-                      wAvail?.session_holding_id &&
-                      wAvail?.session_loanable &&
-                      (wAvail?.session_available_count || 0) > 0;
-                    return (
-                      <div key={w.id} className="ab-conta-item" style={{ display: 'flex', gap: 10 }}>
-                        <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                          <Link to={`/livro/${w.book_id}`} className="ab-conta-item__title">{b.titulo || '—'}</Link>
-                          <span className="ab-conta-item__meta">{b.autor || '—'}{b.editora && ` · ${b.editora}`}{b.ano && ` (${b.ano})`}</span>
-                          <span className="ab-conta-item__meta">ref: {b.bib_ref || '—'}{w.note && ` · ${w.note}`}</span>
-                          <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>{t({id:'account.wishlist.addedOn2'},{date: new Date(w.created_at).toLocaleDateString()})}</span>
-                          {/* #CL.9 — dispo courante du livre dans la biblio par défaut (31/05/2026) */}
-                          {wAvail && (
-                            <span className="ab-conta-item__meta" style={{ marginTop: 4 }}>
-                              <BookAvailability availability={wAvail} variant="compact" />
-                            </span>
-                          )}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
-                          <Link to={`/livro/${w.book_id}`}><Button variant="mini">{t({ id: 'account.wishlist.seeRecord' })}</Button></Link>
-                          {/* #CL.9 — réserver depuis la wishlist quand le livre est dispo et prêtable (31/05/2026) */}
-                          {canReserveFromWishlist && (
-                            <Button variant="mini" onClick={async () => {
-                              const { error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
-                                p_user_id: user.id,
-                                p_holding_ids: [wAvail.session_holding_id],
-                              });
-                              if (!error) loadData();
-                            }}>{t({ id: 'account.wishlist.reserveNow' })}</Button>
-                          )}
-                          <Button variant="mini" onClick={async () => {
-                            await supabase.from('user_wishlist').delete().eq('id', w.id);
-                            loadData();
-                          }} style={{ color: '#f87171' }}>{t({ id: 'common.remove' })}</Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            <TabDesejos wishlist={wishlist} availabilityMap={availabilityMap} user={user} loadData={loadData} />
           )}
 
           {/* ═══ MES NOTES DE LECTURE (Lot 2) ═══ */}
