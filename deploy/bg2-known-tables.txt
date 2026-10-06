@@ -133,7 +133,6 @@ library_theme_configs
 library_themes
 library_unarchive_log
 loan_deposits
-loan_midpoint_message_log
 mail_transport_failures
 membership_expiry_notifications
 membership_payments
