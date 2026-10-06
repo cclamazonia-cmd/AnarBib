@@ -38,7 +38,7 @@
  * Le même commit aligne aussi sur fr.json onze valeurs au « vous » que la
  * passe du 07/09 avait corrigées dans fr.json et jamais à leur source
  * (« Vous pouvez restaurer », « Votre collectif n'est pas encore sur la
- * carte ? Proposez-le ici »…). Laissé tel quel : merge-imp-deposit-keys.cjs,
+ * carte ? Proposez-le ici »…). Laissé tel quel : merge-imp-deposit-keys.cjs (supprimé le 06/10/2026, J11),
  * dont les clés importacoes.deposit.* n'existent plus dans les locales.
  *
  * La garde : src/tests/i18n-ecriture.test.js, chemin (4), VOUVOIEMENT.fr.
