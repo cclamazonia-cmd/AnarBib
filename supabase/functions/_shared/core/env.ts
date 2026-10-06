@@ -9,7 +9,10 @@ export const WEBHOOK_SECRET = (Deno.env.get("WEBHOOK_SECRET_NOTIFY_EVENT") || ""
 // SENDER_NAME (les anciens fallbacks ANARBIB_*/NETWORK_*/LIBRARY_* etaient
 // alignes sur la meme valeur ; voir investigation digests du 08/06/2026).
 export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || "no-reply@example.org";
-export const SENDER_NAME = Deno.env.get("SENDER_NAME") || "Biblioteca da rede AnarBib";
+// F24 (06/10/2026, décision de Xavier) : sans secret SENDER_NAME, les courriels
+// partent au nom de « AnarBib » — un nom propre, le même dans toutes les langues
+// (« Biblioteca da rede AnarBib » arrivait en portugais dans toutes les boîtes).
+export const SENDER_NAME = Deno.env.get("SENDER_NAME") || "AnarBib";
 export const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || Deno.env.get("LIBRARY_ADMIN_EMAIL") || Deno.env.get("ANARBIB_ADMIN_EMAIL") || Deno.env.get("NETWORK_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL_NOTIFY_EVENT") || Deno.env.get("BLMF_ADMIN_EMAIL") || "").trim();
 export const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || Deno.env.get("LIBRARY_ADMIN_NAME") || Deno.env.get("ANARBIB_ADMIN_NAME") || Deno.env.get("NETWORK_ADMIN_NAME") || Deno.env.get("BLMF_ADMIN_NAME") || "").trim();
 export const LIBRARIAN_PHONE = Deno.env.get("LIBRARIAN_PHONE") || Deno.env.get("ANARBIB_LIBRARIAN_PHONE") || Deno.env.get("NETWORK_LIBRARIAN_PHONE") || "";
