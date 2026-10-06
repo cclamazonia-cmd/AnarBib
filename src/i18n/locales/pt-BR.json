@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Ficha já importada pela sua biblioteca: {title}",
   "importacoes.fila.knownRecordNotHeld": "Ficha que sua biblioteca não possui mais.",
   "error.digital.file_not_in_bucket": "O arquivo não está no lugar que o recurso indica. Envie o arquivo de novo antes de salvar.",
-  "catalogacao.dep.oldCopyNotRemoved": "Recurso salvo, mas a cópia antiga do arquivo não pôde ser removida ({path}). Ela pode continuar acessível: avise a administração da rede."
+  "catalogacao.dep.oldCopyNotRemoved": "Recurso salvo, mas a cópia antiga do arquivo não pôde ser removida ({path}). Ela pode continuar acessível: avise a administração da rede.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# alteração no arquivo} other {# alterações no arquivo}}{c, plural, =0 {} one {, incluindo # conflito} other {, incluindo # conflitos}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# campo a revisar (sem base)} other {# campos a revisar (sem base)}}",
+  "importacoes.fila.comparison.none": "Nenhuma alteração no arquivo",
+  "review.report.updates": "Atualizações trazidas pelo arquivo",
+  "review.report.updates.summary": "{rows, plural, one {# ficha já importada comparada} other {# fichas já importadas comparadas}}; {changed, plural, =0 {nenhuma muda no arquivo} one {# muda no arquivo} other {# mudam no arquivo}}",
+  "review.report.updates.verdict.inchange": "Inalterado",
+  "review.report.updates.verdict.identique": "Já igual no AnarBib",
+  "review.report.updates.verdict.source_seule": "Alterado só no arquivo",
+  "review.report.updates.verdict.local_seul": "Alterado só no AnarBib (mantido)",
+  "review.report.updates.verdict.conflit": "Conflito (sinalizado, nunca aplicado)",
+  "review.report.updates.verdict.sans_base": "A revisar (sem base)",
+  "review.report.updates.values": "base: {b} · AnarBib: {a} · arquivo: {n}",
+  "importacoes.fila.comparison.notComputed": "Comparação não calculada",
+  "review.report.updates.notCompared": "{n, plural, one {# ficha ainda não comparada (ou a comparar de novo)} other {# fichas ainda não comparadas (ou a comparar de novo)}}",
+  "review.report.updates.masked": "oculto (ficha fora da sua visão)"
 }

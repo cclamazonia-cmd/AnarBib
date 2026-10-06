@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -66,6 +66,36 @@ function estSelectionnable(r) {
   return ed == null || ed === 'pending'
     || (ed === 'accept_new' && r.match_status === 'new_record')
     || ed === 'accept_duplicate';
+}
+
+// H21 lot 3 (05/10/2026) : la comparaison à trois états d'une ligne « Déjà
+// importée » (base de l'import précédent, notice AnarBib, nouveau fichier),
+// résumée pour la colonne Correspondance depuis
+// fn_import_list_run_rows.comparison_counts (comptes par verdict). Les
+// changements que le fichier apporte : « source seule » (le fichier seul a
+// changé) et « conflit » (les deux, différemment) ; à revoir : « sans base ».
+// Ce qu'AnarBib seule a changé, ou ce qui est déjà pareil, n'est pas un
+// changement du fichier. null sans comptes (ligne d'avant le lot 3, pas encore
+// comparée) : rien n'est dit.
+function resumeComparaison(r) {
+  const c = r && r.comparison_counts;
+  if (!c || typeof c !== 'object') return null;
+  const n = (k) => Number(c[k] || 0);
+  return { changements: n('source_seule') + n('conflit'), conflits: n('conflit'), aRevoir: n('sans_base') };
+}
+
+// H21 lot 3 (06/10/2026) : la comparaison n'est plus calculée au rapprochement
+// (délai de 8 s des edge functions) ; l'écran la demande, par pages de 200
+// (fn_import_recomparer), pour les lignes « Déjà importées » dont les comptes
+// manquent : jamais calculée, effacée par un nouveau rapprochement, ou faite
+// contre une autre notice (fusion : la liste rend alors NULL). Une ligne d'un
+// serveur d'avant le lot 3 n'a pas la clé comparison_counts : rien à demander.
+const PAGE_COMPARAISON = 200;
+function lignesAComparer(r) {
+  return (Array.isArray(r) ? r : [])
+    .filter(x => x && x.match_status === 'known_record' && x.proposed_book_id
+      && Object.prototype.hasOwnProperty.call(x, 'comparison_counts') && x.comparison_counts === null)
+    .map(x => x.id);
 }
 
 export default function ImportacoesPage() {
@@ -249,6 +279,33 @@ export default function ImportacoesPage() {
     } catch { /* guard */ }
     finally { setOaiLoading(false); }
   }, []);
+
+  // ── H21 lot 3 : comparer les lignes « Déjà importées », par pages ──
+  // La coordination ou l'administration seulement (le recalcul leur est
+  // réservé, comme les décisions) ; une ligne n'est demandée qu'une fois par
+  // ouverture de l'écran (pas de boucle si une ligne reste sans comparaison).
+  // Les comptes rendus par la RPC sont posés sur les lignes, sans recharger
+  // (la sélection en cours n'est pas touchée).
+  const peutComparer = role === 'coordenador' || !!isNetworkAdmin;
+  const comparaisonsDemandees = useRef(new Set());
+  useEffect(() => {
+    if (!peutComparer || !selectedRunId || runRowsLoading) return;
+    const ids = lignesAComparer(runRows).filter(id => !comparaisonsDemandees.current.has(`${selectedRunId}:${id}`));
+    if (!ids.length) return;
+    ids.forEach(id => comparaisonsDemandees.current.add(`${selectedRunId}:${id}`));
+    const runId = selectedRunId;
+    (async () => {
+      for (let i = 0; i < ids.length; i += PAGE_COMPARAISON) {
+        const page = ids.slice(i, i + PAGE_COMPARAISON);
+        try {
+          const { data, error } = await supabase.rpc('fn_import_recomparer', { p_run_id: Number(runId), p_row_ids: page });
+          if (error || !data || !Array.isArray(data.rows)) return;
+          const comptes = new Map(data.rows.map(x => [x.id, x.counts]));
+          setRunRows(prev => prev.map(r => (r.run_id === runId && comptes.has(r.id) ? { ...r, comparison_counts: comptes.get(r.id) } : r)));
+        } catch { return; }
+      }
+    })();
+  }, [peutComparer, selectedRunId, runRows, runRowsLoading]);
 
   useEffect(() => { loadSources(); loadRuns(); loadOaiSources(); }, [loadSources, loadRuns, loadOaiSources]);
 
@@ -1889,6 +1946,11 @@ export default function ImportacoesPage() {
                           // Ton « info », comme « Déjà au catalogue » : une reconnaissance
                           // sûre, pas un doublon à vérifier (« warn »).
                           const isKnown = ms === 'known_record';
+                          // H21 lot 3 : ce que le fichier change, comparé à trois états.
+                          const comparaison = isKnown ? resumeComparaison(row) : null;
+                          // Comptes absents (la clé existe, la valeur est NULL) : pas encore
+                          // calculée — la coordination la demande à l'ouverture (plus haut).
+                          const comparaisonAbsente = isKnown && !!row.proposed_book_id && row.comparison_counts === null;
                           const ed = row.editorial_decision || 'pending';
                           // Sélectionnable : même prédicat que « tout cocher ».
                           const reviewable = estSelectionnable(row);
@@ -1924,6 +1986,27 @@ export default function ImportacoesPage() {
                                 {isKnown && (
                                   <div className="imp-note imp-known-of" style={{ marginTop: 3, fontSize: '.72rem' }}>
                                     {t({ id: 'importacoes.fila.knownRecordOf' }, { title: row.proposed_title || (row.proposed_book_id ? `#${row.proposed_book_id}` : '—') })}
+                                  </div>
+                                )}
+                                {comparaison && (
+                                  <div className="imp-note imp-known-compare" data-testid="known-compare"
+                                    style={{ marginTop: 2, fontSize: '.72rem', color: comparaison.conflits > 0 ? 'var(--brand-warning, #fbbf24)' : undefined }}>
+                                    {comparaison.changements === 0 && comparaison.aRevoir === 0
+                                      ? t({ id: 'importacoes.fila.comparison.none' })
+                                      : [
+                                        comparaison.changements > 0
+                                          ? t({ id: 'importacoes.fila.comparison.changes' }, { n: comparaison.changements, c: comparaison.conflits })
+                                          : null,
+                                        comparaison.aRevoir > 0
+                                          ? t({ id: 'importacoes.fila.comparison.toReview' }, { n: comparaison.aRevoir })
+                                          : null,
+                                      ].filter(Boolean).join(' · ')}
+                                  </div>
+                                )}
+                                {comparaisonAbsente && (
+                                  <div className="imp-note imp-known-compare-absente" data-testid="known-compare-absente"
+                                    style={{ marginTop: 2, fontSize: '.72rem', color: 'var(--brand-muted, #94a3b8)' }}>
+                                    {t({ id: 'importacoes.fila.comparison.notComputed' })}
                                   </div>
                                 )}
                                 {isKnown && row.proposed_book_held === false && (

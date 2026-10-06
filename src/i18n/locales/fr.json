@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Notice déjà importée par ta bibliothèque : {title}",
   "importacoes.fila.knownRecordNotHeld": "Notice plus détenue par ta bibliothèque.",
   "error.digital.file_not_in_bucket": "Le fichier n’est pas à l’endroit que la ressource indique. Verse-le de nouveau avant d’enregistrer.",
-  "catalogacao.dep.oldCopyNotRemoved": "Ressource enregistrée, mais l’ancienne copie du fichier n’a pas pu être retirée ({path}). Elle peut rester accessible : préviens l’administration du réseau."
+  "catalogacao.dep.oldCopyNotRemoved": "Ressource enregistrée, mais l’ancienne copie du fichier n’a pas pu être retirée ({path}). Elle peut rester accessible : préviens l’administration du réseau.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# changement dans le fichier} other {# changements dans le fichier}}{c, plural, =0 {} one {, dont # conflit} other {, dont # conflits}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# champ à revoir (sans base)} other {# champs à revoir (sans base)}}",
+  "importacoes.fila.comparison.none": "Aucun changement dans le fichier",
+  "review.report.updates": "Mises à jour apportées par le fichier",
+  "review.report.updates.summary": "{rows, plural, one {# notice déjà importée comparée} other {# notices déjà importées comparées}} ; {changed, plural, =0 {aucune ne change dans le fichier} one {# change dans le fichier} other {# changent dans le fichier}}",
+  "review.report.updates.verdict.inchange": "Inchangé",
+  "review.report.updates.verdict.identique": "Déjà pareil dans AnarBib",
+  "review.report.updates.verdict.source_seule": "Changé dans le fichier seulement",
+  "review.report.updates.verdict.local_seul": "Changé dans AnarBib seulement (gardé)",
+  "review.report.updates.verdict.conflit": "Conflit (signalé, jamais appliqué)",
+  "review.report.updates.verdict.sans_base": "À revoir (sans base)",
+  "review.report.updates.values": "base : {b} · AnarBib : {a} · fichier : {n}",
+  "importacoes.fila.comparison.notComputed": "Comparaison non calculée",
+  "review.report.updates.notCompared": "{n, plural, one {# notice pas encore comparée (ou à recomparer)} other {# notices pas encore comparées (ou à recomparer)}}",
+  "review.report.updates.masked": "masqué (notice hors de ta vue)"
 }

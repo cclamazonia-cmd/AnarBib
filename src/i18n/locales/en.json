@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Record already imported by your library: {title}",
   "importacoes.fila.knownRecordNotHeld": "Record no longer held by your library.",
   "error.digital.file_not_in_bucket": "The file is not where the resource says it is. Upload it again before saving.",
-  "catalogacao.dep.oldCopyNotRemoved": "Resource saved, but the old copy of the file could not be removed ({path}). It may still be accessible: let the network administration know."
+  "catalogacao.dep.oldCopyNotRemoved": "Resource saved, but the old copy of the file could not be removed ({path}). It may still be accessible: let the network administration know.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# change in the file} other {# changes in the file}}{c, plural, =0 {} one {, including # conflict} other {, including # conflicts}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# field to review (no baseline)} other {# fields to review (no baseline)}}",
+  "importacoes.fila.comparison.none": "No change in the file",
+  "review.report.updates": "Updates brought by the file",
+  "review.report.updates.summary": "{rows, plural, one {# already-imported record compared} other {# already-imported records compared}}; {changed, plural, =0 {none changes in the file} one {# changes in the file} other {# change in the file}}",
+  "review.report.updates.verdict.inchange": "Unchanged",
+  "review.report.updates.verdict.identique": "Already the same in AnarBib",
+  "review.report.updates.verdict.source_seule": "Changed in the file only",
+  "review.report.updates.verdict.local_seul": "Changed in AnarBib only (kept)",
+  "review.report.updates.verdict.conflit": "Conflict (flagged, never applied)",
+  "review.report.updates.verdict.sans_base": "To review (no baseline)",
+  "review.report.updates.values": "baseline: {b} · AnarBib: {a} · file: {n}",
+  "importacoes.fila.comparison.notComputed": "Comparison not computed",
+  "review.report.updates.notCompared": "{n, plural, one {# record not compared yet (or to compare again)} other {# records not compared yet (or to compare again)}}",
+  "review.report.updates.masked": "hidden (record outside your view)"
 }

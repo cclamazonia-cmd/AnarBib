@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Record dat jouw bibliotheek al heeft geïmporteerd: {title}",
   "importacoes.fila.knownRecordNotHeld": "Record dat jouw bibliotheek niet meer bezit.",
   "error.digital.file_not_in_bucket": "Het bestand staat niet op de plek die de bron aangeeft. Upload het opnieuw voordat je opslaat.",
-  "catalogacao.dep.oldCopyNotRemoved": "Bron opgeslagen, maar de oude kopie van het bestand kon niet worden verwijderd ({path}). Die kan nog toegankelijk zijn: laat het netwerkbeheer weten."
+  "catalogacao.dep.oldCopyNotRemoved": "Bron opgeslagen, maar de oude kopie van het bestand kon niet worden verwijderd ({path}). Die kan nog toegankelijk zijn: laat het netwerkbeheer weten.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# wijziging in het bestand} other {# wijzigingen in het bestand}}{c, plural, =0 {} one {, waarvan # conflict} other {, waarvan # conflicten}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# veld na te kijken (zonder basis)} other {# velden na te kijken (zonder basis)}}",
+  "importacoes.fila.comparison.none": "Geen wijziging in het bestand",
+  "review.report.updates": "Updates uit het bestand",
+  "review.report.updates.summary": "{rows, plural, one {# al geïmporteerd record vergeleken} other {# al geïmporteerde records vergeleken}}; {changed, plural, =0 {geen enkel verandert in het bestand} one {# verandert in het bestand} other {# veranderen in het bestand}}",
+  "review.report.updates.verdict.inchange": "Ongewijzigd",
+  "review.report.updates.verdict.identique": "Al gelijk in AnarBib",
+  "review.report.updates.verdict.source_seule": "Alleen in het bestand gewijzigd",
+  "review.report.updates.verdict.local_seul": "Alleen in AnarBib gewijzigd (blijft)",
+  "review.report.updates.verdict.conflit": "Conflict (gemeld, nooit toegepast)",
+  "review.report.updates.verdict.sans_base": "Na te kijken (zonder basis)",
+  "review.report.updates.values": "basis: {b} · AnarBib: {a} · bestand: {n}",
+  "importacoes.fila.comparison.notComputed": "Vergelijking niet berekend",
+  "review.report.updates.notCompared": "{n, plural, one {# record nog niet vergeleken (of opnieuw te vergelijken)} other {# records nog niet vergeleken (of opnieuw te vergelijken)}}",
+  "review.report.updates.masked": "verborgen (record buiten jouw zicht)"
 }

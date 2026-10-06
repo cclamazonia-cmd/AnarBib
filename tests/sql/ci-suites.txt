@@ -652,6 +652,14 @@ tests/sql/h21_lot1_reconnaitre_tests.sql
 # rapprochement (créée seulement si absente), à la bibliothèque qui a importé ; suit
 # l'identifiant ; reprise ; l'export lit la base d'abord ; l'API n'y a pas accès.
 tests/sql/h21_lot2_la_base_tests.sql
+# 05/10/2026 — H21 lot 3 (REGISTRE IMP-23, IMP-29) : comparer à trois états, en lecture
+# seule — base, notice AnarBib, nouveau fichier (même correspondance) ; six verdicts par
+# champ (inchange, identique, source_seule, local_seul, conflit, sans_base, champ douteux
+# compris) ; responsabilités par book_contributors, jamais books.autor ; vedettes comme
+# ensemble ; aucune écriture au catalogue ; stockée sur la ligne au rapprochement,
+# recalculée par fn_import_recomparer ; détail par fn_import_row_comparison ; comptes
+# dans la liste ; section « updates » du rapport de révision ; 2 000 lignes < 8 s.
+tests/sql/h21_lot3_comparer_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Fitxa ja importada per la teva biblioteca: {title}",
   "importacoes.fila.knownRecordNotHeld": "Fitxa que la teva biblioteca ja no té.",
   "error.digital.file_not_in_bucket": "El fitxer no és on indica el recurs. Torna a pujar-lo abans de desar.",
-  "catalogacao.dep.oldCopyNotRemoved": "Recurs desat, però no s’ha pogut retirar la còpia antiga del fitxer ({path}). Pot continuar accessible: avisa l’administració de la xarxa."
+  "catalogacao.dep.oldCopyNotRemoved": "Recurs desat, però no s’ha pogut retirar la còpia antiga del fitxer ({path}). Pot continuar accessible: avisa l’administració de la xarxa.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# canvi al fitxer} other {# canvis al fitxer}}{c, plural, =0 {} one {, inclòs # conflicte} other {, inclosos # conflictes}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# camp per revisar (sense base)} other {# camps per revisar (sense base)}}",
+  "importacoes.fila.comparison.none": "Cap canvi al fitxer",
+  "review.report.updates": "Actualitzacions que porta el fitxer",
+  "review.report.updates.summary": "{rows, plural, one {# fitxa ja importada comparada} other {# fitxes ja importades comparades}}; {changed, plural, =0 {cap no canvia al fitxer} one {# canvia al fitxer} other {# canvien al fitxer}}",
+  "review.report.updates.verdict.inchange": "Sense canvis",
+  "review.report.updates.verdict.identique": "Ja igual a AnarBib",
+  "review.report.updates.verdict.source_seule": "Canviat només al fitxer",
+  "review.report.updates.verdict.local_seul": "Canviat només a AnarBib (es manté)",
+  "review.report.updates.verdict.conflit": "Conflicte (assenyalat, mai aplicat)",
+  "review.report.updates.verdict.sans_base": "Per revisar (sense base)",
+  "review.report.updates.values": "base: {b} · AnarBib: {a} · fitxer: {n}",
+  "importacoes.fila.comparison.notComputed": "Comparació no calculada",
+  "review.report.updates.notCompared": "{n, plural, one {# fitxa encara no comparada (o per tornar a comparar)} other {# fitxes encara no comparades (o per tornar a comparar)}}",
+  "review.report.updates.masked": "amagat (fitxa fora de la teva vista)"
 }

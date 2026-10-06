@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Slipo jam importita de via biblioteko: {title}",
   "importacoes.fila.knownRecordNotHeld": "Slipo ne plu posedata de via biblioteko.",
   "error.digital.file_not_in_bucket": "La dosiero ne troviĝas tie, kie la rimedo indikas. Alŝutu ĝin denove antaŭ ol konservi.",
-  "catalogacao.dep.oldCopyNotRemoved": "Rimedo konservita, sed la malnova kopio de la dosiero ne povis esti forigita ({path}). Ĝi eble restas alirebla: sciigu la retan administradon."
+  "catalogacao.dep.oldCopyNotRemoved": "Rimedo konservita, sed la malnova kopio de la dosiero ne povis esti forigita ({path}). Ĝi eble restas alirebla: sciigu la retan administradon.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# ŝanĝo en la dosiero} other {# ŝanĝoj en la dosiero}}{c, plural, =0 {} one {, el kiuj # konflikto} other {, el kiuj # konfliktoj}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# kampo reviziinda (sen bazo)} other {# kampoj reviziindaj (sen bazo)}}",
+  "importacoes.fila.comparison.none": "Neniu ŝanĝo en la dosiero",
+  "review.report.updates": "Ĝisdatigoj el la dosiero",
+  "review.report.updates.summary": "{rows, plural, one {# jam importita slipo komparita} other {# jam importitaj slipoj komparitaj}}; {changed, plural, =0 {neniu ŝanĝiĝas en la dosiero} one {# ŝanĝiĝas en la dosiero} other {# ŝanĝiĝas en la dosiero}}",
+  "review.report.updates.verdict.inchange": "Neŝanĝita",
+  "review.report.updates.verdict.identique": "Jam sama en AnarBib",
+  "review.report.updates.verdict.source_seule": "Ŝanĝita nur en la dosiero",
+  "review.report.updates.verdict.local_seul": "Ŝanĝita nur en AnarBib (konservata)",
+  "review.report.updates.verdict.conflit": "Konflikto (signalita, neniam aplikata)",
+  "review.report.updates.verdict.sans_base": "Reviziinda (sen bazo)",
+  "review.report.updates.values": "bazo: {b} · AnarBib: {a} · dosiero: {n}",
+  "importacoes.fila.comparison.notComputed": "Komparo ne kalkulita",
+  "review.report.updates.notCompared": "{n, plural, one {# slipo ankoraŭ ne komparita (aŭ rekomparenda)} other {# slipoj ankoraŭ ne komparitaj (aŭ rekomparendaj)}}",
+  "review.report.updates.masked": "kaŝita (slipo ekster via vido)"
 }

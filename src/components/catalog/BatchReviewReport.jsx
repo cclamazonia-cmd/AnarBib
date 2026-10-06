@@ -19,6 +19,22 @@ const ITEM_REASONS = ['without_library', 'library_mismatch', 'library_without_nu
 
 const ORDRE_COUVERTURE = { brut: 0, indice: 1, laisse: 2 };
 
+// H21 lot 3 (05/10/2026) : les verdicts de la comparaison à trois états (base
+// de l'import précédent, notice AnarBib, nouveau fichier), dans l'ordre du
+// rapport (clé `updates` de fn_batch_review_report, absente des instantanés
+// d'avant et des lots sans notice déjà importée).
+const VERDICTS = ['conflit', 'source_seule', 'sans_base', 'local_seul', 'identique', 'inchange'];
+// Une valeur comparée, lisible : vide, liste de responsabilités [nom, rôle],
+// ensemble de vedettes, texte (coupé).
+function valeurComparee(v) {
+  if (v == null || (Array.isArray(v) && v.length === 0)) return '∅';
+  if (Array.isArray(v)) {
+    return v.map((x) => (Array.isArray(x) ? `${x[0] ?? '?'}${x[1] ? ` (${x[1]})` : ''}` : String(x))).join(' ; ');
+  }
+  const s = String(v);
+  return s.length > 120 ? `${s.slice(0, 117)}…` : s;
+}
+
 export default function BatchReviewReport({ report }) {
   const { formatMessage: t, formatDate } = useIntl();
   if (!report) return null;
@@ -35,6 +51,12 @@ export default function BatchReviewReport({ report }) {
   const items = report.items && typeof report.items === 'object' ? report.items : null;
   const itemProblems = Array.isArray(items?.problems) ? items.problems : [];
   const itemProblemCount = Math.max(itemProblems.length, ITEM_REASONS.reduce((n, k) => n + Number(items?.[k] || 0), 0));
+  // H21 lot 3 : les notices déjà importées du lot, comparées à trois états ;
+  // 40 exemples au plus (conflits d'abord), les comptes portent sur tout.
+  const updates = report.updates && typeof report.updates === 'object' ? report.updates : null;
+  const updateCounts = updates?.counts && typeof updates.counts === 'object' ? updates.counts : {};
+  const updateExamples = Array.isArray(updates?.examples) ? updates.examples : [];
+  const updateNotable = ['conflit', 'source_seule', 'sans_base', 'local_seul'].reduce((n, k) => n + Number(updateCounts[k] || 0), 0);
   // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
   // (report.batch.library_id / library_name ; nulle = administration du
   // réseau). Les instantanés figés avant B30 n'en ont pas : on n'affiche rien.
@@ -149,6 +171,45 @@ export default function BatchReviewReport({ report }) {
                 </li>
               ))}
               {more(itemProblemCount, Math.min(itemProblems.length, 40))}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {updates && Number(updates.rows || 0) > 0 && (
+        <section data-testid="review-updates">
+          <h5 style={secTitle}>{t({ id: 'review.report.updates' })}</h5>
+          <div>{t({ id: 'review.report.updates.summary' }, { rows: Number(updates.rows || 0), changed: Number(updates.rows_with_changes || 0) })}</div>
+          {/* Lu dans les comparaisons stockées : celles qui manquent (ou périmées) le disent. */}
+          {'compared_rows' in updates && Number(updates.compared_rows || 0) < Number(updates.rows || 0) && (
+            <div data-testid="review-updates-not-compared" style={muted}>
+              {t({ id: 'review.report.updates.notCompared' }, { n: Number(updates.rows || 0) - Number(updates.compared_rows || 0) })}
+            </div>
+          )}
+          <div style={muted}>
+            {VERDICTS.filter((v) => Number(updateCounts[v] || 0) > 0)
+              .map((v) => `${t({ id: `review.report.updates.verdict.${v}` })} ${Number(updateCounts[v])}`)
+              .join(' · ')}
+          </div>
+          {updateExamples.length > 0 && (
+            <ul style={list}>
+              {updateExamples.slice(0, 40).map((e, i) => (
+                <li key={`${e.row_id}-${e.champ}-${i}`} data-update-verdict={e.verdict}>
+                  {e.titulo || '—'}
+                  {e.external_key ? <span style={muted}> ({e.external_key})</span> : null}
+                  {' · '}<code>{e.champ}</code>{' — '}
+                  <strong>{t({ id: `review.report.updates.verdict.${e.verdict}` })}</strong>
+                  <div style={muted}>
+                    {t({ id: 'review.report.updates.values' }, {
+                      b: valeurComparee(e.b),
+                      // notice hors de la vue de qui lit : la base le masque, l'écran le dit
+                      a: e.a_masque ? t({ id: 'review.report.updates.masked' }) : valeurComparee(e.a),
+                      n: valeurComparee(e.n),
+                    })}
+                  </div>
+                </li>
+              ))}
+              {more(updateNotable, Math.min(updateExamples.length, 40))}
             </ul>
           )}
         </section>

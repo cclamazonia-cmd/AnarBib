@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Scheda già importata dalla tua biblioteca: {title}",
   "importacoes.fila.knownRecordNotHeld": "Scheda non più posseduta dalla tua biblioteca.",
   "error.digital.file_not_in_bucket": "Il file non si trova dove la risorsa indica. Caricalo di nuovo prima di salvare.",
-  "catalogacao.dep.oldCopyNotRemoved": "Risorsa salvata, ma la vecchia copia del file non è stata rimossa ({path}). Potrebbe restare accessibile: avvisa l’amministrazione della rete."
+  "catalogacao.dep.oldCopyNotRemoved": "Risorsa salvata, ma la vecchia copia del file non è stata rimossa ({path}). Potrebbe restare accessibile: avvisa l’amministrazione della rete.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# modifica nel file} other {# modifiche nel file}}{c, plural, =0 {} one {, di cui # conflitto} other {, di cui # conflitti}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# campo da rivedere (senza base)} other {# campi da rivedere (senza base)}}",
+  "importacoes.fila.comparison.none": "Nessuna modifica nel file",
+  "review.report.updates": "Aggiornamenti portati dal file",
+  "review.report.updates.summary": "{rows, plural, one {# scheda già importata confrontata} other {# schede già importate confrontate}}; {changed, plural, =0 {nessuna cambia nel file} one {# cambia nel file} other {# cambiano nel file}}",
+  "review.report.updates.verdict.inchange": "Invariato",
+  "review.report.updates.verdict.identique": "Già uguale in AnarBib",
+  "review.report.updates.verdict.source_seule": "Modificato solo nel file",
+  "review.report.updates.verdict.local_seul": "Modificato solo in AnarBib (mantenuto)",
+  "review.report.updates.verdict.conflit": "Conflitto (segnalato, mai applicato)",
+  "review.report.updates.verdict.sans_base": "Da rivedere (senza base)",
+  "review.report.updates.values": "base: {b} · AnarBib: {a} · file: {n}",
+  "importacoes.fila.comparison.notComputed": "Confronto non calcolato",
+  "review.report.updates.notCompared": "{n, plural, one {# scheda non ancora confrontata (o da riconfrontare)} other {# schede non ancora confrontate (o da riconfrontare)}}",
+  "review.report.updates.masked": "nascosto (scheda fuori dalla tua vista)"
 }

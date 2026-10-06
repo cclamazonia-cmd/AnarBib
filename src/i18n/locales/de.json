@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Eintrag, den deine Bibliothek schon importiert hat: {title}",
   "importacoes.fila.knownRecordNotHeld": "Eintrag, den deine Bibliothek nicht mehr besitzt.",
   "error.digital.file_not_in_bucket": "Die Datei liegt nicht dort, wo die Ressource sie angibt. Lade sie erneut hoch, bevor du speicherst.",
-  "catalogacao.dep.oldCopyNotRemoved": "Ressource gespeichert, aber die alte Kopie der Datei konnte nicht entfernt werden ({path}). Sie könnte weiter zugänglich sein: Gib der Netzwerkverwaltung Bescheid."
+  "catalogacao.dep.oldCopyNotRemoved": "Ressource gespeichert, aber die alte Kopie der Datei konnte nicht entfernt werden ({path}). Sie könnte weiter zugänglich sein: Gib der Netzwerkverwaltung Bescheid.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# Änderung in der Datei} other {# Änderungen in der Datei}}{c, plural, =0 {} one {, davon # Konflikt} other {, davon # Konflikte}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# Feld zu prüfen (ohne Basis)} other {# Felder zu prüfen (ohne Basis)}}",
+  "importacoes.fila.comparison.none": "Keine Änderung in der Datei",
+  "review.report.updates": "Aktualisierungen aus der Datei",
+  "review.report.updates.summary": "{rows, plural, one {# schon importierter Eintrag verglichen} other {# schon importierte Einträge verglichen}}; {changed, plural, =0 {keiner ändert sich in der Datei} one {# ändert sich in der Datei} other {# ändern sich in der Datei}}",
+  "review.report.updates.verdict.inchange": "Unverändert",
+  "review.report.updates.verdict.identique": "In AnarBib schon gleich",
+  "review.report.updates.verdict.source_seule": "Nur in der Datei geändert",
+  "review.report.updates.verdict.local_seul": "Nur in AnarBib geändert (bleibt)",
+  "review.report.updates.verdict.conflit": "Konflikt (gemeldet, nie übernommen)",
+  "review.report.updates.verdict.sans_base": "Zu prüfen (ohne Basis)",
+  "review.report.updates.values": "Basis: {b} · AnarBib: {a} · Datei: {n}",
+  "importacoes.fila.comparison.notComputed": "Vergleich nicht berechnet",
+  "review.report.updates.notCompared": "{n, plural, one {# Eintrag noch nicht verglichen (oder neu zu vergleichen)} other {# Einträge noch nicht verglichen (oder neu zu vergleichen)}}",
+  "review.report.updates.masked": "verborgen (Eintrag außerhalb deiner Sicht)"
 }

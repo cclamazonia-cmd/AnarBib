@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Ficha ya importada por tu biblioteca: {title}",
   "importacoes.fila.knownRecordNotHeld": "Ficha que tu biblioteca ya no posee.",
   "error.digital.file_not_in_bucket": "El archivo no está en el lugar que indica el recurso. Vuelve a subirlo antes de guardar.",
-  "catalogacao.dep.oldCopyNotRemoved": "Recurso guardado, pero no se pudo quitar la copia anterior del archivo ({path}). Puede seguir accesible: avisa a la administración de la red."
+  "catalogacao.dep.oldCopyNotRemoved": "Recurso guardado, pero no se pudo quitar la copia anterior del archivo ({path}). Puede seguir accesible: avisa a la administración de la red.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# cambio en el archivo} other {# cambios en el archivo}}{c, plural, =0 {} one {, incluido # conflicto} other {, incluidos # conflictos}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# campo por revisar (sin base)} other {# campos por revisar (sin base)}}",
+  "importacoes.fila.comparison.none": "Ningún cambio en el archivo",
+  "review.report.updates": "Actualizaciones que trae el archivo",
+  "review.report.updates.summary": "{rows, plural, one {# ficha ya importada comparada} other {# fichas ya importadas comparadas}}; {changed, plural, =0 {ninguna cambia en el archivo} one {# cambia en el archivo} other {# cambian en el archivo}}",
+  "review.report.updates.verdict.inchange": "Sin cambios",
+  "review.report.updates.verdict.identique": "Ya igual en AnarBib",
+  "review.report.updates.verdict.source_seule": "Cambiado solo en el archivo",
+  "review.report.updates.verdict.local_seul": "Cambiado solo en AnarBib (se conserva)",
+  "review.report.updates.verdict.conflit": "Conflicto (señalado, nunca aplicado)",
+  "review.report.updates.verdict.sans_base": "Por revisar (sin base)",
+  "review.report.updates.values": "base: {b} · AnarBib: {a} · archivo: {n}",
+  "importacoes.fila.comparison.notComputed": "Comparación no calculada",
+  "review.report.updates.notCompared": "{n, plural, one {# ficha aún no comparada (o por volver a comparar)} other {# fichas aún no comparadas (o por volver a comparar)}}",
+  "review.report.updates.masked": "oculto (ficha fuera de tu vista)"
 }

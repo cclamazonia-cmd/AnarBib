@@ -7168,5 +7168,20 @@
   "importacoes.fila.knownRecordOf": "Εγγραφή που η βιβλιοθήκη σου έχει ήδη εισαγάγει: {title}",
   "importacoes.fila.knownRecordNotHeld": "Εγγραφή που η βιβλιοθήκη σου δεν κατέχει πλέον.",
   "error.digital.file_not_in_bucket": "Το αρχείο δεν βρίσκεται εκεί που δηλώνει ο πόρος. Ανέβασέ το ξανά πριν από την αποθήκευση.",
-  "catalogacao.dep.oldCopyNotRemoved": "Ο πόρος αποθηκεύτηκε, αλλά το παλιό αντίγραφο του αρχείου δεν αφαιρέθηκε ({path}). Μπορεί να παραμένει προσβάσιμο: ενημέρωσε τη διαχείριση του δικτύου."
+  "catalogacao.dep.oldCopyNotRemoved": "Ο πόρος αποθηκεύτηκε, αλλά το παλιό αντίγραφο του αρχείου δεν αφαιρέθηκε ({path}). Μπορεί να παραμένει προσβάσιμο: ενημέρωσε τη διαχείριση του δικτύου.",
+  "importacoes.fila.comparison.changes": "{n, plural, one {# αλλαγή στο αρχείο} other {# αλλαγές στο αρχείο}}{c, plural, =0 {} one {, από τις οποίες # σύγκρουση} other {, από τις οποίες # συγκρούσεις}}",
+  "importacoes.fila.comparison.toReview": "{n, plural, one {# πεδίο προς έλεγχο (χωρίς βάση)} other {# πεδία προς έλεγχο (χωρίς βάση)}}",
+  "importacoes.fila.comparison.none": "Καμία αλλαγή στο αρχείο",
+  "review.report.updates": "Ενημερώσεις από το αρχείο",
+  "review.report.updates.summary": "{rows, plural, one {# ήδη εισαγμένη εγγραφή συγκρίθηκε} other {# ήδη εισαγμένες εγγραφές συγκρίθηκαν}} · {changed, plural, =0 {καμία δεν αλλάζει στο αρχείο} one {# αλλάζει στο αρχείο} other {# αλλάζουν στο αρχείο}}",
+  "review.report.updates.verdict.inchange": "Αμετάβλητο",
+  "review.report.updates.verdict.identique": "Ήδη ίδιο στο AnarBib",
+  "review.report.updates.verdict.source_seule": "Άλλαξε μόνο στο αρχείο",
+  "review.report.updates.verdict.local_seul": "Άλλαξε μόνο στο AnarBib (διατηρείται)",
+  "review.report.updates.verdict.conflit": "Σύγκρουση (επισημαίνεται, δεν εφαρμόζεται ποτέ)",
+  "review.report.updates.verdict.sans_base": "Προς έλεγχο (χωρίς βάση)",
+  "review.report.updates.values": "βάση: {b} · AnarBib: {a} · αρχείο: {n}",
+  "importacoes.fila.comparison.notComputed": "Η σύγκριση δεν έχει υπολογιστεί",
+  "review.report.updates.notCompared": "{n, plural, one {# εγγραφή δεν έχει συγκριθεί ακόμη (ή θέλει νέα σύγκριση)} other {# εγγραφές δεν έχουν συγκριθεί ακόμη (ή θέλουν νέα σύγκριση)}}",
+  "review.report.updates.masked": "κρυφό (εγγραφή εκτός της όψης σου)"
 }
