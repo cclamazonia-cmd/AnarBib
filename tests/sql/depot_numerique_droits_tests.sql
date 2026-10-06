@@ -21,6 +21,11 @@
 --    déclaré : réservée dans pdf-restrito alors que le fichier n'est que dans
 --    le seau public (cas vécu sur /livro/2287) → refus ; chemin changé vers un
 --    fichier absent → refus. Le décor pose les objets que T2 et T6 déclarent.
+-- T8 (D9, 20261006175037) la publication ne retire que ce que le brouillon dit de
+--    retirer : une ressource liée supprimée du brouillon quitte le publié ;
+--    une ressource posée sur la notice après la reprise (réception d'un
+--    fonds) reste ; un brouillon créé sans reprise ne vide pas la notice ;
+--    la reprise vide la trace des suppressions.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'DEPOT-NUMERIQUE-DROITS OK : N/N'
@@ -33,6 +38,7 @@ DECLARE
   v_biblio uuid; v_admin uuid;
   v_book bigint; v_draft bigint; v_r1 bigint; v_r2 bigint; v_p1 bigint; v_p1b bigint; v_n int;
   v_hint text; v_txt text; v_retake bigint; v_ok boolean;
+  v_b9 bigint; v_d9 bigint; v_d9b bigint; v_pa bigint; v_pb bigint; v_pc bigint;
 BEGIN
   -- ── Décor (postgres) ────────────────────────────────────────────────
   INSERT INTO auth.users (id, instance_id, aud, role, email, created_at, updated_at)
@@ -230,6 +236,44 @@ BEGIN
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T8 (D9) ─────────────────────────────────────────────────────────
+  v_t := 'T8 la publication ne retire que ce que le brouillon dit de retirer';
+  BEGIN
+    INSERT INTO public.books (titulo, bib_ref, tipo_material, owner_library_id) VALUES ('DN D9', 'DN-D9', 'livro', v_libA) RETURNING id INTO v_b9;
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, source_url, label)
+    VALUES (v_b9, 'link_externo', 'link_externo', 'publico', 'active', true, 'https://exemple.invalid/a', 'A') RETURNING id INTO v_pa;
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, source_url, label)
+    VALUES (v_b9, 'link_externo', 'link_externo', 'publico', 'active', true, 'https://exemple.invalid/b', 'B') RETURNING id INTO v_pb;
+    -- la reprise copie A et B ...
+    INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status, published_book_id, action)
+    VALUES ('DN D9 reprise', 'livro', v_libA, v_coordA, 'draft', v_b9, 'update') RETURNING id INTO v_d9;
+    PERFORM public.copy_book_digital_resources_to_draft(v_b9, v_d9);
+    -- ... la personne qui catalogue supprime B (geste explicite) ...
+    DELETE FROM public.book_draft_digital_resources WHERE book_draft_id = v_d9 AND published_resource_id = v_pb;
+    -- ... puis la réception d'un fonds pose C sur la notice, que le brouillon ignore
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, source_url, label)
+    VALUES (v_b9, 'link_externo', 'link_externo', 'publico', 'active', true, 'https://exemple.invalid/c', 'C') RETURNING id INTO v_pc;
+    PERFORM public.publish_book_draft_digital_resources(v_d9, v_b9);
+    v_txt := format('A=%s B=%s C=%s',
+      CASE WHEN EXISTS (SELECT 1 FROM public.book_digital_resources WHERE id = v_pa) THEN 'garde' ELSE 'retiree' END,
+      CASE WHEN EXISTS (SELECT 1 FROM public.book_digital_resources WHERE id = v_pb) THEN 'garde' ELSE 'retiree' END,
+      CASE WHEN EXISTS (SELECT 1 FROM public.book_digital_resources WHERE id = v_pc) THEN 'garde' ELSE 'retiree' END);
+    -- un brouillon créé sans reprise des ressources (mise à jour par import) ne vide pas la notice
+    DELETE FROM public.book_drafts WHERE id = v_d9;
+    INSERT INTO public.book_drafts (titulo, tipo_material, owner_library_id, created_by, status, published_book_id, action)
+    VALUES ('DN D9 import', 'livro', v_libA, v_coordA, 'draft', v_b9, 'update') RETURNING id INTO v_d9b;
+    PERFORM public.publish_book_draft_digital_resources(v_d9b, v_b9);
+    SELECT count(*) INTO v_n FROM public.book_digital_resources WHERE book_id = v_b9;
+    v_txt := v_txt || ' ; sans-reprise=' || v_n;
+    -- la reprise vide la trace des suppressions
+    UPDATE public.book_drafts SET digital_resources_removed = '{999999}' WHERE id = v_d9b;
+    PERFORM public.copy_book_digital_resources_to_draft(v_b9, v_d9b);
+    v_txt := v_txt || ' ; trace=' || (SELECT digital_resources_removed::text FROM public.book_drafts WHERE id = v_d9b);
+    IF v_txt = 'A=garde B=retiree C=garde ; sans-reprise=2 ; trace={}'
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : rendu « '||v_txt||' »'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'DEPOT-NUMERIQUE-DROITS OK : %/% tests passés', v_passed, v_passed;
