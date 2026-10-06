@@ -3,6 +3,7 @@
 -- qu'elles filtrent (suite de B32, 28/09/2026)
 -- Ref     : 20260928162102_les_facettes_disent_ce_qu_elles_filtrent.sql
 --           20260928164227_les_facettes_comptent_ce_que_la_page_montre.sql
+--           20261006170736_les_facettes_comptent_le_catalogue_que_la_page_affiche.sql (E29)
 --
 -- api.catalog_facets_v1 assemble ses cinq prédicats (commun, auteur·rice,
 -- années, CDD, sujet) à partir des filtres présents ; chaque facette ignore
@@ -28,13 +29,19 @@
 --      deux notices, « MEMÓRIA » aussi ; « três » trouve « três ») ;
 --   T7 pour une recherche, la somme des décennies vaut le nombre d'éditions
 --      datées que catalog_search_ids_v1 rend — les facettes comptent ce que
---      la page montre.
+--      la page montre ;
+--   T8 (E29) pour une session, les facettes lisent la vue de la page : une
+--      notice d'une bibliothèque en visibilité « network » est comptée pour
+--      une personne membre comme la page la montre, ni pour une personne
+--      connectée sans appartenance ni pour un·e anonyme (INV-1, OPAC-F1).
 --   Bilan OK : 'FACETTES OK : N/N'
 -- =====================================================================
 DO $$
 DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   c_lib constant uuid := 'fac3fac3-0000-4000-8000-0000000000c1';
+  c_lib_reseau constant uuid := 'fac3fac3-0000-4000-8000-0000000000c2';
+  v_b7 bigint; v_membre uuid := gen_random_uuid(); v_externe uuid := gen_random_uuid(); v_forme text;
   v_b1 bigint; v_b2 bigint; v_b3 bigint; v_b4 bigint; v_b5 bigint; v_b6 bigint; v_sujet bigint; v_auteur bigint;
   v_n int; v_m int;
   v_txt text; v_out jsonb; r record;
@@ -141,6 +148,67 @@ BEGIN
     RESET ROLE;
     IF v_n = v_m AND v_m >= 2 THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : facettes %s, recherche %s', v_n, v_m)); END IF;
+  EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- T8 (E29) : la vue des facettes est celle de la page. Une bibliothèque en
+  -- visibilité « network » porte une notice que le catalogue du réseau montre
+  -- et que le catalogue public ne montre pas : une personne membre la voit à la
+  -- page ET dans les facettes ; un·e anonyme ne la voit nulle part (INV-1) ;
+  -- une personne connectée sans appartenance non plus (la vue de session ne lui
+  -- montre que ce qu'une bibliothèque publique détient).
+  v_t := 'T8 pour une session, les facettes comptent la vue de la page (OPAC-F1, E29)';
+  BEGIN
+    INSERT INTO public.libraries (id, slug, name, visibility_level, catalog_mode, network_mode, is_active)
+    VALUES (c_lib_reseau, 'facettes-reseau', 'Biblio facettes réseau (test)', 'network', 'network_published', 'federated', true)
+    ON CONFLICT (id) DO NOTHING;
+    INSERT INTO public.books (titulo, autor, ano, cdd, idioma, tipo_material, bib_ref)
+    VALUES ('Facettes sete', 'Sete, Autora', '1815', '995.1', 'pt-BR', 'livro', 'FAC-7') RETURNING id INTO v_b7;
+    INSERT INTO public.book_holdings (book_id, library_id, loanable, exemplares_total, available_count)
+    VALUES (v_b7, c_lib_reseau, true, 1, 1);
+    INSERT INTO auth.users (id, email) VALUES (v_membre, 'e29-membre-' || v_membre || '@example.invalid'),
+                                              (v_externe, 'e29-externe-' || v_externe || '@example.invalid');
+    INSERT INTO public.profiles (id) VALUES (v_membre), (v_externe) ON CONFLICT (id) DO NOTHING;
+    INSERT INTO public.user_library_memberships (user_id, library_id, role, status, is_primary)
+    VALUES (v_membre, c_lib, 'reader', 'active', true);
+    REFRESH MATERIALIZED VIEW public.mv_books_catalog_list_v1;
+    REFRESH MATERIALIZED VIEW public.mv_books_catalog_list_network_v1;
+
+    -- la fonction choisit sa vue comme catalog_works_v1
+    SELECT CASE WHEN p.prosrc ~ 'catalog_list_session_v1' AND p.prosrc ~ 'auth\.uid\(\) IS NULL' THEN 'oui' ELSE 'non' END
+      INTO v_forme FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace WHERE n.nspname = 'api' AND p.proname = 'catalog_facets_v1';
+
+    -- personne membre : facette CDD 995 et décennie 1810, contre les lignes de la page
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_membre, 'role', 'authenticated')::text, true);
+    SET LOCAL ROLE authenticated;
+    v_out := api.catalog_facets_v1('{}'::jsonb);
+    SELECT count(*)::int INTO v_n FROM api.catalog_list_session_v1 c WHERE left(c.cdd, 3) = '995';
+    SELECT count(*)::int INTO v_m FROM api.catalog_list_session_v1 c WHERE c.ano ~ '^\d{4}$' AND left(c.ano, 3) = '181';
+    RESET ROLE;
+    v_txt := format('forme=%s ; membre cdd=%s/%s dec=%s/%s', v_forme,
+      coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'cdd') x WHERE x->>'code' = '995'), 0), v_n,
+      coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'decade') x WHERE x->>'decade' = '1810'), 0), v_m);
+
+    -- personne connectée sans appartenance : ni à la page ni aux facettes
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_externe, 'role', 'authenticated')::text, true);
+    SET LOCAL ROLE authenticated;
+    v_out := api.catalog_facets_v1('{}'::jsonb);
+    SELECT count(*)::int INTO v_n FROM api.catalog_list_session_v1 c WHERE left(c.cdd, 3) = '995';
+    RESET ROLE;
+    v_txt := v_txt || format(' ; externe cdd=%s/%s',
+      coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'cdd') x WHERE x->>'code' = '995'), 0), v_n);
+
+    -- anonyme : rien du périmètre réseau (INV-1)
+    PERFORM set_config('request.jwt.claims', '', true);
+    SET LOCAL ROLE anon;
+    v_out := api.catalog_facets_v1('{}'::jsonb);
+    SELECT count(*)::int INTO v_n FROM api.catalog_list_anon_v1 c WHERE left(c.cdd, 3) = '995';
+    RESET ROLE;
+    v_txt := v_txt || format(' ; anonyme cdd=%s/%s',
+      coalesce((SELECT (x->>'count')::int FROM jsonb_array_elements(v_out->'cdd') x WHERE x->>'code' = '995'), 0), v_n);
+
+    IF v_txt = 'forme=oui ; membre cdd=1/1 dec=1/1 ; externe cdd=0/0 ; anonyme cdd=0/0' THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : rendu « ' || v_txt || ' »'); END IF;
   EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN
