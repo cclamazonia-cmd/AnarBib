@@ -698,3 +698,7 @@ tests/sql/liste_coauteurs_tests.sql
 tests/sql/g13_reseaux_constitues_tests.sql
 tests/sql/f1_restes_supprimes_tests.sql
 tests/sql/nom_affiche_cherchable_tests.sql
+# Advisor 0029 (06/10/2026) : 34 fonctions DEFINER sans appelant sous
+# authenticated fermées ; la suite garde qu'aucun appelant ne naît, et que les
+# portes DEFINER répondent sous le rôle.
+tests/sql/aides_definer_fermees_tests.sql

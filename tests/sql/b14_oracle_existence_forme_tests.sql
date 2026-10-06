@@ -78,18 +78,27 @@ BEGIN
   -- `DOC-RPC-3` ne dit pas « ne jamais révoquer » : il dit que le refus ne doit
   -- pas remplacer un écran vivant par un écran mort. Là où aucun écran n'appelle,
   -- il n'y a pas d'écran à casser.
+  --
+  -- DEUXIÈME CORRECTION, 06/10/2026 (20261006202320), MÊME LEÇON. « La seule que
+  -- le panneau appelle » n'était pas mesuré : aucun fichier de `src/` ni
+  -- d'Edge Function n'a jamais nommé `…_by_lookup` (git log -S sur tout le
+  -- dépôt hors migrations, docs et tests : vide) ; le Painel cherche par
+  -- `fn_painel_search_reader`. Son seul appelant est `…_by_email`, DEFINER,
+  -- elle-même fermée et sans appelant. Elle rejoint T2b ; T2 garde la seule
+  -- des trois qu'un écran appelle, `fn_attach_received_asset_record` (par
+  -- l'Edge Function attach-received-asset, sous le jeton de l'appelant).
   v_t := 'T2 la fonction appelee par le panneau reste exposee';
   BEGIN
     SELECT count(*) INTO v_n
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
      WHERE n.nspname = 'public'
-       AND p.proname IN ('fn_painel_find_profile_by_lookup','fn_attach_received_asset_record')
+       AND p.proname = 'fn_attach_received_asset_record'
        AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
 
-    IF v_n = 2 THEN v_passed := v_passed + 1;
+    IF v_n = 1 THEN v_passed := v_passed + 1;
     ELSE
       v_failed := v_failed + 1;
-      v_failures := v_failures || (v_t || ' : ' || v_n || '/2 exposees'
+      v_failures := v_failures || (v_t || ' : ' || v_n || '/1 exposee'
         || ' | fermer l''EXECUTE de celles-la casse un ecran vivant au lieu de'
         || ' refuser proprement — ce n''est pas le cas des deux remplacees,'
         || ' fermees le 01/09 parce que RIEN ne les appelle');
@@ -106,12 +115,13 @@ BEGIN
   -- appelant, ni en base ni au dépôt). Si un écran venait à les appeler de
   -- nouveau, c'est ce test qui doit forcer à trancher — rouvrir le droit, ou
   -- appeler la remplaçante.
-  v_t := 'T2b les deux fonctions remplacees restent fermees';
+  v_t := 'T2b les fonctions sans appelant restent fermees';
   BEGIN
     SELECT count(*) INTO v_n
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
      WHERE n.nspname = 'public'
-       AND p.proname IN ('fn_painel_get_profile_by_id','fn_painel_find_profile_by_email')
+       AND p.proname IN ('fn_painel_get_profile_by_id','fn_painel_find_profile_by_email',
+                         'fn_painel_find_profile_by_lookup')
        AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
 
     IF v_n = 0 THEN v_passed := v_passed + 1;

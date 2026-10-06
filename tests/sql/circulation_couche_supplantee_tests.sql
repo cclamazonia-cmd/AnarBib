@@ -11,6 +11,9 @@
 -- (security_invoker, lues par AccountPage et PanelPage), ce que la mesure
 -- « 0 appelant » n'avait pas vu (pg_rewrite). Elle rejoint T3 : dix fermées,
 -- une rouverte, onze existent.
+--
+-- 06/10/2026 (20261006202320) : trois jumelles de T3 ne sont appelées que
+-- par des fonctions DEFINER ; fermées à la porte, gardées par T4.
 
 DO $$
 DECLARE
@@ -57,9 +60,12 @@ BEGIN
   --      l'appellent sous le rôle du lecteur (rattrapage 20260902175631).
   v_test_name := 'T3 jumelles câblées ouvertes';
   SELECT string_agg(a.nsp||'.'||a.nom, ', ') INTO v_liste
+  -- 06/10/2026 (20261006202320) : get_due_date_after_renewal,
+  -- resolve_circulation_rule et get_library_circulation_policy_sets_ui sont
+  -- sorties de T3 — câblées, mais seulement derrière des fonctions DEFINER
+  -- (aucun appel du front, aucune vue, aucune politique) : voir T4.
   FROM (VALUES ('api','confirm_pickup_slot'),('api','fn_confirm_pickup_slot_as_reader'),
-               ('api','fn_propose_pickup_slot_as_reader'),('api','get_due_date_after_renewal'),
-               ('api','resolve_circulation_rule'),('api','get_library_circulation_policy_sets_ui'),
+               ('api','fn_propose_pickup_slot_as_reader'),
                ('api','get_remaining_renewals'),
                ('public','publish_book_draft')) a(nsp, nom)
   WHERE NOT EXISTS (
@@ -68,6 +74,31 @@ BEGIN
       AND has_function_privilege('authenticated', p.oid, 'EXECUTE'));
   IF v_liste IS NULL THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : fermées ou introuvables — ' || v_liste); END IF;
+
+  -- T4 : les trois aides câblées derrière des DEFINER sont fermées à la porte,
+  --      et chacune garde au moins une porte DEFINER ouverte à authenticated
+  --      qui l'appelle (sinon la fermeture aurait coupé un écran).
+  v_test_name := 'T4 aides derrière DEFINER fermées, portes ouvertes';
+  SELECT string_agg(a.nsp||'.'||a.nom||' ('||a.sens||')', ', ') INTO v_liste
+  FROM (
+    SELECT x.nsp, x.nom, 'ouverte' AS sens
+      FROM (VALUES ('api','get_due_date_after_renewal'),('api','resolve_circulation_rule'),
+                   ('api','get_library_circulation_policy_sets_ui')) x(nsp, nom)
+     WHERE EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+                    WHERE n.nspname = x.nsp AND p.proname = x.nom
+                      AND (has_function_privilege('authenticated', p.oid, 'EXECUTE')
+                        OR has_function_privilege('anon', p.oid, 'EXECUTE')))
+    UNION ALL
+    SELECT x.nsp, x.nom, 'sans porte'
+      FROM (VALUES ('api','get_due_date_after_renewal'),('api','resolve_circulation_rule'),
+                   ('api','get_library_circulation_policy_sets_ui')) x(nsp, nom)
+     WHERE NOT EXISTS (SELECT 1 FROM pg_proc q
+                        WHERE q.prosecdef
+                          AND has_function_privilege('authenticated', q.oid, 'EXECUTE')
+                          AND q.prosrc ~ ('\m' || x.nom || '\s*\('))
+  ) a;
+  IF v_liste IS NULL THEN v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_liste); END IF;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'CIRCULATION_SUPPLANTEE ECHEC : %/% — %', v_failed, v_passed + v_failed, array_to_string(v_failures, ' | ');

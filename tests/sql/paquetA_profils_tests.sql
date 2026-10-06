@@ -426,8 +426,11 @@ BEGIN
   -- solde des differees B20) : fermes a la porte, corps intacts, GRANT le
   -- jour ou un ecran les demande. 15.3 garde les trois qui servent ;
   -- 15.4 garde les trois fermees fermees.
+  -- 06/10/2026 (20261006202320) : fn_library_is_federated n'a plus que des
+  -- appelants DEFINER (fn_peb_authorized, private.fn_cartography_network_rows)
+  -- — elle passe de 15.3 a 15.4.
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
-    FROM unnest(c_modes || ARRAY['fn_library_has_circulation','fn_library_has_full_sigb','fn_library_is_federated']) AS nom
+    FROM unnest(c_modes || ARRAY['fn_library_has_circulation','fn_library_has_full_sigb']) AS nom
    WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
                       WHERE routine_schema = 'public' AND routine_name = nom
                         AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
@@ -436,15 +439,16 @@ BEGIN
   END IF;
 
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
-    FROM unnest(ARRAY['fn_library_has_staff_roles','fn_library_publishes_catalog','fn_library_uses_governance']) AS nom
+    FROM unnest(ARRAY['fn_library_has_staff_roles','fn_library_publishes_catalog','fn_library_uses_governance',
+                      'fn_library_is_federated']) AS nom
    WHERE EXISTS (SELECT 1 FROM information_schema.routine_privileges
                   WHERE routine_schema = 'public' AND routine_name = nom
-                    AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
+                    AND grantee IN ('authenticated', 'PUBLIC') AND privilege_type = 'EXECUTE');
   IF v_txt IS NOT NULL THEN
     RAISE EXCEPTION 'TEST 15.4 FAILED : predicat(s) sans appelant rouverts a authenticated -> % (leur reouverture se decide avec un ecran, elle ne se constate pas)', v_txt;
   END IF;
 
-  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 3 predicats servis ouverts, 3 sans appelant fermes';
+  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 2 predicats servis ouverts, 4 sans appelant sous authenticated fermes';
 END $$;
 
 -- ============================================================

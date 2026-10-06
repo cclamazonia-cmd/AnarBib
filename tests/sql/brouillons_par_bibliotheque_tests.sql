@@ -5,6 +5,8 @@
 -- Ref     : migration 20260927160000_b29_brouillons_par_bibliotheque
 --           + 20260927200627_b29_aides_internes_fermees_aux_comptes (T31)
 --           + 20260928105437_b35_deux_aides_de_b29_passent_dans_private (T30-T32)
+--           + 20261006202320_aides_definer_sans_appelant_fermees (T31 :
+--             fn_batch_caller_can_edit fermée, éprouvée par fn_batch_rubrics)
 --
 -- Cinq personnes : coordination de A (seed), bibliothécaire de B, staff de A
 -- ET de B, lectrice de A, admin réseau sans adhésion ; plus une coordination
@@ -996,6 +998,11 @@ BEGIN
     -- (b) appelée en direct, une aide fermée est refusée par le privilège
     BEGIN PERFORM public.fn_caller_can_see_batch(v_lot31A); v_txt := v_txt || 'direct:can_see_batch ';
     EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+    -- 06/10/2026 (20261006202320) : fn_batch_caller_can_edit rejoint les
+    -- fermées — ses seuls appelants sont fn_batch_rubrics,
+    -- fn_batch_assign_bib_refs et fn_batch_apply_rubric_classes, DEFINER.
+    BEGIN PERFORM public.fn_batch_caller_can_edit(v_lot31A); v_txt := v_txt || 'direct:batch_caller_can_edit ';
+    EXCEPTION WHEN insufficient_privilege THEN NULL; END;
     BEGIN PERFORM public.fn_caller_can_edit_batch(v_lot31A, true); v_txt := v_txt || 'direct:can_edit_batch ';
     EXCEPTION WHEN insufficient_privilege THEN NULL; END;
     BEGIN PERFORM public.fn_caller_can_edit_draft_library(v_libA, v_coordA); v_txt := v_txt || 'direct:can_edit_draft_library ';
@@ -1007,7 +1014,15 @@ BEGIN
     -- (c) les prédicats servis qui les appellent répondent juste
     BEGIN
       IF NOT public.fn_caller_owns_batch(v_lot31A) OR public.fn_caller_owns_batch(v_lot31B) THEN v_txt := v_txt || 'owns_batch '; END IF;
-      IF public.fn_batch_caller_can_edit(v_lot31B) THEN v_txt := v_txt || 'batch_caller_can_edit '; END IF;
+      -- son verdict, lu par son porteur : lot de B refusé pour la raison métier
+      v_hint := NULL;
+      BEGIN PERFORM public.fn_batch_rubrics(v_lot31B); v_hint := 'lu';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+      IF v_hint IS DISTINCT FROM 'error.rubrics.batch.staff_only' THEN v_txt := v_txt || 'rubriques-lot-de-B:' || v_hint || ' '; END IF;
+      v_hint := NULL;
+      BEGIN PERFORM public.fn_batch_rubrics(v_lot31A); v_hint := 'lu';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_hint := coalesce(nullif(v_hint, ''), SQLSTATE); END;
+      IF v_hint IS DISTINCT FROM 'lu' THEN v_txt := v_txt || 'rubriques-lot-de-A:' || v_hint || ' '; END IF;
       IF NOT public.fn_caller_can_edit_book_draft(v_b31A) OR public.fn_caller_can_edit_book_draft(v_b31B) THEN v_txt := v_txt || 'can_edit_book_draft '; END IF;
     EXCEPTION WHEN OTHERS THEN v_txt := v_txt || 'predicats:' || SQLSTATE || ' ';
     END;

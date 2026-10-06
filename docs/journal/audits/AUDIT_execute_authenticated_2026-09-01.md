@@ -1892,3 +1892,62 @@ reste fermée à `authenticated`.
 | `public.fn_import_row_comparison(bigint, bigint)` | 06/10 (H21 lot 3) | staff de la bibliothèque du run (accès au panneau), ou administration du réseau | **Saine.** Rend, champ par champ, la base, AnarBib et le fichier d'une ligne du run de l'appelant. Les valeurs AnarBib d'une notice que l'appelant ne voit pas sous la règle de `books_select_authenticated` sont masquées (`a_masque`), les verdicts restent. *Forme à noter* : `proposed_title` de `fn_import_list_run_rows` montrait déjà, avant ce lot, le titre d'une telle notice. |
 
 Compte attendu au prochain relevé : 0029 = **451** (+2) ; 0028 inchangé.
+
+## Complément du 06/10/2026, soir — trente-quatre ouvertures sans objet fermées (451 → 417)
+
+Relevé du tableau de bord (export du 06/10, 19 h 22 UTC) : 481 WARN = **451**
+(0029) + **29** (0028) + **1** (0011). Les trois comptes sont ceux qu'on
+attendait : 0029 = 451 (voir ci-dessus), 0028 = 29 = la liste nommée T10 de
+`grants_herites_tests`, et le 0011 est `fn_locale_from_idioma`, voulu (B32).
+
+Ce qui pouvait encore baisser : les fonctions ouvertes à `authenticated` que
+**personne** n'appelle sous ce rôle. Méthode, sur les 451, en production
+(lecture seule) puis dans le dépôt :
+
+1. appelants qui s'exécutent sous le rôle du lecteur — politiques (tous
+   schémas), vues, fonctions INVOKER (`prosrc`, tous schémas), commandes cron,
+   `pg_depend` (défaut, contrainte, index, règle, corps SQL standard) :
+   52 en ont, **399** n'en ont aucun ;
+2. pour ces 399, un nom littéral dans `src/` (hors tests), `supabase/functions/`,
+   `scripts/` ou `deploy/` — les sept `.rpc(variable)` du front prennent tous
+   leur nom dans un littéral du même fichier, aucun nom n'est construit :
+   **43** n'en ont aucun ;
+3. sur ces 43, neuf restent ouvertes : les sept de la liste T10 (ouvertes à
+   `anon` par décision), `api.fn_outbox_abandonnees` et
+   `api.fn_outbox_acquitter` (RPC d'admin réseau voulues par F12, sans écran),
+   `fn_import_row_comparison` (H21 lot 3, son écran est en cours).
+
+Les **34** fermées par `20261006202320` (`REVOKE … FROM PUBLIC, anon,
+authenticated` ; `service_role` garde ce qu'il avait) :
+
+| Groupe | Fonctions | Pourquoi aucune porte n'est perdue |
+|---|---|---|
+| Déclencheurs | `fn_audit_draft_deletion`, `fn_guard_catalog_batch_delete` | EXECUTE n'est vérifié qu'à la création du déclencheur. |
+| Façade de l'espace institutionnel | `api.get_library_circulation_policy_sets_ui`, `api.get_library_regulation_documents_ui`, `get_library_notification_context`, `get_library_theme_config_by_library_id`, `resolve_managed_library_id` | Appelées par `api.get_library_institutional_workspace` (DEFINER) et ses voisines. |
+| Circulation | `api.resolve_circulation_rule`, `api.get_due_date_after_renewal`, `api.get_future_availability`, `fn_circulation_concurrent_max` | Appelées par les `fn_v2_*` et les façades `api.get_*` DEFINER, et par le déclencheur `fn_enforce_circulation_limit`. |
+| Lots | `fn_batch_caller_can_edit` | Appelée par `fn_batch_rubrics`, `fn_batch_assign_bib_refs`, `fn_batch_apply_rubric_classes`. |
+| Gouvernance | `fn_caller_is_assembleia_facilitator`, `fn_classify_transition`, `fn_library_active_staff_count`, `fn_request_caller_is_owner` | Appelées par les RPC d'assemblée, de changement de profil et de demande, toutes DEFINER. |
+| Appartenance, réseau | `fn_current_user_is_in_network`, `fn_current_user_is_member_of`, `fn_current_user_is_member_of_holding_library`, `fn_library_is_federated`, `fn_compute_membership_validity` | Appelées par `fn_library_visible_to_caller`, `catalog_digital_access_v1`, `fn_peb_authorized`, `fn_record_membership_payment`… DEFINER. |
+| Partenariats | `fn_partnership_canonical_id`, `fn_partnership_has_active_right`, `fn_partnership_reciprocal_id`, `fn_partnership_transparence_active` | Appelées par les RPC de partenariat, de PEB et du Painel, DEFINER. |
+| Autorités, catalogue | `merge_serial`, `merge_subject`, `fn_library_uses_authority`, `fn_painel_find_profile_by_lookup`, `get_library_theme_config`, `set_library_theme_config` | Appelées par `api.fn_authority_apply`, `api.fn_authority_object`, `fn_painel_find_profile_by_email`, `*_by_library_id`, DEFINER. |
+| Sans aucun appelant | `api.revoke_my_reader_card` (carte-lecteur bêta, jamais câblée), `discard_book` (supplantée par `discard_book_cascade`), `fn_ensure_current_user_profile` | — |
+
+Aucune n'était une fuite : toutes ont été lues à cet audit ou à ses
+compléments. On les ferme parce qu'une ouverture doit servir (DOC-GRANT-1).
+
+**Éprouvé avant de pousser** : la migration, jouée en production dans une
+transaction annulée, a passé sa garde (après qu'elle eut refusé ma première
+liste de portes : `api.get_due_date_for_loan` y figurait, alors qu'elle est
+fermée depuis B20) et donné 0029 = 417. Garde continue :
+`tests/sql/aides_definer_fermees_tests.sql` (fermées, aucun appelant sous
+`authenticated`, portes ouvertes et DEFINER, portes jouées sous le rôle sans
+« permission denied for function »). Quatre suites ajustées :
+`circulation_couche_supplantee` (T3 → T4), `paquetA_profils` (15.3 → 15.4),
+`brouillons_par_bibliotheque` (T31), `b14_oracle_existence_forme` (T2 → T2b).
+Cette dernière affirmait que le Painel appelle `fn_painel_find_profile_by_lookup` :
+aucun fichier hors migrations, docs et tests ne l'a jamais nommée (`git log -S`
+vide) ; le Painel cherche par `fn_painel_search_reader`. Le rouge du banc l'a
+attrapé ; la prémisse était fausse, pas la fermeture.
+
+Compte attendu au prochain relevé : 0029 = **417** ; 0028 = **29** ; 0011 = **1**
+(voulu).
