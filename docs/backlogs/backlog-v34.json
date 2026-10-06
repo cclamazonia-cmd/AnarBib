@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-05",
+    "maj": "2026-10-06",
     "releve": {
       "date": "2026-10-05",
       "commit": "a387b46c"
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 5 octobre 2026 au soir** (`a387b46c`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le midi même, `16962c55`). Une journée chargée, à deux sessions et une contribution extérieure : **16 migrations** (432 appliquées = 432 au dépôt, toutes par la CI), 70 commits, 2 056 tests JS et 173 suites SQL, tous verts. Ce qui a bougé et pourquoi : **la base** — `public.networks` et sa policy (G13), une policy dans `ingest` (H21 lot 2), +18 fonctions dont 11 DEFINER, deux avis de sécurité de plus (G13, G17 ; le verdict de G17 reste à écrire) ; **les fonctions Edge** — `read-pdf` et `mail-i18n-test` retirées du dépôt (F3) ; **le catalogue** — le lot 66 de l'acervo CCLA (24 brouillons, 2 publiés) ; **le réseau** — un second administrateur, le camarade (`ASR2026`) ; **le dépôt** — +185 tests JS, +9 suites, +166 clés. **Mis à jour dans cette version, après l'inventaire des commits des dix derniers jours (26/09 → 05/10) contre le backlog** : I30 passe à vérifier ; dix items ouverts pour ce qui avait été trouvé en route sans être porté nulle part (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11) ; notes complétées sur A1, A3, B36, C3, C14, C18, E6, F21, G1, H21, H25 et sur douze clôtures (B32, C7, C20, C21, C22, C24, E25, E28, G13, G18, couvertures, « pt-BR parle brésilien ») ; calendrier réécrit (les gels de septembre sont passés) ; notes des domaines B, E, F et I remises à jour ; REGISTRE corrigé sur `OPAC-F3` (`alias_norm` plié sur place, pas recalculé). **Ce qui reste à clore, et par qui** — *par Xavier, critères relus et tenus sur pièces* : B29, B30, H17, H18, H19, H22, H23, H24, F16, F21 (H20 : un test à vérifier d'abord ; H25 : un critère à trancher) ; *par Xavier, à l'écran* : E31, et avec lui C14, C23, G16 ; *les décisions* : A1, C4, C17 ; *sans code* : A1 (une troisième administration réseau), A3 (la machine du runner), F3 (supprimer deux fonctions de la plateforme).",
-      "pt": "**Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16, F21 (H20 e H25: um ponto a verificar antes); *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3."
+      "fr": "**Relevé du 5 octobre 2026 au soir** (`a387b46c`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le midi même, `16962c55`). Une journée chargée, à deux sessions et une contribution extérieure : **16 migrations** (432 appliquées = 432 au dépôt, toutes par la CI), 70 commits, 2 056 tests JS et 173 suites SQL, tous verts. Ce qui a bougé et pourquoi : **la base** — `public.networks` et sa policy (G13), une policy dans `ingest` (H21 lot 2), +18 fonctions dont 11 DEFINER, deux avis de sécurité de plus (G13, G17 ; le verdict de G17 reste à écrire) ; **les fonctions Edge** — `read-pdf` et `mail-i18n-test` retirées du dépôt (F3) ; **le catalogue** — le lot 66 de l'acervo CCLA (24 brouillons, 2 publiés) ; **le réseau** — un second administrateur, le camarade (`ASR2026`) ; **le dépôt** — +185 tests JS, +9 suites, +166 clés. **Mis à jour dans cette version, après l'inventaire des commits des dix derniers jours (26/09 → 05/10) contre le backlog** : I30 passe à vérifier ; dix items ouverts pour ce qui avait été trouvé en route sans être porté nulle part (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11) ; notes complétées sur A1, A3, B36, C3, C14, C18, E6, F21, G1, H21, H25 et sur douze clôtures (B32, C7, C20, C21, C22, C24, E25, E28, G13, G18, couvertures, « pt-BR parle brésilien ») ; calendrier réécrit (les gels de septembre sont passés) ; notes des domaines B, E, F et I remises à jour ; REGISTRE corrigé sur `OPAC-F3` (`alias_norm` plié sur place, pas recalculé). **Ce qui reste à clore, et par qui** — *par Xavier, critères relus et tenus sur pièces* : B29, B30, H17, H18, H19, H22, H23, H24, F16 et F21 — **clos par Xavier le 06/10** (leurs restes vont à H28, H29, E31 et F24, ouvert pour l'occasion) ; H20 (un test à vérifier d'abord) et H25 (un critère à trancher) ; *par Xavier, à l'écran* : E31, et avec lui C14, C23, G16 ; *les décisions* : A1, C4, C17 ; *sans code* : A1 (une troisième administration réseau), A3 (la machine du runner), F3 (supprimer deux fonctions de la plateforme).",
+      "pt": "**Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3."
     },
     "photo": [
       {
@@ -2794,6 +2794,86 @@
           "fr": "**Le schéma `ingest` entre au flux long de la sauvegarde #BG2 — livré et mis en service le 05/10, décision de Xavier du jour** (`f5e3f5ed`, CI verte). Relevé par la revue du lot 2 de H21 : aucun flux ne sauvegardait `ingest` (imports, lignes de staging — qui portent désormais des preuves : ligne écartée IMP-27, source des bases —, liens ligne → brouillon, bases du lot 2) ; le cadrage BG2-13 du 30/06 n’avait jamais été appliqué. `anarbib-bg2.sh` : un seul `pg_dump --schema=public --schema=ingest`, même fichier `anarbib-long.sql` (même lignée restic), exclusions et denylist en noms qualifiés, deux contrôles de plus sur le dump, filet sur public + ingest, restore-test aux attendus calculés ; `bg2-known-tables.txt` : les 11 tables `ingest.<table>` ; filet CI aux mêmes fonctions ; RUNBOOK : repose des droits d’ingest, exposition dans le Data API, secours `fn_h21_reprendre_les_bases()` ; REGISTRE : BG2-13 mis en œuvre (tout ingest, colonnes d’acteur staff acceptées), BG2-AUTO-2 corrigé. Preuve sur banc privé : dump de 169 tables (public 158, ingest 11) avec données, rejeu dans une base vide, ACL reposées identiques à la production. Mis en service : `~/anarbib` avancé sur `f5e3f5ed`, `anarbib-bg2.sh check` → « Filet OK ». **Reste** : le premier tir long avec ingest, dimanche 11/10 à 20:00 (attendu au journal : « Dump long OK : N tables (public ~158, ingest 11) ») ; hors périmètre, consigné : `--no-privileges` perd aussi les droits de public, et les schémas `private` et `api` ne sont dans aucun flux.",
           "pt": "**O esquema `ingest` entra no fluxo longo do backup #BG2 — entregue e em serviço em 05/10, decisão de Xavier** (`f5e3f5ed`). Nenhum fluxo salvava `ingest`; agora um único `pg_dump --schema=public --schema=ingest`, mesmo arquivo, filtro de classificação nos dois esquemas, 11 tabelas classificadas, RUNBOOK e REGISTRO atualizados. Prova em banco privado; `anarbib-bg2.sh check` → «Filet OK». **Falta**: o primeiro backup longo com ingest, domingo 11/10 às 20:00."
         }
+      ],
+      [
+        "B29",
+        "2026-10-06",
+        {
+          "fr": "Les brouillons appartiennent à leur bibliothèque, constaté en production le 28/09 : la coordination d'une bibliothèque modifie ses 1 673 brouillons en cours et les 147 autres lui sont refusés ; l'administration du réseau voit tout ; les trois questions de `CAT-E18` sont réalisées telles qu'écrites (`2c8a9af0`, `faea418c`, `140afab6`, `f1808c85` ; suite `brouillons_par_bibliotheque_tests`, 32 tests). **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "Os rascunhos pertencem à sua biblioteca, constatado em produção em 28/09: a coordenação edita seus 1 673 rascunhos e os outros 147 lhe são recusados; a administração da rede vê tudo; `CAT-E18` realizado (suíte de 32 testes). **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "B30",
+        "2026-10-06",
+        {
+          "fr": "Chaque lot a sa bibliothèque : les politiques de `catalog_batches` comparent `library_id`, plus aucun prédicat n'est déduit du contenu ; constaté le 28/09 et de nouveau le 05/10 (quatre lots : 8 MLEG, 57 et 66 BLMF, 63 Solidaires) ; la suite de B29 reste verte (`3a0e036f`, `2ecdaea3`). **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "Cada lote tem sua biblioteca: as políticas de `catalog_batches` comparam `library_id`; constatado em 28/09 e em 05/10 (quatro lotes); a suíte do B29 segue verde. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H17",
+        "2026-10-06",
+        {
+          "fr": "Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB : zones reprises et testées (`import_zones`), tableau de couverture engendré, et gardé par un test qui échoue si une perte mesurée n'est pas acceptée (`7dbd9f11`, `466324aa`, `2348cb86`). Un import réel et le rattachement des fascicules importés à leur périodique ne sont pas des critères : portés par H28. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "O mapeamento UNIMARC retoma as zonas correntes do PMB: zonas testadas, tabela de cobertura gerada e guardada. Importação real e fascículos ligados ao periódico: H28. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H18",
+        "2026-10-06",
+        {
+          "fr": "Les responsabilités importées gardent leur rôle et leur nature sur la fixture, les rapprochements d'autorités sont proposés en révision, tests écrits (`8c80de27`, `2ee5f7a7`, `a692a75e`). L'épreuve sur un import réel est portée par H28. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "As responsabilidades importadas mantêm papel e natureza, aproximações propostas na revisão, testes escritos. Prova numa importação real: H28. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H19",
+        "2026-10-06",
+        {
+          "fr": "Les exemplaires d'un catalogue importé suivent leur notice : critères tenus au banc le 27/09, 46 exemplaires sur 46 au réimport (`2f488790`, `IMP-25`). L'épreuve sur un import DIRA réel est portée par H28. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "Os exemplares importados seguem sua notícia: critérios cumpridos em bancada, 46/46 na reimportação (`IMP-25`). Importação real da DIRA: H28. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H22",
+        "2026-10-06",
+        {
+          "fr": "Le lecteur de l'export XML propre à PMB est livré (`8c80de27`) et déployé le 28/09 ; le format `pmb_xml` est admis par la CHECK de la base. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "O leitor do XML do PMB foi entregue (`8c80de27`) e implantado em 28/09; formato `pmb_xml` admitido pela CHECK. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H23",
+        "2026-10-06",
+        {
+          "fr": "Un export UNIMARC (ISO 2709 et XML), miroir exact de l'import : les deux sont proposés dans Importations, une seule table de correspondance (`_shared/marc/correspondance.ts`) sert à l'import et à l'export, et les 64 notices de la fixture font l'aller-retour à l'identique (`ecriture.test.ts`, 19 tests ; `8c80de27`, `2ee5f7a7`, `466324aa`, `2348cb86`). **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "Exportação UNIMARC (ISO 2709 e XML), espelho exato da importação: uma só tabela de correspondência, ida e volta idêntica das 64 notícias. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "H24",
+        "2026-10-06",
+        {
+          "fr": "L'export d'une bibliothèque contient tout ce qu'elle a catalogué : critère 1 éprouvé le 29/09 par la preuve de H27 (46/46 exemplaires, 61/61 responsabilités, 42/42 notices indexées), critère 2 par `export_catalogue_tests` (10). Le type, la section et le code statistique des exemplaires sont portés par H29. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "A exportação de uma biblioteca contém tudo o que ela catalogou: critério 1 provado em 29/09 (H27), critério 2 por `export_catalogue_tests`. Tipo, seção e código estatístico: H29. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "F16",
+        "2026-10-06",
+        {
+          "fr": "L'invitation à une tâche crée enfin une invitation : `fn_task_invite` pose `convite:<adresse>` (`32cfea66`, migration `20260930195644`) ; suite `taches_invitation_tests` 6/6 (1/6 contre l'ancienne fonction) ; les marqueurs `convite:` ne s'affichent plus. Une invitation réelle reçue est portée par E31. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "O convite a uma tarefa enfim cria um convite (`32cfea66`); suíte 6/6; as marcas `convite:` não aparecem mais. Um convite real recebido: E31. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
+      ],
+      [
+        "F21",
+        "2026-10-06",
+        {
+          "fr": "Pied de page et statuts des courriels dans la langue de la bibliothèque : une clé `wf.stage.*` par étape dans les dix langues, plus de pied ni de signature en portugais par défaut (PR #31 du camarade `ASR2026`, `da034c83` — `9e298ea3`, `70233b98` — et `9bdce13a`) ; bancs `mail-status-footer-i18n` (9) et `mail-nom-equipe-repli-garde` (4). Un vrai courriel en français reçu en production et le nom d'expéditeur par défaut, encore en portugais, sont portés par F24. **Clos le 06/10 par Xavier sur ces constats.**",
+          "pt": "Rodapé e status dos e-mails na língua da biblioteca: uma chave `wf.stage.*` por etapa nas dez línguas, sem rodapé nem assinatura em português por padrão (PR #31 do camarada, `9bdce13a`); bancadas 9 + 4. E-mail real em francês e nome de remetente padrão: F24. **Fechado em 06/10 por Xavier com base nessas constatações.**"
+        }
       ]
     ]
   },
@@ -2900,112 +2980,6 @@
       "verif": {
         "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur. Le commit de la sonde `ci_en_retard`, de `deploy/ops/RUNNER.md` et de `deploy/runner/compose.yml` (28/09) est `afdb81a2`.",
         "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor. O commit da sonda `ci_en_retard`, de `RUNNER.md` e de `compose.yml` (28/09) é `afdb81a2`."
-      }
-    },
-    {
-      "id": "B29",
-      "d": "B",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "L",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Les brouillons de catalogage appartiennent à leur bibliothèque : l'administration du réseau voit tout, une coordination ou une bibliothécaire ne voit que les siens",
-        "pt": "Os rascunhos de catalogação pertencem à sua biblioteca: a administração da rede vê tudo, uma coordenação ou bibliotecária só vê os seus"
-      },
-      "v": {
-        "fr": "Relevé le 27/09 pendant la revue de H19 (baseline, l.53888, 54047, 54406) : les politiques `author_drafts_catalogacao_librarian_all`, `book_drafts_catalogacao_librarian_all` et `exemplar_drafts_catalogacao_librarian_all` ne demandent que `api.my_access.can_access_catalogacao`, **sans aucune portée de bibliothèque**, en lecture comme en écriture. Toute personne qui catalogue, dans n'importe quelle bibliothèque, lit et modifie les brouillons de toutes les autres — y compris ceux d'une bibliothèque privée, et ceux d'un dépôt compagnon en attente d'admission. H19 a fermé ce qui passait par les RPC de publication (garde d'appartenance dans `publish_exemplar_draft`, liens d'import non écrivables par l'API), pas l'accès direct aux tables. **Règle posée par Xavier le 27/09** : possible pour un·e catalogueur·se qui est par ailleurs admin réseau, pas pour une coordination ni une bibliothécaire.",
-        "pt": "Levantado em 27/09 na revisão de H19: as políticas de `author_drafts`, `book_drafts` e `exemplar_drafts` só exigem `can_access_catalogacao`, **sem nenhum escopo de biblioteca**, em leitura e escrita. **Regra de Xavier (27/09)**: possível para quem cataloga e é admin da rede, não para coordenação nem bibliotecária."
-      },
-      "w": {
-        "fr": "Portée par bibliothèque : `book_drafts` par `owner_library_id` (et la destination résolue par `fn_book_draft_destination_library` quand il est nul), `exemplar_drafts` par `target_library_id` (et la bibliothèque de sa notice pour un exemplaire importé) ; `fn_caller_is_network_admin()` voit tout. **À trancher d'abord** : les brouillons sans bibliothèque (dépôt compagnon non admis : administration seule ?) ; `author_drafts`, dont les autorités sont communes au réseau (portée par qui les a créés, ou restées communes ?) ; les lots partagés entre bibliothèques (mutirão) ; les gardes « staff QUELQUE PART » des fonctions de fusion (`api.merge_book_drafts`, `api.merge_draft_into_book`), du journal (`fn_restore_deleted_draft`) et du rapport de révision, à aligner sur la même règle. Chercher les VUES et les RPC `security_invoker` qui lisent ces tables avant de restreindre (une vue invoker appelle sous le rôle du lecteur). Tester avec des comptes de deux bibliothèques et un compte admin. **Tranché le 27/09 par Xavier (REGISTRE `CAT-E18`)** : *(1)* un brouillon sans bibliothèque appartient à celle de l'adhésion de staff active de qui l'a créé — sans le repli sur qui publie, qui rendrait tout visible —, sinon à son créateur et à l'administration ; *(2)* les brouillons d'autorités restent lisibles par toute personne qui catalogue, modifiables par qui les a créés et par l'administration ; *(3)* le mutirão passe par une adhésion temporaire dans la bibliothèque hôte, à laquelle appartiennent ses brouillons. **Livré le 27/09** (`2c8a9af0`, `faea418c`, migration `20260927160000`), règle et choix de réalisation au REGISTRE (CAT-E18, « Mise en œuvre » et « Limites connues ») : politiques par bibliothèque (mêmes noms), autorités en lecture commune et écriture par le créateur, suppression définitive par la coordination DE la bibliothèque du brouillon ; par l'API, `created_by` figé, bibliothèque fixée à la création, rangement dans un lot gardé ; une cinquantaine de fonctions SECURITY DEFINER alignées, refus avant tout autre contrôle ; lots vus, modifiés, révisés et supprimés selon leurs brouillons en cours (lot mixte : l'administration ; suppression et demande de révision : la coordination du lot) ; `publish_book_draft` et `create_book_draft_from_book` repartent de leur version capas. **Une revue contradictoire et quatre vérifications des corrections** (18, 21, 21 et 29 constats, un seul bloquant — NULL lu comme « à soi » —, les importants corrigés) ; pire cas mesuré 20-35 ms (dépôt de 1 800 notices et 1 800 exemplaires sans bibliothèque, appelant d'une troisième bibliothèque).",
-        "pt": "Escopo por biblioteca (owner_library_id / target_library_id), admin da rede vê tudo. **Decidir antes**: rascunhos sem biblioteca, `author_drafts` (autoridades comuns à rede), lotes compartilhados (mutirão), guardas «staff em QUALQUER biblioteca» das funções de fusão, do diário e do relatório de revisão. Procurar as views e RPC security_invoker antes de restringir. **Decidido em 27/09 por Xavier (REGISTRO `CAT-E18`)**: *(1)* rascunho sem biblioteca = biblioteca da adesão de staff ativa de quem o criou (sem o recurso a quem publica), senão quem o criou e a administração; *(2)* rascunhos de autoridade: leitura comum, escrita por quem criou e pela administração; *(3)* mutirão por adesão temporária na biblioteca anfitriã, dona dos rascunhos. **Entregue em 27/09** (`2c8a9af0`, `faea418c`, migração `20260927160000`), regra e escolhas no REGISTRO (CAT-E18): políticas por biblioteca, autoridades com leitura comum e escrita por quem criou, gardas das funções SECURITY DEFINER alinhadas, lotes segundo os seus rascunhos em curso. Uma revisão contraditória e quatro verificações das correções."
-      },
-      "y": {
-        "fr": "Risque de casser des gestes aujourd'hui ouverts (file de catalogage multi-bibliothèques, fusions, corbeille, étiquettes) : une restriction de lecture qui masque une ligne rend des mises à jour silencieusement nulles. Avancer table par table, avec une suite SQL par rôle.",
-        "pt": "Risco de quebrar gestos hoje abertos: uma restrição de leitura torna atualizações silenciosamente nulas. Avançar tabela por tabela."
-      },
-      "f": {
-        "fr": [
-          "Une bibliothécaire de A ne lit ni ne modifie un brouillon de B (notice, exemplaire), par l'API comme par les RPC.",
-          "L'administration du réseau garde la vue et l'action sur tout.",
-          "Les trois questions tranchées le 27/09 (`CAT-E18`) sont réalisées telles qu'écrites."
-        ],
-        "pt": [
-          "Uma bibliotecária de A não lê nem modifica um rascunho de B.",
-          "A administração da rede mantém tudo.",
-          "As três questões decididas em 27/09 (`CAT-E18`) estão realizadas como escritas."
-        ]
-      },
-      "dep": {
-        "fr": "Après la livraison de H19 (même zone, colonnes neuves de `exemplar_drafts`).",
-        "pt": "Depois da entrega de H19."
-      },
-      "r": [
-        "supabase/migrations/20260510000000_baseline_live.sql",
-        "supabase/migrations/20260927113000_h19_exemplaires_importes.sql",
-        "docs/specs/REGISTRE_decisions.md"
-      ],
-      "verif": {
-        "fr": "27/09 — suite SQL `brouillons_par_bibliotheque_tests` 30/30 (cinq profils : coordination de A, bibliothécaire de B, staff de A et B, lectrice, admin sans adhésion, admin aussi staff) et les 122 suites de la CI ; vitest 1 061 ; relevé de production (1 820 notices en cours, toutes rattachées ; un seul lot, 57, porte des notices publiées sans bibliothèque). **28/09, prod en lecture seule** : les politiques `*_catalogacao_librarian_all` de `book_drafts` et `exemplar_drafts` demandent `can_access_catalogacao` ET (admin réseau OU `COALESCE(owner_library_id, private.fn_book_draft_creator_library(…))` parmi les bibliothèques de staff) ; `author_drafts` : lecture commune au réseau, écriture par l'admin ou l'auteur·e ; `fn_user_staff_library` fermée aux comptes (`postgres`, `service_role`) ; les deux aides déplacées dans `private` par B35 ; 134 brouillons de notice sur 2 260 sans `owner_library_id` (repli par la bibliothèque du créateur), 20/20 brouillons d'exemplaire avec `target_library_id`. Conforme aux trois critères. **27-28/09** — mesuré en production après le déploiement (`a4b66ad4`) : la coordination d'une bibliothèque modifie ses 1 673 notices en cours, et les 147 autres lui sont refusées. Cinq aides de B29 sans appelant sous `authenticated` (`fn_caller_can_edit_draft_library`, `fn_caller_can_edit_exemplar_draft`, `fn_caller_can_edit_author_draft`, `fn_caller_can_edit_batch`, `fn_caller_can_see_batch`) sont fermées aux comptes par `f1808c85` (migration `20260927200627`, déployée par la CI le 28/09 à 10 h 04 UTC) : lint 0029 de 448 à 443 en production (441 après B35). T31 garde ce choix : sous `authenticated`, les DEFINER qui portent ces aides opposent un refus métier, jamais un 42501. Le complément d'audit du 27/09 (`71793cca`) lit les vingt-quatre fonctions neuves de B29, des capas et de B30 : aucune faille. `brouillons_par_bibliotheque_tests` compte désormais 32 tests (T32 vient de B35). **05/10, inventaire — critères relus contre les commits** : conforme aux trois critères depuis le relevé en production du 28/09 (ci-dessus) ; rien ne reste. **Clôture à décider par Xavier.**",
-        "pt": "27/09 — suíte SQL 30/30 e as 122 suítes da CI; vitest 1 061; levantamento em produção. **28/09, produção em leitura** : as políticas de `book_drafts` e `exemplar_drafts` exigem `can_access_catalogacao` E (admin da rede OU biblioteca do rascunho entre as bibliotecas de staff); `author_drafts` de leitura comum; `fn_user_staff_library` fechada às contas; 134 de 2 260 rascunhos sem `owner_library_id` (recuo pela biblioteca de quem criou). Conforme. **27-28/09** — medido em produção depois da implantação (`a4b66ad4`): a coordenação de uma biblioteca edita seus 1 673 rascunhos em andamento, e os outros 147 lhe são recusados. Cinco funções auxiliares sem chamador sob `authenticated` foram fechadas às contas por `f1808c85` (migração `20260927200627`, implantada pela CI em 28/09 às 10 h 04 UTC): lint 0029 de 448 para 443 em produção (441 depois do B35). T31 guarda essa escolha; a auditoria complementar `71793cca` não acha nenhuma falha. A suíte `brouillons_par_bibliotheque_tests` tem agora 32 testes (T32 vem do B35). **05/10, inventário — critérios relidos contra os commits**: conforme aos três critérios desde 28/09. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
-      "id": "B30",
-      "d": "B",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Donner une bibliothèque propre au lot de catalogage (suite de B29)",
-        "pt": "Dar ao lote de catalogação uma biblioteca própria (sequência de B29)"
-      },
-      "v": {
-        "fr": "B29 (27/09) déduit « à qui est un lot » de ses brouillons : en cours, publiés, jetés, réattribués (IMP-20 c), exemplaires importés qui suivent leur notice, lots d'import de l'administration. Quatre vérifications de suite ont trouvé à chaque fois de nouveaux cas limites (18, 21, 21, 29 constats) : la règle tient, mais par une dizaine de prédicats (`fn_caller_can_see_batch`, `fn_caller_can_edit_batch`, `fn_caller_owns_batch`, `fn_caller_coordinates_batch`, déclencheur de rangement, politiques de `catalog_batches`). Limites connues au REGISTRE (CAT-E18) : une personne staff de deux bibliothèques peut rendre un lot mixte ; un brouillon restauré qui sort de son lot ne le dit pas ; le lot d'un compte d'administration n'est visible de personne d'autre tant qu'elle ne l'a pas confié.",
-        "pt": "B29 deduz «de quem é um lote» a partir dos seus rascunhos; quatro verificações acharam sempre novos casos-limite. Limites conhecidos no REGISTRO (CAT-E18)."
-      },
-      "w": {
-        "fr": "Colonne `catalog_batches.library_id` (nulle = lot de l'administration), posée à la création (écran : la bibliothèque de staff choisie ; import : bibliothèque du run pour un catalogue propre, destination pour un dépôt, nulle si inconnue ; réattribution : la nouvelle) et figée par l'API ; rangement d'un brouillon seulement si sa bibliothèque est celle du lot ; toutes les règles de lot (voir, modifier, réviser, supprimer) ramenées à cette colonne. Reprise des lots existants : la bibliothèque commune de leurs brouillons en cours et publiés, sinon nulle (administration). Repartir des définitions RÉELLES de `fn_import_promote`, `fn_batch_reassign_library` et des fonctions de rapprochement (H19). **Livré le 27/09** (`3a0e036f`, `2ecdaea3`, migration `20260927191059`), règle et choix au REGISTRE (CAT-E18, paragraphe « B30 ») : colonne posée à la création (écran : la bibliothèque active, un menu pour le staff de plusieurs bibliothèques, « Administration du réseau » pour l'administration), figée par l'API, changée par la seule réattribution (« Changer la bibliothèque du lot » remplace « confier ») ; toutes les règles de lot lues sur la colonne ; un brouillon ne se range que dans un lot de sa bibliothèque ; imports : bibliothèque du run ou destination de la source ; publier ouvert à l'administration sans adhésion (adhésion ACTIVE exigée du staff) ; une notice importée sans bibliothèque ne se publie pas. Reprise en production : lot 8 → MLEG et 63 → Solidaires (brouillons en cours), 57 → BLMF (fiches publiées). **Une revue contradictoire (28 constats, 2 bloquants), deux vérifications des corrections (10 puis 2 constats), contre-épreuve à 17 mutants.**",
-        "pt": "Coluna `catalog_batches.library_id` (nula = lote da administração), posta na criação e congelada; todas as regras de lote reduzidas a ela; retomada dos lotes existentes. **Entregue em 27/09** (`3a0e036f`, `2ecdaea3`, migração `20260927191059`), regra e escolhas no REGISTRO (CAT-E18): coluna posta na criação e congelada, mudada só pela reatribuição; todas as regras de lote lidas na coluna; um rascunho só entra num lote da sua biblioteca. Retomada em produção: lote 8 → MLEG, 63 → Solidaires, 57 → BLMF. Uma revisão contraditória, duas verificações das correções, contraprova com 17 mutantes."
-      },
-      "y": {
-        "fr": "Touche les fonctions d'import livrées avec H19 : une revue contradictoire avant tout déploiement.",
-        "pt": "Toca as funções de importação de H19: revisão contraditória antes de implantar."
-      },
-      "f": {
-        "fr": [
-          "Un lot a une bibliothèque, visible à l'écran, ou relève de l'administration.",
-          "Les prédicats de lot déduits du contenu disparaissent au profit de la colonne.",
-          "Les tests de B29 restent verts."
-        ],
-        "pt": [
-          "Um lote tem uma biblioteca ou é da administração.",
-          "Os predicados deduzidos do conteúdo desaparecem.",
-          "Os testes de B29 continuam verdes."
-        ]
-      },
-      "dep": {
-        "fr": "Après la vérification de B29 en production.",
-        "pt": "Depois da verificação de B29 em produção."
-      },
-      "r": [
-        "supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql",
-        "docs/specs/REGISTRE_decisions.md",
-        "supabase/migrations/20260927191059_b30_lot_a_une_bibliotheque.sql",
-        "tests/sql/lot_a_une_bibliotheque_tests.sql",
-        "src/lib/useStaffLibraries.js"
-      ],
-      "verif": {
-        "fr": "27/09 — suite SQL `lot_a_une_bibliotheque_tests` 17/17 (huit profils) et les 132 suites de la CI ; vitest 107 fichiers ; production en lecture seule après le déploiement (tag `deployed-functions` = `2ecdaea3`, migration `created_by` nul) : lots 8, 57, 63 à MLEG, BLMF, Solidaires, `updated_at` intact, aucun lot à l'administration ; la coordination de chaque bibliothèque voit son lot et seulement lui ; déclencheurs *_zz_batch_guarded posés, anciens retirés ; droits des fonctions neuves conformes (aucune à anon). **28/09, prod en lecture seule** : `catalog_batches.library_id` présente ; 3 lots, tous avec une bibliothèque, aucun lot d'administration ; les quatre politiques de `catalog_batches` (lire, modifier, supprimer, suppression définitive) comparent `library_id` aux bibliothèques de staff ou de coordination de l'appelant·e — plus un prédicat déduit du contenu. Conforme aux trois critères. **05/10, inventaire — critères relus contre les commits** : conforme aux trois critères depuis le relevé en production du 28/09 (les quatre lots ont chacun leur bibliothèque au 05/10 : 8 MLEG, 57 et 66 BLMF, 63 Solidaires) ; rien ne reste. **Clôture à décider par Xavier.**",
-        "pt": "27/09 — suíte SQL 17/17 e as 132 suítes da CI; vitest 107 arquivos; produção em leitura após a implantação: lotes 8, 57, 63 em MLEG, BLMF, Solidaires; cada coordenação vê o seu lote e só ele. **28/09, produção em leitura** : `catalog_batches.library_id` presente; 3 lotes, todos com biblioteca; as quatro políticas de `catalog_batches` comparam `library_id` às bibliotecas de staff ou de coordenação. Conforme. **05/10, inventário — critérios relidos contra os commits**: conforme desde 28/09 (os quatro lotes têm cada um sua biblioteca). **Fechamento a decidir por Xavier.**"
       }
     },
     {
@@ -4976,54 +4950,6 @@
       }
     },
     {
-      "id": "F16",
-      "d": "F",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "L'invitation à une tâche n'a jamais créé d'invitation",
-        "pt": "O convite para uma tarefa nunca criou convite"
-      },
-      "v": {
-        "fr": "Relevé par la carte F1 (30/09). `fn_task_invite` ajoute l'adresse BRUTE aux marqueurs de la tâche, alors que `task_invite_emails_from_tags` ne retient que les marqueurs `convite:…` : aucune invitation n'a jamais été créée (`painel_internal_task_invites` : 0 ligne ; file d'invitation : 0 insertion). L'écran annonce pourtant « invitation envoyée », et l'adresse invitée finit dans les « Marqueurs » des avis de tâche.",
-        "pt": "Achado pelo mapa F1 (30/09). `fn_task_invite` põe o endereço CRU nas marcas da tarefa, e `task_invite_emails_from_tags` só aceita `convite:…`: nenhum convite jamais foi criado. A tela anuncia « convite enviado », e o endereço acaba nas « Marcas » dos avisos."
-      },
-      "w": {
-        "fr": "Migration depuis la définition réelle : `fn_task_invite` pose `convite:` || adresse (ou `task_invite_emails_from_tags` accepte les deux formes) ; `taskTagsLabel` n'affiche plus les marqueurs `convite:` ; suite SQL : un appel crée une invitation et une ligne de file.",
-        "pt": "Migração a partir da definição real: `fn_task_invite` grava `convite:` || endereço; `taskTagsLabel` esconde as marcas `convite:`; suíte SQL: uma chamada cria um convite e uma linha na fila."
-      },
-      "y": {
-        "fr": "Une fonction qui dit « envoyé » sans rien envoyer : la personne invitée attend un courriel qui ne vient jamais, et son adresse se retrouve affichée dans les avis.",
-        "pt": "Uma função que diz « enviado » sem enviar: a pessoa convidada espera um e-mail que nunca chega, e seu endereço aparece nos avisos."
-      },
-      "f": {
-        "fr": [
-          "Inviter une personne à une tâche crée une invitation et un courriel (suite SQL qui emprunte le chemin).",
-          "Aucune adresse n'apparaît dans les marqueurs affichés."
-        ],
-        "pt": [
-          "Convidar uma pessoa cria um convite e um e-mail (suíte SQL).",
-          "Nenhum endereço aparece nas marcas exibidas."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Sort de F1.",
-        "pt": "Nenhuma. Sai de F1."
-      },
-      "r": [
-        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ],
-      "verif": {
-        "fr": "**30/09** — livré (`32cfea66`, migration `20260930195644`, appliquée par la CI ; fonctions redéployées le 30/09 à 22 h 21-22 h 23). `fn_task_invite` pose `convite:<adresse>` ; suite `taches_invitation_tests` 6/6 (inviter crée une invitation et une ligne d'envoi, réinviter ne double rien, adresse invalide refusée, retirer le marqueur annule ; 1/6 contre l'ancienne fonction) ; les marqueurs `convite:` ne s'affichent plus (écrans et avis). Les deux critères sont tenus au banc. **Reste** : qu'une invitation réelle parte — inviter quelqu'un (soi-même) à une tâche et recevoir le courriel ; le secret d'expédition existe en production. **05/10, inventaire — critères relus contre les commits** : les deux critères sont tenus au banc (`32cfea66`) ; reste une invitation réelle, qui n'est pas un critère. **Clôture à décider par Xavier.**",
-        "pt": "**30/09** — entregue (`32cfea66`); suíte 6/6. Falta um convite real chegar. **05/10, inventário — critérios relidos contra os commits**: os dois critérios cumpridos em bancada; falta um convite real, que não é critério. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
       "id": "F19",
       "d": "F",
       "p": "P1",
@@ -5066,52 +4992,6 @@
       "verif": {
         "fr": "**30/09** — livré et déployé (`4158504a`, CI verte, les 55 fonctions redéployées le 30/09 à 22 h 01 ; puis de nouveau le 01/10 avec F17). `masquerAdresse` à la source (transport, notificateurs) et un filet sur `console.*` installé au chargement sous Deno ; banc `journal-sans-adresse` (les 55 fonctions atteignent le masque) ; éprouvé sous Deno 2.7. **Reste le critère** : une semaine de journaux d'envoi sans adresse complète — à relever le 08/10.",
         "pt": "**30/09** — entregue e implantado (`4158504a`). Falta o critério: uma semana de registros sem endereço completo (08/10)."
-      }
-    },
-    {
-      "id": "F21",
-      "d": "F",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "deno",
-        "langue"
-      ],
-      "t": {
-        "fr": "Pied de page et ligne « Status » des courriels en pt-BR dans toutes les langues",
-        "pt": "Rodapé e linha « Status » dos e-mails em pt-BR em todas as línguas"
-      },
-      "v": {
-        "fr": "Relevé par la carte F1 (30/09). Sans `footer_local` (aucune des trois bibliothèques n'en a), le contexte de repli pose un pied de page et une signature en portugais que `tMail` ne traduit plus : tout courriel de bibliothèque se termine en pt-BR, quelle que soit la langue. Et la ligne « Status » des courriels de réservation vient d'une table codée en dur en pt-BR (`WF_LABELS`, `shared/events.ts`).",
-        "pt": "Achado pelo mapa F1. O rodapé de reserva e a linha « Status » ficam em pt-BR em todas as línguas."
-      },
-      "w": {
-        "fr": "`footer_local` et `signature_short` à null dans `fallbackLibraryNotificationContext` pour laisser `tMail` localiser ; une clé par stage à la place de `WF_LABELS`, dans les dix langues ; un test de source qui rend un courriel en fr et y refuse le portugais.",
-        "pt": "Deixar `tMail` localizar o rodapé; uma chave por etapa em vez de `WF_LABELS`, nas dez línguas; teste de fonte."
-      },
-      "y": {
-        "fr": "Une lectrice francophone reçoit un courriel qui finit en portugais : l'app a l'air de ne pas savoir à qui elle parle.",
-        "pt": "Um e-mail em francês que termina em português."
-      },
-      "f": {
-        "fr": [
-          "Un courriel rendu en fr, nl ou el ne contient plus de portugais (test de source sur le rendu)."
-        ],
-        "pt": [
-          "Um e-mail em fr, nl ou el não contém mais português (teste)."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ],
-      "verif": {
-        "fr": "01/10, le soir — **déployé** (PR #31 d'ASR2026, fusion `da034c83`, CI verte à 22 h 23 ; et `9bdce13a`). Les statuts de réservation passent par une clé `wf.stage.*` dans les dix langues (`WF_LABELS` ne sert plus que de repli) ; les courriels d'équipe des emprunts partent dans la langue de la bibliothèque, comme ceux des réservations (le pt-BR forcé du Paquet 17, `96006b81`, est abandonné). Le pied de page : `FOOTER_TEXT` n'a plus de défaut portugais et `tMail` localise quand il manque ; une valeur configurée reste prioritaire. La revue de la PR a trouvé une seconde source du même défaut : `ADMIN_NAME` valait par défaut « Equipe da biblioteca » et revenait par `signature_short` — un courriel français rendu avec la PR finissait encore en portugais. Corrigé par `9bdce13a` : défaut vide, signature au nom de la bibliothèque (`shared/branding.ts`). Preuves : banc `mail-status-footer-i18n` (9 tests, cas réel d'une bibliothèque sans signature), garde `mail-nom-equipe-repli-garde` (4 tests, rouge sans le correctif), 1 672 tests vitest. **Reste à vérifier** : un vrai courriel de réservation en français, en production, sans un mot de portugais. Hors F21, toujours en pt-BR par défaut : `SENDER_NAME` (« Biblioteca da rede AnarBib »). **Commits de la PR #31 non nommés plus haut** : `9e298ea3` (statuts et pieds de page) et `70233b98` (écriture inclusive, dont `wf.stage.cancelada_leitor` en de, it et ca ; `FOOTER_TEXT` et `ADMIN_NAME` préservés) ; et, hors F21, `7dbd0a56` : l'image de fond par défaut est servie en statique depuis `public/img/`, plus de fond noir sur une instance neuve (garde `theme-fond-statique-garde`). **05/10, inventaire** — le critère (un test de source qui rend un courriel et y refuse le portugais) est tenu ; le vrai courriel en production n'en fait pas partie. **Clôture à décider par Xavier.** Si F21 se clôt, `SENDER_NAME` en pt-BR par défaut (« Biblioteca da rede AnarBib ») reste à porter ailleurs.",
-        "pt": "01/10, à noite — **implantado** (PR #31 de ASR2026, merge `da034c83`, CI verde às 22h23; e `9bdce13a`). Os status de reserva passam por uma chave `wf.stage.*` nas dez línguas; os e-mails da equipe sobre empréstimos saem na língua da biblioteca, como os de reserva (o pt-BR forçado do Pacote 17, `96006b81`, é abandonado). `FOOTER_TEXT` não tem mais padrão em português e `tMail` localiza o rodapé quando falta. A revisão da PR achou uma segunda fonte do mesmo defeito: `ADMIN_NAME` valia por padrão « Equipe da biblioteca » e voltava por `signature_short`. Corrigido por `9bdce13a`: padrão vazio, assinatura com o nome da biblioteca. Provas: bancada `mail-status-footer-i18n` (9 testes), guarda `mail-nom-equipe-repli-garde` (4 testes), 1 672 testes vitest. **Falta verificar**: um e-mail real de reserva em francês, em produção, sem nenhuma palavra em português. Fora do F21, ainda em pt-BR por padrão: `SENDER_NAME`. Commits da PR #31: `9e298ea3`, `70233b98`; e `7dbd0a56` (imagem de fundo estática em `public/img/`). **05/10, inventário** — o critério está cumprido; o e-mail real não é critério. **Fechamento a decidir por Xavier.** Se F21 fechar, `SENDER_NAME` em pt-BR fica para outro item."
       }
     },
     {
@@ -5415,8 +5295,8 @@
         "tests/pmb/README.md"
       ],
       "verif": {
-        "fr": "26/09 — migration `20260926184500` appliquée par la CI (`created_by` vide) ; CHECK en production : `marc_iso2709` présent ; banc de la vraie EF sur l'export PMB : `detected_format = marc_iso2709` écrit. **28/09** — toujours aucun run `marc_iso2709` en production (relevé fait pour **H17**) : le critère 2 attend. Plus loin que « prêt à revoir », un lot MARC ne se serait pas publié (langue brute contre la CHECK BCP-47) : corrigé le 28/09 (`2ee5f7a7`, voir **H17**). **29/09** — `import_format_marc_tests` (4 tests) tourne en CI depuis `d008bb51` ; dernière batterie relevée : SQL 149/149, avant la poussée de `2348cb86`.",
-        "pt": "26/09 — migração aplicada pela CI; CHECK em produção com `marc_iso2709`; banco da EF real escreve `marc_iso2709`. **28/09** — ainda nenhum run `marc_iso2709` em produção (levantamento feito para **H17**): o critério 2 espera. Além de «pronta para revisão», um lote MARC não teria sido publicado (idioma bruto contra a CHECK BCP-47): corrigido em 28/09 (`2ee5f7a7`, ver **H17**). **29/09** — `import_format_marc_tests` (4 testes) roda na CI desde `d008bb51`; última bateria anotada: SQL 149/149, antes do push de `2348cb86`."
+        "fr": "26/09 — migration `20260926184500` appliquée par la CI (`created_by` vide) ; CHECK en production : `marc_iso2709` présent ; banc de la vraie EF sur l'export PMB : `detected_format = marc_iso2709` écrit. **28/09** — toujours aucun run `marc_iso2709` en production (relevé fait pour **H17**) : le critère 2 attend. Plus loin que « prêt à revoir », un lot MARC ne se serait pas publié (langue brute contre la CHECK BCP-47) : corrigé le 28/09 (`2ee5f7a7`, voir **H17**). **29/09** — `import_format_marc_tests` (4 tests) tourne en CI depuis `d008bb51` ; dernière batterie relevée : SQL 149/149, avant la poussée de `2348cb86`. **06/10** — H17, H18 et H19 sont clos (critères tenus au banc) et lui confient leur épreuve réelle : au premier import ISO 2709 réel, regarder aussi les responsabilités (rôle, nature), les exemplaires (un catalogue DIRA) et le rattachement des fascicules importés à leur périodique.",
+        "pt": "26/09 — migração aplicada pela CI; CHECK em produção com `marc_iso2709`; banco da EF real escreve `marc_iso2709`. **28/09** — ainda nenhum run `marc_iso2709` em produção (levantamento feito para **H17**): o critério 2 espera. Além de «pronta para revisão», um lote MARC não teria sido publicado (idioma bruto contra a CHECK BCP-47): corrigido em 28/09 (`2ee5f7a7`, ver **H17**). **29/09** — `import_format_marc_tests` (4 testes) roda na CI desde `d008bb51`; última bateria anotada: SQL 149/149, antes do push de `2348cb86`. **06/10** — H17, H18 e H19 fechados; a primeira importação ISO 2709 real verifica também responsabilidades, exemplares (DIRA) e fascículos ligados ao periódico."
       }
     },
     {
@@ -5522,158 +5402,6 @@
       }
     },
     {
-      "id": "H17",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Le mapping UNIMARC reprend les zones courantes d'un catalogue PMB",
-        "pt": "O mapeamento UNIMARC aproveita as zonas correntes de um catálogo PMB"
-      },
-      "v": {
-        "fr": "La table `UNIMARC` de `marc.ts` (l. 55-74) ne reprend que 200 $a$e$f, 205, 210 $a$c$d, la première 101, 010, 011, 70x/71x $a$b et 60x $a. Elle ignore : **214** (publication, UNIMARC récent), **215** (pages), **225/410** (collection), **300/327/330** (notes, sommaire, résumé), **676/686** (classification), **856** (URL), **200 $h$i** (tomes), les subdivisions **60x $x$y$z** et **461/463** (dépouillement de périodique). **Zones présentes dans un export PMB réel** (jeu de test PMB 8.1, 26/09) : 001 009 010 100 101 102 200 210 **214** 215 225 300 319 327 330 410 461 462 463 464 530 606 610 676 700 701 702 710 711 801 856 896 995 996 — soit la liste de travail, dans cet ordre de fréquence à mesurer par **H16**. **Livré le 28/09** (`8c80de27`, migration `20260928111814`) : type de matériel déduit du guide (article MARC21 « b », fascicule de bulletin PMB lu comme périodique), pages, volume, collection d'une seule zone (225 ou 410), notes (300, 327, 330), classification, adresse électronique (856), périodique et article (ISSN de la revue hôte, numéro, date) ; chaque zone laissée exprès a un motif codé, traduit dans les 10 langues, et le rapport de couverture les distingue ; MARC21 : ponctuation ISBD retirée. Suite SQL `import_zones_tests` (13 blocs). Revue contradictoire H17/H18/H22 : 34 constats confirmés, corrigés. **Reste** : un import PMB réel en production ; rattacher à leur périodique (`serials`) les fascicules importés.",
-        "pt": "A tabela `UNIMARC` de `marc.ts` (l. 55-74) só aproveita 200 $a$e$f, 205, 210 $a$c$d, a primeira 101, 010, 011, 70x/71x $a$b, 60x $a. Ignora 214, 215, 225/410, 300/327/330, 676/686, 856, 200 $h$i, subdivisões 60x $x$y$z e 461/463. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): tipo de material pelo guia, páginas, volume, coleção, notas (300, 327, 330), classificação, endereço eletrônico (856), periódico e artigo (ISSN da revista); cada zona deixada de propósito tem um motivo codificado, nas 10 línguas. Suíte `import_zones_tests` (13 blocos). **Falta**: uma importação PMB real em produção; ligar os fascículos importados ao seu periódico (`serials`)."
-      },
-      "w": {
-        "fr": "Étendre la table et la forme normalisée, zone par zone, dans l'ordre que donne le rapport de couverture (**H16**) sur le jeu de **H14** et sur l'échantillon de DIRA. Faire les mêmes ajouts côté MARC21 (300, 490, 5xx, 082, 856) pour garder la symétrie. Chaque champ nouveau suit la règle des trois endroits (`book_drafts`, `publish_book_draft`, `create_book_draft_from_book`). Un test par zone.",
-        "pt": "Estender a tabela zona por zona, na ordem dada por **H16** sobre **H14** e a amostra da DIRA; mesmos acréscimos em MARC21. Cada campo novo segue a regra dos três lugares. Um teste por zona."
-      },
-      "y": {
-        "fr": "Une notice qui arrive sans pagination, sans collection, sans résumé ni classification oblige à tout reprendre à la main. Ça annule l'intérêt d'importer.",
-        "pt": "Um registro sem paginação, coleção, resumo nem classificação obriga a refazer tudo à mão — anula o interesse de importar."
-      },
-      "f": {
-        "fr": [
-          "Les zones listées sont reprises, testées une à une.",
-          "Le rapport de couverture de la fixture PMB ne montre plus que des zones délibérément laissées."
-        ],
-        "pt": [
-          "As zonas listadas são aproveitadas, testadas uma a uma.",
-          "O relatório de cobertura da fixture PMB só mostra zonas deixadas de propósito."
-        ]
-      },
-      "dep": {
-        "fr": "Après **H16**. 461/463 touche les périodiques (`serials`, autorité de titre). Les responsabilités sont dans **H18**.",
-        "pt": "Depois de **H16**. 461/463 toca os periódicos. Responsabilidades em **H18**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; aucun import MARC encore en production (0 run `marc_iso2709`) : rien à constater sur des données réelles. **28/09** — corrigé par la preuve de **H27** (`2ee5f7a7`, revue `a692a75e`, migration `20260928170909`), déployé (`deployed-functions` sur `a692a75e`) : les mots-clés 610/653 arrivent à part au lieu d'être fondus dans les vedettes ; la langue est convertie en BCP-47 à la création du brouillon (`ingest.fn_idioma_bcp47`, 36 langues ; en production, `fn_idioma_bcp47('fre')` = fr) — sans cela, un lot MARC ne se publiait pas ; l'ISSN d'un article est d'abord celui de sa revue. **29/09** — revues de la fin de H27 (`466324aa`, `2348cb86`, migration `20260929102719`), déployées (`deployed-functions` sur `2348cb86`) : sur un périodique, un 010 $a de forme ISSN va en ISSN (PMB y écrit l'ISSN) ; une notice de bulletin PMB prend le titre de sa revue en 200 $h, sinon à la dernière 463 $t, et garde le sien à part ; la 461 $t d'une monographie qui a déjà une collection va en note « Série: » ; 463 $x $e, 225 $i $x, 410 $x et 411 sont laissés avec leur motif. Par l'écran, une revue et ses fascicules, un ensemble et ses tomes ne sont plus « doublon possible » l'un de l'autre, et un article n'est plus rapproché de sa revue par l'ISSN (`import_doublons_intra_lot_tests` 19, `import_rapprochement_issn_tests` 4 ; en production, les deux fonctions au md5 du banc). `marc.test.ts` : 35 tests pontés (28 à `8c80de27`). **05/10, inventaire — critères relus contre les commits** : zones reprises et testées (`import_zones`), tableau de couverture engendré et gardé (`7dbd9f11`, `466324aa`, `2348cb86`) ; le reste — un import réel, les fascicules rattachés à leur périodique — n'est pas un critère. **Clôture à décider par Xavier.**",
-        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; nenhuma importação MARC em produção ainda. **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado (`deployed-functions` em `a692a75e`): as palavras-chave 610/653 chegam à parte, sem se fundir nos cabeçalhos de assunto; o idioma é convertido em BCP-47 na criação do rascunho (`ingest.fn_idioma_bcp47`, 36 línguas; em produção, `fn_idioma_bcp47('fre')` = fr) — sem isso, um lote MARC não se publicava; o ISSN de um artigo é primeiro o da sua revista. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`, migração `20260929102719`), implantadas (`deployed-functions` em `2348cb86`): num periódico, um 010 $a em forma de ISSN vai para ISSN; um registro de fascículo do PMB toma o título da revista em 200 $h, senão na última 463 $t, e guarda o seu à parte; a 461 $t de uma monografia que já tem coleção vira nota «Série:»; 463 $x $e, 225 $i $x, 410 $x e 411 ficam de fora com motivo. Pela tela, uma revista e seus fascículos, uma obra e seus tomos não são mais «duplicata possível» uns dos outros, e um artigo não é mais aproximado da sua revista pelo ISSN (`import_doublons_intra_lot_tests` 19, `import_rapprochement_issn_tests` 4; em produção, as duas funções com o md5 do banco). `marc.test.ts`: 35 testes pela ponte (28 em `8c80de27`). **05/10, inventário — critérios relidos contra os commits**: zonas retomadas e testadas, tabela de cobertura gerada e guardada; o resto não é critério. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
-      "id": "H18",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno",
-        "sql",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Les responsabilités importées gardent leur rôle, leur nature (personne ou collectivité) et leur lien d'autorité",
-        "pt": "As responsabilidades importadas guardam seu papel, sua natureza (pessoa ou coletividade) e seu vínculo de autoridade"
-      },
-      "v": {
-        "fr": "`authorNames()` (`marc.ts`) réduit chaque zone 70x/71x à une chaîne « $a, $b ». Les codes de rôle **$4** sont perdus, le numéro d'autorité **$3** aussi, et une collectivité (71x) devient un nom parmi d'autres. **Mesuré le 26/09 en production** : la table `authors` n'a aucune colonne `kind`, `entity_type`, `is_corporate`, `author_type` ni `type`. La nature se lit donc ailleurs, ou pas du tout (à instruire). La source de vérité des responsabilités est `book_contributors` (`book_authors` en est dérivée). **Livré le 28/09** (`8c80de27`, migration `20260928111814`) : `book_contributors` et `book_draft_contributors` gagnent `nature` (personne, collectivité, congrès) et `role_code` (le code d'origine) ; tous les $4/$e sont lus, une 702 sans code devient « outro », l'URI de relation est gardée ; la nature et le code suivent la publication, la reprise d'une notice, la fusion de notices et la scission d'autorité. Les rapprochements d'autorité sont **proposés** en révision, jamais appliqués, en une seule passe pour tout le lot (`fn_conv_autorites_homonymes` : 44 ms en production pour le lot 63, contre plus de 60 s nom par nom) ; le rapport de révision aussi. Rattrapage des brouillons importés en cours (jamais un non-agent). Au passage : la reprise d'une notice effaçait, à la republication, ses champs article, thèse, zine, distributeur et le texte des sujets (aucune notice touchée en production). **Reste** : un import MARC réel en production (aujourd'hui 0 contributeur y porte une nature).",
-        "pt": "`authorNames()` reduz cada 70x/71x a uma cadeia «$a, $b»: perdem-se o papel ($4), a autoridade ($3) e a natureza (71x vira um nome qualquer). `authors` não tem coluna de tipo (a instruir). A verdade é `book_contributors`. **Entregue em 28/09** (`8c80de27`, migração `20260928111814`): `nature` (pessoa, coletividade, congresso) e `role_code` em `book_contributors` e nos rascunhos; todos os $4/$e lidos; natureza e código seguem publicação, retomada, fusão e cisão de autoridade. Aproximações de autoridade **propostas** na revisão, numa só passada (44 ms em produção para o lote 63). **Falta**: uma importação MARC real em produção."
-      },
-      "w": {
-        "fr": "Rendre une forme structurée `{ nom, nature, rôle, référence d'autorité }`, avec une table de correspondance des codes $4 vers les rôles AnarBib. Alimenter `book_contributors` depuis les brouillons. Rapprocher les autorités par `fn_conv_autorite_homonyme` (la recherche par nom) et présenter les rapprochements en révision de lot, jamais d'office. Même travail en MARC21 (100/110/111/700/710/711, $e/$4).",
-        "pt": "Forma estruturada `{nome, natureza, papel, autoridade}`, tabela $4 → papéis AnarBib; alimentar `book_contributors`; aproximação de autoridades por `fn_conv_autorite_homonyme`, apresentada na revisão de lote, nunca de ofício. Idem MARC21."
-      },
-      "y": {
-        "fr": "Un traducteur importé comme auteur, ou un collectif militant importé comme une personne : c'est exactement le genre d'erreur qu'un comité documentaire repère en premier, et qui fait perdre confiance dans tout le lot.",
-        "pt": "Um tradutor importado como autor, um coletivo como pessoa: é o erro que um comitê documental vê primeiro."
-      },
-      "f": {
-        "fr": [
-          "Rôles et nature conservés sur la fixture PMB.",
-          "Rapprochements d'autorité proposés en révision, pas appliqués d'office.",
-          "Tests."
-        ],
-        "pt": [
-          "Papéis e natureza conservados na fixture.",
-          "Aproximações de autoridade propostas na revisão.",
-          "Testes."
-        ]
-      },
-      "dep": {
-        "fr": "Avant **H24** (l'export relit les mêmes rôles).",
-        "pt": "Antes de **H24**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; `fn_conv_autorites_homonymes(text[])` et `ingest.fn_h18_nom_d_auteur(jsonb)` en base ; 0 `book_contributors` et 0 `book_draft_contributors` avec une nature (0 run MARC en production) ; lot 63 : 1 395 contributeurs de brouillon. **28/09** — corrigé par la preuve de **H27** (`2ee5f7a7`, revue `a692a75e`, migration `20260928170909`), déployé : un nom grec, cyrillique, arabe ou chinois n'est plus pris pour « Collectif » (`fn_conv_est_non_agent` comparait une forme normalisée vide) ; ses responsabilités étaient écartées à l'import, au rattrapage H18, au rapport de révision et aux candidats d'autorité. Seul un nom sans lettre reste un non-agent ; `v_author_alias_worklist` et `api.report_autorites_doublons` ne prennent plus la clé vide pour un nom. À l'export, une responsabilité secondaire garde son niveau d'origine (701/702, 711/712) quand le rôle n'a pas changé. En production, un nom grec n'est plus un non-agent ; aucune notice n'était touchée (0 import MARC publié, lu le 28/09). **05/10, inventaire — critères relus contre les commits** : rôles et nature gardés sur la fixture, rapprochements proposés en révision, tests écrits (`8c80de27`, `2ee5f7a7`, `a692a75e`) ; reste un import réel, qui n'est pas un critère. **Clôture à décider par Xavier.**",
-        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; funções em produção; 0 contribuidor com natureza (nenhuma importação MARC). **28/09** — corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`, migração `20260928170909`), implantado: um nome grego, cirílico, árabe ou chinês não é mais tomado por «Collectif» (`fn_conv_est_non_agent` comparava uma forma normalizada vazia); suas responsabilidades eram descartadas na importação, na recuperação H18, no relatório de revisão e nos candidatos de autoridade. Só um nome sem letra continua não-agente. No export, uma responsabilidade secundária mantém seu nível de origem (701/702, 711/712) quando o papel não mudou. Em produção, um nome grego não é mais não-agente; nenhum registro foi afetado (0 importação MARC publicada, lido em 28/09). **05/10, inventário — critérios relidos contra os commits**: papéis e natureza mantidos, testes escritos; falta uma importação real, que não é critério. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
-      "id": "H19",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno",
-        "sql"
-      ],
-      "t": {
-        "fr": "Les exemplaires d'un catalogue importé (995 en UNIMARC, 852 en MARC21) deviennent des exemplaires AnarBib",
-        "pt": "Os exemplares de um catálogo importado (995 UNIMARC, 852 MARC21) viram exemplares AnarBib"
-      },
-      "v": {
-        "fr": "Le parseur ignore la 995, où PMB exporte ses exemplaires. **Mesuré le 26/09 en production** : l'infrastructure existe mais n'a jamais servi à l'import. `exemplar_drafts`, `publish_exemplar_draft` et `ingest.fn_create_exemplar_drafts_from_import_rows` sont en base, mais **0** ligne de staging porte un `created_exemplar_draft_id`. Et `exemplares.tombo` est **unique sur toute la base** (`exemplares_unique_tombo`) : les codes-barres de deux bibliothèques peuvent entrer en collision (23505). **Relevé du 26/09 (cartographie + banc PMB).** Conventions 995 de PMB 8.1, vues dans ses exports : `$a`/`$c` propriétaire, `$f` code-barres, `$k` cote, `$u` note, `$r` type, `$q` public/section (+ une 996 propre à PMB). Trois pièges côté AnarBib : *(1)* `publish_book_draft` pose `greatest(1, initial_copies)` — importer N exemplaires ET publier la notice en ferait **N+1** ; *(2)* sur collision, `publish_exemplar_draft` **régénère le tombo en silence** (`fn_next_tombo`, qui lève si la biblio n'a pas de `tombo_pattern`) — le code-barres d'origine serait perdu ; *(3)* `ingest.fn_unreconcile_staging_on_exemplar_draft` remet la ligne de staging à « pending » dès qu'UN brouillon d'exemplaire lié est annulé — ne pas réutiliser `created_exemplar_draft_id` pour N exemplaires. Côté PMB (retour) : `func_bdp` **ignore le propriétaire de la 995** (il vient du formulaire).",
-        "pt": "O parser ignora a 995. Medido em 26/09: `exemplar_drafts`, `publish_exemplar_draft` e `ingest.fn_create_exemplar_drafts_from_import_rows` existem, mas **0** linha de staging tem `created_exemplar_draft_id`. `exemplares.tombo` é **único na base toda**: colisões possíveis (23505). **Levantamento de 26/09**: 995 do PMB = `$a`/`$c` proprietário, `$f` código de barras, `$k` cota, `$u` nota, `$r` tipo, `$q`. Armadilhas: N+1 exemplares (`greatest(1, initial_copies)`), tombo regenerado em silêncio em colisão, gatilho que devolve a linha a « pending » ao cancelar UM exemplar."
-      },
-      "w": {
-        "fr": "Lire d'abord `fn_create_exemplar_drafts_from_import_rows` : c'est un chemin jamais emprunté. Parser la 995 ($f code-barres, $k cote, $a/$b propriétaire et prêteur, $r type, $o/$q circulation, $u note) et la 852 en MARC21. Porter les exemplaires dans le staging, puis créer les brouillons d'exemplaires rattachés au brouillon de notice. ~~Préfixer le `tombo` par un code de bibliothèque (comme `SOL-`).~~ Écarté le 26/09 (IMP-21 a) : le `tombo` suit le schéma de la bibliothèque. Traduire le statut vers `circulation_policy`. Les conventions de sous-zones varient d'une installation PMB à l'autre : prévoir un profil par source. **Décisions attendues de Xavier (exposées le 26/09, rien n'est construit avant) :** *(1)* **numérotation** — A : `tombo` = code PMB préfixé ; **B (recommandée)** : `tombo` selon le schéma AnarBib de la bibliothèque, code PMB dans une colonne dédiée ; C : au choix dans le profil ; *(2)* le **code d'origine dans une colonne dédiée**, unique par bibliothèque (et non dans une note) — il est la clé de **H21** (réimport) et de **H24** (995 `$f` à l'export) ; *(3)* la **correspondance 995** réglée dans le profil de la bibliothèque (précise IMP-19 au REGISTRE) ; *(4)* les **statuts PMB → `circulation_policy`** : attendre l'échantillon de DIRA, ou règle par défaut « tout prêtable sauf mention ». Faits qui cadrent *(1)* : `tombo` unique sur toute la base ; chaque biblio a son schéma (`BTL-TL-EX-000909-R`, `MLEG-2026-0270`, `CCLA.2026.91`, `SOL-…`) ; les étiquettes AnarBib sont des QR portant l'identifiant interne de l'exemplaire (`LabelSheetPrinter.jsx`), et le prêt passe par la référence de la notice vers la détention (`create_loan_at_counter`) — un code-barres PMB n'est lu par AnarBib dans aucun cas. **Décidé le 26/09 (IMP-21) et livré le 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migration `20260927113000`) : numérotation B (tombo du schéma de la bibliothèque), code d'origine dans `exemplares.source_item_code` unique par bibliothèque (jamais dans une note), correspondance 995/852 dans le profil d'import (défaut PMB 8.1), statuts PMB gardés dans la note de provenance en attendant l'échantillon de DIRA. L'EF lit les zones d'exemplaire (sous-zones répétées comprises) ; la promotion crée un brouillon d'exemplaire par exemplaire, rattaché à sa notice et publié AVEC elle, à la place de l'exemplaire automatique ; le rapprochement aussi (dépôt compagnon réservé à l'administration, versé à la destination, code déjà présent non recréé, ligne entièrement détenue rejetée) ; le rapport de révision gagne `items` (six raisons, 40 au plus, en un passage). **Trois revues contradictoires** avant tout déploiement (26-27/09, chaque constat passé devant un sceptique) : garde d'appartenance dans `publish_exemplar_draft` (la tête ne demandait qu'un rôle QUELQUE PART), tombo gardé à la republication, cote brute gardée par le formulaire (`src/lib/shelfLocation.js`), exclusion mutuelle promotion/rapprochement, suivi de la notice (corbeille, restauration, lot, fusions de doublons, journal des suppressions), liens d'import non écrivables par l'API, retraitement refusé après rapprochement, profil supprimé refusé dès l'envoi. **Reste** : un import PMB réel (DIRA) mené jusqu'à la publication ; la correspondance statuts → `circulation_policy` (IMP-21 d). **29/09 (IMP-25, décidé le 28/09 par Xavier)** : une notice qu'un fichier MARC importe sans exemplaire n'en reçoit plus d'automatique à la publication (`2f488790`, migration `20260929103533`) ; un CSV ou un RIS garde le sien. Réimporté dans PMB (**H27**) : 46 exemplaires pour 46.",
-        "pt": "Ler primeiro a função (caminho nunca usado). Parsear 995 ($f, $k, $a/$b, $r, $o/$q, $u) e 852; exemplares no staging, rascunhos de exemplar ligados ao rascunho do registro; ~~`tombo` prefixado (como `SOL-`)~~ (descartado em 26/09, IMP-21 a: o `tombo` segue o esquema da biblioteca); status → `circulation_policy`; perfil por fonte, pois as convenções variam entre instalações PMB. **Decisões esperadas de Xavier (expostas em 26/09):** numeração (A: código PMB prefixado; **B, recomendada**: esquema AnarBib + código PMB em coluna própria; C: por perfil); código de origem em coluna dedicada (chave de H21 e H24); correspondência 995 no perfil da biblioteca (IMP-19); status PMB → `circulation_policy`. **Decidido em 26/09 (IMP-21), entregue em 27/09** (`3efd89b0`, `a7b2d44d`, `02000b89`, migração `20260927113000`): numeração B, código de origem em coluna própria única por biblioteca, correspondência 995/852 no perfil, status PMB na nota de proveniência até a amostra da DIRA. Três revisões contraditórias antes de qualquer implantação. **Falta**: uma importação PMB real (DIRA) até a publicação; status → `circulation_policy`. **29/09 (IMP-25)**: um registro que um arquivo MARC importa sem exemplar não recebe mais exemplar automático na publicação; CSV e RIS mantêm o seu. Reimportado no PMB (**H27**): 46 exemplares de 46."
-      },
-      "y": {
-        "fr": "Une bibliothèque, ce sont des livres sur des étagères. Sans cotes ni codes-barres, l'import donne un catalogue qu'on ne peut ni prêter ni ranger. Et un essai sans exemplaires ne prouve rien à DIRA.",
-        "pt": "Sem cotas nem códigos de barras, a importação dá um catálogo que não se empresta nem se arruma."
-      },
-      "f": {
-        "fr": [
-          "Les exemplaires de la fixture PMB arrivent en brouillons, puis se publient.",
-          "Aucune collision de tombo : le `tombo` suit le schéma de la bibliothèque, le code d'origine va dans `exemplares.source_item_code`, unique par bibliothèque (IMP-21 a, b).",
-          "Tests SQL et edge function."
-        ],
-        "pt": [
-          "Exemplares da fixture chegam como rascunhos e se publicam.",
-          "Nenhuma colisão de tombo: `tombo` do esquema da biblioteca, código de origem em `exemplares.source_item_code`, único por biblioteca (IMP-21 a, b).",
-          "Testes SQL e edge function."
-        ]
-      },
-      "dep": {
-        "fr": "Fixture de **H14**. Avant **H21** et **H24**.",
-        "pt": "Fixture de **H14**. Antes de **H21** e **H24**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "27/09 — suite SQL `import_exemplaires_tests` 30/30 et les 118 suites de la CI ; banc de la vraie EF sur l'export PMB (profil honoré, profil supprimé ou illisible sans rien effacer) ; tests Deno du parseur (sous-zones répétées) ; écran rendu en fr et el (`import-exemplaires-ecran`, `shelf-location`). **29/09** — IMP-25 déployé (`2f488790`) : migration `20260929103533` appliquée par la CI (`created_by` vide), `publish_book_draft` au md5 du banc en production ; suites `import_sans_exemplaire_tests` (3) et `import_exemplaires_tests` 30/30. Le déploiement du 27/09 n'était dit que par `cebde675` : migration `20260927113000` appliquée par la CI, vérifiée en production. **05/10, inventaire — critères relus contre les commits** : critères tenus au banc le 27/09, 46 exemplaires sur 46 au réimport (`2f488790`, IMP-25) ; reste un import DIRA réel, qui n'est pas un critère. **Clôture à décider par Xavier.**",
-        "pt": "27/09 — suíte SQL 30/30 e as 118 suítes da CI; banco da EF real no export PMB; testes Deno do parser; tela em fr e el. **29/09** — IMP-25 implantado (`2f488790`): migração `20260929103533` aplicada pela CI (`created_by` vazio), `publish_book_draft` com o md5 do banco em produção; suítes `import_sans_exemplaire_tests` (3) e `import_exemplaires_tests` 30/30. A implantação de 27/09 só era dita por `cebde675`: migração `20260927113000` aplicada pela CI, verificada em produção. **05/10, inventário — critérios relidos contra os commits**: critérios cumpridos em bancada, 46/46 exemplares na reimportação; falta uma importação real da DIRA. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
       "id": "H20",
       "d": "H",
       "p": "P1",
@@ -5769,150 +5497,6 @@
       "verif": {
         "fr": "26/09 — `book_drafts.action` ∈ {create, update} en base. **29/09** — passé en cours par `69dbeec7` ; aucun des neuf lots n'est livré au soir du 29/09. Constat de production qui a demandé la règle (REGISTRE `IMP-26` a, 28/09) : 198 mises à jour publiées, dont 33 sur des notices aujourd'hui partagées et 3 par une bibliothèque qui ne détenait pas la notice. Le tableau de couverture le dit à DIRA : le 001 est gardé et rendu à l'export, mais un réimport ne s'en sert pas encore (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lot 0 livré** (`1385431b` base, `d4f97afc` écran ; migration `20261001200931` appliquée par la CI, `created_by` vide ; REGISTRE `IMP-27`) : une notice ou un exemplaire rapproché né d’un import ne se publie la première fois que dans un lot révisé, même sorti de son lot ; une notice ou un exemplaire déjà publiés (et au catalogue) se republient hors lot ; l’approbation couvre les brouillons figés à la demande, et la coordination redemande un tour pour les ajouts ; un lot de rapprochement passe par la révision ; une sélection rejoint le lot ouvert du run et « Promouvoir la sélection » ne promeut qu’elle ; « rattaché » ne devient jamais une notice ; vider la corbeille d’un brouillon importé écarte sa ligne, que seul le rejeu de ce brouillon reprend ; « Retraiter » refusé tout de suite pour un run qui a une ligne écartée ou un exemplaire rapproché à la corbeille ; l’écran dit les lignes ignorées. Six passes de revue contradictoire ; SQL 158/158, vitest 1 666 ; vérifié en production le 01/10 (définitions, cinq déclencheurs, droits, 0 tour sans liste) et l’écran servi. **Consigné** : la course entre « Retraiter » accepté et l’effacement par l’edge function, et « Retraiter » d’un run sans fichier (**H30**, **H31**) ; les fusions `api.merge_*` qui absorbent un brouillon importé (lot 5) ; la corbeille d’un exemplaire rapproché libère sa ligne, qu’un nouveau « Rapprocher » puis la sortie de corbeille dédoublent (lot 6) ; l’assistant d’import ne lit pas `skipped_rows` ; une ligne dont la notice proposée a été descartée reste « en attente » sans autre geste que « Rejeter » ; un onglet resté sur un run supprimé reçoit « Run N introuvable » en brut. **À trancher par Xavier** : un exemplaire rattaché sorti de la corbeille après la demande doit-il suivre la liste du tour, comme les notices (aujourd’hui non, règle de H19) ? Après une réattribution, la notice garde-t-elle pour la bibliothèque cible l’identifiant d’origine venu du PMB de la première ? **05/10 — lot 1 livré** (`32afb117` base, `ba6ec496` écran ; migration `20261005103427` appliquée par la CI ; REGISTRE `IMP-28`) : une ligne réimportée dont l’identifiant d’origine est connu pour la bibliothèque qui importe, toutes sources, sur une seule notice, devient « Déjà importée » (`known_record`) sans passes floues ; elle se rapproche (exemplaires sur la notice reconnue) ou se rejette, jamais de notice neuve ni de mise à jour ; « plus détenue par ta bibliothèque » est signalé ; l’identifiant d’origine reste à la bibliothèque dont le PMB l’a émis (plus de recopie à la réattribution) ; un exemplaire rattaché sorti de la corbeille après la demande attend un nouveau tour, et « Publier le lot » ne le publie qu’une fois couvert. Critère d’acceptation : la fixture PMB réimportée telle quelle donne 64 « Déjà importée » sur 64, 0 nouveauté, 0 doublon possible (sans la reconnaissance : 33 « déjà au catalogue », 19 nouveautés, 12 doublons possibles). SQL 167/167, vitest 1 905. **Relevé en chemin, consigné (05/10, à la demande de Xavier)** : (1) l’avertissement « clé connue sur plusieurs notices » (`warnings[].kind = known_record_ambiguous`) n’est affiché nulle part à l’écran — la page Importations ne montre aucun avertissement de ligne ; (2) tant qu’un exemplaire rattaché attend son tour, republier sa notice est refusé (`error.publish.items_on_update`, garde de H19) : la règle IMP-28 (d) rend ce cas plus fréquent ; (3) la vue héritée `api.partner_catalog_import_rows_workflow_ui` ne connaît pas `known_record` (« sem classificação », `can_create_draft` faux) — lisible par service_role seulement, aucun écran ne l’utilise. **Relevé par la revue du lot 1, consigné** : (4) un exemplaire rattaché sorti de la corbeille APRÈS la fermeture de son lot est coincé — `added_after_review`, mais la redemande de tour répond `error.review.batch_not_open` ; issue : ranger la notice publiée dans un lot ouvert (0 cas en production le 05/10) ; (5) republier un rattaché déjà publié est refusé (`review_required`) pendant qu’un nouveau tour est demandé sur son lot, comme une notice ; (6) un dépôt sans bibliothèque de destination ne pose aucun identifiant d’origine, ses lignes ne seront jamais reconnues ; (7) pour un dépôt, « déjà importée par ta bibliothèque » est inexact (c’est la destination), et l’assistant affiche une confiance ×100 (« 10000% », défaut antérieur). **05/10 — lot 2 livré** (`84c455cd`, migration `20261005172708` appliquée par la CI, `created_by` vide ; REGISTRE `IMP-29`) : `ingest.book_import_baselines` garde, par identifiant d’origine, ce que le dernier fichier accepté a apporté (colonnes AnarBib, responsabilités, sujets, enregistrement d’origine, empreinte) pour la bibliothèque qui a importé ; une seule règle de correspondance (`ingest.fn_import_row_as_book`, appelée par la création — brouillons identiques avant/après : fixture PMB figée, définition d’avant rejouée, 1 475 écritures espionnées) ; base écrite à la publication, à l’absorption (qui l’avance) et au rapprochement (qui la crée seulement) ; la bibliothèque importatrice se rabat, pour une source sans bibliothèque (MLEG), sur celle qui porte déjà ses identifiants, puis sur celle du brouillon (147 brouillons MLEG en attente auraient sinon été publiés sans identifiant ni base — défaut présent depuis le lot 1) ; l’export lit d’abord la base (identique au caractère près). Vérifié en production : 264 bases reprises pour 264 identifiants, champs douteux marqués, table fermée à l’API. SQL 170/170, vitest 1 993. **Consigné** : (1) la reconnaissance du lot 1 et la liste de l’écran ne connaissent pas le repli des sources sans bibliothèque (un run MLEG n’y serait pas reconnu ; MLEG ne réimporte pas, IMP-26) ; (2) aucun accès de lecture staff à la base (RPC à prévoir au lot 3) ; (3) `publish_catalog_batch` publie sans ORDER BY : identifiants de notice et tombos dépendent du plan ; (4) la reconstitution d’une base depuis `marc_json.ingest` (après une restauration sans le schéma ingest) est approximative (8 lignes CSV sur 2 160 diffèrent) ; (5) `fn_h21_base_du_brouillon` se laisse tromper par une copie dont la trace a été retouchée — la protection vient de ce que la copie n’a pas de clé (lot 1) ; (6) le schéma ingest n’est sauvegardé par aucun flux — décision de Xavier du 05/10 : l’ajouter au flux long (item séparé). **05/10, soir** — le point consigné « le schéma `ingest` n'a pas de sauvegarde » est réglé : **I29**, clos le 05/10 (`f5e3f5ed`) ; les droits et les schémas `private` et `api`, vus en chemin, sont **I30**.",
         "pt": "26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo). **05/10, à noite** — o ponto « o esquema `ingest` não tem backup » está resolvido: **I29**, fechado em 05/10 (`f5e3f5ed`); direitos e esquemas `private`/`api`: **I30**."
-      }
-    },
-    {
-      "id": "H22",
-      "d": "H",
-      "p": "P3",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Lire l'export XML propre à PMB, s'il le faut",
-        "pt": "Ler o export XML próprio do PMB, se for preciso"
-      },
-      "v": {
-        "fr": "`looksLikeMarcXml()` n'accepte que du vrai MARCXML (`<record>`, `<datafield>`). À notre connaissance, PMB a aussi un XML qui lui est propre (`<notice><f c=\"200\">…`), que l'import ne reconnaîtrait pas. **Vérifié le 26/09 sur le banc** : l'export « UNIMARC PMB XML » est bien `<unimarc><notice><f c=\"200\"><s c=\"a\">…` et notre import rend `null` (figé par `pmb-fixtures-parseur`, fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml`). PMB sait aussi sortir du « XML MARC » (sans espace de noms), que l'import lit déjà à l'identique de l'ISO 2709 : ce lecteur n'est utile que si une bibliothèque ne peut produire ni l'un ni l'autre. **Livré le 28/09** (`8c80de27`) : sur décision de Xavier (« Écrire le lecteur »), l'import lit le XML propre à PMB (`<unimarc><notice><f c=\"…\">`) vers le même modèle que l'ISO 2709 ; format `pmb_xml` admis par la CHECK (migration `20260928111814`) ; la fixture `pmb-8.1.1.1_jeu-de-test.pmbxml.xml` donne les mêmes notices que l'ISO 2709.",
-        "pt": "`looksLikeMarcXml()` só aceita MARCXML verdadeiro. O PMB teria um XML próprio (`<notice><f c=\"200\">`), não reconhecido. **Verificado em 26/09 no banco**: o XML próprio do PMB não é reconhecido; o « XML MARC » do PMB já é lido. **Entregue em 28/09** (`8c80de27`): por decisão de Xavier, a importação lê o XML próprio do PMB; formato `pmb_xml` admitido; a fixture dá as mesmas notícias que o ISO 2709."
-      },
-      "w": {
-        "fr": "Seulement si une bibliothèque ne peut pas sortir de l'ISO 2709 ni du MARCXML. Il suffirait alors d'un lecteur vers le modèle commun de `marc.ts` (leader + zones), sans rien changer en aval.",
-        "pt": "Só se uma biblioteca não conseguir sair do ISO 2709 nem do MARCXML: um leitor para o modelo comum de `marc.ts`."
-      },
-      "y": {
-        "fr": "Inutile tant que l'ISO 2709 suffit. Gardé ici pour que personne ne croie que « XML » veut dire « compatible ».",
-        "pt": "Inútil enquanto o ISO 2709 bastar; registrado para que ninguém ache que «XML» quer dizer «compatível»."
-      },
-      "f": {
-        "fr": [
-          "Constat fait sur le banc ; lecteur écrit ou item clos sans objet."
-        ],
-        "pt": [
-          "Constatação feita no banco; leitor escrito ou item encerrado sem objeto."
-        ]
-      },
-      "dep": {
-        "fr": "**H14**.",
-        "pt": "**H14**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27`. **05/10, inventaire — critères relus contre les commits** : le lecteur XML propre à PMB est livré (`8c80de27`) et déployé le 28/09, format `pmb_xml` admis ; rien ne reste. **Clôture à décider par Xavier.**",
-        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`. **05/10, inventário — critérios relidos contra os commits**: o leitor XML do PMB foi entregue e implantado em 28/09; nada falta. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
-      "id": "H23",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno",
-        "biblio"
-      ],
-      "t": {
-        "fr": "Un export UNIMARC (ISO 2709 et XML), miroir exact de l'import",
-        "pt": "Um export UNIMARC (ISO 2709 e XML), espelho exato da importação"
-      },
-      "v": {
-        "fr": "`export-catalog-lote/serialize.ts` ne sait écrire que du CSV, du **MARCXML en MARC21** et du JSON (`SUPPORTED_FORMATS`). Son en-tête annonce « UNIMARC ISO 2709 / Dublin Core / BibTeX viendront ensuite » : aucun n'existe. PMB travaille nativement en UNIMARC. La correspondance des zones est écrite **deux fois**, dans `marc.ts` pour l'import et dans `serialize.ts` pour l'export, et rien ne garantit que les deux restent symétriques. **Livré le 28/09** (`8c80de27`) : une table unique `_shared/marc/correspondance.ts`, lue par l'import et par l'écrivain `_shared/marc/ecriture.ts` ; UNIMARC en ISO 2709 (longueurs en octets UTF-8, zone trop longue découpée ou raccourcie, notice trop longue écartée et dite) et en XML ; MARC21 en ISO 2709 (008, 040) et MARCXML ; langues en ISO 639-2, pays de la 801, types de subdivision et dates d'une personne repris de l'origine quand rien ne les contredit. Les 64 notices PMB des fixtures font PMB → AnarBib → UNIMARC → réimport à l'identique (`pmb-aller-retour-export`, `ecriture.test.ts` 13 tests pontés). Revue contradictoire H23/H24 : 35 constats confirmés, corrigés.",
-        "pt": "`serialize.ts` só escreve CSV, **MARCXML em MARC21** e JSON; o cabeçalho anuncia UNIMARC ISO 2709, DC e BibTeX, que não existem. O PMB trabalha em UNIMARC. A correspondência de zonas está escrita **duas vezes** (import e export), sem garantia de simetria. **Entregue em 28/09** (`8c80de27`): uma tabela única `_shared/marc/correspondance.ts` para importação e exportação; UNIMARC ISO 2709 (comprimentos em bytes UTF-8) e XML; MARC21 ISO 2709 e MARCXML. As 64 notícias PMB das fixtures fazem ida e volta idênticas."
-      },
-      "w": {
-        "fr": "Une seule table de correspondance partagée par l'import et l'export (`_shared/marc/`). Un écrivain ISO 2709 : les longueurs du répertoire se comptent en **octets UTF-8**, pas en caractères. Un leader correct et le jeu de caractères déclaré en 100 $a/26-29 (Unicode). Un MARCXML UNIMARC. Des tests `parse(serialize(x)) = x` sur la fixture.",
-        "pt": "Uma só tabela de correspondência compartilhada (`_shared/marc/`); escritor ISO 2709 (comprimentos em **bytes UTF-8**); leader e 100 $a/26-29 corretos; MARCXML UNIMARC; testes `parse(serialize(x)) = x`."
-      },
-      "y": {
-        "fr": "« Vos données restent à vous » ne vaut que si elles ressortent dans le format du logiciel d'où elles viennent. Un MARC21 que PMB devrait d'abord convertir, c'est une promesse de réversibilité qui s'arrête à mi-chemin.",
-        "pt": "«Seus dados continuam seus» só vale se saem no formato do software de origem."
-      },
-      "f": {
-        "fr": [
-          "Export UNIMARC ISO 2709 et XML disponibles dans Importations.",
-          "Table de zones unique ; tests aller-retour unitaires verts."
-        ],
-        "pt": [
-          "Export UNIMARC ISO 2709 e XML disponíveis em Importações.",
-          "Tabela de zonas única; testes de ida-e-volta verdes."
-        ]
-      },
-      "dep": {
-        "fr": "Contenu complet : **H24**. Preuve : **H27**.",
-        "pt": "Conteúdo: **H24**. Prova: **H27**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; formats proposés par l'écran Importations : UNIMARC ISO 2709, UNIMARC XML, MARC21 ISO 2709, MARCXML, CSV, JSON. **28/09** — écrivain corrigé par la preuve de **H27** (`2ee5f7a7`, revue `a692a75e`), déployé (`deployed-functions` sur `a692a75e`) : l'ISSN d'un article sort en 461 $x et non plus en 011 ; les mots-clés importés, rangés à part (**H17**), ressortent en 610/653 et non plus en 606, que PMB change en catégories. **29/09** — revues de la fin de H27 (`466324aa`, `2348cb86`), déployées (`deployed-functions` sur `2348cb86`) : l'export range les périodiques avant les articles, car PMB ne rattache un article qu'à une revue lue avant lui (15 articles rattachés sur 15 au banc, 7 dans l'ordre des identifiants) ; la 995 porte `$r uu` et `$q u` (« indéterminé »), sans quoi PMB rangeait tout exemplaire sous le premier type de sa base (suite : **H29**) ; l'aide de l'écran nomme, dans les 10 langues, l'onglet d'import de PMB (« Exemplaires UNIMARC ») et les deux réglages dont tout dépend. `ecriture.test.ts` : 19 tests pontés (13 à `8c80de27`). **05/10, inventaire — critères relus contre les commits** : exports UNIMARC ISO 2709 et XML proposés dans Importations, une seule table de correspondance pour l'import et l'export, aller-retour identique des 64 notices (`8c80de27`, `2ee5f7a7`, `466324aa`, `2348cb86`). **Clôture à décider par Xavier.**",
-        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`. **28/09** — escritor corrigido pela prova de **H27** (`2ee5f7a7`, revisão `a692a75e`), implantado (`deployed-functions` em `a692a75e`): o ISSN de um artigo sai em 461 $x, não mais em 011; as palavras-chave importadas, guardadas à parte (**H17**), saem em 610/653, não mais em 606, que o PMB transforma em categorias. **29/09** — revisões do fim de H27 (`466324aa`, `2348cb86`), implantadas (`deployed-functions` em `2348cb86`): o export põe os periódicos antes dos artigos, porque o PMB só vincula um artigo a uma revista lida antes dele (15 artigos vinculados de 15 no banco, 7 na ordem dos identificadores); a 995 leva `$r uu` e `$q u` («indeterminado»), sem o que o PMB punha todo exemplar no primeiro tipo da sua base (sequência: **H29**); a ajuda da tela nomeia, nas 10 línguas, a aba de importação do PMB («Exemplaires UNIMARC») e os dois ajustes dos quais tudo depende. `ecriture.test.ts`: 19 testes pela ponte (13 em `8c80de27`). **05/10, inventário — critérios relidos contra os commits**: exportações UNIMARC propostas, uma só tabela de correspondência, ida e volta idêntica das 64 notícias. **Fechamento a decidir por Xavier.**"
-      }
-    },
-    {
-      "id": "H24",
-      "d": "H",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql",
-        "deno"
-      ],
-      "t": {
-        "fr": "L'export d'une bibliothèque contient tout ce qu'elle a catalogué : exemplaires, responsabilités, sujets, collection, identifiants",
-        "pt": "O export de uma biblioteca contém tudo o que ela catalogou: exemplares, responsabilidades, assuntos, coleção, identificadores"
-      },
-      "v": {
-        "fr": "**Mesuré le 26/09 en production** : d'après la définition réelle de `fn_export_catalog_lote`, l'export livre les notices détenues par la bibliothèque, et rien de plus. **Aucun exemplaire** (ni tombo, ni cote, ni statut). Les auteurs sortent de `book_authors` (table dérivée), par leur seul `preferred_name`, sans rôle. Les sujets sont du texte découpé sur `;`/`,`, et non l'autorité du thésaurus. L'écrivain MARCXML met toujours `100 1_`, même pour une collectivité. Rien ne sort sur l'œuvre ni sur le périodique. **Côté PMB (banc, 26/09)** : même un export parfait perd en entrant dans PMB par sa fonction d'import par défaut (`func_bdp`) — 200 `$f`/`$g`, seconde 700, 606 fondues en une 610, Dewey tronquée à 5 caractères, propriétaire de la 995 ignoré (`tests/pmb/README.md`). À traiter dans **H27**. **Livré le 28/09** (`8c80de27`, migration `20260928111816`) : `fn_export_catalog_lote(p_library_id, p_apres, p_limite)` réécrite depuis sa définition réelle : identifiant d'origine de la bibliothèque (001), référence locale, responsabilités (`book_contributors`, rôle, nature, code), sujets du thésaurus dans la langue de la bibliothèque, mots-clés, exemplaires de cette seule bibliothèque, œuvre, périodique (numéro, date), article (revue hôte). **Réémission prudente** décidée par Xavier (REGISTRE IMP-22) : seules les zones qu'AnarBib ne tient pas, et seulement pour la bibliothèque d'où vient la notice (destination d'un dépôt compagnon comprise) ; jamais 001/005/100/995/996 d'origine. Suite SQL `export_catalogue_tests` (10). **Reste** : rattacher les fascicules importés à leur périodique (la 461 vers la notice de titre) ; les imports antérieurs au 28/09 n'ont pas gardé leur zone d'exemplaire (`item_tag`), l'export retombe alors sur celle du dialecte ; contre-épreuve par mutants de la RPC encore partielle.",
-        "pt": "Medido em 26/09 (definição real de `fn_export_catalog_lote`): **nenhum exemplar**; autores de `book_authors` (derivada) só pelo nome, sem papel; assuntos como texto cortado, não autoridade; `100 1_` até para coletividade; nada de obra nem periódico. **Entregue em 28/09** (`8c80de27`, migração `20260928111816`): `fn_export_catalog_lote` reescrita: identificador de origem da biblioteca, responsabilidades com papel e natureza, assuntos do tesauro, exemplares só dessa biblioteca, obra, periódico, artigo; **reemissão prudente** (REGISTRE IMP-22). **Falta**: ligar fascículos ao periódico; importações anteriores a 28/09 sem `item_tag`; mutantes da RPC parciais."
-      },
-      "w": {
-        "fr": "Réécrire `fn_export_catalog_lote` **depuis sa définition réelle**. Y mettre : les exemplaires de la bibliothèque, et d'elle seule ; `book_contributors` avec rôle, nature et autorité ; les sujets du thésaurus avec leurs subdivisions ; collection, notes, périodique (461), œuvre (titre uniforme) ; en 001 l'identifiant d'origine (**H20**), sinon le `bib_ref`, et les autres identifiants en 035. **À trancher** : réémettre les zones non reprises depuis `books.marc_json` pour les notices venues de PMB. On y gagne en fidélité, mais on risque de réémettre une valeur périmée si la notice a été retouchée depuis.",
-        "pt": "Reescrever `fn_export_catalog_lote` **a partir da definição real**: exemplares da biblioteca (só dela), `book_contributors`, assuntos do tesauro, coleção, notas, periódico, obra, 001 de origem (**H20**) ou `bib_ref`, 035. **A decidir**: reemitir as zonas não aproveitadas de `books.marc_json` (fidelidade vs valor defasado)."
-      },
-      "y": {
-        "fr": "Une bibliothèque qui part sans ses cotes ni ses exemplaires doit refaire son récolement. En pratique, elle ne peut pas partir. C'est la moitié de la promesse de pérennité.",
-        "pt": "Uma biblioteca que sai sem cotas nem exemplares precisa refazer o inventário — na prática, não pode sair."
-      },
-      "f": {
-        "fr": [
-          "Export de la fixture réimportée : mêmes exemplaires, mêmes rôles, mêmes sujets.",
-          "Test SQL sur la RPC."
-        ],
-        "pt": [
-          "Export da fixture reimportada: mesmos exemplares, papéis, assuntos.",
-          "Teste SQL da RPC."
-        ]
-      },
-      "dep": {
-        "fr": "Après **H23**, **H20**, **H19**, **H18**.",
-        "pt": "Depois de **H23**, **H20**, **H19**, **H18**."
-      },
-      "r": [
-        "claude/aller-retour-PMB_2026-09-26",
-        "Réponse à DIRA du 26/09/2026"
-      ],
-      "verif": {
-        "fr": "28/09 — migrations appliquées par la CI (`created_by` vide), `deployed-functions` = `8c80de27` ; signature en production : `fn_export_catalog_lote(p_library_id uuid, p_apres bigint, p_limite integer)`. **28/09** — `fn_export_catalog_lote` recréée depuis sa définition réelle par la revue de H25 et H27 (`a692a75e`, migration `20260928170908`, appliquée par la CI) : une 71X `$3` ne mène plus à une fiche de personne, chaque fiche ayant un seul type, le même dans les deux exports (`private.fn_nature_autorite`, voir **H25**). **29/09** — critère 1 éprouvé au banc par la preuve de **H27** (`tests/pmb/bilans/h27-aller-retour.json`) : l'export tiré de la base, réimporté dans un PMB vide, rend 46 exemplaires sur 46, 61 responsabilités sur 61 et 42 notices indexées sur 42 ; deux catégories PMB de même libellé n'en font qu'une (48 liens pour 49) ; le type, la section et le code statistique des exemplaires ne reviennent pas (**H29**). **05/10, inventaire — critères relus contre les commits** : critère 1 éprouvé le 29/09 par la preuve de H27 (46/46 exemplaires, 61/61 responsabilités, 42/42 notices indexées), critère 2 par `export_catalogue_tests` (10) ; type, section et code statistique des exemplaires sont sortis vers H29. **Clôture à décider par Xavier.**",
-        "pt": "28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`; assinatura em produção com paginação. **28/09** — `fn_export_catalog_lote` recriada a partir da definição real pela revisão de H25 e H27 (`a692a75e`, migração `20260928170908`, aplicada pela CI): uma 71X `$3` não leva mais a uma ficha de pessoa; cada ficha tem um só tipo, o mesmo nos dois exports (`private.fn_nature_autorite`, ver **H25**). **29/09** — critério 1 provado no banco pela prova de **H27** (`tests/pmb/bilans/h27-aller-retour.json`): o export tirado da base, reimportado num PMB vazio, devolve 46 exemplares de 46, 61 responsabilidades de 61 e 42 registros indexados de 42; duas categorias do PMB com o mesmo rótulo viram uma só (48 vínculos para 49); tipo, seção e código estatístico dos exemplares não voltam (**H29**). **05/10, inventário — critérios relidos contra os commits**: critério 1 provado em 29/09 (H27), critério 2 por `export_catalogue_tests`; tipo, seção e código estatístico passaram para H29. **Fechamento a decidir por Xavier.**"
       }
     },
     {
@@ -6557,8 +6141,8 @@
         "pt": "O que espera um olhar na tela, com sessão"
       },
       "v": {
-        "fr": "Plusieurs livraisons de fin septembre et de début octobre sont prouvées au banc et en base, mais ne se jugent qu'à l'écran, avec une session ; leurs clôtures le disent, sans qu'aucun item ne le porte. **Items clos, regard manquant** : la barre d'état collante et la fenêtre de confirmation du catalogage (C21, session staff) ; « Publié — et maintenant ? », notamment le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; la lecture réservée pour une personne membre de la BTL (C20 ; C25 a réparé un cas voisin). **Items ouverts qui l'attendent aussi** : un déplacement d'exemplaire par publication (C23), un vote réel de transition (G16), les deux refus de C14, chaque lot de E6.",
-        "pt": "Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6."
+        "fr": "Plusieurs livraisons de fin septembre et de début octobre sont prouvées au banc et en base, mais ne se jugent qu'à l'écran, avec une session ; leurs clôtures le disent, sans qu'aucun item ne le porte. **Items clos, regard manquant** : la barre d'état collante et la fenêtre de confirmation du catalogage (C21, session staff) ; « Publié — et maintenant ? », notamment le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; la lecture réservée pour une personne membre de la BTL (C20 ; C25 a réparé un cas voisin). **Items ouverts qui l'attendent aussi** : un déplacement d'exemplaire par publication (C23), un vote réel de transition (G16), les deux refus de C14, chaque lot de E6. **Ajouté le 06/10** : une invitation réelle à une tâche, envoyée à soi-même et reçue (reste de F16, clos).",
+        "pt": "Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6. **Acrescentado em 06/10**: um convite real a uma tarefa, recebido (resto do F16)."
       },
       "w": {
         "fr": "Une séance avec Xavier connecté (staff BLMF ou BTL), un point à la fois ; noter pour chacun « vu, conforme » ou le défaut trouvé (ouvert en item).",
@@ -6582,7 +6166,8 @@
       },
       "r": [
         "clôtures C20, C21, C22, C24, C25",
-        "items C14, C23, G16, E6"
+        "items C14, C23, G16, E6",
+        "clôture F16"
       ],
       "verif": null
     },
@@ -6713,6 +6298,52 @@
       "r": [
         "commits 9fc60a15, a64bd04f, 8f0d85a0, d7f65c54, 57a4aafc, 89a2b508",
         "scripts/purge-orphelins-covers.py"
+      ],
+      "verif": null
+    },
+    {
+      "id": "F24",
+      "d": "F",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Le nom d'expéditeur par défaut des courriels est en portugais",
+        "pt": "O nome de remetente padrão dos e-mails está em português"
+      },
+      "v": {
+        "fr": "Reste de F21 (clos le 06/10). `_shared/core/env.ts` (l. 12) donne à `SENDER_NAME`, à défaut du secret du même nom, la valeur « Biblioteca da rede AnarBib » ; le contexte d'une bibliothèque y retombe quand elle n'a ni nom d'expéditeur ni nom court (`library-mail-routing.ts`, `library-notification-context.ts`). Si le secret est posé en production, c'est sa valeur qui sert : non vérifié (la valeur des secrets ne se lit pas). Et le critère de F21 était un test de source : aucun vrai courriel en français n'a encore été lu en production pour s'assurer qu'il ne porte pas un mot de portugais.",
+        "pt": "Resto do F21 (fechado em 06/10). `_shared/core/env.ts` dá a `SENDER_NAME`, na falta do segredo, « Biblioteca da rede AnarBib »; o contexto de uma biblioteca recai nele quando ela não tem nome de remetente. Se o segredo existir em produção, vale o seu valor: não verificado. E nenhum e-mail real em francês foi lido em produção."
+      },
+      "w": {
+        "fr": "Décider du défaut : le nom de la bibliothèque, « AnarBib » seul, ou une clé par langue ; l'écrire, avec un banc qui rend un courriel français sans nom de bibliothèque. Puis lire un vrai courriel de réservation en français reçu en production.",
+        "pt": "Decidir o padrão (nome da biblioteca, « AnarBib » só, ou uma chave por língua) e escrevê-lo com bancada; depois ler um e-mail real em francês recebido em produção."
+      },
+      "y": {
+        "fr": "C'est la première ligne qu'une lectrice lit dans sa boîte : en portugais, elle dit que le courriel n'a pas été écrit pour elle.",
+        "pt": "É a primeira linha que a leitora vê na caixa de entrada."
+      },
+      "f": {
+        "fr": [
+          "Aucun courriel rendu en français ne porte de nom d'expéditeur en portugais (banc).",
+          "Un vrai courriel de réservation en français, reçu en production, ne contient pas un mot de portugais."
+        ],
+        "pt": [
+          "Nenhum e-mail em francês tem remetente em português (bancada).",
+          "Um e-mail real de reserva em francês, recebido em produção, sem nenhuma palavra em português."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune ; Xavier pour le courriel réel.",
+        "pt": "Nenhuma; Xavier para o e-mail real."
+      },
+      "r": [
+        "clôture F21",
+        "supabase/functions/_shared/core/env.ts",
+        "supabase/functions/_shared/context/library-mail-routing.ts"
       ],
       "verif": null
     }
