@@ -1865,3 +1865,17 @@ Cinq, lues corps par corps en production le 05/10.
 au 28/09, +5 ci-dessus, −1 fermée entre-temps et non identifiée (même écart
 d'une unité qu'au 06/09). 0028 = **28** : 27 au relevé du 29/09, +1 `catalog_digital_access_v1` (04/10,
 ouverte au catalogue public, voir ci-dessus).
+
+## Complément du 06/10/2026 — deux DEFINER ouvertes à `authenticated` le 05/10
+
+Relevé à l'inventaire du backlog (05/10 au soir) : le lint 0029 passe de 447 à
+**449**. Les deux nouvelles, lues corps par corps dans leur migration et
+comparées à la production (`pg_proc`, droits par `has_function_privilege`).
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `public.fn_network_admin_find_user_by_email(text)` | 05/10 (G17, `20261005113021`) | `fn_caller_is_network_admin()` en tête ; sinon `42501`, HINT `error.forbidden`. `REVOKE … FROM PUBLIC, anon`, `GRANT … TO authenticated` | **Saine.** Résout une adresse **exacte** (casse et espaces ignorés, plus de `ilike` et de ses jokers) en identifiant de compte, comptes supprimés exclus, et ne rend que cet identifiant. Elle sert à désigner la personne à coopter : un compte sans bibliothèque est invisible à l'admin sous la RLS de `profiles`, que la fonction ne change pas. *Forme à noter* : elle dit à un·e admin réseau si une adresse a un compte — ce que la cooptation exige, et réservé à l'administration. |
+| `api.fn_catalog_networks_v1()` | 05/10 (G13, `20261005173015`) | aucune, ouverte aussi à `anon`, exprès | **Saine.** Verdict écrit à l'audit anon (`AUDIT_execute_anon_2026-08-30.md`, addendum du 05/10) : ne rend que les réseaux « documentation » et les bibliothèques visibles par une fiche publique de la carte. |
+
+**Compte au 06/10.** 0029 = **449**, tous justifiés ; 0028 = **29** (+1,
+`api.fn_catalog_networks_v1`).

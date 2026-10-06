@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-06.** **45 itens de 69** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **24** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-06.** **46 itens de 69** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, E1, E2, E4, E6, E20, E29, F3, F6, F10, F15, F19, G1, G6, G8, G10, G15, G16, H2, H15, H16, H20, H21, H25, H26, H28, H29, H30, H31, I2, I18, I21, I30, J9, K2, K7, K10). Os **23** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -439,7 +439,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Levantado em 29/09 ao corrigir a reatribuição (`CAT-E19`): três caminhos deixam para trás de um exemplar deslocado coisas que ainda apontam para a biblioteca ou o acervo de origem. Nenhum foi visto na tela; todos se leem no código.
 
-*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto. **05/10, à noite** — o defeito « visto de passagem, fora de C14 » virou **C23**, entregue no mesmo dia (`16962c55`).*
+*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto. **05/10, à noite** — o defeito « visto de passagem, fora de C14 » virou **C23**, entregue no mesmo dia (`16962c55`). **06/10** — contadores relidos após o recálculo das 04h43 UTC: fundos BTL 173 e 2426 com 1 disponível de 1. Falta o olhar de Xavier nas duas recusas (E31).*
 
 **O que é.** (1) Um rascunho de exemplar ABERTO (`draft`, `ready`) sobre um exemplar reatribuído guarda a biblioteca de origem: publicado, levaria o exemplar de volta, sem avisar — decidir se ele acompanha o exemplar (mudaria de fila, `B29`) ou se é recusado na publicação. (2) Reservas e EEB em curso continuam contados no acervo de origem após o deslocamento (`fn_v2_recompute_holdings_availability` conta por `holding_id`): a disponibilidade do destino fica superestimada. (3) A mudança de biblioteca de um exemplar isolado (`publish_exemplar_draft`) e o descarte (`discard_exemplar`) também deixam acervos vazios, que a ficha pública mostra com «0 exemplar». (4) Restaurar da lixeira um rascunho de exemplar que visava um acervo apagado depois levanta 23503 bruto (`fn_restore_deleted_draft` reinsere seu `target_holding_id`) — consequência direta de `CAT-E19`. (5) O painel de reatribuição não diz que um acervo de origem foi mantido (`holdings_kept`), vazio, porque um histórico o referencia.
 
@@ -755,7 +755,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
-| **E29** | As facetas de um membro contam o catálogo público, não o que ele vê | `P2` | Aberto |
+| **E29** | As facetas de um membro contam o catálogo público, não o que ele vê | `P2` | A verificar |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
 | **E32** | Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1) | `P3` | Aberto |
@@ -896,11 +896,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E29 — As facetas de um membro contam o catálogo público, não o que ele vê
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Escrito no fechamento do B32 e repetido por `5f13ec86` (28/09): um membro vê a página sobre o catálogo da rede, mas `api.catalog_facets_v1` conta sobre o catálogo público. Nenhum item o carregava.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Fazer as facetas contarem sobre o conjunto que a página mostra, mantendo em anônimo o mesmo resultado nos 23 conjuntos de filtros.
 
@@ -1718,7 +1718,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção.
 
