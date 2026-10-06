@@ -186,8 +186,10 @@ BEGIN
   BEGIN
     SELECT jsonb_agg(jsonb_build_object(
              'row_no', s.row_no,
+             -- digital_resources_removed (D9, 06/10) : la trace des ressources
+             -- supprimées d'un brouillon, née après la capture ; l'import n'y écrit pas
              'brouillon', (to_jsonb(d) - 'id' - 'batch_id' - 'bib_ref' - 'created_at' - 'updated_at' - 'last_opened_at'
-                                       - 'publisher_id' - 'marc_json' - 'provenance_note')
+                                       - 'publisher_id' - 'marc_json' - 'provenance_note' - 'digital_resources_removed')
                           || jsonb_build_object(
                                'provenance_note', regexp_replace(d.provenance_note, 'run [0-9]+', 'run #'),
                                'marc_json', jsonb_build_object(
