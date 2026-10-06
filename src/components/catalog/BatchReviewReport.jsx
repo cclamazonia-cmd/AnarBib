@@ -57,6 +57,13 @@ export default function BatchReviewReport({ report }) {
   const updateCounts = updates?.counts && typeof updates.counts === 'object' ? updates.counts : {};
   const updateExamples = Array.isArray(updates?.examples) ? updates.examples : [];
   const updateNotable = ['conflit', 'source_seule', 'sans_base', 'local_seul'].reduce((n, k) => n + Number(updateCounts[k] || 0), 0);
+  // H21 lot 4 (06/10/2026, IMP-31) : les brouillons de mise à jour préparés
+  // par un réimport (clé `prepared_updates`, absente des instantanés d'avant
+  // et des lots sans mise à jour) : pour chacun, les champs appliqués et les
+  // champs MONTRÉS non appliqués (responsabilités changées dans le fichier,
+  // conflits, sans base) ; 40 brouillons au plus, les comptes portent sur tout.
+  const prepared = report.prepared_updates && typeof report.prepared_updates === 'object' ? report.prepared_updates : null;
+  const preparedExamples = Array.isArray(prepared?.examples) ? prepared.examples : [];
   // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
   // (report.batch.library_id / library_name ; nulle = administration du
   // réseau). Les instantanés figés avant B30 n'en ont pas : on n'affiche rien.
@@ -212,6 +219,43 @@ export default function BatchReviewReport({ report }) {
               {more(updateNotable, Math.min(updateExamples.length, 40))}
             </ul>
           )}
+        </section>
+      )}
+
+      {prepared && Number(prepared.count || 0) > 0 && (
+        <section data-testid="review-prepared">
+          <h5 style={secTitle}>{t({ id: 'review.report.prepared' })}</h5>
+          <div>{t({ id: 'review.report.prepared.summary' }, {
+            count: Number(prepared.count || 0),
+            applied: Number(prepared.applied_fields || 0),
+            shown: Number(prepared.shown_fields || 0),
+          })}</div>
+          <ul style={list}>
+            {preparedExamples.slice(0, 40).map((e) => (
+              <li key={e.draft_id} data-prepared-draft={e.draft_id}>
+                {draftLabel({ draft_id: e.draft_id, titulo: e.titulo })}
+                {e.external_key ? <span style={muted}> ({e.external_key})</span> : null}
+                <ul style={list}>
+                  {(Array.isArray(e.applied) ? e.applied : []).map((c, i) => (
+                    <li key={`a-${c.champ}-${i}`} data-prepared-field="applied">
+                      <code>{c.champ}</code>{' — '}<strong>{t({ id: 'review.report.prepared.applied' })}</strong>
+                      <div style={muted}>{t({ id: 'review.report.updates.values' }, { b: valeurComparee(c.b), a: valeurComparee(c.a), n: valeurComparee(c.n) })}</div>
+                    </li>
+                  ))}
+                  {(Array.isArray(e.shown) ? e.shown : []).map((c, i) => (
+                    <li key={`s-${c.champ}-${i}`} data-prepared-field="shown" data-update-verdict={c.verdict}>
+                      <code>{c.champ}</code>{' — '}<strong>{t({ id: 'review.report.prepared.shown' })}</strong>
+                      {c.verdict ? <> · {t({ id: `review.report.updates.verdict.${c.verdict}` })}</> : null}
+                      {/* IMP-31 c : un champ que le fichier vide est montré, jamais appliqué */}
+                      {c.raison === 'efface_par_la_source' ? <> · {t({ id: 'review.report.prepared.erased' })}</> : null}
+                      <div style={muted}>{t({ id: 'review.report.updates.values' }, { b: valeurComparee(c.b), a: valeurComparee(c.a), n: valeurComparee(c.n) })}</div>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+            {more(Number(prepared.count || 0), Math.min(preparedExamples.length, 40))}
+          </ul>
         </section>
       )}
 

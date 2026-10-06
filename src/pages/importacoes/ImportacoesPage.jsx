@@ -16,6 +16,7 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
 import RunEncodingPanel from './RunEncodingPanel.jsx';
 import RunCoveragePanel from './RunCoveragePanel.jsx';
+import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
 // Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
@@ -60,8 +61,18 @@ const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh', 'own_catalog']
 // qu'elle est rattachée sans exemplaire ; jamais en « Accepté (nouveau) » :
 // elle ne devient jamais une notice neuve (seulement « Rapprocher » ou
 // « Rejeter »). La règle accept_new ne vaut que pour new_record.
+// H21 lot 4 (décision de Xavier du 06/10, IMP-31 d) : « Préparer la mise à
+// jour » et « Rapprocher » sont deux gestes indépendants. Une ligne « Déjà
+// importée » qui a une mise à jour à préparer (même règle qu'estPreparable,
+// écrite ici en entier : ce prédicat se lit seul) reste cochable même
+// rapprochée, ou marquée rejetée par « Rapprocher » parce que tous ses
+// exemplaires étaient déjà là (H19) — la base rend update_applicable = 0 pour
+// une ligne rejetée par choix ou écartée.
 function estSelectionnable(r) {
-  if (!r || r.created_book_draft_id || r.created_exemplar_draft_id) return false;
+  if (!r || r.created_book_draft_id) return false;
+  if (r.match_status === 'known_record' && r.proposed_book_id && r.proposed_book_held !== false
+      && Number(r.update_applicable || 0) > 0 && !r.update_draft_id) return true;
+  if (r.created_exemplar_draft_id) return false;
   const ed = r.editorial_decision;
   return ed == null || ed === 'pending'
     || (ed === 'accept_new' && r.match_status === 'new_record')
@@ -96,6 +107,94 @@ function lignesAComparer(r) {
     .filter(x => x && x.match_status === 'known_record' && x.proposed_book_id
       && Object.prototype.hasOwnProperty.call(x, 'comparison_counts') && x.comparison_counts === null)
     .map(x => x.id);
+}
+
+// H21 lot 4 (06/10/2026, REGISTRE IMP-31) : « Préparer la mise à jour » —
+// une ligne « Déjà importée » dont la comparaison valide a au moins un champ
+// changé dans le fichier seulement, hors responsabilités (update_applicable,
+// compté par la base), encore détenue par ta bibliothèque, sans brouillon de
+// mise à jour. La base juge seule ce que l'écran ne voit pas (notice partagée
+// avec une bibliothèque hors de ta vue, comparaison recalculée) et dit les
+// lignes ignorées, par raison.
+function estPreparable(r) {
+  return !!r && r.match_status === 'known_record' && !!r.proposed_book_id
+    && r.proposed_book_held !== false && Number(r.update_applicable || 0) > 0 && !r.update_draft_id;
+}
+const PAGE_PREPARATION = 200;
+// L'ordre du message : ce qui demande une action d'abord.
+const RAISONS_IGNOREES = ['partagee', 'plus_detenue', 'sans_base', 'rien_a_appliquer', 'deja_preparee', 'rejetee',
+  'pas_reconnue', 'hors_run', 'non_comparee'];
+
+// Le détail d'une ligne « Déjà importée », champ par champ (base de l'import
+// précédent / AnarBib / fichier / verdict), lu à l'ouverture par
+// fn_import_row_comparison (calculé à la lecture). Les champs inchangés sont
+// comptés, pas listés ; valeurs AnarBib masquées d'une notice hors de ta vue.
+const LIBELLE_CHAMP = {
+  ...Object.fromEntries(REGISTRY.flatMap(g => (Array.isArray(g.fields) ? g.fields : []).map(f => [f.id, f.label]))),
+  contributors: 'catalogacao.ui.contributors',
+};
+function valeurDuChamp(v) {
+  if (v == null || (Array.isArray(v) && v.length === 0)) return '∅';
+  if (Array.isArray(v)) return v.map(x => (Array.isArray(x) ? `${x[0] ?? '?'}${x[1] ? ` (${x[1]})` : ''}` : String(x))).join(' ; ');
+  const s = String(v);
+  return s.length > 160 ? `${s.slice(0, 157)}…` : s;
+}
+function messagePreparation(t, prepares, lot, ignorees) {
+  const parties = [prepares > 0
+    ? t({ id: 'importacoes.fila.prepared' }, { n: prepares, batch: lot ?? '—' })
+    : t({ id: 'importacoes.fila.preparedNone' })];
+  const liste = RAISONS_IGNOREES.filter(k => Number(ignorees[k] || 0) > 0)
+    .map(k => t({ id: `importacoes.fila.prepareSkip.${k}` }, { n: Number(ignorees[k]) }));
+  if (liste.length) parties.push(t({ id: 'importacoes.fila.prepareSkipped' }, { list: liste.join(', ') }));
+  return { text: parties.join(' '), kind: prepares > 0 ? (liste.length ? 'info' : 'ok') : 'error' };
+}
+function DetailComparaison({ runId, rowId }) {
+  const { formatMessage: t } = useIntl();
+  const [etat, setEtat] = useState({ charge: true, data: null, erreur: null });
+  useEffect(() => {
+    let actif = true;
+    supabase.rpc('fn_import_row_comparison', { p_run_id: Number(runId), p_row_id: Number(rowId) })
+      .then(({ data, error }) => { if (actif) setEtat({ charge: false, data: error ? null : data, erreur: error || null }); })
+      .catch((e) => { if (actif) setEtat({ charge: false, data: null, erreur: e }); });
+    return () => { actif = false; };
+  }, [runId, rowId]);
+  if (etat.charge) return <div className="imp-note" style={{ fontSize: '.72rem' }}>{t({ id: 'importacoes.fila.detail.loading' })}</div>;
+  if (etat.erreur || !etat.data) {
+    return <div className="imp-note" style={{ fontSize: '.72rem' }}>{etat.erreur ? localizeError(etat.erreur, t) : t({ id: 'importacoes.fila.comparison.notComputed' })}</div>;
+  }
+  const champs = Array.isArray(etat.data.champs) ? etat.data.champs.filter(Boolean) : [];
+  const ecarts = champs.filter(c => c.verdict !== 'inchange');
+  const masque = !!etat.data.a_masque;
+  const libelle = (champ) => (LIBELLE_CHAMP[champ] ? t({ id: LIBELLE_CHAMP[champ] }) : champ);
+  return (
+    <div data-testid="known-detail" className="imp-known-detail" style={{ marginTop: 4, fontSize: '.72rem' }}>
+      {masque && <div className="imp-note" data-testid="known-detail-masked">{t({ id: 'importacoes.fila.detail.masked' })}</div>}
+      {ecarts.length === 0
+        ? <div className="imp-note">{t({ id: 'importacoes.fila.comparison.none' })}</div>
+        : (
+          <ul style={{ margin: '2px 0 0 16px', padding: 0, lineHeight: 1.45 }}>
+            {ecarts.map(c => (
+              <li key={c.champ} data-champ={c.champ} data-verdict={c.verdict}>
+                <strong>{libelle(c.champ)}</strong>{' — '}{t({ id: `review.report.updates.verdict.${c.verdict}` })}
+                {/* IMP-31 c : un champ que le fichier vide est montré, jamais appliqué */}
+                {c.verdict === 'source_seule' && c.champ !== 'contributors' && c.n == null
+                  ? <span data-testid="known-detail-erased"> · {t({ id: 'review.report.prepared.erased' })}</span> : null}
+                <div style={{ color: 'var(--brand-muted, #94a3b8)' }}>
+                  {t({ id: 'review.report.updates.values' }, {
+                    b: valeurDuChamp(c.b),
+                    a: masque ? t({ id: 'review.report.updates.masked' }) : valeurDuChamp(c.a),
+                    n: valeurDuChamp(c.n),
+                  })}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      {champs.length - ecarts.length > 0 && (
+        <div className="imp-note">{t({ id: 'importacoes.fila.detail.unchanged' }, { n: champs.length - ecarts.length })}</div>
+      )}
+    </div>
+  );
 }
 
 export default function ImportacoesPage() {
@@ -389,6 +488,15 @@ export default function ImportacoesPage() {
       && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'known_record')).length,
     [filteredRunRows, selectedRows]
   );
+
+  // H21 lot 4 : les lignes sélectionnées que « Préparer la mise à jour » prendra.
+  const selectedUpdCount = useMemo(
+    () => filteredRunRows.filter(r => selectedRows.has(r.id) && estPreparable(r)).length,
+    [filteredRunRows, selectedRows]
+  );
+  // H21 lot 4 : les lignes dont le détail champ par champ est ouvert.
+  const [detailsOuverts, setDetailsOuverts] = useState(() => new Set());
+  useEffect(() => { setDetailsOuverts(new Set()); }, [selectedRunId]);
 
   // Réinitialise pagination + sélection quand on change de run ou de filtre.
   useEffect(() => { setRowLimit(50); setSelectedRows(new Set()); }, [selectedRunId, filaStateFilter, filaMatchFilter]);
@@ -757,6 +865,51 @@ export default function ImportacoesPage() {
     } finally {
       setPromotingSel(false);
     }
+  }
+  // H21 lot 4 (06/10/2026, IMP-31) : « Préparer la mise à jour » — pour les
+  // lignes « Déjà importées » sélectionnées qui ont un champ changé dans le
+  // fichier seulement (estPreparable), un brouillon de mise à jour par notice
+  // que ta bibliothèque est seule à détenir, dans le lot du run ; la base
+  // recalcule la comparaison et dit les lignes ignorées, par raison. Par pages
+  // de 200 (plafond de la RPC). Jamais d'office : seulement ce geste.
+  async function handlePrepareUpdates() {
+    if (!selectedRunId) return;
+    const ids = filteredRunRows.filter(r => selectedRows.has(r.id) && estPreparable(r)).map(r => r.id);
+    if (!ids.length) return;
+    setPromotingSel(true);
+    setMsg({ text: t({ id: 'importacoes.fila.preparing' }), kind: 'info' });
+    let prepares = 0;
+    let lot = null;
+    const ignorees = {};
+    try {
+      for (let i = 0; i < ids.length; i += PAGE_PREPARATION) {
+        const { data, error } = await supabase.rpc('fn_import_preparer_mises_a_jour', {
+          p_run_id: Number(selectedRunId),
+          p_row_ids: ids.slice(i, i + PAGE_PREPARATION),
+        });
+        if (error) throw error;
+        prepares += Number(data?.prepared || 0);
+        if (data?.batch_id) lot = data.batch_id;
+        Object.entries(data?.skipped || {}).forEach(([k, n]) => { ignorees[k] = (ignorees[k] || 0) + Number(n || 0); });
+      }
+      setMsg(messagePreparation(t, prepares, lot, ignorees));
+      setSelectedRows(new Set());
+      await loadRuns();
+      await loadRunRows(selectedRunId);
+    } catch (err) {
+      // une page refusée après d'autres : ce qui a été préparé est dit aussi
+      setMsg({ text: `${prepares > 0 ? `${messagePreparation(t, prepares, lot, ignorees).text} ` : ''}${localizeError(err, t)}`, kind: 'error' });
+      await loadRunRows(selectedRunId);
+    } finally {
+      setPromotingSel(false);
+    }
+  }
+  function basculerDetail(id) {
+    setDetailsOuverts(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
   }
   // Écarter des lignes (doublons, hors-sujet) : décision 'reject'. Elles ne
   // seront jamais promues et apparaissent « Rejeitada » (rouge).
@@ -1906,6 +2059,12 @@ export default function ImportacoesPage() {
                       <button className="cat-btn" disabled={promotingSel || selectedDupCount === 0} onClick={handleReconcileSelected} title={t({ id: 'importacoes.fila.reconcileTitle' })}>
                         {t({ id: 'importacoes.fila.reconcile' }, { n: selectedDupCount })}
                       </button>
+                      {peutComparer && (
+                        <button className="cat-btn" data-testid="prepare-update" disabled={promotingSel || selectedUpdCount === 0}
+                          onClick={handlePrepareUpdates} title={t({ id: 'importacoes.fila.prepareUpdateTitle' })}>
+                          {t({ id: 'importacoes.fila.prepareUpdate' }, { n: selectedUpdCount })}
+                        </button>
+                      )}
                       <button className="cat-btn secondary" disabled={promotingSel} onClick={handleRejectSelected}
                         title={t({ id: 'importacoes.fila.rejectTitle' })}
                         style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
@@ -2007,6 +2166,23 @@ export default function ImportacoesPage() {
                                   <div className="imp-note imp-known-compare-absente" data-testid="known-compare-absente"
                                     style={{ marginTop: 2, fontSize: '.72rem', color: 'var(--brand-muted, #94a3b8)' }}>
                                     {t({ id: 'importacoes.fila.comparison.notComputed' })}
+                                  </div>
+                                )}
+                                {isKnown && row.update_draft_id && (
+                                  <div className="imp-note imp-known-update" data-testid="known-update-draft"
+                                    style={{ marginTop: 2, fontSize: '.72rem', color: 'var(--brand-info, #60a5fa)' }}>
+                                    {t({ id: `importacoes.fila.update.${row.update_draft_status === 'published' ? 'published'
+                                      : row.update_draft_status === 'cancelled' ? 'cancelled' : 'prepared'}` }, { id: row.update_draft_id })}
+                                  </div>
+                                )}
+                                {isKnown && row.proposed_book_id && (
+                                  <div style={{ marginTop: 2 }}>
+                                    <button type="button" className="cat-btn secondary" data-testid="known-detail-toggle"
+                                      aria-expanded={detailsOuverts.has(row.id)} style={{ fontSize: '.7rem', padding: '1px 6px' }}
+                                      onClick={() => basculerDetail(row.id)}>
+                                      {t({ id: detailsOuverts.has(row.id) ? 'importacoes.fila.detail.hide' : 'importacoes.fila.detail.show' })}
+                                    </button>
+                                    {detailsOuverts.has(row.id) && <DetailComparaison runId={row.run_id} rowId={row.id} />}
                                   </div>
                                 )}
                                 {isKnown && row.proposed_book_held === false && (

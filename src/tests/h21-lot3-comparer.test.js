@@ -106,11 +106,15 @@ describe('Importations — resumeComparaison (comptes par verdict → mention)',
     expect(resume(ligne)).toEqual(attendu);
   });
 
-  it('la page ne la calcule que pour une ligne known_record ; pages de 200 ; le détail n\'est pas appelé d\'ici', () => {
+  it('la page ne la calcule que pour une ligne known_record ; pages de 200 ; le détail n\'est lu qu\'à l\'ouverture du panneau (lot 4)', () => {
     expect(IMPORTACOES).toContain("const comparaison = isKnown ? resumeComparaison(row) : null;");
     expect(IMPORTACOES).toContain('const PAGE_COMPARAISON = 200;');
     expect(IMPORTACOES).toContain("const peutComparer = role === 'coordenador' || !!isNetworkAdmin;");
-    expect(IMPORTACOES).not.toMatch(/fn_import_row_comparison/);
+    // 06/10/2026 (H21 lot 4) : le détail est lu par le panneau dépliable
+    // (DetailComparaison), à son ouverture seulement — jamais au chargement
+    // (le test monté plus bas le vérifie).
+    expect(IMPORTACOES.match(/rpc\('fn_import_row_comparison'/g)).toHaveLength(1);
+    expect(IMPORTACOES).toMatch(/function DetailComparaison\([\s\S]*?supabase\.rpc\('fn_import_row_comparison'/);
   });
 });
 

@@ -660,6 +660,14 @@ tests/sql/h21_lot2_la_base_tests.sql
 # recalculée par fn_import_recomparer ; détail par fn_import_row_comparison ; comptes
 # dans la liste ; section « updates » du rapport de révision ; 2 000 lignes < 8 s.
 tests/sql/h21_lot3_comparer_tests.sql
+# 06/10/2026 — H21 lot 4 (REGISTRE IMP-29, IMP-31) : seule détentrice, un brouillon de
+# mise à jour — « Préparer la mise à jour » (fn_import_preparer_mises_a_jour) copie la
+# notice et n'y patche que les champs changés dans le fichier seulement ; responsabilités
+# montrées, jamais appliquées ; notice partagée, rien à appliquer, déjà préparée, plus
+# détenue : ignorées avec leur raison, sans écriture ; révision obligatoire ; publication
+# refusée si la notice, la détention, la base, bib_ref ou l'identifiant ont changé ; tout
+# le reste de la notice intact ; la base avance selon la règle 3 ; 200 lignes < 8 s.
+tests/sql/h21_lot4_mise_a_jour_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.
