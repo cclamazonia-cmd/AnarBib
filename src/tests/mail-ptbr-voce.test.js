@@ -233,7 +233,10 @@ const TEXTE_EN_DUR_PT = [
   'notify-network-weekly-report/index.ts',
   'notify-document-permission-request/index.ts',
   '_shared/shared/events.ts',
-  '_shared/core/env.ts',
+  // '_shared/core/env.ts' en est sorti le 06/10/2026 (F24) : son dernier texte
+  // portugais, le nom d'expéditeur par défaut, est devenu « AnarBib » — le
+  // pied de page par défaut avait déjà perdu le sien (F21). La garde
+  // mail-expediteur-par-defaut veille sur ce nom.
   'opds/index.ts',
 ];
 
