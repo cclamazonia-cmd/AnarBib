@@ -22,6 +22,7 @@ import CatalogPanel from './CatalogPanel';
 import SubjectGovernancePanel from './SubjectGovernancePanel';
 import SerialGovernancePanel from './SerialGovernancePanel';
 import DedupAssistantPanel from './DedupAssistantPanel';
+import DivergencesPanel from './DivergencesPanel';
 import BatchReviewReport from '@/components/catalog/BatchReviewReport';
 import ContributorCandidates from '@/components/catalog/ContributorCandidates';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -50,6 +51,21 @@ export default function CatalogacaoPage() {
   // que des impasses.
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { formatMessage: t } = useIntl();
+  // H21 lot 5 (07/10/2026, IMP-32 a) : « Divergences à traiter » — la
+  // coordination d'une bibliothèque (détentrice : la base filtre) et
+  // l'administration du réseau ; le librarian ne les voit pas. La pastille dit
+  // le nombre de notices à traiter.
+  const { coordLibraryIds } = useCoordLibraries();
+  const voitDivergences = !!isNetworkAdmin || (coordLibraryIds?.length ?? 0) > 0;
+  const [nbDivergences, setNbDivergences] = useState(0);
+  useEffect(() => {
+    if (!voitDivergences) { setNbDivergences(0); return undefined; }
+    let actif = true;
+    supabase.rpc('fn_divergences_a_traiter', { p_library_id: null, p_limit: 1, p_offset: 0 })
+      .then(({ data, error }) => { if (actif && !error) setNbDivergences(Number(data?.total || 0)); })
+      .catch(() => {});
+    return () => { actif = false; };
+  }, [voitDivergences]);
   useDocumentTitle(t({ id: 'pageTitle.cataloging' }));
   const confirmer = useConfirm();
   const { notifyError } = useToast();
@@ -73,6 +89,9 @@ export default function CatalogacaoPage() {
     { id: 'ocrPanel',       icon: '📷', label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
     { id: 'queuePanel',     icon: '📥', label: t({ id: 'catalogacao.tab.fila' }), separator: true },
     { id: 'batchesPanel',   icon: '📦', label: t({ id: 'catalogacao.tab.lotes' }) },
+    ...(voitDivergences
+      ? [{ id: 'divergencesPanel', icon: 'scale', label: t({ id: 'catalogacao.tab.divergences' }), count: nbDivergences }]
+      : []),
     { id: 'materiaPanel',   icon: '🗂️', label: t({ id: 'catalogacao.tab.materia' }), separator: true },
     { id: 'periodicosPanel', icon: '📰', label: t({ id: 'catalogacao.tab.periodicos' }) },
     ...(arbitreDoublons
@@ -487,6 +506,7 @@ export default function CatalogacaoPage() {
               >
                 <AppIcon className="ab-tabbar__icon" name={tab.icon} size="1em" />
                 {tab.label}
+                {tab.count > 0 && <span className="ab-tabbar__badge" data-testid="tab-badge-divergences">{tab.count}</span>}
               </button>
             ))}
           </nav>
@@ -503,7 +523,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm panelActive={activeTab === 'booksPanel'} batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} onEditExemplar={editPublishedExemplar} />
+            <BookDraftForm panelActive={activeTab === 'booksPanel'} batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} onEditExemplar={editPublishedExemplar} onOpenDraft={(id) => openForEdit('book', id)} />
           </div>
 
           {/* 2. Autoria */}
@@ -543,6 +563,15 @@ export default function CatalogacaoPage() {
             </div>
             <BatchesPanel batches={batches} onRefresh={refreshAll} isCoord={isCoord} isNetworkAdmin={isNetworkAdmin} />
           </div>
+
+          {/* 6 bis. Divergences à traiter (H21 lot 5) : notices partagées qu'un
+              réimport a trouvées différentes, sans les réécrire. */}
+          {voitDivergences && (
+            <div className={`cat-panel${activeTab === 'divergencesPanel' ? ' active' : ''}`}>
+              <DivergencesPanel isActive={activeTab === 'divergencesPanel'} onOpenDraft={(id) => openForEdit('book', id)}
+                onCount={setNbDivergences} />
+            </div>
+          )}
 
           {/* 7. Coordenação de matéria (gouvernance thésaurus — étape 2c) */}
           <div className={`cat-panel${activeTab === 'materiaPanel' ? ' active' : ''}`}>

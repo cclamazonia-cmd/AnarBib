@@ -668,6 +668,16 @@ tests/sql/h21_lot3_comparer_tests.sql
 # refusée si la notice, la détention, la base, bib_ref ou l'identifiant ont changé ; tout
 # le reste de la notice intact ; la base avance selon la règle 3 ; 200 lignes < 8 s.
 tests/sql/h21_lot4_mise_a_jour_tests.sql
+# 07/10/2026 — H21 lot 5 (REGISTRE IMP-26 b/c, IMP-32) : une notice partagée n'est jamais
+# réécrite par un réimport — fn_import_recomparer signale ses champs divergents aux
+# détentrices (ingest.book_import_divergences) sans écrire au catalogue ; coordination de
+# chaque détentrice et administration les voient (liste, bandeau), ni la lectrice ni le
+# librarian ; écarter avance la base pour ce champ seul (même N : plus rien ; N nouveau :
+# rouverte) ; appliquer = brouillon de reprise prérempli des seuls champs choisis
+# (responsabilités et effacements montrés), publié par la détentrice, refusé si la
+# notice a changé, a disparu, n'est plus détenue ou si bib_ref a changé (republication
+# comprise) ; résolue, caduque ; page de 200 < 8 s.
+tests/sql/h21_lot5_divergences_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

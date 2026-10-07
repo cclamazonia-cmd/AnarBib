@@ -10,6 +10,8 @@
  * résumé, champs appliqués, champs montrés non appliqués.
  * Refus de publication (HINT de ingest.fn_h21_garde_mise_a_jour) et borne de
  * page du geste (error.import.update_page_too_large).
+ * 07/10/2026 (H21 lot 5) : le message d'une notice partagée dit qu'elle est
+ * signalée aux détentrices — même valeur que scripts/i18n-add-h21-lot5.cjs.
  * 37 clés × 10 locales (34, puis le 06/10 au soir « effacé par la source »,
  * décision de Xavier, et deux refus de la revue sceptique : notice retirée,
  * absorption d'un brouillon de mise à jour). Tutoiement partout ; pt-BR au « você ».
@@ -98,16 +100,16 @@ const CLES = {
     el: 'Παραλείφθηκαν: {list}.',
   },
   'importacoes.fila.prepareSkip.partagee': {
-    fr: '{n, plural, one {# notice partagée avec une autre bibliothèque (jamais réécrite par un réimport)} other {# notices partagées avec une autre bibliothèque (jamais réécrites par un réimport)}}',
-    'pt-BR': '{n, plural, one {# ficha compartilhada com outra biblioteca (nunca reescrita por uma reimportação)} other {# fichas compartilhadas com outra biblioteca (nunca reescritas por uma reimportação)}}',
-    en: '{n, plural, one {# record shared with another library (never rewritten by a reimport)} other {# records shared with another library (never rewritten by a reimport)}}',
-    es: '{n, plural, one {# ficha compartida con otra biblioteca (nunca reescrita por una reimportación)} other {# fichas compartidas con otra biblioteca (nunca reescritas por una reimportación)}}',
-    ca: '{n, plural, one {# fitxa compartida amb una altra biblioteca (mai reescrita per una reimportació)} other {# fitxes compartides amb una altra biblioteca (mai reescrites per una reimportació)}}',
-    it: '{n, plural, one {# scheda condivisa con un’altra biblioteca (mai riscritta da una reimportazione)} other {# schede condivise con un’altra biblioteca (mai riscritte da una reimportazione)}}',
-    de: '{n, plural, one {# Eintrag mit einer anderen Bibliothek geteilt (nie von einem Neuimport überschrieben)} other {# Einträge mit einer anderen Bibliothek geteilt (nie von einem Neuimport überschrieben)}}',
-    nl: '{n, plural, one {# record gedeeld met een andere bibliotheek (nooit herschreven door een herimport)} other {# records gedeeld met een andere bibliotheek (nooit herschreven door een herimport)}}',
-    eo: '{n, plural, one {# slipo kunhavata kun alia biblioteko (neniam reskribita de reimporto)} other {# slipoj kunhavataj kun alia biblioteko (neniam reskribitaj de reimporto)}}',
-    el: '{n, plural, one {# εγγραφή κοινή με άλλη βιβλιοθήκη (δεν ξαναγράφεται ποτέ από επανεισαγωγή)} other {# εγγραφές κοινές με άλλη βιβλιοθήκη (δεν ξαναγράφονται ποτέ από επανεισαγωγή)}}',
+    fr: '{n, plural, one {# notice partagée avec une autre bibliothèque (jamais réécrite par un réimport : signalée aux détentrices)} other {# notices partagées avec une autre bibliothèque (jamais réécrites par un réimport : signalées aux détentrices)}}',
+    'pt-BR': '{n, plural, one {# ficha compartilhada com outra biblioteca (nunca reescrita por uma reimportação: sinalizada às detentoras)} other {# fichas compartilhadas com outra biblioteca (nunca reescritas por uma reimportação: sinalizadas às detentoras)}}',
+    en: '{n, plural, one {# record shared with another library (never rewritten by a reimport: flagged to its holders)} other {# records shared with another library (never rewritten by a reimport: flagged to their holders)}}',
+    es: '{n, plural, one {# ficha compartida con otra biblioteca (nunca reescrita por una reimportación: señalada a las poseedoras)} other {# fichas compartidas con otra biblioteca (nunca reescritas por una reimportación: señaladas a las poseedoras)}}',
+    ca: '{n, plural, one {# fitxa compartida amb una altra biblioteca (mai reescrita per una reimportació: assenyalada a les posseïdores)} other {# fitxes compartides amb una altra biblioteca (mai reescrites per una reimportació: assenyalades a les posseïdores)}}',
+    it: '{n, plural, one {# scheda condivisa con un’altra biblioteca (mai riscritta da una reimportazione: segnalata alle detentrici)} other {# schede condivise con un’altra biblioteca (mai riscritte da una reimportazione: segnalate alle detentrici)}}',
+    de: '{n, plural, one {# Eintrag mit einer anderen Bibliothek geteilt (nie von einem Neuimport überschrieben: den Besitzerinnen gemeldet)} other {# Einträge mit einer anderen Bibliothek geteilt (nie von einem Neuimport überschrieben: den Besitzerinnen gemeldet)}}',
+    nl: '{n, plural, one {# record gedeeld met een andere bibliotheek (nooit herschreven door een herimport: gemeld aan de bezitters)} other {# records gedeeld met een andere bibliotheek (nooit herschreven door een herimport: gemeld aan de bezitters)}}',
+    eo: '{n, plural, one {# slipo kunhavata kun alia biblioteko (neniam reskribita de reimporto: signalita al la posedantoj)} other {# slipoj kunhavataj kun alia biblioteko (neniam reskribitaj de reimporto: signalitaj al la posedantoj)}}',
+    el: '{n, plural, one {# εγγραφή κοινή με άλλη βιβλιοθήκη (δεν ξαναγράφεται ποτέ από επανεισαγωγή: επισημαίνεται στις κατόχους)} other {# εγγραφές κοινές με άλλη βιβλιοθήκη (δεν ξαναγράφονται ποτέ από επανεισαγωγή: επισημαίνονται στις κατόχους)}}',
   },
   'importacoes.fila.prepareSkip.rien_a_appliquer': {
     fr: '{n, plural, one {# sans rien à appliquer} other {# sans rien à appliquer}}',

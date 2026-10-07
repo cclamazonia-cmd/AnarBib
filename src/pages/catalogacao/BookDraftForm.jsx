@@ -16,6 +16,7 @@ import ShelfLabelPreview from './ShelfLabelPreview';
 import InitialCopiesBlock from './InitialCopiesBlock';
 import ReassignPanel from './ReassignPanel';
 import InfoCards from './InfoCards';
+import DivergencesNotice from '@/components/catalog/DivergencesNotice';
 import TitleCaseAssist from '@/components/catalog/TitleCaseAssist';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -39,7 +40,7 @@ import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATE
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true, onOpenDraft }) {
   const { formatMessage: t } = useIntl();
   const confirmer = useConfirm();
   const { user } = useAuth();
@@ -1796,6 +1797,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       {isNetworkAdmin && f('published_book_id') && (
         <ReassignPanel bookId={f('published_book_id')} catalogLibraries={catalogLibraries}
           setMsg={setMsg} onSaved={onSaved} />
+      )}
+
+      {/* H21 lot 5 (IMP-32 a) : un réimport a trouvé cette notice partagée
+          différente sans la réécrire — bandeau et détail pour la coordination
+          d'une détentrice (vide pour les autres). */}
+      {f('published_book_id') && (
+        <DivergencesNotice bookId={f('published_book_id')} onOpenDraft={onOpenDraft} />
       )}
 
       {/* Message */}

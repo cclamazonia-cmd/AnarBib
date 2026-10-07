@@ -13,7 +13,7 @@
 //   - les listes (classement, denylist, exclusions) acceptent des noms
 //     qualifiés : `books` = public.books, `ingest.<table>` = son schéma ;
 //   - le filet compare les tables de public ET d'ingest au classement ;
-//   - le classement contient les 11 tables d'ingest ;
+//   - le classement contient les 12 tables d'ingest (11, puis H21 lot 5 le 07/10/2026) ;
 //   - la CI (scripts/ci/run-sql-suites.sh) et le poste lisent le classement
 //     avec les MÊMES fonctions, ici extraites telles quelles et exécutées.
 // Les fonctions du script sont éprouvées en bash, avec pg_dump, psql et restic
@@ -33,6 +33,7 @@ const CLASSEMENT = lire('deploy/bg2-known-tables.txt');
 
 const INGEST_ATTENDUES = [
   'ingest.book_import_baselines',
+  'ingest.book_import_divergences',   // H21 lot 5 (07/10/2026)
   'ingest.import_profiles',
   'ingest.oai_harvest_state',
   'ingest.partner_catalog_import_dispatch_log',
@@ -95,7 +96,7 @@ describe('BG2-13 — ingest au flux long (source)', () => {
     expect(CI).not.toMatch(/nspname = 'public' and c\.relkind = 'r'/);
   });
 
-  it('le classement contient les 11 tables d’ingest, qualifiées, et public reste en noms nus', () => {
+  it('le classement contient les 12 tables d’ingest, qualifiées, et public reste en noms nus', () => {
     const lignes = CLASSEMENT.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
     const ingest = lignes.filter((l) => l.startsWith('ingest.')).sort();
     expect(ingest).toEqual(INGEST_ATTENDUES);
@@ -104,7 +105,7 @@ describe('BG2-13 — ingest au flux long (source)', () => {
     expect(lignes).toContain('books');
   });
 
-  it('les 11 tables classées sont exactement celles que les migrations créent dans ingest', () => {
+  it('les 12 tables classées sont exactement celles que les migrations créent dans ingest', () => {
     const dir = fileURLToPath(new URL('../../supabase/migrations', import.meta.url));
     const creees = new Set();
     for (const f of readdirSync(dir).filter((x) => /^[0-9].*\.sql$/.test(x))) {

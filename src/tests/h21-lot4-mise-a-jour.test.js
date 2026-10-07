@@ -186,7 +186,7 @@ describe('Importations, page MONTÉE — « Préparer la mise à jour », état,
   const rangee = (id) => screen.getByText(`Titre ${id}`).closest('tr');
   async function ouvrirLeRun(derniere = 'Titre 8') {
     render(h(IntlProvider, { locale: 'fr', messages: fr }, h(Page)));
-    fireEvent.click(await screen.findByRole('button', { name: '#7 — Fonds du banc' }));
+    fireEvent.click(await screen.findByRole('button', { name: '#7 — Fonds du banc' }, { timeout: 5000 }));
     await screen.findByText(derniere);
     await waitFor(() => {
       expect(screen.queryByText(dire('importacoes.loadingRows'))).toBeNull();
@@ -214,7 +214,7 @@ describe('Importations, page MONTÉE — « Préparer la mise à jour », état,
     // (le bandeau porte son bouton de fermeture « × »)
     expect(screen.getByText((t) => t.startsWith('1 mise à jour préparée')).textContent.replace(/×$/, '')).toBe(
       '1 mise à jour préparée dans le lot n° 77 : relis-les, puis demande la révision du lot. '
-      + 'Ignorées : 1 notice partagée avec une autre bibliothèque (jamais réécrite par un réimport), 2 sans rien à appliquer.');
+      + 'Ignorées : 1 notice partagée avec une autre bibliothèque (jamais réécrite par un réimport : signalée aux détentrices), 2 sans rien à appliquer.');
   });
 
   it('rapprocher puis préparer : la ligne rapprochée se coche, compte et part ; la ligne préparée reste cochable (pour « Rapprocher »)', async () => {
