@@ -1966,3 +1966,21 @@ droits.
 
 Compte attendu au prochain relevé : 0029 = **418** (+1 sur le compte ci-dessus,
 mesuré avant ce lot) ; 0028 inchangé.
+
+### Complément du 07/10 — H21 lot 5 (`2cb5fd31`, migration `20261007175456`)
+
+Quatre portes nouvelles pour `authenticated`, aucune pour `anon` (vérifié en
+production par `has_function_privilege`). La table `ingest.book_import_divergences`
+est sous RLS sans politique et sans droit ; le déclencheur
+`tg_book_drafts_trace_import_insert` n'est exécutable par personne.
+`publish_book_draft`, `fn_import_recomparer`, `fn_import_preparer_mises_a_jour` et
+`api.merge_draft_into_book` gagnent des refus, pas de droits.
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `public.fn_divergences_a_traiter(uuid, integer, integer)` | 07/10 (H21 lot 5) | uid non nul ; administration du réseau, ou coordination (`fn_caller_coordinator_library_ids`) d'une bibliothèque qui détient la notice ; `p_library_id` doit être une bibliothèque que l'appelant coordonne, sinon réponse vide | **Saine.** Lecture seule : divergences ouvertes groupées par notice (titre, `bib_ref`, bibliothèque qui importe, valeurs des seuls champs divergents). |
+| `public.fn_notice_divergences(bigint)` | 07/10 (H21 lot 5) | même règle ; sinon `{book_id, groupes: []}`, sans titre | **Saine.** Lecture seule, pour le bandeau de la notice. |
+| `public.fn_divergences_ecarter(bigint[])` | 07/10 (H21 lot 5) | coordination ou administration, sinon `error.divergence.coord_only` ; 200 au plus ; puis divergence par divergence : notice détenue par une bibliothèque que l'appelant coordonne (ou administration), sinon ignorée avec sa raison | **Saine.** Écrit le statut de la divergence et avance la base de ce champ seul (`ingest.book_import_baselines`) ; jamais le catalogue. |
+| `public.fn_divergences_appliquer(bigint, bigint[])` | 07/10 (H21 lot 5) | `my_access` (bibliothèque active, accès au panneau) ; coordination de la bibliothèque active ou administration ; la bibliothèque active détient la notice ; pas de brouillon vivant lié à une divergence ; 200 au plus | **Saine.** Crée un brouillon de reprise prérempli ; la notice ne change qu'à sa publication, sous la garde de `publish_book_draft`. |
+
+Compte attendu au prochain relevé : 0029 = **422** (+4) ; 0028 inchangé.
