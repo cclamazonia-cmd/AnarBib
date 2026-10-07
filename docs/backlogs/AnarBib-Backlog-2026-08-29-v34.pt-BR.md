@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-07** · 70 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-07** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 5 de outubro de 2026](#o-estado-real-em-5-de-outubro-de-2026)
+- [O estado real em 7 de outubro de 2026](#o-estado-real-em-7-de-outubro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 12
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
@@ -58,61 +58,61 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 5 de outubro de 2026
+## O estado real em 7 de outubro de 2026
 
-**Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
+**Levantamento de 7 de outubro de 2026, à noite** (`9b95bc63`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 05/10 à noite, `a387b46c`). **8 migrações** (440 = 440, todas pela CI), 38 commits, 2 212 testes JS e 179 suítes SQL. O que mudou: uma tabela e uma policy a menos (J11), uma tabela `ingest` a mais (H21 lote 5), +31 funções, **34 DEFINER fechadas** a `authenticated` (B37: 0029 de 449 a 422); **a queda de 07/10** (I31, I32) zerou os contadores de uso — 440 « índice não usado »; duas notícias fundidas por Xavier, uma criada, dezesseis rascunhos publicados; `AccountPage` de 153 a 73 KB em oito lotes (E6), E33. **Nesta versão, após o inventário das sessões vizinhas dos últimos cinco dias (03/10 → 07/10)**: duas entregas de 06/10 sem item entram em fechamento (**E35**, **B37**); um item aberto em decisão (**G19**, correspondência entre bibliotecas — cinco perguntas a Xavier); notas em H2, E31, B36, I32, H6, E6 e E33. **Falta fechar** — *por Xavier, critérios cumpridos*: D9, F24, J11, E33; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17, G19, E6; *sem código*: A1, A3, F3, H2.
 
-**Frescor dos constatos em 2026-10-07.** **48 itens de 70** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-07.** **52 itens de 71** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **198** | todas com RLS ativado, **361 policies** em todos os esquemas (`public` 311, `storage` 47, `cron` 2, `ingest` 1). +1 tabela e +1 policy desde o meio-dia: `public.networks` (G13), em leitura pública. |
-| Tabelas `ingest` | **11** | todas com RLS; uma só tem policy, `book_import_baselines_select_staff` (H21 lote 2) — as outras 10 não (aviso 0008). O esquema continua fechado a `anon` e `authenticated` (sem `USAGE`). Com backup desde 05/10 (I29). |
-| Views `api` | **68** | **67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Inalterado desde 24/09. |
-| Funções aplicativas | **1 034** | `public` 750 · `api` 202 · `ingest` 56 · `private` 26. Das quais **777 SECURITY DEFINER** (766 ao meio-dia, +11). +18 desde o meio-dia: onze em `ingest` (H21 lotes 1 e 2, H31), em `public` as redes (G13), a busca de conta sem biblioteca (G17) e dois gatilhos do depósito digital (C24); `api.fn_catalog_networks_v1`; `private.fn_objet_stocke_existe` (C25). |
-| Migrações aplicadas | **432** | **432 aplicadas em produção = 432 no repositório**, todas pela CI. +16 desde o meio-dia, todas de 05/10: C24, C25, acervo CCLA; G16; E28 (três); C18 (duas); H21 lotes 1 e 2, H31; G17; C10; G13 (duas). |
-| Jobs `pg_cron` | **43** | Inalterado desde o meio-dia. ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26). |
-| Avisos de segurança | **506** | 0 ERROR · **449** WARN sobre DEFINER expostas a `authenticated` (0029; +2: `fn_catalog_networks_v1`, G13, e `fn_network_admin_find_user_by_email`, G17 — guarda: só a administração da rede; **veredito ainda a escrever** na auditoria), **29** expostas a `anon` (0028; +1: `fn_catalog_networks_v1`, aberta de propósito), **1** `search_path` não fixado (0011, voluntário), **27** INFO (0008). |
-| Avisos de desempenho | **257** | Inalterado desde o meio-dia. **231 « índices não usados »** (236 em 29/09, −5), **17** chaves estrangeiras sem índice (guardadas pela suíte de lista fechada), **8** tabelas sem chave primária, **1** aviso sobre as conexões do Auth em número absoluto. |
-| Esquemas de refugo | **1** | Inalterado desde o meio-dia. `conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas. |
+| Tabelas `public` | **197** | todas com RLS ativado, **360 policies** em todos os esquemas (`public` 310, `storage` 47, `cron` 2, `ingest` 1). −1 tabela e −1 policy desde 05/10: `loan_midpoint_message_log`, resto de F1 sem leitor, suprimida (J11). |
+| Tabelas `ingest` | **12** | todas com RLS; só uma tem policy, as outras 11 não (aviso 0008). +1 desde 05/10: `ingest.book_import_divergences` (H21 lote 5), vazia. O esquema segue fechado a `anon` e `authenticated` (verificado em 07/10). Com backup desde 05/10 (I29); primeiro tiro longo com `ingest` em 11/10. |
+| Views `api` | **68** | Inalterado desde o levantamento de 05/10. **67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Inalterado desde 24/09. |
+| Funções aplicativas | **1 065** | `public` 759 · `api` 202 · `ingest` 78 · `private` 26. Das quais **800 SECURITY DEFINER** (+23). +31 desde 05/10: vinte e duas em `ingest` (H21 lotes 3, 4 e 5); o resto em `public` (D9, J11, E35, E29). Trinta e quatro DEFINER fechadas a `authenticated` sem serem suprimidas (B37). |
+| Migrações aplicadas | **440** | **440 aplicadas em produção = 440 no repositório**, todas pela CI. +8 desde 05/10, todas de 06 e 07/10: E29, D9, H21 lotes 3, 4 e 5, J11, E35, B37. A última, `20261007175456`, é a do lote 5. |
+| Jobs `pg_cron` | **43** | Inalterado desde o levantamento de 05/10. ativos — +2 desde 29/09: `anarbib-consultas-expire-daily` (F1) e `anarbib-purge-untouched-retakes` (C19). Uma instância restaurada os recupera por `private.fn_crons_replanifier()` (I26). |
+| Avisos de segurança | **480** | 0 ERROR · **422** WARN sobre DEFINER expostas a `authenticated` (0029; 449 em 05/10: −34 fechadas por B37, +7 de H21, cada uma na auditoria; 422 é o número esperado pela auditoria), **29** expostas a `anon` (0028, = lista T10), **1** `search_path` não fixado (0011, voluntário), **28** INFO (0008; +1: `ingest.book_import_divergences`). |
+| Avisos de desempenho | **466** | **contadores zerados pelo reinício de 07/10** (I32): **440** « índice não usado » (as estatísticas recomeçam às 20h19; 257 avisos em 05/10), **17** FK sem índice (sob guarda CI), **8** tabelas sem chave primária (refugo conhecido), **1** sobre as conexões do Auth. B36 relê os índices por volta de 28/10, contando desde 07/10. |
+| Esquemas de refugo | **1** | Inalterado desde o levantamento de 05/10. `conv_backup` apenas — **sete tabelas**, todas de 20/08 (cópias e três listas de revisão); « seis » nos levantamentos anteriores era uma contagem errada. Não se purgam enquanto as fichas não forem revistas. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **52** | + `_shared`; **−2 desde o meio-dia**: `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); a CI não suprime uma função — suprimi-las da plataforma cabe a Xavier. Inclui o roteador `main`, nunca implantado (I3). |
-| Declarações `verify_jwt` | **38** | **todas `false`** (−1 com `read-pdf`). Cada função verifica quem a chama. |
+| Pastas no repositório | **52** | + `_shared`; inalterado desde 05/10. `read-pdf` e `mail-i18n-test` (F3) seguem por suprimir da plataforma por Xavier. Inclui o roteador `main`, nunca implantado (I3). |
+| Declarações `verify_jwt` | **38** | Inalterado desde o levantamento de 05/10. **todas `false`** (−1 com `read-pdf`). Cada função verifica quem a chama. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 607** | 2 761 exemplares, **2 368 obras**, **1 506 autoridades**, **2 662 fundos, nenhum vazio**. +2 notícias desde o meio-dia: as duas primeiras do acervo CCLA (2747 e 2748, lote 66, C26). |
-| Rascunhos de catalogação | **2 393** | `draft` 1 842, `published` 550, `cancelled` 1 (2 362 ao meio-dia). +24 com o lote 66 do acervo CCLA (BLMF; 22 a revisar, 2 publicados — C26); o único cancelado é 6393 (C18). **Quatro lotes**, cada um com sua biblioteca (B30): MLEG (8), BLMF (57 fechado, 66), Solidaires (63, a revisar e publicar). |
-| Indexação de assunto | **2 144 / 2 607** | notícias com ao menos um assunto — **463 sem nenhum** (462 ao meio-dia). O que o vocabulário não cobre: item C27. |
-| Tesauro FICEDL | **621** | Inalterado desde o meio-dia. termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09. |
-| Periódicos | **4** | Inalterado desde o meio-dia. títulos, **5 fascículos ligados**, inalterado. |
+| Fichas | **2 606** | 2 762 exemplares, **2 369 obras**, **1 506 autoridades**, **2 663 fundos, nenhum vazio**. Desde 05/10: +1 notícia, a 2749 (BLMF, 07/10), e −2: duas fusões de notícias feitas por Xavier (`merge_log`: a 2446 na 1432 em 06/10; a 324 na 2222 em 07/10), exemplares e fundos levados pela notícia mantida. Dezesseis rascunhos publicados desde 05/10 à noite. |
+| Rascunhos de catalogação | **2 409** | `draft` 1 843, `published` 565, `cancelled` 1 (+16 desde 05/10, todos publicados). **Quatro lotes**, cada um com sua biblioteca (B30): MLEG 8 (411), BLMF 57 (6, fechado) e 66 CCLA (24, C26), Solidaires 63 (1 673, a revisar e publicar); 295 fora de lote. Nenhum rascunho de atualização (H21 lote 4) existe ainda. |
+| Indexação de assunto | **2 142 / 2 606** | notícias com ao menos um assunto — **464 sem nenhum** (463 em 05/10). O que o vocabulário não cobre: item C27. |
+| Tesauro FICEDL | **621** | Inalterado desde o levantamento de 05/10. termos, **10 locales completas**, 159 datas; **110 alinhamentos**. Inalterado desde 28/09. |
+| Periódicos | **4** | Inalterado desde o levantamento de 05/10. títulos, **5 fascículos ligados**, inalterado. |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **6** | **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. Inalterado. |
-| Contas | **23** | **26** filiações ativas; **23 linhas** em `auth.users`, **21 confirmadas**. +1 conta desde o meio-dia: a do camarada (`ASR2026`), criada em 05/10. |
-| Administrador(a/e)s da rede | **2** | **o camarada (`ASR2026`) foi cooptado em 05/10** — primeiro uso real do circuito de cooptação (seis defeitos achados, G18). A1 segue aberto: uma terceira pessoa. |
-| Circulação viva | **6 / 20 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**. As 22 consultas não têm prazo: a regra dos 60 dias só vale para as novas (F23). Inalterado desde o meio-dia. |
+| Bibliotecas | **6** | Inalterado desde o levantamento de 05/10. **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste`. Inalterado. |
+| Contas | **23** | **26** filiações ativas; **23 linhas** em `auth.users`, **21 confirmadas**. Inalterado desde 05/10. |
+| Administrador(a/e)s da rede | **2** | Inalterado desde o levantamento de 05/10. **o camarada (`ASR2026`) foi cooptado em 05/10** — primeiro uso real do circuito de cooptação (seis defeitos achados, G18). A1 segue aberto: uma terceira pessoa. |
+| Circulação viva | **1 / 21 / 22 / 0** | empréstimos / reservas / consultas / EEB **não arquivados** — **nenhum aberto**: o empréstimo está « encerrado » (o renovado em 07/10 às 19h58, último gesto antes da queda), as 21 reservas (+1) e as 22 consultas estão fechadas. Os três EEB arquivados. As 22 consultas não têm prazo (F23). |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **3 168** | +70 desde o meio-dia (`16962c55`; contava 3 099, eram 3 098), contados no espelho completo. O dia 05/10: C24, C25, G16, G17, G18, E28, C10, G13, D6, E9, E25, H21, H31, I29, I30, F3, a PR #32 do camarada, o lote 1 da AccountPage. |
-| Arquivos `src/` | **506** | +29 desde o meio-dia, dos quais 20 arquivos de teste; entre os outros: `TabHistorico.jsx`, `ContaTabHeader.jsx` (E6), `CadastroVersLogin.jsx` (G18), `src/lib/reseaux.js` (G13). |
-| Chaves i18n | **7 170** | paridade estrita nas dez locales (7 170 cada). +166 desde o meio-dia, sobretudo o depósito digital (C24); as redes 11 (G13), o estado de revisão 1 (C10). |
-| Testes | **2 056 + 173** | **2 056 testes JS** (vitest, 167 arquivos, 3 pulados; relançados por inteiro em 05/10 às 22h49, todos verdes; +185) e **173 suítes SQL** na CI (+9). |
-| Marcadores de dívida | **18** | dos quais 4 em `src/` — método fixo: 18, como desde 15/09. Nenhum é tarefa aberta. |
+| Commits | **3 206** | +38 desde o levantamento de 05/10 à noite (`a387b46c`), contados no espelho completo. 06 e 07/10: E29, F24, D9, J11, E35, B37, H21 lotes 3 a 5, lotes 2 a 8 da `AccountPage` (E6), E33, os fechamentos de 06/10, os três itens abertos após a queda. |
+| Arquivos `src/` | **531** | +25 desde 05/10: os doze componentes e o hook saídos da `AccountPage` (E6, lotes 2 a 8), `ServiceIndisponible.jsx` (E33), e suas bancadas (179 arquivos em `src/tests`). |
+| Chaves i18n | **7 281** | paridade estrita nas dez locales (7 281 cada). +111 desde 05/10: as telas de H21 lotes 3 a 5, `account.reserve.howTo`, `service.unavailable.*` (E33), o selo de direitos do leitor PDF (E35). |
+| Testes | **2 212 + 179** | **2 212 testes JS** (vitest, 178 arquivos, 3 pulados; relançados por inteiro em 07/10 às 22h15 em `9b95bc63`, todos verdes salvo a bancada de geração do backlog antes desta versão; +156) e **179 suítes SQL** na CI (+6). |
+| Marcadores de dívida | **18** | Inalterado desde o levantamento de 05/10. dos quais 4 em `src/` — método fixo: 18, como desde 15/09. Nenhum é tarefa aberta. |
 
 ---
 
@@ -248,11 +248,10 @@ Os congelamentos de setembro passaram: a cadeia auto-hospedada está descongelad
 
 | Data | O que se aplica |
 |---|---|
-| **06/10/2026** | C14: reler os contadores dos fundos BTL 173 e 2426 após o recálculo noturno (04h43). Às **19:00**, primeiro tiro curto do backup #BG2 desde o I30: o diário deve mostrar os direitos (GRANT) no dump. |
 | **08/10/2026** | F19: uma semana de registros de envio a levantar — nenhum endereço completo. |
 | **10/10/2026** | Noite de formação BLMF (K7). Até a última noite, a barra de navegação não muda (E20). |
 | **11/10/2026, 20:00** | Primeiro tiro longo com `ingest`, `private`, `api` e os direitos (I29, I30): « Dump long OK », depois `restore-test` e a impressão dos direitos comparada à produção. |
-| **por volta de 28/10/2026** | B36: reler nos contadores de produção os índices mantidos sob reserva, e o tempo da chamada medida pelo B33. |
+| **por volta de 28/10/2026** | B36: reler nos contadores de produção os índices mantidos sob reserva, e o tempo da chamada medida pelo B33. — os contadores recomeçaram do zero em 07/10 às 20h19 (I32). |
 | **depois da última noite de formação** | E20: a barra se agrupa por natureza — Público, Eu, Trabalho. |
 
 Um item marcado **congelado** não é um item morto: é um item cuja data de retomada está escrita.
@@ -343,7 +342,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 ### B — Banco de dados, segurança, RLS
 
-*198 tabelas `public`, 777 funções SECURITY DEFINER, 361 policies (05/10). A maior superfície do projeto.*
+*197 tabelas `public`, 800 funções SECURITY DEFINER, 360 policies (07/10). A maior superfície do projeto.*
 
 | | | | |
 |---|---|---|---|
@@ -355,7 +354,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** O B10 (27/09) retirou 22 índices e manteve outros com ressalva. **22 redundantes ainda usados** (até 10,8 milhões de varreduras em `book_holdings_book_id_idx`) estão nomeados com seus contadores em `index_redondants_garde_tests.sql` (`af98dee8`): retirá-los deslocaria planos quentes para o índice que os cobre, a medir antes de decidir. **108 índices estavam a zero varreduras**, fora chaves estrangeiras e redundantes: 12 retirados (`3ac1c910`), os outros mantidos, com veredito, em `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`. O B32 (28/09) tornou usáveis os índices das visões materializadas do catálogo; três continuam sem varredura no seu levantamento (`autor_norm_trgm_idx`, `library_slug_idx`, `titulo_trgm_idx`). Esses encontros só viviam nos fechamentos do B10 e do B32.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 02/09 (B9): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada.
 
@@ -745,7 +744,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 ### E — Front, OPAC, i18n, acessibilidade
 
-*10 locales em paridade estrita, 7 170 chaves cada (05/10), verificadas na integração contínua.*
+*10 locales em paridade estrita, 7 281 chaves cada (05/10), verificadas na integração contínua.*
 
 | | | | |
 |---|---|---|---|
@@ -758,7 +757,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
 | **E32** | Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1) | `P3` | Aberto |
-| **E33** | Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia | `P2` | Aberto |
+| **E33** | Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia | `P2` | A verificar |
 | **E34** | «Editar» um registro de consulta o torna emprestável na publicação: a retomada esquece `circulation_default` | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
@@ -833,7 +832,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
 
-*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31). **06/10 — `AccountPage.jsx`, lote 2** (`f025a469`, implantado): abas Avisos e Lista de desejos em `TabAvisos.jsx` e `TabDesejos.jsx`; 140 → 132 KB; bancada 7 casos. **Xavier deve ver na tela.** **06/10 — `AccountPage.jsx`, lote 3** (`ee3ef355`, implantado): aba Minhas notas de leitura em `TabNotas.jsx`; 132 → 128 KB; bancada 6 casos. **Xavier deve ver na tela.** **07/10 — `AccountPage.jsx`, lote 4** (`6584e5d3`, implantado): aba Em curso em `TabCurso.jsx`; 128 → 119 KB; bancada 5 casos. **Xavier deve ver na tela.** **07/10 — lote 5** (`a4ddaaa3`): aba Reservar em `TabReservar.jsx`; 119 → 111 KB. Frase em português fixo traduzida (`fd08ace5`, dez locales). Xavier: aba Notas conforme na tela. **07/10 — lote 6** (`b42e3548`, implantado): as três decisões de Dados pessoais em `ContaDecisions.jsx`; 111 → 103 KB; guarda E19 7/7. **Xavier deve ver na tela.** **07/10 — lote 6 conforme na tela (Xavier). Lote 7** (`2aef5ce2`, implantado): senha, cotização, depósito e supressão da conta em quatro componentes; 103 → 88 KB. **Xavier deve ver na tela.***
+*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31). **06/10 — `AccountPage.jsx`, lote 2** (`f025a469`, implantado): abas Avisos e Lista de desejos em `TabAvisos.jsx` e `TabDesejos.jsx`; 140 → 132 KB; bancada 7 casos. **Xavier deve ver na tela.** **06/10 — `AccountPage.jsx`, lote 3** (`ee3ef355`, implantado): aba Minhas notas de leitura em `TabNotas.jsx`; 132 → 128 KB; bancada 6 casos. **Xavier deve ver na tela.** **07/10 — `AccountPage.jsx`, lote 4** (`6584e5d3`, implantado): aba Em curso em `TabCurso.jsx`; 128 → 119 KB; bancada 5 casos. **Xavier deve ver na tela.** **07/10 — lote 5** (`a4ddaaa3`): aba Reservar em `TabReservar.jsx`; 119 → 111 KB. Frase em português fixo traduzida (`fd08ace5`, dez locales). Xavier: aba Notas conforme na tela. **07/10 — lote 6** (`b42e3548`, implantado): as três decisões de Dados pessoais em `ContaDecisions.jsx`; 111 → 103 KB; guarda E19 7/7. **Xavier deve ver na tela.** **07/10 — lote 6 conforme na tela (Xavier). Lote 7** (`2aef5ce2`, implantado): senha, cotização, depósito e supressão da conta em quatro componentes; 103 → 88 KB. **Xavier deve ver na tela.** **07/10 — lote 8, lado dados** (`51bcfe51`, implantado às 21h23): onze gestos de reserva e consulta e seus nove estados em `useReservationActions`; 88 → 73 KB. O limite de 60 KB não foi atingido: o que resta é o núcleo da página. **Xavier deve ver na tela** (reservar, cancelar).*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -922,7 +921,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6. **Acrescentado em 06/10**: um convite real a uma tarefa, recebido (resto do F16).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item).
 
@@ -958,11 +957,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E33 — Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript
 
 **Estado.** Durante a queda de 07/10, Minha conta girou sem fim e, recarregada, só mostrou o fundo da página: nenhuma mensagem.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Achar o que deixa a página vazia; limitar a espera; mostrar « Serviço momentaneamente indisponível » com « Tentar de novo », nas dez locales; um limite de erro em torno das abas.
 
@@ -1177,6 +1176,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
 | **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | A verificar |
+| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Decisão coletiva |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1335,6 +1335,29 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1` · `migration 20261005101029` · `commit f93667ac`*
 
+#### G19 — Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua
+
+`P2` Corrente · Estado : **Decisão coletiva** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+
+**Estado.** Pergunta de Xavier em 07/10: as coordenações podem dialogar entre si no app e por e-mail? **Não, verificado em 07/10**: nenhuma mensageria livre entre coordenações. O que mais se aproxima: a ajuda mútua de `/federacao` (um apelo, ofertas, um só ida e volta), os intercâmbios entre bibliotecas (pedido, resposta, notas), o EEB, as assembleias. Um plano em cinco lotes foi escrito em 07/10, não commitado; aguarda cinco decisões.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** **Lote 1, dados**: `library_conversations`, `library_conversation_participants` (uma biblioteca por linha, arquivamento próprio), `library_messages` (`body`, `lang` nas dez locales, `body_i18n`, `i18n_status`), `library_conversation_reads`; escritas só por RPC DEFINER em `api` (limite de 30 por 24 h), leitura por política das coordenações participantes; índices nas FK, tabelas classificadas no backup, só arquivamento. **Lote 2, telas**: aba `#tab=correspondance` em `BibliotecaPage`, « Escrever a uma biblioteca », dez locales. **Lote 3**: sino e e-mail a `admin_notification_email` na locale da biblioteca. **Lote 4**: `libraries.read_languages`. **Lote 5**: tradução no envio com consentimento da autora, marcada como automática. **Depois**: fios de círculo; resposta por e-mail (nada recebe e-mail hoje).
+
+**Por que importa.** As coordenações não têm hoje nenhum meio de se escrever no AnarBib fora de um gesto estruturado. Uma rede de bibliotecas que não podem conversar não é uma rede.
+
+**O que conta como terminado.**
+
+- Uma coordenação escreve a outra biblioteca a partir do app; cada coordenação destinatária vê o fio e recebe um e-mail na locale da sua biblioteca.
+- Cada mensagem guarda seu texto e sua língua; uma tradução só existe se a autora a pediu no envio, marcada como automática.
+- Nada legível fora das coordenações participantes; nada executável por `anon`; nenhuma mensagem apagada, só arquivada.
+- Dez locales, guarda i18n, suítes SQL e bancada da função Edge.
+
+**Dependências.** **Lote 0, cinco decisões de Xavier**: (1) quem participa; (2) quem recebe o e-mail; (3) tradução automática de mensagens privadas pela API Anthropic, com consentimento — senão o lote 5 cai; (4) começar sem resposta por e-mail; (5) o nome da aba. Nada se codifica antes.
+
+*Remissões : `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/translate-gazette-submission` · `src/pages/FederacaoPage.jsx` · `src/components/NotificationBell.jsx`*
+
 ---
 
 ### H — Interoperabilidade, tesauro, coleta
@@ -1362,7 +1385,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** As sete: a forma dos identificadores; **a hierarquia, que é a verdadeira questão**; o estatuto da faceta «datas»; o destino dos 2 842 vínculos para seis catálogos; o grego romanizado; a licença; e a maneira como o arquivo se regenera.
 
@@ -1384,7 +1407,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A NORLA construiu seu vocabulário — com suas facetas *Tactics* e *Social Movement* — **sem vínculo com o tesauro FICEDL**. Dois vocabulários militantes, construídos em paralelo, que se ignoram. Além disso, as 11 categorias temáticas do AnarcosyndicalismeBOOK não estão alinhadas a nada.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Começar pelo menor e mais viável: as 11 categorias do AnarcosyndicalismeBOOK, **um primeiro passo concreto, delimitado, viável numa noite** — e como o tesauro já está em dez línguas, o alinhamento vale simultaneamente para as dez. Depois abrir a conversa com a NORLA.
 
@@ -1746,7 +1769,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Mesmo episódio. Não foi tráfego (51 requisições em 200 no último minuto), nem erro de consulta, nem implantação. Indício: PostgREST registrava « Thread killed by timeout manager » desde 17:50 UTC. Primeiro suspeito, não provado: falta de memória da instância MICRO (1 GB).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Ler o relatório de infraestrutura (Reports → Database) entre 19:45 e 20:00 de 07/10; se for memória, achar o consumidor e decidir a passagem de MICRO para SMALL (decisão de custo de Xavier).
 
@@ -2265,6 +2288,8 @@ CI verde. |
 | F23 | 2026-10-06 | As 22 consultas anteriores a 01/10 ficam sem prazo: estão todas encerradas; a regra dos 60 dias vale para os pedidos novos. Nenhuma migração. **Decisão de Xavier, 06/10.** |
 | H25 | 2026-10-06 | **Fechado em 06/10 por decisão de Xavier.** A exportação de autoridades reimporta-se no PMB 8.1.1.1 com «Não»: autores aproximados por nome e datas, nenhum recriado; o vínculo pelo `$3` não funciona por um defeito do PMB (a origem não é transmitida pelo formulário) — sinalização e correção para a DIRA em **H32**. |
 | H20 | 2026-10-06 | O identificador de origem é guardado por biblioteca (`book_external_ids`, `8c80de27`); critérios cobertos por `identifiant_origine_tests` T10 e T3 na CI. **Fechado em 06/10 por Xavier.** |
+| E35 | 2026-10-06 | **Aberto e entregue em 06/10, sobre três sinalizações de Xavier na tela** (`2ce1bad5`, migração `20261006194628`, verificado às 22h18). (1) Um leitor da BLMF via o exemplar da BTL « Disponível »: não há empréstimo entre bibliotecas, toda linha de outra biblioteca diz « Indisponível para você ». (2) « Confederación » não achava a notícia digitada « C.N.T. »: as duas buscas leem também o nome de autoridade exibido (8 → 9 notícias). (3) `sob_direitos` fixo no leitor PDF: o selo usa o rótulo dos direitos da ficha, dez locales. A quarta sinalização não era falha: a administração da rede lê um PDF reservado, decisão de 04/10. **Resta** ver na tela a linha BTL para uma conta BLMF (E31). *Levado ao backlog em 07/10, no inventário.* |
+| B37 | 2026-10-06 | **Aberto e entregue em 06/10** (`1fafc35b`, migração `20261006202320`, verificado às 23h02): **34 funções SECURITY DEFINER sem chamador sob `authenticated` fechadas** — o aviso 0029 passa de 451 a 418. Nove ficam abertas de propósito (7 da lista T10, as duas RPC `fn_outbox_*`, `fn_import_row_comparison`). A guarda da migração reverifica na implantação. Suíte `aides_definer_fermees_tests`; T2 de `b14_oracle_existence_forme` corrigido (premissa falsa). 0028 = 29 = T10; 0011 = 1, voluntário. Complemento na auditoria. *Levado ao backlog em 07/10, no inventário.* |
 
 ---
 
@@ -2296,4 +2321,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 70 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-10-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9b95bc63`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
