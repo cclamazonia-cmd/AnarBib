@@ -42,25 +42,30 @@ const page = lire('pages/account/AccountPage.jsx');
 const css = lire('pages/account/AccountPage.css');
 
 // L'onglet, et lui seul : de son ouverture à celle de l'onglet suivant.
-// Depuis E6 lot 6 (07/10/2026), la grille des trois décisions vit dans
-// ContaDecisions.jsx : on relit l'onglet en remettant son source à la place de
-// l'élément, pour que les contrats ci-dessous portent sur le même texte.
+// Depuis E6 (lots 6 et 7, 07/10/2026), des blocs de l'onglet vivent dans des
+// composants `Conta…` (ContaDecisions, ContaMotDePasse, ContaCotisation,
+// ContaDepot, ContaSuppression) : on relit l'onglet en remettant à la place de
+// chaque élément le JSX que rend son fichier, pour que les contrats ci-dessous
+// portent sur le même texte qu'avant le découpage.
 const debut = page.indexOf("activeTab === 'perfil' && profile");
 const fin = page.indexOf("activeTab === 'reservar'", debut);
-const decisions = lire('pages/account/ContaDecisions.jsx');
-const corpsDecisions = decisions.slice(decisions.indexOf('<section className="ab-conta-decisions-bloc"'),
-  decisions.indexOf('</section>') + '</section>'.length);
 const ongletBrut = page.slice(debut, fin);
-const element = ongletBrut.match(/<ContaDecisions\b[\s\S]*?\/>/);
-const onglet = element ? ongletBrut.replace(element[0], corpsDecisions) : ongletBrut;
+const montes = [...ongletBrut.matchAll(/<(Conta[A-Z]\w*)\b[\s\S]*?\/>/g)];
+const sources = Object.fromEntries(montes.map(([, nom]) => {
+  const src = lire(`pages/account/${nom}.jsx`);
+  return [nom, src.slice(src.indexOf('return ('))];
+}));
+const onglet = montes.reduce((txt, [element, nom]) => txt.replace(element, sources[nom]), ongletBrut);
 
 describe('Mon compte, « Données personnelles » — les décisions sous le profil (E19)', () => {
   it("l'onglet se laisse découper", () => {
     expect(debut).toBeGreaterThan(-1);
     expect(fin).toBeGreaterThan(debut);
-    // la grille est montée une fois dans l'onglet, et son source se retrouve
-    expect(ongletBrut.split('<ContaDecisions').length - 1).toBe(1);
-    expect(corpsDecisions.length).toBeGreaterThan(1000);
+    // chaque bloc sorti est monté une fois dans l'onglet, et son source se retrouve
+    for (const nom of ['ContaDecisions', 'ContaMotDePasse', 'ContaCotisation', 'ContaDepot', 'ContaSuppression']) {
+      expect(ongletBrut.match(new RegExp(`<${nom}\\b`, 'g'))?.length ?? 0, nom).toBe(1);
+      expect(sources[nom]?.length ?? 0, nom).toBeGreaterThan(200);
+    }
   });
 
   it('ordre des blocs : profil, trois décisions, ce qui se lit, suppression en dernier', () => {

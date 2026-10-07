@@ -37,6 +37,10 @@ import TabNotas from '@/pages/account/TabNotas';
 import TabCurso from '@/pages/account/TabCurso';
 import TabReservar from '@/pages/account/TabReservar';
 import ContaDecisions from '@/pages/account/ContaDecisions';
+import ContaMotDePasse from '@/pages/account/ContaMotDePasse';
+import ContaCotisation from '@/pages/account/ContaCotisation';
+import ContaDepot from '@/pages/account/ContaDepot';
+import ContaSuppression from '@/pages/account/ContaSuppression';
 // MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 // Onglet « Événements » (agenda des biblios de la lectrice) en chunk lazy.
@@ -1408,187 +1412,16 @@ export default function AccountPage() {
               )}
 
               {/* ── Lot 26.1a — Changement de mot de passe ────────── */}
-              <div style={{ marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-                <h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
-                  {t({ id: 'account.changePassword.title', defaultMessage: 'Mudar minha senha' })}
-                </h3>
-                <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 14 }}>
-                  {t({ id: 'account.changePassword.hint', defaultMessage: 'Defina uma nova senha de pelo menos 8 caracteres. A confirmação é obrigatória.' })}
-                </div>
-                <form onSubmit={handleChangePassword} className="ab-conta-form">
-                  <div className="ab-conta-grid2">
-                    <label>
-                      {t({ id: 'account.changePassword.newPassword', defaultMessage: 'Nova senha' })}
-                      <input
-                        type="password"
-                        value={pwdNew}
-                        onChange={e => setPwdNew(e.target.value)}
-                        autoComplete="new-password"
-                        minLength={8}
-                        required
-                      />
-                    </label>
-                    <label>
-                      {t({ id: 'account.changePassword.confirmPassword', defaultMessage: 'Confirmar nova senha' })}
-                      <input
-                        type="password"
-                        value={pwdConfirm}
-                        onChange={e => setPwdConfirm(e.target.value)}
-                        autoComplete="new-password"
-                        minLength={8}
-                        required
-                      />
-                    </label>
-                  </div>
-                  <div className="ab-conta-form-actions">
-                    <Button type="submit" loading={pwdSaving}>
-                      {t({ id: 'account.changePassword.submit', defaultMessage: 'Atualizar senha' })}
-                    </Button>
-                    {pwdMsg && (
-                      <span className={`ab-conta-msg ${pwdMsgIsError ? 'ab-conta-msg--error' : ''}`}>
-                        {pwdMsg}
-                      </span>
-                    )}
-                  </div>
-                </form>
-              </div>
+              <ContaMotDePasse pwdNew={pwdNew} setPwdNew={setPwdNew} pwdConfirm={pwdConfirm} setPwdConfirm={setPwdConfirm} pwdSaving={pwdSaving} pwdMsg={pwdMsg} pwdMsgIsError={pwdMsgIsError} handleChangePassword={handleChangePassword} />
 
               {/* ── Cotisation associative ─────────────── */}
               {/* Paquet E.4.5 : ajoute le check availability.cotisacoes (depend de
                   circulation_mode et membership_enabled de la biblio) */}
-              {availability.cotisacoes && (membership || membershipRules.length > 0) && (() => {
-                const status = membership?.dues_status || 'not_applicable';
-                const statusVariant = status === 'up_to_date' ? 'ok' : status === 'expired' ? 'danger' : status === 'never_paid' ? 'warn' : status === 'lifetime' ? 'ok' : 'default';
-                const statusColor = statusVariant === 'ok' ? '#4ade80' : statusVariant === 'danger' ? '#f87171' : statusVariant === 'warn' ? '#fbbf24' : 'var(--brand-muted)';
-                const lastPayment = membershipPayments[0]; // tri DESC
-                const fmtD = d => d ? new Date(d).toLocaleDateString() : '—';
-                return (
-                  <div style={{ marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-                    <h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
-                      {t({ id: 'membership.config.title' })}
-                    </h3>
-                    <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 14 }}>
-                      {t({ id: 'membership.account.hint' }, { library: libraryName })}
-                    </div>
-
-                    {/* Statut principal */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
-                      <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: 999, fontSize: '.85rem', fontWeight: 700, color: statusColor, background: `${statusColor}1a`, border: `1px solid ${statusColor}55` }}>
-                        {t({ id: `membership.status.${status === 'up_to_date' ? 'upToDate' : status === 'never_paid' ? 'neverPaid' : status === 'not_applicable' ? 'notApplicable' : status}` })}
-                      </span>
-                      {membership?.last_valid_until && status !== 'lifetime' && (
-                        <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                          {t({ id: 'membership.validUntil' }, { date: fmtD(membership.last_valid_until) })}
-                          {membership.days_until_expiry != null && membership.days_until_expiry >= 0 && (
-                            <> · {t({ id: 'membership.daysUntilExpiry.plural' }, { days: membership.days_until_expiry })}</>
-                          )}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Dernier paiement */}
-                    {lastPayment && (
-                      <div style={{ marginBottom: 14 }}>
-                        <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', textTransform: 'uppercase', letterSpacing: '.04em', marginBottom: 4 }}>
-                          {t({ id: 'membership.account.lastPayment' })}
-                        </div>
-                        <div style={{ fontSize: '.9rem' }}>
-                          {lastPayment.amount_paid > 0
-                            ? <strong>{lastPayment.amount_paid} {lastPayment.currency}</strong>
-                            : <em>{t({ id: `membership.method.${lastPayment.payment_method}` })}</em>}
-                          <span style={{ color: 'var(--brand-muted)', marginLeft: 8 }}>
-                            · {t({ id: `membership.method.${lastPayment.payment_method}` })} · {t({ id: 'membership.payment.paidOn' }, { date: fmtD(lastPayment.paid_at) })}
-                          </span>
-                        </div>
-                        {lastPayment.notes && (
-                          <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)', marginTop: 3, fontStyle: 'italic' }}>{lastPayment.notes}</div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Règles applicables (info) */}
-                    {membershipRules.length > 0 && (
-                      <div style={{ marginBottom: 14 }}>
-                        <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', textTransform: 'uppercase', letterSpacing: '.04em', marginBottom: 6 }}>
-                          {t({ id: 'membership.account.applicableRules' })}
-                        </div>
-                        {membershipRules.map(r => (
-                          <div key={r.id} style={{ fontSize: '.85rem', padding: '6px 10px', borderRadius: 6, background: 'rgba(0,0,0,.15)', marginBottom: 4 }}>
-                            <strong>{r.name}</strong>
-                            {r.amount_min > 0 && <span style={{ color: 'var(--brand-muted)' }}> · {t({ id: 'membership.rule.minimumAmount' }, { amount: r.amount_min, currency: r.currency })}</span>}
-                            {r.amount_suggested && r.amount_suggested !== r.amount_min && (
-                              <span style={{ color: 'var(--brand-muted)' }}> · {t({ id: 'membership.rule.suggestedAmount' }, { amount: r.amount_suggested, currency: r.currency })}</span>
-                            )}
-                            {r.is_required && <span style={{ marginLeft: 6, fontSize: '.7rem', padding: '1px 6px', borderRadius: 4, background: 'rgba(251,191,36,.15)', color: '#fbbf24' }}>{t({ id: 'membership.rule.required' })}</span>}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Lien vers le règlement et message d'orientation */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', fontSize: '.82rem', color: 'var(--brand-muted)' }}>
-                      <span>{t({ id: 'membership.account.howToPay' })}</span>
-                      {regimentoUrl && (
-                        <a href={regimentoUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>
-                          {t({ id: 'membership.account.openRegulation' })}
-                        </a>
-                      )}
-                    </div>
-
-                    {/* Historique complet (si plusieurs paiements) */}
-                    {membershipPayments.length > 1 && (
-                      <details style={{ marginTop: 14 }}>
-                        <summary style={{ cursor: 'pointer', fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                          {t({ id: 'membership.account.fullHistory' }, { count: membershipPayments.length })}
-                        </summary>
-                        <div style={{ marginTop: 8, borderRadius: 6, overflow: 'hidden', border: '1px solid rgba(255,255,255,.06)' }}>
-                          {membershipPayments.map((p, i) => (
-                            <div key={p.id} style={{ padding: '8px 12px', fontSize: '.82rem', background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom: i < membershipPayments.length - 1 ? '1px solid rgba(255,255,255,.04)' : 'none' }}>
-                              <div>
-                                {p.amount_paid > 0 ? `${p.amount_paid} ${p.currency}` : t({ id: `membership.method.${p.payment_method}` })}
-                                <span style={{ color: 'var(--brand-muted)', marginLeft: 8 }}>
-                                  · {t({ id: 'membership.payment.paidOn' }, { date: fmtD(p.paid_at) })}
-                                  {p.valid_until && <> · {t({ id: 'membership.validUntil' }, { date: fmtD(p.valid_until) })}</>}
-                                </span>
-                              </div>
-                              {p.notes && <div style={{ fontStyle: 'italic', color: 'var(--brand-muted)', marginTop: 2 }}>{p.notes}</div>}
-                            </div>
-                          ))}
-                        </div>
-                      </details>
-                    )}
-                  </div>
-                );
-              })()}
+              <ContaCotisation availability={availability} membership={membership} membershipRules={membershipRules} membershipPayments={membershipPayments} libraryName={libraryName} regimentoUrl={regimentoUrl} />
 
               {/* ── Dépôt de garantie (DEPOT §8) ───────────
                   Masqué si la lectrice n'a aucun dépôt (défaut). */}
-              {deposits.length > 0 && (
-                <div style={{ marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-                  <h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
-                    {t({ id: 'deposit.account.title' })}
-                  </h3>
-                  <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 14 }}>
-                    {t({ id: 'deposit.account.hint' })}
-                  </div>
-                  {deposits.map(d => {
-                    const isHeld = d.status === 'detenu';
-                    const color = isHeld ? '#fbbf24' : d.status === 'rembourse' ? '#4ade80' : 'var(--brand-muted)';
-                    return (
-                      <div key={d.deposit_id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 6, background: 'rgba(0,0,0,.15)', marginBottom: 6, flexWrap: 'wrap' }}>
-                        <strong>{d.amount} {d.currency}</strong>
-                        <span style={{ padding: '2px 10px', borderRadius: 999, fontSize: '.78rem', fontWeight: 700, color, background: `${color}1a`, border: `1px solid ${color}55` }}>
-                          {t({ id: `deposit.status.${d.status}` })}
-                        </span>
-                        <span style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
-                          #{d.emprestimo_id}
-                          {d.collected_at && <> · {new Date(d.collected_at).toLocaleDateString()}</>}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              <ContaDepot deposits={deposits} />
 
               {/* ── Carte-lecteur (lazy : sort qrcode + jspdf du bundle) ── */}
               {availability.reader_card && (
@@ -1598,40 +1431,7 @@ export default function AccountPage() {
               )}
 
               {/* ── Suppression du compte — zone destructive isolee tout en bas (deplacee depuis la section RGPD, 04/06/2026) ── */}
-              <div style={{ marginTop: 40, padding: 22, borderRadius: 10, background: 'rgba(220,38,38,.04)', border: '1px solid rgba(220,38,38,.15)' }}>
-                  <h4 style={{ margin: '0 0 6px', fontSize: '.95rem', fontWeight: 700, color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'account.deleteAccount.title' })}</h4>
-                  <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 12px' }}>{t({ id: 'account.deleteAccount.warning' })}</p>
-                  <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: '.85rem', fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--brand-muted)' }}>
-                      {t({ id: 'account.deleteAccount.confirmLabel' })}
-                    </label>
-                    <input type="text" value={deleteConfirm} onChange={e => setDeleteConfirm(e.target.value)}
-                      placeholder={t({ id: 'account.deleteAccount.confirmText' })} style={{ width: 200, padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(220,38,38,.3)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }} />
-                  </div>
-                  <button
-                    disabled={deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' }) || deleting}
-                    onClick={async () => {
-                      if (deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' })) return;
-                      if (!confirm(t({ id: 'account.deleteAccount.confirmDialog' }))) return;
-                      setDeleting(true);
-                      try {
-                        const { data, error } = await supabase.rpc('fn_delete_my_account');
-                        if (error) throw error;
-                        if (data?.ok === false) { alert(data.error || t({ id: 'account.reserve.deleteError' })); setDeleting(false); return; }
-                        await supabase.auth.signOut();
-                        sessionStorage.removeItem('anarbib.libraryContext');
-                        navigate('/');
-                      } catch (err) { alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)})); setDeleting(false); }
-                    }}
-                    style={{
-                      padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 700, cursor: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'pointer' : 'not-allowed',
-                      background: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'rgba(220,38,38,.8)' : 'rgba(220,38,38,.2)',
-                      color: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? '#fff' : 'rgba(255,255,255,.4)',
-                      border: '1px solid rgba(220,38,38,.4)', transition: 'all .15s',
-                    }}>
-                    {deleting ? t({ id: 'account.deleteAccount.deleting' }) : t({ id: 'account.deleteAccount.button' })}
-                  </button>
-              </div>
+              <ContaSuppression deleteConfirm={deleteConfirm} setDeleteConfirm={setDeleteConfirm} deleting={deleting} setDeleting={setDeleting} navigate={navigate} />
             </div>
           )}
 
