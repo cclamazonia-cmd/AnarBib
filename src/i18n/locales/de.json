@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Daten gespeichert!",
   "account.reserve.deleteError": "Konto konnte nicht gelöscht werden.",
   "account.reserve.hint": "Kopiere die Referenz aus dem Katalog und füge sie hier ein.",
+  "account.reserve.howTo": "Nutze {loan} für ausleihbare Medien oder {consult} für Zeitschriften und Medien, die nur vor Ort eingesehen werden können.",
   "account.reserve.loan": "Ausleihe vormerken",
   "account.reserve.loanOnlyHint": "Die Referenz(en) {refs} ist/sind ausleihbar.",
   "account.reserve.loanOnlyMsg": "Referenz(en) {refs} ist/sind ausleihbar. Verwende den Button «Ausleihe vormerken».",

@@ -31,9 +31,15 @@ export default function TabReservar({
   return (
     <div>
       <ContaTabHeader title={t({ id: 'account.reserve.title' })} onRefresh={() => loadData({ silent: true })} />
+      {/* Le mode d'emploi passe par deux clés (07/10/2026) : il était écrit en
+          portugais en dur et s'affichait tel quel dans toutes les langues. Les
+          noms des boutons viennent de leurs propres clés. */}
       <p className="ab-conta-hint">
-        No catálogo, copie a referência e cole aqui. Use <strong>{t({ id: 'account.reserve.loan' })}</strong> para materiais emprestáveis
-        ou <strong>{t({ id: 'account.reserve.consult' })}</strong> para periódicos e materiais consultáveis.
+        {t({ id: 'account.reserve.hint' })}{' '}
+        {t({ id: 'account.reserve.howTo' }, {
+          loan: <strong key="loan">{t({ id: 'account.reserve.loan' })}</strong>,
+          consult: <strong key="consult">{t({ id: 'account.reserve.consult' })}</strong>,
+        })}
       </p>
 
       <div className="ab-conta-reserve-form">

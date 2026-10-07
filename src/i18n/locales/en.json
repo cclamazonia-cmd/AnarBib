@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Data saved!",
   "account.reserve.deleteError": "Could not delete account.",
   "account.reserve.hint": "In the catalog, copy the reference and paste it here.",
+  "account.reserve.howTo": "Use {loan} for borrowable items, or {consult} for periodicals and items for on-site consultation.",
   "account.reserve.loan": "Reserve a loan",
   "account.reserve.loanOnlyHint": "Reference(s) {refs} is/are loanable. Use the \"Reserve a loan\" button.",
   "account.reserve.loanOnlyMsg": "Reference(s) {refs} is/are loanable. Use the \"Reserve a loan\" button.",

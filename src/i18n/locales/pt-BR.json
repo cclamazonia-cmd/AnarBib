@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Dados salvos com sucesso!",
   "account.reserve.deleteError": "Não foi possível excluir a conta.",
   "account.reserve.hint": "No catálogo, copie a referência e cole aqui.",
+  "account.reserve.howTo": "Use {loan} para materiais emprestáveis ou {consult} para periódicos e materiais consultáveis.",
   "account.reserve.loan": "Reservar empréstimo",
   "account.reserve.loanOnlyHint": "A(s) referência(s) {refs} é/são emprestável/eis. Use o botão \"Reservar empréstimo\".",
   "account.reserve.loanOnlyMsg": "A(s) referência(s) {refs} é/são emprestável/eis. Use o botão \"Reservar empréstimo\".",

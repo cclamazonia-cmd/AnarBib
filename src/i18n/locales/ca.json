@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Dades desades!",
   "account.reserve.deleteError": "No s'ha pogut suprimir el compte.",
   "account.reserve.hint": "Al catàleg, copia la referència i enganxa-la aquí.",
+  "account.reserve.howTo": "Fes servir {loan} per als documents prestables, o {consult} per a les publicacions periòdiques i els documents de consulta a la sala.",
   "account.reserve.loan": "Reservar un préstec",
   "account.reserve.loanOnlyHint": "La/les referència/referències {refs} és/són manllevable(s). Fes servir el botó \"Reservar un préstec\".",
   "account.reserve.loanOnlyMsg": "La/les referència/referències {refs} és/són manllevable(s). Fes servir el botó \"Reservar un préstec\".",

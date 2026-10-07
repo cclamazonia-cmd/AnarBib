@@ -53,6 +53,17 @@ function monter(sur = {}) {
 }
 
 describe('l’onglet Réserver, sorti d’AccountPage', () => {
+  it('le mode d’emploi parle la langue de la page : plus de portugais en dur (07/10)', () => {
+    monter();
+    const texte = document.body.textContent;
+    expect(texte).toContain(fr['account.reserve.hint']);
+    expect(texte).toContain(fr['account.reserve.howTo'].split('{loan}')[0].trim());
+    expect(texte).not.toMatch(/No catálogo|copie a referência|materiais emprestáveis/);
+    const gras = [...document.querySelectorAll('.ab-conta-hint strong')].map((e) => e.textContent);
+    expect(gras).toEqual([fr['account.reserve.loan'], fr['account.reserve.consult']]);
+    expect(lire('src/pages/account/TabReservar.jsx')).not.toMatch(/No catálogo/);
+  });
+
   it('le formulaire par référence remonte la saisie et appelle handleReserve', () => {
     const p = monter({ reserveMsg: 'Réservation enregistrée.' });
     fireEvent.change(screen.getByPlaceholderText(fr['account.reserve.placeholder']), { target: { value: 'BLMF-0007' } });

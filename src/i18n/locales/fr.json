@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Données enregistrées !",
   "account.reserve.deleteError": "Impossible de supprimer le compte.",
   "account.reserve.hint": "Dans le catalogue, copie la référence et colle-la ici.",
+  "account.reserve.howTo": "Utilise {loan} pour les documents empruntables, ou {consult} pour les périodiques et les documents consultables sur place.",
   "account.reserve.loan": "Réserver un emprunt",
   "account.reserve.loanOnlyHint": "La/les référence(s) {refs} est/sont empruntable(s). Utilise le bouton \"Réserver un emprunt\".",
   "account.reserve.loanOnlyMsg": "La/les référence(s) {refs} est/sont empruntable(s). Utilise le bouton \"Réserver un emprunt\".",

@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Dati salvati!",
   "account.reserve.deleteError": "Impossibile eliminare l'account.",
   "account.reserve.hint": "Nel catalogo, copia il riferimento e incollalo qui.",
+  "account.reserve.howTo": "Usa {loan} per i documenti prestabili, oppure {consult} per i periodici e i documenti consultabili in sede.",
   "account.reserve.loan": "Prenotare un prestito",
   "account.reserve.loanOnlyHint": "Il/i riferimento/i {refs} è/sono prestabile/i.",
   "account.reserve.loanOnlyMsg": "Il/i riferimento/i {refs} è/sono prestabile/i. Usa il pulsante «Prenota un prestito».",

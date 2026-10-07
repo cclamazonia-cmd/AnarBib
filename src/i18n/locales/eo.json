@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Datumoj konservitaj!",
   "account.reserve.deleteError": "Ne eblas forigi la konton.",
   "account.reserve.hint": "En la katalogo, kopiu la referencon kaj algluu ĝin ĉi tien.",
+  "account.reserve.howTo": "Uzu {loan} por pruntepreneblaj dokumentoj, aŭ {consult} por periodaĵoj kaj dokumentoj konsulteblaj surloke.",
   "account.reserve.loan": "Rezervi prunton",
   "account.reserve.loanOnlyHint": "La referenco(j) {refs} estas pruntebla(j). Uzu la butonon \"Rezervi prunton\".",
   "account.reserve.loanOnlyMsg": "La referenco(j) {refs} estas pruntebla(j). Uzu la butonon \"Rezervi prunton\".",

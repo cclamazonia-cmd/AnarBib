@@ -321,6 +321,7 @@
   "account.reserve.dataSaved": "Gegevens opgeslagen!",
   "account.reserve.deleteError": "Kon account niet verwijderen.",
   "account.reserve.hint": "Kopieer in de catalogus de referentie en plak ze hier.",
+  "account.reserve.howTo": "Gebruik {loan} voor uitleenbare materialen, of {consult} voor tijdschriften en materialen die je ter plaatse kunt raadplegen.",
   "account.reserve.loan": "Een uitlening reserveren",
   "account.reserve.loanOnlyHint": "Referentie(s) {refs} is/zijn uitleenbaar. Gebruik de knop \"Een uitlening reserveren\".",
   "account.reserve.loanOnlyMsg": "Referentie(s) {refs} is/zijn uitleenbaar. Gebruik de knop \"Een uitlening reserveren\".",
