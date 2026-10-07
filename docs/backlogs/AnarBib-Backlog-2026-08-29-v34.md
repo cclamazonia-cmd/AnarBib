@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-07** · 66 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-07** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,11 +19,11 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 11
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 5
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 7
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 12
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 5 octobre 2026 au soir** (`a387b46c`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le midi même, `16962c55`). Une journée chargée, à deux sessions et une contribution extérieure : **16 migrations** (432 appliquées = 432 au dépôt, toutes par la CI), 70 commits, 2 056 tests JS et 173 suites SQL, tous verts. Ce qui a bougé et pourquoi : **la base** — `public.networks` et sa policy (G13), une policy dans `ingest` (H21 lot 2), +18 fonctions dont 11 DEFINER, deux avis de sécurité de plus (G13, G17 ; le verdict de G17 reste à écrire) ; **les fonctions Edge** — `read-pdf` et `mail-i18n-test` retirées du dépôt (F3) ; **le catalogue** — le lot 66 de l'acervo CCLA (24 brouillons, 2 publiés) ; **le réseau** — un second administrateur, le camarade (`ASR2026`) ; **le dépôt** — +185 tests JS, +9 suites, +166 clés. **Mis à jour dans cette version, après l'inventaire des commits des dix derniers jours (26/09 → 05/10) contre le backlog** : I30 passe à vérifier ; dix items ouverts pour ce qui avait été trouvé en route sans être porté nulle part (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11) ; notes complétées sur A1, A3, B36, C3, C14, C18, E6, F21, G1, H21, H25 et sur douze clôtures (B32, C7, C20, C21, C22, C24, E25, E28, G13, G18, couvertures, « pt-BR parle brésilien ») ; calendrier réécrit (les gels de septembre sont passés) ; notes des domaines B, E, F et I remises à jour ; REGISTRE corrigé sur `OPAC-F3` (`alias_norm` plié sur place, pas recalculé). **Ce qui reste à clore, et par qui** — *par Xavier, critères relus et tenus sur pièces* : B29, B30, H17, H18, H19, H22, H23, H24, F16 et F21 — **clos par Xavier le 06/10** (leurs restes vont à H28, H29, E31 et F24, ouvert pour l'occasion) ; H20 (un test à vérifier d'abord) et H25 (un critère à trancher) ; *par Xavier, à l'écran* : E31, et avec lui C14, C23, G16 ; *les décisions* : A1, C4, C17 ; *sans code* : A1 (une troisième administration réseau), A3 (la machine du runner), F3 (supprimer deux fonctions de la plateforme).
 
-**Fraîcheur des constats au 2026-10-07.** **47 items sur 66** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-07.** **47 items sur 69** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Les **22** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -758,6 +758,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
 | **E31** | Ce qui attend un regard à l'écran, connecté | `P2` | Ouvert |
 | **E32** | Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1) | `P3` | Ouvert |
+| **E33** | Quand la base ne répond pas, Mon compte dit que le service est indisponible au lieu d'une page vide | `P2` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -953,6 +954,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `REGISTRE IDENT-5 à IDENT-8, IDENT-Q1` · `commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14`*
+
+#### E33 — Quand la base ne répond pas, Mon compte dit que le service est indisponible au lieu d'une page vide
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** Pendant la panne du 07/10, Mon compte a tourné sans fin (les lectures en 522 ou 524 relancées), puis, rechargée, n'a affiché que le fond de la page : aucun message, aucun bouton. La lectrice ne peut pas savoir si c'est elle, son compte ou le service.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Trouver ce qui laisse la page vide (session non résolue, chargement qui ne se termine pas, rendu qui casse sans limite d'erreur) ; borner l'attente ; afficher « Le service est momentanément indisponible » avec « Réessayer », dans les dix locales ; une limite d'erreur autour des onglets pour qu'un onglet cassé n'emporte pas la page.
+
+**Pourquoi ça compte.** Une page vide fait croire à une perte de compte ; un message dit d'attendre.
+
+**Ce qui compte comme fini.**
+
+- API injoignable (simulée dans un test) : Mon compte affiche le message et « Réessayer » en moins de vingt secondes.
+- Un onglet qui casse affiche son erreur sans emporter la page.
+- Dix locales, test.
+
+**Dépendances.** Aucune.
+
+*Renvois : `src/pages/account/AccountPage.jsx` · `capture de Xavier du 07/10, 20:02`*
 
 ---
 
@@ -1582,6 +1605,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I30** | Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api` | `P1` | À vérifier |
+| **I31** | Une panne de la base doit déclencher une alerte qui ne dépend pas de la base | `P1` | Ouvert |
+| **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1670,6 +1695,49 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après **I29** (clos le 05/10). Voisin de **B22** (rejeu depuis zéro ≠ production).
 
 *Renvois : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
+
+#### I31 — Une panne de la base doit déclencher une alerte qui ne dépend pas de la base
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
+
+**État.** Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Personne n'a été prévenu** : `health-probe` tourne par une tâche planifiée de la base, écrit ses incidents dans `service_health_incidents` et n'envoie qu'à partir d'eux — base tombée, sonde tombée avec elle ; aucun incident n'a été enregistré pour ces 21 minutes. C'est Xavier qui a vu la panne, en se servant de Mon compte.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Un témoin hors de la base, qui interroge l'API (une lecture REST, la santé d'Auth) toutes les cinq minutes depuis une autre machine — le poste (timer systemd utilisateur, comme les sauvegardes) en attendant le serveur maison — et qui, après deux échecs de suite, écrit directement par le transport de courriel (sans passer par la base) aux admins du réseau, puis une seconde fois au retour.
+
+**Pourquoi ça compte.** Une panne qui dure jusqu'à ce que quelqu'un s'en aperçoive dure le temps qu'on mette à s'en apercevoir. Le 07/10, c'était un hasard d'usage.
+
+**Ce qui compte comme fini.**
+
+- Une panne simulée (adresse injoignable) déclenche un courriel aux admins du réseau en moins de quinze minutes, sans rien lire ni écrire dans la base.
+- Le retour déclenche un second courriel.
+- Le témoin prouve qu'il tourne (journal systemd, comme les sauvegardes).
+
+**Dépendances.** Le transport de courriel lisible hors de la base (clé Resend sur la machine du témoin, à poser par Xavier) ; plus tard, le serveur maison.
+
+*Renvois : `supabase/functions/health-probe/index.ts` · `deploy/ops/ (timers systemd du poste)` · `panne du 07/10/2026`*
+
+#### I32 — Établir la cause de la panne du 07/10 et dimensionner l'instance de base
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Ce que la panne n'est pas** : ni du trafic (51 requêtes de 17:58:00 à 17:58:58 UTC, toutes en 200 — un renouvellement d'emprunt, son courriel, quatre rechargements de Mon compte, une autre session qui lit ses avis), ni une requête en erreur (aucune ERROR ni FATAL dans les journaux de Postgres avant l'arrêt), ni un déploiement (le dernier `db push` à 19:50, sans migration). **Indice** : depuis 17:50 UTC, PostgREST signalait à répétition « Thread killed by timeout manager ». Premier suspect, non prouvé : un manque de mémoire de l'instance MICRO (1 Go), tuée par l'hébergeur.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Lire le rapport d'infrastructure du tableau de bord (Reports → Database : mémoire, swap, CPU, E/S disque) entre 19:45 et 20:00 le 07/10 ; si la mémoire est en cause, chercher ce qui la consomme (connexions du pooler, tâches planifiées des 5 minutes, fonctions Edge) et décider du passage de MICRO à SMALL — une décision de coût qui revient à Xavier.
+
+**Pourquoi ça compte.** Sans cause, la panne peut revenir demain à la même heure ; et une instance trop petite pour la charge du réseau fera de chaque soirée de formation un pari.
+
+**Ce qui compte comme fini.**
+
+- La cause est établie sur pièces (rapport d'infrastructure, journaux), ou déclarée non établissable, raison écrite.
+- La taille de l'instance est décidée par Xavier et écrite ici.
+
+**Dépendances.** Xavier (accès au tableau de bord, décision de coût).
+
+*Renvois : `exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)` · `journaux Postgres et PostgREST du 07/10` · `job backend 10213611`*
 
 ---
 
@@ -2216,4 +2284,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 66 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `a387b46c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-05 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `a387b46c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

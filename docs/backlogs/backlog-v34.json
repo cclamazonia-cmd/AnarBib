@@ -6266,6 +6266,147 @@
           "pt": "**06/10 — decisão de Xavier: « AnarBib » só. Entregue e implantado** (`7aa8e8c4`, `c952704a`); guarda `mail-expediteur-par-defaut`; `notify-event` v1742 com `|| \"AnarBib\"`. O segredo `SENDER_NAME` foi posto em « AnarBib » por Xavier em 06/10. **Falta**: ler um e-mail real em francês."
         }
       ]
+    },
+    {
+      "id": "I31",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Une panne de la base doit déclencher une alerte qui ne dépend pas de la base",
+        "pt": "Uma queda do banco deve disparar um alerta que não dependa do banco"
+      },
+      "v": {
+        "fr": "Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Personne n'a été prévenu** : `health-probe` tourne par une tâche planifiée de la base, écrit ses incidents dans `service_health_incidents` et n'envoie qu'à partir d'eux — base tombée, sonde tombée avec elle ; aucun incident n'a été enregistré pour ces 21 minutes. C'est Xavier qui a vu la panne, en se servant de Mon compte.",
+        "pt": "Em 07/10, o banco de produção caiu das 19:58 às 20:19 (Paris). Ninguém foi avisado: o `health-probe` roda por uma tarefa agendada do próprio banco e grava seus incidentes nele; nenhum incidente foi registrado."
+      },
+      "w": {
+        "fr": "Un témoin hors de la base, qui interroge l'API (une lecture REST, la santé d'Auth) toutes les cinq minutes depuis une autre machine — le poste (timer systemd utilisateur, comme les sauvegardes) en attendant le serveur maison — et qui, après deux échecs de suite, écrit directement par le transport de courriel (sans passer par la base) aux admins du réseau, puis une seconde fois au retour.",
+        "pt": "Uma testemunha fora do banco, que consulta a API a cada cinco minutos de outra máquina e, após duas falhas seguidas, escreve diretamente pelo transporte de e-mail aos admins da rede, e de novo na volta."
+      },
+      "y": {
+        "fr": "Une panne qui dure jusqu'à ce que quelqu'un s'en aperçoive dure le temps qu'on mette à s'en apercevoir. Le 07/10, c'était un hasard d'usage.",
+        "pt": "Uma queda que dura até alguém perceber dura o tempo que se leva para perceber."
+      },
+      "f": {
+        "fr": [
+          "Une panne simulée (adresse injoignable) déclenche un courriel aux admins du réseau en moins de quinze minutes, sans rien lire ni écrire dans la base.",
+          "Le retour déclenche un second courriel.",
+          "Le témoin prouve qu'il tourne (journal systemd, comme les sauvegardes)."
+        ],
+        "pt": [
+          "Uma queda simulada dispara um e-mail aos admins da rede em menos de quinze minutos, sem tocar no banco.",
+          "A volta dispara um segundo e-mail.",
+          "A testemunha prova que roda (diário systemd)."
+        ]
+      },
+      "dep": {
+        "fr": "Le transport de courriel lisible hors de la base (clé Resend sur la machine du témoin, à poser par Xavier) ; plus tard, le serveur maison.",
+        "pt": "O transporte de e-mail acessível fora do banco (chave Resend na máquina da testemunha, a pôr por Xavier)."
+      },
+      "r": [
+        "supabase/functions/health-probe/index.ts",
+        "deploy/ops/ (timers systemd du poste)",
+        "panne du 07/10/2026"
+      ],
+      "verif": null
+    },
+    {
+      "id": "I32",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Établir la cause de la panne du 07/10 et dimensionner l'instance de base",
+        "pt": "Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco"
+      },
+      "v": {
+        "fr": "Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Ce que la panne n'est pas** : ni du trafic (51 requêtes de 17:58:00 à 17:58:58 UTC, toutes en 200 — un renouvellement d'emprunt, son courriel, quatre rechargements de Mon compte, une autre session qui lit ses avis), ni une requête en erreur (aucune ERROR ni FATAL dans les journaux de Postgres avant l'arrêt), ni un déploiement (le dernier `db push` à 19:50, sans migration). **Indice** : depuis 17:50 UTC, PostgREST signalait à répétition « Thread killed by timeout manager ». Premier suspect, non prouvé : un manque de mémoire de l'instance MICRO (1 Go), tuée par l'hébergeur.",
+        "pt": "Mesmo episódio. Não foi tráfego (51 requisições em 200 no último minuto), nem erro de consulta, nem implantação. Indício: PostgREST registrava « Thread killed by timeout manager » desde 17:50 UTC. Primeiro suspeito, não provado: falta de memória da instância MICRO (1 GB)."
+      },
+      "w": {
+        "fr": "Lire le rapport d'infrastructure du tableau de bord (Reports → Database : mémoire, swap, CPU, E/S disque) entre 19:45 et 20:00 le 07/10 ; si la mémoire est en cause, chercher ce qui la consomme (connexions du pooler, tâches planifiées des 5 minutes, fonctions Edge) et décider du passage de MICRO à SMALL — une décision de coût qui revient à Xavier.",
+        "pt": "Ler o relatório de infraestrutura (Reports → Database) entre 19:45 e 20:00 de 07/10; se for memória, achar o consumidor e decidir a passagem de MICRO para SMALL (decisão de custo de Xavier)."
+      },
+      "y": {
+        "fr": "Sans cause, la panne peut revenir demain à la même heure ; et une instance trop petite pour la charge du réseau fera de chaque soirée de formation un pari.",
+        "pt": "Sem causa, a queda pode voltar amanhã."
+      },
+      "f": {
+        "fr": [
+          "La cause est établie sur pièces (rapport d'infrastructure, journaux), ou déclarée non établissable, raison écrite.",
+          "La taille de l'instance est décidée par Xavier et écrite ici."
+        ],
+        "pt": [
+          "A causa é estabelecida com provas, ou declarada não estabelecível, com razão escrita.",
+          "O tamanho da instância é decidido por Xavier e escrito aqui."
+        ]
+      },
+      "dep": {
+        "fr": "Xavier (accès au tableau de bord, décision de coût).",
+        "pt": "Xavier (acesso ao painel, decisão de custo)."
+      },
+      "r": [
+        "exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)",
+        "journaux Postgres et PostgREST du 07/10",
+        "job backend 10213611"
+      ],
+      "verif": null
+    },
+    {
+      "id": "E33",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front"
+      ],
+      "t": {
+        "fr": "Quand la base ne répond pas, Mon compte dit que le service est indisponible au lieu d'une page vide",
+        "pt": "Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia"
+      },
+      "v": {
+        "fr": "Pendant la panne du 07/10, Mon compte a tourné sans fin (les lectures en 522 ou 524 relancées), puis, rechargée, n'a affiché que le fond de la page : aucun message, aucun bouton. La lectrice ne peut pas savoir si c'est elle, son compte ou le service.",
+        "pt": "Durante a queda de 07/10, Minha conta girou sem fim e, recarregada, só mostrou o fundo da página: nenhuma mensagem."
+      },
+      "w": {
+        "fr": "Trouver ce qui laisse la page vide (session non résolue, chargement qui ne se termine pas, rendu qui casse sans limite d'erreur) ; borner l'attente ; afficher « Le service est momentanément indisponible » avec « Réessayer », dans les dix locales ; une limite d'erreur autour des onglets pour qu'un onglet cassé n'emporte pas la page.",
+        "pt": "Achar o que deixa a página vazia; limitar a espera; mostrar « Serviço momentaneamente indisponível » com « Tentar de novo », nas dez locales; um limite de erro em torno das abas."
+      },
+      "y": {
+        "fr": "Une page vide fait croire à une perte de compte ; un message dit d'attendre.",
+        "pt": "Uma página vazia faz crer numa perda de conta; uma mensagem diz para esperar."
+      },
+      "f": {
+        "fr": [
+          "API injoignable (simulée dans un test) : Mon compte affiche le message et « Réessayer » en moins de vingt secondes.",
+          "Un onglet qui casse affiche son erreur sans emporter la page.",
+          "Dix locales, test."
+        ],
+        "pt": [
+          "API inacessível (simulada): Minha conta mostra a mensagem e « Tentar de novo » em menos de vinte segundos.",
+          "Uma aba que quebra mostra o erro sem derrubar a página.",
+          "Dez locales, teste."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "src/pages/account/AccountPage.jsx",
+        "capture de Xavier du 07/10, 20:02"
+      ],
+      "verif": null
     }
   ]
 }

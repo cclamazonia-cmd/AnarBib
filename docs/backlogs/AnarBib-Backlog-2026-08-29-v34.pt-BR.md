@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-07** · 66 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-07** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,11 +19,11 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 11
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 12
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 5 de outubro de 2026, à noite** (`a387b46c`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: o meio-dia do mesmo dia, `16962c55`). **16 migrações** (432 = 432, todas pela CI), 70 commits, 2 056 testes JS e 173 suítes SQL, todos verdes. `public.networks` (G13), +18 funções, dois avisos de segurança a mais (G13, G17; o veredito de G17 falta escrever); `read-pdf` e `mail-i18n-test` retiradas do repositório (F3); lote 66 do acervo CCLA; um segundo administrador da rede. **Nesta versão, após o inventário dos commits dos últimos dez dias (26/09 → 05/10)**: I30 a verificar; dez itens abertos para o que fora achado no caminho sem item (C26, C27, C28, D9, E29, E30, E31, E32, F23, J11); notas completadas em onze itens e doze fechamentos; calendário reescrito; REGISTRE corrigido em `OPAC-F3`. **Falta fechar** — *por Xavier, critérios cumpridos*: B29, B30, H17, H18, H19, H22, H23, H24, F16 e F21 — **fechados por Xavier em 06/10** (restos em H28, H29, E31 e F24); H20 e H25: um ponto a verificar antes; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17; *sem código*: A1, A3, F3.
 
-**Frescor dos constatos em 2026-10-07.** **47 itens de 66** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-07.** **47 itens de 69** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, J9, J11, K2, K7, K10). Os **22** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -758,6 +758,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
 | **E32** | Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1) | `P3` | Aberto |
+| **E33** | Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -953,6 +954,28 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `REGISTRE IDENT-5 à IDENT-8, IDENT-Q1` · `commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14`*
+
+#### E33 — Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : React / JavaScript
+
+**Estado.** Durante a queda de 07/10, Minha conta girou sem fim e, recarregada, só mostrou o fundo da página: nenhuma mensagem.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Achar o que deixa a página vazia; limitar a espera; mostrar « Serviço momentaneamente indisponível » com « Tentar de novo », nas dez locales; um limite de erro em torno das abas.
+
+**Por que importa.** Uma página vazia faz crer numa perda de conta; uma mensagem diz para esperar.
+
+**O que conta como terminado.**
+
+- API inacessível (simulada): Minha conta mostra a mensagem e « Tentar de novo » em menos de vinte segundos.
+- Uma aba que quebra mostra o erro sem derrubar a página.
+- Dez locales, teste.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `src/pages/account/AccountPage.jsx` · `capture de Xavier du 07/10, 20:02`*
 
 ---
 
@@ -1582,6 +1605,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | A verificar |
+| **I31** | Uma queda do banco deve disparar um alerta que não dependa do banco | `P1` | Aberto |
+| **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1670,6 +1695,49 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois do **I29**. Vizinho do **B22**.
 
 *Remissões : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
+
+#### I31 — Uma queda do banco deve disparar um alerta que não dependa do banco
+
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas
+
+**Estado.** Em 07/10, o banco de produção caiu das 19:58 às 20:19 (Paris). Ninguém foi avisado: o `health-probe` roda por uma tarefa agendada do próprio banco e grava seus incidentes nele; nenhum incidente foi registrado.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Uma testemunha fora do banco, que consulta a API a cada cinco minutos de outra máquina e, após duas falhas seguidas, escreve diretamente pelo transporte de e-mail aos admins da rede, e de novo na volta.
+
+**Por que importa.** Uma queda que dura até alguém perceber dura o tempo que se leva para perceber.
+
+**O que conta como terminado.**
+
+- Uma queda simulada dispara um e-mail aos admins da rede em menos de quinze minutos, sem tocar no banco.
+- A volta dispara um segundo e-mail.
+- A testemunha prova que roda (diário systemd).
+
+**Dependências.** O transporte de e-mail acessível fora do banco (chave Resend na máquina da testemunha, a pôr por Xavier).
+
+*Remissões : `supabase/functions/health-probe/index.ts` · `deploy/ops/ (timers systemd du poste)` · `panne du 07/10/2026`*
+
+#### I32 — Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Mesmo episódio. Não foi tráfego (51 requisições em 200 no último minuto), nem erro de consulta, nem implantação. Indício: PostgREST registrava « Thread killed by timeout manager » desde 17:50 UTC. Primeiro suspeito, não provado: falta de memória da instância MICRO (1 GB).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Ler o relatório de infraestrutura (Reports → Database) entre 19:45 e 20:00 de 07/10; se for memória, achar o consumidor e decidir a passagem de MICRO para SMALL (decisão de custo de Xavier).
+
+**Por que importa.** Sem causa, a queda pode voltar amanhã.
+
+**O que conta como terminado.**
+
+- A causa é estabelecida com provas, ou declarada não estabelecível, com razão escrita.
+- O tamanho da instância é decidido por Xavier e escrito aqui.
+
+**Dependências.** Xavier (acesso ao painel, decisão de custo).
+
+*Remissões : `exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)` · `journaux Postgres et PostgREST du 07/10` · `job backend 10213611`*
 
 ---
 
@@ -2206,4 +2274,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 66 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-07. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-05 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `a387b46c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
