@@ -42,14 +42,25 @@ const page = lire('pages/account/AccountPage.jsx');
 const css = lire('pages/account/AccountPage.css');
 
 // L'onglet, et lui seul : de son ouverture à celle de l'onglet suivant.
+// Depuis E6 lot 6 (07/10/2026), la grille des trois décisions vit dans
+// ContaDecisions.jsx : on relit l'onglet en remettant son source à la place de
+// l'élément, pour que les contrats ci-dessous portent sur le même texte.
 const debut = page.indexOf("activeTab === 'perfil' && profile");
 const fin = page.indexOf("activeTab === 'reservar'", debut);
-const onglet = page.slice(debut, fin);
+const decisions = lire('pages/account/ContaDecisions.jsx');
+const corpsDecisions = decisions.slice(decisions.indexOf('<section className="ab-conta-decisions-bloc"'),
+  decisions.indexOf('</section>') + '</section>'.length);
+const ongletBrut = page.slice(debut, fin);
+const element = ongletBrut.match(/<ContaDecisions\b[\s\S]*?\/>/);
+const onglet = element ? ongletBrut.replace(element[0], corpsDecisions) : ongletBrut;
 
 describe('Mon compte, « Données personnelles » — les décisions sous le profil (E19)', () => {
   it("l'onglet se laisse découper", () => {
     expect(debut).toBeGreaterThan(-1);
     expect(fin).toBeGreaterThan(debut);
+    // la grille est montée une fois dans l'onglet, et son source se retrouve
+    expect(ongletBrut.split('<ContaDecisions').length - 1).toBe(1);
+    expect(corpsDecisions.length).toBeGreaterThan(1000);
   });
 
   it('ordre des blocs : profil, trois décisions, ce qui se lit, suppression en dernier', () => {
