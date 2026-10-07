@@ -4952,6 +4952,8 @@
   "service.recess": "En pausa",
   "service.reduced": "Funcionament reduït",
   "service.suspended": "Suspès temporalment",
+  "service.unavailable.title": "El servei no està disponible de moment",
+  "service.unavailable.body": "Ara mateix no podem contactar amb el servidor. Les teves dades no s'han perdut: espera un moment i torna-ho a provar.",
   "solicitar.beforeSending.body": "inicia primer la sessió al teu compte a <loginLink>Inici de sessió</loginLink>. L'enviament registrarà una sol·licitud institucional real, en estat pendent, perquè la coordinació l'analitzi.",
   "solicitar.beforeSending.label": "Abans d'enviar:",
   "solicitar.claim.invalid.body": "L'enllaç que has seguit ja no és vàlid (ja s'ha fet servir, ha expirat o és desconegut). Si ja coordines una biblioteca registrada, pots enviar igualment la sol·licitud de més avall. Si no, contacta amb la coordinació de la xarxa.",

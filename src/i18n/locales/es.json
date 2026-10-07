@@ -4952,6 +4952,8 @@
   "service.recess": "En receso",
   "service.reduced": "Funcionamiento reducido",
   "service.suspended": "Suspendido temporalmente",
+  "service.unavailable.title": "El servicio no está disponible por el momento",
+  "service.unavailable.body": "No podemos comunicarnos con el servidor ahora mismo. Tus datos no se han perdido: espera un momento y vuelve a intentarlo.",
   "solicitar.beforeSending.body": "entra primero a tu cuenta en <loginLink>Login</loginLink>. El envío registrará una solicitud institucional real, en estado pendiente, para análisis de la coordinación.",
   "solicitar.beforeSending.label": "Antes de enviar:",
   "solicitar.claim.invalid.body": "El enlace que seguiste ya no es válido (ya utilizado, expirado o desconocido). Si coordinás una biblioteca ya registrada, podés enviar igualmente la solicitud abajo. De lo contrario, contactá a la coordinación de la red.",

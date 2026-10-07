@@ -8,6 +8,8 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { useAccountAvailability } from '@/hooks/useAccountAvailability';
 import { useBookAvailability } from '@/hooks/useBookAvailability';
 import { useReservationActions } from '@/hooks/useReservationActions';
+import ServiceIndisponible from '@/components/ServiceIndisponible';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Skeleton } from '@/components/ui';
 import AppIcon from '@/components/ui/AppIcon';
@@ -343,6 +345,16 @@ export default function AccountPage() {
     handleConfirmSchedule, openRefuseModal, closeRefuseModal, handleRefuseSchedule
   } = useReservationActions({ user, profile, serviceState, reservations, loans, loadData });
 
+  // E33 (07/10/2026) : sans délai côté client, un premier chargement peut
+  // pendre sans fin (panne de la base du 07/10) et le squelette avec lui. Au-delà
+  // de douze secondes, on dit que le service est indisponible.
+  const [attenteLongue, setAttenteLongue] = useState(false);
+  useEffect(() => {
+    if (!loading) { setAttenteLongue(false); return undefined; }
+    const id = setTimeout(() => setAttenteLongue(true), 12000);
+    return () => clearTimeout(id);
+  }, [loading]);
+
   // Montage : noyau seulement (paint rapide de l'onglet par défaut « perfil »).
   useEffect(() => { loadCore(); }, [loadCore]);
 
@@ -642,6 +654,14 @@ export default function AccountPage() {
   // Maintenant on affiche le hero avec son titre/sous-titre traduits
   // (ne dépendent pas des données), des skeletons à la place des pills,
   // et une zone de chargement structurée pour le contenu de l'onglet.
+  if (loading && attenteLongue) {
+    return (
+      <PageShell>
+        <Topbar />
+        <ServiceIndisponible onRetry={() => window.location.reload()} />
+      </PageShell>
+    );
+  }
   if (loading) {
     return (
       <PageShell>
@@ -934,6 +954,10 @@ export default function AccountPage() {
         </nav>
 
         <div className="ab-conta-panel">
+          {/* E33 (07/10/2026) : une personne connectée a toujours une ligne de profil ;
+              un profil nul après chargement, c'est la base qui n'a pas répondu. */}
+          {!profile && <ServiceIndisponible compact onRetry={() => loadData()} />}
+          <ErrorBoundary>
 
           {/* ═══ PERFIL ═══ */}
           {activeTab === 'perfil' && profile && (
@@ -1141,6 +1165,7 @@ export default function AccountPage() {
               <TabEventos />
             </Suspense>
           )}
+          </ErrorBoundary>
         </div>
       </div>
 

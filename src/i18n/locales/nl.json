@@ -4952,6 +4952,8 @@
   "service.recess": "Met reces",
   "service.reduced": "Beperkte werking",
   "service.suspended": "Tijdelijk opgeschort",
+  "service.unavailable.title": "De dienst is tijdelijk niet beschikbaar",
+  "service.unavailable.body": "We kunnen de server op dit moment niet bereiken. Je gegevens zijn niet verloren: wacht even en probeer het opnieuw.",
   "solicitar.beforeSending.body": "meld je eerst aan bij je account via <loginLink>Inloggen</loginLink>. Door te verzenden registreer je een echte institutionele aanvraag, met status in afwachting, voor beoordeling door de coördinatie.",
   "solicitar.beforeSending.label": "Vóór het verzenden:",
   "solicitar.claim.invalid.body": "De link die je hebt gevolgd is niet langer geldig (al gebruikt, verlopen of onbekend). Als je al een geregistreerde bibliotheek coördineert, kun je de aanvraag hieronder toch indienen. Neem anders contact op met de netwerkcoördinatie.",

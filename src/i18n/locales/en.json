@@ -4952,6 +4952,8 @@
   "service.recess": "On break",
   "service.reduced": "Reduced operation",
   "service.suspended": "Temporarily suspended",
+  "service.unavailable.title": "The service is temporarily unavailable",
+  "service.unavailable.body": "We can't reach the server right now. Your data isn't lost: wait a moment, then try again.",
   "solicitar.beforeSending.body": "first log into your account at <loginLink>Login</loginLink>. Submitting will register a real institutional request, with pending status, for review by the coordination.",
   "solicitar.beforeSending.label": "Before sending:",
   "solicitar.claim.invalid.body": "The link you followed is no longer valid (already used, expired, or unknown). If you already coordinate a registered library, you can still submit the request below. Otherwise, contact the network coordination.",

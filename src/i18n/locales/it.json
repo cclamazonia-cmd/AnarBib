@@ -4952,6 +4952,8 @@
   "service.recess": "In pausa",
   "service.reduced": "Funzionamento ridotto",
   "service.suspended": "Sospeso temporaneamente",
+  "service.unavailable.title": "Il servizio è momentaneamente non disponibile",
+  "service.unavailable.body": "Al momento non riusciamo a raggiungere il server. I tuoi dati non sono andati persi: aspetta un attimo e riprova.",
   "solicitar.beforeSending.body": "entra prima nel tuo account su <loginLink>Login</loginLink>. L'invio registrerà una richiesta istituzionale reale, in stato in attesa, per l'analisi del coordinamento.",
   "solicitar.beforeSending.label": "Prima di inviare:",
   "solicitar.claim.invalid.body": "Il link che hai seguito non è più valido (già usato, scaduto o sconosciuto). Se coordini già una biblioteca registrata, puoi comunque inviare la richiesta qui sotto. Altrimenti, contatta il coordinamento della rete.",

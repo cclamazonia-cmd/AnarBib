@@ -4958,6 +4958,8 @@
   "service.recess": "En pause",
   "service.reduced": "Fonctionnement réduit",
   "service.suspended": "Suspendu temporairement",
+  "service.unavailable.title": "Le service est momentanément indisponible",
+  "service.unavailable.body": "Nous n'arrivons pas à joindre le serveur pour l'instant. Tes données ne sont pas perdues : attends un instant, puis réessaie.",
   "solicitar.beforeSending.body": "connecte-toi d'abord à ton compte sur <loginLink>Login</loginLink>. L'envoi enregistrera une vraie demande institutionnelle, en statut en attente, pour analyse par la coordination.",
   "solicitar.beforeSending.label": "Avant d'envoyer :",
   "solicitar.claim.invalid.body": "Le lien que tu as suivi n'est plus valide (déjà utilisé, expiré ou inconnu). Si tu coordonnes déjà une bibliothèque enregistrée, tu peux quand même envoyer la demande ci-dessous. Sinon, contacte la coordination du réseau.",

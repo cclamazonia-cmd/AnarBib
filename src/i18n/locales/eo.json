@@ -4952,6 +4952,8 @@
   "service.recess": "En paŭzo",
   "service.reduced": "Reduktita funkciado",
   "service.suspended": "Provizore suspendita",
+  "service.unavailable.title": "La servo estas momente nedisponebla",
+  "service.unavailable.body": "Ni ne povas atingi la servilon nun. Viaj datumoj ne perdiĝis: atendu momenton kaj reprovu.",
   "solicitar.beforeSending.body": "unue ensalutu al via konto ĉe <loginLink>Ensaluto</loginLink>. La sendado registros veran institucian peton, en stato atendanta, por analizo fare de la kunordigo.",
   "solicitar.beforeSending.label": "Antaŭ ol sendi:",
   "solicitar.claim.invalid.body": "La ligilo kiun vi sekvis ne plu validas (jam uzita, eksvalidiĝinta aŭ nekonata). Se vi jam kunordigas registritan bibliotekon, vi povas tamen sendi la suban peton. Alie, kontaktu la kunordigon de la reto.",
