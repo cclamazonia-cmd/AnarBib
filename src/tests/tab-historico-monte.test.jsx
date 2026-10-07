@@ -67,7 +67,11 @@ describe('l’onglet Historique, sorti d’AccountPage', () => {
   it('le parent monte l’onglet avec ses props et ne garde plus son corps', () => {
     const page = lire('src/pages/account/AccountPage.jsx');
     expect(page).toContain("import TabHistorico from '@/pages/account/TabHistorico';");
-    expect(page).toContain("import ContaTabHeader from '@/pages/account/ContaTabHeader';");
+    // ContaTabHeader vit dans son fichier ; depuis le lot 5 (07/10) la page ne
+    // l'importe plus, ce sont les onglets sortis qui l'emploient.
+    for (const onglet of ['TabHistorico', 'TabAvisos', 'TabCurso', 'TabReservar']) {
+      expect(lire(`src/pages/account/${onglet}.jsx`), onglet).toContain("import ContaTabHeader from '@/pages/account/ContaTabHeader';");
+    }
     expect(page).not.toContain('function ContaTabHeader');
     for (const p of ['loanHistory', 'consultationsHistory', 'history', 'showHiddenHistory', 'setShowHiddenHistory', 'renderHistActions',
       'histLinkBtn', 'retentionPrefs', 'setRetentionPrefs', 'handleSaveRetentionPrefs', 'retentionSaving', 'retentionMsg',

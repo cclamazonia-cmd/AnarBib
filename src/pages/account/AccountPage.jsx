@@ -15,10 +15,8 @@ import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
-import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
 import { isPasswordPolicyOk } from '@/lib/passwordPolicy';
-import { decodeSystemNote } from '@/lib/systemNotes';
 import DataExportButton from '@/components/account/DataExportButton';
 import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
 import MinhaSolicitacaoPanel from '@/components/account/MinhaSolicitacaoPanel';
@@ -27,22 +25,19 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import LibraryContextBanner from '@/components/LibraryContextBanner';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import ReaderTutorialsCard from '@/components/account/ReaderTutorialsCard';
-import ContaTabHeader from '@/pages/account/ContaTabHeader';
 import './AccountPage.css';
 
 // #REFACTOR 08/06 : carte-lecteur extraite en chunk LAZY -> sort qrcode + jspdf
 // (~200 ko+) du bundle AccountPage. Chargée seulement au rendu de la section
 // (biblios reader_cards_enabled, onglet profil).
 const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSection'));
-// #REFACTOR 08/06 (onglets lourds) : ReservationCard (~245 lignes) en chunk lazy,
-// chargé seulement depuis l'onglet « reservar ».
-const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
-// MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 import TabHistorico from '@/pages/account/TabHistorico';
 import TabAvisos from '@/pages/account/TabAvisos';
 import TabDesejos from '@/pages/account/TabDesejos';
 import TabNotas from '@/pages/account/TabNotas';
 import TabCurso from '@/pages/account/TabCurso';
+import TabReservar from '@/pages/account/TabReservar';
+// MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 // Onglet « Événements » (agenda des biblios de la lectrice) en chunk lazy.
 const TabEventos = lazy(() => import('@/pages/account/TabEventos'));
@@ -1790,137 +1785,16 @@ export default function AccountPage() {
 
           {/* ═══ RESERVAS E CONSULTAS ═══ */}
           {activeTab === 'reservar' && (
-            <div>
-              <ContaTabHeader title={t({ id: 'account.reserve.title' })} onRefresh={() => loadData({ silent: true })} />
-              <p className="ab-conta-hint">
-                No catálogo, copie a referência e cole aqui. Use <strong>{t({ id: 'account.reserve.loan' })}</strong> para materiais emprestáveis
-                ou <strong>{t({ id: 'account.reserve.consult' })}</strong> para periódicos e materiais consultáveis.
-              </p>
-
-              <div className="ab-conta-reserve-form">
-                <input type="text" value={reserveRef} onChange={e => setReserveRef(e.target.value)}
-                  placeholder={t({ id: 'account.reserve.placeholder' })} className="ab-input" />
-                <Button variant="secondary" onClick={() => handleReserve('reserve')}>{t({ id: 'account.reserve.loan' })}</Button>
-                <Button variant="secondary" onClick={() => handleReserve('consult')}>{t({ id: 'account.reserve.consult' })}</Button>
-              </div>
-              {reserveMsg && <p className="ab-conta-msg">{reserveMsg}</p>}
-
-              <h3 className="ab-conta-subsection">{t({ id: 'account.reservations.active' })}</h3>
-              {reservations.length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.reservations.empty' })}</p>
-              ) : (
-                <Suspense fallback={null}>
-                <div className="ab-conta-items">
-                  {reservations.map((r, i) => (
-                    <ReservationCard
-                      key={i}
-                      r={r}
-                      timeZone={tzMap[r.library_id]}
-                      libTag={renderLibTag(r.library_id)}
-                      sameTitleSignal={renderSameTitleSignal(r.titulo)}
-                      onCancel={cancelReservation}
-                      onConfirmPickup={handleConfirmPickup}
-                      onOpenCounterProposalForm={openCounterProposalForm}
-                      onCloseCounterProposalForm={() => setNegotiationForm(null)}
-                      onSubmitCounterProposal={handleSubmitCounterProposal}
-                      negotiationForm={negotiationForm}
-                      setNegotiationForm={setNegotiationForm}
-                      loadData={loadData}
-                    />
-                  ))}
-                </div>
-                </Suspense>
-              )}
-
-              {/* Paquet 27.A.5 (4.3) : creneau propose par la biblio, en attente de reponse */}
-              {consultations.filter(c => c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status).length > 0 && (
-                <>
-                  <h3 className="ab-conta-subsection" style={{ marginTop: 0 }}>
-                    {t({ id: 'account.consultations.scheduleProposed.title' })}
-                  </h3>
-                  <p className="ab-conta-hint">{t({ id: 'account.consultations.scheduleProposed.hint' })}</p>
-                  <div className="ab-conta-items">
-                    {consultations.filter(c => c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status).map((c, i) => (
-                      <div key={`prop-${i}`} className="ab-conta-item" style={{ borderLeft: '3px solid #2563eb' }}>
-                        <div className="ab-conta-item__main">
-                          <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || ''}</Link>
-                          <span className="ab-conta-item__meta">ref: {c.bib_ref || ''}</span>
-                          <p style={{ margin: '8px 0 0', fontWeight: 600 }}>
-                            {t({ id: 'account.consultations.scheduleProposed.dateLabel' })} : {formatSchedule(c, tzMap[c.library_id])}
-                          </p>
-                          {c.workflow_note && (
-                            <p style={{ margin: '4px 0 0', fontStyle: 'italic', color: 'var(--brand-muted)' }}>
-                              {t({ id: 'account.consultations.scheduleProposed.noteLabel' })} : {decodeSystemNote(c.workflow_note, t)}
-                            </p>
-                          )}
-                        </div>
-                        <div className="ab-conta-item__actions" style={{ display: 'flex', gap: 8 }}>
-                          <Button onClick={() => handleConfirmSchedule(c)} disabled={replying}>
-                            {t({ id: 'account.consultations.scheduleProposed.confirmButton' })}
-                          </Button>
-                          <Button variant="secondary" onClick={() => openRefuseModal(c)} disabled={replying}>
-                            {t({ id: 'account.consultations.scheduleProposed.refuseButton' })}
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              <h3 className="ab-conta-subsection">{t({ id: 'account.consultations.active' })}</h3>
-              {consultations.filter(c => c.status === 'ativa').length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.consultations.empty' })}</p>
-              ) : (
-                <div className="ab-conta-items">
-                  {consultations.filter(c => c.status === 'ativa').map((c, i) => (
-                    <div key={`act-${i}`} className="ab-conta-item">
-                      <div className="ab-conta-item__main">
-                        <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
-                        <span className="ab-conta-item__meta">ref: {c.bib_ref || '—'} · {c.workflow_stage || c.status || '—'}</span>
-                        {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
-                          <p style={{ margin: '4px 0 0', color: '#15803d', fontWeight: 600 }}>
-                            ✓ {t({ id: 'account.consultations.scheduleConfirmed.badge' }, { date: formatSchedule(c, tzMap[c.library_id]) })}
-                          </p>
-                        )}
-                      </div>
-                      <div className="ab-conta-item__actions">
-                        <Button variant="secondary" onClick={() => setCancelTarget(c)}>
-                          {t({ id: 'account.consultations.cancelButton' })}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {consultations.filter(c => c.status === 'cancelada_biblioteca').length > 0 && (
-                <>
-                  <h3 className="ab-conta-subsection" style={{ marginTop: 24 }}>
-                    {t({ id: 'account.consultations.cancelledByLibrary' })}
-                  </h3>
-                  <p className="ab-conta-hint">{t({ id: 'account.consultations.cancelledByLibraryHint' })}</p>
-                  <div className="ab-conta-items">
-                    {consultations.filter(c => c.status === 'cancelada_biblioteca').map((c, i) => (
-                      <div key={`cnx-${i}`} className="ab-conta-item" style={{ borderLeft: '3px solid #f59e0b' }}>
-                        <div className="ab-conta-item__main">
-                          <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
-                          <span className="ab-conta-item__meta">
-                            ref: {c.bib_ref || '—'}
-                            {c.cancelled_at && <> · {new Date(c.cancelled_at).toLocaleDateString()}</>}
-                          </span>
-                        </div>
-                        <div className="ab-conta-item__actions">
-                          <Button variant="secondary" onClick={() => handleDismissConsultaCancelled(c)}>
-                            {t({ id: 'account.consultations.dismissButton' })}
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+            <TabReservar
+              reserveRef={reserveRef} setReserveRef={setReserveRef} handleReserve={handleReserve} reserveMsg={reserveMsg}
+              reservations={reservations} consultations={consultations} tzMap={tzMap} loadData={loadData}
+              renderLibTag={renderLibTag} renderSameTitleSignal={renderSameTitleSignal}
+              cancelReservation={cancelReservation} handleConfirmPickup={handleConfirmPickup}
+              openCounterProposalForm={openCounterProposalForm} handleSubmitCounterProposal={handleSubmitCounterProposal}
+              negotiationForm={negotiationForm} setNegotiationForm={setNegotiationForm}
+              handleConfirmSchedule={handleConfirmSchedule} replying={replying} openRefuseModal={openRefuseModal}
+              setCancelTarget={setCancelTarget} handleDismissConsultaCancelled={handleDismissConsultaCancelled}
+            />
           )}
 
           {/* ═══ EMPRÉSTIMOS EM CURSO ═══ */}
@@ -2129,7 +2003,8 @@ export default function AccountPage() {
 // ═══════════════════════════════════════════════════════════
 
 // #REFACTOR 08/06 (onglets lourds) : fmtDate + ReservationCard déplacés dans le
-// module lazy src/components/account/ReservationCard.jsx (import lazy en tête).
+// module lazy src/components/account/ReservationCard.jsx (import lazy dans
+// TabReservar.jsx depuis le 07/10/2026, E6 lot 5).
 
 // (ReservationCard vit désormais dans src/components/account/ReservationCard.jsx)
 
