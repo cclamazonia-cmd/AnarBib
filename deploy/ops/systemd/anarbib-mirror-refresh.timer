@@ -12,8 +12,18 @@ Description=AnarBib — declencheur du miroir froid (quotidien, 18:00 Europe/Par
 # quelques secondes, et la valeur d'une copie froide se mesure a ce qu'elle
 # perdrait si l'amont disparaissait maintenant.
 OnCalendar=*-*-* 18:00:00 Europe/Paris
+# Second passage a 18:50 (I33, 08/10/2026) : le tir avance aussi le checkout
+# d'exploitation ~/anarbib, ou la sauvegarde lit la liste des tables classees ;
+# une migration poussee dans la journee doit y etre AVANT le flux court de 19:00
+# (et le long du dimanche, 20:00 : 19:50 pour lui). Le delai aleatoire est
+# ramene de 600 a 120 s pour ne pas mordre sur 19:00.
+OnCalendar=*-*-* 18:50:00 Europe/Paris
+OnCalendar=Sun *-*-* 19:50:00 Europe/Paris
+# Et au demarrage de la session : un poste rallume rejoue d'abord ses tirs
+# manques ; une minute apres, au moins le checkout est a jour pour les suivants.
+OnStartupSec=1min
 Persistent=true
-RandomizedDelaySec=600
+RandomizedDelaySec=120
 
 [Install]
 WantedBy=timers.target

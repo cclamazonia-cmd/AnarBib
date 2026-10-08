@@ -35,6 +35,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `systemd/forgejo-runner.service` · `systemd/forgejo-runner.service.d/` | Le runner Forgejo et son drop-in |
 | `anarbib-copie-froide.sh` | La réplique hors ligne des trois dépôts restic sur un disque qu'on débranche, et sa vérification intégrale (lecture seule côté distant) |
 | `anarbib-mirror-refresh.sh` | Le rafraîchissement du miroir Git `anarbib-mirror.git`, avec le garde-fou anti-réécriture d'historique |
+| `anarbib-exploitation-suit.sh` | Le checkout d'exploitation `~/anarbib` suit `main` en avance rapide seulement — appelé en fin de tir du miroir (I33) |
 | `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
 
 ## Ce qu'il ne contient pas, et pourquoi
@@ -229,6 +230,40 @@ sudo systemctl daemon-reload
 > Tant que ces liens ne sont pas posés, la machine tourne encore sur les copies
 > de juillet — dont celle qui écrit un horodatage illisible. Le dépôt a le
 > correctif, la machine ne l'a pas.
+
+## Le checkout d'exploitation suit `main` (I33)
+
+Tout ce que ce dossier décrit tourne **par des liens vers `~/anarbib`** : les
+scripts, les unités, et `bg2-known-tables.txt`, la liste des tables classées
+que le filet de la sauvegarde compare à la base. Le 08/10/2026 à 19:03, le tir
+court a été refusé — « classe les nouvelles tables avant de sauvegarder » —
+alors que la table nouvelle était classée au dépôt depuis la veille : le
+checkout `~/anarbib` était resté trois jours en arrière, personne ne l'avait
+avancé. Le filet avait raison de refuser ce qu'il voyait, et tort de ce qu'il
+voyait.
+
+`anarbib-exploitation-suit.sh` l'avance tout seul, en fin de chaque tir du
+miroir (18:00, **18:50** — avant le flux court de 19:00 —, 19:50 le dimanche
+avant le flux long, et une minute après le démarrage de la session). Trois
+règles, et aucune ne se discute :
+
+- **avance rapide seulement** (`--ff-only`) : jamais de rebase, de reset ni de
+  checkout forcé ; un checkout divergent ne bouge pas, le tir sort en erreur et
+  le drapeau `.last-failure` le dit ;
+- **jamais sur un checkout sale** (un fichier suivi modifié — les fichiers
+  ignorés, `CLAUDE.md` et `.claude/`, ne comptent pas) : même issue ;
+- **jamais pendant qu'un script d'exploitation tourne** (sauvegarde, fraîcheur,
+  témoin) : ce sont des liens vers ce checkout, et bash lit un script au fil de
+  l'eau. Il attend le tir suivant, sans erreur.
+
+Il se recopie dans `/tmp` avant de tourner, pour la même raison ; et le tir du
+miroir l'appelle en `exec`, dernier geste, parce que `anarbib-mirror-refresh.sh`
+vit lui aussi dans ce checkout.
+
+Ce que ça veut dire pour qui pousse : **un script d'exploitation changé sur
+`main` est actif au tir suivant du poste**, sans geste humain. C'était déjà vrai
+quand une session avançait `~/anarbib` à la main ; c'est désormais la règle, et
+elle a sa place dans la tête de qui modifie `deploy/ops/`.
 
 ## Le témoin de panne (I31)
 

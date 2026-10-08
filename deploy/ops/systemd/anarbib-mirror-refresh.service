@@ -1,5 +1,5 @@
 [Unit]
-Description=AnarBib — rafraichissement du miroir froid anarbib-mirror.git
+Description=AnarBib — rafraichissement du miroir froid anarbib-mirror.git, puis le checkout d'exploitation suit main (I33)
 Documentation=file:%h/anarbib/deploy/ops/anarbib-mirror-refresh.sh
 OnFailure=anarbib-backup-failure@%n.service
 

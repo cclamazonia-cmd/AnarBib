@@ -91,3 +91,13 @@ done
 [ "$reecrit" -eq 0 ] || die "reecriture d'historique detectee — voir ci-dessus"
 
 info "Miroir froid a jour. ($(du -sh "$MIRROR" 2>/dev/null | cut -f1))"
+
+# --- le checkout d'exploitation suit main (I33, 08/10/2026) -------------------
+# Les scripts d'exploitation et bg2-known-tables.txt sont lus dans ~/anarbib par
+# des liens ; un checkout en retard a fait refuser le tir court du 08/10 par le
+# filet. On l'avance ici, apres le miroir, en avance rapide seulement — et par
+# `exec` : ce fichier-ci vit dans le checkout qu'on va reecrire, il ne doit
+# plus etre lu quand ca arrive. Le suivi dit lui-meme pourquoi il ne bouge pas.
+SUIVI="$(dirname "$(readlink -f "$0")")/anarbib-exploitation-suit.sh"
+[ -x "$SUIVI" ] || die "suivi de l'exploitation introuvable : $SUIVI"
+exec "$SUIVI"
