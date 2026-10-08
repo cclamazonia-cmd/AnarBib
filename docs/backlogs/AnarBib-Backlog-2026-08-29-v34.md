@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-08** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-08** · 72 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 6
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 8
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 12
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 7
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 7 octobre 2026 au soir** (`9b95bc63`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 05/10 au soir, `a387b46c`). Deux journées à trois sessions, et une panne : **8 migrations** (440 appliquées = 440 au dépôt, toutes par la CI), 38 commits, 2 212 tests JS et 179 suites SQL. Ce qui a bougé et pourquoi : **la base** — une table et une policy de moins (J11), une table `ingest` de plus (H21 lot 5), +31 fonctions dont 23 DEFINER, et **34 DEFINER fermées** à `authenticated` (B37 : l'avis 0029 tombe de 449 à 422, exactement le compte de l'audit) ; **la panne du 07/10** (19:58 → 20:19, I31, I32) a remis à zéro les compteurs d'usage, d'où 440 « index inutilisé » et un avis de performance qui monte de 257 à 466 sans qu'une ligne ait changé ; **le catalogue** — deux notices fusionnées par Xavier, une créée, seize brouillons publiés ; **le dépôt** — `AccountPage` passée de 153 à 73 Ko en huit lots (E6), Mon compte qui dit l'indisponibilité du service (E33), +111 clés, +156 tests. **Mis à jour dans cette version, après l'inventaire des sessions voisines des cinq derniers jours (03/10 → 07/10) contre le backlog** : deux livraisons du 06/10 qui n'avaient d'item nulle part entrent en clôture (**E35**, trois signalements de Xavier à l'écran ; **B37**, les 34 DEFINER) ; un item ouvert en décision (**G19**, la correspondance entre bibliothèques — cinq questions à Xavier) ; notes complétées sur H2 (le site du thésaurus coupe la connexion depuis le 05/10, deux gestes proposés sans réponse), E31 (ce qui attend un regard : E6 lots 2, 4, 5, 8, E33, E35, les écrans de H21), B36 et I32 (compteurs remis à zéro), H6 (OPDS d'AnarcosyndicalismeBOOK), E6 (lot 8, seuil de 60 Ko non atteint, à décider) et E33 (livré, à voir à l'écran). **Ce qui reste à clore, et par qui** — *par Xavier, critères tenus sur pièces* : D9, F24, J11, E33, H20 est clos, C14, C23, G16 attendent l'écran ; *à l'écran* : E31 ; *les décisions* : A1, C4, C17, G19 (cinq questions), E6 (aller au-delà des 73 Ko déplacerait les chargements) ; *sans code* : A1, A3, F3 (deux fonctions à supprimer de la plateforme), H2 (un courriel prêt depuis le 16/09).
 
-**Fraîcheur des constats au 2026-10-08.** **52 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-08.** **53 items sur 72** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I31, I32, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1650,8 +1650,9 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I18** | Le banc CI ne rejoue pas sur une image Supabase — il faut un rejeu qui le fasse | `P2` | En cours |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I30** | Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api` | `P1` | À vérifier |
-| **I31** | Une panne de la base doit déclencher une alerte qui ne dépend pas de la base | `P1` | Ouvert |
+| **I31** | Une panne de la base doit déclencher une alerte qui ne dépend pas de la base | `P1` | À vérifier |
 | **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
+| **I33** | Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues | `P2` | Ouvert |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1743,11 +1744,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### I31 — Une panne de la base doit déclencher une alerte qui ne dépend pas de la base
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
+`P1` Prioritaire · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : administration système
 
 **État.** Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Personne n'a été prévenu** : `health-probe` tourne par une tâche planifiée de la base, écrit ses incidents dans `service_health_incidents` et n'envoie qu'à partir d'eux — base tombée, sonde tombée avec elle ; aucun incident n'a été enregistré pour ces 21 minutes. C'est Xavier qui a vu la panne, en se servant de Mon compte.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Un témoin hors de la base, qui interroge l'API (une lecture REST, la santé d'Auth) toutes les cinq minutes depuis une autre machine — le poste (timer systemd utilisateur, comme les sauvegardes) en attendant le serveur maison — et qui, après deux échecs de suite, écrit directement par le transport de courriel (sans passer par la base) aux admins du réseau, puis une seconde fois au retour.
 
@@ -1783,6 +1784,28 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Xavier (accès au tableau de bord, décision de coût).
 
 *Renvois : `exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)` · `journaux Postgres et PostgREST du 07/10` · `job backend 10213611`*
+
+#### I33 — Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** **08/10/2026, 19:03 (Paris) — le tir court #BG2 a échoué** au démarrage de la machine : « Filet déclenché : classe les nouvelles tables avant de sauvegarder ». La table nouvelle était `ingest.book_import_divergences` (H21 lot 5, 07/10), **bien classée au dépôt** (`deploy/bg2-known-tables.txt`, 209 tables, le banc SQL le vérifie à chaque CI) — mais `~/anarbib-ops/bg2-known-tables.txt` est un lien vers `~/anarbib/deploy/bg2-known-tables.txt`, et le checkout `~/anarbib` était resté sur `a387b46c` (05/10) : personne ne l'avait avancé depuis I29. Le drapeau `.last-failure` s'est affiché à l'ouverture du terminal ; le contrôle de fraîcheur disait « frais » (24 h, seuil 36 h) et n'a donc rien relancé. Réparé à 20:28 : `~/anarbib` avancé sur `4dfb1dc2` (ff), tir court relancé à la main, « Filet OK », snapshot `a3325d79`, drapeau retiré. Le flux court n'a manqué qu'un jour ; le long de dimanche aurait échoué pareil.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Faire suivre `main` au checkout d'exploitation sans geste humain : le plus simple est que `anarbib-mirror-refresh.sh` (minuteur quotidien), après avoir rafraîchi le miroir nu, avance aussi `~/anarbib` en `--ff-only` quand il est propre — jamais de rebase ni de reset : un checkout sale ou divergent s'écrit au drapeau et ne bouge pas. Variante : le job `acquittement` de la CI ne peut pas le faire (il tourne dans un conteneur). À écrire dans `deploy/ops/README.md` (« ce que fait la machine après un push »), et à éprouver : une table créée au dépôt, le tir du soir passe sans qu'on ait touché au poste. Les unités systemd étant des liens vers ce checkout, un script d'exploitation changé par un push devient actif au tir suivant — c'est déjà le cas aujourd'hui quand une session avance `~/anarbib` ; le dire au README.
+
+**Pourquoi ça compte.** Le filet existe pour qu'une table nouvelle ne parte jamais sans classement ; s'il lit une liste périmée, il refuse de sauvegarder des données parfaitement classées — et une sauvegarde qui ne part pas pour une mauvaise raison s'apprend à ignorer.
+
+**Ce qui compte comme fini.**
+
+- Une table créée par une migration poussée le jour même est connue du tir du soir sans qu'une personne ait avancé `~/anarbib`.
+- Un checkout sale ou divergent n'est jamais touché : drapeau posé, le tir se fait avec la liste qu'il a.
+- Documenté dans `deploy/ops/README.md`.
+
+**Dépendances.** Aucune.
+
+*Renvois : `deploy/ops/anarbib-mirror-refresh.sh` · `deploy/ops/anarbib-bg2.sh (filet)` · `journal du 08/10/2026, anarbib-backup-court.service`*
 
 ---
 
@@ -2331,4 +2354,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9b95bc63` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 72 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9b95bc63` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

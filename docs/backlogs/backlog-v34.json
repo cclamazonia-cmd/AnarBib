@@ -6312,7 +6312,7 @@
       "id": "I31",
       "d": "I",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sysadmin"
@@ -6354,7 +6354,12 @@
         "deploy/ops/ (timers systemd du poste)",
         "panne du 07/10/2026"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**08/10 — livré, posé sur le poste, en attente de la clé** (`ead6aea9`, mode exécutable `4dfb1dc2`, CI verte). `deploy/ops/anarbib-temoin.sh` : toutes les cinq minutes (`anarbib-temoin.timer`, `*:0/5`, deux minutes après le démarrage de la session, sans rattrapage), une lecture REST (`api.public_libraries`, clé publiable) et la santé d'Auth ; après deux échecs de suite, un courriel aux destinataires configurés par l'API de Resend — sans rien lire ni écrire dans la base —, un second au retour avec la durée ; un seul courriel par panne, un envoi refusé retenté au passage suivant ; si l'API et codeberg.org se taisent ensemble, le poste est sans réseau : aveugle, rien compté, rien écrit (sortie 3) ; sans configuration, il refuse de tourner (sortie 2, unité en échec visible — un témoin qui ne peut pas prévenir ne doit pas avoir l'air de veiller). Banc `temoin-panne` (8 cas, le vrai script contre deux serveurs HTTP du test, transport fichier) ; un passage réel contre la production : REST 200, Auth 200. Posé sur le poste : liens dans `~/anarbib-ops` et `~/.config/systemd/user`, minuteur actif. **Ce qui manque, et que seul Xavier peut poser** : `~/anarbib-ops/temoin.env` (mode 600) — `RESEND_API_KEY` à l'invite masquée, `TEMOIN_DESTINATAIRES` (les admins du réseau), `TEMOIN_EXPEDITEUR` (le domaine d'envoi) ; la recette est dans `deploy/ops/README.md`, « Le témoin de panne ». *Critère 1* (panne simulée → courriel en moins de quinze minutes) : à jouer par Xavier une fois la clé posée, deux passages avec `TEMOIN_URL_REST=http://127.0.0.1:9/` puis un passage normal — c'est le vrai courriel qui compte ; *critère 2* (retour) : le même essai ; *critère 3* (il prouve qu'il tourne) : `journalctl --user -u anarbib-temoin.service`. Consigné : le témoin ne voit ni la cause (I32) ni une panne de moins de dix minutes ; le serveur maison le reprendra tel quel (même unité, même fichier).",
+          "pt": "**08/10 — entregue, instalado no posto, à espera da chave** (`ead6aea9`, mode exécutable `4dfb1dc2`). A cada cinco minutos, uma leitura REST e a saúde do Auth; após dois falhos seguidos, um e-mail pela API da Resend, sem tocar no banco; um segundo na volta. Cego se nem a API nem codeberg.org respondem; recusa sem configuração. Bancada de 8 casos; passagem real: 200/200. **Falta Xavier pôr** `~/anarbib-ops/temoin.env` (chave Resend, destinatários, remetente) e jogar a queda simulada do README — o e-mail real é o critério 1."
+        }
+      ]
     },
     {
       "id": "I32",
@@ -6563,6 +6568,53 @@
         "supabase/functions/translate-gazette-submission",
         "src/pages/FederacaoPage.jsx",
         "src/components/NotificationBell.jsx"
+      ]
+    },
+    {
+      "id": "I33",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues",
+        "pt": "O checkout de operação do posto (`~/anarbib`) deve seguir `main`: a rede de segurança do backup lê nele a lista de tabelas conhecidas"
+      },
+      "v": {
+        "fr": "**08/10/2026, 19:03 (Paris) — le tir court #BG2 a échoué** au démarrage de la machine : « Filet déclenché : classe les nouvelles tables avant de sauvegarder ». La table nouvelle était `ingest.book_import_divergences` (H21 lot 5, 07/10), **bien classée au dépôt** (`deploy/bg2-known-tables.txt`, 209 tables, le banc SQL le vérifie à chaque CI) — mais `~/anarbib-ops/bg2-known-tables.txt` est un lien vers `~/anarbib/deploy/bg2-known-tables.txt`, et le checkout `~/anarbib` était resté sur `a387b46c` (05/10) : personne ne l'avait avancé depuis I29. Le drapeau `.last-failure` s'est affiché à l'ouverture du terminal ; le contrôle de fraîcheur disait « frais » (24 h, seuil 36 h) et n'a donc rien relancé. Réparé à 20:28 : `~/anarbib` avancé sur `4dfb1dc2` (ff), tir court relancé à la main, « Filet OK », snapshot `a3325d79`, drapeau retiré. Le flux court n'a manqué qu'un jour ; le long de dimanche aurait échoué pareil.",
+        "pt": "**08/10/2026 — o tiro curto #BG2 falhou** no arranque: « rede acionada: classifique as novas tabelas ». A tabela (`ingest.book_import_divergences`, lote 5) estava classificada no repositório, mas `~/anarbib` ficara em `a387b46c` (05/10). Reparado às 20:28: checkout avançado, tiro relançado, snapshot `a3325d79`."
+      },
+      "w": {
+        "fr": "Faire suivre `main` au checkout d'exploitation sans geste humain : le plus simple est que `anarbib-mirror-refresh.sh` (minuteur quotidien), après avoir rafraîchi le miroir nu, avance aussi `~/anarbib` en `--ff-only` quand il est propre — jamais de rebase ni de reset : un checkout sale ou divergent s'écrit au drapeau et ne bouge pas. Variante : le job `acquittement` de la CI ne peut pas le faire (il tourne dans un conteneur). À écrire dans `deploy/ops/README.md` (« ce que fait la machine après un push »), et à éprouver : une table créée au dépôt, le tir du soir passe sans qu'on ait touché au poste. Les unités systemd étant des liens vers ce checkout, un script d'exploitation changé par un push devient actif au tir suivant — c'est déjà le cas aujourd'hui quand une session avance `~/anarbib` ; le dire au README.",
+        "pt": "Fazer `~/anarbib` seguir `main` sem gesto humano: `anarbib-mirror-refresh.sh` avança o checkout em `--ff-only` quando está limpo; nunca rebase nem reset. Documentar e provar: uma tabela criada no repositório, o tiro da noite passa."
+      },
+      "y": {
+        "fr": "Le filet existe pour qu'une table nouvelle ne parte jamais sans classement ; s'il lit une liste périmée, il refuse de sauvegarder des données parfaitement classées — et une sauvegarde qui ne part pas pour une mauvaise raison s'apprend à ignorer.",
+        "pt": "A rede existe para que nenhuma tabela nova parta sem classificação; se lê uma lista velha, recusa salvar dados bem classificados."
+      },
+      "f": {
+        "fr": [
+          "Une table créée par une migration poussée le jour même est connue du tir du soir sans qu'une personne ait avancé `~/anarbib`.",
+          "Un checkout sale ou divergent n'est jamais touché : drapeau posé, le tir se fait avec la liste qu'il a.",
+          "Documenté dans `deploy/ops/README.md`."
+        ],
+        "pt": [
+          "Uma tabela criada por migração do dia é conhecida do tiro da noite sem gesto humano.",
+          "Um checkout sujo ou divergente nunca é tocado.",
+          "Documentado."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "deploy/ops/anarbib-mirror-refresh.sh",
+        "deploy/ops/anarbib-bg2.sh (filet)",
+        "journal du 08/10/2026, anarbib-backup-court.service"
       ]
     }
   ]
