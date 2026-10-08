@@ -16,6 +16,7 @@ import { handleBugReportEvent } from "../domain/bug-report.ts";
 import { handleLettreEvent } from "../domain/lettre.ts";
 import { handleEntraideRequestCircle } from "../domain/entraide.ts";
 import { handleAssembleiaEvent } from "../domain/assembleia.ts";
+import { handleCorrespondanceMessage } from "../domain/correspondance.ts";
 import { executerPour } from "../transport/restriction.ts";
 
 // F12 (25/09/2026) : un REJEU arrive du cron anarbib-notify-outbox-retry avec la liste
@@ -162,5 +163,7 @@ async function dispatchInterne(event, recordId, payload) {
   // Entraide : appel routé vers un cercle → notif aux membres du cercle (payload-based,
   // record_id factice ; lit circle_id/subject/author dans le payload).
   if (event === "entraide_request_circle") return await handleEntraideRequestCircle(payload);
+  // G19 lot 3 (08/10/2026) : un message de correspondance entre bibliothèques prévient les autres bibliothèques du fil.
+  if (event === "correspondance_message_created") return await handleCorrespondanceMessage(recordId);
   return null;
 }

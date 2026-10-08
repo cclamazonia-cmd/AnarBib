@@ -1,7 +1,7 @@
 -- =====================================================================
 -- AnarBib — Tests : correspondance entre bibliothèques, lot 1 (G19)
 -- Date    : 2026-10-08
--- Ref     : 20261008195923_correspondance_entre_bibliotheques_lot_1
+-- Ref     : 20261008195923_correspondance_entre_bibliotheques_lot_1 ; lot 3 : correspondance_lot_3_prevenir
 --           REGISTRE CORR-1 à CORR-6
 --
 -- Trois bibliothèques A, B, C ; une coordination de chacune (cA, cB, cC), une
@@ -27,7 +27,9 @@
 --   T10 anon : aucune porte, aucune lecture ;
 --   T11 structure : RLS sans FORCE, une permissive par table, index des clés
 --       étrangères, CHECK des dix langues, aucun droit d'écriture pour
---       authenticated, aides internes fermées.
+--       authenticated, aides internes fermées ;
+--   T12 (lot 3) le déclencheur AFTER INSERT prévient (fonction DEFINER fermée) ;
+--   T13 (lot 3) une bibliothèque isolée du réseau ne reçoit pas de correspondance.
 --   Bilan OK : 'CORRESPONDANCE-LOT1 OK : N/N'
 -- =====================================================================
 DO $$
@@ -261,6 +263,35 @@ BEGIN
     IF v_b THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : rls %s/4, politiques %s/4, index %s/6', v_n, v_n2, v_n3)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T12 (lot 3) le déclencheur prévient : AFTER INSERT sur library_messages, fonction DEFINER fermée à tous';
+  BEGIN
+    v_b := EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trg_library_messages_notifier' AND tgrelid = 'public.library_messages'::regclass AND NOT tgisinternal)
+       AND NOT has_function_privilege('authenticated', 'public.tg_library_message_notifier()', 'EXECUTE')
+       AND NOT has_function_privilege('anon', 'public.tg_library_message_notifier()', 'EXECUTE')
+       AND NOT has_function_privilege('service_role', 'public.tg_library_message_notifier()', 'EXECUTE')
+       AND EXISTS (SELECT 1 FROM pg_proc p WHERE p.oid = 'public.tg_library_message_notifier()'::regprocedure AND p.prosecdef AND p.proconfig::text LIKE '%search_path%')
+       AND (SELECT prosrc FROM pg_proc WHERE oid = 'public.tg_library_message_notifier()'::regprocedure) ~ 'correspondance_message_created';
+    IF v_b THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : déclencheur ou droits'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T13 (lot 3) une bibliothèque isolée du réseau ne reçoit pas de correspondance';
+  BEGIN
+    -- une isolée ne publie pas au réseau (chk_catalog_published_requires_network)
+    UPDATE public.libraries SET network_mode = 'isolated', catalog_mode = 'local_only' WHERE id = c_c;
+    SET ROLE authenticated;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', c_cb, 'role', 'authenticated')::text, true);
+    BEGIN
+      PERFORM api.fn_correspondance_ouvrir(c_b, c_c, 'Sujet', 'Corps', 'pt-BR');
+      v_txt := 'passé';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; v_txt := SQLSTATE || ' ' || coalesce(v_hint, ''); END;
+    RESET ROLE;
+    IF v_txt = '22023 error.correspondance.library_isolated' THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'CORRESPONDANCE-LOT1 ECHEC : %/% — %', v_failed, v_passed + v_failed, array_to_string(v_failures, ' | ');

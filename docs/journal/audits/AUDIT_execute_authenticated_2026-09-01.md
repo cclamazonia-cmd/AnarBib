@@ -2013,3 +2013,10 @@ Cinq portes neuves pour `authenticated`, aucune pour `anon` ; trois aides fermé
 - Fermées (`service_role` seul) : `fn_correspondance_coordonne`, `fn_correspondance_langue`, `fn_correspondance_poser_message`.
 **Verdict** : les cinq portes sont voulues ; les tables n'accordent à `authenticated` que SELECT sous politique. Compte 0029
 attendu : 422 + 5 = **427**.
+
+### Complément du 08/10 — G19 lot 3, la correspondance prévient (migration `correspondance_lot_3_prevenir`)
+
+Aucune porte nouvelle. `public.tg_library_message_notifier()` (déclencheur AFTER INSERT de `library_messages`) est DEFINER,
+`search_path` figé, fermée à `anon`, `authenticated` et `service_role` — un déclencheur n'a besoin d'aucun grant ; elle
+n'appelle que `fn_dispatch_notify_event`. `api.fn_correspondance_ouvrir` est réécrite (une garde de plus : bibliothèque
+`isolated` refusée), droits inchangés. Compte 0029 attendu inchangé : **427**.

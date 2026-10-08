@@ -30,6 +30,10 @@ function resolveRoute(n) {
       return '/rede#tab=reviews';
     case 'batch_review_result':
       return '/catalogacao#tab=batchesPanel';
+    // Correspondance entre bibliothèques (G19 lot 3, 08/10/2026) : la coordination
+    // prévenue va à l'onglet de sa page Bibliothèque ; le fil s'y ouvre.
+    case 'correspondance':
+      return '/biblioteca#tab=correspondance';
     default:
       return null;
   }
