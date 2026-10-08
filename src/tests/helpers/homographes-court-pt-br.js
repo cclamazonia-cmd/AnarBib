@@ -786,6 +786,7 @@ export const HOMOGRAPHE_COURT = {
     "Exemplar",
     "Exemplar material",
     "Exemplar:",
+    "exemplar {tombo}",
     "Expirada",
     "Exportar CSV",
     "Exportar PDF",

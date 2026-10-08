@@ -561,7 +561,9 @@ BEGIN
        AND (SELECT (p.proargnames)[34] = 'comparison_counts' AND (p.proargnames)[35] = 'update_applicable'
                    AND (p.proargnames)[36] = 'update_draft_id' AND (p.proargnames)[37] = 'update_draft_status'
                    AND (p.proargnames)[38] = 'exemplaires'
-                   AND array_length(p.proargnames, 1) = 38
+                   -- H21 lot 6b (08/10/2026) : une colonne de plus, à la fin (exemplaires_maj)
+                   AND (p.proargnames)[39] = 'exemplaires_maj'
+                   AND array_length(p.proargnames, 1) = 39
               FROM pg_proc p WHERE p.oid = 'public.fn_import_list_run_rows(bigint)'::regprocedure)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_res::text, 'NULL')); END IF;

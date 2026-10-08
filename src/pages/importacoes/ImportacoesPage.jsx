@@ -18,6 +18,7 @@ import RunEncodingPanel from './RunEncodingPanel.jsx';
 import RunCoveragePanel from './RunCoveragePanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
+import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -70,10 +71,14 @@ const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh', 'own_catalog']
 // rapprochée, ou marquée rejetée par « Rapprocher » parce que tous ses
 // exemplaires étaient déjà là (H19) — la base rend update_applicable = 0 pour
 // une ligne rejetée par choix ou écartée.
+// H21 lot 6b (IMP-33 c) : de même une ligne dont un exemplaire « déjà là » a une
+// cote ou une note à mettre à jour (exemplaires_maj.applicables, compté par la
+// base : 0 pour une ligne rejetée par choix).
 function estSelectionnable(r) {
   if (!r || r.created_book_draft_id) return false;
   if (r.match_status === 'known_record' && r.proposed_book_id && r.proposed_book_held !== false
       && Number(r.update_applicable || 0) > 0 && !r.update_draft_id) return true;
+  if (r.match_status === 'known_record' && r.proposed_book_id && Number(r.exemplaires_maj?.applicables || 0) > 0) return true;
   if (r.created_exemplar_draft_id) return false;
   const ed = r.editorial_decision;
   return ed == null || ed === 'pending'
@@ -103,11 +108,13 @@ function resumeComparaison(r) {
 // manquent : jamais calculée, effacée par un nouveau rapprochement, ou faite
 // contre une autre notice (fusion : la liste rend alors NULL). Une ligne d'un
 // serveur d'avant le lot 3 n'a pas la clé comparison_counts : rien à demander.
+// H21 lot 6b : de même la comparaison des exemplaires (exemplaires_maj NULL).
 const PAGE_COMPARAISON = 200;
 function lignesAComparer(r) {
   return (Array.isArray(r) ? r : [])
     .filter(x => x && x.match_status === 'known_record' && x.proposed_book_id
-      && Object.prototype.hasOwnProperty.call(x, 'comparison_counts') && x.comparison_counts === null)
+      && ((Object.prototype.hasOwnProperty.call(x, 'comparison_counts') && x.comparison_counts === null)
+          || (Object.prototype.hasOwnProperty.call(x, 'exemplaires_maj') && x.exemplaires_maj === null)))
     .map(x => x.id);
 }
 
@@ -118,9 +125,14 @@ function lignesAComparer(r) {
 // mise à jour. La base juge seule ce que l'écran ne voit pas (notice partagée
 // avec une bibliothèque hors de ta vue, comparaison recalculée) et dit les
 // lignes ignorées, par raison.
+// H21 lot 6b (IMP-33 c) : le même geste prépare aussi les exemplaires « déjà
+// là » dont la cote ou la note n'a changé que dans le fichier — indépendamment
+// de la notice (partagée, ou sans rien à appliquer) : la ligne est préparable
+// si sa notice l'est OU si un de ses exemplaires l'est.
 function estPreparable(r) {
-  return !!r && r.match_status === 'known_record' && !!r.proposed_book_id
-    && r.proposed_book_held !== false && Number(r.update_applicable || 0) > 0 && !r.update_draft_id;
+  if (!r || r.match_status !== 'known_record' || !r.proposed_book_id) return false;
+  const notice = r.proposed_book_held !== false && Number(r.update_applicable || 0) > 0 && !r.update_draft_id;
+  return notice || Number(r.exemplaires_maj?.applicables || 0) > 0;
 }
 const PAGE_PREPARATION = 200;
 // L'ordre du message : ce qui demande une action d'abord.
@@ -141,14 +153,21 @@ function valeurDuChamp(v) {
   const s = String(v);
   return s.length > 160 ? `${s.slice(0, 157)}…` : s;
 }
-function messagePreparation(t, prepares, lot, ignorees) {
-  const parties = [prepares > 0
-    ? t({ id: 'importacoes.fila.prepared' }, { n: prepares, batch: lot ?? '—' })
-    : t({ id: 'importacoes.fila.preparedNone' })];
+// H21 lot 6b : les exemplaires (préparés, ignorés par raison) à la suite des
+// notices ; « Aucune mise à jour préparée » seulement si rien du tout ne l'est.
+function messagePreparation(t, prepares, lot, ignorees, ex = { prepares: 0, ignorees: {} }) {
+  const exPrepares = Number(ex?.prepares || 0);
+  const parties = [];
+  if (prepares > 0) parties.push(t({ id: 'importacoes.fila.prepared' }, { n: prepares, batch: lot ?? '—' }));
+  else if (exPrepares === 0) parties.push(t({ id: 'importacoes.fila.preparedNone' }));
+  const exemplaires = partiesExemplaires(t, exPrepares, lot, ex?.ignorees || {});
+  if (exemplaires.parties.length && exPrepares > 0) parties.push(exemplaires.parties.shift());
   const liste = RAISONS_IGNOREES.filter(k => Number(ignorees[k] || 0) > 0)
     .map(k => t({ id: `importacoes.fila.prepareSkip.${k}` }, { n: Number(ignorees[k]) }));
   if (liste.length) parties.push(t({ id: 'importacoes.fila.prepareSkipped' }, { list: liste.join(', ') }));
-  return { text: parties.join(' '), kind: prepares > 0 ? (liste.length ? 'info' : 'ok') : 'error' };
+  parties.push(...exemplaires.parties);
+  const total = prepares + exPrepares;
+  return { text: parties.join(' '), kind: total > 0 ? (liste.length || exemplaires.ignorees ? 'info' : 'ok') : 'error' };
 }
 function DetailComparaison({ runId, rowId }) {
   const { formatMessage: t } = useIntl();
@@ -168,6 +187,12 @@ function DetailComparaison({ runId, rowId }) {
   const ecarts = champs.filter(c => c.verdict !== 'inchange');
   const masque = !!etat.data.a_masque;
   const libelle = (champ) => (LIBELLE_CHAMP[champ] ? t({ id: LIBELLE_CHAMP[champ] }) : champ);
+  // H21 lot 6b (IMP-33 c) : les exemplaires « déjà là », cote et note à trois
+  // états (base / AnarBib / fichier / verdict) ; valeurs AnarBib masquées d'un
+  // exemplaire hors de ta vue.
+  const exemplaires = Array.isArray(etat.data.exemplaires?.items)
+    ? etat.data.exemplaires.items.filter(x => x && Array.isArray(x.champs)) : [];
+  const libelleExemplaire = (champ) => (CHAMPS_EXEMPLAIRE.includes(champ) ? t({ id: `importacoes.items.field.${champ}` }) : champ);
   return (
     <div data-testid="known-detail" className="imp-known-detail" style={{ marginTop: 4, fontSize: '.72rem' }}>
       {masque && <div className="imp-note" data-testid="known-detail-masked">{t({ id: 'importacoes.fila.detail.masked' })}</div>}
@@ -194,6 +219,51 @@ function DetailComparaison({ runId, rowId }) {
         )}
       {champs.length - ecarts.length > 0 && (
         <div className="imp-note">{t({ id: 'importacoes.fila.detail.unchanged' }, { n: champs.length - ecarts.length })}</div>
+      )}
+      {exemplaires.length > 0 && (
+        <div data-testid="known-detail-items" style={{ marginTop: 4 }}>
+          <div className="imp-note"><strong>{t({ id: 'importacoes.fila.detail.items' })}</strong></div>
+          <ul style={{ margin: '2px 0 0 16px', padding: 0, lineHeight: 1.45 }}>
+            {exemplaires.map(x => {
+              const bougent = x.champs.filter(c => c && c.verdict !== 'inchange');
+              return (
+                <li key={x.n} data-item-n={x.n} data-exemplar={x.exemplar_id ?? ''}>
+                  <span style={{ fontFamily: 'monospace', overflowWrap: 'anywhere' }}>{x.code || '—'}</span>
+                  {x.tombo ? <> · {t({ id: 'importacoes.items.exemplar' }, { tombo: x.tombo })}</> : null}
+                  {x.a_masque && (
+                    <div className="imp-note" data-testid="known-detail-item-masked">{t({ id: 'importacoes.fila.detail.itemsMasked' })}</div>
+                  )}
+                  {bougent.length === 0
+                    ? <div className="imp-note">{t({ id: 'importacoes.fila.detail.itemUnchanged' })}</div>
+                    : (
+                      <ul style={{ margin: '2px 0 0 16px', padding: 0 }}>
+                        {bougent.map(c => (
+                          <li key={c.champ} data-champ={c.champ} data-verdict={c.verdict}>
+                            {/* hors de vue (revue sceptique du 08/10) : ni verdict fin, ni base, ni AnarBib — le fichier seul */}
+                            <strong>{libelleExemplaire(c.champ)}</strong>{' — '}{c.verdict === 'masque'
+                              ? t({ id: 'importacoes.fila.detail.itemFieldMasked' })
+                              : t({ id: `review.report.updates.verdict.${c.verdict}` })}
+                            {/* comme IMP-31 c : un champ que le fichier vide est montré, jamais vidé */}
+                            {c.verdict === 'source_seule' && c.n == null
+                              ? <span data-testid="known-detail-item-erased"> · {t({ id: 'review.report.prepared.erased' })}</span> : null}
+                            <div style={{ color: 'var(--brand-muted, #94a3b8)' }}>
+                              {c.verdict === 'masque'
+                                ? t({ id: 'importacoes.fila.detail.itemFieldFile' }, { n: valeurDuChamp(c.n) })
+                                : t({ id: 'review.report.updates.values' }, {
+                                  b: valeurDuChamp(c.b),
+                                  a: x.a_masque ? t({ id: 'review.report.updates.masked' }) : valeurDuChamp(c.a),
+                                  n: valeurDuChamp(c.n),
+                                })}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );
@@ -395,14 +465,22 @@ export default function ImportacoesPage() {
     if (!ids.length) return;
     ids.forEach(id => comparaisonsDemandees.current.add(`${selectedRunId}:${id}`));
     const runId = selectedRunId;
+    // H21 lot 6b : pages de 200 lignes ET de 5 000 exemplaires du fichier au plus
+    const parId = new Map(runRows.map(r => [r.id, r]));
+    const pages = pagesParExemplaires(ids.map(id => parId.get(id) || { id }), PAGE_COMPARAISON);
     (async () => {
-      for (let i = 0; i < ids.length; i += PAGE_COMPARAISON) {
-        const page = ids.slice(i, i + PAGE_COMPARAISON);
+      for (const page of pages) {
         try {
           const { data, error } = await supabase.rpc('fn_import_recomparer', { p_run_id: Number(runId), p_row_ids: page });
           if (error || !data || !Array.isArray(data.rows)) return;
-          const comptes = new Map(data.rows.map(x => [x.id, x.counts]));
-          setRunRows(prev => prev.map(r => (r.run_id === runId && comptes.has(r.id) ? { ...r, comparison_counts: comptes.get(r.id) } : r)));
+          const comptes = new Map(data.rows.map(x => [x.id, x]));
+          // H21 lot 6b : la comparaison des exemplaires (exemplaires_maj) avec
+          // les comptes de la notice, quand le serveur la rend.
+          setRunRows(prev => prev.map(r => (r.run_id === runId && comptes.has(r.id)
+            ? { ...r, comparison_counts: comptes.get(r.id).counts,
+                ...(Object.prototype.hasOwnProperty.call(comptes.get(r.id), 'exemplaires_maj')
+                  ? { exemplaires_maj: comptes.get(r.id).exemplaires_maj } : {}) }
+            : r)));
         } catch { return; }
       }
     })();
@@ -889,24 +967,30 @@ export default function ImportacoesPage() {
     let prepares = 0;
     let lot = null;
     const ignorees = {};
+    // H21 lot 6b : la partie exemplaires (préparés, ignorés par raison)
+    const ex = { prepares: 0, ignorees: {} };
     try {
-      for (let i = 0; i < ids.length; i += PAGE_PREPARATION) {
+      // H21 lot 6b : pages de 200 lignes ET de 5 000 exemplaires du fichier au plus
+      const parId = new Map(filteredRunRows.map(r => [r.id, r]));
+      for (const page of pagesParExemplaires(ids.map(id => parId.get(id) || { id }), PAGE_PREPARATION)) {
         const { data, error } = await supabase.rpc('fn_import_preparer_mises_a_jour', {
           p_run_id: Number(selectedRunId),
-          p_row_ids: ids.slice(i, i + PAGE_PREPARATION),
+          p_row_ids: page,
         });
         if (error) throw error;
         prepares += Number(data?.prepared || 0);
         if (data?.batch_id) lot = data.batch_id;
         Object.entries(data?.skipped || {}).forEach(([k, n]) => { ignorees[k] = (ignorees[k] || 0) + Number(n || 0); });
+        ex.prepares += Number(data?.exemplaires?.prepared || 0);
+        Object.entries(data?.exemplaires?.skipped || {}).forEach(([k, n]) => { ex.ignorees[k] = (ex.ignorees[k] || 0) + Number(n || 0); });
       }
-      setMsg(messagePreparation(t, prepares, lot, ignorees));
+      setMsg(messagePreparation(t, prepares, lot, ignorees, ex));
       setSelectedRows(new Set());
       await loadRuns();
       await loadRunRows(selectedRunId);
     } catch (err) {
       // une page refusée après d'autres : ce qui a été préparé est dit aussi
-      setMsg({ text: `${prepares > 0 ? `${messagePreparation(t, prepares, lot, ignorees).text} ` : ''}${localizeError(err, t)}`, kind: 'error' });
+      setMsg({ text: `${prepares + ex.prepares > 0 ? `${messagePreparation(t, prepares, lot, ignorees, ex).text} ` : ''}${localizeError(err, t)}`, kind: 'error' });
       await loadRunRows(selectedRunId);
     } finally {
       setPromotingSel(false);
@@ -2170,6 +2254,12 @@ export default function ImportacoesPage() {
                                       ].filter(Boolean).join(' · ')}
                                   </div>
                                 )}
+                                {isKnown && exemplairesPreparables(row) > 0 && (
+                                  <div className="imp-note imp-known-items-update" data-testid="known-items-update"
+                                    style={{ marginTop: 2, fontSize: '.72rem' }}>
+                                    {t({ id: 'importacoes.fila.comparison.items' }, { n: exemplairesPreparables(row) })}
+                                  </div>
+                                )}
                                 {comparaisonAbsente && (
                                   <div className="imp-note imp-known-compare-absente" data-testid="known-compare-absente"
                                     style={{ marginTop: 2, fontSize: '.72rem', color: 'var(--brand-muted, #94a3b8)' }}>
@@ -2204,7 +2294,7 @@ export default function ImportacoesPage() {
                                   </div>
                                 )}
                                 {/* H21 lot 6a : les exemplaires du fichier et leur verdict */}
-                                <ExemplairesDuFichier items={row.exemplaires} titreLigne={row.title} />
+                                <ExemplairesDuFichier items={row.exemplaires} titreLigne={row.title} maj={row.exemplaires_maj} />
                               </td>
                               <td className="imp-hide-sm">
                                 <Pill variant={ed === 'accept_new' || ed === 'accept_duplicate' ? 'ok' : ed === 'reject' ? 'danger' : 'muted'}>

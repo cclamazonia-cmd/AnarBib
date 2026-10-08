@@ -118,7 +118,8 @@ describe('Le message de « Rapprocher »', () => {
 
   it('Importations : la liste sur chaque ligne, le message composé avec les verdicts', () => {
     expect(IMPORTACOES).toContain("import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';");
-    expect(IMPORTACOES).toContain('<ExemplairesDuFichier items={row.exemplaires} titreLigne={row.title} />');
+    // (H21 lot 6b, 08/10/2026 : la comparaison des exemplaires passe en plus, prop maj)
+    expect(IMPORTACOES).toMatch(/<ExemplairesDuFichier items=\{row\.exemplaires\} titreLigne=\{row\.title\}( maj=\{row\.exemplaires_maj\})? \/>/);
     expect(IMPORTACOES).toMatch(/resumeVerdicts\(t, data\?\.verdicts, data\?\.rows_signalled\)/);
     // rien de créé (tout signalé) : les comptes, jamais « Brouillon d'exemplaire créé »
     expect(IMPORTACOES).toContain('skipped || held || Number(data?.created_items || 0) === 0');

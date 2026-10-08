@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { coverageItemLabel } from '../../lib/importCoverage.js';
 import { libelleVerdict, VERDICTS as VERDICTS_EXEMPLAIRE } from '../../lib/importItemVerdicts.js';
+import { CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 
 // BatchReviewReport — rendu du rapport de revision d'un lot (05/09/2026).
 // H16 (26/09/2026) : section « couverture » — pour chaque import dont le lot
@@ -72,6 +73,14 @@ export default function BatchReviewReport({ report }) {
   const ecartes = report.items_set_aside && typeof report.items_set_aside === 'object' ? report.items_set_aside : null;
   const ecartesCounts = ecartes?.counts && typeof ecartes.counts === 'object' ? ecartes.counts : {};
   const ecartesExamples = Array.isArray(ecartes?.examples) ? ecartes.examples : [];
+  // H21 lot 6b (08/10/2026, IMP-33 c) : les brouillons de mise à jour
+  // d'exemplaire (cote, note) préparés par un réimport (clé
+  // `prepared_item_updates`, absente sans tel brouillon et des instantanés
+  // d'avant) : champs appliqués et montrés non appliqués ; 40 au plus.
+  const preparedItems = report.prepared_item_updates && typeof report.prepared_item_updates === 'object'
+    ? report.prepared_item_updates : null;
+  const preparedItemExamples = Array.isArray(preparedItems?.examples) ? preparedItems.examples : [];
+  const libelleChampExemplaire = (c) => (CHAMPS_EXEMPLAIRE.includes(c) ? t({ id: `importacoes.items.field.${c}` }) : c);
   // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
   // (report.batch.library_id / library_name ; nulle = administration du
   // réseau). Les instantanés figés avant B30 n'en ont pas : on n'affiche rien.
@@ -288,6 +297,43 @@ export default function BatchReviewReport({ report }) {
               </li>
             ))}
             {more(Number(prepared.count || 0), Math.min(preparedExamples.length, 40))}
+          </ul>
+        </section>
+      )}
+
+      {preparedItems && Number(preparedItems.count || 0) > 0 && (
+        <section data-testid="review-prepared-items">
+          <h5 style={secTitle}>{t({ id: 'review.report.preparedItems' })}</h5>
+          <div>{t({ id: 'review.report.preparedItems.summary' }, {
+            count: Number(preparedItems.count || 0),
+            applied: Number(preparedItems.applied_fields || 0),
+            shown: Number(preparedItems.shown_fields || 0),
+          })}</div>
+          <ul style={list}>
+            {preparedItemExamples.slice(0, 40).map((e) => (
+              <li key={e.item_draft_id} data-prepared-item-draft={e.item_draft_id}>
+                {t({ id: 'importacoes.items.exemplar' }, { tombo: e.tombo || '—' })}
+                {e.code ? <> · <code>{e.code}</code></> : null}
+                {e.titulo ? <> — {e.titulo}</> : null}
+                <ul style={list}>
+                  {(Array.isArray(e.applied) ? e.applied : []).map((c, i) => (
+                    <li key={`a-${c.champ}-${i}`} data-prepared-field="applied">
+                      {libelleChampExemplaire(c.champ)}{' — '}<strong>{t({ id: 'review.report.prepared.applied' })}</strong>
+                      <div style={muted}>{t({ id: 'review.report.updates.values' }, { b: valeurComparee(c.b), a: valeurComparee(c.a), n: valeurComparee(c.n) })}</div>
+                    </li>
+                  ))}
+                  {(Array.isArray(e.shown) ? e.shown : []).map((c, i) => (
+                    <li key={`s-${c.champ}-${i}`} data-prepared-field="shown" data-update-verdict={c.verdict}>
+                      {libelleChampExemplaire(c.champ)}{' — '}<strong>{t({ id: 'review.report.prepared.shown' })}</strong>
+                      {c.verdict ? <> · {t({ id: `review.report.updates.verdict.${c.verdict}` })}</> : null}
+                      {c.raison === 'efface_par_la_source' ? <> · {t({ id: 'review.report.prepared.erased' })}</> : null}
+                      <div style={muted}>{t({ id: 'review.report.updates.values' }, { b: valeurComparee(c.b), a: valeurComparee(c.a), n: valeurComparee(c.n) })}</div>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+            {more(Number(preparedItems.count || 0), Math.min(preparedItemExamples.length, 40))}
           </ul>
         </section>
       )}

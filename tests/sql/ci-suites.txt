@@ -687,6 +687,17 @@ tests/sql/h21_lot5_divergences_tests.sql
 # n'apporte rien ; corbeille et journal ne ramènent pas un exemplaire au code pris ;
 # trace refusée à l'API ; rapport de révision ; 300 exemplaires < 8 s.
 tests/sql/h21_lot6a_exemplaires_tests.sql
+# 08/10/2026 — H21 lot 6b (REGISTRE IMP-33 c) : la cote et la note d'un exemplaire, comme
+# les notices — une base par exemplaire importé (ingest.exemplar_import_baselines, posée à
+# la première publication) ; le recalcul compare cote et note à trois états (six verdicts,
+# aucune écriture) ; « Préparer la mise à jour » prépare aussi un brouillon d'exemplaire
+# (copie complète patchée des seuls champs changés dans le fichier) par exemplaire « déjà
+# là » de la bibliothèque qui importe, indépendamment de la notice (partagée comprise),
+# dans le lot ouvert du run ; garde de publication avant la branche et à la republication
+# (exemplaire supprimé — jamais une création —, changé, déplacé, bibliothèque, base,
+# ligne, effet de bord), par le lot ; tout le reste intact (fonds, circulation) ; base
+# avancée selon IMP-31 d ; trace refusée à l'API ; 200 lignes < 8 s.
+tests/sql/h21_lot6b_exemplaires_maj_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.
