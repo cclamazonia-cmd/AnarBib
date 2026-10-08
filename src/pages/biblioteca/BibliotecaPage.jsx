@@ -38,6 +38,7 @@ import TasksSection from './TasksSection';
 import MembershipSection from './MembershipSection';
 import DepositSection from './DepositSection';
 import CorrespondanceSection from './CorrespondanceSection'; /* G19 lot 2 : l'onglet Correspondance (08/10/2026) */
+import ReadLanguagesField from './ReadLanguagesField'; /* G19 lot 4 : les langues que l'équipe lit */
 import { fs, ls, bx } from './styles';
 import FinanceReportsSection from '@/components/biblioteca/FinanceReportsSection';
 import '@/components/team/TeamPanel.css';
@@ -268,7 +269,7 @@ export default function BibliotecaPage() {
         .order('display_order', { ascending: true }).order('created_at', { ascending: true });
       setDepositRules(drData || []);
       // allLibraries : selects PEB + onglets documents/exchanges + rapport.
-      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active').order('name');
+      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active, default_locale, read_languages').order('name');
       setAllLibraries(allLibs || []);
       // Stats KPI : bandeau toujours visible au-dessus des onglets -> noyau.
       const [au, circStats] = await Promise.all([
@@ -436,7 +437,7 @@ export default function BibliotecaPage() {
       // PATCH 09/05/2026 paquet 6.3 : default_locale ajouté à l'update.
       // C'est l'identité linguistique de la biblio, configurable depuis le
       // sélecteur ajouté dans la grille identité (champ après country).
-      const { error: libErr } = await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
+      const { error: libErr } = await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', read_languages:Array.isArray(lib.read_languages)?lib.read_languages:[], reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
       // 29/09/2026 : un refus de la base ne disait rien (« enregistré » quand même) ;
       // et la carte-lecteur, que « Mon compte » lit dans le contexte de session,
       // ne s'y voyait qu'après un rechargement.
@@ -784,6 +785,7 @@ export default function BibliotecaPage() {
               <label style={ls}>{t({ id: 'biblioteca.identity.defaultLocale' })}</label>
               <LocaleSelector value={lib.default_locale} onChange={loc=>setL('default_locale',loc)} style={fs} />
             </div>
+            <ReadLanguagesField value={lib.read_languages} onChange={v=>setL('read_languages',v)} />
           </div>
           {commons && <div className="cat-book-grid" style={{ marginBottom:16 }}>
             <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.comms.displayName' })}</label><input type="text" value={commons.display_name||''} onChange={e=>setC('display_name',e.target.value)} style={fs} /></div>

@@ -143,6 +143,23 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
 
   const visibles = useMemo(() => fils.filter((f) => (filtre === 'archives' ? !!f.archived_at : !f.archived_at)), [fils, filtre]);
   // Les autres bibliothèques actives qui participent au réseau (une bibliothèque « isolée » ne correspond pas).
+  // Lot 4 : les langues que lit chaque équipe (déclarées à l'Identité) ; à défaut, la locale de la bibliothèque.
+  const languesDeclarees = useCallback((id) => {
+    const l = allLibraries.find((x) => x.id === id);
+    return Array.isArray(l?.read_languages) ? l.read_languages.filter((c) => CODES.includes(c)) : [];
+  }, [allLibraries]);
+  const languesLues = useCallback((id) => {
+    const lues = languesDeclarees(id);
+    if (lues.length) return lues;
+    const l = allLibraries.find((x) => x.id === id);
+    return [l?.default_locale || localeDe[id]].filter((c) => CODES.includes(c));
+  }, [allLibraries, localeDe, languesDeclarees]);
+  // La première langue commune aux deux équipes (la mienne en premier) ; null sinon.
+  const langueCommune = useCallback((dest) => {
+    const miennes = [...new Set([...languesLues(libraryId), langueParDefaut])];
+    const siennes = languesLues(dest);
+    return miennes.find((c) => siennes.includes(c)) || null;
+  }, [languesLues, libraryId, langueParDefaut]);
   const destinataires = useMemo(() => allLibraries.filter((l) => l.id !== libraryId && l.is_active !== false && l.network_mode !== 'isolated'), [allLibraries, libraryId]);
   const fil = ouvert ? fils.find((f) => f.id === ouvert) : null;
   const date = (d) => (d ? new Date(d).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : '');
@@ -206,12 +223,22 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
         <form onSubmit={envoyerNouveau} style={bx}>
           <div className="cat-field">
             <label style={ls} htmlFor="corr-dest">{t({ id: 'biblioteca.correspondance.to' })}</label>
-            <select id="corr-dest" value={brouillon.dest} onChange={(e) => setBrouillon({ ...brouillon, dest: e.target.value })} required style={fs}>
+            <select id="corr-dest" value={brouillon.dest} onChange={(e) => { const dest = e.target.value; const commune = dest ? langueCommune(dest) : null; setBrouillon({ ...brouillon, dest, lang: commune || brouillon.lang }); }} required style={fs}>
               <option value="">—</option>
               {destinataires.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
-            {brouillon.dest && localeDe[brouillon.dest] && (
-              <div style={{ fontSize: '.85rem', opacity: .8, marginTop: 4 }}>{t({ id: 'biblioteca.correspondance.libraryLocale' }, { lang: nomLangue(localeDe[brouillon.dest], locale) })}</div>
+            {brouillon.dest && (
+              <div style={{ fontSize: '.85rem', opacity: .8, marginTop: 4 }}>
+                {languesDeclarees(brouillon.dest).length > 0 && (
+                  <div>{t({ id: 'biblioteca.correspondance.readsLanguages' }, { langs: languesDeclarees(brouillon.dest).map((c) => nomLangue(c, locale)).join(', ') })}</div>
+                )}
+                {languesDeclarees(brouillon.dest).length === 0 && localeDe[brouillon.dest] && (
+                  <div>{t({ id: 'biblioteca.correspondance.libraryLocale' }, { lang: nomLangue(localeDe[brouillon.dest], locale) })}</div>
+                )}
+                <div>{langueCommune(brouillon.dest)
+                  ? t({ id: 'biblioteca.correspondance.commonLanguage' }, { lang: nomLangue(langueCommune(brouillon.dest), locale) })
+                  : t({ id: 'biblioteca.correspondance.noCommonLanguage' })}</div>
+              </div>
             )}
           </div>
           <div className="cat-field">

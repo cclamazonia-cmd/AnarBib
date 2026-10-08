@@ -29,7 +29,8 @@
 --       étrangères, CHECK des dix langues, aucun droit d'écriture pour
 --       authenticated, aides internes fermées ;
 --   T12 (lot 3) le déclencheur AFTER INSERT prévient (fonction DEFINER fermée) ;
---   T13 (lot 3) une bibliothèque isolée du réseau ne reçoit pas de correspondance.
+--   T13 (lot 3) une bibliothèque isolée du réseau ne reçoit pas de correspondance ;
+--   T14 (lot 4) read_languages : CHECK des dix locales, dédoublonné par déclencheur, écrit sous politique.
 --   Bilan OK : 'CORRESPONDANCE-LOT1 OK : N/N'
 -- =====================================================================
 DO $$
@@ -291,6 +292,28 @@ BEGIN
     RESET ROLE;
     IF v_txt = '22023 error.correspondance.library_isolated' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T14 (lot 4) read_languages : dix locales (CHECK), dédoublonné et ordonné (déclencheur), écrit par la coordination sous politique, pas par anon';
+  BEGIN
+    SET ROLE authenticated;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', c_ca, 'role', 'authenticated')::text, true);
+    -- doublon et désordre : normalisés par le déclencheur (ordre des dix locales : pt-BR, fr, es, …)
+    UPDATE public.libraries SET read_languages = ARRAY['es', 'fr', 'fr'] WHERE id = c_a;
+    SELECT read_languages::text INTO v_txt FROM public.libraries WHERE id = c_a;
+    BEGIN UPDATE public.libraries SET read_languages = ARRAY['fr', 'xx'] WHERE id = c_a; v_txt := v_txt || ' invalide:passé';
+    EXCEPTION WHEN check_violation THEN v_txt := v_txt || ' invalide:refusé'; END;
+    -- la coordination de A ne touche pas B (politique libraries_staff_update) : aucune ligne
+    UPDATE public.libraries SET read_languages = ARRAY['el'] WHERE id = c_b;
+    GET DIAGNOSTICS v_n = ROW_COUNT;
+    RESET ROLE;
+    v_b := v_txt = '{fr,es} invalide:refusé' AND v_n = 0
+       AND NOT has_function_privilege('authenticated', 'public.tg_libraries_read_languages_normaliser()', 'EXECUTE')
+       AND NOT has_column_privilege('anon', 'public.libraries', 'read_languages', 'UPDATE')
+       AND has_column_privilege('authenticated', 'public.libraries', 'read_languages', 'UPDATE');
+    IF v_b THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : %s, lignes B %s', v_txt, v_n)); END IF;
   EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN

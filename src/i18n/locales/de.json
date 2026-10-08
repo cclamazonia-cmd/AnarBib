@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Faden wieder geöffnet.",
   "biblioteca.correspondance.unknownLibrary": "Unbekannte Bibliothek",
   "biblioteca.correspondance.libraryLocale": "Sprache dieser Bibliothek: {lang}",
-  "error.correspondance.library_isolated": "Diese Bibliothek nimmt nicht am Netzwerk teil: sie empfängt keine Korrespondenz."
+  "error.correspondance.library_isolated": "Diese Bibliothek nimmt nicht am Netzwerk teil: sie empfängt keine Korrespondenz.",
+  "biblioteca.identity.readLanguages": "Die Sprachen, die unser Team liest",
+  "biblioteca.identity.readLanguagesHelp": "Wird den Bibliotheken gezeigt, die dieser schreiben, damit sie eine Sprache wählen, die das Team liest: Es gibt keine automatische Übersetzung.",
+  "biblioteca.correspondance.readsLanguages": "Diese Bibliothek liest: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Vorgeschlagene gemeinsame Sprache: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "Keine gemeinsame Sprache angegeben: schreib in deiner, die Nachricht wird so gelesen, wie sie ist — es gibt keine automatische Übersetzung."
 }

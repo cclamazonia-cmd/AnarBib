@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Hilo reabierto.",
   "biblioteca.correspondance.unknownLibrary": "Biblioteca desconocida",
   "biblioteca.correspondance.libraryLocale": "Lengua de esta biblioteca: {lang}",
-  "error.correspondance.library_isolated": "Esta biblioteca no participa en la red: no recibe correspondencia."
+  "error.correspondance.library_isolated": "Esta biblioteca no participa en la red: no recibe correspondencia.",
+  "biblioteca.identity.readLanguages": "Las lenguas que lee nuestro equipo",
+  "biblioteca.identity.readLanguagesHelp": "Se muestra a las bibliotecas que escriben a esta, para que elijan una lengua que lee el equipo: no hay traducción automática.",
+  "biblioteca.correspondance.readsLanguages": "Esta biblioteca lee: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Lengua común propuesta: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "Ninguna lengua común declarada: escribe en la tuya, el mensaje se leerá tal cual — no hay traducción automática."
 }

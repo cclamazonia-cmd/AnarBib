@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Fadeno remalfermita.",
   "biblioteca.correspondance.unknownLibrary": "Nekonata biblioteko",
   "biblioteca.correspondance.libraryLocale": "Lingvo de ĉi tiu biblioteko: {lang}",
-  "error.correspondance.library_isolated": "Ĉi tiu biblioteko ne partoprenas la reton: ĝi ne ricevas korespondadon."
+  "error.correspondance.library_isolated": "Ĉi tiu biblioteko ne partoprenas la reton: ĝi ne ricevas korespondadon.",
+  "biblioteca.identity.readLanguages": "La lingvoj kiujn nia teamo legas",
+  "biblioteca.identity.readLanguagesHelp": "Montrata al la bibliotekoj kiuj skribas al ĉi tiu, por ke ili elektu lingvon kiun la teamo legas: ne estas aŭtomata tradukado.",
+  "biblioteca.correspondance.readsLanguages": "Ĉi tiu biblioteko legas: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Proponata komuna lingvo: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "Neniu komuna lingvo deklarita: skribu en la via, la mesaĝo estos legata tia kia ĝi estas — ne estas aŭtomata tradukado."
 }

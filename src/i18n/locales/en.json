@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Thread reopened.",
   "biblioteca.correspondance.unknownLibrary": "Unknown library",
   "biblioteca.correspondance.libraryLocale": "This library’s language: {lang}",
-  "error.correspondance.library_isolated": "This library does not take part in the network: it does not receive correspondence."
+  "error.correspondance.library_isolated": "This library does not take part in the network: it does not receive correspondence.",
+  "biblioteca.identity.readLanguages": "The languages our team reads",
+  "biblioteca.identity.readLanguagesHelp": "Shown to the libraries that write to this one, so they can pick a language the team reads: there is no automatic translation.",
+  "biblioteca.correspondance.readsLanguages": "This library reads: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Suggested common language: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "No common language declared: write in yours, the message will be read as is — there is no automatic translation."
 }

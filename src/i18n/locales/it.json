@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Conversazione riaperta.",
   "biblioteca.correspondance.unknownLibrary": "Biblioteca sconosciuta",
   "biblioteca.correspondance.libraryLocale": "Lingua di questa biblioteca: {lang}",
-  "error.correspondance.library_isolated": "Questa biblioteca non partecipa alla rete: non riceve corrispondenza."
+  "error.correspondance.library_isolated": "Questa biblioteca non partecipa alla rete: non riceve corrispondenza.",
+  "biblioteca.identity.readLanguages": "Le lingue che il nostro gruppo legge",
+  "biblioteca.identity.readLanguagesHelp": "Mostrato alle biblioteche che scrivono a questa, perché scelgano una lingua che il gruppo legge: non c’è traduzione automatica.",
+  "biblioteca.correspondance.readsLanguages": "Questa biblioteca legge: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Lingua comune proposta: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "Nessuna lingua comune dichiarata: scrivi nella tua, il messaggio sarà letto così com’è — non c’è traduzione automatica."
 }

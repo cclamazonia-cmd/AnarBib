@@ -71,11 +71,12 @@ const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
 const fr = JSON.parse(lire('src/i18n/locales/fr.json'));
 const LIBS = [
-  { id: LIB_A, name: 'Biblio A', short_name: 'A', is_active: true },
-  { id: LIB_B, name: 'Biblio B', short_name: 'B', is_active: true },
-  { id: LIB_C, name: 'Biblio C', short_name: 'C', is_active: true },
+  { id: LIB_A, name: 'Biblio A', short_name: 'A', is_active: true, read_languages: ['fr', 'es'] },
+  { id: LIB_B, name: 'Biblio B', short_name: 'B', is_active: true, read_languages: ['pt-BR', 'es'] },
+  { id: LIB_C, name: 'Biblio C', short_name: 'C', is_active: true, read_languages: [], default_locale: 'es' },
   { id: 'dddddddd-0000-4000-8000-000000000004', name: 'Biblio D', short_name: 'D', is_active: false },
   { id: 'eeeeeeee-0000-4000-8000-000000000005', name: 'Biblio E', short_name: 'E', is_active: true, network_mode: 'isolated' },
+  { id: 'eeeeeeee-0000-4000-8000-000000000006', name: 'Biblio G', short_name: 'G', is_active: true, read_languages: ['el'] },
 ];
 const setMsg = vi.fn();
 const monter = () => render(<IntlProvider locale="fr" messages={fr}><CorrespondanceSection libraryId={LIB_A} allLibraries={LIBS} setMsg={setMsg} /></IntlProvider>);
@@ -128,12 +129,29 @@ describe('l’onglet Correspondance (G19 lot 2)', () => {
     expect(noms).not.toContain('Biblio D');     // inactive
     expect(noms).not.toContain('Biblio E');     // isolée du réseau
     fireEvent.change(dest, { target: { value: LIB_C } });
+    // C n'a rien déclaré : sa locale ; aucune langue commune avec A (fr, es) ? si : es
     expect((await screen.findByText(/Langue de cette bibliothèque/)).textContent).toContain('espagnol');
+    expect(screen.getByText(/Langue commune proposée/).textContent).toContain('espagnol');
     fireEvent.change(screen.getByLabelText(fr['biblioteca.correspondance.subject']), { target: { value: 'Un prêt de longue durée ?' } });
     fireEvent.change(screen.getByLabelText(fr['biblioteca.correspondance.body']), { target: { value: 'Bonjour C.' } });
     fireEvent.click(screen.getByRole('button', { name: fr['biblioteca.correspondance.send'] }));
+    // la langue proposée (commune : es) est présélectionnée
     await waitFor(() => expect(rpc).toHaveBeenCalledWith('fn_correspondance_ouvrir',
-      { p_library_id: LIB_A, p_destinataire_id: LIB_C, p_sujet: 'Un prêt de longue durée ?', p_corps: 'Bonjour C.', p_lang: 'fr' }));
+      { p_library_id: LIB_A, p_destinataire_id: LIB_C, p_sujet: 'Un prêt de longue durée ?', p_corps: 'Bonjour C.', p_lang: 'es' }));
+  });
+
+  it('lot 4 : « Cette bibliothèque lit » vient des langues déclarées, la langue commune est proposée, et son absence est dite', async () => {
+    monter();
+    await screen.findByText('Des doubles de Reclus ?');
+    fireEvent.click(screen.getByRole('button', { name: fr['biblioteca.correspondance.write'] }));
+    const dest = screen.getByLabelText(fr['biblioteca.correspondance.to']);
+    fireEvent.change(dest, { target: { value: LIB_B } });
+    expect(screen.getByText(/Cette bibliothèque lit/).textContent).toContain('portugais');
+    expect(screen.getByText(/Langue commune proposée/).textContent).toContain('espagnol');
+    const langues = screen.getAllByLabelText(fr['biblioteca.correspondance.lang']);
+    expect(langues[0].value).toBe('es');
+    fireEvent.change(dest, { target: { value: 'eeeeeeee-0000-4000-8000-000000000006' } });
+    expect(screen.getByText(fr['biblioteca.correspondance.noCommonLanguage'])).toBeTruthy();
   });
 
   it('archiver appelle api.fn_correspondance_archiver pour ma bibliothèque', async () => {

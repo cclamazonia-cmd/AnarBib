@@ -7342,5 +7342,10 @@
   "biblioteca.correspondance.unarchived": "Το νήμα ανοίχτηκε ξανά.",
   "biblioteca.correspondance.unknownLibrary": "Άγνωστη βιβλιοθήκη",
   "biblioteca.correspondance.libraryLocale": "Γλώσσα αυτής της βιβλιοθήκης: {lang}",
-  "error.correspondance.library_isolated": "Αυτή η βιβλιοθήκη δεν συμμετέχει στο δίκτυο: δεν δέχεται αλληλογραφία."
+  "error.correspondance.library_isolated": "Αυτή η βιβλιοθήκη δεν συμμετέχει στο δίκτυο: δεν δέχεται αλληλογραφία.",
+  "biblioteca.identity.readLanguages": "Οι γλώσσες που διαβάζει η ομάδα μας",
+  "biblioteca.identity.readLanguagesHelp": "Εμφανίζεται στις βιβλιοθήκες που γράφουν σε αυτήν, ώστε να διαλέξουν μια γλώσσα που διαβάζει η ομάδα: δεν υπάρχει αυτόματη μετάφραση.",
+  "biblioteca.correspondance.readsLanguages": "Αυτή η βιβλιοθήκη διαβάζει: {langs}",
+  "biblioteca.correspondance.commonLanguage": "Προτεινόμενη κοινή γλώσσα: {lang}",
+  "biblioteca.correspondance.noCommonLanguage": "Δεν δηλώθηκε κοινή γλώσσα: γράψε στη δική σου, το μήνυμα θα διαβαστεί ως έχει — δεν υπάρχει αυτόματη μετάφραση."
 }
