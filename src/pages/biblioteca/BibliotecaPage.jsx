@@ -37,6 +37,7 @@ import IllSection from './IllSection';
 import TasksSection from './TasksSection';
 import MembershipSection from './MembershipSection';
 import DepositSection from './DepositSection';
+import CorrespondanceSection from './CorrespondanceSection'; /* G19 lot 2 : l'onglet Correspondance (08/10/2026) */
 import { fs, ls, bx } from './styles';
 import FinanceReportsSection from '@/components/biblioteca/FinanceReportsSection';
 import '@/components/team/TeamPanel.css';
@@ -117,6 +118,7 @@ export default function BibliotecaPage() {
     { id: 'leitores', icon: '👤', label: t({ id: 'biblioteca.tab.leitores' }) },
     { id: 'eventos', icon: '🗓️', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
     { id: 'exchanges', icon: '🔀', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
+    { id: 'correspondance', icon: 'mail', label: t({ id: 'biblioteca.tab.correspondance' }), coordOnly: true },
     { id: 'ill', icon: '🚚', label: t({ id: 'biblioteca.tab.ill' }) },
     { id: 'reports', icon: '📊', label: t({ id: 'biblioteca.tab.reports' }) },
     { id: 'notas', icon: '✍️', label: t({ id: 'biblioteca.tab.readingNotes' }) },
@@ -1221,6 +1223,9 @@ export default function BibliotecaPage() {
         {tab==='notas' && <ReadingNotesModeration libraryId={libraryId} />}
 
         {/* ═══ 9. Tarefas internas (E6 lot 2 : TasksSection) ═══ */}
+        {tab==='correspondance' && isCoord && (
+          <CorrespondanceSection libraryId={libraryId} allLibraries={allLibraries} setMsg={setMsg} />
+        )}
         {tab==='tasks' && (
           <TasksSection libraryId={libraryId} tasks={tasks} templates={templates} suggestions={suggestions}
             taskPrio={TASK_PRIO} setMsg={setMsg} onChanged={loadAll} />
