@@ -274,7 +274,14 @@ BEGIN
   UPDATE ingest.partner_catalog_staging_rows SET language = NULL WHERE id = r56;          -- effacement seul
   UPDATE ingest.partner_catalog_staging_rows SET publication_year = '1990' WHERE id IN (r61, r62, r63, r64);
   UPDATE ingest.partner_catalog_staging_rows
-     SET normalized_payload = jsonb_set(normalized_payload, '{items}', '[{"code": "L4-NOUVEAU-64"}]'::jsonb) WHERE id = r64;
+     -- H21 lot 6a : la clé du code d'origine est source_item_code (« code » donnait
+     -- un exemplaire sans code — signalé depuis le lot 6a, plus créé)
+     SET normalized_payload = jsonb_set(normalized_payload, '{items}', '[{"source_item_code": "L4-NOUVEAU-64"}]'::jsonb) WHERE id = r64;
+  -- H21 lot 6a (revue sceptique) : la ligne 62 n'a pas d'exemplaire dans le fichier
+  -- PMB (lu avec sa zone 995) : « Rapprocher » n'en invente plus (IMP-25) — un
+  -- exemplaire au fichier, pour que T20 rapproche.
+  UPDATE ingest.partner_catalog_staging_rows
+     SET normalized_payload = jsonb_set(normalized_payload, '{items}', '[{"source_item_code": "L4-NOUVEAU-62"}]'::jsonb) WHERE id = r62;
 
   v_nb_livres := (SELECT count(*) FROM public.books);
   v_nb_fonds := (SELECT count(*) FROM public.book_holdings);
@@ -550,9 +557,11 @@ BEGIN
        -- un effacement ne compte pas ; une ligne rejetée par choix : 0
        AND v_res->(r56::text) = jsonb_build_object('app', 0, 'dr', NULL, 'st', NULL)
        AND v_res->(r57::text) = jsonb_build_object('app', 0, 'dr', NULL, 'st', NULL)
+       -- H21 lot 6a (08/10/2026) : une colonne de plus, à la fin (exemplaires)
        AND (SELECT (p.proargnames)[34] = 'comparison_counts' AND (p.proargnames)[35] = 'update_applicable'
                    AND (p.proargnames)[36] = 'update_draft_id' AND (p.proargnames)[37] = 'update_draft_status'
-                   AND array_length(p.proargnames, 1) = 37
+                   AND (p.proargnames)[38] = 'exemplaires'
+                   AND array_length(p.proargnames, 1) = 38
               FROM pg_proc p WHERE p.oid = 'public.fn_import_list_run_rows(bigint)'::regprocedure)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_res::text, 'NULL')); END IF;

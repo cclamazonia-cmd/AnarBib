@@ -133,6 +133,8 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
 import { localizeError } from '@/lib/localizeError';
+// H21 lot 6a : « Rapprocher » compose aussi les comptes par verdict des exemplaires.
+import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
 
 // ── Décor de la page MONTÉE (dernier describe) ─────────────────
 // Un faux Supabase qui répond par nom de RPC et garde les appels, une
@@ -212,6 +214,7 @@ async function jouerGeste(nom, { lignes, selection, reponse, runRowsLoading = fa
     runRowsLoading,
     t: (d, v) => dit(d.id, v),
     localizeError: (err) => `localisé : ${err.message}`,
+    resumeVerdicts,   // H21 lot 6a ('' sans verdicts : les messages d'avant)
     supabase: { rpc: async (n, args) => { journal.push(`rpc:${n}`); appels.push([n, args]); return reponse; } },
     setPromotingSel: (v) => journal.push(`occupé:${v}`),
     setMsg: (m) => { journal.push('message'); messages.push(m); },

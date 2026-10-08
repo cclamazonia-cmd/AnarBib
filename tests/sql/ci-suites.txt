@@ -678,6 +678,15 @@ tests/sql/h21_lot4_mise_a_jour_tests.sql
 # notice a changé, a disparu, n'est plus détenue ou si bib_ref a changé (republication
 # comprise) ; résolue, caduque ; page de 200 < 8 s.
 tests/sql/h21_lot5_divergences_tests.sql
+# 08/10/2026 — H21 lot 6a (REGISTRE IMP-33) : reconnaître les exemplaires d'un réimport —
+# l'identifiant interne de PMB (996 $9 expl_id) lu, porté par l'exemplaire avec sa source
+# et son run ; un constat par exemplaire du fichier (nouveau, déjà là, déjà en brouillon,
+# sans code, déplacé, réétiqueté, code repris), à la promotion et au rapprochement, pour
+# la bibliothèque importatrice : seul « nouveau » crée, rien n'est écrit sur l'existant ;
+# « Rapprocher » rejoint le lot ouvert du run ; rejet d'office seulement quand la ligne
+# n'apporte rien ; corbeille et journal ne ramènent pas un exemplaire au code pris ;
+# trace refusée à l'API ; rapport de révision ; 300 exemplaires < 8 s.
+tests/sql/h21_lot6a_exemplaires_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

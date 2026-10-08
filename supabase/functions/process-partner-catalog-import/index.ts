@@ -840,7 +840,9 @@ Deno.serve(async (req)=>{
       items: {
         rows_with_items: stagingRows.filter((r)=>r.normalized_payload.items.length > 0).length,
         items: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.length, 0),
-        with_code: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.filter((i)=>i.source_item_code).length, 0)
+        with_code: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.filter((i)=>i.source_item_code).length, 0),
+        // H21 lot 6a : avec l'identifiant interne de la source (PMB : 996 $9 expl_id)
+        with_item_id: stagingRows.reduce((n, r)=>n + r.normalized_payload.items.filter((i)=>i.source_item_id).length, 0)
       },
       // Les axes d'adaptateur EMPLOYÉS pour ce passage : l'écran les relit pour
       // « Retraiter » en ne changeant que l'encodage (fn_import_list_runs ne

@@ -128,7 +128,8 @@ describe('process-partner-catalog-import sur un export PMB réel (H15, H28)', ()
     expect(r.finale.summary.coverage).toMatchObject({ kind: 'marc', records: 50 });
     expect(r.finale.summary.coverage.zones.find((z) => z.tag === '995' && z.code === 'f')).toMatchObject({ status: 'repris', occurrences: 33 });
     // H19 : les exemplaires voyagent jusqu'aux lignes importées, et se comptent.
-    expect(r.finale.summary.items).toEqual({ rows_with_items: 31, items: 33, with_code: 33 });
+    // H21 lot 6a : with_item_id — l'identifiant interne de PMB (996 $9 expl_id)
+    expect(r.finale.summary.items).toEqual({ rows_with_items: 31, items: 33, with_code: 33, with_item_id: 33 });
     expect(r.lignes.flatMap((l) => l.normalized_payload.items)).toHaveLength(33);
     expect(r.lignes[0].normalized_payload.items[0]).toMatchObject({ source_item_code: '33700004388761', call_number: 'JR SOU' });
     expect(r.finale.summary.coverage_counts.total).toBe(r.finale.summary.coverage.zones.length);

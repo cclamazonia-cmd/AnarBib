@@ -86,7 +86,80 @@ export function resolveItemMapping(dialect, override) {
     const s = v.trim().toLowerCase();
     if (s === '' || /^[0-9a-z]{1,4}$/.test(s)) base[k] = s;
   }
+  // H21 lot 6a : l'identifiant interne de l'exemplaire (même règle que la
+  // fonction de profil fn_import_profile_create) — zone à 3 chiffres ou '',
+  // UNE sous-zone ou '', préfixe sans espace de 32 caractères au plus ou ''.
+  if (typeof override.id_tag === 'string') {
+    const s = override.id_tag.trim();
+    if (s === '' || /^\d{3}$/.test(s)) base.id_tag = s;
+  }
+  if (typeof override.id_code === 'string') {
+    const s = override.id_code.trim().toLowerCase();
+    if (s === '' || /^[0-9a-z]$/.test(s)) base.id_code = s;
+  }
+  if (typeof override.id_prefix === 'string' && /^\S{0,32}$/.test(override.id_prefix)) base.id_prefix = override.id_prefix;
   return base;
+}
+
+// ── L'identifiant interne de l'exemplaire (H21 lot 6a, IMP-33 a) ─────────────
+//
+// RÈGLE D'APPARIEMENT 995 ↔ 996 (PMB 8.1, établie sur les fixtures
+// tests/pmb/fixtures, 46 exemplaires) : PMB écrit, pour chaque exemplaire, sa
+// 995 suivie IMMÉDIATEMENT de sa 996, et la 996 répète le code-barres de la 995
+// dans la même sous-zone ($f) — ainsi qu'en $9 « expl_cb: » ; son identifiant
+// interne est en $9 « expl_id:N ». L'appariement :
+//   1. une 996 sans identifiant (pas de $9 « expl_id: », valeur vide) n'apporte
+//      rien ;
+//   2. une 996 qui porte un code-barres va à la PREMIÈRE zone d'exemplaire
+//      (ordre du fichier) encore libre qui porte le MÊME code-barres — deux
+//      exemplaires au même code se partagent les 996 dans l'ordre ;
+//   3. une 996 sans code-barres va à la zone d'exemplaire qui la PRÉCÈDE
+//      immédiatement dans le fichier, si celle-ci est libre et sans code ;
+//   4. sinon la 996 est orpheline : aucun exemplaire ne reçoit d'identifiant,
+//      jamais d'erreur. Un code différent ne s'apparie jamais (ce n'est pas le
+//      même exemplaire).
+// Si la zone de l'identifiant est la zone d'exemplaire elle-même (profil), il
+// est lu dans chaque zone. → Map(zone d'exemplaire → identifiant).
+function readItemId(field, m) {
+  if (!m.id_code) return null;
+  for (const sf of (field.subfields || [])) {
+    if (sf.code !== m.id_code) continue;
+    const v = clean(sf.value);
+    if (!v) continue;
+    if (!m.id_prefix) return v;
+    if (v.startsWith(m.id_prefix)) {
+      const r = clean(v.slice(m.id_prefix.length));
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+function pairItemIds(record, m) {
+  const ids = new Map();
+  if (!m.id_tag || !m.id_code) return ids;
+  const fields = record.fields || [];
+  if (m.id_tag === m.tag) {
+    for (const f of fields) if (f.tag === m.tag && f.subfields) ids.set(f, readItemId(f, m));
+    return ids;
+  }
+  const codeOf = new Map();
+  for (const f of fields) if (f.tag === m.tag && f.subfields) codeOf.set(f, readItemValue(f, m.code, 'code'));
+  fields.forEach((f, i) => {
+    if (f.tag !== m.id_tag || !f.subfields) return;
+    const id = readItemId(f, m);
+    if (!id) return;
+    const key = readItemValue(f, m.code, 'code');
+    let cible = null;
+    if (key) {
+      for (const [z, code] of codeOf) if (code === key && !ids.has(z)) { cible = z; break; }
+    } else {
+      const prec = fields[i - 1];
+      if (prec && codeOf.has(prec) && codeOf.get(prec) === null && !ids.has(prec)) cible = prec;
+    }
+    if (cible) ids.set(cible, id);
+  });
+  return ids;
 }
 
 function readItemValue(field, codes, key) {
@@ -103,10 +176,14 @@ function readItemValue(field, codes, key) {
   return parts.length ? parts.join(ITEM_JOIN[key] || ' ') : null;
 }
 
-// → [{ source_item_code, call_number, note, owner, item_type, public, status }]
-//   (un objet par zone d'exemplaire ayant au moins une valeur lue)
+// → [{ source_item_code, call_number, note, owner, item_type, public, status,
+//      source_item_id }]
+//   (un objet par zone d'exemplaire ayant au moins une valeur lue ; H21 lot 6a :
+//   source_item_id = l'identifiant interne apparié, NULL sans 996 appariée —
+//   il ne fait pas, à lui seul, un exemplaire)
 export function extractItems(record, dialect, mappingOverride = null) {
   const m = resolveItemMapping(dialect, mappingOverride);
+  const ids = pairItemIds(record, m);
   const out = [];
   for (const f of fieldsByTag(record, m.tag)) {
     if (!f.subfields) continue;
@@ -119,7 +196,7 @@ export function extractItems(record, dialect, mappingOverride = null) {
       public: readItemValue(f, m.public, 'public'),
       status: readItemValue(f, m.status, 'status'),
     };
-    if (Object.values(item).some((v) => v !== null)) out.push(item);
+    if (Object.values(item).some((v) => v !== null)) out.push({ ...item, source_item_id: ids.get(f) ?? null });
   }
   return out;
 }

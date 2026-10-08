@@ -626,6 +626,14 @@ BEGIN
   DECLARE v_rap jsonb; v_rap1 jsonb;
   BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    -- H21 lot 6a (08/10/2026) : les exemplaires du fichier réimporté sont déjà
+    -- là depuis le premier import — « Rapprocher » n'en créerait aucun et
+    -- rejetterait les lignes (elles n'apportent rien). Un exemplaire NOUVEAU par
+    -- ligne, pour que le rapprochement fasse un lot.
+    UPDATE ingest.partner_catalog_staging_rows
+       SET normalized_payload = jsonb_set(normalized_payload, '{items}',
+                                          jsonb_build_array(jsonb_build_object('source_item_code', 'L3-T13-' || id)))
+     WHERE id IN (r48, r51);
     v_res := public.fn_import_reconcile_duplicates(v_run2, ARRAY[r48, r51]);
     v_lotr := (v_res->>'batch_id')::bigint;
     -- la notice retouchée APRÈS le calcul : le rapport lit le stocké, il ne recalcule pas
@@ -667,7 +675,9 @@ BEGIN
     INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision,
                                                      proposed_book_id, raw_payload, normalized_payload)
     VALUES (v_run2, 9001, 'L3-PRIV-1', 'L3 Titre du fichier', 'known_record', 'pending', v_bp, '{}'::jsonb,
-            '{"items": [{"code": "L3-PRIV-ITEM-1"}]}'::jsonb) RETURNING id INTO v_rp;
+            -- H21 lot 6a : la clé du code d'origine est source_item_code (« code »
+            -- donnait un exemplaire sans code — signalé, plus créé)
+            '{"items": [{"source_item_code": "L3-PRIV-ITEM-1"}]}'::jsonb) RETURNING id INTO v_rp;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     EXECUTE 'SET LOCAL ROLE authenticated';
     SELECT count(*) INTO v_vis FROM public.books WHERE id = v_bp;          -- la coordination ne la voit pas au catalogue

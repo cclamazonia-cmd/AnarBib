@@ -358,8 +358,8 @@ const REC_995 = {
 
 Deno.test('H19 extractItems : une 995 = un exemplaire, correspondance PMB 8.1 par defaut', () => {
   assertEquals(extractItems(REC_995, 'unimarc'), [
-    { source_item_code: 'CDF0000000010', call_number: '027.6 GAR', note: null, owner: 'BDP', item_type: 'uu', public: 'u', status: null },
-    { source_item_code: 'CDF0000000012', call_number: 'ARCH GAR 1', note: 'Exemplaire dédicacé', owner: 'Fonds propre', item_type: null, public: null, status: null },
+    { source_item_code: 'CDF0000000010', call_number: '027.6 GAR', note: null, owner: 'BDP', item_type: 'uu', public: 'u', status: null, source_item_id: null },
+    { source_item_code: 'CDF0000000012', call_number: 'ARCH GAR 1', note: 'Exemplaire dédicacé', owner: 'Fonds propre', item_type: null, public: null, status: null, source_item_id: null },
   ]);
   // mapMarcRecord porte les exemplaires.
   assertEquals(mapMarcRecord(REC_995, 'unimarc').items.length, 2);
@@ -369,7 +369,8 @@ Deno.test('H19 extractItems : une 995 = un exemplaire, correspondance PMB 8.1 pa
 
 Deno.test('H19 resolveItemMapping : le profil surcharge cle par cle, une valeur invalide est ignoree', () => {
   const m = resolveItemMapping('unimarc', { code: 'b', call_number: 'kd', note: '', tag: '996', owner: '$$$', status: 'o' });
-  assertEquals(m, { tag: '996', code: 'b', call_number: 'kd', note: '', owner: 'a', item_type: 'r', public: 'q', status: 'o' });
+  assertEquals(m, { tag: '996', code: 'b', call_number: 'kd', note: '', owner: 'a', item_type: 'r', public: 'q', status: 'o',
+                    id_tag: '996', id_code: '9', id_prefix: 'expl_id:' });
   // Surcharge par le profil appliquee a l'extraction : proprietaire lu en $c.
   const items = extractItems(REC_995, 'unimarc', { owner: 'c' });
   assertEquals(items.map((i) => i.owner), ['BDP', null]);
@@ -381,7 +382,7 @@ Deno.test('H19 MARC21 852 : $p code, $h + $i cote concatenes, $z note, $b locali
     { tag: '852', ind1: ' ', ind2: ' ', subfields: [{ code: 'b', value: 'Main' }, { code: 'h', value: '335.83' }, { code: 'i', value: 'KRO' }, { code: 'p', value: '31234000123' }, { code: 'z', value: 'Signed' }] },
   ] };
   assertEquals(extractItems(rec, 'marc21'), [
-    { source_item_code: '31234000123', call_number: '335.83 KRO', note: 'Signed', owner: 'Main', item_type: null, public: null, status: null },
+    { source_item_code: '31234000123', call_number: '335.83 KRO', note: 'Signed', owner: 'Main', item_type: null, public: null, status: null, source_item_id: null },
   ]);
 });
 
@@ -396,8 +397,8 @@ Deno.test('H19 sous-zones repetees dans UNE zone : cote et note gardent tout, le
     { tag: '852', ind1: ' ', ind2: ' ', subfields: [{ code: 'p', value: '31234000124' }] },
   ] };
   assertEquals(extractItems(rec, 'marc21'), [
-    { source_item_code: '31234000123', call_number: '335.83 KRO v.2', note: 'Signé ; Jaquette manquante', owner: 'Main', item_type: null, public: null, status: null },
-    { source_item_code: '31234000124', call_number: null, note: null, owner: null, item_type: null, public: null, status: null },
+    { source_item_code: '31234000123', call_number: '335.83 KRO v.2', note: 'Signé ; Jaquette manquante', owner: 'Main', item_type: null, public: null, status: null, source_item_id: null },
+    { source_item_code: '31234000124', call_number: null, note: null, owner: null, item_type: null, public: null, status: null, source_item_id: null },
   ]);
   const cov = marcCoverage(buildParsedEntriesFromMarc([rec], [], 'marc21'));
   const z = (code) => cov.zones.find((x) => x.tag === '852' && x.code === code);
@@ -418,6 +419,73 @@ Deno.test('H19 couverture : sous-zones d\'exemplaire reprises (code, cote, note,
   const cov2 = marcCoverage(buildParsedEntriesFromMarc([REC_995], [], 'unimarc', { owner: 'c' }), { owner: 'c' });
   assertEquals(cov2.zones.find((x) => x.tag === '995' && x.code === 'c').status, 'repris');
   assertEquals(cov2.zones.find((x) => x.tag === '995' && x.code === 'a').status, 'brut');
+});
+
+// ── H21 lot 6a (08/10/2026, IMP-33 a) : l'identifiant interne (996 $9 expl_id) ──
+const z996 = (code, id, extra = []) => ({ tag: '996', ind1: ' ', ind2: ' ', subfields: [
+  ...(code ? [{ code: 'f', value: code }] : []), { code: 'k', value: 'X' },
+  ...(id ? [{ code: '9', value: `expl_id:${id}` }] : []), { code: '9', value: 'create_date:2005-01-01' },
+  ...(code ? [{ code: '9', value: `expl_cb:${code}` }] : []), ...extra] });
+const z995 = (code, cote = 'C') => ({ tag: '995', ind1: ' ', ind2: ' ', subfields: [
+  ...(code ? [{ code: 'f', value: code }] : []), { code: 'k', value: cote }] });
+
+Deno.test('H21 lot 6a extractItems : la 996 qui suit sa 995 donne source_item_id (règle de PMB 8.1)', () => {
+  const rec = { leader: '', fields: [
+    { tag: '001', value: '7' },
+    z995('AAA1'), z996('AAA1', '11'),
+    z995('BBB2'), z996('BBB2', '12'),
+  ] };
+  assertEquals(extractItems(rec, 'unimarc').map((i) => [i.source_item_code, i.source_item_id]), [['AAA1', '11'], ['BBB2', '12']]);
+  // mapMarcRecord le porte aussi.
+  assertEquals(mapMarcRecord(rec, 'unimarc').items.map((i) => i.source_item_id), ['11', '12']);
+});
+
+Deno.test('H21 lot 6a appariement : par code-barres, pas par position ; orphelines et 996 sans $9 ne donnent rien, jamais une erreur', () => {
+  const rec = { leader: '', fields: [
+    z995('AAA1'), z995('BBB2'), z995('CCC3'), z995('DDD4'),
+    // dans le désordre : BBB2 puis AAA1
+    z996('BBB2', '22'), z996('AAA1', '21'),
+    // 996 sans expl_id (CCC3) : rien
+    z996('CCC3', null),
+    // 996 orpheline (aucune 995 à ce code) : rien, et DDD4 n'en reçoit pas
+    z996('ZZZ9', '29'),
+    // une 996 dont le $9 expl_id est vide : rien
+    { tag: '996', ind1: ' ', ind2: ' ', subfields: [{ code: 'f', value: 'DDD4' }, { code: '9', value: 'expl_id:' }] },
+  ] };
+  assertEquals(extractItems(rec, 'unimarc').map((i) => [i.source_item_code, i.source_item_id]),
+    [['AAA1', '21'], ['BBB2', '22'], ['CCC3', null], ['DDD4', null]]);
+  // Une 996 seule (aucune 995) ne fait pas un exemplaire.
+  assertEquals(extractItems({ leader: '', fields: [z996('AAA1', '1')] }, 'unimarc'), []);
+});
+
+Deno.test('H21 lot 6a appariement : même code deux fois — dans l\'ordre ; sans code — la 995 qui précède immédiatement', () => {
+  const rec = { leader: '', fields: [
+    z995('SAME', 'A'), z996('SAME', '31'), z995('SAME', 'B'), z996('SAME', '32'),
+    // 995 sans code suivie d'une 996 sans code : appariées par adjacence
+    z995(null, 'SANS'), z996(null, '33'),
+    // 996 sans code qui ne suit pas une 995 libre sans code : orpheline
+    z995(null, 'SANS2'), { tag: '200', ind1: '1', ind2: ' ', subfields: [{ code: 'a', value: 't' }] }, z996(null, '34'),
+    // 996 sans code après une 995 AVEC code : orpheline (jamais un code différent)
+    z995('EEE5'), z996(null, '35'),
+  ] };
+  assertEquals(extractItems(rec, 'unimarc').map((i) => [i.source_item_code, i.call_number, i.source_item_id]), [
+    ['SAME', 'A', '31'], ['SAME', 'B', '32'], [null, 'SANS', '33'], [null, 'SANS2', null], ['EEE5', 'C', null],
+  ]);
+});
+
+Deno.test('H21 lot 6a profil : id_tag/id_code/id_prefix surchargent, valeurs invalides ignorées ; id_tag vide coupe ; MARC21 sans identifiant', () => {
+  assertEquals(resolveItemMapping('unimarc', { id_tag: '997', id_code: 'A', id_prefix: '' }),
+    { ...resolveItemMapping('unimarc', null), id_tag: '997', id_code: 'a', id_prefix: '' });
+  assertEquals(resolveItemMapping('unimarc', { id_tag: '99', id_code: 'ab', id_prefix: 'a b' }), resolveItemMapping('unimarc', null));
+  const rec = { leader: '', fields: [z995('AAA1'), z996('AAA1', '41')] };
+  assertEquals(extractItems(rec, 'unimarc', { id_tag: '' })[0].source_item_id, null);
+  // identifiant lu dans la zone d'exemplaire elle-même, sans préfixe
+  const rec2 = { leader: '', fields: [{ tag: '995', ind1: ' ', ind2: ' ', subfields: [{ code: 'f', value: 'Q1' }, { code: 'i', value: '77' }] }] };
+  assertEquals(extractItems(rec2, 'unimarc', { id_tag: '995', id_code: 'i', id_prefix: '' })[0].source_item_id, '77');
+  // MARC21 : aucun identifiant par défaut
+  const rec3 = { leader: '', fields: [{ tag: '852', ind1: ' ', ind2: ' ', subfields: [{ code: 'p', value: 'P1' }] },
+    { tag: '996', ind1: ' ', ind2: ' ', subfields: [{ code: 'p', value: 'P1' }, { code: '9', value: 'expl_id:5' }] }] };
+  assertEquals(extractItems(rec3, 'marc21')[0].source_item_id, null);
 });
 
 Deno.test('buildParsedEntriesFromMarc : numerotation + dialecte mixte', () => {

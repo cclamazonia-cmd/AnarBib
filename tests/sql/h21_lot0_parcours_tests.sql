@@ -660,7 +660,11 @@ BEGIN
     END;
     v_res := public.fn_import_reconcile_duplicates(v_run, ARRAY[v_l7]);
     v_r7b := (v_res->>'batch_id')::bigint;
-    SELECT x.id INTO v_x7b FROM public.exemplar_drafts x WHERE x.import_staging_row_id = v_l7 AND x.batch_id = v_r7b;
+    -- H21 lot 6a (08/10/2026, IMP-27 d) : le second rapprochement REJOINT le
+    -- lot ouvert du run (celui du premier, sans révision demandée) ; le nouveau
+    -- brouillon y côtoie l'ancien, à la corbeille.
+    SELECT x.id INTO v_x7b FROM public.exemplar_drafts x
+     WHERE x.import_staging_row_id = v_l7 AND x.batch_id = v_r7b AND x.status = 'draft';
     v_h1 := NULL;
     BEGIN
       PERFORM public.publish_exemplar_draft(v_x7b);
@@ -668,7 +672,7 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_h1 = PG_EXCEPTION_HINT;
     END;
     IF coalesce(v_ok, false) AND v_txt IS NULL
-       AND v_r7b IS NOT NULL AND v_r7b <> v_r7
+       AND v_r7b IS NOT NULL AND v_r7b = v_r7 AND (v_res->>'batch_joined')::boolean
        AND (SELECT count(*) FROM public.exemplar_drafts x
              WHERE x.import_staging_row_id = v_l7 AND x.status IN ('draft', 'ready', 'published')) = 1
        AND (SELECT created_exemplar_draft_id FROM ingest.partner_catalog_staging_rows WHERE id = v_l7) = v_x7b

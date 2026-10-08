@@ -76,7 +76,7 @@ pas — colonne « À l'export » ; le § 2 mesure ces pertes.
 | 319 | toutes | donnée interne au logiciel d’origine | zone locale PMB (droits), sans équivalent | oui, telle quelle |
 | 801 | toutes | donnée interne au logiciel d’origine | source de la notice, réécrite par chaque logiciel | oui, telle quelle |
 | 896 | toutes | donnée interne au logiciel d’origine | vignette de l'OPAC PMB (adresse locale à l'installation) | oui, telle quelle |
-| 996 | toutes | sans champ dans AnarBib | exemplaire détaillé PMB : type ($e), section ($x), localisation ($v), statut ($1) et prêt ($3) en clair, que rien ne reprend ($a, $f, $k, $u redisent la 995) ; jamais réémise ; un profil d'import peut la lire à la place de la 995 | non |
+| 996 | toutes | sans champ dans AnarBib | exemplaire détaillé PMB : seul son identifiant interne ($9 « expl_id:N ») est lu, second signal du réimport après le code-barres (H21 lot 6a, IMP-33 a) ; type ($e), section ($x), localisation ($v), statut ($1) et prêt ($3) en clair, que rien ne reprend ($a, $f, $k, $u redisent la 995) ; jamais réémise ; un profil d'import peut la lire à la place de la 995 | non |
 | toutes | $9 | donnée interne au logiciel d’origine | identifiants internes de PMB (id:N, lnk:…), valables dans une seule installation | dans les zones rendues entières seulement |
 | 010 | $d | sans champ dans AnarBib | prix, sans équivalent dans AnarBib | non |
 | 210 | $h | donnée interne au logiciel d’origine | date normalisée propre à PMB (la $d suffit) | non |

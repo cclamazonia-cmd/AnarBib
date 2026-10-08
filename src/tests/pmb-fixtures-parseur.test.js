@@ -136,6 +136,23 @@ describe('fixtures PMB 8.1.1.1 : le parseur lit ce que PMB exporte', () => {
     expect(new Set(items.map((i) => i.source_item_code)).size).toBe(33);
     expect(items[0]).toMatchObject({ source_item_code: '33700004388761', call_number: 'JR SOU', owner: 'BDP', item_type: 'uu', public: 'u' });
   });
+
+  // H21 lot 6a (08/10/2026, IMP-33 a) : chaque exemplaire porte l'identifiant
+  // interne que PMB écrit dans la 996 qui le suit ($9 expl_id:N) ; vérifié par
+  // un second chemin (la 996 dont le $9 expl_cb: est son code-barres).
+  it('H21 lot 6a — les 33 exemplaires ont leur expl_id (996 $9), uniques, celui de LEUR 996', () => {
+    for (const e of utf8.res.entries) {
+      const parExplCb = new Map(e.rawPayload.fields.filter((f) => f.tag === '996').map((f) => {
+        const v9 = (f.subfields || []).filter((s) => s.code === '9').map((s) => s.value);
+        return [v9.find((v) => v.startsWith('expl_cb:'))?.slice(8), v9.find((v) => v.startsWith('expl_id:'))?.slice(8)];
+      }));
+      for (const it of e.mapped.items) expect(it.source_item_id, it.source_item_code).toBe(parExplCb.get(it.source_item_code));
+    }
+    const items = utf8.res.entries.flatMap((e) => e.mapped.items);
+    expect(items.every((i) => /^\d+$/.test(i.source_item_id))).toBe(true);
+    expect(new Set(items.map((i) => i.source_item_id)).size).toBe(33);
+    expect(items[0].source_item_id).toBe('1');
+  });
 });
 
 // Les cas difficiles (tests/pmb/banc/cas-difficiles.marcxml.xml) importés dans
@@ -175,6 +192,9 @@ describe('fixtures PMB 8.1.1.1 : les cas difficiles réexportés par PMB', () =>
     expect(e.mapped.items.map((i) => i.source_item_code)).toEqual(['CDF0000000010', 'CDF0000000011', 'CDF0000000012']);
     expect(new Set(e.mapped.items.map((i) => i.call_number))).toEqual(new Set(['027.6 GAR', 'ARCH GAR 1']));
     expect(e.mapped.items[2].note).toBe('Exemplaire dédicacé');
+    // H21 lot 6a : trois exemplaires, trois expl_id distincts
+    expect(new Set(e.mapped.items.map((i) => i.source_item_id)).size).toBe(3);
+    expect(iso.res.entries.flatMap((x) => x.mapped.items).filter((i) => i.source_item_id)).toHaveLength(13);
   });
 
   it('l\'export « XML MARC » des mêmes notices donne les mêmes notices', () => {

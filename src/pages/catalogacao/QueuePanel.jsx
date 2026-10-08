@@ -588,10 +588,15 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       }
       return res;
     };
-    const ok = await bulkByType(sel, restaurer, (rows) => rows.filter((r) => r.status !== 'cancelled').length);
+    // H21 lot 6a : un refus de la base (exemplaire dont le code d'origine est
+    // repris depuis, error.import.item_restore_code_taken) est dit, traduit.
+    const erreurs = [];
+    const ok = await bulkByType(sel, restaurer, (rows) => rows.filter((r) => r.status !== 'cancelled').length, erreurs);
     const note = ok < sel.length ? ' ' + t({ id: 'catalogacao.queue.someUnchanged' }) : '';
     const sortie = sortis > 0 ? ' ' + t({ id: 'catalogacao.queue.restoreLeftBatch' }, { count: sortis }) : '';
-    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note + sortie, kind: sortis > 0 ? 'warn' : 'ok' });
+    const bilan = t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }) + note + sortie;
+    if (erreurs.length) setMsg({ text: `${localizeError(erreurs[0], t)} ${bilan}`, kind: 'error' });
+    else setMsg({ text: bilan, kind: sortis > 0 ? 'warn' : 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
   }

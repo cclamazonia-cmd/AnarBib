@@ -1,5 +1,6 @@
 import { useIntl } from 'react-intl';
 import { coverageItemLabel } from '../../lib/importCoverage.js';
+import { libelleVerdict, VERDICTS as VERDICTS_EXEMPLAIRE } from '../../lib/importItemVerdicts.js';
 
 // BatchReviewReport — rendu du rapport de revision d'un lot (05/09/2026).
 // H16 (26/09/2026) : section « couverture » — pour chaque import dont le lot
@@ -64,6 +65,13 @@ export default function BatchReviewReport({ report }) {
   // conflits, sans base) ; 40 brouillons au plus, les comptes portent sur tout.
   const prepared = report.prepared_updates && typeof report.prepared_updates === 'object' ? report.prepared_updates : null;
   const preparedExamples = Array.isArray(prepared?.examples) ? prepared.examples : [];
+  // H21 lot 6a (08/10/2026, IMP-33) : les exemplaires du fichier ÉCARTÉS pour
+  // ce lot (clé `items_set_aside`, absente sans écart et des instantanés
+  // d'avant) — déjà là, déjà en brouillon, sans code-barres, déplacé dans PMB,
+  // réétiqueté, code repris — et pourquoi ; 40 exemples, les comptes sur tout.
+  const ecartes = report.items_set_aside && typeof report.items_set_aside === 'object' ? report.items_set_aside : null;
+  const ecartesCounts = ecartes?.counts && typeof ecartes.counts === 'object' ? ecartes.counts : {};
+  const ecartesExamples = Array.isArray(ecartes?.examples) ? ecartes.examples : [];
   // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
   // (report.batch.library_id / library_name ; nulle = administration du
   // réseau). Les instantanés figés avant B30 n'en ont pas : on n'affiche rien.
@@ -180,6 +188,31 @@ export default function BatchReviewReport({ report }) {
               {more(itemProblemCount, Math.min(itemProblems.length, 40))}
             </ul>
           )}
+        </section>
+      )}
+
+      {ecartes && Number(ecartes.count || 0) > 0 && (
+        <section data-testid="review-items-set-aside">
+          <h5 style={secTitle}>{t({ id: 'review.report.itemsSetAside' })}</h5>
+          <div>{t({ id: 'review.report.itemsSetAside.summary' }, { count: Number(ecartes.count || 0), rows: Number(ecartes.rows || 0) })}</div>
+          <div style={muted}>
+            {VERDICTS_EXEMPLAIRE.filter((v) => Number(ecartesCounts[v] || 0) > 0)
+              .map((v) => t({ id: `importacoes.items.count.${v}` }, { n: Number(ecartesCounts[v]) }))
+              .join(' · ')}
+          </div>
+          <ul style={list}>
+            {ecartesExamples.slice(0, 40).map((e) => (
+              <li key={`${e.row_id}-${e.n}`} data-set-aside={e.verdict}>
+                {e.titulo || '—'}
+                {e.external_key ? <span style={muted}> ({e.external_key})</span> : null}
+                {' · '}<code>{e.code || t({ id: 'importacoes.items.noCode' })}</code>
+                {e.expl_id ? <span style={muted}> (expl_id {e.expl_id})</span> : null}
+                {' — '}<strong>{libelleVerdict(t, e, e.titulo)}</strong>
+                {e.tombo ? <span style={muted}> · {t({ id: 'review.report.itemsSetAside.tombo' }, { tombo: e.tombo })}</span> : null}
+              </li>
+            ))}
+            {more(Number(ecartes.count || 0), Math.min(ecartesExamples.length, 40))}
+          </ul>
         </section>
       )}
 

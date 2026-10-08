@@ -216,7 +216,7 @@ export const ZONES_LAISSEES: Record<Dialecte, { tag: string; code: string; motif
     { tag: '319', code: '*', motif: 'interne', raison: 'zone locale PMB (droits), sans équivalent' },
     { tag: '801', code: '*', motif: 'interne', raison: 'source de la notice, réécrite par chaque logiciel' },
     { tag: '896', code: '*', motif: 'interne', raison: "vignette de l'OPAC PMB (adresse locale à l'installation)" },
-    { tag: '996', code: '*', motif: 'sans_champ', raison: "exemplaire détaillé PMB : type ($e), section ($x), localisation ($v), statut ($1) et prêt ($3) en clair, que rien ne reprend ($a, $f, $k, $u redisent la 995) ; jamais réémise ; un profil d'import peut la lire à la place de la 995" },
+    { tag: '996', code: '*', motif: 'sans_champ', raison: "exemplaire détaillé PMB : seul son identifiant interne ($9 « expl_id:N ») est lu, second signal du réimport après le code-barres (H21 lot 6a, IMP-33 a) ; type ($e), section ($x), localisation ($v), statut ($1) et prêt ($3) en clair, que rien ne reprend ($a, $f, $k, $u redisent la 995) ; jamais réémise ; un profil d'import peut la lire à la place de la 995" },
     { tag: '*', code: '9', motif: 'interne', raison: 'identifiants internes de PMB (id:N, lnk:…), valables dans une seule installation' },
     { tag: '010', code: 'd', motif: 'sans_champ', raison: 'prix, sans équivalent dans AnarBib' },
     { tag: '210', code: 'h', motif: 'interne', raison: 'date normalisée propre à PMB (la $d suffit)' },
@@ -287,9 +287,17 @@ function laissee(dialecte: Dialecte, tag: string, code: string) {
 // PMB), 852 en MARC21. Chaque clé nomme la ou les sous-zones à lire (plusieurs
 // lettres = concaténées, dans cet ordre). Défaut UNIMARC = ce que PMB 8.1 écrit ;
 // surchargé par le profil d'import de la bibliothèque (items_mapping).
+// H21 lot 6a (08/10/2026, IMP-33 a) : l'IDENTIFIANT INTERNE de l'exemplaire à
+// la source, second signal du réimport (le code-barres reste la clé) — PMB
+// l'écrit dans la zone d'exemplaire détaillée qui suit chaque 995 :
+// 996 $9 « expl_id:N ». id_tag = la zone qui le porte ('' : aucun ; égale à
+// tag : lu dans la zone d'exemplaire elle-même), id_code = la sous-zone,
+// id_prefix = le préfixe de la valeur ('' : la valeur entière).
 export const DEFAULT_ITEM_MAPPINGS = {
-  unimarc: { tag: '995', code: 'f', call_number: 'k', note: 'u', owner: 'a', item_type: 'r', public: 'q', status: '' },
-  marc21: { tag: '852', code: 'p', call_number: 'hi', note: 'z', owner: 'b', item_type: '', public: '', status: '' },
+  unimarc: { tag: '995', code: 'f', call_number: 'k', note: 'u', owner: 'a', item_type: 'r', public: 'q', status: '',
+             id_tag: '996', id_code: '9', id_prefix: 'expl_id:' },
+  marc21: { tag: '852', code: 'p', call_number: 'hi', note: 'z', owner: 'b', item_type: '', public: '', status: '',
+            id_tag: '', id_code: '', id_prefix: '' },
 };
 
 // ── Types de notice (guide/6-7) ↔ type de matériel AnarBib ──────────────────

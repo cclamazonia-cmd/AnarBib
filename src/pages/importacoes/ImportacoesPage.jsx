@@ -16,6 +16,8 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
 import RunEncodingPanel from './RunEncodingPanel.jsx';
 import RunCoveragePanel from './RunCoveragePanel.jsx';
+import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
+import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -844,17 +846,23 @@ export default function ImportacoesPage() {
       // H21 lot 0 : une ligne traitée, rejetée ou écartée ailleurs entre-temps
       // est ignorée par la RPC (skipped_rows) ; l'écran le dit.
       const ignorees = Number(data?.skipped_rows || 0);
+      // H21 lot 6a : les comptes par verdict des exemplaires du fichier (déjà
+      // là, déplacé, sans code…) et les lignes signalées, laissées sans brouillon.
+      const verdicts = resumeVerdicts(t, data?.verdicts, data?.rows_signalled);
+      const signal = Number(data?.rows_signalled || 0) > 0;
       // Les lignes ignorées d'abord, puis ce qui a été fait des autres (comptes
       // H19 compris) : une ligne ignorée ne cache pas une ligne détenue.
       setMsg(ignorees > 0
-        ? { text: `${t({ id: 'importacoes.fila.reconciledPartial' }, { skipped: ignorees, asked: ids.length })} ${
+        ? { text: [`${t({ id: 'importacoes.fila.reconciledPartial' }, { skipped: ignorees, asked: ids.length })} ${
               t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })}`,
+            verdicts].filter(Boolean).join(' '),
             kind: ignorees >= ids.length ? 'error' : 'info' }
         : {
-            text: skipped || held
+            // (rien de créé — tout signalé : jamais « Brouillon d'exemplaire créé »)
+            text: [skipped || held || Number(data?.created_items || 0) === 0
               ? t({ id: 'importacoes.fila.reconciledCounts' }, { created: Number(data?.created_items || 0), skipped, held })
-              : t({ id: 'importacoes.fila.reconciled' }),
-            kind: 'ok',
+              : t({ id: 'importacoes.fila.reconciled' }), verdicts].filter(Boolean).join(' '),
+            kind: signal ? 'info' : 'ok',
           });
       setSelectedRows(new Set());
       await loadRuns();
@@ -2195,6 +2203,8 @@ export default function ImportacoesPage() {
                                     {t({ id: 'importacoes.fila.reconcileRowHint' })}
                                   </div>
                                 )}
+                                {/* H21 lot 6a : les exemplaires du fichier et leur verdict */}
+                                <ExemplairesDuFichier items={row.exemplaires} titreLigne={row.title} />
                               </td>
                               <td className="imp-hide-sm">
                                 <Pill variant={ed === 'accept_new' || ed === 'accept_duplicate' ? 'ok' : ed === 'reject' ? 'danger' : 'muted'}>

@@ -258,12 +258,19 @@ BEGIN
   -- ── T5 ──────────────────────────────────────────────────────────────
   v_t := 'T5 code d''origine deja pris dans la bibliotheque : dit au rapport, refuse a la publication';
   BEGIN
+    -- H21 lot 6a (08/10/2026) : un code DÉJÀ pris à la promotion n'entre plus
+    -- dans les brouillons (constat « déplacé », suite h21_lot6a_exemplaires) ;
+    -- ce test garde le cas qui reste : le code est pris ENTRE la promotion et
+    -- la publication (ici, l'exemplaire publié par T4 le reçoit après coup).
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
     VALUES (v_src, v_lib, 'essai/pmb2.marc', 'pmb2.marc', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_run2;
     INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision, normalized_payload)
-    VALUES (v_run2, 1, '61b', 'Brûler les frontières (réimport)', 'new_record', 'accept_new', jsonb_build_object('items', v_items1));
+    VALUES (v_run2, 1, '61b', 'Brûler les frontières (réimport)', 'new_record', 'accept_new',
+            jsonb_build_object('items', '[{"source_item_code":"CDF0000000001-B","call_number":"ZINE BRU"}]'::jsonb));
     v_lot2 := (public.fn_import_promote(v_run2, ARRAY['new_record'], ARRAY['accept_new'])->>'batch_id')::bigint;
     UPDATE public.book_drafts SET bib_ref = 'ESSAI-H19-REF-' || id WHERE batch_id = v_lot2;
+    UPDATE public.exemplar_drafts x SET source_item_code = 'CDF0000000001'
+     WHERE x.batch_id = v_lot2 AND x.source_item_code = 'CDF0000000001-B';
     v_rep := public.fn_batch_review_report(v_lot2);
     v_res := public.fn_batch_review_request(v_lot2);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
@@ -556,11 +563,21 @@ BEGIN
     VALUES (v_src, v_lib, 'essai/gros.marc', 'gros.marc', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_run6;
     INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, match_status, editorial_decision, normalized_payload)
     VALUES (v_run6, 1, 'gros', 'Quarante-cinq fois le meme code', 'new_record', 'accept_new',
-            jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', 'DUP-X', 'call_number', 'C' || g)) FROM generate_series(1, 45) g))),
+            jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', 'DUP-X' || g, 'call_number', 'C' || g)) FROM generate_series(1, 45) g))),
            (v_run6, 2, 'mis', 'Notice attribuee ailleurs', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"MIS-1"}]'::jsonb)),
-           (v_run6, 3, 'corb2', 'Code attendu par un autre lot', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"CORB-1"}]'::jsonb)),
-           (v_run6, 4, 'pris', 'Code deja dans la bibliotheque', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"CDF0000000001"}]'::jsonb));
+           (v_run6, 3, 'corb2', 'Code attendu par un autre lot', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"CORB-1-B"}]'::jsonb)),
+           (v_run6, 4, 'pris', 'Code deja dans la bibliotheque', 'new_record', 'accept_new', jsonb_build_object('items', '[{"source_item_code":"CDF0000000001-C"}]'::jsonb));
     v_lot7 := (public.fn_import_promote(v_run6, ARRAY['new_record'], ARRAY['accept_new'])->>'batch_id')::bigint;
+    -- H21 lot 6a (08/10/2026) : la promotion ne crée plus ces brouillons-là (un
+    -- code deux fois dans la ligne, attendu par un autre lot ou déjà dans la
+    -- bibliothèque : constat, suite h21_lot6a_exemplaires). Le rapport doit
+    -- encore les dire quand ils naissent autrement (code retouché par l'API,
+    -- code pris après la promotion) : ils sont fabriqués après coup.
+    UPDATE public.exemplar_drafts x SET source_item_code = CASE
+             WHEN x.source_item_code LIKE 'DUP-X%' THEN 'DUP-X'
+             WHEN x.source_item_code = 'CORB-1-B' THEN 'CORB-1'
+             ELSE 'CDF0000000001' END
+     WHERE x.batch_id = v_lot7 AND (x.source_item_code LIKE 'DUP-X%' OR x.source_item_code IN ('CORB-1-B', 'CDF0000000001-C'));
     SELECT m.draft_id INTO v_d_mis FROM ingest.partner_catalog_row_to_draft m JOIN ingest.partner_catalog_staging_rows s ON s.id = m.staging_row_id WHERE s.run_id = v_run6 AND s.row_no = 2;
     -- B29 : une notice donnée à une autre bibliothèque rendrait le lot mixte (rapport
     -- refusé à la coordination) ; le décalage se fabrique donc sur l'exemplaire.
@@ -575,6 +592,12 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
     END;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    -- H21 lot 6a : les codes fabriqués qui heurtent d'autres brouillons sont
+    -- rendus, le rapport lu (sinon CORB-1, porté par ce brouillon vivant,
+    -- retiendrait à la corbeille l'exemplaire CORB-1 de T15 quand T24 restaure
+    -- sa notice — règle du lot 6a).
+    UPDATE public.exemplar_drafts x SET source_item_code = x.source_item_code || CASE x.source_item_code WHEN 'CORB-1' THEN '-B' ELSE '-C' END
+     WHERE x.batch_id = v_lot7 AND x.source_item_code IN ('CORB-1', 'CDF0000000001');
     IF (v_rep->'items'->>'count')::int = 48
        AND (v_rep->'items'->>'code_twice')::int = 45
        AND (v_rep->'items'->>'library_mismatch')::int = 1
@@ -1018,7 +1041,8 @@ BEGIN
              WHERE h.book_id = v_book_trois AND e.library_id = v_lib
                AND e.source_item_code IN ('PRO-1', 'PRO-2') AND e.tombo ~ '^ESSAI-H19-[0-9]{4}$') = 2
        AND (SELECT e.shelf_location FROM public.exemplares e WHERE e.source_item_code = 'PRO-1' AND e.library_id = v_lib) = 'P 1'
-       AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.batch_id = v_lot_pro AND x.status <> 'published')
+       -- (H21 lot 6a : le lot de rapprochement du run est rejoint — la corbeille de T19 y est)
+       AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts x WHERE x.batch_id = v_lot_pro AND x.status NOT IN ('published', 'cancelled'))
        AND (SELECT status FROM public.catalog_batches WHERE id = v_lot_pro) = 'published'
        AND NOT EXISTS (SELECT 1 FROM public.book_drafts d WHERE d.titulo LIKE 'Petite histoire (rattachee%')
     THEN v_passed := v_passed+1;

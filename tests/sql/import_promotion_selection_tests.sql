@@ -1384,9 +1384,10 @@ BEGIN
        AND (v_res->>'created_items')::int = 2
        AND v_res->>'batch_id' IS NOT NULL
        -- les clés d'avant, rien de moins
+       -- les clés d'avant, plus celles du lot 6a (batch_joined, rows_signalled, verdicts)
        AND (SELECT array_agg(k ORDER BY k) FROM jsonb_object_keys(v_res - 'skipped_rows') AS k)
-           = ARRAY['batch_id', 'batch_name', 'created_exemplar_drafts', 'created_items', 'items_skipped_code_taken',
-                   'requested_rows', 'rows_already_held', 'run', 'run_id']
+           = ARRAY['batch_id', 'batch_joined', 'batch_name', 'created_exemplar_drafts', 'created_items', 'items_skipped_code_taken',
+                   'requested_rows', 'rows_already_held', 'rows_signalled', 'run', 'run_id', 'verdicts']
        AND (SELECT count(*) FROM ingest.partner_catalog_staging_rows
              WHERE id IN (v_kw2, v_kw3) AND editorial_decision = 'accept_duplicate' AND review_status = 'draft_created'
                AND created_exemplar_draft_id IS NOT NULL) = 2
@@ -1620,12 +1621,16 @@ BEGIN
   -- ── T31 ─────────────────────────────────────────────────────────────
   v_t := 'T31 (5e passe) Rejeter une ligne deja rejetee par H19 (Rapprocher d''une ligne entierement detenue) : ignoree (updated_rows 0, skipped_rows 1), la raison de H19 reste ; [N1, N2] ne rejette que N2';
   BEGIN
-    -- Décor (postgres) : un exemplaire de BLMF du seed porte le code d'origine
-    -- de l'unique exemplaire de N1.
-    UPDATE public.exemplares SET source_item_code = 'H21B-HELD-N1'
-     WHERE id = (SELECT e.id FROM public.exemplares e WHERE e.library_id = v_lib ORDER BY e.id LIMIT 1)
+    -- Décor (postgres) : un exemplaire de BLMF porte le code d'origine de
+    -- l'unique exemplaire de N1. H21 lot 6a (08/10/2026) : SUR LA NOTICE DE N1
+    -- (déjà là) — ailleurs, il serait « déplacé dans PMB » : signalé, la ligne
+    -- n'est plus rejetée d'office.
+    INSERT INTO public.book_holdings (book_id, library_id) VALUES (v_book, v_lib)
+    ON CONFLICT (book_id, library_id) DO UPDATE SET updated_at = now() RETURNING id INTO v_exh;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, circulation_policy, source_item_code)
+    SELECT b.bib_ref, 'H21B-T31-TOMBO', v_lib, v_exh, 'consulta', 'H21B-HELD-N1' FROM public.books b WHERE b.id = v_book
     RETURNING id INTO v_exh;
-    IF v_exh IS NULL THEN RAISE EXCEPTION 'decor : aucun exemplaire de BLMF au seed'; END IF;
+    IF v_exh IS NULL THEN RAISE EXCEPTION 'decor : exemplaire de N1 non pose'; END IF;
     -- L'autre onglet : « Rapprocher » N1. Tous ses exemplaires sont déjà là :
     -- H19 la marque rejetée, avec sa raison, sans exemplaire.
     EXECUTE 'SET LOCAL ROLE authenticated';
@@ -1796,8 +1801,8 @@ BEGIN
        AND (v_res4->>'created_exemplar_drafts')::int = 2
        AND (v_res4->>'created_items')::int = 2
        AND (SELECT array_agg(k ORDER BY k) FROM jsonb_object_keys(v_res4 - 'skipped_rows') AS k)
-           = ARRAY['batch_id', 'batch_name', 'created_exemplar_drafts', 'created_items', 'items_skipped_code_taken',
-                   'requested_rows', 'rows_already_held', 'run', 'run_id']
+           = ARRAY['batch_id', 'batch_joined', 'batch_name', 'created_exemplar_drafts', 'created_items', 'items_skipped_code_taken',
+                   'requested_rows', 'rows_already_held', 'rows_signalled', 'run', 'run_id', 'verdicts']
        AND (SELECT array_agg(x.source_item_code ORDER BY x.source_item_code) FROM public.exemplar_drafts x
              WHERE x.import_staging_row_id IN (v_v5, v_v7)) = ARRAY['H21B-EX-V5', 'H21B-EX-V7']
        -- V1, V3, V6 : les lignes entières telles qu'après le descarte — en
@@ -1807,8 +1812,11 @@ BEGIN
        AND (SELECT string_agg(editorial_decision || '/' || review_status, ',' ORDER BY row_no)
               FROM ingest.partner_catalog_staging_rows WHERE id IN (v_v1, v_v3, v_v6)) = 'pending/pending,pending/pending,pending/pending'
        AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts WHERE import_staging_row_id IN (v_v1, v_v3, v_v6))
-       -- en tout : trois lots ([V1, V2], [V6, V4], [V5, V7]), quatre exemplaires
-       AND (SELECT count(*) FROM public.catalog_batches) = v_nb + 3
+       -- en tout : un lot ([V1, V2] l'ouvre ; H21 lot 6a, IMP-27 d : [V6, V4]
+       -- et [V5, V7] rejoignent le lot ouvert du run), quatre exemplaires
+       AND (SELECT count(*) FROM public.catalog_batches) = v_nb + 1
+       AND NOT (v_res2->>'batch_joined')::boolean AND (v_res3->>'batch_joined')::boolean AND (v_res4->>'batch_joined')::boolean
+       AND v_res3->>'batch_id' = v_res2->>'batch_id' AND v_res4->>'batch_id' = v_res2->>'batch_id'
        AND (SELECT count(*) FROM public.exemplar_drafts) = v_nx + 4
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : [V3] refus='||coalesce(v_txt, 'aucun')
