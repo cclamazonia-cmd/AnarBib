@@ -249,6 +249,61 @@ sauvegardée avant, restaurée après) :
 | responsabilités rattachées à leur fiche AnarBib, par le `$3` | **61 sur 61** ; 0 auteur recréé par l'import des notices |
 | catégories rattachées à une fiche AnarBib, par le libellé | **47 sur 47** |
 
+## Pour DIRA — corriger la ligne de son PMB, puis repasser « Oui » (H32, 08/10/2026)
+
+Tant que PMB Services n'a pas repris le correctif (signalement rédigé :
+`docs/interop/signalement-pmb-origine-autorites-2026-10-08.md`), une
+bibliothèque qui veut que ses notices importées se lient à leurs autorités par
+le `$3` peut corriger son PMB 8.1.1.1 elle-même. C'est une ligne, dans un seul
+fichier, sans toucher à la base.
+
+1. **Sauvegarder** le fichier `admin/import/import_func.inc.php` (à la racine
+   de l'installation de PMB), puis l'ouvrir. La ligne 95 (dans le gabarit
+   `$tpl_beforeupload_expl`, qui commence ligne 28) est :
+
+   ```php
+   ".origin::gen_combo_box("authorities")."
+   ```
+
+   La remplacer par la forme que les trois autres formulaires du module
+   utilisent déjà (ligne 245 du même fichier, lignes 275 et 451 de
+   `iimport_expl.php`) :
+
+   ```php
+   ".origin::gen_combo_box("authorities","authorities_default_origin")."
+   ```
+
+   Rien d'autre ne change : le libellé de la ligne 94 porte déjà
+   `for='authorities_default_origin'`, et le script d'import lit cette
+   variable (lignes 911 et 924). Pas de cache à vider : PHP relit le fichier.
+
+2. **Vérifier que le champ part sous le bon nom** : ouvrir Administration >
+   Imports > Exemplaires UNIMARC, inspecter la liste des origines (clic droit,
+   « Inspecter ») — son attribut `name` doit être `authorities_default_origin`.
+
+3. **Importer dans l'ordre habituel** (ci-dessus) : les autorités d'abord
+   (Autorités > Import, dans le thésaurus par défaut), puis les notices avec
+   la fonction `func_cpt_rameau_first_level`, « Générer les liens : Oui »,
+   **« Tenir compte des notices d'autorités : Oui »** et, dans la liste,
+   l'origine **AnarBib** (créée par l'import des autorités).
+
+4. **Vérifier le résultat** sur une notice importée : ses responsabilités
+   pointent vers les fiches d'autorité importées (pas vers des auteurs
+   recréés) ; dans la base, `authorities_sources` lie chaque autorité à
+   l'origine AnarBib et `notices_authors` ne contient aucun auteur neuf pour ce
+   fichier. **Éprouvé le 08/10/2026 au banc** : le correctif posé dans le PMB
+   du banc (puis retiré), l'import joué comme le navigateur
+   (`PMB_COMME_LE_NAVIGATEUR=1`, le champ part sous le nom que la page
+   corrigée porte) : 61 responsabilités sur 61 rattachées à leur fiche AnarBib
+   par le `$3`, 61 liens notice → source d'autorité, 0 vers une source absente,
+   0 auteur recréé — chiffre pour chiffre le réglage « origine transmise » du
+   tableau ci-dessus (bilan `~/pmb-banc/echange/bilans-h32-navigateur-corrige`,
+   non versé : il ne mesure rien que `h25-origine-transmise` ne dise déjà).
+
+À la prochaine mise à jour de PMB, le fichier sera réécrit : si le correctif
+n'y est pas encore, refaire la ligne. Sans le correctif, laisser « Non » :
+avec « Oui », l'import écrit des liens vers une origine absente.
+
 ## Réimporter dans PMB l'export tiré de la base (H27, mesuré le 29/09/2026)
 
 Le chemin complet : les 64 notices des deux fixtures (`fixtures/`), lues par la

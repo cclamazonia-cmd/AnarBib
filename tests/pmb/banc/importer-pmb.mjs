@@ -186,7 +186,11 @@ const proprietaire = choisir(r.text, 'book_lender_id', process.env.PMB_PROPRIETA
 const statut = choisir(r.text, 'book_statut_id', process.env.PMB_STATUT || 'Document en bon état');
 const localisation = choisir(r.text, 'book_location_id', process.env.PMB_LOCALISATION || 'Bibliothèque principale');
 const statutNotice = choisir(r.text, 'statutnot');
-const origine = choisir(r.text, 'authorities_origin', process.env.PMB_ORIGINE);
+// H32 (08/10/2026) : le formulaire de PMB 8.1.1.1 nomme la liste authorities_origin ;
+// un PMB corrigé (une ligne, docs/interop/signalement-pmb-origine-autorites-2026-10-08.md)
+// la nomme authorities_default_origin — on lit celle que la page porte.
+const nomOrigine = options(r.text, 'authorities_default_origin').length ? 'authorities_default_origin' : 'authorities_origin';
+const origine = choisir(r.text, nomOrigine, process.env.PMB_ORIGINE);
 const autoritesNotices = process.env.PMB_AUTORITES_NOTICES === '1';
 const liens = (process.env.PMB_LIENS ?? '1') === '1';
 const commeLeNavigateur = process.env.PMB_COMME_LE_NAVIGATEUR === '1';
@@ -197,7 +201,7 @@ const champs = {
   isbn_mandatory: '0', isbn_dedoublonnage: '1', isbn_only: '1',
   statutnot: statutNotice.valeur, link_generate: liens ? '1' : '0', notice_replace_links: '0',
   import_force_notice_is_new: '0', authorities_notices: autoritesNotices ? '1' : '0', import_notice_existing_replace: '0',
-  [commeLeNavigateur ? 'authorities_origin' : 'authorities_default_origin']: origine.valeur,
+  [commeLeNavigateur ? nomOrigine : 'authorities_default_origin']: origine.valeur,
   book_lender_id: proprietaire.valeur, book_statut_id: statut.valeur, book_location_id: localisation.valeur,
   cote_mandatory: '0', tdoc_codage: '0', statisdoc_codage: '0', sdoc_codage: '0',
 };
@@ -253,7 +257,7 @@ const bilan = {
   encodage: encodage || 'détection automatique',
   options: {
     proprietaire: proprietaire.libelle, statut: statut.libelle, localisation: localisation.libelle,
-    statut_notice: statutNotice.libelle, liens_46X: liens, autorites_notices: autoritesNotices, origine: origine.libelle, origine_transmise: !commeLeNavigateur, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
+    statut_notice: statutNotice.libelle, liens_46X: liens, autorites_notices: autoritesNotices, origine: origine.libelle, origine_transmise: !commeLeNavigateur || nomOrigine === 'authorities_default_origin', champ_origine_du_formulaire: nomOrigine, dedoublonnage_isbn: true, isbn_obligatoire: false, cote_obligatoire: false,
   },
   relances: etapes,
   pmb: {
