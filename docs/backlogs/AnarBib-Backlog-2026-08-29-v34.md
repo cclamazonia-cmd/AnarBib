@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-07** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-08** · 71 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 7 octobre 2026 au soir** (`9b95bc63`) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 05/10 au soir, `a387b46c`). Deux journées à trois sessions, et une panne : **8 migrations** (440 appliquées = 440 au dépôt, toutes par la CI), 38 commits, 2 212 tests JS et 179 suites SQL. Ce qui a bougé et pourquoi : **la base** — une table et une policy de moins (J11), une table `ingest` de plus (H21 lot 5), +31 fonctions dont 23 DEFINER, et **34 DEFINER fermées** à `authenticated` (B37 : l'avis 0029 tombe de 449 à 422, exactement le compte de l'audit) ; **la panne du 07/10** (19:58 → 20:19, I31, I32) a remis à zéro les compteurs d'usage, d'où 440 « index inutilisé » et un avis de performance qui monte de 257 à 466 sans qu'une ligne ait changé ; **le catalogue** — deux notices fusionnées par Xavier, une créée, seize brouillons publiés ; **le dépôt** — `AccountPage` passée de 153 à 73 Ko en huit lots (E6), Mon compte qui dit l'indisponibilité du service (E33), +111 clés, +156 tests. **Mis à jour dans cette version, après l'inventaire des sessions voisines des cinq derniers jours (03/10 → 07/10) contre le backlog** : deux livraisons du 06/10 qui n'avaient d'item nulle part entrent en clôture (**E35**, trois signalements de Xavier à l'écran ; **B37**, les 34 DEFINER) ; un item ouvert en décision (**G19**, la correspondance entre bibliothèques — cinq questions à Xavier) ; notes complétées sur H2 (le site du thésaurus coupe la connexion depuis le 05/10, deux gestes proposés sans réponse), E31 (ce qui attend un regard : E6 lots 2, 4, 5, 8, E33, E35, les écrans de H21), B36 et I32 (compteurs remis à zéro), H6 (OPDS d'AnarcosyndicalismeBOOK), E6 (lot 8, seuil de 60 Ko non atteint, à décider) et E33 (livré, à voir à l'écran). **Ce qui reste à clore, et par qui** — *par Xavier, critères tenus sur pièces* : D9, F24, J11, E33, H20 est clos, C14, C23, G16 attendent l'écran ; *à l'écran* : E31 ; *les décisions* : A1, C4, C17, G19 (cinq questions), E6 (aller au-delà des 73 Ko déplacerait les chargements) ; *sans code* : A1, A3, F3 (deux fonctions à supprimer de la plateforme), H2 (un courriel prêt depuis le 16/09).
 
-**Fraîcheur des constats au 2026-10-07.** **52 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-08.** **52 items sur 71** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, J9, J11, K2, K7, K10). Les **19** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -758,7 +758,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E31** | Ce qui attend un regard à l'écran, connecté | `P2` | Ouvert |
 | **E32** | Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1) | `P3` | Ouvert |
 | **E33** | Quand la base ne répond pas, Mon compte dit que le service est indisponible au lieu d'une page vide | `P2` | À vérifier |
-| **E34** | « Éditer » une notice en consultation la rend empruntable à la publication : la reprise oublie `circulation_default` | `P2` | Ouvert |
+| **E34** | « Éditer » une notice en consultation la rend empruntable à la publication : la reprise oublie `circulation_default` | `P2` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -979,11 +979,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E34 — « Éditer » une notice en consultation la rend empruntable à la publication : la reprise oublie `circulation_default`
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Constaté le 07/10 par le lot 5 de H21 : `public.create_book_draft_from_book` (« Éditer ») ne recopie pas `circulation_default` de la notice ; le brouillon prend la valeur par défaut `emprestavel`, et à la publication le déclencheur `fn_propagate_circulation_default_on_publish` réécrit `circulation_default` et `loanable` dans la notice. Une reprise à la main d’une notice en consultation sur place la rend donc empruntable sans que personne l’ait choisi. En production (lecture seule, 07/10) : 12 notices en consultation ; 11 brouillons publiés portent un `circulation_default` différent de celui de leur notice. La copie du lot 4 de H21 avait le même défaut, corrigé par le lot 5.
 
-*Vérifié : 07/10 — ouvert sur constat du lot 5 de H21 (en-tête de sa migration).*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Recopier `circulation_default` dans `create_book_draft_from_book` (définition vivante, par ancres) ; relire les 11 brouillons publiés divergents et dire à Xavier quelles notices ont pu changer de circulation (comparer au journal du catalogue), sans rien corriger en production sans son accord ; test : reprise d’une notice en consultation, publiée, reste en consultation et non empruntable. Vérifier en même temps les autres colonnes de `books` (une colonne = trois endroits : `book_drafts`, publication, `create_from_book`).
 
@@ -1375,7 +1375,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | En cours |
 | **H26** | L'export d'un gros catalogue ne dépend plus de la mémoire d'une edge function | `P2` | À vérifier |
 | **H29** | Au retour dans PMB, un exemplaire garde son type, sa section et son code statistique | `P2` | Ouvert |
-| **H32** | Signaler à PMB que son formulaire d’import ne transmet pas l’origine des autorités, et donner à DIRA le correctif d’une ligne | `P3` | Ouvert |
+| **H32** | Signaler à PMB que son formulaire d’import ne transmet pas l’origine des autorités, et donner à DIRA le correctif d’une ligne | `P3` | À vérifier |
 | **H30** | « Retraiter » un import sans fichier (moisson OAI, candidat, dépôt direct) n’efface plus ses lignes | `P1` | À vérifier |
 | **H31** | « Retraiter » juge le run au moment d’effacer, pas seulement à l’envoi | `P2` | À vérifier |
 
@@ -1574,11 +1574,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H32 — Signaler à PMB que son formulaire d’import ne transmet pas l’origine des autorités, et donner à DIRA le correctif d’une ligne
 
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, aucune compétence technique
+`P3` Différé · État : **À vérifier** · Charge : une soirée · Ce que ça demande : bibliothéconomie, aucune compétence technique
 
 **État.** Constaté par **H25** (banc PMB 8.1.1.1, `tests/pmb/README.md` § origine) : dans l’onglet d’import « Exemplaires UNIMARC », la liste de l’origine des autorités s’appelle `authorities_origin` (`origin::gen_combo_box("authorities")`), alors que l’import lit `$authorities_default_origin`. Depuis un navigateur, l’origine choisie n’arrive jamais : avec « Tenir compte des notices d’autorités : Oui », les liens notice → autorité partent vers une source absente (44 sur la fixture) ; d’où la consigne « Non », qui rapproche par le nom.
 
-*Vérifié : 06/10 — ouvert à la clôture de H25, sur décision de Xavier.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Rédiger (pour Xavier, qui l’enverra) le signalement à l’équipe PMB (forge ou liste de PMB Services), avec la ligne en cause et le correctif proposé (`origin::gen_combo_box("authorities", "authorities_default_origin")`) ; et, pour DIRA, la marche à suivre pour corriger la ligne dans leur PMB, puis repasser « Oui ». Vérifier au banc que le correctif d’une ligne rend les 61 liens par `$3` (`PMB_ORIGINE=AnarBib`).
 
@@ -2331,4 +2331,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-07. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9b95bc63` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-08. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 71 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-07 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9b95bc63` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

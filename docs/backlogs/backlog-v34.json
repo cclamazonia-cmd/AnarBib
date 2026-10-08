@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-07",
+    "maj": "2026-10-08",
     "releve": {
       "date": "2026-10-07",
       "commit": "9b95bc63"
@@ -5615,7 +5615,7 @@
       "id": "H32",
       "d": "H",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "biblio",
@@ -5656,10 +5656,16 @@
       "r": [
         "tests/pmb/README.md"
       ],
-      "verif": {
-        "fr": "06/10 — ouvert à la clôture de H25, sur décision de Xavier.",
-        "pt": "06/10 — aberto no fechamento de H25, por decisão de Xavier."
-      }
+      "verif": [
+        {
+          "fr": "06/10 — ouvert à la clôture de H25, sur décision de Xavier.",
+          "pt": "06/10 — aberto no fechamento de H25, por decisão de Xavier."
+        },
+        {
+          "fr": "**08/10 — rédigé, éprouvé au banc, livré** (`4c2d1c32`). (1) Le signalement pour PMB Services est écrit, au « je », prêt à envoyer par Xavier : `docs/interop/signalement-pmb-origine-autorites-2026-10-08.md` — version 8.1.1 patch 1, la ligne en cause (`admin/import/import_func.inc.php` 95, gabarit `$tpl_beforeupload_expl` de l'onglet « Exemplaires UNIMARC », affiché par `iimport_expl.php` 150), la variable lue (lignes 911 et 924, `$authorities_default_origin`), les trois formulaires voisins qui passent déjà le bon nom (245 ; `iimport_expl.php` 275 et 451), le correctif d'une ligne, et la mesure (origine non transmise : 44 liens vers une origine absente ; transmise : 61 responsabilités sur 61 par le `$3`, 0 auteur recréé). Lignes relues dans les sources de l'archive du banc. (2) La marche à suivre pour DIRA est dans `tests/pmb/README.md`, section « Pour DIRA » : sauvegarder le fichier, remplacer la ligne, vérifier le `name` de la liste, importer dans l'ordre avec « Oui » et l'origine AnarBib, vérifier le résultat ; refaire la ligne après une mise à jour de PMB, sinon laisser « Non ». (3) **Le correctif d'une ligne, éprouvé au banc** : posé dans le PMB du banc, puis l'import joué « comme le navigateur » (l'outil envoie le champ sous le nom que la page corrigée porte, `authorities_default_origin` — `importer-pmb.mjs` lit désormais la liste sous l'un ou l'autre nom) : 61 responsabilités sur 61 rattachées à leur fiche AnarBib par le ``, 61 liens notice → source d'autorité, 0 vers une source absente, 0 auteur recréé — chiffre pour chiffre le bilan « origine transmise » du 29/09 (`h25-origine-transmise`) ; sans le correctif, le même import « comme le navigateur » donne 0 sur 61 et 44 liens vers une origine absente (`h25-comme-le-navigateur`). Le correctif a ensuite été retiré du banc, qui reste un PMB 8.1.1.1 tel quel. Le canal d'envoi (forge de PMB Services ou liste des utilisateur·rices) est au choix de Xavier. **Reste** : l'envoi, par Xavier ; clôture à sa décision.",
+          "pt": "**08/10 — redigido, provado na bancada, entregue** (`4c2d1c32`). (1) O relato para a PMB Services está escrito (`docs/interop/signalement-pmb-origine-autorites-2026-10-08.md`): a linha em causa, a variável lida, a correção de uma linha, a medida. (2) O passo a passo para a DIRA está em `tests/pmb/README.md`. (3) A correção de uma linha foi provada na bancada: 61 responsabilités sur 61 rattachées à leur fiche AnarBib par le ``, 61 liens notice → source d'autorité, 0 vers une source absente, 0 auteur recréé — chiffre pour chiffre le bilan « origine transmise » du 29/09 (`h25-origine-transmise`) ; sans le correctif, le même import « comme le navigateur » donne 0 sur 61 et 44 liens vers une origine absente (`h25-comme-le-navigateur`). **Resta** o envio, por Xavier."
+        }
+      ]
     },
     {
       "d": "H",
@@ -6457,7 +6463,7 @@
       "id": "E34",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -6496,10 +6502,16 @@
         "supabase/migrations",
         "tests/sql"
       ],
-      "verif": {
-        "fr": "07/10 — ouvert sur constat du lot 5 de H21 (en-tête de sa migration).",
-        "pt": "07/10 — aberto por constatação do lote 5 de H21."
-      }
+      "verif": [
+        {
+          "fr": "07/10 — ouvert sur constat du lot 5 de H21 (en-tête de sa migration).",
+          "pt": "07/10 — aberto por constatação do lote 5 de H21."
+        },
+        {
+          "fr": "**08/10 — livré, déployé et vérifié à 19 h 37** (`52fd90e2`, migration `20261008172304`, appliquée par la CI, `created_by` vide). *Cause confirmée sur la définition réelle* : `create_book_draft_from_book` recopiait 90 colonnes, pas `circulation_default` ; le déclencheur `fn_propagate_circulation_default_on_publish` (AFTER UPDATE OF status → published) réécrit `circulation_default` ET `loanable` depuis le brouillon — le brouillon né au défaut `'emprestavel'` basculait la notice. *Ce qui a protégé les notices jusqu'ici* : l'écran — `BookDraftForm` recalcule la circulation depuis `loanable` (recopié, lui) en chargeant le brouillon ; en production, les 12 notices en consultation ont tous leurs brouillons publiés à `'consulta'` (19 brouillons relus), **aucune n'a basculé par ce chemin**, et la liste des « 11 brouillons publiés divergents » de la fiche n'est pas ce défaut : ce sont des `'ambos'`/`'emprestavel'` posés autrement (exemplaires, fiche) — rien à corriger en données, rien à soumettre. Deux notices portent un exemplaire `'consulta'` sous une notice `'emprestavel'` (1778, 2301) : des politiques d'exemplaire posées à la main (MLEG, 07-08/2026), pas une bascule. *Livré* : la reprise recopie `circulation_default`, par ancres comptées sur la définition vivante (md5 `d1cd9eb2…`), droits et `search_path` inchangés ; vérification finale : la recopie, **toute colonne commune à `books` et `book_drafts` recopiée** (sept exceptions nommées : `id`, horodatages, auteurs de modification, `work_id` en coalesce, `publisher_id` par déclencheur), droits (`authenticated`, `service_role`, ni `anon` ni PUBLIC), DEFINER. Suite `e34_reprise_garde_la_circulation` (5 cas : consulta, ambos, emprestavel repris puis publiés tels qu'ils naissent — les deux valeurs, leçon du 27/08 ; T5 garde les colonnes à venir au troisième endroit). Banc réduit 13 suites vertes (les dix qui appellent la fonction, grants, hygiène), mutant (reprise d'avant) rouge sur T1, T2, T3, T5 — T4 (`'emprestavel'`) reste vert, c'est exactement ce qui cachait le défaut. vitest 2 212, CI verte. *Critère 1* tenu (suite) ; *critère 2* : la liste à soumettre est vide, dit ci-dessus. **Reste** : clôture à décider par Xavier.",
+          "pt": "**08/10 — entregue e verificado às 19 h 37** (`52fd90e2`, migração `20261008172304`). A reprise não copiava `circulation_default`; o gatilho de publicação reescrevia circulação e `loanable` a partir do rascunho. O que protegia: a tela recalcula a circulação a partir de `loanable`; em produção nenhuma das 12 notícias em consulta mudou por este caminho; os « 11 rascunhos divergentes » não são este defeito — nada a corrigir. Entregue: a cópia recopia `circulation_default`; verificação final: toda coluna comum a `books` e `book_drafts` é copiada. Suíte de 5 casos, mutante vermelho. **Fechamento a decidir por Xavier.**"
+        }
+      ]
     },
     {
       "id": "G19",
