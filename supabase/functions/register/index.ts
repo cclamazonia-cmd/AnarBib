@@ -1,4 +1,8 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
+// F19 (08/10/2026) : le filet global de console (deps.ts) ne tient pas dans l'exécuteur
+// Edge de production — trois lignes de register y portaient encore des adresses le
+// 05/10 ; les objets journalisés ici passent donc par le masque AVANT console.log.
+import { masquerAdresses } from "../_shared/core/journal-masque.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { verifierSolution } from '../_shared/altcha.ts';
 import { createClient } from '../_shared/deps.ts';
@@ -410,10 +414,10 @@ async function sendEmail({ logLabel, payload }) {
       console.warn(`register: ${logLabel} inlineLogosInHtml failed (mail sent anyway):`, e);
     }
   }
-  console.log(`register: ${logLabel} request`, {
+  console.log(`register: ${logLabel} request`, masquerAdresses(JSON.stringify({
     to: payload.to,
     subject: payload.subject
-  });
+  })));
   try {
     const responseText = await sendEmailPartage({
       toEmails: payload.to,
@@ -1127,7 +1131,7 @@ serve(async (req)=>{
     const adminRecipients = uniqueEmails([
       ANARBIB_ADMIN_EMAIL
     ]);
-    console.log("register: routing", {
+    console.log("register: routing", masquerAdresses(JSON.stringify({
       library_slug: effectiveLibrarySlug,
       signup_intent: signupIntent,
       display_name: displayName,
@@ -1138,7 +1142,7 @@ serve(async (req)=>{
       effective_library_internal_recipients: effectiveLibraryInternalRecipients,
       admin_recipients: adminRecipients,
       is_test_mode: isTestMode
-    });
+    })));
     const userMailHtml = buildUserMail({
       firstName,
       libraryName: displayName,
