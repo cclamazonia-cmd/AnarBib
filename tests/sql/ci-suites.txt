@@ -724,3 +724,6 @@ tests/sql/aides_definer_fermees_tests.sql
 # E34 (08/10/2026) : « Éditer » recopie circulation_default ; la suite garde
 # que toute colonne commune à books et book_drafts est recopiée par la reprise.
 tests/sql/e34_reprise_garde_la_circulation_tests.sql
+# DEDUP-15 (08/10/2026) : deux tomes différents ne sont jamais un doublon, aussi
+# dans le détecteur par notice et dans celui des brouillons (règle du lot 4).
+tests/sql/tomes_jamais_doublons_par_notice_tests.sql
