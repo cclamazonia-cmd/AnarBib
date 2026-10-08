@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "in AnarBib, inventario {tombo}",
   "error.import.item_trace_reserved": "La traccia d’importazione di un esemplare (identificativo d’origine, fonte, esecuzione) non si mette a mano: viene dalla promozione o da «Riconcilia».",
   "error.import.item_restore_code_taken": "Questo esemplare non esce dal cestino: il suo codice a barre d’origine (o il suo identificativo d’origine) è ora portato da un altro esemplare o da un’altra bozza della tua biblioteca.",
-  "error.publish.source_item_id_taken": "Un esemplare di questa biblioteca porta già questo identificativo d’origine (expl_id): pubblicazione rifiutata."
+  "error.publish.source_item_id_taken": "Un esemplare di questa biblioteca porta già questo identificativo d’origine (expl_id): pubblicazione rifiutata.",
+  "error.correspondance.not_coordinator": "Solo una coordinazione della biblioteca può scrivere a suo nome.",
+  "error.correspondance.not_participant": "Questa conversazione non esiste, o la tua biblioteca non ne fa parte.",
+  "error.correspondance.library_not_found": "Questa biblioteca non si trova o non è più attiva.",
+  "error.correspondance.same_library": "Scegli un’altra biblioteca: non si scrive alla propria.",
+  "error.correspondance.subject_required": "Dai un oggetto alla conversazione (al massimo 200 caratteri).",
+  "error.correspondance.empty_body": "Il messaggio è vuoto.",
+  "error.correspondance.body_too_long": "Il messaggio supera i 4 000 caratteri: accorcialo, o invialo in due parti.",
+  "error.correspondance.lang_invalid": "La lingua del messaggio deve essere una delle dieci lingue di AnarBib.",
+  "error.correspondance.rate_limited": "Trenta messaggi in ventiquattro ore sono già molti: riprendi domani.",
+  "error.correspondance.not_found": "Questa conversazione non si trova."
 }

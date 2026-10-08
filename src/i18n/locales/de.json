@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "in AnarBib, Inventarnummer {tombo}",
   "error.import.item_trace_reserved": "Die Importspur eines Exemplars (Herkunftskennung, Quelle, Lauf) wird nicht von Hand gesetzt: Sie kommt aus der Übernahme oder aus „Abgleichen“.",
   "error.import.item_restore_code_taken": "Dieses Exemplar kann nicht aus dem Papierkorb: Sein ursprünglicher Barcode (oder seine Herkunftskennung) gehört jetzt einem anderen Exemplar oder Entwurf deiner Bibliothek.",
-  "error.publish.source_item_id_taken": "Ein Exemplar dieser Bibliothek trägt bereits diese Herkunftskennung (expl_id): Veröffentlichung abgelehnt."
+  "error.publish.source_item_id_taken": "Ein Exemplar dieser Bibliothek trägt bereits diese Herkunftskennung (expl_id): Veröffentlichung abgelehnt.",
+  "error.correspondance.not_coordinator": "Nur eine Koordination der Bibliothek kann in ihrem Namen schreiben.",
+  "error.correspondance.not_participant": "Dieser Faden existiert nicht, oder deine Bibliothek gehört nicht dazu.",
+  "error.correspondance.library_not_found": "Diese Bibliothek ist nicht zu finden oder nicht mehr aktiv.",
+  "error.correspondance.same_library": "Wähle eine andere Bibliothek: an die eigene schreibt man nicht.",
+  "error.correspondance.subject_required": "Gib dem Faden einen Betreff (höchstens 200 Zeichen).",
+  "error.correspondance.empty_body": "Die Nachricht ist leer.",
+  "error.correspondance.body_too_long": "Die Nachricht ist länger als 4 000 Zeichen: kürze sie oder schicke sie in zwei Teilen.",
+  "error.correspondance.lang_invalid": "Die Sprache der Nachricht muss eine der zehn Sprachen von AnarBib sein.",
+  "error.correspondance.rate_limited": "Dreißig Nachrichten in vierundzwanzig Stunden sind schon viel: mach morgen weiter.",
+  "error.correspondance.not_found": "Dieser Faden ist nicht zu finden."
 }

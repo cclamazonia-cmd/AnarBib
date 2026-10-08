@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "in AnarBib, inventarisnummer {tombo}",
   "error.import.item_trace_reserved": "Het importspoor van een exemplaar (herkomst-ID, bron, run) zet je niet met de hand: het komt uit de promotie of uit „Koppelen”.",
   "error.import.item_restore_code_taken": "Dit exemplaar kan niet uit de prullenbak: de oorspronkelijke streepjescode (of herkomst-ID) staat nu op een ander exemplaar of concept van je bibliotheek.",
-  "error.publish.source_item_id_taken": "Een exemplaar van deze bibliotheek heeft al deze herkomst-ID (expl_id): publicatie geweigerd."
+  "error.publish.source_item_id_taken": "Een exemplaar van deze bibliotheek heeft al deze herkomst-ID (expl_id): publicatie geweigerd.",
+  "error.correspondance.not_coordinator": "Alleen een coördinatie van de bibliotheek kan in haar naam schrijven.",
+  "error.correspondance.not_participant": "Deze draad bestaat niet, of je bibliotheek maakt er geen deel van uit.",
+  "error.correspondance.library_not_found": "Deze bibliotheek is niet te vinden of niet meer actief.",
+  "error.correspondance.same_library": "Kies een andere bibliotheek: aan je eigen schrijf je niet.",
+  "error.correspondance.subject_required": "Geef de draad een onderwerp (hoogstens 200 tekens).",
+  "error.correspondance.empty_body": "Het bericht is leeg.",
+  "error.correspondance.body_too_long": "Het bericht is langer dan 4 000 tekens: kort het in of stuur het in twee delen.",
+  "error.correspondance.lang_invalid": "De taal van het bericht moet een van de tien talen van AnarBib zijn.",
+  "error.correspondance.rate_limited": "Dertig berichten in vierentwintig uur is al veel: ga morgen verder.",
+  "error.correspondance.not_found": "Deze draad is niet te vinden."
 }

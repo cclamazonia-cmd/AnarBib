@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "a AnarBib: {tombo}",
   "error.import.item_trace_reserved": "El rastre d’importació d’un exemplar (identificador d’origen, font, execució) no es posa a mà: ve de la promoció o d’«Aproximar».",
   "error.import.item_restore_code_taken": "Aquest exemplar no surt de la paperera: el seu codi de barres d’origen (o el seu identificador d’origen) ara el porta un altre exemplar o un altre esborrany de la teva biblioteca.",
-  "error.publish.source_item_id_taken": "Un exemplar d’aquesta biblioteca ja porta aquest identificador d’origen (expl_id): publicació refusada."
+  "error.publish.source_item_id_taken": "Un exemplar d’aquesta biblioteca ja porta aquest identificador d’origen (expl_id): publicació refusada.",
+  "error.correspondance.not_coordinator": "Només una coordinació de la biblioteca pot escriure en nom seu.",
+  "error.correspondance.not_participant": "Aquest fil no existeix, o la teva biblioteca no en forma part.",
+  "error.correspondance.library_not_found": "Aquesta biblioteca no es troba o ja no és activa.",
+  "error.correspondance.same_library": "Tria una altra biblioteca: no s’escriu a la pròpia.",
+  "error.correspondance.subject_required": "Posa un assumpte al fil (200 caràcters com a màxim).",
+  "error.correspondance.empty_body": "El missatge és buit.",
+  "error.correspondance.body_too_long": "El missatge supera els 4.000 caràcters: escurça’l o envia’l en dues parts.",
+  "error.correspondance.lang_invalid": "La llengua del missatge ha de ser una de les deu llengües d’AnarBib.",
+  "error.correspondance.rate_limited": "Trenta missatges en vint-i-quatre hores ja és molt: continua demà.",
+  "error.correspondance.not_found": "Aquest fil no es troba."
 }

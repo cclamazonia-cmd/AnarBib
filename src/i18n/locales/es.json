@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "en AnarBib: {tombo}",
   "error.import.item_trace_reserved": "El rastro de importación de un ejemplar (identificador de origen, fuente, ejecución) no se pone a mano: viene de la promoción o de «Aproximar».",
   "error.import.item_restore_code_taken": "Este ejemplar no sale de la papelera: su código de barras de origen (o su identificador de origen) lo lleva ahora otro ejemplar u otro borrador de tu biblioteca.",
-  "error.publish.source_item_id_taken": "Un ejemplar de esta biblioteca ya lleva este identificador de origen (expl_id): publicación rechazada."
+  "error.publish.source_item_id_taken": "Un ejemplar de esta biblioteca ya lleva este identificador de origen (expl_id): publicación rechazada.",
+  "error.correspondance.not_coordinator": "Solo una coordinación de la biblioteca puede escribir en su nombre.",
+  "error.correspondance.not_participant": "Este hilo no existe, o tu biblioteca no forma parte de él.",
+  "error.correspondance.library_not_found": "Esta biblioteca no se encuentra o ya no está activa.",
+  "error.correspondance.same_library": "Elige otra biblioteca: no se escribe a la propia.",
+  "error.correspondance.subject_required": "Pon un asunto al hilo (200 caracteres como máximo).",
+  "error.correspondance.empty_body": "El mensaje está vacío.",
+  "error.correspondance.body_too_long": "El mensaje supera los 4 000 caracteres: acórtalo o envíalo en dos partes.",
+  "error.correspondance.lang_invalid": "La lengua del mensaje debe ser una de las diez lenguas de AnarBib.",
+  "error.correspondance.rate_limited": "Treinta mensajes en veinticuatro horas ya es mucho: sigue mañana.",
+  "error.correspondance.not_found": "Este hilo no se encuentra."
 }

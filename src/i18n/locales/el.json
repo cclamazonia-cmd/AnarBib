@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "στο AnarBib: {tombo}",
   "error.import.item_trace_reserved": "Το ίχνος εισαγωγής ενός αντιτύπου (αναγνωριστικό προέλευσης, πηγή, εκτέλεση) δεν μπαίνει με το χέρι: προέρχεται από την προώθηση ή την «Αντιστοίχιση».",
   "error.import.item_restore_code_taken": "Αυτό το αντίτυπο δεν βγαίνει από τον κάδο: τον αρχικό γραμμωτό κώδικά του (ή το αναγνωριστικό προέλευσης) τον έχει πλέον άλλο αντίτυπο ή πρόχειρο της βιβλιοθήκης σου.",
-  "error.publish.source_item_id_taken": "Ένα αντίτυπο αυτής της βιβλιοθήκης έχει ήδη αυτό το αναγνωριστικό προέλευσης (expl_id): η δημοσίευση απορρίφθηκε."
+  "error.publish.source_item_id_taken": "Ένα αντίτυπο αυτής της βιβλιοθήκης έχει ήδη αυτό το αναγνωριστικό προέλευσης (expl_id): η δημοσίευση απορρίφθηκε.",
+  "error.correspondance.not_coordinator": "Μόνο ένας συντονισμός της βιβλιοθήκης μπορεί να γράψει εξ ονόματός της.",
+  "error.correspondance.not_participant": "Αυτό το νήμα δεν υπάρχει, ή η βιβλιοθήκη σου δεν συμμετέχει σε αυτό.",
+  "error.correspondance.library_not_found": "Αυτή η βιβλιοθήκη δεν βρέθηκε ή δεν είναι πλέον ενεργή.",
+  "error.correspondance.same_library": "Διάλεξε άλλη βιβλιοθήκη: δεν γράφουμε στη δική μας.",
+  "error.correspondance.subject_required": "Δώσε ένα θέμα στο νήμα (έως 200 χαρακτήρες).",
+  "error.correspondance.empty_body": "Το μήνυμα είναι κενό.",
+  "error.correspondance.body_too_long": "Το μήνυμα ξεπερνά τους 4.000 χαρακτήρες: συντόμευσέ το ή στείλε το σε δύο μέρη.",
+  "error.correspondance.lang_invalid": "Η γλώσσα του μηνύματος πρέπει να είναι μία από τις δέκα γλώσσες του AnarBib.",
+  "error.correspondance.rate_limited": "Τριάντα μηνύματα σε είκοσι τέσσερις ώρες είναι ήδη πολλά: συνέχισε αύριο.",
+  "error.correspondance.not_found": "Αυτό το νήμα δεν βρέθηκε."
 }

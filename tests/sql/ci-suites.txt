@@ -727,3 +727,6 @@ tests/sql/e34_reprise_garde_la_circulation_tests.sql
 # DEDUP-15 (08/10/2026) : deux tomes différents ne sont jamais un doublon, aussi
 # dans le détecteur par notice et dans celui des brouillons (règle du lot 4).
 tests/sql/tomes_jamais_doublons_par_notice_tests.sql
+# G19 lot 1 (08/10/2026) : correspondance entre bibliothèques — coordinations seules,
+# écriture par RPC, archivage, limite d'envoi, l'administration ne lit pas.
+tests/sql/correspondance_lot1_tests.sql

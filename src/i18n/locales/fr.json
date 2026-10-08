@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "dans AnarBib : {tombo}",
   "error.import.item_trace_reserved": "La trace d’import d’un exemplaire (identifiant d’origine, source, run) ne se pose pas à la main : elle vient de la promotion ou de « Rapprocher ».",
   "error.import.item_restore_code_taken": "Cet exemplaire ne sort pas de la corbeille : son code-barres d’origine (ou son identifiant d’origine) est désormais porté par un autre exemplaire ou un autre brouillon de ta bibliothèque.",
-  "error.publish.source_item_id_taken": "Un exemplaire de cette bibliothèque porte déjà cet identifiant d’origine (expl_id) : publication refusée."
+  "error.publish.source_item_id_taken": "Un exemplaire de cette bibliothèque porte déjà cet identifiant d’origine (expl_id) : publication refusée.",
+  "error.correspondance.not_coordinator": "Seule une coordination de la bibliothèque peut écrire en son nom.",
+  "error.correspondance.not_participant": "Ce fil n’existe pas, ou ta bibliothèque n’en fait pas partie.",
+  "error.correspondance.library_not_found": "Cette bibliothèque est introuvable ou n’est plus active.",
+  "error.correspondance.same_library": "Choisis une autre bibliothèque : on n’écrit pas à la sienne.",
+  "error.correspondance.subject_required": "Donne un sujet au fil (200 caractères au plus).",
+  "error.correspondance.empty_body": "Le message est vide.",
+  "error.correspondance.body_too_long": "Le message dépasse 4 000 caractères : raccourcis-le, ou envoie-le en deux fois.",
+  "error.correspondance.lang_invalid": "La langue du message doit être l’une des dix langues d’AnarBib.",
+  "error.correspondance.rate_limited": "Trente messages en vingt-quatre heures, c’est déjà beaucoup : reprends demain.",
+  "error.correspondance.not_found": "Ce fil est introuvable."
 }

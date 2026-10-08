@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "in AnarBib: {tombo}",
   "error.import.item_trace_reserved": "A copy’s import trace (source identifier, source, run) is not set by hand: it comes from promotion or from “Reconcile”.",
   "error.import.item_restore_code_taken": "This copy cannot leave the trash: its original barcode (or source identifier) is now carried by another copy or draft in your library.",
-  "error.publish.source_item_id_taken": "A copy in this library already carries this source identifier (expl_id): publication refused."
+  "error.publish.source_item_id_taken": "A copy in this library already carries this source identifier (expl_id): publication refused.",
+  "error.correspondance.not_coordinator": "Only a coordinator of the library can write on its behalf.",
+  "error.correspondance.not_participant": "This thread does not exist, or your library is not part of it.",
+  "error.correspondance.library_not_found": "This library cannot be found or is no longer active.",
+  "error.correspondance.same_library": "Choose another library: you cannot write to your own.",
+  "error.correspondance.subject_required": "Give the thread a subject (200 characters at most).",
+  "error.correspondance.empty_body": "The message is empty.",
+  "error.correspondance.body_too_long": "The message exceeds 4,000 characters: shorten it, or send it in two parts.",
+  "error.correspondance.lang_invalid": "The message language must be one of AnarBib’s ten languages.",
+  "error.correspondance.rate_limited": "Thirty messages in twenty-four hours is already a lot: carry on tomorrow.",
+  "error.correspondance.not_found": "This thread cannot be found."
 }

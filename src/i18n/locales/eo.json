@@ -7304,5 +7304,15 @@
   "review.report.itemsSetAside.tombo": "en AnarBib: {tombo}",
   "error.import.item_trace_reserved": "La importa spuro de ekzemplero (deveno-identigilo, fonto, rulo) ne estas metita permane: ĝi venas de la promocio aŭ de «Proksimigi».",
   "error.import.item_restore_code_taken": "Ĉi tiu ekzemplero ne eliras el la rubujo: ĝian originan strekkodon (aŭ deveno-identigilon) nun portas alia ekzemplero aŭ malneto de via biblioteko.",
-  "error.publish.source_item_id_taken": "Ekzemplero de ĉi tiu biblioteko jam portas ĉi tiun deveno-identigilon (expl_id): publikigo rifuzita."
+  "error.publish.source_item_id_taken": "Ekzemplero de ĉi tiu biblioteko jam portas ĉi tiun deveno-identigilon (expl_id): publikigo rifuzita.",
+  "error.correspondance.not_coordinator": "Nur kunordiganto de la biblioteko povas skribi en ĝia nomo.",
+  "error.correspondance.not_participant": "Ĉi tiu fadeno ne ekzistas, aŭ via biblioteko ne partoprenas ĝin.",
+  "error.correspondance.library_not_found": "Ĉi tiu biblioteko ne troviĝas aŭ ne plu estas aktiva.",
+  "error.correspondance.same_library": "Elektu alian bibliotekon: oni ne skribas al la propra.",
+  "error.correspondance.subject_required": "Donu temon al la fadeno (maksimume 200 signoj).",
+  "error.correspondance.empty_body": "La mesaĝo estas malplena.",
+  "error.correspondance.body_too_long": "La mesaĝo superas 4 000 signojn: mallongigu ĝin, aŭ sendu ĝin en du partoj.",
+  "error.correspondance.lang_invalid": "La lingvo de la mesaĝo devas esti unu el la dek lingvoj de AnarBib.",
+  "error.correspondance.rate_limited": "Tridek mesaĝoj en dudek kvar horoj jam estas multe: daŭrigu morgaŭ.",
+  "error.correspondance.not_found": "Ĉi tiu fadeno ne troviĝas."
 }

@@ -1997,3 +1997,19 @@ déclencheur sont fermées. `fn_import_list_run_rows` (recréée, droits restaur
 `import_run_id` sont lisibles par `anon` par la politique `exemplares_public_read`,
 comme le reste de l'exemplaire (dont `source_item_code`) ; ce sont des numéros
 internes, sans donnée personnelle. Compte 0029 attendu inchangé (422).
+
+### Complément du 08/10 — G19 lot 1, correspondance entre bibliothèques (migration `correspondance_entre_bibliotheques_lot_1`)
+
+Cinq portes neuves pour `authenticated`, aucune pour `anon` ; trois aides fermées.
+- `api.fn_correspondance_ouvrir(uuid, uuid, text, text, text)`, `api.fn_correspondance_envoyer(bigint, uuid, text, text)`,
+  `api.fn_correspondance_archiver(bigint, uuid, boolean)` : garde lue — `public.fn_correspondance_coordonne(p_library_id)`,
+  l'adhésion `coordenador` ACTIVE de l'appelant·e à la bibliothèque au nom de laquelle il ou elle écrit (CORR-1, CORR-6 :
+  l'administration du réseau n'y passe pas), refus 42501 `error.correspondance.not_coordinator` ; puis la bibliothèque doit
+  être participante du fil (`not_participant`, 42501 — « introuvable » et « pas dans ce fil » ne se distinguent pas).
+- `api.fn_correspondance_lue(bigint)` : garde lue — `auth.uid()` non nul et `public.fn_correspondance_lit(fil)` (coordination
+  d'une bibliothèque du fil) ; écrit la ligne de lecture de l'appelant·e seulement.
+- `public.fn_correspondance_lit(bigint)` : DEFINER STABLE, appelée par les quatre politiques de lecture (une politique qui
+  relirait les participantes sous sa propre politique tournerait en rond) ; rend un booléen, ne divulgue rien.
+- Fermées (`service_role` seul) : `fn_correspondance_coordonne`, `fn_correspondance_langue`, `fn_correspondance_poser_message`.
+**Verdict** : les cinq portes sont voulues ; les tables n'accordent à `authenticated` que SELECT sous politique. Compte 0029
+attendu : 422 + 5 = **427**.
