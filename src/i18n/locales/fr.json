@@ -828,7 +828,7 @@
   "biblioteca.contactProfile.contact_role.placeholder": "Comment cette personne ou ce collectif se situe dans la bibliothèque.",
   "biblioteca.contactProfile.contact_whatsapp": "WhatsApp",
   "biblioteca.contactProfile.contact_whatsapp.placeholder": "Numéro WhatsApp, le cas échéant.",
-  "biblioteca.contactProfile.intro": "Coordonnées de la bibliothèque, montrées aux autres bibliothèques du réseau pour le prêt interbibliothèques et les échanges. C’est le contact humain — qui joindre, comment, où —, distinct de l’e-mail technique d’envoi.",
+  "biblioteca.contactProfile.intro": "Contact humain de la bibliothèque pour la coopération entre bibliothèques — qui joindre, comment, où —, distinct de l’e-mail technique d’envoi. Seule l’équipe de la bibliothèque voit ces coordonnées ; les autres bibliothèques ne les voient pas. L’adresse e-mail reçoit les avis d’échange adressés à la bibliothèque.",
   "biblioteca.contactProfile.postal_address": "Adresse postale",
   "biblioteca.contactProfile.postal_address.placeholder": "Adresse pour l’envoi ou le retrait de documents.",
   "biblioteca.contactProfile.reload": "Recharger",

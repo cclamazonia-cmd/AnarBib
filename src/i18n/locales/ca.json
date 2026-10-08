@@ -828,7 +828,7 @@
   "biblioteca.contactProfile.contact_role.placeholder": "Com se situa aquesta persona o col·lectiu a la biblioteca.",
   "biblioteca.contactProfile.contact_whatsapp": "WhatsApp",
   "biblioteca.contactProfile.contact_whatsapp.placeholder": "Número de WhatsApp, si n’hi ha.",
-  "biblioteca.contactProfile.intro": "Dades de contacte de la biblioteca, mostrades a les altres biblioteques de la xarxa per al préstec interbibliotecari i els intercanvis. És el contacte humà — a qui adreçar-se, com, on —, diferent del correu tècnic d’enviament.",
+  "biblioteca.contactProfile.intro": "Contacte humà de la biblioteca per a la cooperació entre biblioteques — a qui adreçar-se, com, on —, diferent del correu tècnic d’enviament. Aquestes dades només són visibles per a l’equip de la biblioteca; les altres biblioteques no hi tenen accés. L’adreça electrònica rep els avisos d’intercanvi adreçats a la biblioteca.",
   "biblioteca.contactProfile.postal_address": "Adreça postal",
   "biblioteca.contactProfile.postal_address.placeholder": "Adreça per a l’enviament o la recollida de documents.",
   "biblioteca.contactProfile.reload": "Tornar a carregar",

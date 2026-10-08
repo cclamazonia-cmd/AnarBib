@@ -828,7 +828,7 @@
   "biblioteca.contactProfile.contact_role.placeholder": "Πώς τοποθετείται αυτό το άτομο ή η συλλογικότητα στη βιβλιοθήκη.",
   "biblioteca.contactProfile.contact_whatsapp": "WhatsApp",
   "biblioteca.contactProfile.contact_whatsapp.placeholder": "Αριθμός WhatsApp, αν υπάρχει.",
-  "biblioteca.contactProfile.intro": "Στοιχεία επικοινωνίας της βιβλιοθήκης, που εμφανίζονται στις άλλες βιβλιοθήκες του δικτύου για διαδανεισμό και ανταλλαγές. Πρόκειται για την ανθρώπινη επαφή — ποιον να βρεις, πώς, πού — διακριτή από το τεχνικό email αποστολής.",
+  "biblioteca.contactProfile.intro": "Ανθρώπινη επαφή της βιβλιοθήκης για τη συνεργασία μεταξύ βιβλιοθηκών — ποιον να βρεις, πώς, πού — διακριτή από το τεχνικό email αποστολής. Μόνο η ομάδα της βιβλιοθήκης βλέπει αυτά τα στοιχεία· οι άλλες βιβλιοθήκες δεν τα βλέπουν. Η διεύθυνση email λαμβάνει τις ειδοποιήσεις ανταλλαγής που απευθύνονται στη βιβλιοθήκη.",
   "biblioteca.contactProfile.postal_address": "Ταχυδρομική διεύθυνση",
   "biblioteca.contactProfile.postal_address.placeholder": "Διεύθυνση για αποστολή ή παραλαβή τεκμηρίων.",
   "biblioteca.contactProfile.reload": "Επαναφόρτωση",

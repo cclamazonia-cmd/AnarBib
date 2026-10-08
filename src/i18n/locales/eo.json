@@ -828,7 +828,7 @@
   "biblioteca.contactProfile.contact_role.placeholder": "Kiel ĉi tiu persono aŭ kolektivo situas en la biblioteko.",
   "biblioteca.contactProfile.contact_whatsapp": "WhatsApp",
   "biblioteca.contactProfile.contact_whatsapp.placeholder": "WhatsApp-numero, se ekzistas.",
-  "biblioteca.contactProfile.intro": "Kontaktdatumoj de la biblioteko, montritaj al la aliaj bibliotekoj de la reto por la interbiblioteka prunto kaj la interŝanĝoj. Estas la homa kontakto — kiun trovi, kiel, kie —, malsama ol la teknika senda retpoŝto.",
+  "biblioteca.contactProfile.intro": "Homa kontakto de la biblioteko por la kunlaboro inter bibliotekoj — kiun trovi, kiel, kie —, malsama ol la teknika senda retpoŝto. Nur la teamo de la biblioteko vidas ĉi tiujn datumojn; la aliaj bibliotekoj ne vidas ilin. La retpoŝtadreso ricevas la interŝanĝajn sciigojn adresitajn al la biblioteko.",
   "biblioteca.contactProfile.postal_address": "Poŝta adreso",
   "biblioteca.contactProfile.postal_address.placeholder": "Adreso por la sendo aŭ elpreno de dokumentoj.",
   "biblioteca.contactProfile.reload": "Reŝargi",

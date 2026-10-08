@@ -828,7 +828,7 @@
   "biblioteca.contactProfile.contact_role.placeholder": "Hoe deze persoon of dit collectief in de bibliotheek staat.",
   "biblioteca.contactProfile.contact_whatsapp": "WhatsApp",
   "biblioteca.contactProfile.contact_whatsapp.placeholder": "WhatsApp-nummer, indien aanwezig.",
-  "biblioteca.contactProfile.intro": "Contactgegevens van de bibliotheek, getoond aan de andere bibliotheken van het netwerk voor interbibliothecaire uitlening en uitwisselingen. Dit is het menselijke contact — wie te bereiken, hoe, waar — los van het technische verzend-e-mailadres.",
+  "biblioteca.contactProfile.intro": "Menselijk contact van de bibliotheek voor de samenwerking tussen bibliotheken — wie te bereiken, hoe, waar — los van het technische verzend-e-mailadres. Alleen het team van de bibliotheek ziet deze gegevens; andere bibliotheken zien ze niet. Het e-mailadres ontvangt de uitwisselingsberichten die aan de bibliotheek gericht zijn.",
   "biblioteca.contactProfile.postal_address": "Postadres",
   "biblioteca.contactProfile.postal_address.placeholder": "Adres voor het verzenden of ophalen van documenten.",
   "biblioteca.contactProfile.reload": "Opnieuw laden",
