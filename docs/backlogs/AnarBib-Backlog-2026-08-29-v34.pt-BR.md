@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-08** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-08** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,14 +17,14 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 11
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 5
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 12
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -60,9 +60,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 7 de outubro de 2026
 
-**Levantamento de 7 de outubro de 2026, à noite** (`9b95bc63`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 05/10 à noite, `a387b46c`). **8 migrações** (440 = 440, todas pela CI), 38 commits, 2 212 testes JS e 179 suítes SQL. O que mudou: uma tabela e uma policy a menos (J11), uma tabela `ingest` a mais (H21 lote 5), +31 funções, **34 DEFINER fechadas** a `authenticated` (B37: 0029 de 449 a 422); **a queda de 07/10** (I31, I32) zerou os contadores de uso — 440 « índice não usado »; duas notícias fundidas por Xavier, uma criada, dezesseis rascunhos publicados; `AccountPage` de 153 a 73 KB em oito lotes (E6), E33. **Nesta versão, após o inventário das sessões vizinhas dos últimos cinco dias (03/10 → 07/10)**: duas entregas de 06/10 sem item entram em fechamento (**E35**, **B37**); um item aberto em decisão (**G19**, correspondência entre bibliotecas — cinco perguntas a Xavier); notas em H2, E31, B36, I32, H6, E6 e E33. **Falta fechar** — *por Xavier, critérios cumpridos*: D9, F24, J11, E33; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17, G19, E6; *sem código*: A1, A3, F3, H2.
+**Levantamento de 7 de outubro de 2026, à noite** (`9b95bc63`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 05/10 à noite, `a387b46c`). **8 migrações** (440 = 440, todas pela CI), 38 commits, 2 212 testes JS e 179 suítes SQL. O que mudou: uma tabela e uma policy a menos (J11), uma tabela `ingest` a mais (H21 lote 5), +31 funções, **34 DEFINER fechadas** a `authenticated` (B37: 0029 de 449 a 422); **a queda de 07/10** (I31, I32) zerou os contadores de uso — 440 « índice não usado »; duas notícias fundidas por Xavier, uma criada, dezesseis rascunhos publicados; `AccountPage` de 153 a 73 KB em oito lotes (E6), E33. **Nesta versão, após o inventário das sessões vizinhas dos últimos cinco dias (03/10 → 07/10)**: duas entregas de 06/10 sem item entram em fechamento (**E35**, **B37**); um item aberto em decisão (**G19**, correspondência entre bibliotecas — cinco perguntas a Xavier); notas em H2, E31, B36, I32, H6, E6 e E33. **Limpeza de 08/10 à noite, às respostas de Xavier**: quinze fechamentos (E34, H32, E33, D9, J11, F24, H30, H31, F6, F15, G16, C14, C23, J9, F3), I31 fechado no mesmo dia, I33 entregue; quatro decisões inscritas (E6, G19, C17, C4); F19 corrigido na fonte. **Falta fechar** — *a verificar num fato por vir*: F19 (15/10), I30 (11/10), I33, H15, H16, H28, H26, K10; *na tela*: E31; *decisões*: A1; *sem código*: A1, A3, H2, H32 (envios).
 
-**Frescor dos constatos em 2026-10-08.** **53 itens de 71** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, I33, J9, J11, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-08.** **40 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, G19, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -248,7 +248,7 @@ Os congelamentos de setembro passaram: a cadeia auto-hospedada está descongelad
 
 | Data | O que se aplica |
 |---|---|
-| **08/10/2026** | F19: uma semana de registros de envio a levantar — nenhum endereço completo. |
+| **por volta de 15/10/2026** | F19: reler uma semana de diários de envio após a correção de `register` de 08/10 — nenhum endereço completo. |
 | **10/10/2026** | Noite de formação BLMF (K7). Até a última noite, a barra de navegação não muda (E20). |
 | **11/10/2026, 20:00** | Primeiro tiro longo com `ingest`, `private`, `api` e os direitos (I29, I30): « Dump long OK », depois `restore-test` e a impressão dos direitos comparada à produção. |
 | **por volta de 28/10/2026** | B36: reler nos contadores de produção os índices mantidos sob reserva, e o tempo da chamada medida pelo B33. — os contadores recomeçaram do zero em 07/10 às 20h19 (I32). |
@@ -378,12 +378,10 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
-| **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Decisão coletiva |
-| **C14** | Um exemplar que muda de biblioteca leva tudo consigo | `P2` | A verificar |
-| **C23** | Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino | `P2` | A verificar |
+| **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Aberto |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
-| **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Decisão coletiva |
+| **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Aberto |
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
@@ -413,13 +411,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C4 — Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09)
 
-`P2` Corrente · Estado : **Decisão coletiva** · Carga : alguns dias · O que exige : biblioteconomia
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
 
 **Estado.** **Em 29/08, 722 fichas de 1 305 (55 %) não tinham `country`; em 27/09, depois de três passagens (Wikidata `b418e149`, Library of Congress `abaa4755`, IdRef `62553dc6`), 674 de 1 505 (45 %).** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
-**O que é.** As fontes consultáveis automaticamente já se esgotaram (Wikidata, Library of Congress, IdRef, 26-27/09). As bibliotecas nacionais do Brasil e da Argentina fecham o acesso automatizado: não se contorna. Restam, por decisão de Xavier, a revisão humana dos arquivos `decisions*.csv` e o conhecimento do acervo, ou a reescrita do critério 1. A detecção dos duplos sobrenomes já pode ser refeita sobre os países postos.
+**O que é.** **Decisão de Xavier em 08/10: enriquecimento Wikidata / LC / IdRef, proposto em revisão** — país de autoridade externa quando a identidade é segura, posto como proposta na Oficina, nunca de ofício.
 
 **Por que importa.** É o pré-requisito duro de toda a cadeia de convenções: `CONV-7` faz de `country` em ISO 3166-1 α-2 uma condição, e `CONV-3` faz a caixa ser comandada pela língua. Um catálogo com 45 % sem país (27/09) aplica as próprias regras pela metade.
 
@@ -431,48 +429,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Pré-requisito da segunda passagem de **C3**.
 
 *Remissões : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
-
-#### C14 — Um exemplar que muda de biblioteca leva tudo consigo
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** Levantado em 29/09 ao corrigir a reatribuição (`CAT-E19`): três caminhos deixam para trás de um exemplar deslocado coisas que ainda apontam para a biblioteca ou o acervo de origem. Nenhum foi visto na tela; todos se leem no código.
-
-*Verificado : **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto. **05/10, à noite** — o defeito « visto de passagem, fora de C14 » virou **C23**, entregue no mesmo dia (`16962c55`). **06/10** — contadores relidos após o recálculo das 04h43 UTC: fundos BTL 173 e 2426 com 1 disponível de 1. Falta o olhar de Xavier nas duas recusas (E31).*
-
-**O que é.** (1) Um rascunho de exemplar ABERTO (`draft`, `ready`) sobre um exemplar reatribuído guarda a biblioteca de origem: publicado, levaria o exemplar de volta, sem avisar — decidir se ele acompanha o exemplar (mudaria de fila, `B29`) ou se é recusado na publicação. (2) Reservas e EEB em curso continuam contados no acervo de origem após o deslocamento (`fn_v2_recompute_holdings_availability` conta por `holding_id`): a disponibilidade do destino fica superestimada. (3) A mudança de biblioteca de um exemplar isolado (`publish_exemplar_draft`) e o descarte (`discard_exemplar`) também deixam acervos vazios, que a ficha pública mostra com «0 exemplar». (4) Restaurar da lixeira um rascunho de exemplar que visava um acervo apagado depois levanta 23503 bruto (`fn_restore_deleted_draft` reinsere seu `target_holding_id`) — consequência direta de `CAT-E19`. (5) O painel de reatribuição não diz que um acervo de origem foi mantido (`holdings_kept`), vazio, porque um histórico o referencia.
-
-**Por que importa.** O ponto (3) é o mesmo defeito da notícia 771, por outras portas: enquanto ele estiver aberto, um «0 exemplar» pode reaparecer numa ficha pública.
-
-**O que conta como terminado.**
-
-- Cada ponto tem sua decisão (Xavier para o (1)) e, se corrigido, uma suíte que percorre o caminho.
-- Para o (3), a regra de `CAT-E19` se aplica tal qual: apagar o acervo que o gesto esvazia, salvo referência.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `REGISTRE CAT-E19` · `migration 20260929151902` · `migration 20261005074236` · `commit 07ad68af`*
-
-#### C23 — Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, língua materna
-
-**Estado.** Visto em 05/10 ao entregar C14: publicar o rascunho de um exemplar já publicado para uma biblioteca sem fundo da notícia falhava em `exemplar_library_holding_mismatch`; e uma biblioteca sem série de tombos mostrava o código bruto `tombo_pattern_not_configured`.
-
-*Verificado : **05/10 — entregue** (`16962c55`). Suíte 6/6, mutante morto, vitest 1 871. Falta um deslocamento visto na tela.*
-
-**O que é.** `publish_exemplar_draft` usa o fundo da mesma notícia no destino, senão o cria (restaurado se uma reatribuição o apagou). Chave `panel.apiError.tombo_pattern_not_configured` nas dez locales.
-
-**Por que importa.** Mover um exemplar para uma biblioteca que ainda não tem a notícia é o gesto normal de uma doação ou transferência; falhava sem dizer por quê.
-
-**O que conta como terminado.**
-
-- A suíte `exemplaire_deplace_cree_son_fonds` (6 testes) passa; o mutante reproduz o erro original.
-- Um deslocamento real visto na tela, depois fechamento.
-
-**Dependências.** Depois de C14.
-
-*Remissões : `migration 20261005092748` · `commit 16962c55` · `REGISTRE CAT-E19`*
 
 #### C15 — Corrigir oito registros da BTL, com o livro na mão
 
@@ -518,13 +474,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C17 — Decidir se um número de tombo apagado pode ser dado de novo
 
-`P2` Corrente · Estado : **Decisão coletiva** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
 
 **Estado.** `CCLA.2026.93`, criado por engano em 27/09 a partir de um posto da BLMF em BTL-TL-000881, foi retirado em 28/09 (`96b4a104`, migração `20260928111729`, exemplar 2796). Em 29/09, o exemplar inicial do registro de ensaio «Je suis une légende» recebeu o mesmo número, `CCLA.2026.93` (verif do E6). Não é uma falha: `fn_next_tombo` devolve o maior número sob o prefixo, mais um (`20260815145252`), e a restrição `exemplares_unique_tombo` só vale entre exemplares presentes. Apagar o último exemplar de uma série libera o seu número. Nada diz se isso é desejado: nem o REGISTRO, nem as specs.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
-**O que é.** Xavier decide entre duas regras, depois ela é escrita no REGISTRO: (a) um número dado nunca é dado de novo — contador por prefixo, ou maior número já atribuído, diário incluído; (b) o reaproveitamento é tolerado, e a regra o diz. Se (a), `fn_next_tombo` muda por uma migração testada.
+**O que é.** **Decisão de Xavier em 08/10: um número dado nunca se devolve.** Escrever no REGISTRE; `fn_next_tombo` devolve o maior número já atribuído sob o prefixo, diário incluído; suíte SQL.
 
 **Por que importa.** Um número de tombo se escreve no livro e nos registros em papel. Se ele é dado de novo depois de uma exclusão, dois livros podem ter o mesmo número — um fora do banco, o outro dentro — e um empréstimo, um inventário ou uma etiqueta podem confundi-los.
 
@@ -629,7 +585,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
-| **D9** | Um recurso posto por recepção de fundo desaparece na publicação seguinte do rascunho | `P2` | A verificar |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
 
@@ -719,27 +674,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
 
-#### D9 — Um recurso posto por recepção de fundo desaparece na publicação seguinte do rascunho
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Visto na entrega do C24 (05/10, `d1d72405`): um recurso posto pela recepção de um fundo, que o rascunho não contém, é retirado pela publicação seguinte desse rascunho, sem aviso. Comportamento anterior, mantido de propósito pelo C24.
-
-*Verificado : [object Object]*
-
-**O que é.** Decidir: a publicação mantém um recurso que não conhece, ou o rascunho retoma os recursos da notícia ao ser criado. Depois escrever, com uma suíte SQL.
-
-**Por que importa.** Um fundo recebido de outra biblioteca perde seus arquivos no primeiro retoque da notícia, e ninguém vê.
-
-**O que conta como terminado.**
-
-- Publicar um rascunho não retira mais um recurso de recepção de fundo sem um gesto explícito.
-- Uma suíte SQL o prova.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `clôture C24` · `commit d1d72405` · `migration 20261005092916`*
-
 ---
 
 ### E — Front, OPAC, i18n, acessibilidade
@@ -757,8 +691,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
 | **E32** | Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1) | `P3` | Aberto |
-| **E33** | Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia | `P2` | A verificar |
-| **E34** | «Editar» um registro de consulta o torna emprestável na publicação: a retomada esquece `circulation_default` | `P2` | A verificar |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -832,7 +764,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
 
-*Verificado : **28/09** — `BookDraftForm.jsx`: 214 Ko → 130 Ko em oito lotes; nove módulos extraídos. Lotes 2 e 3 vistos na tela por Xavier: ok. Lotes 4 a 8 publicados, a ver do mesmo modo; `BibliotecaPage` lotes 1 a 3 (PEB, tarefas, cotização e depósito) publicados, a ver também; a página: 184 → 83 Ko. O critério «nenhum arquivo acima de 60 Ko» continua longe: remedidos em 29/09 à noite (`75ccb035`), nove arquivos de código passam disso — `AccountPage.jsx` 156,8 Ko, `BookDraftForm.jsx` 130,9, `ImportacoesPage.jsx` 129,6 (109 em 29/08), `PanelPage.jsx` 118,5, `CatalogPage.jsx` 108,7 (91 em 29/08), `BibliotecaPage.jsx` 83,9, `CatalogacaoPage.jsx` 82,1, `AuthorDraftForm.jsx` 70,9, `QueuePanel.jsx` 60,6; os dez arquivos de locales (486 a 734 Ko) também caem na letra do critério. Onze testes de fonte guardam as montagens, três deles da página Biblioteca. **29/09, visto na tela por Xavier**: o interruptor da cotização e o ciclo de uma tarefa (criar, mudar estado, apagar) funcionam; os dois ensaios revelaram dois defeitos anteriores à divisão, corrigidos no mesmo dia (`0bf96cb8`, `455c7f0b`). O depósito de garantia também: teto posto, regra criada, interruptor acionado. Tarefas completas (instanciar, adotar) e regras de cotização: ok. Aba PEB: buscar, criar, arquivar, apagar — ok. Formulário de registro: um registro de ensaio criado, publicado e retirado — contribuidores e exemplar inicial ok; ligar uma autoridade também verificado; reatribuição também (registro 771, BTL → BLMF → BTL): os dois exemplares voltaram, mas a ida deixou um acervo BLMF VAZIO (2747), que a ficha pública mostra com «0 exemplar» — as duas funções de reatribuição nunca apagam o acervo que esvaziam (defeito anterior à divisão); corrigido em 29/09 com autorização de Xavier (`CAT-E19`, migração `20260929151902`): o acervo esvaziado é apagado salvo referência; o acervo 2747 é apagado sob guarda. Suíte `reattribution_fonds_vide_tests` (`8ee37bde`): **18/18** na bancada, 13 mutantes mortos, cada um pelo teste que o guarda; a revisão contraditória acrescentou três guardas (o acervo recriado volta como era — número de chamada local, emprestabilidade, notas —; cada acervo apagado fica inteiro no diário do catálogo; um rascunho aberto que visa o número de chamada retém o acervo), e o estado de coleção das revistas é recontado. Em produção, no levantamento da noite: nenhum acervo sem exemplar na rede. Defeitos vizinhos em `C14`. Registro da devolução de um EEB: ok — todos os lotes vistos. «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»): o botão só aparece nos dois status aceitos pela base, e a recusa é dita claramente (`b3ac9d13`). **29/09** — mais dois defeitos, achados na revisão das telas, anteriores à divisão. `--brand-accent` não estava definido em lugar nenhum: o botão «Salvar» dos horários (`e4814be1`) e umas quarenta chamadas caíam cada uma no seu próprio vermelho de reserva; `0d8a0a30` o define a partir de `--brand-accent-rgb` (segue o tema da biblioteca) e define `.cat-btn` uma só vez. `0bf96cb8` expõe `patchLibrary` (regra pura em `contexts/libraryPatch.js`), chamado pela cotização, pela carteira de leitor e pelo salto colegiado; de passagem, salvar a identidade não diz mais «salvo» diante de uma recusa do banco (`library-context-patch`, 9 casos). **05/10 — `AccountPage.jsx`, lote 1** (`fe5a9d84`): a aba Histórico vira `TabHistorico.jsx`, o cabeçalho comum das abas `ContaTabHeader.jsx`. Defeito de origem corrigido: a sequência `\u00b7` estava escrita 13 vezes em texto JSX, onde aparecia tal qual. Bancada `tab-historico-monte`, que guarda todo o `src/` contra uma sequência `\uXXXX` em texto JSX. Falta Xavier ver na tela (E31). **06/10 — `AccountPage.jsx`, lote 2** (`f025a469`, implantado): abas Avisos e Lista de desejos em `TabAvisos.jsx` e `TabDesejos.jsx`; 140 → 132 KB; bancada 7 casos. **Xavier deve ver na tela.** **06/10 — `AccountPage.jsx`, lote 3** (`ee3ef355`, implantado): aba Minhas notas de leitura em `TabNotas.jsx`; 132 → 128 KB; bancada 6 casos. **Xavier deve ver na tela.** **07/10 — `AccountPage.jsx`, lote 4** (`6584e5d3`, implantado): aba Em curso em `TabCurso.jsx`; 128 → 119 KB; bancada 5 casos. **Xavier deve ver na tela.** **07/10 — lote 5** (`a4ddaaa3`): aba Reservar em `TabReservar.jsx`; 119 → 111 KB. Frase em português fixo traduzida (`fd08ace5`, dez locales). Xavier: aba Notas conforme na tela. **07/10 — lote 6** (`b42e3548`, implantado): as três decisões de Dados pessoais em `ContaDecisions.jsx`; 111 → 103 KB; guarda E19 7/7. **Xavier deve ver na tela.** **07/10 — lote 6 conforme na tela (Xavier). Lote 7** (`2aef5ce2`, implantado): senha, cotização, depósito e supressão da conta em quatro componentes; 103 → 88 KB. **Xavier deve ver na tela.** **07/10 — lote 8, lado dados** (`51bcfe51`, implantado às 21h23): onze gestos de reserva e consulta e seus nove estados em `useReservationActions`; 88 → 73 KB. O limite de 60 KB não foi atingido: o que resta é o núcleo da página. **Xavier deve ver na tela** (reservar, cancelar).*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -921,11 +853,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6. **Acrescentado em 06/10**: um convite real a uma tarefa, recebido (resto do F16).
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item).
 
-**Por que importa.** Foi na tela que as últimas semanas acharam os defeitos que as bancadas não viam (G18, C25, as tarefas internas de 29/09).
+**Por que importa.** **O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16.
 
 **O que conta como terminado.**
 
@@ -955,49 +887,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `REGISTRE IDENT-5 à IDENT-8, IDENT-Q1` · `commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14`*
 
-#### E33 — Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript
-
-**Estado.** Durante a queda de 07/10, Minha conta girou sem fim e, recarregada, só mostrou o fundo da página: nenhuma mensagem.
-
-*Verificado : [object Object]*
-
-**O que é.** Achar o que deixa a página vazia; limitar a espera; mostrar « Serviço momentaneamente indisponível » com « Tentar de novo », nas dez locales; um limite de erro em torno das abas.
-
-**Por que importa.** Uma página vazia faz crer numa perda de conta; uma mensagem diz para esperar.
-
-**O que conta como terminado.**
-
-- API inacessível (simulada): Minha conta mostra a mensagem e « Tentar de novo » em menos de vinte segundos.
-- Uma aba que quebra mostra o erro sem derrubar a página.
-- Dez locales, teste.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `src/pages/account/AccountPage.jsx` · `capture de Xavier du 07/10, 20:02`*
-
-#### E34 — «Editar» um registro de consulta o torna emprestável na publicação: a retomada esquece `circulation_default`
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado em 07/10: `create_book_draft_from_book` não copia `circulation_default`; a publicação torna emprestável um registro de consulta.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Copiar `circulation_default` em `create_book_draft_from_book`; revisar os 11 rascunhos divergentes com Xavier; teste.
-
-**Por que importa.** Um documento de consulta que vira emprestável pode sair da biblioteca.
-
-**O que conta como terminado.**
-
-- A retomada mantém a consulta.
-- Registros afetados listados para Xavier.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `supabase/migrations` · `tests/sql`*
-
 ---
 
 ### F — E-mail e notificações
@@ -1006,77 +895,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **F3** | Consolidar as funções de notificação redundantes | `P2` | A verificar |
-| **F6** | `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail | `P2` | A verificar |
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F15** | Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva | `P2` | A verificar |
 | **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
-| **F24** | O nome de remetente padrão dos e-mails está em português | `P3` | A verificar |
-
-#### F3 — Consolidar as funções de notificação redundantes
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** Quatro funções fazem resumos: `notify-weekly-report`, `notify-network-weekly-report`, `notify-cross-library-digest`, `notify-rede-digest`. Três funções servem documentos: `read-pdf`, `read-digital-asset`, `read-ill-shared-asset`. Duas exportam lotes: `export-catalog-lote`, `export-fonds-bundle`. E `mail-i18n-test`, função de teste, está implantada em produção na versão 1553.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Verificar o que cada uma faz de fato antes de concluir pela redundância — provavelmente têm destinatários e alcances diferentes. Depois fundir o que deve sê-lo, e retirar `mail-i18n-test` da produção.
-
-**Por que importa.** 48 funções implantadas é muito para manter num projeto com um mantenedor. Cada uma carrega seu próprio template, suas próprias dez línguas, seus próprios segredos. Não é um problema de performance, é um problema de superfície a revisar.
-
-**O que conta como terminado.**
-
-- Cada grupo tem um veredicto: fusão, ou motivo escrito da separação.
-- `mail-i18n-test` não está mais implantada em produção.
-- A contagem de funções implantadas está atualizada em `CLAUDE.md` e em `config.toml`.
-
-**Dependências.** Depois de **F1**. Atenção: a implantação de `notify-event` não passa por MCP, seu pacote é grande demais.
-
-*Remissões : `PLAN_DE_MARCHE §8` · `Relevé du 29/08/2026`*
-
-#### F6 — `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** **A divergência de assinatura foi fechada em 30/08.** O `resolveMailRouting` da cópia aceita agora uma locale e lê `signature_short_i18n[locale]`, igual ao canónico; `renderEmail` transmite-a, e os três envios do gestor passam a sua — já estava calculada quatro linhas acima de cada vez, por `normalizeTaskLocale`. Um aviso de tarefa na BLMF é agora assinado na língua de quem o lê. Guardado por `src/tests/notify-internal-task-signature.test.js`, 6 testes que exercitam o ficheiro real sobre o contexto real da BLMF — incluindo um que verifica que **sem locale, o comportamento é exatamente o de antes**.
-
-**O grosso foi fechado na mesma noite.** Os 9 arquivos de infraestrutura duplicados foram apagados: a função só tem um `index.ts`, e os 3 arquivos próprios das tarefas passaram a `_shared/` (`334e852c`), depois do alinhamento dos dois remetentes no cabeçalho padrão (`20260830205754`). O levantamento abaixo é o de antes da reunião.
-
-**Medido em 30/08, depois da abertura do item.** Há de facto três árvores `_shared` sob `supabase/functions/`, mas não pesam o mesmo: a de `catalog_metadata_lookup` contém apenas um `cors.ts` sem equivalente canónico — não é duplicação. O caso real é `notify-internal-task`.
-
-Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data/internal-tasks.ts`, `handlers/internal-task.ts`, `i18n/task-mail-strings.ts`, ausentes do canónico) e **9 são infraestrutura duplicada, toda divergente** — `library-mail-routing` (116 linhas de diferença), `library-notification-context` (122), `mail/layout` (140), `transport/email` (121), `shared/format` (89), `context/policies` (42), `core/webhook` (30), `core/env` (10), `shared/branding` (4). Cerca de **694 linhas** ao todo.
-
-**Porque existem estas cópias: a pergunta não tem resposta no repositório.** Aparecem no PRIMEIRO commit (`e6ec991a`, 21/08/2026) — 1 479 ficheiros e 615 892 inserções sob uma mensagem que fala de um botão do ecrã de catalogação. É a importação inicial: a história não começa antes. Nenhuma decisão está escrita em lado nenhum.
-
-**O que diverge realmente, verificado:** o canónico resolve a assinatura de rodapé em `signature_short_i18n[locale]` com recurso a `signature_short`; a cópia só conhece `signature_short`, e o seu `resolveMailRouting` nem sequer aceita uma locale. **A BLMF tem `signature_short_i18n` preenchido em seis línguas.** Os seus avisos de tarefa interna são portanto assinados «Equipe da BLMF» seja qual for a língua da pessoa, ao passo que todos os outros e-mails da mesma biblioteca dizem «L'équipe de la BLMF» a quem lê em francês.
-
-**O que NÃO diverge, também verificado:** `transportDisabledReason` é idêntico byte a byte nas duas cópias, e o contexto da cópia lê bem `channel_active`. O interruptor de envio tornado real em 30/08 é portanto honrado aqui como noutro sítio. `policyEnabled` e `resolveNetworkLogoUrl`, presentes só na cópia, não são chamados por ninguém.
-
-*Verificado : 30/08 — levantamento feito ficheiro a ficheiro, depois da abertura do item: 9 ficheiros duplicados e todos divergentes, ~694 linhas, e **uma única divergência com efeito observável** — a assinatura de rodapé não traduzida, **fechada na mesma noite e guardada por 6 testes**. A origem das cópias não tem resposta no repositório: estão no primeiro commit. O que resta é uma decisão de alcance, não uma medição. **31/08** — no dia seguinte à reunião, e no âmbito deste item, `20260831073104` deu a `painel_internal_tasks.status` os sete estados dos e-mails, com uma CHECK e `aberta` como padrão — a tabela estava vazia. **29/09** — esse segundo gesto tinha quebrado a criação de tarefas: cinco funções ainda escreviam ou filtravam `pendente`, e nenhuma tarefa interna pôde nascer durante quatro semanas (23514). Achado por Xavier na tela; corrigido por `455c7f0b` (migração `20260929095411`, suíte `taches_sept_etats_tests`, 7 testes; `src/lib/taskStatus.js` e o teste `task-status-vocabulaire`, que compara as listas da tela com a CHECK). Os quatro critérios estão cumpridos ou sem objeto desde a reunião de 30/08. **Falta verificar**: que um aviso de tarefa real saia pela função reunida — a tabela estava vazia em 31/08, e nenhuma tarefa pôde nascer depois até 29/09.*
-
-**O que é.** A primeira pergunta do item — *porque existem estas cópias* — está encerrada: precedem a história do repositório, nenhuma decisão está escrita. É preciso portanto decidir **pelo mérito**, não por arqueologia.
-
-**O menor gesto útil**, se não se quiser abrir o canteiro: dar ao `resolveMailRouting` da cópia o parâmetro `locale` e a leitura de `signature_short_i18n`, igual ao canónico. Isso fecha a única divergência cujo efeito foi constatado.
-
-**O gesto completo**: fazer os 9 ficheiros de infraestrutura de `notify-internal-task` apontarem para `../../_shared/`, e guardar em próprio apenas os 3 ficheiros de tarefas. O risco não é nulo — 694 linhas de diferença talvez contenham outras diferenças desejadas — portanto cada ficheiro retoma-se um a um, comparando os envios antes/depois num aviso de tarefa real.
-
-**E nos dois casos**: escrever no cabeçalho de `notify-internal-task/_shared/` o que ali vive e porquê, para que a próxima pessoa não tenha de refazer este levantamento.
-
-**Por que importa.** Porque o roteamento do e-mail é justamente o sítio onde uma divergência não se vê. Um logótipo resolvido de outra forma, uma regra de extinção aplicada numa cópia e não na outra: a mensagem parte na mesma, e ninguém compara dois e-mails enviados por duas funções diferentes.
-
-É exatamente o que acaba de acontecer à escala de uma única coluna — `register` resolvia o logótipo de forma diferente de todas as outras funções, e a diferença durou meses. Aqui a diferença é de 139 linhas.
-
-**O que conta como terminado.**
-
-- ~~A divergência de assinatura localizada está fechada~~ — feito em 30/08, guardado por 6 testes.
-- ~~O destino dos 9 ficheiros de infraestrutura duplicados está decidido — reunidos, ou assumidos por escrito.~~ — reunidos em 30/08 (`334e852c`).
-- ~~Um cabeçalho em `notify-internal-task/_shared/` diz o que ali vive e porquê.~~ — sem objeto: a pasta não existe mais, o cabeçalho de `index.ts` conta a reunião.
-- ~~A colisão de nome sobre `resolveLibraryLogoUrl` está resolvida.~~ — uma só definição, em `_shared/context/library-mail-routing.ts` (`79207ddb`, depois `334e852c`).
-
-**Dependências.** Nenhuma. O levantamento está feito — está neste item. O que resta é uma decisão de alcance, não uma investigação.
-
-*Remissões : `supabase/functions/_shared/context/library-mail-routing.ts` · `supabase/functions/notify-internal-task/_shared/ (12 fichiers, dont 9 dupliqués)` · `library_notification_profiles.signature_short_i18n (BLMF, 6 langues)` · `commit e6ec991a — import initial du dépôt, 21/08/2026` · `src/tests/notify-internal-task-signature.test.js`*
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
 
@@ -1099,34 +919,13 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
 
-#### F15 — Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** **Constatado em 24/09/2026 às 21h46**: « [AnarBib] Mise à jour d'une demande institutionnelle » (pedido da Anarchief.Org aprovado), enviado por `notify-library-request`, chegou à caixa pessoal de Xavier e a mais nenhum lugar. No código: a função escreve em leque às admins ativas de `network_administrators`, cada uma na sua língua, e `ADMIN_EMAIL` só serve de recurso; **em produção há UMA admin ativa**. A caixa coletiva `admins@anarbib.org` — destinatária dos alertas de saúde desde 28/08 (`HEALTH_ALERT_CC`) e dos relatórios DMARC — não via passar nenhum e-mail institucional. **Nove lugares** recarregavam `network_administrators` + `profiles` cada um à sua maneira, e três outros só escreviam a `ADMIN_EMAIL`. O precedente existia: `health-probe` já fazia admins ativas + variável de ambiente, sem duplicados, sem sair quando a tabela está vazia.
-
-*Verificado : 24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier.*
-
-**O que é.** Uma única resolução dos destinatários de administração, `_shared/context/network-admins.ts`: admins ativas (cada uma na sua língua) **mais** a caixa coletiva lida em `NETWORK_ADMIN_CC` (recurso `HEALTH_ALERT_CC`, logo efetivo em produção sem novo segredo), em **pt-BR** (língua de referência, decisão de Xavier em 24/09), sem duplicados, nunca vazia enquanto houver uma caixa. **Acrescentar, não substituir**. **Nem tudo merece a caixa**: a governança entre admins (cooptação, retirada coletiva), a facilitação de AG, a gazeta e a oficina continuam endereçadas às pessoas. Passam pelo módulo: `notify-library-request`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-cross-library-digest`, `membership-restriction` (congelamento global), `health-probe`. Uma guarda de duas listas fechadas fica vermelha se uma função institucional voltar a ler a tabela diretamente.
-
-**Por que importa.** Um endereço institucional sobrevive às saídas, às ausências e às mudanças de endereço — o que a tabela das admins não garante. A rede tem uma só admin ativa: cada pedido de biblioteca, cada permissão documental, cada congelamento global depende hoje de uma caixa gmail pessoal.
-
-**O que conta como terminado.**
-
-- Um e-mail institucional real é lido na caixa `admins@anarbib.org`, em português, E na caixa pessoal da admin, na sua língua.
-- A guarda de listas fechadas está verde, e uma mutação a faz ficar vermelha.
-
-**Dependências.** Nenhuma. `HEALTH_ALERT_CC` já está em produção.
-
-*Remissões : `supabase/functions/_shared/context/network-admins.ts` · `src/tests/admins-reseau-destinataires.test.js` · `deploy/functions.env.example` · `mémoire anarbib-alertes-supervision-destinataires`*
-
 #### F19 — Os registros das funções contêm os endereços em claro
 
 `P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
 
 **Estado.** Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08.
 
-*Verificado : **30/09** — entregue e implantado (`4158504a`). Falta o critério: uma semana de registros sem endereço completo (08/10).*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte.
 
@@ -1139,27 +938,6 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
-
-#### F24 — O nome de remetente padrão dos e-mails está em português
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** Resto do F21 (fechado em 06/10). `_shared/core/env.ts` dá a `SENDER_NAME`, na falta do segredo, « Biblioteca da rede AnarBib »; o contexto de uma biblioteca recai nele quando ela não tem nome de remetente. Se o segredo existir em produção, vale o seu valor: não verificado. E nenhum e-mail real em francês foi lido em produção.
-
-*Verificado : [object Object]*
-
-**O que é.** Decidir o padrão (nome da biblioteca, « AnarBib » só, ou uma chave por língua) e escrevê-lo com bancada; depois ler um e-mail real em francês recebido em produção.
-
-**Por que importa.** É a primeira linha que a leitora vê na caixa de entrada.
-
-**O que conta como terminado.**
-
-- Nenhum e-mail em francês tem remetente em português (bancada).
-- Um e-mail real de reserva em francês, recebido em produção, sem nenhuma palavra em português.
-
-**Dependências.** Nenhuma; Xavier para o e-mail real.
-
-*Remissões : `clôture F21` · `supabase/functions/_shared/core/env.ts` · `supabase/functions/_shared/context/library-mail-routing.ts`*
 
 ---
 
@@ -1175,8 +953,7 @@ Os seus 12 ficheiros repartem-se assim: **3 são legitimamente privados** (`data
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
-| **G16** | O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco | `P2` | A verificar |
-| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Decisão coletiva |
+| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Aberto |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1314,34 +1091,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
-#### G16 — O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL, deliberação coletiva
-
-**Estado.** Levantado em 05/10 (E23). `TransitionsPanel.jsx` envia um voto `pro`, `contre` ou `abstain`; o banco só aceita `for` ou `against`: **todo voto seria recusado**. A tela pede 5 caracteres para justificar um voto contra, o banco 20. O banco não conhece a abstenção. Circuito **nunca usado**: 0 proposta, 0 voto (05/10). Caso de G1.
-
-*Verificado : **05/10 — entregue, implantado e verificado em produção às 12h39** (`f93667ac`). Decisão de Xavier: manter a abstenção (regra da cooptação). Dois defeitos a mais: o tipo 4 nunca fechava, e o tipo 2 aceito por maioria falhava no voto vencedor. Suíte 12/12, três mutantes mortos. **Falta**: um voto real visto na tela.*
-
-**O que é.** Decidir a abstenção (Xavier): retirá-la da tela ou acrescentá-la ao banco. Depois traduzir os valores no envio e na exibição, alinhar o mínimo de justificativa e percorrer o circuito de ponta a ponta numa biblioteca de teste.
-
-**Por que importa.** Mudar de modo é a decisão colegiada por excelência; no dia em que uma equipe usar, seu primeiro voto falhará.
-
-**O que conta como terminado.**
-
-- A abstenção está decidida.
-- Votos a favor, contra e (se mantida) abstenção passam pela tela; uma suíte percorre proposta, voto e aplicação.
-
-**Dependências.** Nenhuma (decisão de Xavier em 05/10: manter a abstenção).
-
-*Remissões : `src/components/TransitionsPanel.jsx` · `fn_vote_library_profile_change` · `G1` · `migration 20261005101029` · `commit f93667ac`*
-
 #### G19 — Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua
 
-`P2` Corrente · Estado : **Decisão coletiva** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
 
 **Estado.** Pergunta de Xavier em 07/10: as coordenações podem dialogar entre si no app e por e-mail? **Não, verificado em 07/10**: nenhuma mensageria livre entre coordenações. O que mais se aproxima: a ajuda mútua de `/federacao` (um apelo, ofertas, um só ida e volta), os intercâmbios entre bibliotecas (pedido, resposta, notas), o EEB, as assembleias. Um plano em cinco lotes foi escrito em 07/10, não commitado; aguarda cinco decisões.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** **Lote 1, dados**: `library_conversations`, `library_conversation_participants` (uma biblioteca por linha, arquivamento próprio), `library_messages` (`body`, `lang` nas dez locales, `body_i18n`, `i18n_status`), `library_conversation_reads`; escritas só por RPC DEFINER em `api` (limite de 30 por 24 h), leitura por política das coordenações participantes; índices nas FK, tabelas classificadas no backup, só arquivamento. **Lote 2, telas**: aba `#tab=correspondance` em `BibliotecaPage`, « Escrever a uma biblioteca », dez locales. **Lote 3**: sino e e-mail a `admin_notification_email` na locale da biblioteca. **Lote 4**: `libraries.read_languages`. **Lote 5**: tradução no envio com consentimento da autora, marcada como automática. **Depois**: fios de círculo; resposta por e-mail (nada recebe e-mail hoje).
 
@@ -1354,7 +1110,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Nada legível fora das coordenações participantes; nada executável por `anon`; nenhuma mensagem apagada, só arquivada.
 - Dez locales, guarda i18n, suítes SQL e bancada da função Edge.
 
-**Dependências.** **Lote 0, cinco decisões de Xavier**: (1) quem participa; (2) quem recebe o e-mail; (3) tradução automática de mensagens privadas pela API Anthropic, com consentimento — senão o lote 5 cai; (4) começar sem resposta por e-mail; (5) o nome da aba. Nada se codifica antes.
+**Dependências.** **Lote 0 decidido por Xavier em 08/10**: só coordenações; e-mail ao endereço coletivo; tradução automática com consentimento; sem resposta por e-mail no início; aba « Correspondência ». O lote 1 pode começar.
 
 *Remissões : `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/translate-gazette-submission` · `src/pages/FederacaoPage.jsx` · `src/components/NotificationBell.jsx`*
 
@@ -1375,9 +1131,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | Em curso |
 | **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
-| **H32** | Sinalizar ao PMB que o formulário de importação não transmite a origem das autoridades, e dar à DIRA a correção de uma linha | `P3` | A verificar |
-| **H30** | «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas | `P1` | A verificar |
-| **H31** | «Reprocessar» julga a importação no momento de apagar, não só no envio | `P2` | A verificar |
 
 #### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
 
@@ -1572,72 +1325,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
 
-#### H32 — Sinalizar ao PMB que o formulário de importação não transmite a origem das autoridades, e dar à DIRA a correção de uma linha
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : biblioteconomia, nenhuma competência técnica
-
-**Estado.** Constatado em **H25**: o formulário do PMB 8.1.1.1 envia `authorities_origin`, a importação lê `authorities_default_origin`; a origem escolhida nunca chega.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Redigir o relato para a equipe do PMB e o passo a passo para a DIRA corrigir a linha.
-
-**Por que importa.** O vínculo por número evita que o PMB funda dois homônimos.
-
-**O que conta como terminado.**
-
-- Relato redigido e entregue a Xavier.
-- Correção verificada na bancada PMB.
-- Passo a passo para a DIRA no README.
-
-**Dependências.** Depois de **H25** (fechado em 06/10).
-
-*Remissões : `tests/pmb/README.md`*
-
-#### H30 — «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas
-
-`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, Deno / TypeScript
-
-**Estado.** **Provado na bancada em 01/10** (revisão do lote 0 de H21): para uma importação cujo caminho é uma convenção sem arquivo (`oai/…`, `lookup/…`, `direct/…`), a tela oferece «Reprocessar» e `fn_import_dispatch` aceita; a edge function apaga todas as linhas e depois falha no download: importação «falhou», 0 linha. Anterior ao lote 0 (H15, EX-4).
-
-*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada). **05/10 — entregue** (`324a49a5`, migração `20261005064758` aplicada pela CI; edge functions implantadas): `fn_import_dispatch` recusa na hora «Reprocessar» quando o arquivo não está em `storage.objects` (HINT traduzida, 10 locales); as duas edge functions leem e analisam o arquivo antes de apagar e, se falharem antes do apagamento, mantêm linhas e estado (diário, 409). **Registrado**: a tela não lê `error_log`; uma falha DEPOIS do apagamento ainda perde as linhas; a janela de **H31** aumenta.*
-
-**O que é.** Recusar o reprocessamento em `fn_import_dispatch` para `oai_pmh`, `lookup` ou caminho `direct/` (HINT traduzida, 10 locales), esconder o botão nesses casos, e na edge function ler o arquivo ANTES de apagar as linhas.
-
-**Por que importa.** É uma perda de dados silenciosa a um clique oferecido na tela.
-
-**O que conta como terminado.**
-
-- «Reprocessar» não é oferecido nem aceito para importação sem arquivo; recusa traduzida.
-- Uma falha de leitura do arquivo não apaga mais nenhuma linha.
-- Suíte SQL e bancada da edge function.
-
-**Dependências.** Depois do lote 0 de **H21** (entregue em 01/10).
-
-*Remissões : `claude/h21-reimport`*
-
-#### H31 — «Reprocessar» julga a importação no momento de apagar, não só no envio
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript
-
-**Estado.** **Provado na bancada em 01/10.** A guarda de «Reprocessar» é julgada no envio; a edge function apaga as linhas segundos depois, sem reler. Nessa janela: uma promoção dá dois registros para a mesma linha (anterior, H15); uma vinculação faz recusar o apagamento e a importação termina «falhou», com a fila escondida. Ao lado: um pacote de acervo reprocessado apaga o rastro de anexação dos arquivos recebidos.
-
-*Verificado : 01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção). **05/10 — entregue** (`9942be20`, enviado por engano com a mensagem provisória «wip(h31)»; migração `20261005124652` aplicada pela CI): o apagamento das linhas no reprocessamento passa por uma função que trava a importação e rejulga a guarda; promoção, vinculação, decisão, anexação de arquivo recebido e exclusão da importação usam a mesma trava; um pacote com arquivo já anexado não se reprocessa mais. Provado com duas sessões. **Registrado**: uma promoção grande faz os outros gestos esperarem até 8 s; dois «Reprocessar» simultâneos não são recusados; «Run N introuvable» sem HINT.*
-
-**O que é.** Passar o apagamento das duas edge functions por uma RPC `ingest` que trava a importação, rejulga a guarda e apaga; promoção, vinculação e decisão usam a mesma trava. Um apagamento recusado deixa a importação no estado anterior e registra a recusa no diário.
-
-**Por que importa.** O lote 0 promete «nunca dois registros para uma linha»; essa janela é o último caminho conhecido que a desmente.
-
-**O que conta como terminado.**
-
-- Uma promoção ou vinculação na janela é recusada ou faz recusar o reprocessamento, sem importação falhada nem linha perdida.
-- Um reprocessamento recusado deixa a importação e a fila visíveis.
-- Testes da janela e bancadas das duas edge functions.
-
-**Dependências.** Depois do lote 0 de **H21** (entregue em 01/10); com **H30**.
-
-*Remissões : `claude/h21-reimport`*
-
 ---
 
 ### I — Auto-hospedagem, operação, backups, CI
@@ -1792,30 +1479,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **J9** | Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px | `P2` | A verificar |
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-| **J11** | Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5 | `P3` | A verificar |
-
-#### J9 — Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : nenhuma competência técnica
-
-**Estado.** O portfólio de 02/09 deixa cinco coisas abertas: 320 posições preenchidas das quais **180 por recuo pt-BR** (sem captura na própria língua para nove locales); **IMG-31** reproduz um pedido de adesão real ainda em análise (Solidaires); **IMG-08** deixa legíveis o endereço e o e-mail da BLMF, «provavelmente deliberado, a confirmar»; o texto fica ≈ 4,5 pt no papel, daí recaptura em 900-1000 px e recorte do fundo; **IMG-20** espera o deploy da correção do seletor de periódico. O manual da leitora v2 de 03/09 reutilizou as mesmas capturas sem essa correção. **Verificado em 07/09 no repositório**: os dez `docs/manual*.md` estão na v1.1 de setembro — essa parte está feita; o branch e o worktree `manualv5` não existem mais — feito também. As capturas em si estão na máquina de Xavier, fora de alcance.
-
-*Verificado : 07/09 — manuais .md na v1.1 e branch removido (feito); capturas não verificáveis daqui.*
-
-**O que é.** Decidir IMG-31 (pedido fictício ou desfoque) e IMG-08; depois uma passagem de recaptura em 900-1000 px, locale por locale, começando pelas que têm leitoras.
-
-**Por que importa.** Um manual que não se consegue ler no papel, e cuja imagem mostra o dossiê de uma biblioteca que espera resposta, não se imprime para Bolonha.
-
-**O que conta como terminado.**
-
-- IMG-31 e IMG-08 decididas, com a razão escrita.
-- As capturas relidas legíveis na impressão.
-
-**Dependências.** IMG-31 toca **G7** (não expor uma candidatura em curso).
-
-*Remissões : `claude/MANUEL_v5_portfolio_captures_2026-09-02` · `claude/MANUEL_LECTEUR_v2_refonte_2026-09-03`*
 
 #### J10 — Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão
 
@@ -1836,26 +1500,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de Bolonha. Sem dependência técnica.
 
 *Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
-
-#### J11 — Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : React / JavaScript, SQL / PostgreSQL
-
-**Estado.** Cinco restos achados no caminho, sem item: (1) duas guardas iguais (`locales-sans-cle-en-double`, `i18n-cles-uniques`); (2) `scripts/merge-imp-deposit-keys.cjs`, script morto; (3) capas antigas no bucket até rodar `purge-orphelins-covers.py` (classe B); (4) colunas e tabela sem leitor do e-mail (`57a4aafc`); (5) duas views de trabalho do lote C5 (`89a2b508`).
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Para cada um: retirar, ou escrever por que fica. Antes de qualquer `DROP`, procurar em `prosrc`, no front e nas Edge Functions.
-
-**Por que importa.** Cada resto custa uma leitura a quem o cruza, e duas guardas gêmeas se contradizem no dia em que uma muda.
-
-**O que conta como terminado.**
-
-- Cada um dos cinco restos foi retirado, ou mantido com a razão escrita aqui.
-
-**Dependências.** Xavier, para a purga das capas e qualquer migração que apague.
-
-*Remissões : `commits 9fc60a15, a64bd04f, 8f0d85a0, d7f65c54, 57a4aafc, 89a2b508` · `scripts/purge-orphelins-covers.py`*
 
 ---
 
@@ -1991,7 +1635,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Sessão de 30/08: o e-mail a Monique e Serge (Radio Libertaire, *Trous Noirs*) escreve «Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois». **Não verificado**: nem a entrega do primeiro artigo, nem o envio do e-mail, nem a resposta. Nenhum item do backlog carregava esse compromisso.
 
-*Verificado : 07/09 — compromisso encontrado numa sessão, nenhum rastro de acompanhamento em outro lugar.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Dizer aqui onde estão os três artigos (entregue, revisto, publicado) e se o e-mail saiu; depois manter o ritmo — um artigo por mês é uma dívida que se vê.
 
@@ -2292,6 +1936,21 @@ CI verde. |
 | B37 | 2026-10-06 | **Aberto e entregue em 06/10** (`1fafc35b`, migração `20261006202320`, verificado às 23h02): **34 funções SECURITY DEFINER sem chamador sob `authenticated` fechadas** — o aviso 0029 passa de 451 a 418. Nove ficam abertas de propósito (7 da lista T10, as duas RPC `fn_outbox_*`, `fn_import_row_comparison`). A guarda da migração reverifica na implantação. Suíte `aides_definer_fermees_tests`; T2 de `b14_oracle_existence_forme` corrigido (premissa falsa). 0028 = 29 = T10; 0011 = 1, voluntário. Complemento na auditoria. *Levado ao backlog em 07/10, no inventário.* |
 | I31 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier, os três critérios cumpridos com envio real.** Testemunha de queda fora do banco: a cada cinco minutos, do posto, leitura REST e saúde do Auth; após dois falhos, e-mail pela API da Resend sem tocar no banco; um segundo na volta. Cego se o posto está sem rede; recusa sem configuração. Bancada de 8 casos. Prova real às 20h50: dois e-mails (Resend 200) recebidos em `admins@anarbib.org` e `anarbib@proton.me`. Consignado: não vê a causa (I32) nem uma queda de menos de dez minutos. |
 | Dois tomos diferentes nunca são uma duplicata, nos três detectores; cinco tomos catalogados duas vezes fundidos (DEDUP-15) | 2026-10-08 | **Encerrado em 08/10** (REGISTRO `DEDUP-15`). Relatado por Xavier na lista plana do catálogo (a visão por obra agrupa os tomos; a opção «Lista plana» ficara gravada). Medido em produção: a varredura global descartava dois tomos diferentes desde o lote 4 (04/09), mas `suggest_book_duplicates` (o assistente numa ficha) e `api.suggest_draft_duplicates` (o formulário) não liam o tomo — 64 pares de tomos diferentes propostos por engano. Migração `20261008185800`: os dois detectores calculam a ordem do tomo como a varredura e excluem duas ordens conhecidas e diferentes; um tomo desconhecido de um lado continua candidato. Suíte `tomes_jamais_doublons_par_notice_tests` (7). Migração `20261008185801`, com acordo escrito de Xavier e sob sua identidade como em C18: cinco pares de mesma edição e mesmo tomo, em duas bibliotecas, nunca fundidos em 31/08 porque o tomo estava escrito de outro modo («1» / «I», «Vol I» no título) — Thomas, *A guerra civil espanhola* 1964, tomos 1 e 2; *Os Sindicatos operários e a Revolução social* vol. 1; *Rebeldias* vol. 2 e 3. Ficha mais antiga mantida, acervo MLEG com seu próprio número de chamada, nada copiado da ficha MLEG, um assunto recuperado. **Falta a uma mão**: 29 pares entre bibliotecas em que só um lado tem tomo — pôr o tomo, depois decidir no assistente. |
+| E34 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** «Editar» um registro de consulta o torna emprestável na publicação: a retomada esquece `circulation_default`. *Histórico*: 07/10 — aberto por constatação do lote 5 de H21. **08/10 — entregue e verificado às 19 h 37** (`52fd90e2`, migração `20261008172304`). A reprise não copiava `circulation_default`; o gatilho de publicação reescrevia circulação e `loanable` a partir do rascunho. O que protegia: a tela recalcula a circulação a partir de `loanable`; em produção nenhuma das 12 notícias em consulta mudou por este caminho; os « 11 rascunhos divergentes » não são este defeito — nada a corrigir. Entregue: a cópia recopia `circulation_default`; verificação final: toda coluna comum a `books` e `book_drafts` é copiada. Suíte de 5 casos, mutante vermelho. **Fechamento a decidir por Xavier.** |
+| H32 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Sinalizar ao PMB que o formulário de importação não transmite a origem das autoridades, e dar à DIRA a correção de uma linha. *Histórico*: 06/10 — aberto no fechamento de H25, por decisão de Xavier. **08/10 — redigido, provado na bancada, entregue** (`4c2d1c32`). (1) O relato para a PMB Services está escrito (`docs/interop/signalement-pmb-origine-autorites-2026-10-08.md`): a linha em causa, a variável lida, a correção de uma linha, a medida. (2) O passo a passo para a DIRA está em `tests/pmb/README.md`. (3) A correção de uma linha foi provada na bancada: 61 responsabilités sur 61 rattachées à leur fiche AnarBib par le ``, 61 liens notice → source d'autorité, 0 vers une source absente, 0 auteur recréé — chiffre pour chiffre le bilan « origine transmise » du 29/09 (`h25-origine-transmise`) ; sans le correctif, le même import « comme le navigateur » donne 0 sur 61 et 44 liens vers une origine absente (`h25-comme-le-navigateur`). **Resta** o envio, por Xavier. |
+| E33 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Quando o banco não responde, Minha conta diz que o serviço está indisponível em vez de uma página vazia. *Histórico*: **07/10 — entregue e verificado às 21 h 48** (`312f91cc`). Causa: sem timeout no cliente, `ContaRouter` esperava três respostas e renderizava `null` sem fim; com 522 rápido, montava a página com perfil nulo. Entregue: `ServiceIndisponible` (dez locales), roteador e página limitados a doze segundos, `ErrorBoundary` em torno das abas. Bancada 6 casos. **Fechamento a decidir por Xavier.** |
+| D9 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Um recurso posto por recepção de fundo desaparece na publicação seguinte do rascunho. *Histórico*: **06/10 — decisão de Xavier: « manter o que ela ignora ». Entregue e verificado em produção às 20h13** (`0dae3d10`, migração `20261006175037`). Um recurso publicado só sai se o rascunho o tiver retirado ou inativo, ou o tiver apagado (rastro em `book_drafts.digital_resources_removed`). Efeito vizinho resolvido: publicar um rascunho sem retomada (importação) esvaziava a notícia. Suíte T8; `sql-tests` vermelho por uma comparação com captura fixa (`aller_retour_pmb_tests` T5), corrigida (`81c17016`). **Critérios cumpridos; fechamento a decidir por Xavier.** |
+| J11 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Faxina: guardas duplicadas, script morto, capas órfãs, restos do e-mail e do lote C5. *Histórico*: **06/10 — quatro restos de cinco resolvidos.** Guarda duplicada e script morto retirados (`4b8ddebc`); restos do F1 suprimidos com autorização escrita de Xavier (`fe10098d`, migração `20261006190649`, verificada em produção; a tabela saiu também da denylist do backup, hors repositório); as duas views do lote C5 alimentam um relatório ativo: mantidas. Capas: 7 originais órfãos (não 358) — a purga cabe a Xavier. **06/10 — capas purgadas por Xavier**: 12 objetos (6 originais + 6 miniaturas), 778 KB, 0 falha; `books/0000280/front.jpg` mantida. Os cinco restos tratados. **Critérios cumpridos; fechamento a decidir por Xavier.** |
+| F24 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** O nome de remetente padrão dos e-mails está em português. *Histórico*: **06/10 — decisão de Xavier: « AnarBib » só. Entregue e implantado** (`7aa8e8c4`, `c952704a`); guarda `mail-expediteur-par-defaut`; `notify-event` v1742 com `|| "AnarBib"`. O segredo `SENDER_NAME` foi posto em « AnarBib » por Xavier em 06/10. **Falta**: ler um e-mail real em francês. |
+| H30 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** «Reprocessar» uma importação sem arquivo (coleta OAI, candidato, depósito direto) não apaga mais as linhas. *Histórico*: 01/10 — aberto na entrega do lote 0 de H21 (constatação de revisão, provada na bancada). **05/10 — entregue** (`324a49a5`, migração `20261005064758` aplicada pela CI; edge functions implantadas): `fn_import_dispatch` recusa na hora «Reprocessar» quando o arquivo não está em `storage.objects` (HINT traduzida, 10 locales); as duas edge functions leem e analisam o arquivo antes de apagar e, se falharem antes do apagamento, mantêm linhas e estado (diário, 409). **Registrado**: a tela não lê `error_log`; uma falha DEPOIS do apagamento ainda perde as linhas; a janela de **H31** aumenta. |
+| H31 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** «Reprocessar» julga a importação no momento de apagar, não só no envio. *Histórico*: 01/10 — aberto na entrega do lote 0 de H21 (provado na bancada; largura da janela não medida em produção). **05/10 — entregue** (`9942be20`, enviado por engano com a mensagem provisória «wip(h31)»; migração `20261005124652` aplicada pela CI): o apagamento das linhas no reprocessamento passa por uma função que trava a importação e rejulga a guarda; promoção, vinculação, decisão, anexação de arquivo recebido e exclusão da importação usam a mesma trava; um pacote com arquivo já anexado não se reprocessa mais. Provado com duas sessões. **Registrado**: uma promoção grande faz os outros gestos esperarem até 8 s; dois «Reprocessar» simultâneos não são recusados; «Run N introuvable» sem HINT. |
+| F6 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** `notify-internal-task` corre sobre uma cópia congelada de toda a pilha de e-mail. *Histórico*: 30/08 — levantamento feito ficheiro a ficheiro, depois da abertura do item: 9 ficheiros duplicados e todos divergentes, ~694 linhas, e **uma única divergência com efeito observável** — a assinatura de rodapé não traduzida, **fechada na mesma noite e guardada por 6 testes**. A origem das cópias não tem resposta no repositório: estão no primeiro commit. O que resta é uma decisão de alcance, não uma medição. **31/08** — no dia seguinte à reunião, e no âmbito deste item, `20260831073104` deu a `painel_internal_tasks.status` os sete estados dos e-mails, com uma CHECK e `aberta` como padrão — a tabela estava vazia. **29/09** — esse segundo gesto tinha quebrado a criação de tarefas: cinco funções ainda escreviam ou filtravam `pendente`, e nenhuma tarefa interna pôde nascer durante quatro semanas (23514). Achado por Xavier na tela; corrigido por `455c7f0b` (migração `20260929095411`, suíte `taches_sept_etats_tests`, 7 testes; `src/lib/taskStatus.js` e o teste `task-status-vocabulaire`, que compara as listas da tela com a CHECK). Os quatro critérios estão cumpridos ou sem objeto desde a reunião de 30/08. **Falta verificar**: que um aviso de tarefa real saia pela função reunida — a tabela estava vazia em 31/08, e nenhuma tarefa pôde nascer depois até 29/09. |
+| F15 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Os e-mails institucionais às admins da rede só chegavam a uma caixa pessoal — uma única resolução de destinatários, com a caixa coletiva. *Histórico*: 24/09/2026 — e-mail recebido às 21h46 lido; `sendToAdmins` lido; uma admin ativa contada na base; `HEALTH_ALERT_CC` presente nos segredos, `NETWORK_ADMIN_CC` ausente. **Entregue em 24/09 à noite**: módulo + seis conversões + modelos de ambiente + guarda e bancadas. Falta o primeiro critério: um e-mail real lido na caixa, por Xavier. |
+| G16 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** O voto das transições (mudar um modo de funcionamento de uma biblioteca) não fala a língua do banco. *Histórico*: **05/10 — entregue, implantado e verificado em produção às 12h39** (`f93667ac`). Decisão de Xavier: manter a abstenção (regra da cooptação). Dois defeitos a mais: o tipo 4 nunca fechava, e o tipo 2 aceito por maioria falhava no voto vencedor. Suíte 12/12, três mutantes mortos. **Falta**: um voto real visto na tela. |
+| C14 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Um exemplar que muda de biblioteca leva tudo consigo. *Histórico*: **05/10 — entregue, implantado e verificado em produção (`07ad68af`, migração `20261005074236`, pela CI).** Rascunho aberto antes da mudança do exemplar: recusado na publicação. Reatribuição recusada enquanto houver reserva ativa no fundo. EEB declarado devolvido ou cancelado à mão fecha suas linhas; as duas linhas dos EEB 24 e 25 foram reparadas. Fundos vazios: regra de CAT-E19 no descarte e na mudança de um exemplar (`private.fn_fonds_vides_menage`, fechada a `anon` e `authenticated`). Lixeira sem 23503. Suíte 17/17, sete mutantes mortos, CAT-E19 18/18, vitest 1 865, lint 0 erro. **Falta ver**: os contadores dos fundos BTL 173 e 2426 ainda mostram «0 disponível» — o recálculo noturno (04h43) deve corrigi-los, reler em 06/10; e um olhar do Xavier nas duas recusas na tela. **Visto de passagem, fora de C14**: `publish_exemplar_draft` não cria o fundo da biblioteca de destino; mover um exemplar para uma biblioteca sem fundo da notícia falha em `exemplar_library_holding_mismatch` bruto. **05/10, à noite** — o defeito « visto de passagem, fora de C14 » virou **C23**, entregue no mesmo dia (`16962c55`). **06/10** — contadores relidos após o recálculo das 04h43 UTC: fundos BTL 173 e 2426 com 1 disponível de 1. Falta o olhar de Xavier nas duas recusas (E31). |
+| C23 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Um exemplar movido pela publicação encontra, ou cria, o fundo da sua notícia na biblioteca de destino. *Histórico*: **05/10 — entregue** (`16962c55`). Suíte 6/6, mutante morto, vitest 1 871. Falta um deslocamento visto na tela. |
+| J9 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px. *Histórico*: 07/09 — manuais .md na v1.1 e branch removido (feito); capturas não verificáveis daqui. |
+| F3 | 2026-10-08 | **Fechado em 08/10: Xavier suprimiu `read-pdf` e `mail-i18n-test` no painel — verificado: 50 funções, nenhuma das duas.** Consolidar as funções de notificação redundantes. *Histórico*: 31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`. 24/09 — `mail-i18n-test` continua no repositório e no `config.toml`, portanto implantada. Desde F7, um só transporte: F1 e esta consolidação ficaram mais baratos. 29/09 — Desde `6f762f8f`, o texto escrito no código dos dois relatórios semanais é lido por `mail-ptbr-voce.test.js` (lista fechada `TEXTE_EN_DUR_PT`): uma função de resumo consolidada deverá entrar nela. **05/10 — vereditos escritos, duas funções retiradas do repositório** (`82afd616`). Recapitulativos, leitores e exportações: separados com razão escrita; `read-pdf` e `mail-i18n-test` retiradas (nenhuma chamada em oito dias). **Falta (Xavier)**: suprimi-las da plataforma. **08/10 — verificado: `read-pdf` e `mail-i18n-test` ainda implantadas.** Xavier as suprime no painel; depois verifico e fecho. |
 
 ---
 
@@ -2323,4 +1982,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-10-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9b95bc63`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9b95bc63`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
