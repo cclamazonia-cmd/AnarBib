@@ -230,6 +230,85 @@ sudo systemctl daemon-reload
 > de juillet — dont celle qui écrit un horodatage illisible. Le dépôt a le
 > correctif, la machine ne l'a pas.
 
+## Le témoin de panne (I31)
+
+Le 07/10/2026, la base de production s'est arrêtée de 19:58 à 20:19 (Paris) et
+**personne n'a été prévenu**. La sonde `health-probe` tourne par une tâche
+planifiée de la base, écrit ses incidents dans la base et n'envoie qu'à partir
+d'eux : base tombée, sonde tombée avec elle. C'est un usage de hasard qui a vu
+la panne. Une panne qui dure jusqu'à ce que quelqu'un s'en aperçoive dure le
+temps qu'on mette à s'en apercevoir.
+
+`anarbib-temoin.sh` regarde depuis une **autre machine** — le poste, en
+attendant le serveur maison — toutes les cinq minutes (`anarbib-temoin.timer`).
+Il interroge l'API de production avec la clé publiable (une lecture REST de la
+liste publique des bibliothèques, la santé d'Auth) et, après **deux échecs de
+suite**, écrit **directement par l'API de Resend**, sans rien lire ni écrire
+dans la base, aux adresses configurées ; puis une seconde fois au retour, avec
+la durée. Un seul courriel par panne ; un envoi refusé par Resend est retenté
+au passage suivant.
+
+Trois issues, comme pour la fraîcheur, et les confondre serait se tromper de
+coupable :
+
+| Le témoin voit | Il en conclut | Sortie |
+|---|---|---|
+| l'API répond 2xx | tout va bien (et le retour, s'il sortait d'une panne) | 0 |
+| l'API ne répond pas, l'adresse de contrôle (codeberg.org) répond | la base est en panne — compté, puis écrit au deuxième | 1 |
+| ni l'API ni le contrôle ne répondent | **le poste** est sans réseau : pas de verdict, rien compté, rien écrit | 3 |
+| pas de configuration | il refuse de veiller en silence : unité en échec, visible | 2 |
+
+Son état vit dans `~/anarbib-ops/temoin/etat` (échecs de suite, état, début de
+la panne) ; les courriels partis dans `~/anarbib-ops/temoin/courriels.log`.
+
+### Le poser sur une machine
+
+La configuration ne vient **jamais** du dépôt : `~/anarbib-ops/temoin.env`, mode
+600, les noms dans `deploy/ops/temoin.env.example` — la clé Resend (la même que
+le secret des fonctions Edge), les destinataires (les administrateur·rices du
+réseau, séparées par des virgules) et l'expéditeur sur le domaine d'envoi.
+La clé s'écrit à l'invite masquée, jamais dans l'historique du terminal :
+
+```sh
+umask 077 && install -m 600 /dev/null ~/anarbib-ops/temoin.env
+read -rs -p 'RESEND_API_KEY : ' k && printf 'RESEND_API_KEY=%s
+' "$k" >> ~/anarbib-ops/temoin.env && unset k
+printf 'TEMOIN_DESTINATAIRES=%s
+' 'adresse1,adresse2' >> ~/anarbib-ops/temoin.env
+printf 'TEMOIN_EXPEDITEUR=%s
+' 'AnarBib <adresse-du-domaine-d-envoi>' >> ~/anarbib-ops/temoin.env
+```
+
+Puis les liens, comme pour les autres unités :
+
+```sh
+ln -s ~/anarbib/deploy/ops/anarbib-temoin.sh ~/anarbib-ops/anarbib-temoin.sh
+ln -s ~/anarbib/deploy/ops/systemd/anarbib-temoin.service ~/.config/systemd/user/
+ln -s ~/anarbib/deploy/ops/systemd/anarbib-temoin.timer   ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now anarbib-temoin.timer
+```
+
+### L'éprouver
+
+Une panne simulée, sans toucher à la production ni à la base : pointer la sonde
+sur un port fermé, deux passages — le second écrit (un vrai courriel aux
+destinataires, par Resend, sujet « la base ne répond plus ») —, puis un
+passage normal : le courriel de retour. L'état repart à zéro.
+
+```sh
+TEMOIN_URL_REST=http://127.0.0.1:9/ ~/anarbib-ops/anarbib-temoin.sh
+TEMOIN_URL_REST=http://127.0.0.1:9/ ~/anarbib-ops/anarbib-temoin.sh
+~/anarbib-ops/anarbib-temoin.sh
+journalctl --user -u anarbib-temoin.service -n 20
+```
+
+Le banc du dépôt rejoue la même décision contre deux serveurs locaux et un
+transport fichier (`src/tests/temoin-panne.test.js`) : il ne prouve pas
+l'envoi, il prouve quand on envoie, à qui, et quand on se tait.
+
+Ce que le témoin ne voit pas : la cause (il ne lit rien dans la base — c'est
+l'item I32), et une panne plus courte que dix minutes.
+
 ## Les horaires
 
 `19:00`, `dimanche 20:00`, `dimanche 21:00` — **en `Europe/Paris`**, fuseau nommé

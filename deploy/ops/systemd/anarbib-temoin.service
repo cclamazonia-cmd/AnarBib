@@ -1,0 +1,16 @@
+[Unit]
+Description=AnarBib — temoin de panne hors de la base (I31) : interroge l'API, ecrit aux admins apres deux echecs
+Documentation=file:%h/anarbib/deploy/ops/README.md
+# PAS de OnFailure= : la sortie 1 (l'API ne repond pas) et la sortie 3 (poste
+# sans reseau) sont le travail du temoin, pas une panne du temoin. Lui seul
+# decide d'ecrire — par le transport de courriel, sans la base. La sortie 2
+# (configuration absente) reste un echec visible : un temoin qui ne peut pas
+# prevenir ne doit pas avoir l'air de veiller.
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+TimeoutStartSec=120
+ExecStart=%h/anarbib-ops/anarbib-temoin.sh
+SuccessExitStatus=1 3

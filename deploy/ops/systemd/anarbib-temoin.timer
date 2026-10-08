@@ -1,0 +1,17 @@
+[Unit]
+Description=AnarBib — declencheur du temoin de panne (toutes les cinq minutes)
+
+[Timer]
+# Toutes les cinq minutes, a la minute ronde : deux echecs de suite = dix
+# minutes avant d'ecrire, le delai que la fiche I31 fixe (« moins de quinze »).
+OnCalendar=*:0/5
+# Deux minutes apres le demarrage de la session : le reseau est la, et une panne
+# survenue pendant que le poste etait eteint se voit au premier passage.
+OnStartupSec=2min
+# Pas de rattrapage des passages manques : un passage dit l'etat MAINTENANT,
+# rejouer ceux d'une nuit eteinte n'apprendrait rien.
+Persistent=false
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target
