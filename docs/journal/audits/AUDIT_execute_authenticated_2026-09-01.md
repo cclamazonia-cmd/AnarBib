@@ -1984,3 +1984,16 @@ est sous RLS sans politique et sans droit ; le déclencheur
 | `public.fn_divergences_appliquer(bigint, bigint[])` | 07/10 (H21 lot 5) | `my_access` (bibliothèque active, accès au panneau) ; coordination de la bibliothèque active ou administration ; la bibliothèque active détient la notice ; pas de brouillon vivant lié à une divergence ; 200 au plus | **Saine.** Crée un brouillon de reprise prérempli ; la notice ne change qu'à sa publication, sous la garde de `publish_book_draft`. |
 
 Compte attendu au prochain relevé : 0029 = **422** (+4) ; 0028 inchangé.
+
+### Complément du 08/10 — H21 lot 6a (`e225f463`, migration `20261008173955`)
+
+Aucune porte nouvelle pour `authenticated` ni pour `anon` : les aides
+`ingest.fn_h21_constat_exemplaire`, `fn_h21_exemplaire_pris`,
+`fn_h21_lot_ouvert_du_run`, `fn_h21_trace_exemplaire_rejouable` et les fonctions de
+déclencheur sont fermées. `fn_import_list_run_rows` (recréée, droits restaurés),
+`fn_import_reconcile_duplicates`, `fn_batch_review_report`, `fn_import_profile_create`,
+`publish_exemplar_draft` et `fn_restore_deleted_draft` gardent leur garde.
+**Forme à noter** : les colonnes `exemplares.source_item_id`, `import_source_id` et
+`import_run_id` sont lisibles par `anon` par la politique `exemplares_public_read`,
+comme le reste de l'exemplaire (dont `source_item_code`) ; ce sont des numéros
+internes, sans donnée personnelle. Compte 0029 attendu inchangé (422).
