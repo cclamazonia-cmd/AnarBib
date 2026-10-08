@@ -2922,6 +2922,14 @@
           "fr": "**Ouvert et livré le 06/10** (`1fafc35b`, migration `20261006202320`, déployé et vérifié à 23 h 02), à partir du CSV des avis du tableau de bord (« réduis ce qui peut être réduit ») : **34 fonctions SECURITY DEFINER sans appelant sous `authenticated` fermées** — l'avis 0029 passe de 451 à 418 (417 attendus : `fn_import_preparer_mises_a_jour`, H21 lot 4, est arrivée pendant le banc ; son verdict a été écrit le même soir). Le tri : sur 451, 399 ne sont appelées sous `authenticated` ni par une politique, ni par une vue, ni par une fonction INVOKER, ni par le cron ; 43 d'entre elles ne le sont ni par le front, ni par une fonction Edge, ni par un script. Neuf restent ouvertes exprès : les 7 qui figurent aussi dans la liste T10, les deux RPC d'admin `fn_outbox_*` (F12), `fn_import_row_comparison` (H21 en cours). Les 34 fermées : des aides que seules des DEFINER appellent, deux fonctions de déclencheur, trois fonctions mortes (`revoke_my_reader_card`, `discard_book`, `fn_ensure_current_user_profile`). La garde de la migration revérifie au déploiement qu'aucune n'a d'appelant sous `authenticated` — jouée d'abord en production dans une transaction annulée, elle a refusé une première liste qui portait une fonction déjà fermée. Suite `aides_definer_fermees_tests` (six mutants rouges) ; `circulation_couche_supplantee`, `paquetA_profils` et `brouillons_par_bibliotheque` ajustées ; dans `b14_oracle_existence_forme`, T2 affirmait que le Painel appelle `fn_painel_find_profile_by_lookup` — aucun fichier de l'historique ne l'a jamais nommée, le Painel cherche par `fn_painel_search_reader` : prémisse fausse, fonction déplacée côté « reste fermée », sans affaiblir le test. **Ce qui ne baisse pas, et pourquoi** : 0028 = 29, exactement la liste T10, chaque ouverture à `anon` décidée par écrit ; 0011 = 1, `fn_locale_from_idioma`, voulu (B32). Complément écrit dans `AUDIT_execute_authenticated_2026-09-01.md`. *Porté au backlog le 07/10, à l'inventaire des sessions voisines : la livraison n'avait d'item nulle part.*",
           "pt": "**Aberto e entregue em 06/10** (`1fafc35b`, migração `20261006202320`, verificado às 23h02): **34 funções SECURITY DEFINER sem chamador sob `authenticated` fechadas** — o aviso 0029 passa de 451 a 418. Nove ficam abertas de propósito (7 da lista T10, as duas RPC `fn_outbox_*`, `fn_import_row_comparison`). A guarda da migração reverifica na implantação. Suíte `aides_definer_fermees_tests`; T2 de `b14_oracle_existence_forme` corrigido (premissa falsa). 0028 = 29 = T10; 0011 = 1, voluntário. Complemento na auditoria. *Levado ao backlog em 07/10, no inventário.*"
         }
+      ],
+      [
+        "I31",
+        "2026-10-08",
+        {
+          "fr": "**Clos le 08/10 sur le mot de Xavier (« mails reçus sur les deux adresses, tu peux clore »), les trois critères tenus sur envoi réel.** Ouvert le 07/10 après la panne de la base (19:58 → 20:19) dont personne n'avait été prévenu : `health-probe` vit dans la base et tombe avec elle. Livré le 08/10 (`ead6aea9`, mode exécutable `4dfb1dc2`, CI verte) : `deploy/ops/anarbib-temoin.sh`, toutes les cinq minutes depuis le poste (`anarbib-temoin.timer`, `*:0/5`, deux minutes après le démarrage, sans rattrapage), une lecture REST (`api.public_libraries`, clé publiable) et la santé d'Auth ; après deux échecs de suite, un courriel par l'API de Resend — sans rien lire ni écrire dans la base —, un second au retour avec la durée ; un seul courriel par panne, un envoi refusé retenté au passage suivant ; aveugle si l'API et codeberg.org se taisent ensemble (poste sans réseau : rien compté, rien écrit) ; sans configuration il refuse de tourner (sortie 2, visible). Banc `temoin-panne` (8 cas, le vrai script contre deux serveurs HTTP du test). Posé sur le poste le soir même ; configuration `~/anarbib-ops/temoin.env` (mode 600, jamais au dépôt) : clé Resend saisie par Xavier à l'invite masquée, destinataires `admins@anarbib.org,anarbib@proton.me`, expéditeur `no-reply@notifications.anarbib.org`. *En chemin* : une première pose a laissé le texte d'exemple de la consigne comme destinataire (Resend 422) — le témoin a dit « courriel non parti, nouvel essai au prochain passage » sans déclarer la panne, comme prévu ; leçon pour les consignes à Xavier, pas pour le code. **Épreuve réelle à 20 h 50** : panne simulée (port fermé), deux passages → « la base ne répond plus » (Resend 200) ; passage normal → « répond de nouveau (panne de 5 min) » (Resend 200) ; les deux reçus sur les deux adresses. **Consigné** : le témoin ne voit ni la cause (I32) ni une panne de moins de dix minutes ; le serveur maison le reprendra tel quel (même unité, même fichier).",
+          "pt": "**Fechado em 08/10 à palavra de Xavier, os três critérios cumpridos com envio real.** Testemunha de queda fora do banco: a cada cinco minutos, do posto, leitura REST e saúde do Auth; após dois falhos, e-mail pela API da Resend sem tocar no banco; um segundo na volta. Cego se o posto está sem rede; recusa sem configuração. Bancada de 8 casos. Prova real às 20h50: dois e-mails (Resend 200) recebidos em `admins@anarbib.org` e `anarbib@proton.me`. Consignado: não vê a causa (I32) nem uma queda de menos de dez minutos."
+        }
       ]
     ]
   },
@@ -6309,59 +6317,6 @@
       ]
     },
     {
-      "id": "I31",
-      "d": "I",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Une panne de la base doit déclencher une alerte qui ne dépend pas de la base",
-        "pt": "Uma queda do banco deve disparar um alerta que não dependa do banco"
-      },
-      "v": {
-        "fr": "Le 07/10/2026, la base de production s'est arrêtée à 19:58 (Paris) et n'a répondu à rien jusqu'au redémarrage du projet par Xavier : 19:58 → 20:19, environ 21 minutes. Journaux : Postgres se tait à 17:57:59 UTC juste après un point de contrôle normal, sans erreur ; la passerelle rend des 522/544 de 18:00 à 18:17 UTC, des 503 au redémarrage (18:18), puis tout revient en 200 (18:19) ; le pooler refuse toute connexion (« ECIRCUITBREAKER… new connections are temporarily blocked », job `backend` de `a4ddaaa3` rouge à 20:14) ; aucun incident Supabase public ; le tableau de bord affichait « Unhealthy », instance MICRO (t4g.micro), mémoire 70 %, connexions indisponibles. **Personne n'a été prévenu** : `health-probe` tourne par une tâche planifiée de la base, écrit ses incidents dans `service_health_incidents` et n'envoie qu'à partir d'eux — base tombée, sonde tombée avec elle ; aucun incident n'a été enregistré pour ces 21 minutes. C'est Xavier qui a vu la panne, en se servant de Mon compte.",
-        "pt": "Em 07/10, o banco de produção caiu das 19:58 às 20:19 (Paris). Ninguém foi avisado: o `health-probe` roda por uma tarefa agendada do próprio banco e grava seus incidentes nele; nenhum incidente foi registrado."
-      },
-      "w": {
-        "fr": "Un témoin hors de la base, qui interroge l'API (une lecture REST, la santé d'Auth) toutes les cinq minutes depuis une autre machine — le poste (timer systemd utilisateur, comme les sauvegardes) en attendant le serveur maison — et qui, après deux échecs de suite, écrit directement par le transport de courriel (sans passer par la base) aux admins du réseau, puis une seconde fois au retour.",
-        "pt": "Uma testemunha fora do banco, que consulta a API a cada cinco minutos de outra máquina e, após duas falhas seguidas, escreve diretamente pelo transporte de e-mail aos admins da rede, e de novo na volta."
-      },
-      "y": {
-        "fr": "Une panne qui dure jusqu'à ce que quelqu'un s'en aperçoive dure le temps qu'on mette à s'en apercevoir. Le 07/10, c'était un hasard d'usage.",
-        "pt": "Uma queda que dura até alguém perceber dura o tempo que se leva para perceber."
-      },
-      "f": {
-        "fr": [
-          "Une panne simulée (adresse injoignable) déclenche un courriel aux admins du réseau en moins de quinze minutes, sans rien lire ni écrire dans la base.",
-          "Le retour déclenche un second courriel.",
-          "Le témoin prouve qu'il tourne (journal systemd, comme les sauvegardes)."
-        ],
-        "pt": [
-          "Uma queda simulada dispara um e-mail aos admins da rede em menos de quinze minutos, sem tocar no banco.",
-          "A volta dispara um segundo e-mail.",
-          "A testemunha prova que roda (diário systemd)."
-        ]
-      },
-      "dep": {
-        "fr": "Le transport de courriel lisible hors de la base (clé Resend sur la machine du témoin, à poser par Xavier) ; plus tard, le serveur maison.",
-        "pt": "O transporte de e-mail acessível fora do banco (chave Resend na máquina da testemunha, a pôr por Xavier)."
-      },
-      "r": [
-        "supabase/functions/health-probe/index.ts",
-        "deploy/ops/ (timers systemd du poste)",
-        "panne du 07/10/2026"
-      ],
-      "verif": [
-        {
-          "fr": "**08/10 — livré, posé sur le poste, en attente de la clé** (`ead6aea9`, mode exécutable `4dfb1dc2`, CI verte). `deploy/ops/anarbib-temoin.sh` : toutes les cinq minutes (`anarbib-temoin.timer`, `*:0/5`, deux minutes après le démarrage de la session, sans rattrapage), une lecture REST (`api.public_libraries`, clé publiable) et la santé d'Auth ; après deux échecs de suite, un courriel aux destinataires configurés par l'API de Resend — sans rien lire ni écrire dans la base —, un second au retour avec la durée ; un seul courriel par panne, un envoi refusé retenté au passage suivant ; si l'API et codeberg.org se taisent ensemble, le poste est sans réseau : aveugle, rien compté, rien écrit (sortie 3) ; sans configuration, il refuse de tourner (sortie 2, unité en échec visible — un témoin qui ne peut pas prévenir ne doit pas avoir l'air de veiller). Banc `temoin-panne` (8 cas, le vrai script contre deux serveurs HTTP du test, transport fichier) ; un passage réel contre la production : REST 200, Auth 200. Posé sur le poste : liens dans `~/anarbib-ops` et `~/.config/systemd/user`, minuteur actif. **Ce qui manque, et que seul Xavier peut poser** : `~/anarbib-ops/temoin.env` (mode 600) — `RESEND_API_KEY` à l'invite masquée, `TEMOIN_DESTINATAIRES` (les admins du réseau), `TEMOIN_EXPEDITEUR` (le domaine d'envoi) ; la recette est dans `deploy/ops/README.md`, « Le témoin de panne ». *Critère 1* (panne simulée → courriel en moins de quinze minutes) : à jouer par Xavier une fois la clé posée, deux passages avec `TEMOIN_URL_REST=http://127.0.0.1:9/` puis un passage normal — c'est le vrai courriel qui compte ; *critère 2* (retour) : le même essai ; *critère 3* (il prouve qu'il tourne) : `journalctl --user -u anarbib-temoin.service`. Consigné : le témoin ne voit ni la cause (I32) ni une panne de moins de dix minutes ; le serveur maison le reprendra tel quel (même unité, même fichier).",
-          "pt": "**08/10 — entregue, instalado no posto, à espera da chave** (`ead6aea9`, mode exécutable `4dfb1dc2`). A cada cinco minutos, uma leitura REST e a saúde do Auth; após dois falhos seguidos, um e-mail pela API da Resend, sem tocar no banco; um segundo na volta. Cego se nem a API nem codeberg.org respondem; recusa sem configuração. Bancada de 8 casos; passagem real: 200/200. **Falta Xavier pôr** `~/anarbib-ops/temoin.env` (chave Resend, destinatários, remetente) e jogar a queda simulada do README — o e-mail real é o critério 1."
-        }
-      ]
-    },
-    {
       "id": "I32",
       "d": "I",
       "p": "P1",
@@ -6574,7 +6529,7 @@
       "id": "I33",
       "d": "I",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sysadmin"
@@ -6615,6 +6570,12 @@
         "deploy/ops/anarbib-mirror-refresh.sh",
         "deploy/ops/anarbib-bg2.sh (filet)",
         "journal du 08/10/2026, anarbib-backup-court.service"
+      ],
+      "verif": [
+        {
+          "fr": "**08/10 — livré, posé, éprouvé sur le poste** (`2d3c8273`, CI verte). `anarbib-exploitation-suit.sh` : avance `~/anarbib` en avance rapide seulement si le checkout est sur `main`, propre (fichiers suivis ; `CLAUDE.md` et `.claude/` ignorés) et qu'aucun script d'exploitation ne tourne (sauvegardes, fraîcheur, témoin : des liens vers ce checkout) ; sinon il dit pourquoi — sale ou divergent : sortie 1 et drapeau `.last-failure` ; un tir en cours : on attend. Il se recopie dans `/tmp` avant de tourner, et le tir du miroir l'appelle en `exec`, dernier geste, parce que tous deux vivent dans le checkout qu'ils avancent. Minuteur du miroir : 18:00, **18:50** (avant le flux court), 19:50 le dimanche (avant le long), une minute après le démarrage. Banc `exploitation-suit-main` (9 cas, vrais dépôts git jetables), vitest 2 229. Sur le poste : `systemd` rechargé, un tir du miroir lancé à la main a enchaîné le suivi — `~/anarbib` suit `main`. *Critère 1* se vérifie au prochain tir du soir après une migration qui crée une table ; *critères 2 et 3* tenus (banc, README). **Reste** : clôture à décider par Xavier après un tir réel.",
+          "pt": "**08/10 — entregue, instalado, provado no posto** (`2d3c8273`). O checkout `~/anarbib` segue `main` em avanço rápido, só se limpo e sem script em curso; o tiro do espelho o encadeia (18:00, 18:50, 19:50 dom., arranque). Bancada de 9 casos. **Fechamento a decidir por Xavier após um tiro real.**"
+        }
       ]
     }
   ]

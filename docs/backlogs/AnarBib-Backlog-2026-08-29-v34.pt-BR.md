@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-08** · 72 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-08** · 71 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 6
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 8
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 12
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 7
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 7 de outubro de 2026, à noite** (`9b95bc63`) — produção consultada em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 05/10 à noite, `a387b46c`). **8 migrações** (440 = 440, todas pela CI), 38 commits, 2 212 testes JS e 179 suítes SQL. O que mudou: uma tabela e uma policy a menos (J11), uma tabela `ingest` a mais (H21 lote 5), +31 funções, **34 DEFINER fechadas** a `authenticated` (B37: 0029 de 449 a 422); **a queda de 07/10** (I31, I32) zerou os contadores de uso — 440 « índice não usado »; duas notícias fundidas por Xavier, uma criada, dezesseis rascunhos publicados; `AccountPage` de 153 a 73 KB em oito lotes (E6), E33. **Nesta versão, após o inventário das sessões vizinhas dos últimos cinco dias (03/10 → 07/10)**: duas entregas de 06/10 sem item entram em fechamento (**E35**, **B37**); um item aberto em decisão (**G19**, correspondência entre bibliotecas — cinco perguntas a Xavier); notas em H2, E31, B36, I32, H6, E6 e E33. **Falta fechar** — *por Xavier, critérios cumpridos*: D9, F24, J11, E33; *na tela*: E31, C14, C23, G16; *decisões*: A1, C4, C17, G19, E6; *sem código*: A1, A3, F3, H2.
 
-**Frescor dos constatos em 2026-10-08.** **53 itens de 72** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I31, I32, J9, J11, K2, K7, K10). Os **19** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-08.** **53 itens de 71** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C14, C18, C23, D3, D8, D9, E1, E2, E4, E6, E20, E31, E33, E34, F3, F6, F10, F15, F19, F24, G1, G6, G8, G10, G15, G16, H2, H6, H15, H16, H21, H26, H28, H29, H30, H31, H32, I2, I18, I21, I30, I32, I33, J9, J11, K2, K7, K10). Os **18** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1650,9 +1650,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I18** | O banco de CI não faz replay numa imagem Supabase — é preciso um que faça | `P2` | Em curso |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | A verificar |
-| **I31** | Uma queda do banco deve disparar um alerta que não dependa do banco | `P1` | A verificar |
 | **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
-| **I33** | O checkout de operação do posto (`~/anarbib`) deve seguir `main`: a rede de segurança do backup lê nele a lista de tabelas conhecidas | `P2` | Aberto |
+| **I33** | O checkout de operação do posto (`~/anarbib`) deve seguir `main`: a rede de segurança do backup lê nele a lista de tabelas conhecidas | `P2` | A verificar |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1742,28 +1741,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
 
-#### I31 — Uma queda do banco deve disparar um alerta que não dependa do banco
-
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : administração de sistemas
-
-**Estado.** Em 07/10, o banco de produção caiu das 19:58 às 20:19 (Paris). Ninguém foi avisado: o `health-probe` roda por uma tarefa agendada do próprio banco e grava seus incidentes nele; nenhum incidente foi registrado.
-
-*Verificado : [object Object]*
-
-**O que é.** Uma testemunha fora do banco, que consulta a API a cada cinco minutos de outra máquina e, após duas falhas seguidas, escreve diretamente pelo transporte de e-mail aos admins da rede, e de novo na volta.
-
-**Por que importa.** Uma queda que dura até alguém perceber dura o tempo que se leva para perceber.
-
-**O que conta como terminado.**
-
-- Uma queda simulada dispara um e-mail aos admins da rede em menos de quinze minutos, sem tocar no banco.
-- A volta dispara um segundo e-mail.
-- A testemunha prova que roda (diário systemd).
-
-**Dependências.** O transporte de e-mail acessível fora do banco (chave Resend na máquina da testemunha, a pôr por Xavier).
-
-*Remissões : `supabase/functions/health-probe/index.ts` · `deploy/ops/ (timers systemd du poste)` · `panne du 07/10/2026`*
-
 #### I32 — Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco
 
 `P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
@@ -1787,11 +1764,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I33 — O checkout de operação do posto (`~/anarbib`) deve seguir `main`: a rede de segurança do backup lê nele a lista de tabelas conhecidas
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
 
 **Estado.** **08/10/2026 — o tiro curto #BG2 falhou** no arranque: « rede acionada: classifique as novas tabelas ». A tabela (`ingest.book_import_divergences`, lote 5) estava classificada no repositório, mas `~/anarbib` ficara em `a387b46c` (05/10). Reparado às 20:28: checkout avançado, tiro relançado, snapshot `a3325d79`.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Fazer `~/anarbib` seguir `main` sem gesto humano: `anarbib-mirror-refresh.sh` avança o checkout em `--ff-only` quando está limpo; nunca rebase nem reset. Documentar e provar: uma tabela criada no repositório, o tiro da noite passa.
 
@@ -2313,6 +2290,7 @@ CI verde. |
 | H20 | 2026-10-06 | O identificador de origem é guardado por biblioteca (`book_external_ids`, `8c80de27`); critérios cobertos por `identifiant_origine_tests` T10 e T3 na CI. **Fechado em 06/10 por Xavier.** |
 | E35 | 2026-10-06 | **Aberto e entregue em 06/10, sobre três sinalizações de Xavier na tela** (`2ce1bad5`, migração `20261006194628`, verificado às 22h18). (1) Um leitor da BLMF via o exemplar da BTL « Disponível »: não há empréstimo entre bibliotecas, toda linha de outra biblioteca diz « Indisponível para você ». (2) « Confederación » não achava a notícia digitada « C.N.T. »: as duas buscas leem também o nome de autoridade exibido (8 → 9 notícias). (3) `sob_direitos` fixo no leitor PDF: o selo usa o rótulo dos direitos da ficha, dez locales. A quarta sinalização não era falha: a administração da rede lê um PDF reservado, decisão de 04/10. **Resta** ver na tela a linha BTL para uma conta BLMF (E31). *Levado ao backlog em 07/10, no inventário.* |
 | B37 | 2026-10-06 | **Aberto e entregue em 06/10** (`1fafc35b`, migração `20261006202320`, verificado às 23h02): **34 funções SECURITY DEFINER sem chamador sob `authenticated` fechadas** — o aviso 0029 passa de 451 a 418. Nove ficam abertas de propósito (7 da lista T10, as duas RPC `fn_outbox_*`, `fn_import_row_comparison`). A guarda da migração reverifica na implantação. Suíte `aides_definer_fermees_tests`; T2 de `b14_oracle_existence_forme` corrigido (premissa falsa). 0028 = 29 = T10; 0011 = 1, voluntário. Complemento na auditoria. *Levado ao backlog em 07/10, no inventário.* |
+| I31 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier, os três critérios cumpridos com envio real.** Testemunha de queda fora do banco: a cada cinco minutos, do posto, leitura REST e saúde do Auth; após dois falhos, e-mail pela API da Resend sem tocar no banco; um segundo na volta. Cego se o posto está sem rede; recusa sem configuração. Bancada de 8 casos. Prova real às 20h50: dois e-mails (Resend 200) recebidos em `admins@anarbib.org` e `anarbib@proton.me`. Consignado: não vê a causa (I32) nem uma queda de menos de dez minutos. |
 
 ---
 
@@ -2344,4 +2322,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 72 itens em 11 domínios. O estado numérico foi levantado em 2026-10-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9b95bc63`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 71 itens em 11 domínios. O estado numérico foi levantado em 2026-10-07 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9b95bc63`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
