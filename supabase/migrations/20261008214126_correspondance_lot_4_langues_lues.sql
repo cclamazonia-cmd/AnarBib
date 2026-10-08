@@ -60,6 +60,10 @@ COMMENT ON COLUMN public.libraries.read_languages IS
   'une langue commune : il n''y a pas de traduction automatique (CORR-3). Ni default_locale (interface, courriels) ni '
   'langue_fonds (les livres).';
 
+-- anon n'écrit jamais libraries : en production il n'a aucun UPDATE sur la table ; sur une image Supabase
+-- rejouée depuis zéro (CI rejeu-image), le privilège par défaut lui ouvre toute table de public — ce REVOKE
+-- nominatif (sans effet en production) rend le rejeu fidèle et laisse la vérification ci-dessous stricte.
+REVOKE UPDATE ON TABLE public.libraries FROM anon;
 GRANT UPDATE (read_languages) ON TABLE public.libraries TO authenticated;
 
 -- Le commentaire posé au lot 1 annonçait « body_i18n / i18n_status attendent le lot 5 (traduction avec
