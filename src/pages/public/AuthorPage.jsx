@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { roleLabel } from '@/lib/roleLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -96,7 +97,8 @@ function buildHeroIntro(author, booksCount, t, locale) {
 export default function AuthorPage() {
   const { id } = useParams();
   const { user } = useAuth();
-  const { formatMessage: t, locale } = useIntl();
+  const intl = useIntl();
+  const { formatMessage: t, locale } = intl;
   const { librarySlug } = useLibrary();
   const navigate = useNavigate();
 
@@ -418,7 +420,7 @@ export default function AuthorPage() {
                     </div>
                     <div className="ab-autor-book-meta">
                       {book.editora && <span>{book.editora}</span>}
-                      {book.role && <span>{t({ id: 'author.role' })}: {book.role}</span>}
+                      {book.role && <span>{t({ id: 'author.role' })}: {roleLabel(book.role, intl)}</span>}
                     </div>
                     {isAuth && availMap[book.book_id] && (() => {
                       const s = bookAvail(availMap[book.book_id], t);

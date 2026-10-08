@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { roleLabel } from '@/lib/roleLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -782,7 +783,10 @@ function MetaPill({ label, value, always = false }) {
 function BookAuthorLinks({ book, contributors }) {
   // CONV-8 : sans autorité liée, « AA. VV. » / « Anônimo » s'affichent comme une
   // étiquette localisée entre crochets ; la transcription reste la donnée.
-  const { formatMessage: t } = useIntl();
+  // Le rôle passe par roleLabel : le code stocké est en portugais (« organizador »),
+  // l'écran montre le libellé de la locale (« Compilateur·rice »).
+  const intl = useIntl();
+  const t = intl.formatMessage;
   // Priorite : liste COMPLETE des contributeurs (lies en <Link>, non lies en
   // texte). Evite le masquage des contributeurs sans autorite
   // (#FICHE-AUTEURS-INCOMPLETE). Fallback : authors_json (autorites liees).
@@ -799,7 +803,7 @@ function BookAuthorLinks({ book, contributors }) {
           <span>{c.name}</span>
         )}
         {c.role && c.role !== 'autor' && (
-          <span className="ab-livro-author-role"> ({c.role})</span>
+          <span className="ab-livro-author-role"> ({roleLabel(c.role, intl)})</span>
         )}
       </span>
     ));
@@ -818,7 +822,7 @@ function BookAuthorLinks({ book, contributors }) {
           {a.sort_name || a.display_name || a.label || a.preferred_name || '?'}
         </Link>
         {a.role && a.role !== 'autor' && (
-          <span className="ab-livro-author-role"> ({a.role})</span>
+          <span className="ab-livro-author-role"> ({roleLabel(a.role, intl)})</span>
         )}
       </span>
     ));
