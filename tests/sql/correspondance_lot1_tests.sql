@@ -30,7 +30,8 @@
 --       authenticated, aides internes fermées ;
 --   T12 (lot 3) le déclencheur AFTER INSERT prévient (fonction DEFINER fermée) ;
 --   T13 (lot 3) une bibliothèque isolée du réseau ne reçoit pas de correspondance ;
---   T14 (lot 4) read_languages : CHECK des dix locales, dédoublonné par déclencheur, écrit sous politique.
+--   T14 (lot 4) read_languages : CHECK des dix locales, dédoublonné par déclencheur, écrit sous politique ;
+--   T15 (lot 4 bis) api.fn_correspondance_fils : la liste calculée en base, coordination seule.
 --   Bilan OK : 'CORRESPONDANCE-LOT1 OK : N/N'
 -- =====================================================================
 DO $$
@@ -46,6 +47,7 @@ DECLARE
   c_la constant uuid := '6c190000-0000-4000-8000-000000000004';
   c_na constant uuid := '6c190000-0000-4000-8000-000000000005';
   v_fil bigint; v_m1 bigint; v_m2 bigint; v_m3 bigint; v_n int; v_n2 int; v_n3 int; v_txt text; v_ts timestamptz; v_ts2 timestamptz; v_b boolean; v_i int;
+  v_j jsonb; v_ids bigint[]; v_ids2 bigint[];
   v_u uuid; v_e text; v_hint text;
 BEGIN
   -- ── Fixtures ──
@@ -314,6 +316,34 @@ BEGIN
        AND has_column_privilege('authenticated', 'public.libraries', 'read_languages', 'UPDATE');
     IF v_b THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : %s, lignes B %s', v_txt, v_n)); END IF;
+  EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T15 (lot 4 bis) api.fn_correspondance_fils : un fil par participation, dernier message et non-lus justes, triée par activité ; coordination seule, anon sans EXECUTE';
+  BEGIN
+    SET ROLE authenticated;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', c_ca, 'role', 'authenticated')::text, true);
+    SELECT jsonb_agg(to_jsonb(f)), array_agg(f.conversation_id) INTO v_j, v_ids FROM api.fn_correspondance_fils(c_a) f;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', c_la, 'role', 'authenticated')::text, true);
+    BEGIN PERFORM 1 FROM api.fn_correspondance_fils(c_a); v_txt := 'librarian:passé';
+    EXCEPTION WHEN insufficient_privilege THEN v_txt := 'librarian:refusé'; END;
+    RESET ROLE;
+    SELECT count(*), array_agg(c.id ORDER BY c.last_message_at DESC, c.id DESC) INTO v_n, v_ids2
+      FROM public.library_conversation_participants p JOIN public.library_conversations c ON c.id = p.conversation_id
+     WHERE p.library_id = c_a;
+    v_b := v_n > 0 AND v_ids = v_ids2 AND v_txt = 'librarian:refusé'
+       AND NOT has_function_privilege('anon', 'api.fn_correspondance_fils(uuid)', 'EXECUTE')
+       AND NOT EXISTS (
+         SELECT 1 FROM jsonb_to_recordset(v_j) AS f(conversation_id bigint, non_lus int, dernier_id bigint, dernier_body text, autres uuid[], last_message_at timestamptz, archived_at timestamptz)
+          WHERE f.non_lus <> (SELECT count(*) FROM public.library_messages m WHERE m.conversation_id = f.conversation_id
+                               AND m.id > coalesce((SELECT r.last_read_message_id FROM public.library_conversation_reads r
+                                                     WHERE r.conversation_id = f.conversation_id AND r.user_id = c_ca), 0))
+             OR f.dernier_id IS DISTINCT FROM (SELECT max(m.id) FROM public.library_messages m WHERE m.conversation_id = f.conversation_id)
+             OR f.dernier_body IS DISTINCT FROM (SELECT left(m.body, 300) FROM public.library_messages m WHERE m.conversation_id = f.conversation_id ORDER BY m.id DESC LIMIT 1)
+             OR c_a = ANY (f.autres) OR cardinality(f.autres) = 0
+             OR f.archived_at IS DISTINCT FROM (SELECT p.archived_at FROM public.library_conversation_participants p WHERE p.conversation_id = f.conversation_id AND p.library_id = c_a));
+    IF v_b THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : %s fils, ordre %s / attendu %s, %s', v_n, v_ids, v_ids2, v_txt)); END IF;
   EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN

@@ -1,11 +1,10 @@
 // ═════════════════════════════════════════════════
 // AnarBib — G19 lot 2 (08/10/2026) : l'onglet « Correspondance » de la page
 // Bibliothèque (CorrespondanceSection), REGISTRE CORR-1 à CORR-6.
-//   * la liste : un fil par participation de ma bibliothèque, l'autre
-//     bibliothèque nommée, le non-lu compté (messages après ma dernière
-//     lecture), les archivés sous leur filtre ;
-//   * ouvrir un fil appelle api.fn_correspondance_lue et montre les messages
-//     (bibliothèque, langue, texte) ;
+//   * la liste : api.fn_correspondance_fils (calculée en base, lot 4 bis) —
+//     l'autre bibliothèque nommée, le non-lu, les archivés sous leur filtre ;
+//   * ouvrir un fil lit ses messages, appelle api.fn_correspondance_lue et les
+//     montre (bibliothèque, langue, texte) ;
 //   * répondre appelle api.fn_correspondance_envoyer au nom de ma
 //     bibliothèque, avec la langue choisie ;
 //   * « Écrire à une bibliothèque » appelle api.fn_correspondance_ouvrir ; la
@@ -24,37 +23,31 @@ import path from 'node:path';
 const LIB_A = 'aaaaaaaa-0000-4000-8000-000000000001';
 const LIB_B = 'bbbbbbbb-0000-4000-8000-000000000002';
 const LIB_C = 'cccccccc-0000-4000-8000-000000000003';
+// Lot 4 bis : la liste vient de api.fn_correspondance_fils (calculée en base) ; les messages d'un fil se lisent
+// à son ouverture (library_messages, .eq('conversation_id')).
+const FILS = [
+  { conversation_id: 11, subject: 'Des doubles de Reclus ?', last_message_at: '2026-10-08T10:00:00Z', archived_at: null, autres: [LIB_B],
+    dernier_id: 2, dernier_library_id: LIB_B, dernier_body: 'Sim, temos dois exemplares.', dernier_lang: 'pt-BR', dernier_created_at: '2026-10-08T10:00:00Z', non_lus: 1 },
+  { conversation_id: 12, subject: 'Vieux fil', last_message_at: '2026-09-30T10:00:00Z', archived_at: '2026-10-01T00:00:00Z', autres: [LIB_C],
+    dernier_id: 3, dernier_library_id: LIB_C, dernier_body: 'Hola.', dernier_lang: 'es', dernier_created_at: '2026-09-30T10:00:00Z', non_lus: 0 },
+];
 const DONNEES = {
-  library_conversation_participants: {
-    moi: [
-      { conversation_id: 11, archived_at: null, library_conversations: { id: 11, subject: 'Des doubles de Reclus ?', last_message_at: '2026-10-08T10:00:00Z', created_at: '2026-10-07T10:00:00Z' } },
-      { conversation_id: 12, archived_at: '2026-10-01T00:00:00Z', library_conversations: { id: 12, subject: 'Vieux fil', last_message_at: '2026-09-30T10:00:00Z', created_at: '2026-09-29T10:00:00Z' } },
-    ],
-    tous: [
-      { conversation_id: 11, library_id: LIB_A }, { conversation_id: 11, library_id: LIB_B },
-      { conversation_id: 12, library_id: LIB_A }, { conversation_id: 12, library_id: LIB_C },
-    ],
-  },
   library_messages: [
     { id: 1, conversation_id: 11, library_id: LIB_A, body: 'Bonjour, avez-vous des doubles ?', lang: 'fr', created_at: '2026-10-07T10:00:00Z' },
     { id: 2, conversation_id: 11, library_id: LIB_B, body: 'Sim, temos dois exemplares.', lang: 'pt-BR', created_at: '2026-10-08T10:00:00Z' },
     { id: 3, conversation_id: 12, library_id: LIB_C, body: 'Hola.', lang: 'es', created_at: '2026-09-30T10:00:00Z' },
   ],
-  library_conversation_reads: [{ conversation_id: 11, last_read_message_id: 1 }, { conversation_id: 12, last_read_message_id: 3 }],
-  libraries: [{ id: LIB_B, default_locale: 'pt-BR' }, { id: LIB_C, default_locale: 'es' }],
 };
-const rpc = vi.fn(async (nom) => ({ data: nom === 'fn_correspondance_ouvrir' ? 13 : 1, error: null }));
-// Un constructeur de requête minimal : chaque méthode rend le constructeur,
-// l'attente rend les données de la table (les participations « de ma
-// bibliothèque » quand .eq('library_id') a été appelé, toutes sinon).
+const rpc = vi.fn(async (nom) => ({ data: nom === 'fn_correspondance_fils' ? FILS : nom === 'fn_correspondance_ouvrir' ? 13 : 1, error: null }));
+// Un constructeur de requête minimal : chaque méthode rend le constructeur, l'attente rend les lignes de la table
+// filtrées par les .eq() posés.
 function constructeur(table) {
-  const etat = { eqLibrary: false };
+  const filtres = {};
   const b = {
     select: () => b, order: () => b, limit: () => b, in: () => b,
-    eq: (col) => { if (col === 'library_id') etat.eqLibrary = true; return b; },
+    eq: (col, val) => { filtres[col] = val; return b; },
     then: (ok) => {
-      let data = DONNEES[table];
-      if (table === 'library_conversation_participants') data = etat.eqLibrary ? data.moi : data.tous;
+      const data = (DONNEES[table] || []).filter((r) => Object.entries(filtres).every(([k, v]) => r[k] === v));
       return Promise.resolve({ data, error: null }).then(ok);
     },
   };
@@ -87,6 +80,7 @@ describe('l’onglet Correspondance (G19 lot 2)', () => {
   it('liste les fils en cours avec l’autre bibliothèque et le non-lu ; les archivés sous leur filtre', async () => {
     monter();
     expect(await screen.findByText('Des doubles de Reclus ?')).toBeTruthy();
+    expect(rpc).toHaveBeenCalledWith('fn_correspondance_fils', { p_library_id: LIB_A });   // lot 4 bis : la liste calculée en base
     expect(screen.getByText(/^Avec B/)).toBeTruthy();   // suivi du dernier expéditeur et de la date, dans le même bloc
     expect(screen.getByText('1 non lu')).toBeTruthy();            // le message 2 est après ma dernière lecture (1)
     expect(screen.queryByText('Vieux fil')).toBeNull();            // archivé : pas sous « En cours »

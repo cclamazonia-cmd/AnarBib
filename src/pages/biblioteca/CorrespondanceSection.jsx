@@ -38,55 +38,43 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
   const [brouillon, setBrouillon] = useState({ dest: '', sujet: '', corps: '', lang: langueParDefaut });
   const [reponse, setReponse] = useState({ corps: '', lang: langueParDefaut });
   const [occupe, setOccupe] = useState(false);
-  const [localeDe, setLocaleDe] = useState({});   // library_id -> default_locale (la langue de la bibliothèque, lot 4 affinera)
+  const localeDe = useMemo(() => Object.fromEntries(allLibraries.map((l) => [l.id, l.default_locale])), [allLibraries]);   // library_id -> default_locale
 
   const nomBiblio = useCallback((id) => {
     const l = allLibraries.find((x) => x.id === id);
     return l ? (l.short_name || l.name) : t({ id: 'biblioteca.correspondance.unknownLibrary' });
   }, [allLibraries, t]);
 
+  // Lot 4 bis : la liste est calculée en base (api.fn_correspondance_fils) — sujet, dernière activité, autres
+  // bibliothèques, dernier message, non-lus de la personne — triée par activité. Avant, l'écran lisait 200
+  // participations par identité puis tous leurs messages sans limite (plafond max_rows de PostgREST : au-delà,
+  // dernier message et non-lus faux). Les messages d'un fil ne se lisent qu'à son ouverture.
   const charger = useCallback(async () => {
     if (!libraryId) return;
     setChargement(true);
     try {
-      const { data: part, error: e1 } = await supabase.from('library_conversation_participants')
-        .select('conversation_id, archived_at, library_conversations!inner(id, subject, last_message_at, created_at)')
-        .eq('library_id', libraryId).order('conversation_id', { ascending: false }).limit(200);
-      if (e1) throw e1;
-      const ids = (part || []).map((p) => p.conversation_id);
-      const { data: locs } = await supabase.from('libraries').select('id, default_locale');
-      setLocaleDe(Object.fromEntries((locs || []).map((l) => [l.id, l.default_locale])));
-      let autres = [], msgs = [], lus = [];
-      if (ids.length) {
-        const [a, m, r] = await Promise.all([
-          supabase.from('library_conversation_participants').select('conversation_id, library_id').in('conversation_id', ids),
-          supabase.from('library_messages').select('id, conversation_id, library_id, body, lang, created_at').in('conversation_id', ids).order('id', { ascending: true }),
-          supabase.from('library_conversation_reads').select('conversation_id, last_read_message_id').in('conversation_id', ids),
-        ]);
-        if (a.error) throw a.error; if (m.error) throw m.error; if (r.error) throw r.error;
-        autres = a.data || []; msgs = m.data || []; lus = r.data || [];
-      }
-      const parFil = {};
-      for (const x of msgs) (parFil[x.conversation_id] ||= []).push(x);
-      const luJusque = Object.fromEntries(lus.map((x) => [x.conversation_id, x.last_read_message_id]));
-      const liste = (part || []).map((p) => {
-        const c = p.library_conversations;
-        const mm = parFil[p.conversation_id] || [];
-        const dernierLu = luJusque[p.conversation_id] || 0;
-        return {
-          id: p.conversation_id, subject: c?.subject, last_message_at: c?.last_message_at, archived_at: p.archived_at,
-          autres: autres.filter((x) => x.conversation_id === p.conversation_id && x.library_id !== libraryId).map((x) => x.library_id),
-          dernier: mm[mm.length - 1] || null,
-          nonLus: mm.filter((x) => x.id > dernierLu).length,
-        };
-      }).sort((x, y) => String(y.last_message_at).localeCompare(String(x.last_message_at)));
-      setFils(liste); setMessages(parFil);
+      const { data, error } = await supabase.schema('api').rpc('fn_correspondance_fils', { p_library_id: libraryId });
+      if (error) throw error;
+      setFils((data || []).map((f) => ({
+        id: f.conversation_id, subject: f.subject, last_message_at: f.last_message_at, archived_at: f.archived_at,
+        autres: Array.isArray(f.autres) ? f.autres : [],
+        dernier: f.dernier_id ? { id: f.dernier_id, library_id: f.dernier_library_id, body: f.dernier_body, lang: f.dernier_lang, created_at: f.dernier_created_at } : null,
+        nonLus: f.non_lus || 0,
+      })));
     } catch (err) {
       setMsg?.({ text: localizeError(err, t), kind: 'error' });
     } finally {
       setChargement(false);
     }
   }, [libraryId, t, setMsg]);
+
+  const chargerMessages = useCallback(async (id) => {
+    if (!id) return;
+    const { data, error } = await supabase.from('library_messages')
+      .select('id, conversation_id, library_id, body, lang, created_at').eq('conversation_id', id).order('id', { ascending: true });
+    if (error) { setMsg?.({ text: localizeError(error, t), kind: 'error' }); return; }
+    setMessages((m) => ({ ...m, [id]: data || [] }));
+  }, [t, setMsg]);
 
   useEffect(() => { charger(); }, [charger]);
 
@@ -95,7 +83,7 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
     if (!error) setFils((f) => f.map((x) => (x.id === id ? { ...x, nonLus: 0 } : x)));
   }, []);
 
-  function ouvrir(id) { setOuvert(id); setEcrire(false); setReponse({ corps: '', lang: langueParDefaut }); marquerLu(id); }
+  function ouvrir(id) { setOuvert(id); setEcrire(false); setReponse({ corps: '', lang: langueParDefaut }); chargerMessages(id); marquerLu(id); }
 
   async function envoyerNouveau(e) {
     e.preventDefault();
@@ -107,7 +95,7 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
       if (error) throw error;
       setMsg?.({ text: t({ id: 'biblioteca.correspondance.sent' }), kind: 'ok' });
       setBrouillon({ dest: '', sujet: '', corps: '', lang: langueParDefaut }); setEcrire(false);
-      await charger(); setOuvert(data);
+      await charger(); setOuvert(data); await chargerMessages(data);
     } catch (err) {
       setMsg?.({ text: localizeError(err, t), kind: 'error' });
     } finally { setOccupe(false); }
@@ -123,7 +111,7 @@ export default function CorrespondanceSection({ libraryId, allLibraries = [], se
       if (error) throw error;
       setMsg?.({ text: t({ id: 'biblioteca.correspondance.sent' }), kind: 'ok' });
       setReponse({ corps: '', lang: reponse.lang });
-      await charger();
+      await charger(); await chargerMessages(ouvert);
     } catch (err) {
       setMsg?.({ text: localizeError(err, t), kind: 'error' });
     } finally { setOccupe(false); }
