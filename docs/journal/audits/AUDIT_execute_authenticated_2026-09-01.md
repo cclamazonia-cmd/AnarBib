@@ -2020,3 +2020,13 @@ Aucune porte nouvelle. `public.tg_library_message_notifier()` (déclencheur AFTE
 `search_path` figé, fermée à `anon`, `authenticated` et `service_role` — un déclencheur n'a besoin d'aucun grant ; elle
 n'appelle que `fn_dispatch_notify_event`. `api.fn_correspondance_ouvrir` est réécrite (une garde de plus : bibliothèque
 `isolated` refusée), droits inchangés. Compte 0029 attendu inchangé : **427**.
+
+### Complément du 08/10 — G19 lot 4 et lot 4 bis (migrations `correspondance_lot_4_langues_lues`, `correspondance_lot_4bis_liste_en_base`)
+
+Lot 4 : aucune porte nouvelle. `public.tg_libraries_read_languages_normaliser()` (déclencheur BEFORE de `libraries`, dédoublonne et
+ordonne `read_languages`) est INVOKER, `search_path` figé, fermée à `anon` et `authenticated`. La colonne reçoit `GRANT UPDATE
+(read_languages)` pour `authenticated`, colonne par colonne comme le socle de `libraries` ; la ligne reste sous
+`libraries_staff_update`.
+Lot 4 bis : **une porte de plus**, `api.fn_correspondance_fils(uuid)` — DEFINER, STABLE, `search_path` figé, EXECUTE à
+`authenticated` et `service_role`, fermée à `anon` ; garde `fn_correspondance_coordonne(p_library_id)` (42501 sinon) ; ne lit
+que les quatre tables de la correspondance de la bibliothèque appelante, les non-lus pour `auth.uid()`. Compte 0029 attendu : **428**.

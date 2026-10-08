@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-09",
+    "maj": "2026-10-08",
     "releve": {
       "date": "2026-10-08",
       "commit": "c06f9ed2"
@@ -5871,7 +5871,7 @@
       "id": "G19",
       "d": "G",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "L",
       "sk": [
         "sql",
@@ -5922,6 +5922,10 @@
         {
           "fr": "**08/10 — les cinq décisions prises** (questions posées une à une, réponses de Xavier) : voir « Ce dont ça dépend ». Ordre des lots inchangé : 1 données, 2 écrans, 3 cloche et courriel, 4 langues lues, 5 traduction.",
           "pt": "**08/10 — as cinco decisões tomadas**; ordem dos lotes inalterada."
+        },
+        {
+          "fr": "**08/10 — lots 1 à 4 livrés, déployés et vérifiés** (lot 1 `3aaf2d2a` à 22 h 54, migration `20261008195923` ; lot 2 `9c9da625` ; lot 3 `67703b6a` à 00 h 18, migration `20261008210528` ; lot 4 `4cc73c57` à 00 h 24 ; lot 4 bis `c8e07879` à 00 h 37). *Lot 1, données* : `library_conversations`, `library_conversation_participants` (archivage propre à chaque bibliothèque, levé par un message nouveau), `library_messages` (corps 1 à 4 000, `lang` parmi les dix locales), `library_conversation_reads` ; RLS sans FORCE, une permissive par table, SELECT seul pour `authenticated`, index de chaque clé étrangère, les quatre tables au flux court de #BG2 (classées au dépôt, posées dans la denylist du poste) ; `api.fn_correspondance_ouvrir / envoyer / archiver / lue` (DEFINER), garde `fn_correspondance_coordonne` = adhésion `coordenador` active — **l'administration du réseau ne lit pas la correspondance (CORR-6)** ; trente messages par personne et 24 h ; dix refus traduits. *Lot 2, écran* : l'onglet « Correspondance » de la page Bibliothèque (coordinations seulement) — fils, non-lus, archivés, fil ouvert (messages par bibliothèque, langue nommée par `Intl`, `lang=` sur chaque corps), réponse, « Écrire à une bibliothèque » (les autres bibliothèques actives non isolées), archiver / rouvrir ; `CorrespondanceSection.jsx`, 27 clés dans les dix locales. *Lot 3, prévenir* : déclencheur AFTER INSERT → `notify-event` → `_shared/domain/correspondance.ts` : la cloche de chaque coordination active des autres bibliothèques du fil, dans sa langue (lien vers l'onglet) ; un courriel à l'adresse collective de chaque bibliothèque, dans sa locale, avec le message, sa langue et « Répondre dans AnarBib » (CORR-2, CORR-4) ; rien si son canal est coupé ; la plateforme écrit, pas la bibliothèque à elle-même ; une bibliothèque `isolated` ne reçoit pas de correspondance (constat de la session voisine). *Lot 4, langues lues* : `libraries.read_languages` (dix locales par CHECK, dédoublonné et ordonné par déclencheur fermé, `GRANT UPDATE` colonne par colonne sous `libraries_staff_update`), déclaré par la coordination à l'onglet Identité (`ReadLanguagesField`, une case par langue nommée dans sa langue) ; en écrivant à une bibliothèque : « Cette bibliothèque lit : … » (ou sa locale si rien n'est déclaré), **langue commune proposée** et présélectionnée, sinon « Aucune langue commune déclarée : écris dans la tienne, le message sera lu tel quel » — **il n'y a pas de traduction automatique**. *Lot 4 bis* (constat de la session voisine, relecture demandée par Xavier) : la liste des fils lisait 200 participations par identité puis tous leurs messages sans limite (plafond `max_rows` de PostgREST : au-delà, dernier message et non-lus faux) → `api.fn_correspondance_fils(uuid)` (DEFINER, coordination seule) rend la liste calculée en base — sujet, dernière activité, autres bibliothèques, dernier message, non-lus de la personne — triée par activité ; l'écran ne lit les messages qu'à l'ouverture d'un fil. *Bancs* : suite SQL `correspondance_lot1` (15 cas, quatre mutants rouges), `correspondance-section-monte`, `read-languages-field`, `correspondance-prevenir` (le vrai module sous esbuild) ; gardes grants, politiques, FK, doctrine, HINT, tutoiement vertes ; audit : six portes, 0029 attendu 428. **Décision de Xavier du 08/10 au soir : pas de traduction automatique** (« limiter au maximum l'usage de LLM pour AnarBib ») tant qu'un outil libre de qualité n'existe pas — **lot 5 gelé**, CORR-3 réécrite au REGISTRE, commentaire de `library_messages` corrigé. **Reste** : plus tard, fils de cercle et réponse par courriel (sans date). Remarque de la session voisine, sans correctif : deux transactions concurrentes peuvent valider leurs messages dans l'ordre inverse de leurs identifiants ; un message validé en second avec un id plus petit compte alors comme lu — rare, accepté. **À voir à l'écran** par deux coordinations (E31) : un fil réel, la cloche et le courriel reçus, les langues lues déclarées.",
+          "pt": "**08/10 — lotes 1 a 4 entregues e verificados** (`3aaf2d2a`, `9c9da625`, `67703b6a`, `4cc73c57`, `c8e07879`). Dados, RPC DEFINER (só coordenações ativas; a administração não lê, CORR-6), aba « Correspondência », sino e e-mail ao endereço coletivo na locale da biblioteca; isoladas excluídas; línguas lidas pela equipe declaradas na Identidade e mostradas a quem escreve, com língua comum proposta — sem tradução automática; lista dos fios calculada no banco. Bancadas: 15 casos SQL + telas. **Decisão de Xavier: sem tradução automática** — lote 5 congelado. **A ver na tela** (E31)."
         }
       ]
     },

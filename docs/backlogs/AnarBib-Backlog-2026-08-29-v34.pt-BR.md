@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-09** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-08** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 8 de outubro de 2026 à noite** (`c06f9ed2`, medido em 09/10 às 0h15, depois que a fila da CI esvaziou os commits de 22h46) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 07/10 à noite, `9b95bc63`). Um dia com três sessões: **38 commits**, 11 migrações no repositório das quais **7 aplicadas** (as quatro últimas, de 23h05 a 23h52, ainda esperavam sua passagem pela CI — um commit por vez), 2 313 testes JS e 183 suítes SQL. O que mudou e por quê: **o catálogo** — **−34 fichas, todas por fusão** (duas na tela, depois por migração com acordo de Xavier: cinco tomos catalogados duas vezes, Goldman e Reclus, vinte e cinco fichas relidas uma a uma — DEDUP-15), nenhuma criada, seis rascunhos publicados; **o banco** — quatro tabelas e oito funções da correspondência entre bibliotecas (G19 lote 1, ainda vazias), as funções do H21 lote 6a e de E34, **+5 avisos 0029** (as RPC da correspondência, a passar pela auditoria), 40 «índice não usado» a menos porque os contadores zerados em 07/10 vão se enchendo; **as locales** — **607 valores copiados do pt-BR traduzidos em seis lotes** em es, it, de, en (guias, rótulos de campos, placeholders, contadores, painel de empréstimo), e **uma guarda CI com dois caminhos** que impede a recaída (`DOC-I18N-3`, frases nomeadas por chave, palavras por vocabulário de homógrafos, 887 relidos); **o repositório** — +68 chaves, +101 testes, +14 arquivos. **Uma linha de 07/10 estava errada**: a circulação contava «1» empréstimo não arquivado, sempre houve 7 (nenhum tem `archived_at`). **Atualizado nesta versão**: um fechamento-constatação sobre as locales («uma chave presente está traduzida» — falso). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21), a correspondência (G19 lotes 1 a 4bis, entregues esta noite); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar).
 
-**Frescor dos constatos em 2026-10-09.** **40 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, G19, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-08.** **40 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, G19, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -953,7 +953,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
-| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Aberto |
+| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Em curso |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1093,11 +1093,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### G19 — Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua
 
-`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
+`P2` Corrente · Estado : **Em curso** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
 
 **Estado.** Pergunta de Xavier em 07/10: as coordenações podem dialogar entre si no app e por e-mail? **Não, verificado em 07/10**: nenhuma mensageria livre entre coordenações. O que mais se aproxima: a ajuda mútua de `/federacao` (um apelo, ofertas, um só ida e volta), os intercâmbios entre bibliotecas (pedido, resposta, notas), o EEB, as assembleias. Um plano em cinco lotes foi escrito em 07/10, não commitado; aguarda cinco decisões.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** **Lote 1, dados**: `library_conversations`, `library_conversation_participants` (uma biblioteca por linha, arquivamento próprio), `library_messages` (`body`, `lang` nas dez locales, `body_i18n`, `i18n_status`), `library_conversation_reads`; escritas só por RPC DEFINER em `api` (limite de 30 por 24 h), leitura por política das coordenações participantes; índices nas FK, tabelas classificadas no backup, só arquivamento. **Lote 2, telas**: aba `#tab=correspondance` em `BibliotecaPage`, « Escrever a uma biblioteca », dez locales. **Lote 3**: sino e e-mail a `admin_notification_email` na locale da biblioteca. **Lote 4**: `libraries.read_languages`. **Lote 5**: tradução no envio com consentimento da autora, marcada como automática. **Depois**: fios de círculo; resposta por e-mail (nada recebe e-mail hoje).
 
@@ -1983,4 +1983,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-09. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-08. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
