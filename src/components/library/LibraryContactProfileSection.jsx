@@ -3,8 +3,16 @@
 // =============================================================================
 // EA-20 du chantier-cadre Biblioteca (rattache a la fin de l'etape 10).
 // Editeur du profil de contact d'une biblioteca : les coordonnees humaines
-// (personne ou collectif a joindre) affichees aux autres bibliotheques du
-// reseau pour le PEB et les trocas interbibliotecas.
+// (personne ou collectif a joindre) pour le PEB et les trocas
+// interbibliotecas.
+//
+// CONFIDENTIEL, contrairement a l'intention d'origine : ce profil n'est
+// montre a AUCUNE autre bibliotheque. La RLS (can_manage_library_contact_profile)
+// en reserve la lecture au staff de la biblioteca elle-meme. Son seul usage
+// hors de cet ecran : notify-document-permission-request y prend l'adresse ou
+// ecrire A CETTE biblioteca quand une troca la concerne (et le prenom de la
+// salutation) ; le courriel ne transmet jamais le contact d'une biblioteca a
+// l'autre. Verifie le 08/10/2026.
 //
 // A NE PAS CONFONDRE avec l'identite e-mail de l'onglet Comunicacoes
 // (display_name, contact_email d'envoi, reply_to) : celle-la est l'adresse

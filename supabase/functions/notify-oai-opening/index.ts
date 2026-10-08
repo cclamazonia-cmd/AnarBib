@@ -128,7 +128,8 @@ async function profileTarget(userId: string | null): Promise<{ email: string; na
 // cette bibliothèque » (library_mail_channels.admin_notification_email, exposé
 // par v_library_notification_context) — pas l'adresse personnelle d'une
 // coordination, et pas non plus la fiche de contact PEB
-// (library_contact_profiles), qui est ce qu'on montre AUX AUTRES biblios.
+// (library_contact_profiles), confidentielle (staff de la biblio seul) et
+// réservée aux courriels de troca.
 //
 // channel_active à false = la biblio a coupé son canal : on ne lui écrit pas.
 // Une adresse absente n'est pas une erreur ici (la gouvernance ne dépend jamais
