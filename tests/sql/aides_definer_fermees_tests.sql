@@ -21,6 +21,13 @@
 --    pour une raison métier — jamais « permission denied for function »
 --    (le code 42501 seul ne suffit pas : des gardes métier le lèvent aussi).
 --
+-- 09/10/2026 — une porte de plus, `api.fn_correspondance_fils(uuid)` (G19 lot
+--    4 bis, migration 20261008215155) : DEFINER ouverte à authenticated, elle
+--    atteint `fn_correspondance_coordonne`, fermée dès sa naissance (service_role
+--    seul, hors des 34). T3 la tient ouverte et DEFINER ; T4 la frappe avec un
+--    compte inconnu et attend le refus métier 42501 `not_coordinator`, jamais
+--    le privilège. Audit : complément du 08/10, compte 0029 attendu 428.
+--
 -- Rien n'est écrit : la suite se termine par un RAISE.
 -- =====================================================================
 DO $$
@@ -86,7 +93,8 @@ DECLARE
     'api.fn_authority_apply(uuid)',
     'api.fn_authority_object(uuid, uuid, text)',
     'api.fn_assembleia_set_status(uuid, text)',
-    'api.fn_request_mark_messages_read(uuid)'
+    'api.fn_request_mark_messages_read(uuid)',
+    'api.fn_correspondance_fils(uuid)'
   ];
 BEGIN
   -- ── T1 ──────────────────────────────────────────────────────────────
@@ -206,6 +214,15 @@ BEGIN
     BEGIN PERFORM api.fn_assembleia_set_status(v_inconnu, 'open');
     EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
     IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'assemblee:' || v_err || ' '; END IF;
+
+    -- La correspondance (09/10) : un compte inconnu n'est coordination de rien,
+    -- la porte doit répondre « not_coordinator », pas buter sur
+    -- fn_correspondance_coordonne (fermée à authenticated).
+    v_err := NULL;
+    BEGIN PERFORM api.fn_correspondance_fils(v_inconnu);
+    EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
+    IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'correspondance-fils:' || v_err || ' '; END IF;
+    IF v_err IS NULL OR v_err !~ 'not_coordinator' THEN v_txt := v_txt || 'correspondance-fils-sans-refus-metier:' || coalesce(v_err, 'aucune erreur') || ' '; END IF;
 
     EXECUTE 'RESET ROLE';
     PERFORM set_config('request.jwt.claims', '', true);
