@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-09** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-09** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -23,7 +23,7 @@
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 5
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Mis à jour dans cette version** : C17 clos sur décision de Xavier (les deux critères tenus, le regard à l'écran porté par E31). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21 ; le refus traduit d'un numéro libéré, C17) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).
 
-**Fraîcheur des constats au 2026-10-09.** **38 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-09.** **38 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -875,7 +875,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
-| **F25** | Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache | `P1` | Ouvert |
+| **F25** | Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache | `P1` | À vérifier |
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
 
@@ -920,11 +920,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### F25 — Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+`P1` Prioritaire · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
 
 **État.** **Constaté le 09/10 à 21 h 49** : quatorze propositions ouvertes d'un coup dans l'Atelier (C4) ont déclenché quatorze événements `authority.proposal_opened`, traités en parallèle par `notify-event`, 72 courriels en deux secondes — Resend n'en accepte que dix par seconde (HTTP 429 `rate_limit_exceeded`) : **58 courriels perdus**, 14 passés. Le transport partagé (`_shared/transport/email.ts`, F7) ne rejoue pas un 429 et ne cadence rien ; `safeSendEmail` avale l'échec et `authority.ts` compte `sent++` quand même (la réponse disait « 72 envoyés »). La sonde de santé l'a vu (incident 23, `echecs_recents (58)`, courriel d'alerte à 21 h 50) : le dispositif de F15 a fait son travail, pas le transport. Tout événement qui s'adresse à beaucoup de personnes à la fois (un fil de l'Atelier, une annonce aux coordinations, un rappel groupé) peut reproduire la perte.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Dans `_shared/transport/email.ts` : rejouer un 429 (et un 5xx) avec attente croissante, trois fois, en lisant `retry-after` ; cadencer les envois d'un même appel (au plus huit par seconde) ; rendre un résultat vrai (`ok: false` compté comme tel par les appelants : `authority.ts`, les autres domaines qui font `sent++`). Banc du transport : un faux Resend qui répond 429 deux fois puis 200 → un seul courriel, livré ; 72 destinataires → aucun 429 émis. Puis relire la sonde : l'incident 23 s'est refermé seul.
 
@@ -1315,7 +1315,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I30** | Une restauration rend une base qui sert : les droits de `public`, et les schémas `private` et `api` | `P1` | À vérifier |
 | **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
-| **I33** | Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues | `P2` | À vérifier |
 
 #### I2 — Achever la bascule vers l'auto-hébergement
 
@@ -1425,28 +1424,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Xavier (accès au tableau de bord, décision de coût).
 
 *Renvois : `exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)` · `journaux Postgres et PostgREST du 07/10` · `job backend 10213611`*
-
-#### I33 — Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues
-
-`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : administration système
-
-**État.** **08/10/2026, 19:03 (Paris) — le tir court #BG2 a échoué** au démarrage de la machine : « Filet déclenché : classe les nouvelles tables avant de sauvegarder ». La table nouvelle était `ingest.book_import_divergences` (H21 lot 5, 07/10), **bien classée au dépôt** (`deploy/bg2-known-tables.txt`, 209 tables, le banc SQL le vérifie à chaque CI) — mais `~/anarbib-ops/bg2-known-tables.txt` est un lien vers `~/anarbib/deploy/bg2-known-tables.txt`, et le checkout `~/anarbib` était resté sur `a387b46c` (05/10) : personne ne l'avait avancé depuis I29. Le drapeau `.last-failure` s'est affiché à l'ouverture du terminal ; le contrôle de fraîcheur disait « frais » (24 h, seuil 36 h) et n'a donc rien relancé. Réparé à 20:28 : `~/anarbib` avancé sur `4dfb1dc2` (ff), tir court relancé à la main, « Filet OK », snapshot `a3325d79`, drapeau retiré. Le flux court n'a manqué qu'un jour ; le long de dimanche aurait échoué pareil.
-
-*Vérifié : [object Object]*
-
-**Ce que c'est.** Faire suivre `main` au checkout d'exploitation sans geste humain : le plus simple est que `anarbib-mirror-refresh.sh` (minuteur quotidien), après avoir rafraîchi le miroir nu, avance aussi `~/anarbib` en `--ff-only` quand il est propre — jamais de rebase ni de reset : un checkout sale ou divergent s'écrit au drapeau et ne bouge pas. Variante : le job `acquittement` de la CI ne peut pas le faire (il tourne dans un conteneur). À écrire dans `deploy/ops/README.md` (« ce que fait la machine après un push »), et à éprouver : une table créée au dépôt, le tir du soir passe sans qu'on ait touché au poste. Les unités systemd étant des liens vers ce checkout, un script d'exploitation changé par un push devient actif au tir suivant — c'est déjà le cas aujourd'hui quand une session avance `~/anarbib` ; le dire au README.
-
-**Pourquoi ça compte.** Le filet existe pour qu'une table nouvelle ne parte jamais sans classement ; s'il lit une liste périmée, il refuse de sauvegarder des données parfaitement classées — et une sauvegarde qui ne part pas pour une mauvaise raison s'apprend à ignorer.
-
-**Ce qui compte comme fini.**
-
-- Une table créée par une migration poussée le jour même est connue du tir du soir sans qu'une personne ait avancé `~/anarbib`.
-- Un checkout sale ou divergent n'est jamais touché : drapeau posé, le tir se fait avec la liste qu'il a.
-- Documenté dans `deploy/ops/README.md`.
-
-**Dépendances.** Aucune.
-
-*Renvois : `deploy/ops/anarbib-mirror-refresh.sh` · `deploy/ops/anarbib-bg2.sh (filet)` · `journal du 08/10/2026, anarbib-backup-court.service`*
 
 ---
 
@@ -1941,6 +1918,7 @@ CI verte : lint et suite unitaire. |
 | Locales : une clé présente dans les dix fichiers est traduite | « La parité des clés, gardée en CI, suffit » (angle mort 2 de la garde code ↔ locales, nommé le 27/08 et laissé ouvert) | **Faux.** Le 08/10, l'onglet Livres du catalogage affichait « Painel de revisão da ficha » en espagnol, italien et allemand. Le balayage « valeur strictement égale à pt-BR » a trouvé **607 valeurs** copiées telles quelles dans es, it, de et en — guides par type de document, libellés de champs, placeholders, messages, compteurs de la page Réglages, états du panneau de prêt —, traduites en six commits (`89534f93`, `88b2f408`, `801c3d93`, `fbc82403`, `c6cb5a00`, `be119b1e`) avec la terminologie de chaque locale (et le « -e » inclusif de l'espagnol : « le autore » n'est pas de l'italien). Le vecteur : les scripts `i18n-add-*` posent pt-BR dans les dix locales pour tenir la parité, et le « traduire ensuite » n'a pas lieu. **Garde** depuis le soir même : `locales-valeurs-copiees-de-pt-br.test.js` (`78d9c4b8`, `055cc326`), deux chemins — phrases nommées clé par clé, mots par vocabulaire d'homographes par locale (887, relus un à un), listes fermées dans les deux sens, prouvée rouge par mutation ; `DOC-I18N-3` au registre (v0.78, v0.79). ca, eo, nl, el n'avaient rien à corriger : leurs identiques sont des homographes. |
 | G19 | 2026-10-09 | Les coordinations s'écrivent dans AnarBib : lots 1 à 4 et 4 bis livrés, déployés et vérifiés les 08 et 09/10 (`3aaf2d2a`, `9c9da625`, `67703b6a`, `4cc73c57`, `c8e07879` ; REGISTRE CORR-1 à CORR-6) — données et RPC DEFINER réservées aux coordinations actives (l'administration du réseau ne lit pas, CORR-6), onglet « Correspondance » de la page Bibliothèque, cloche de chaque coordination des autres bibliothèques du fil et courriel à leur adresse collective, langues lues par chaque équipe déclarées à l'Identité et langue commune proposée, liste des fils calculée en base. **Premier fil réel le 09/10 à 8 h 36**, BLMF → BTL, ouvert par la RPC sous le compte de Xavier : fil vu à l'écran, quatre cloches posées et **cloche reçue côté BTL** (constat de Xavier), courriel accepté par Resend pour l'adresse collective de BTL ; BLMF lit pt-BR, fr, es. **Pas de traduction automatique** (décision de Xavier du 08/10 : pas de LLM tant qu'un outil libre de qualité n'existe pas) : le lot 5 est gelé, `body_i18n` / `i18n_status` restent vides. Plus tard, sans date ni item : fils de cercle, réponse par courriel. Suites `correspondance_lot1` (15), `correspondance-section-monte`, `read-languages-field`, `correspondance-prevenir`. **Clos le 09/10 par Xavier.** |
 | C17 | 2026-10-09 | **Clos le 09/10 sur décision de Xavier (« Passe-le en clos »), les deux critères tenus, le regard à l'écran reporté à E31.** Décider si un numéro d'inventaire supprimé peut être redonné. *Ce qui comptait comme fini* : la règle est écrite au REGISTRE · si un numéro ne doit jamais se redonner, une suite SQL le prouve. **Tranché le 08/10 : un numéro donné ne se redonne jamais** (REGISTRE `CAT-E21` — un numéro est une trace ; retiré, désherbé ou créé par erreur, il reste pris). **Fait le 09/10, déployé et vérifié à 21 h 59** (`5a5a94d6`, migration `20261009194632`) : `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), tout numéro posé entre au registre ; `fn_next_tombo` rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` 6/6 (002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; vers un numéro libéré : refusé ; vers un neuf : accepté), mutant sans le registre rouge (4/6). Table fermée à `anon` et `authenticated` (un avis 0008 de plus, voulu), au relevé du 09/10. **Non vu** : le refus traduit dans le formulaire d'exemplaire, avec une session — porté par E31. |
+| I33 | 2026-10-09 | Le checkout d'exploitation du poste suit `main` sans geste humain : `anarbib-exploitation-suit.sh` (`2d3c8273`, 08/10), appelé en dernier geste par le tir du miroir (18:00, 18:50, dim. 19:50, une minute après le démarrage), avance `~/anarbib` en avance rapide seulement s'il est sur `main`, propre, et qu'aucun script d'exploitation ne tourne ; sinon il dit pourquoi (drapeau `.last-failure`) et ne bouge pas. **Éprouvé le 09/10** : au démarrage du poste à 20 h 06, le tir a avancé le checkout de `67703b6a` à `262bf350` (+14 commits, dont la table `tombos_attribues` classée le jour même), puis la sauvegarde courte de 20 h 11 est passée avec cette liste (snapshot `5b09c063`) ; à 20 h 11 le tir suivant a vu la sauvegarde en cours et a attendu. Banc `exploitation-suit-main` (9 cas), README ops. Les trois critères sont tenus. **Clos le 09/10 par Xavier.** |
 
 ---
 
@@ -1972,4 +1950,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-09. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-09. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -285,7 +285,7 @@ describe('Importations, page MONTÉE — une ligne « Déjà importée »', () =
   });
   async function ouvrirLeRun() {
     render(h(IntlProvider, { locale: 'fr', messages: fr }, h(Page)));
-    // 09/10 : sous la charge de la CI (run 10285497), la seconde d'attente par défaut n'a pas suffi — cinq secondes, comme auRepos.
+    // 09/10 : sous la charge de la CI (run 10285497), la seconde d'attente par défaut n'a pas suffi — cinq secondes.
     fireEvent.click(await screen.findByRole('button', { name: '#7 — Fonds du banc' }, { timeout: 5000 }));
     await screen.findByText('Titre 4');
     await auRepos();

@@ -3091,6 +3091,14 @@
           "fr": "**Clos le 09/10 sur décision de Xavier (« Passe-le en clos »), les deux critères tenus, le regard à l'écran reporté à E31.** Décider si un numéro d'inventaire supprimé peut être redonné. *Ce qui comptait comme fini* : la règle est écrite au REGISTRE · si un numéro ne doit jamais se redonner, une suite SQL le prouve. **Tranché le 08/10 : un numéro donné ne se redonne jamais** (REGISTRE `CAT-E21` — un numéro est une trace ; retiré, désherbé ou créé par erreur, il reste pris). **Fait le 09/10, déployé et vérifié à 21 h 59** (`5a5a94d6`, migration `20261009194632`) : `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), tout numéro posé entre au registre ; `fn_next_tombo` rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` 6/6 (002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; vers un numéro libéré : refusé ; vers un neuf : accepté), mutant sans le registre rouge (4/6). Table fermée à `anon` et `authenticated` (un avis 0008 de plus, voulu), au relevé du 09/10. **Non vu** : le refus traduit dans le formulaire d'exemplaire, avec une session — porté par E31.",
           "pt": "**Fechado em 09/10 por decisão de Xavier («Passe-o a fechado»), os dois critérios cumpridos, o olhar na tela adiado para E31.** Decidir se um número de tombo apagado pode ser dado de novo. *O que contava como pronto*: a regra está escrita no REGISTRO · se um número nunca deve ser dado de novo, uma suíte SQL o prova. **Decidido em 08/10: um número dado nunca se redá** (REGISTRO `CAT-E21` — um número é um rastro; retirado, desbastado ou criado por engano, continua tomado). **Feito em 09/10, implantado e verificado às 21h59** (`5a5a94d6`, migração `20261009194632`): `public.tombos_attribues`, o registro de todos os números já carregados por um exemplar, retomado do acervo (2 762) e do diário das exclusões (13 números, incluindo os cinco já redados — a história fica escrita, não se repete mais); dois gatilhos em `exemplares`: um número já dado que nenhum exemplar presente carrega mais é recusado (`error.catalog.tombo.deja_attribue`, dez locales), todo número posto entra no registro; `fn_next_tombo` devolve o maior número já atribuído, acervo e registro. Suíte `tombo_jamais_redonne` 6/6, mutante sem o registro vermelho (4/6). Tabela fechada a `anon` e `authenticated` (um aviso 0008 a mais, intencional), no levantamento de 09/10. **Não visto**: a recusa traduzida no formulário de exemplar, com sessão — levado por E31."
         }
+      ],
+      [
+        "I33",
+        "2026-10-09",
+        {
+          "fr": "Le checkout d'exploitation du poste suit `main` sans geste humain : `anarbib-exploitation-suit.sh` (`2d3c8273`, 08/10), appelé en dernier geste par le tir du miroir (18:00, 18:50, dim. 19:50, une minute après le démarrage), avance `~/anarbib` en avance rapide seulement s'il est sur `main`, propre, et qu'aucun script d'exploitation ne tourne ; sinon il dit pourquoi (drapeau `.last-failure`) et ne bouge pas. **Éprouvé le 09/10** : au démarrage du poste à 20 h 06, le tir a avancé le checkout de `67703b6a` à `262bf350` (+14 commits, dont la table `tombos_attribues` classée le jour même), puis la sauvegarde courte de 20 h 11 est passée avec cette liste (snapshot `5b09c063`) ; à 20 h 11 le tir suivant a vu la sauvegarde en cours et a attendu. Banc `exploitation-suit-main` (9 cas), README ops. Les trois critères sont tenus. **Clos le 09/10 par Xavier.**",
+          "pt": "O checkout de operação segue `main` sem gesto humano: o disparo do espelho o avança em fast-forward só se estiver em `main`, limpo e sem script de operação rodando ; senão diz por quê e não mexe. Provado em 09/10 (+14 commits antes do backup curto, que passou). **Fechado em 09/10 por Xavier.**"
+        }
       ]
     ]
   },
@@ -5841,63 +5849,10 @@
       ]
     },
     {
-      "id": "I33",
-      "d": "I",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Le checkout d'exploitation du poste (`~/anarbib`) doit suivre `main` : le filet de la sauvegarde y lit la liste des tables connues",
-        "pt": "O checkout de operação do posto (`~/anarbib`) deve seguir `main`: a rede de segurança do backup lê nele a lista de tabelas conhecidas"
-      },
-      "v": {
-        "fr": "**08/10/2026, 19:03 (Paris) — le tir court #BG2 a échoué** au démarrage de la machine : « Filet déclenché : classe les nouvelles tables avant de sauvegarder ». La table nouvelle était `ingest.book_import_divergences` (H21 lot 5, 07/10), **bien classée au dépôt** (`deploy/bg2-known-tables.txt`, 209 tables, le banc SQL le vérifie à chaque CI) — mais `~/anarbib-ops/bg2-known-tables.txt` est un lien vers `~/anarbib/deploy/bg2-known-tables.txt`, et le checkout `~/anarbib` était resté sur `a387b46c` (05/10) : personne ne l'avait avancé depuis I29. Le drapeau `.last-failure` s'est affiché à l'ouverture du terminal ; le contrôle de fraîcheur disait « frais » (24 h, seuil 36 h) et n'a donc rien relancé. Réparé à 20:28 : `~/anarbib` avancé sur `4dfb1dc2` (ff), tir court relancé à la main, « Filet OK », snapshot `a3325d79`, drapeau retiré. Le flux court n'a manqué qu'un jour ; le long de dimanche aurait échoué pareil.",
-        "pt": "**08/10/2026 — o tiro curto #BG2 falhou** no arranque: « rede acionada: classifique as novas tabelas ». A tabela (`ingest.book_import_divergences`, lote 5) estava classificada no repositório, mas `~/anarbib` ficara em `a387b46c` (05/10). Reparado às 20:28: checkout avançado, tiro relançado, snapshot `a3325d79`."
-      },
-      "w": {
-        "fr": "Faire suivre `main` au checkout d'exploitation sans geste humain : le plus simple est que `anarbib-mirror-refresh.sh` (minuteur quotidien), après avoir rafraîchi le miroir nu, avance aussi `~/anarbib` en `--ff-only` quand il est propre — jamais de rebase ni de reset : un checkout sale ou divergent s'écrit au drapeau et ne bouge pas. Variante : le job `acquittement` de la CI ne peut pas le faire (il tourne dans un conteneur). À écrire dans `deploy/ops/README.md` (« ce que fait la machine après un push »), et à éprouver : une table créée au dépôt, le tir du soir passe sans qu'on ait touché au poste. Les unités systemd étant des liens vers ce checkout, un script d'exploitation changé par un push devient actif au tir suivant — c'est déjà le cas aujourd'hui quand une session avance `~/anarbib` ; le dire au README.",
-        "pt": "Fazer `~/anarbib` seguir `main` sem gesto humano: `anarbib-mirror-refresh.sh` avança o checkout em `--ff-only` quando está limpo; nunca rebase nem reset. Documentar e provar: uma tabela criada no repositório, o tiro da noite passa."
-      },
-      "y": {
-        "fr": "Le filet existe pour qu'une table nouvelle ne parte jamais sans classement ; s'il lit une liste périmée, il refuse de sauvegarder des données parfaitement classées — et une sauvegarde qui ne part pas pour une mauvaise raison s'apprend à ignorer.",
-        "pt": "A rede existe para que nenhuma tabela nova parta sem classificação; se lê uma lista velha, recusa salvar dados bem classificados."
-      },
-      "f": {
-        "fr": [
-          "Une table créée par une migration poussée le jour même est connue du tir du soir sans qu'une personne ait avancé `~/anarbib`.",
-          "Un checkout sale ou divergent n'est jamais touché : drapeau posé, le tir se fait avec la liste qu'il a.",
-          "Documenté dans `deploy/ops/README.md`."
-        ],
-        "pt": [
-          "Uma tabela criada por migração do dia é conhecida do tiro da noite sem gesto humano.",
-          "Um checkout sujo ou divergente nunca é tocado.",
-          "Documentado."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "deploy/ops/anarbib-mirror-refresh.sh",
-        "deploy/ops/anarbib-bg2.sh (filet)",
-        "journal du 08/10/2026, anarbib-backup-court.service"
-      ],
-      "verif": [
-        {
-          "fr": "**08/10 — livré, posé, éprouvé sur le poste** (`2d3c8273`, CI verte). `anarbib-exploitation-suit.sh` : avance `~/anarbib` en avance rapide seulement si le checkout est sur `main`, propre (fichiers suivis ; `CLAUDE.md` et `.claude/` ignorés) et qu'aucun script d'exploitation ne tourne (sauvegardes, fraîcheur, témoin : des liens vers ce checkout) ; sinon il dit pourquoi — sale ou divergent : sortie 1 et drapeau `.last-failure` ; un tir en cours : on attend. Il se recopie dans `/tmp` avant de tourner, et le tir du miroir l'appelle en `exec`, dernier geste, parce que tous deux vivent dans le checkout qu'ils avancent. Minuteur du miroir : 18:00, **18:50** (avant le flux court), 19:50 le dimanche (avant le long), une minute après le démarrage. Banc `exploitation-suit-main` (9 cas, vrais dépôts git jetables), vitest 2 229. Sur le poste : `systemd` rechargé, un tir du miroir lancé à la main a enchaîné le suivi — `~/anarbib` suit `main`. *Critère 1* se vérifie au prochain tir du soir après une migration qui crée une table ; *critères 2 et 3* tenus (banc, README). **Reste** : clôture à décider par Xavier après un tir réel.",
-          "pt": "**08/10 — entregue, instalado, provado no posto** (`2d3c8273`). O checkout `~/anarbib` segue `main` em avanço rápido, só se limpo e sem script em curso; o tiro do espelho o encadeia (18:00, 18:50, 19:50 dom., arranque). Bancada de 9 casos. **Fechamento a decidir por Xavier após um tiro real.**"
-        }
-      ]
-    },
-    {
       "id": "F25",
       "d": "F",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "deno"
@@ -5941,7 +5896,12 @@
         "supabase/functions/_shared/transport/email.ts",
         "supabase/functions/_shared/domain/authority.ts"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**09/10 — livré, déployé et vérifié à 22 h 29** (`6b03ebe4`). `_shared/transport/email.ts` : cadence par isolat (huit envois Resend par seconde au plus), rejeu d'un 429, d'un 5xx ou d'une connexion rompue jusqu'à trois fois après `Retry-After` (plafonné à 10 s) ou une attente croissante (0,4 s, 0,8 s, 1,6 s, avec un aléa), un autre 4xx n'est pas rejoué, l'échec après rejeu reste noté pour la sonde ; `authority.ts` et `partnership.ts` ne comptent plus un échec comme un envoi. Banc `mail-transport-rejeu-cadence` (6 cas, faux Resend horodaté) ; les 38 bancs qui passent par le transport restent verts avec des délais réduits. Critères 1 et 2 tenus au banc, critère 3 tenu pour les trois compteurs trouvés (`sent++`) — les autres domaines lisaient déjà `ok`. **Reste** : la prochaine action en masse réelle (une série de propositions, une convocation) sans aucun 429 dans `mail_transport_failures` ; d'ici là, les actions en masse se font par petits lots espacés. L'incident 23 s'est refermé seul.",
+          "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
+        }
+      ]
     }
   ]
 }
