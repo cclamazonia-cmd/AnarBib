@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "L’exemplar ha canviat des de la publicació d’aquesta actualització (un «Editar» publicat mentrestant, per exemple): republicar-la desfaria aquests canvis. Obre «Editar» per retocar l’exemplar.",
   "error.catalog.item_update_pending": "Una actualització d’aquest exemplar, preparada per una reimportació, espera la revisió: publica-la o envia-la a la paperera abans d’obrir un altre esborrany d’aquest exemplar.",
   "error.import.item_update_superseded": "Des d’aleshores s’ha preparat una altra actualització d’aquest exemplar: aquest esborrany no torna. Revisa la més recent.",
-  "error.import.update_page_too_many_items": "Massa exemplars del fitxer per a una sola crida (5 000 com a màxim): selecciona menys línies alhora."
+  "error.import.update_page_too_many_items": "Massa exemplars del fitxer per a una sola crida (5 000 com a màxim): selecciona menys línies alhora.",
+  "error.catalog.tombo.deja_attribue": "Aquest número d’inventari ja s’ha donat: un número no es torna a donar mai, ni tan sols després d’esborrar l’exemplar que el portava. Deixa el camp buit per rebre el número següent de la sèrie."
 }

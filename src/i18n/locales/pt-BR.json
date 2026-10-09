@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "O exemplar mudou desde a publicação desta atualização (um «Editar» publicado nesse meio-tempo, por exemplo): republicá-la desfaria essas mudanças. Abra «Editar» para retocar o exemplar.",
   "error.catalog.item_update_pending": "Uma atualização deste exemplar, preparada por uma reimportação, aguarda revisão: publique-a ou mande-a para a lixeira antes de abrir outro rascunho deste exemplar.",
   "error.import.item_update_superseded": "Outra atualização deste exemplar foi preparada desde então: este rascunho não volta. Revise a mais recente.",
-  "error.import.update_page_too_many_items": "Exemplares do arquivo demais para uma única chamada (no máximo 5 000): selecione menos linhas de cada vez."
+  "error.import.update_page_too_many_items": "Exemplares do arquivo demais para uma única chamada (no máximo 5 000): selecione menos linhas de cada vez.",
+  "error.catalog.tombo.deja_attribue": "Este número de tombo já foi dado: um número nunca é dado de novo, mesmo depois de apagar o exemplar que o tinha. Deixe o campo vazio para receber o próximo número da série."
 }

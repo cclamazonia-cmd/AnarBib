@@ -187,6 +187,7 @@ subject_ficedl_links
 subject_relations
 subjects
 team_notification_outbox
+tombos_attribues
 user_history_retention_preferences
 user_library_memberships
 user_notification_preferences

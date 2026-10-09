@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "La ekzemplero ŝanĝiĝis ekde la publikigo de ĉi tiu ĝisdatigo (ekzemple intertempe publikigita «Redakti»): republikigi ĝin malfarus tiujn ŝanĝojn. Malfermu «Redakti» por retuŝi la ekzempleron.",
   "error.catalog.item_update_pending": "Ĝisdatigo de ĉi tiu ekzemplero, preparita de reimporto, atendas revizion: publikigu ĝin aŭ metu ĝin en la rubujon antaŭ ol malfermi alian malneton de ĉi tiu ekzemplero.",
   "error.import.item_update_superseded": "Ekde tiam alia ĝisdatigo de ĉi tiu ekzemplero estis preparita: ĉi tiu malneto ne revenas. Relegu la plej freŝan.",
-  "error.import.update_page_too_many_items": "Tro da ekzempleroj de la dosiero por unu sola alvoko (maksimume 5 000): elektu malpli da linioj samtempe."
+  "error.import.update_page_too_many_items": "Tro da ekzempleroj de la dosiero por unu sola alvoko (maksimume 5 000): elektu malpli da linioj samtempe.",
+  "error.catalog.tombo.deja_attribue": "Ĉi tiu inventara numero jam estis donita: numero neniam estas donita denove, eĉ post forigo de la ekzemplero kiu portis ĝin. Lasu la kampon malplena por ricevi la sekvan numeron de la serio."
 }

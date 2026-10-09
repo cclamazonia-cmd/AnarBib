@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "L’exemplaire a changé depuis la publication de cette mise à jour (un « Éditer » publié entre-temps, par exemple) : la republier déferait ces changements. Ouvre « Éditer » pour retoucher l’exemplaire.",
   "error.catalog.item_update_pending": "Une mise à jour de cet exemplaire, préparée par un réimport, attend sa révision : publie-la ou mets-la à la corbeille avant d’ouvrir un autre brouillon de cet exemplaire.",
   "error.import.item_update_superseded": "Une autre mise à jour de cet exemplaire a été préparée depuis : ce brouillon ne revient pas. Relis la plus récente.",
-  "error.import.update_page_too_many_items": "Trop d’exemplaires du fichier pour un seul appel (5 000 au plus) : sélectionne moins de lignes à la fois."
+  "error.import.update_page_too_many_items": "Trop d’exemplaires du fichier pour un seul appel (5 000 au plus) : sélectionne moins de lignes à la fois.",
+  "error.catalog.tombo.deja_attribue": "Ce numéro d’inventaire a déjà été donné : un numéro ne se redonne jamais, même après la suppression de l’exemplaire qui le portait. Laisse le champ vide pour recevoir le prochain numéro de la série."
 }

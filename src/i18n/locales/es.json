@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "El ejemplar cambió desde la publicación de esta actualización (un «Editar» publicado entretanto, por ejemplo): republicarla desharía esos cambios. Abre «Editar» para retocar el ejemplar.",
   "error.catalog.item_update_pending": "Una actualización de este ejemplar, preparada por una reimportación, espera su revisión: publícala o mándala a la papelera antes de abrir otro borrador de este ejemplar.",
   "error.import.item_update_superseded": "Desde entonces se preparó otra actualización de este ejemplar: este borrador no vuelve. Revisa la más reciente.",
-  "error.import.update_page_too_many_items": "Demasiados ejemplares del archivo para una sola llamada (5 000 como máximo): selecciona menos líneas a la vez."
+  "error.import.update_page_too_many_items": "Demasiados ejemplares del archivo para una sola llamada (5 000 como máximo): selecciona menos líneas a la vez.",
+  "error.catalog.tombo.deja_attribue": "Este número de inventario ya fue dado: un número nunca se vuelve a dar, ni siquiera después de borrar el ejemplar que lo llevaba. Deja el campo vacío para recibir el siguiente número de la serie."
 }

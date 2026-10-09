@@ -741,3 +741,6 @@ tests/sql/tomes_jamais_doublons_par_notice_tests.sql
 # G19 lot 1 (08/10/2026) : correspondance entre bibliothèques — coordinations seules,
 # écriture par RPC, archivage, limite d'envoi, l'administration ne lit pas.
 tests/sql/correspondance_lot1_tests.sql
+# C17 (09/10/2026, CAT-E21) : un numéro d'inventaire donné ne se redonne jamais — registre des numéros,
+# refus d'un numéro libéré par une suppression, fn_next_tombo sur le plus grand numéro jamais attribué.
+tests/sql/tombo_jamais_redonne_tests.sql

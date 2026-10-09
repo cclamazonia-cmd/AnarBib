@@ -7386,5 +7386,6 @@
   "error.publish.item_update_changed_since_publication": "Das Exemplar hat sich seit der Veröffentlichung dieser Aktualisierung geändert (etwa ein inzwischen veröffentlichtes „Bearbeiten“): sie erneut zu veröffentlichen würde diese Änderungen rückgängig machen. Öffne „Bearbeiten“, um das Exemplar zu überarbeiten.",
   "error.catalog.item_update_pending": "Eine durch einen Reimport vorbereitete Aktualisierung dieses Exemplars wartet auf ihre Prüfung: veröffentliche sie oder lege sie in den Papierkorb, bevor du einen weiteren Entwurf dieses Exemplars öffnest.",
   "error.import.item_update_superseded": "Seitdem wurde eine andere Aktualisierung dieses Exemplars vorbereitet: dieser Entwurf kommt nicht zurück. Prüfe die neueste.",
-  "error.import.update_page_too_many_items": "Zu viele Exemplare der Datei für einen einzigen Aufruf (höchstens 5 000): wähle weniger Zeilen auf einmal."
+  "error.import.update_page_too_many_items": "Zu viele Exemplare der Datei für einen einzigen Aufruf (höchstens 5 000): wähle weniger Zeilen auf einmal.",
+  "error.catalog.tombo.deja_attribue": "Diese Inventarnummer wurde schon vergeben: Eine Nummer wird nie erneut vergeben, auch nicht nach dem Löschen des Exemplars, das sie trug. Lass das Feld leer, um die nächste Nummer der Reihe zu erhalten."
 }
