@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : C17 (à l'écran, un numéro libéré refusé), F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).",
-      "pt": "**Levantamento de 9 de outubro de 2026 à noite** (`47781985`, medido às 22h15 — pedido em `d116d42d`, dois commits depois C17 estava entregue e sua migração aplicada: o levantamento os inclui) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 08/10 à noite, `c06f9ed2`). **A CI está em dia com a cabeça do branch**: 454 migrações aplicadas = 454 no repositório, as quatro que esperavam ontem à noite passaram, mais H21 lote 6b, os tomos II e III de *Acción directa* e C17. O que mudou e por quê: **o catálogo** — −3 fichas, todas por fusão (dois tomos reunidos por migração com acordo de Xavier, uma fusão às 21h46), nenhuma criada, quatro retomadas publicadas; **o banco** — +25 funções (H21 lote 6b em `ingest`, C17 com seu registro `tombos_attribues`, a lista dos fios de correspondência), mais duas tabelas fechadas (daí +2 avisos 0008), **0029 em 428, exatamente a contagem esperada pela auditoria**, e a guarda CI dos DEFINER de lista fechada estendida à correspondência (uma porta, três ajudas); **a rede** — a correspondência vive (um fio, duas mensagens, BLMF para BTL), G19 fechado por Xavier; **o repositório** — +12 commits, +40 chaves, +39 testes, +2 suítes SQL, C17 entregue (um número de tombo nunca se redá). **O que falta fechar, e por quem** — *a verificar num fato por vir*: C17 (na tela, um número liberado recusado), F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração — a migração desta noite permite), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar)."
+      "fr": "**Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Mis à jour dans cette version** : C17 clos sur décision de Xavier (les deux critères tenus, le regard à l'écran porté par E31). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21 ; le refus traduit d'un numéro libéré, C17) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).",
+      "pt": "**Levantamento de 9 de outubro de 2026 à noite** (`47781985`, medido às 22h15 — pedido em `d116d42d`, dois commits depois C17 estava entregue e sua migração aplicada: o levantamento os inclui) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 08/10 à noite, `c06f9ed2`). **A CI está em dia com a cabeça do branch**: 454 migrações aplicadas = 454 no repositório, as quatro que esperavam ontem à noite passaram, mais H21 lote 6b, os tomos II e III de *Acción directa* e C17. O que mudou e por quê: **o catálogo** — −3 fichas, todas por fusão (dois tomos reunidos por migração com acordo de Xavier, uma fusão às 21h46), nenhuma criada, quatro retomadas publicadas; **o banco** — +25 funções (H21 lote 6b em `ingest`, C17 com seu registro `tombos_attribues`, a lista dos fios de correspondência), mais duas tabelas fechadas (daí +2 avisos 0008), **0029 em 428, exatamente a contagem esperada pela auditoria**, e a guarda CI dos DEFINER de lista fechada estendida à correspondência (uma porta, três ajudas); **a rede** — a correspondência vive (um fio, duas mensagens, BLMF para BTL), G19 fechado por Xavier; **o repositório** — +12 commits, +40 chaves, +39 testes, +2 suítes SQL, C17 entregue (um número de tombo nunca se redá). **Atualizado nesta versão**: C17 fechado por decisão de Xavier (os dois critérios cumpridos, o olhar na tela levado por E31). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração — a migração desta noite permite), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21; a recusa traduzida de um número liberado, C17); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar)."
     },
     "photo": [
       {
@@ -3083,6 +3083,14 @@
           "fr": "Les coordinations s'écrivent dans AnarBib : lots 1 à 4 et 4 bis livrés, déployés et vérifiés les 08 et 09/10 (`3aaf2d2a`, `9c9da625`, `67703b6a`, `4cc73c57`, `c8e07879` ; REGISTRE CORR-1 à CORR-6) — données et RPC DEFINER réservées aux coordinations actives (l'administration du réseau ne lit pas, CORR-6), onglet « Correspondance » de la page Bibliothèque, cloche de chaque coordination des autres bibliothèques du fil et courriel à leur adresse collective, langues lues par chaque équipe déclarées à l'Identité et langue commune proposée, liste des fils calculée en base. **Premier fil réel le 09/10 à 8 h 36**, BLMF → BTL, ouvert par la RPC sous le compte de Xavier : fil vu à l'écran, quatre cloches posées et **cloche reçue côté BTL** (constat de Xavier), courriel accepté par Resend pour l'adresse collective de BTL ; BLMF lit pt-BR, fr, es. **Pas de traduction automatique** (décision de Xavier du 08/10 : pas de LLM tant qu'un outil libre de qualité n'existe pas) : le lot 5 est gelé, `body_i18n` / `i18n_status` restent vides. Plus tard, sans date ni item : fils de cercle, réponse par courriel. Suites `correspondance_lot1` (15), `correspondance-section-monte`, `read-languages-field`, `correspondance-prevenir`. **Clos le 09/10 par Xavier.**",
           "pt": "As coordenações escrevem umas às outras no AnarBib: lotes 1 a 4 e 4 bis entregues e verificados em 08 e 09/10 (CORR-1 a CORR-6) — dados e RPC só para coordenações ativas (a administração não lê), aba « Correspondência », sino e e-mail ao endereço coletivo das outras bibliotecas do fio, línguas lidas declaradas na Identidade com língua comum proposta, lista calculada no banco. **Primeiro fio real em 09/10**, BLMF → BTL: visto na tela, sino recebido do lado da BTL. **Sem tradução automática** (decisão de Xavier): lote 5 congelado. **Fechado em 09/10 por Xavier.**"
         }
+      ],
+      [
+        "C17",
+        "2026-10-09",
+        {
+          "fr": "**Clos le 09/10 sur décision de Xavier (« Passe-le en clos »), les deux critères tenus, le regard à l'écran reporté à E31.** Décider si un numéro d'inventaire supprimé peut être redonné. *Ce qui comptait comme fini* : la règle est écrite au REGISTRE · si un numéro ne doit jamais se redonner, une suite SQL le prouve. **Tranché le 08/10 : un numéro donné ne se redonne jamais** (REGISTRE `CAT-E21` — un numéro est une trace ; retiré, désherbé ou créé par erreur, il reste pris). **Fait le 09/10, déployé et vérifié à 21 h 59** (`5a5a94d6`, migration `20261009194632`) : `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), tout numéro posé entre au registre ; `fn_next_tombo` rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` 6/6 (002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; vers un numéro libéré : refusé ; vers un neuf : accepté), mutant sans le registre rouge (4/6). Table fermée à `anon` et `authenticated` (un avis 0008 de plus, voulu), au relevé du 09/10. **Non vu** : le refus traduit dans le formulaire d'exemplaire, avec une session — porté par E31.",
+          "pt": "**Fechado em 09/10 por decisão de Xavier («Passe-o a fechado»), os dois critérios cumpridos, o olhar na tela adiado para E31.** Decidir se um número de tombo apagado pode ser dado de novo. *O que contava como pronto*: a regra está escrita no REGISTRO · se um número nunca deve ser dado de novo, uma suíte SQL o prova. **Decidido em 08/10: um número dado nunca se redá** (REGISTRO `CAT-E21` — um número é um rastro; retirado, desbastado ou criado por engano, continua tomado). **Feito em 09/10, implantado e verificado às 21h59** (`5a5a94d6`, migração `20261009194632`): `public.tombos_attribues`, o registro de todos os números já carregados por um exemplar, retomado do acervo (2 762) e do diário das exclusões (13 números, incluindo os cinco já redados — a história fica escrita, não se repete mais); dois gatilhos em `exemplares`: um número já dado que nenhum exemplar presente carrega mais é recusado (`error.catalog.tombo.deja_attribue`, dez locales), todo número posto entra no registro; `fn_next_tombo` devolve o maior número já atribuído, acervo e registro. Suíte `tombo_jamais_redonne` 6/6, mutante sem o registro vermelho (4/6). Tabela fechada a `anon` e `authenticated` (um aviso 0008 a mais, intencional), no levantamento de 09/10. **Não visto**: a recusa traduzida no formulário de exemplar, com sessão — levado por E31."
+        }
       ]
     ]
   },
@@ -3471,62 +3479,6 @@
         "REGISTRE §43 CAPAS-4",
         "docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md",
         "commits fd5d2f0e, 76c6ae3f, 2a80d43b"
-      ]
-    },
-    {
-      "id": "C17",
-      "d": "C",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "biblio",
-        "sql"
-      ],
-      "t": {
-        "fr": "Décider si un numéro d'inventaire supprimé peut être redonné",
-        "pt": "Decidir se um número de tombo apagado pode ser dado de novo"
-      },
-      "v": {
-        "fr": "`CCLA.2026.93`, créé par erreur le 27/09 depuis un poste BLMF sur BTL-TL-000881, a été retiré le 28/09 (`96b4a104`, migration `20260928111729`, exemplaire 2796). Le 29/09, l'exemplaire initial de la notice d'essai « Je suis une légende » a reçu le même numéro, `CCLA.2026.93` (verif d'E6). Ce n'est pas une panne : `fn_next_tombo` rend le plus grand numéro sous le préfixe, plus un (`20260815145252`), et la contrainte `exemplares_unique_tombo` ne vaut qu'entre exemplaires présents. Supprimer le dernier exemplaire d'une série libère donc son numéro. Rien n'écrit si c'est voulu : ni le REGISTRE, ni les specs.",
-        "pt": "`CCLA.2026.93`, criado por engano em 27/09 a partir de um posto da BLMF em BTL-TL-000881, foi retirado em 28/09 (`96b4a104`, migração `20260928111729`, exemplar 2796). Em 29/09, o exemplar inicial do registro de ensaio «Je suis une légende» recebeu o mesmo número, `CCLA.2026.93` (verif do E6). Não é uma falha: `fn_next_tombo` devolve o maior número sob o prefixo, mais um (`20260815145252`), e a restrição `exemplares_unique_tombo` só vale entre exemplares presentes. Apagar o último exemplar de uma série libera o seu número. Nada diz se isso é desejado: nem o REGISTRO, nem as specs."
-      },
-      "w": {
-        "fr": "**Décision de Xavier du 08/10 : un numéro donné ne se redonne jamais** (règle a). À écrire au REGISTRE, puis : `fn_next_tombo` rend le plus grand numéro **jamais attribué** sous le préfixe, journal compris — un compteur par préfixe (table `tombo_series`, ou la lecture du journal des exemplaires supprimés `catalog_audit_log`), par une migration testée ; suite SQL : supprimer le dernier exemplaire d'une série, en créer un, le numéro est le suivant, pas le même. Vérifier que l'import (H19, tombos par série) et la création à N exemplaires passent par le même compteur.",
-        "pt": "**Decisão de Xavier em 08/10: um número dado nunca se devolve.** Escrever no REGISTRE; `fn_next_tombo` devolve o maior número já atribuído sob o prefixo, diário incluído; suíte SQL."
-      },
-      "y": {
-        "fr": "Un numéro d'inventaire s'écrit sur le livre et dans les registres papier. S'il se redonne après une suppression, deux livres peuvent porter le même numéro — l'un sorti de la base, l'autre dedans — et un prêt, un récolement ou une étiquette peuvent les confondre.",
-        "pt": "Um número de tombo se escreve no livro e nos registros em papel. Se ele é dado de novo depois de uma exclusão, dois livros podem ter o mesmo número — um fora do banco, o outro dentro — e um empréstimo, um inventário ou uma etiqueta podem confundi-los."
-      },
-      "f": {
-        "fr": [
-          "La règle est écrite au REGISTRE.",
-          "Si un numéro ne doit jamais se redonner, une suite SQL le prouve : supprimer le dernier exemplaire d'une série, puis en créer un."
-        ],
-        "pt": [
-          "A regra está escrita no REGISTRO.",
-          "Se um número nunca deve ser dado de novo, uma suíte SQL o prova: apagar o último exemplar de uma série, depois criar um."
-        ]
-      },
-      "dep": {
-        "fr": "Décision de Xavier.",
-        "pt": "Decisão de Xavier."
-      },
-      "r": [
-        "supabase/migrations/20260815145252_tombo_collision_robustness.sql",
-        "supabase/migrations/20260928111729_btl_tl_000881_exemplaire_blmf_retire_et_tirages_notes.sql",
-        "item E6 (verif du 29/09)"
-      ],
-      "verif": [
-        {
-          "fr": "**08/10 — tranché par Xavier : « Jamais redonné ».** L'item passe de la décision au travail : compteur par préfixe et suite SQL (ci-dessus).",
-          "pt": "**08/10 — decidido por Xavier: « nunca devolvido ».** O item passa da decisão ao trabalho."
-        },
-        {
-          "fr": "**09/10 — livré, déployé et vérifié à 21 h 59** (`5a5a94d6`, REGISTRE `CAT-E21`). `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), un numéro porté par un exemplaire présent reste à l'unicité que la publication sait rejouer, tout numéro posé entre au registre ; `fn_next_tombo` (réécrite sur sa définition vivante, md5 vérifié) rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` (6 : 001/002 au registre ; 002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; changement vers un numéro libéré : refusé, vers un neuf : accepté, retour au sien : accepté ; numéro d'un exemplaire présent : 23505 ; registre et déclencheurs fermés), mutant sans le registre rouge (4/6). Critère 1 (règle au REGISTRE) et critère 2 (la suite) tenus ; **reste à voir à l'écran** : saisir à la main, dans le formulaire d'exemplaire, un numéro d'un exemplaire supprimé et lire le refus traduit (E31).",
-          "pt": "**09/10 — entregue e verificado às 21 h 59** (`5a5a94d6`, `CAT-E21`). Registro de todos os tombos já dados (`tombos_attribues`), recusa de um tombo liberado por uma exclusão, `fn_next_tombo` sobre o maior tombo já dado. Suíte 6/6, mutante vermelho. Resta ver na tela a recusa traduzida (E31)."
-        }
       ]
     },
     {
@@ -5787,6 +5739,10 @@
         {
           "fr": "**08/10 — trois regards rendus par Xavier** (questions posées une à une) : C14, C23 et G16 vus à l'écran et clos. La liste restante est réécrite dans « Pourquoi ça compte ».",
           "pt": "**08/10 — três olhares dados por Xavier**: C14, C23 e G16 vistos e fechados. A lista restante foi reescrita."
+        },
+        {
+          "fr": "**09/10 — ajouté à la liste** : le refus traduit d'un numéro d'inventaire libéré, saisi à la main dans le formulaire d'exemplaire (C17, clos sur décision de Xavier sans ce regard ; la suite SQL prouve le refus, pas le message à l'écran — `error.catalog.tombo.deja_attribue`, dix locales).",
+          "pt": "**09/10 — acrescentado à lista**: a recusa traduzida de um número de tombo liberado, digitado à mão no formulário de exemplar (C17, fechado por decisão de Xavier sem esse olhar; a suíte SQL prova a recusa, não a mensagem na tela — `error.catalog.tombo.deja_attribue`, dez locales)."
         }
       ]
     },
