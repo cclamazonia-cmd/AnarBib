@@ -3075,6 +3075,14 @@
           "fr": "**Faux.** Le 08/10, l'onglet Livres du catalogage affichait « Painel de revisão da ficha » en espagnol, italien et allemand. Le balayage « valeur strictement égale à pt-BR » a trouvé **607 valeurs** copiées telles quelles dans es, it, de et en — guides par type de document, libellés de champs, placeholders, messages, compteurs de la page Réglages, états du panneau de prêt —, traduites en six commits (`89534f93`, `88b2f408`, `801c3d93`, `fbc82403`, `c6cb5a00`, `be119b1e`) avec la terminologie de chaque locale (et le « -e » inclusif de l'espagnol : « le autore » n'est pas de l'italien). Le vecteur : les scripts `i18n-add-*` posent pt-BR dans les dix locales pour tenir la parité, et le « traduire ensuite » n'a pas lieu. **Garde** depuis le soir même : `locales-valeurs-copiees-de-pt-br.test.js` (`78d9c4b8`, `055cc326`), deux chemins — phrases nommées clé par clé, mots par vocabulaire d'homographes par locale (887, relus un à un), listes fermées dans les deux sens, prouvée rouge par mutation ; `DOC-I18N-3` au registre (v0.78, v0.79). ca, eo, nl, el n'avaient rien à corriger : leurs identiques sont des homographes.",
           "pt": "**Falso.** Em 08/10, a aba Livros da catalogação mostrava «Painel de revisão da ficha» em espanhol, italiano e alemão. A varredura «valor estritamente igual ao pt-BR» encontrou **607 valores** copiados tal qual em es, it, de e en — guias por tipo de documento, rótulos de campos, placeholders, mensagens, contadores da página Configurações, estados do painel de empréstimo —, traduzidos em seis commits (`89534f93`, `88b2f408`, `801c3d93`, `fbc82403`, `c6cb5a00`, `be119b1e`) com a terminologia de cada locale (e o «-e» inclusivo do espanhol: «le autore» não é italiano). O vetor: os scripts `i18n-add-*` põem pt-BR nas dez locales para manter a paridade, e o «traduzir depois» não acontece. **Guarda** desde a mesma noite: `locales-valeurs-copiees-de-pt-br.test.js` (`78d9c4b8`, `055cc326`), dois caminhos — frases nomeadas chave a chave, palavras por vocabulário de homógrafos por locale (887, relidos um a um), listas fechadas nos dois sentidos, provada vermelha por mutação; `DOC-I18N-3` no registro (v0.78, v0.79). ca, eo, nl, el não tinham nada a corrigir: seus idênticos são homógrafos."
         }
+      ],
+      [
+        "G19",
+        "2026-10-09",
+        {
+          "fr": "Les coordinations s'écrivent dans AnarBib : lots 1 à 4 et 4 bis livrés, déployés et vérifiés les 08 et 09/10 (`3aaf2d2a`, `9c9da625`, `67703b6a`, `4cc73c57`, `c8e07879` ; REGISTRE CORR-1 à CORR-6) — données et RPC DEFINER réservées aux coordinations actives (l'administration du réseau ne lit pas, CORR-6), onglet « Correspondance » de la page Bibliothèque, cloche de chaque coordination des autres bibliothèques du fil et courriel à leur adresse collective, langues lues par chaque équipe déclarées à l'Identité et langue commune proposée, liste des fils calculée en base. **Premier fil réel le 09/10 à 8 h 36**, BLMF → BTL, ouvert par la RPC sous le compte de Xavier : fil vu à l'écran, quatre cloches posées et **cloche reçue côté BTL** (constat de Xavier), courriel accepté par Resend pour l'adresse collective de BTL ; BLMF lit pt-BR, fr, es. **Pas de traduction automatique** (décision de Xavier du 08/10 : pas de LLM tant qu'un outil libre de qualité n'existe pas) : le lot 5 est gelé, `body_i18n` / `i18n_status` restent vides. Plus tard, sans date ni item : fils de cercle, réponse par courriel. Suites `correspondance_lot1` (15), `correspondance-section-monte`, `read-languages-field`, `correspondance-prevenir`. **Clos le 09/10 par Xavier.**",
+          "pt": "As coordenações escrevem umas às outras no AnarBib: lotes 1 a 4 e 4 bis entregues e verificados em 08 e 09/10 (CORR-1 a CORR-6) — dados e RPC só para coordenações ativas (a administração não lê), aba « Correspondência », sino e e-mail ao endereço coletivo das outras bibliotecas do fio, línguas lidas declaradas na Identidade com língua comum proposta, lista calculada no banco. **Primeiro fio real em 09/10**, BLMF → BTL: visto na tela, sino recebido do lado da BTL. **Sem tradução automática** (decisão de Xavier): lote 5 congelado. **Fechado em 09/10 por Xavier.**"
+        }
       ]
     ]
   },
@@ -5742,8 +5750,8 @@
         "pt": "Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item)."
       },
       "y": {
-        "fr": "**Ce qui attend encore un regard (08/10)** : les lots 2, 4, 5 et 8 d'`AccountPage` (Avis et Liste de souhaits ; En cours ; Réserver — réserver par référence, annuler une réservation ; E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; les écrans de H21 lots 1 à 5 sur la page Importations (« Déjà importée », « plus détenue », comptes de changements et recalcul, « Préparer la mise à jour », onglet « Divergences », bandeau) — DIRA n'a pas réimporté. **Vus et clos le 08/10 sur le mot de Xavier** : C14, C23, G16 ; E33 clos sans regard (on ne simule pas une panne en production). Les clôtures de fin septembre (C20, C21, C22, C24, C25, F16) restent à voir, sans urgence.",
-        "pt": "**O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16."
+        "fr": "**Ce qui attend encore un regard (08/10)** : les lots 2, 4, 5 et 8 d'`AccountPage` (Avis et Liste de souhaits ; En cours ; Réserver — réserver par référence, annuler une réservation ; E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; les écrans de H21 lots 1 à 5 sur la page Importations (« Déjà importée », « plus détenue », comptes de changements et recalcul, « Préparer la mise à jour », onglet « Divergences », bandeau) — DIRA n'a pas réimporté. **Vus et clos le 08/10 sur le mot de Xavier** : C14, C23, G16 ; E33 clos sans regard (on ne simule pas une panne en production). **Vu le 09/10** : la correspondance entre bibliothèques (G19, clos) — fil réel BLMF → BTL à l'écran, cloche reçue côté BTL ; le courriel à l'adresse collective de BTL et la réponse de BTL dans l'onglet (qui prévient BLMF) restent à voir, sans urgence. Les clôtures de fin septembre (C20, C21, C22, C24, C25, F16) restent à voir, sans urgence.",
+        "pt": "**O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16. **Visto em 09/10**: correspondência entre bibliotecas (G19, fechado) — fio real BLMF → BTL na tela, sino recebido do lado da BTL; e-mail ao endereço coletivo da BTL e resposta da BTL na aba ainda por ver."
       },
       "f": {
         "fr": [
@@ -5760,7 +5768,8 @@
       "r": [
         "clôtures C20, C21, C22, C24, C25",
         "items C14, C23, G16, E6",
-        "clôture F16"
+        "clôture F16",
+        "clôture G19"
       ],
       "verif": [
         {
@@ -5864,68 +5873,6 @@
         {
           "fr": "**07/10 — effet de bord du redémarrage** : les statistiques d'usage (`pg_stat_*`) sont reparties de zéro à 20:19 ; l'avis de performance passe de 257 à 466 (440 « index inutilisé ») sans que rien ait changé dans la base. B36 en tient compte.",
           "pt": "**07/10 — efeito colateral do reinício**: as estatísticas de uso (`pg_stat_*`) recomeçaram do zero às 20h19; o aviso de desempenho passa de 257 a 466 (440 « índice não usado ») sem que nada tenha mudado no banco. B36 leva isso em conta."
-        }
-      ]
-    },
-    {
-      "id": "G19",
-      "d": "G",
-      "p": "P2",
-      "s": "en-cours",
-      "e": "L",
-      "sk": [
-        "sql",
-        "front",
-        "langue"
-      ],
-      "t": {
-        "fr": "Correspondance entre bibliothèques : un fil dans l'app, un courriel par message, chacune dans sa langue",
-        "pt": "Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua"
-      },
-      "v": {
-        "fr": "Question de Xavier du 07/10 : les coordinations peuvent-elles dialoguer entre elles dans l'app et par courriel ? **Non, vérifié le 07/10** : aucune messagerie libre entre coordinations, ni boîte de réception entre bibliothèques, ni forum, ni liste de diffusion ; aucune fonction Edge ne transmet un message libre d'une coordination à une autre. Ce qui s'en rapproche : l'entraide de `/federacao` (un appel, des offres, un seul aller-retour, la suite dans une salle Framatalk) ; les échanges entre bibliothèques (demande, acceptation ou refus, notes de suivi — le courriel a pour adresse de réponse celle de la plateforme) ; le PEB (seule voie par laquelle une coordination obtient l'adresse d'une autre) ; les assemblées. Un plan en cinq lots a été écrit le 07/10, non commité ; il attend cinq décisions.",
-        "pt": "Pergunta de Xavier em 07/10: as coordenações podem dialogar entre si no app e por e-mail? **Não, verificado em 07/10**: nenhuma mensageria livre entre coordenações. O que mais se aproxima: a ajuda mútua de `/federacao` (um apelo, ofertas, um só ida e volta), os intercâmbios entre bibliotecas (pedido, resposta, notas), o EEB, as assembleias. Um plano em cinco lotes foi escrito em 07/10, não commitado; aguarda cinco decisões."
-      },
-      "w": {
-        "fr": "**Lot 1, données** : `library_conversations` (sujet, créateur·ice, `last_message_at` ; plusieurs fils possibles entre deux mêmes bibliothèques), `library_conversation_participants` (une bibliothèque par ligne, archivage propre à chacune — ouvre la porte aux fils de cercle), `library_messages` (`body` 1 à 4 000 caractères, `lang` limitée aux dix locales, `body_i18n`, `i18n_status`), `library_conversation_reads` ; écritures par RPC DEFINER du schéma `api` seules (ouvrir, envoyer, archiver, marquer lu ; limite de 30 envois par 24 h sur le modèle de `send_message_to_reader` ; garde `current_user`, pas de table temporaire, rien d'exécutable par `anon`) ; lecture par une politique réservée aux coordinations participantes ; index sur chaque clé étrangère, tables classées dans `deploy/bg2-known-tables.txt`, jamais de suppression, seulement l'archivage. **Lot 2, écrans** : un onglet de `BibliotecaPage` (`#tab=correspondance`) — liste des fils, non-lus, archivage, lecture ; « Écrire à une bibliothèque » choisit la destinataire dans `api.public_libraries` ; dix locales d'emblée. **Lot 3, notifications** : déclencheur sur `library_messages` → `fn_dispatch_notify_event` → module `_shared/domain/library-message.ts` ; cloche (une ligne par coordination destinataire, clés i18n, nouveau `link_type` dans `NotificationBell.jsx`) ; courriel à `admin_notification_email` dans la locale de la bibliothèque (`default_locale`), rien si `channel_active = false`, adresses dédoublonnées, le message, sa traduction s'il y en a une, un lien vers le fil ; test sur le modèle de `gazette-monthly-build.test.js`. **Lot 4** : `libraries.read_languages`, les langues que l'équipe lit (pas `langue_fonds`, qui décrit le fonds) ; le formulaire dit « Cette bibliothèque lit : es, pt-BR » et propose une langue commune. **Lot 5** : traduction à l'envoi sur le modèle de `translate-gazette-submission` — mais ces messages sont privés : une case cochée par l'auteur·ice (« joindre une traduction en <langue de la destinataire> »), cochée par défaut sans langue commune, aperçu avant envoi, traduction marquée « automatique » ; traduction à la demande pour les anciens messages. **Plus tard** : fils de cercle ; la réponse par courriel — rien dans AnarBib ne reçoit de courriel aujourd'hui (ni webhook entrant ni IMAP), la première version dit « réponds dans AnarBib » avec le lien.",
-        "pt": "**Lote 1, dados**: `library_conversations`, `library_conversation_participants` (uma biblioteca por linha, arquivamento próprio), `library_messages` (`body`, `lang` nas dez locales, `body_i18n`, `i18n_status`), `library_conversation_reads`; escritas só por RPC DEFINER em `api` (limite de 30 por 24 h), leitura por política das coordenações participantes; índices nas FK, tabelas classificadas no backup, só arquivamento. **Lote 2, telas**: aba `#tab=correspondance` em `BibliotecaPage`, « Escrever a uma biblioteca », dez locales. **Lote 3**: sino e e-mail a `admin_notification_email` na locale da biblioteca. **Lote 4**: `libraries.read_languages`. **Lote 5**: tradução no envio com consentimento da autora, marcada como automática. **Depois**: fios de círculo; resposta por e-mail (nada recebe e-mail hoje)."
-      },
-      "y": {
-        "fr": "Les coordinations n'ont aujourd'hui aucun moyen de s'écrire dans AnarBib hors d'un geste structuré ; elles se cherchent par courriel, quand elles ont l'adresse. Un réseau de bibliothèques qui ne peuvent pas se parler n'est pas un réseau.",
-        "pt": "As coordenações não têm hoje nenhum meio de se escrever no AnarBib fora de um gesto estruturado. Uma rede de bibliotecas que não podem conversar não é uma rede."
-      },
-      "f": {
-        "fr": [
-          "Une coordination écrit à une autre bibliothèque depuis l'app ; chaque coordination destinataire voit le fil et reçoit un courriel dans la locale de sa bibliothèque, avec un lien vers le fil.",
-          "Chaque message garde son texte et sa langue ; une traduction n'existe que si l'auteur·ice l'a demandée à l'envoi, et elle est marquée automatique.",
-          "Rien n'est lisible hors des coordinations des bibliothèques participantes ; rien n'est exécutable par `anon` ; aucun message n'est supprimé, seulement archivé.",
-          "Dix locales, garde i18n, suites SQL et banc de la fonction Edge."
-        ],
-        "pt": [
-          "Uma coordenação escreve a outra biblioteca a partir do app; cada coordenação destinatária vê o fio e recebe um e-mail na locale da sua biblioteca.",
-          "Cada mensagem guarda seu texto e sua língua; uma tradução só existe se a autora a pediu no envio, marcada como automática.",
-          "Nada legível fora das coordenações participantes; nada executável por `anon`; nenhuma mensagem apagada, só arquivada.",
-          "Dez locales, guarda i18n, suítes SQL e bancada da função Edge."
-        ]
-      },
-      "dep": {
-        "fr": "**Lot 0 tranché par Xavier le 08/10** : (1) les coordinations seules lisent et écrivent ; (2) le courriel va à l'adresse collective seule (`admin_notification_email`, locale de la bibliothèque) — la cloche prévient chaque coordination dans sa langue ; (3) traduction automatique des messages privés par l'API Anthropic **avec le consentement de l'auteur·ice à l'envoi** (case, aperçu, traduction marquée automatique) — le lot 5 est gardé ; (4) on commence sans réponse par courriel ; (5) l'onglet s'appelle « Correspondance ». Le lot 1 peut commencer.",
-        "pt": "**Lote 0 decidido por Xavier em 08/10**: só coordenações; e-mail ao endereço coletivo; tradução automática com consentimento; sem resposta por e-mail no início; aba « Correspondência ». O lote 1 pode começar."
-      },
-      "r": [
-        "supabase/functions/_shared/domain/cross_library.ts",
-        "supabase/functions/translate-gazette-submission",
-        "src/pages/FederacaoPage.jsx",
-        "src/components/NotificationBell.jsx"
-      ],
-      "verif": [
-        {
-          "fr": "**08/10 — les cinq décisions prises** (questions posées une à une, réponses de Xavier) : voir « Ce dont ça dépend ». Ordre des lots inchangé : 1 données, 2 écrans, 3 cloche et courriel, 4 langues lues, 5 traduction.",
-          "pt": "**08/10 — as cinco decisões tomadas**; ordem dos lotes inalterada."
-        },
-        {
-          "fr": "**08/10 — lots 1 à 4 livrés, déployés et vérifiés** (lot 1 `3aaf2d2a` à 22 h 54, migration `20261008195923` ; lot 2 `9c9da625` ; lot 3 `67703b6a` à 00 h 18, migration `20261008210528` ; lot 4 `4cc73c57` à 00 h 24 ; lot 4 bis `c8e07879` à 00 h 37). *Lot 1, données* : `library_conversations`, `library_conversation_participants` (archivage propre à chaque bibliothèque, levé par un message nouveau), `library_messages` (corps 1 à 4 000, `lang` parmi les dix locales), `library_conversation_reads` ; RLS sans FORCE, une permissive par table, SELECT seul pour `authenticated`, index de chaque clé étrangère, les quatre tables au flux court de #BG2 (classées au dépôt, posées dans la denylist du poste) ; `api.fn_correspondance_ouvrir / envoyer / archiver / lue` (DEFINER), garde `fn_correspondance_coordonne` = adhésion `coordenador` active — **l'administration du réseau ne lit pas la correspondance (CORR-6)** ; trente messages par personne et 24 h ; dix refus traduits. *Lot 2, écran* : l'onglet « Correspondance » de la page Bibliothèque (coordinations seulement) — fils, non-lus, archivés, fil ouvert (messages par bibliothèque, langue nommée par `Intl`, `lang=` sur chaque corps), réponse, « Écrire à une bibliothèque » (les autres bibliothèques actives non isolées), archiver / rouvrir ; `CorrespondanceSection.jsx`, 27 clés dans les dix locales. *Lot 3, prévenir* : déclencheur AFTER INSERT → `notify-event` → `_shared/domain/correspondance.ts` : la cloche de chaque coordination active des autres bibliothèques du fil, dans sa langue (lien vers l'onglet) ; un courriel à l'adresse collective de chaque bibliothèque, dans sa locale, avec le message, sa langue et « Répondre dans AnarBib » (CORR-2, CORR-4) ; rien si son canal est coupé ; la plateforme écrit, pas la bibliothèque à elle-même ; une bibliothèque `isolated` ne reçoit pas de correspondance (constat de la session voisine). *Lot 4, langues lues* : `libraries.read_languages` (dix locales par CHECK, dédoublonné et ordonné par déclencheur fermé, `GRANT UPDATE` colonne par colonne sous `libraries_staff_update`), déclaré par la coordination à l'onglet Identité (`ReadLanguagesField`, une case par langue nommée dans sa langue) ; en écrivant à une bibliothèque : « Cette bibliothèque lit : … » (ou sa locale si rien n'est déclaré), **langue commune proposée** et présélectionnée, sinon « Aucune langue commune déclarée : écris dans la tienne, le message sera lu tel quel » — **il n'y a pas de traduction automatique**. *Lot 4 bis* (constat de la session voisine, relecture demandée par Xavier) : la liste des fils lisait 200 participations par identité puis tous leurs messages sans limite (plafond `max_rows` de PostgREST : au-delà, dernier message et non-lus faux) → `api.fn_correspondance_fils(uuid)` (DEFINER, coordination seule) rend la liste calculée en base — sujet, dernière activité, autres bibliothèques, dernier message, non-lus de la personne — triée par activité ; l'écran ne lit les messages qu'à l'ouverture d'un fil. *Bancs* : suite SQL `correspondance_lot1` (15 cas, quatre mutants rouges), `correspondance-section-monte`, `read-languages-field`, `correspondance-prevenir` (le vrai module sous esbuild) ; gardes grants, politiques, FK, doctrine, HINT, tutoiement vertes ; audit : six portes, 0029 attendu 428. **Décision de Xavier du 08/10 au soir : pas de traduction automatique** (« limiter au maximum l'usage de LLM pour AnarBib ») tant qu'un outil libre de qualité n'existe pas — **lot 5 gelé**, CORR-3 réécrite au REGISTRE, commentaire de `library_messages` corrigé. **Reste** : plus tard, fils de cercle et réponse par courriel (sans date). Remarque de la session voisine, sans correctif : deux transactions concurrentes peuvent valider leurs messages dans l'ordre inverse de leurs identifiants ; un message validé en second avec un id plus petit compte alors comme lu — rare, accepté. **À voir à l'écran** par deux coordinations (E31) : un fil réel, la cloche et le courriel reçus, les langues lues déclarées.",
-          "pt": "**08/10 — lotes 1 a 4 entregues e verificados** (`3aaf2d2a`, `9c9da625`, `67703b6a`, `4cc73c57`, `c8e07879`). Dados, RPC DEFINER (só coordenações ativas; a administração não lê, CORR-6), aba « Correspondência », sino e e-mail ao endereço coletivo na locale da biblioteca; isoladas excluídas; línguas lidas pela equipe declaradas na Identidade e mostradas a quem escreve, com língua comum proposta — sem tradução automática; lista dos fios calculada no banco. Bancadas: 15 casos SQL + telas. **Decisão de Xavier: sem tradução automática** — lote 5 congelado. **A ver na tela** (E31)."
         }
       ]
     },

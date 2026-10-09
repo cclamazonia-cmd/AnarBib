@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-09** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-09** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 7
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 8 de outubro de 2026 à noite** (`c06f9ed2`, medido em 09/10 às 0h15, depois que a fila da CI esvaziou os commits de 22h46) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 07/10 à noite, `9b95bc63`). Um dia com três sessões: **38 commits**, 11 migrações no repositório das quais **7 aplicadas** (as quatro últimas, de 23h05 a 23h52, ainda esperavam sua passagem pela CI — um commit por vez), 2 313 testes JS e 183 suítes SQL. O que mudou e por quê: **o catálogo** — **−34 fichas, todas por fusão** (duas na tela, depois por migração com acordo de Xavier: cinco tomos catalogados duas vezes, Goldman e Reclus, vinte e cinco fichas relidas uma a uma — DEDUP-15), nenhuma criada, seis rascunhos publicados; **o banco** — quatro tabelas e oito funções da correspondência entre bibliotecas (G19 lote 1, ainda vazias), as funções do H21 lote 6a e de E34, **+5 avisos 0029** (as portas da correspondência, vereditos escritos na auditoria na mesma noite), 40 «índice não usado» a menos porque os contadores zerados em 07/10 vão se enchendo; **as locales** — **607 valores copiados do pt-BR traduzidos em seis lotes** em es, it, de, en (guias, rótulos de campos, placeholders, contadores, painel de empréstimo), e **uma guarda CI com dois caminhos** que impede a recaída (`DOC-I18N-3`, frases nomeadas por chave, palavras por vocabulário de homógrafos, 887 relidos); **o repositório** — +68 chaves, +101 testes, +14 arquivos. **Uma linha de 07/10 estava errada**: a circulação contava «1» empréstimo não arquivado, sempre houve 7 (nenhum tem `archived_at`). **Atualizado nesta versão**: um fechamento-constatação sobre as locales («uma chave presente está traduzida» — falso). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21), a correspondência (G19 lotes 1 a 4bis, entregues esta noite); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar).
 
-**Frescor dos constatos em 2026-10-09.** **40 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, G19, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-09.** **39 itens de 55** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -857,7 +857,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **O que é.** Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item).
 
-**Por que importa.** **O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16.
+**Por que importa.** **O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16. **Visto em 09/10**: correspondência entre bibliotecas (G19, fechado) — fio real BLMF → BTL na tela, sino recebido do lado da BTL; e-mail ao endereço coletivo da BTL e resposta da BTL na aba ainda por ver.
 
 **O que conta como terminado.**
 
@@ -865,7 +865,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Dependências.** Xavier, conectado.
 
-*Remissões : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6` · `clôture F16`*
+*Remissões : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6` · `clôture F16` · `clôture G19`*
 
 #### E32 — Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1)
 
@@ -953,7 +953,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
-| **G19** | Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua | `P2` | Em curso |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1090,29 +1089,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` e `IMP-27` de 29/09, lote 0 entregue em 01/10, depois **H30** e **H31**). Arquivos: **D7** (fechado em 27/09; realização: **D8**).
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
-
-#### G19 — Correspondência entre bibliotecas: um fio no app, um e-mail por mensagem, cada uma na sua língua
-
-`P2` Corrente · Estado : **Em curso** · Carga : várias semanas · O que exige : SQL / PostgreSQL, React / JavaScript, língua materna
-
-**Estado.** Pergunta de Xavier em 07/10: as coordenações podem dialogar entre si no app e por e-mail? **Não, verificado em 07/10**: nenhuma mensageria livre entre coordenações. O que mais se aproxima: a ajuda mútua de `/federacao` (um apelo, ofertas, um só ida e volta), os intercâmbios entre bibliotecas (pedido, resposta, notas), o EEB, as assembleias. Um plano em cinco lotes foi escrito em 07/10, não commitado; aguarda cinco decisões.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** **Lote 1, dados**: `library_conversations`, `library_conversation_participants` (uma biblioteca por linha, arquivamento próprio), `library_messages` (`body`, `lang` nas dez locales, `body_i18n`, `i18n_status`), `library_conversation_reads`; escritas só por RPC DEFINER em `api` (limite de 30 por 24 h), leitura por política das coordenações participantes; índices nas FK, tabelas classificadas no backup, só arquivamento. **Lote 2, telas**: aba `#tab=correspondance` em `BibliotecaPage`, « Escrever a uma biblioteca », dez locales. **Lote 3**: sino e e-mail a `admin_notification_email` na locale da biblioteca. **Lote 4**: `libraries.read_languages`. **Lote 5**: tradução no envio com consentimento da autora, marcada como automática. **Depois**: fios de círculo; resposta por e-mail (nada recebe e-mail hoje).
-
-**Por que importa.** As coordenações não têm hoje nenhum meio de se escrever no AnarBib fora de um gesto estruturado. Uma rede de bibliotecas que não podem conversar não é uma rede.
-
-**O que conta como terminado.**
-
-- Uma coordenação escreve a outra biblioteca a partir do app; cada coordenação destinatária vê o fio e recebe um e-mail na locale da sua biblioteca.
-- Cada mensagem guarda seu texto e sua língua; uma tradução só existe se a autora a pediu no envio, marcada como automática.
-- Nada legível fora das coordenações participantes; nada executável por `anon`; nenhuma mensagem apagada, só arquivada.
-- Dez locales, guarda i18n, suítes SQL e bancada da função Edge.
-
-**Dependências.** **Lote 0 decidido por Xavier em 08/10**: só coordenações; e-mail ao endereço coletivo; tradução automática com consentimento; sem resposta por e-mail no início; aba « Correspondência ». O lote 1 pode começar.
-
-*Remissões : `supabase/functions/_shared/domain/cross_library.ts` · `supabase/functions/translate-gazette-submission` · `src/pages/FederacaoPage.jsx` · `src/components/NotificationBell.jsx`*
 
 ---
 
@@ -1952,6 +1928,7 @@ CI verde. |
 | J9 | 2026-10-08 | **Fechado em 08/10 à palavra de Xavier.** Manual v5: o restante das capturas — 180 posições em recuo pt-BR, IMG-31 a refazer, IMG-08 a confirmar, tudo a recapturar em 900-1000 px. *Histórico*: 07/09 — manuais .md na v1.1 e branch removido (feito); capturas não verificáveis daqui. |
 | F3 | 2026-10-08 | **Fechado em 08/10: Xavier suprimiu `read-pdf` e `mail-i18n-test` no painel — verificado: 50 funções, nenhuma das duas.** Consolidar as funções de notificação redundantes. *Histórico*: 31/08 — `mail-i18n-test` continua implantada (versão 1 566). O repositório tem 50 pastas de funções e 38 declarações `verify_jwt`. 24/09 — `mail-i18n-test` continua no repositório e no `config.toml`, portanto implantada. Desde F7, um só transporte: F1 e esta consolidação ficaram mais baratos. 29/09 — Desde `6f762f8f`, o texto escrito no código dos dois relatórios semanais é lido por `mail-ptbr-voce.test.js` (lista fechada `TEXTE_EN_DUR_PT`): uma função de resumo consolidada deverá entrar nela. **05/10 — vereditos escritos, duas funções retiradas do repositório** (`82afd616`). Recapitulativos, leitores e exportações: separados com razão escrita; `read-pdf` e `mail-i18n-test` retiradas (nenhuma chamada em oito dias). **Falta (Xavier)**: suprimi-las da plataforma. **08/10 — verificado: `read-pdf` e `mail-i18n-test` ainda implantadas.** Xavier as suprime no painel; depois verifico e fecho. |
 | Locales: uma chave presente nos dez arquivos está traduzida | «A paridade das chaves, guardada na CI, basta» (ponto cego 2 da guarda código ↔ locales, nomeado em 27/08 e deixado aberto) | **Falso.** Em 08/10, a aba Livros da catalogação mostrava «Painel de revisão da ficha» em espanhol, italiano e alemão. A varredura «valor estritamente igual ao pt-BR» encontrou **607 valores** copiados tal qual em es, it, de e en — guias por tipo de documento, rótulos de campos, placeholders, mensagens, contadores da página Configurações, estados do painel de empréstimo —, traduzidos em seis commits (`89534f93`, `88b2f408`, `801c3d93`, `fbc82403`, `c6cb5a00`, `be119b1e`) com a terminologia de cada locale (e o «-e» inclusivo do espanhol: «le autore» não é italiano). O vetor: os scripts `i18n-add-*` põem pt-BR nas dez locales para manter a paridade, e o «traduzir depois» não acontece. **Guarda** desde a mesma noite: `locales-valeurs-copiees-de-pt-br.test.js` (`78d9c4b8`, `055cc326`), dois caminhos — frases nomeadas chave a chave, palavras por vocabulário de homógrafos por locale (887, relidos um a um), listas fechadas nos dois sentidos, provada vermelha por mutação; `DOC-I18N-3` no registro (v0.78, v0.79). ca, eo, nl, el não tinham nada a corrigir: seus idênticos são homógrafos. |
+| G19 | 2026-10-09 | As coordenações escrevem umas às outras no AnarBib: lotes 1 a 4 e 4 bis entregues e verificados em 08 e 09/10 (CORR-1 a CORR-6) — dados e RPC só para coordenações ativas (a administração não lê), aba « Correspondência », sino e e-mail ao endereço coletivo das outras bibliotecas do fio, línguas lidas declaradas na Identidade com língua comum proposta, lista calculada no banco. **Primeiro fio real em 09/10**, BLMF → BTL: visto na tela, sino recebido do lado da BTL. **Sem tradução automática** (decisão de Xavier): lote 5 congelado. **Fechado em 09/10 por Xavier.** |
 
 ---
 
@@ -1983,4 +1960,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-09. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-09. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
