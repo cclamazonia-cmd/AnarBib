@@ -97,3 +97,38 @@ Après les trois phases (copie de banc des 1 499 fiches visibles) : **669 fiches
 ## Outils (trace, non exécutés par la CI)
 
 `wd-rapprocher.mjs`, `loc-rapprocher.mjs` et `idref-rapprocher.mjs` (rapprochements, lecture seule, cache disque des réponses), `engendrer-migration.mjs`, `assembler-migration.cjs`, `engendrer-migration-loc.cjs`, `engendrer-migration-idref.cjs`, `etats-historiques.json`. Ils lisent un export des autorités par l'API publique (`authors`) et des notices (`api.catalog_books_public_v2` : auteur principal, année, langue).
+
+## Quatrième phase — des propositions, plus d'écriture d'office (09/10/2026)
+
+**Décision de Xavier du 08/10 (backlog C4)** : le pays vient d'une autorité externe quand l'identité est sûre — des dates
+concordantes, ou deux signaux indépendants — et il est posé en **proposition** dans l'Atelier des autorités
+(`authority_proposals`, `kind = edition`, `fields.country` et, pour Wikidata, `fields.wikidata_id`), jamais d'office.
+
+**Relevé du 09/10** : 675 fiches sans pays (`sans-pays-2026-10-09.txt`), hors les cinq fixtures de formation. Les trois
+passes de septembre sont relues sous cette règle par `c4-candidats.mjs` (Node seul, sans modèle de langue ; Wikidata
+interrogé pour la nationalité `P27` des candidats retenus, `P297` pour le code ISO, `etats-historiques.json` pour les
+États disparus) :
+
+| Ce que disent les passes | Fiches |
+|---|---|
+| introuvables dans Wikidata (et, pour la plupart, à la LC et à IdRef) | 424 |
+| aucun candidat Wikidata à deux signaux | 121 |
+| postérieures au 26/09 : jamais passées | 62 |
+| plusieurs candidats à deux signaux (homonymes) | 22 |
+| acceptées en septembre, mais Wikidata ne donne pas de nationalité | 19 |
+| un candidat à deux signaux, sans nationalité ou sans code ISO | 10 |
+| **un seul candidat à deux signaux, avec nationalité** | **17** |
+| acceptées à la LC avec un lieu de naissance (pays lu à la main) | 4 |
+
+Sur les 21 candidates (`propositions-2026-10-09.csv`), Flor O'Squarr reste exclu (relecture de septembre : Wikidata le
+fait mourir en 1889, il signe en 1892) et Xavier a écarté six homonymes probables (Rockwell → Norman Rockwell, John Lyons,
+Manuel Pérez, Hugo Garcia, Bruno Ribeiro, Paul Kenny). **Quatorze propositions** ont été ouvertes dans l'Atelier le 09/10
+à 21 h 50, par `api.fn_authority_propose` sous le compte de Xavier, échéance le 16/10 — dix Wikidata (Paul Berman US,
+Paul Berthelot FR, Cristina de Campos BR, Paul Carton FR, Henri Dubief FR, Brian Jackson GB, César de Oliveira PT, Jeff
+Stein US, Clément Duval FR, Jaguar BR) et quatre LC (Martín Albornoz ES, Germán Ferrari AR, Miguel Rodríguez MX, Antonio
+Cleber Rudy BR). Chaque motif cite la source, les signaux et les candidats écartés : le relecteur tranche.
+
+**Ce que la règle ne peut pas donner** : 424 fiches introuvables dans les sources ouvertes, 121 sans second signal — le
+critère « moins de 20 % sans pays » reste hors de portée de l'enrichissement automatique (45 % avant, 44 % si les quatorze
+sont acceptées). Les 62 fiches créées depuis le 26/09 n'ont jamais été passées : une passe Wikidata à refaire pour elles,
+avec la même règle, en propositions. Les refus détaillés sont dans `refus-2026-10-09.csv`.

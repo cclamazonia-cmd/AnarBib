@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-09** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-09** · 56 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 2
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 6
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 8 octobre 2026 au soir** (`c06f9ed2`, mesuré le 09/10 à 0 h 15, une fois la file de CI vidée des commits de 22 h 46) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 07/10 au soir, `9b95bc63`). Une journée à trois sessions : **38 commits**, 11 migrations au dépôt dont **7 appliquées** (les quatre dernières, de 23 h 05 à 23 h 52, attendaient encore leur passage de CI — un commit à la fois), 2 313 tests JS et 183 suites SQL. Ce qui a bougé et pourquoi : **le catalogue** — **−34 notices, toutes par fusion** (deux à l'écran, puis par migration sur accord de Xavier : cinq tomes catalogués deux fois, Goldman et Reclus, vingt-cinq notices relues une à une — DEDUP-15), aucune créée, six brouillons publiés ; **la base** — quatre tables et huit fonctions de la correspondance entre bibliothèques (G19 lot 1, encore vides), les fonctions de H21 lot 6a et d'E34, **+5 avis 0029** (les portes de la correspondance, verdicts écrits à l'audit le soir même), 40 « index inutilisé » de moins parce que les compteurs remis à zéro le 07/10 se remplissent ; **les locales** — **607 valeurs copiées de pt-BR traduites en six lots** dans es, it, de, en (guides, libellés de champs, placeholders, compteurs, panneau de prêt), et **une garde CI à deux chemins** qui empêche d'y retomber (`DOC-I18N-3`, phrases nommées par clé, mots par vocabulaire d'homographes, 887 relus) ; **le dépôt** — +68 clés, +101 tests, +14 fichiers. **Une ligne du 07/10 était fausse** : la circulation comptait « 1 » emprunt non archivé, il y en a toujours eu 7 (aucun n'a jamais d'`archived_at`). **Mis à jour dans cette version** : une clôture-constat sur les locales (« une clé présente est traduite » — faux). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21), la correspondance (G19 lots 1 à 4bis, livrés ce soir) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).
 
-**Fraîcheur des constats au 2026-10-09.** **39 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-09.** **39 items sur 56** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Les **17** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -381,7 +381,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C4** | Renseigner les pays manquants des fiches d'autorité (674 sur 1 505 au 27/09) | `P2` | Ouvert |
 | **C15** | Corriger huit notices BTL, livre en main | `P2` | Ouvert |
 | **C16** | Attribuer les couvertures posées avant le 27/09 | `P2` | Ouvert |
-| **C17** | Décider si un numéro d'inventaire supprimé peut être redonné | `P2` | Ouvert |
+| **C17** | Décider si un numéro d'inventaire supprimé peut être redonné | `P2` | À vérifier |
 | **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | Bloqué |
 | **C26** | Réviser et publier les 24 brouillons de l'acervo historique du CCLA (BLMF) | `P2` | Ouvert |
 | **C27** | Indexer les notices que le vocabulaire matière ne couvre pas | `P2` | Ouvert |
@@ -415,7 +415,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Au 29/08, 722 fiches sur 1 305 (55 %) n'avaient pas de `country` ; au 27/09, après trois passes (Wikidata `b418e149`, Library of Congress `abaa4755`, IdRef `62553dc6`), 674 sur 1 505 (45 %).** Or c'est `country` qui pilote la règle d'entrée du nom : sans lui, la détection des doubles patronymes hispaniques ne voit qu'une fraction des cas. Les 22 signalements sont un **plancher**, pas un total.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** **Décision de Xavier du 08/10 : enrichissement Wikidata / Library of Congress / IdRef, proposé en revue** — le pays vient d'une autorité externe quand l'identité est sûre (des dates concordantes, OU deux signaux indépendants : un titre du catalogue et une forme du nom, un identifiant déjà lié…), et il est posé en **proposition** dans l'Atelier des autorités (`authority_proposals`), jamais d'office. Les trois passes automatiques de septembre (`decisions*.csv`) sont la matière : rejouer avec le seuil « deux signaux » sur les 674 restantes, verser les candidates en propositions, et laisser l'Atelier les accepter ou les refuser une à une ; les bibliothèques nationales du Brésil et d'Argentine restent fermées, on ne les contourne pas.
 
@@ -474,11 +474,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C17 — Décider si un numéro d'inventaire supprimé peut être redonné
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
 
 **État.** `CCLA.2026.93`, créé par erreur le 27/09 depuis un poste BLMF sur BTL-TL-000881, a été retiré le 28/09 (`96b4a104`, migration `20260928111729`, exemplaire 2796). Le 29/09, l'exemplaire initial de la notice d'essai « Je suis une légende » a reçu le même numéro, `CCLA.2026.93` (verif d'E6). Ce n'est pas une panne : `fn_next_tombo` rend le plus grand numéro sous le préfixe, plus un (`20260815145252`), et la contrainte `exemplares_unique_tombo` ne vaut qu'entre exemplaires présents. Supprimer le dernier exemplaire d'une série libère donc son numéro. Rien n'écrit si c'est voulu : ni le REGISTRE, ni les specs.
 
-*Vérifié : [object Object]*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** **Décision de Xavier du 08/10 : un numéro donné ne se redonne jamais** (règle a). À écrire au REGISTRE, puis : `fn_next_tombo` rend le plus grand numéro **jamais attribué** sous le préfixe, journal compris — un compteur par préfixe (table `tombo_series`, ou la lecture du journal des exemplaires supprimés `catalog_audit_log`), par une migration testée ; suite SQL : supprimer le dernier exemplaire d'une série, en créer un, le numéro est le suivant, pas le même. Vérifier que l'import (H19, tombos par série) et la création à N exemplaires passent par le même compteur.
 
@@ -897,6 +897,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
 | **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
+| **F25** | Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache | `P1` | Ouvert |
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
 
@@ -938,6 +939,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F25 — Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+
+**État.** **Constaté le 09/10 à 21 h 49** : quatorze propositions ouvertes d'un coup dans l'Atelier (C4) ont déclenché quatorze événements `authority.proposal_opened`, traités en parallèle par `notify-event`, 72 courriels en deux secondes — Resend n'en accepte que dix par seconde (HTTP 429 `rate_limit_exceeded`) : **58 courriels perdus**, 14 passés. Le transport partagé (`_shared/transport/email.ts`, F7) ne rejoue pas un 429 et ne cadence rien ; `safeSendEmail` avale l'échec et `authority.ts` compte `sent++` quand même (la réponse disait « 72 envoyés »). La sonde de santé l'a vu (incident 23, `echecs_recents (58)`, courriel d'alerte à 21 h 50) : le dispositif de F15 a fait son travail, pas le transport. Tout événement qui s'adresse à beaucoup de personnes à la fois (un fil de l'Atelier, une annonce aux coordinations, un rappel groupé) peut reproduire la perte.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Dans `_shared/transport/email.ts` : rejouer un 429 (et un 5xx) avec attente croissante, trois fois, en lisant `retry-after` ; cadencer les envois d'un même appel (au plus huit par seconde) ; rendre un résultat vrai (`ok: false` compté comme tel par les appelants : `authority.ts`, les autres domaines qui font `sent++`). Banc du transport : un faux Resend qui répond 429 deux fois puis 200 → un seul courriel, livré ; 72 destinataires → aucun 429 émis. Puis relire la sonde : l'incident 23 s'est refermé seul.
+
+**Pourquoi ça compte.** Une personne qui ne reçoit pas le courriel ne sait pas qu'une proposition l'attend, qu'une réservation est prête, qu'un mot de passe a été demandé — et le système, lui, a dit « envoyé ». C'est la promesse de F7 (un seul envoi de mail) qui n'est tenue qu'à moitié.
+
+**Ce qui compte comme fini.**
+
+- Un 429 de Resend est rejoué et le courriel finit par partir (banc).
+- Soixante-douze destinataires en un appel ne produisent aucun 429 (banc).
+- Un échec de transport est compté comme un échec par tous les appelants (`sent` vrai).
+
+**Dépendances.** Aucune. Les 58 courriels du 09/10 ne seront pas renvoyés : les propositions restent visibles dans l'Atelier jusqu'au 16/10.
+
+*Renvois : `clôture F7` · `F15` · `C4` · `supabase/functions/_shared/transport/email.ts` · `supabase/functions/_shared/domain/authority.ts`*
 
 ---
 
@@ -1970,4 +1993,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-09. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-08 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `c06f9ed2` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-09. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 56 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-08 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `c06f9ed2` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

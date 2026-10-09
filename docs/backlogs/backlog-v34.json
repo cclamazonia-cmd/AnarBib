@@ -3374,6 +3374,10 @@
         {
           "fr": "**08/10 — tranché par Xavier : « enrichissement Wikidata/LC, proposé en revue ».** L'item passe de la décision au travail (ci-dessus) ; le critère 1 (sous 20 %) se mesure après les acceptations de l'Atelier.",
           "pt": "**08/10 — decidido por Xavier: enriquecimento proposto em revisão.** O item passa da decisão ao trabalho."
+        },
+        {
+          "fr": "**09/10 — la règle rejouée, quatorze propositions dans l'Atelier.** 675 fiches sans pays (hors fixtures de formation). Les trois passes de septembre relues sous la règle « dates concordantes ou deux signaux » (`c4-candidats.mjs`, dans la trace `enrichissement-autorites-2026-09-26`, Wikidata interrogé pour la nationalité) : 424 introuvables, 121 sans second signal, 62 fiches postérieures au 26/09 jamais passées, 22 homonymies à deux signaux, 19 acceptées sans nationalité connue, 17 candidates Wikidata avec pays, 4 LC par lieu de naissance. Flor O'Squarr exclu (relecture de septembre), six homonymes probables écartés par Xavier. **Quatorze propositions ouvertes** (`api.fn_authority_propose`, `edition`, `fields.country` + `wikidata_id`, sous le compte de Xavier, échéance 16/10) : Berman US, Berthelot FR, de Campos BR, Carton FR, Dubief FR, Jackson GB, de Oliveira PT, Stein US, Duval FR, Jaguar BR, Albornoz ES, Ferrari AR, Rodríguez MX, Rudy BR. **Reste** : la revue des quatorze dans l'Atelier ; une passe Wikidata pour les 62 fiches nées depuis le 26/09 (en propositions) ; le critère 1 (sous 20 %) est hors de portée des sources ouvertes (45 % → 44 % si tout est accepté) : à retrancher ou à confier à la revue humaine de C3.",
+          "pt": "**09/10 — regra reaplicada, catorze propostas no Ateliê.** 675 fichas sem país ; passes de setembro relidas (datas concordantes ou dois sinais) : 424 não encontradas, 121 sem segundo sinal, 62 fichas posteriores a 26/09 nunca passadas ; 14 propostas abertas (edition, país + Wikidata), prazo 16/10. Resta a revisão no Ateliê e uma passagem Wikidata para as 62 fichas novas ; o critério « menos de 20 % » está fora do alcance das fontes abertas."
         }
       ]
     },
@@ -3473,7 +3477,7 @@
       "id": "C17",
       "d": "C",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "biblio",
@@ -3518,6 +3522,10 @@
         {
           "fr": "**08/10 — tranché par Xavier : « Jamais redonné ».** L'item passe de la décision au travail : compteur par préfixe et suite SQL (ci-dessus).",
           "pt": "**08/10 — decidido por Xavier: « nunca devolvido ».** O item passa da decisão ao trabalho."
+        },
+        {
+          "fr": "**09/10 — livré, déployé et vérifié à 21 h 59** (`5a5a94d6`, REGISTRE `CAT-E21`). `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), un numéro porté par un exemplaire présent reste à l'unicité que la publication sait rejouer, tout numéro posé entre au registre ; `fn_next_tombo` (réécrite sur sa définition vivante, md5 vérifié) rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` (6 : 001/002 au registre ; 002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; changement vers un numéro libéré : refusé, vers un neuf : accepté, retour au sien : accepté ; numéro d'un exemplaire présent : 23505 ; registre et déclencheurs fermés), mutant sans le registre rouge (4/6). Critère 1 (règle au REGISTRE) et critère 2 (la suite) tenus ; **reste à voir à l'écran** : saisir à la main, dans le formulaire d'exemplaire, un numéro d'un exemplaire supprimé et lire le refus traduit (E31).",
+          "pt": "**09/10 — entregue e verificado às 21 h 59** (`5a5a94d6`, `CAT-E21`). Registro de todos os tombos já dados (`tombos_attribues`), recusa de um tombo liberado por uma exclusão, `fn_next_tombo` sobre o maior tombo já dado. Suíte 6/6, mutante vermelho. Resta ver na tela a recusa traduzida (E31)."
         }
       ]
     },
@@ -5928,6 +5936,56 @@
           "pt": "**08/10 — entregue, instalado, provado no posto** (`2d3c8273`). O checkout `~/anarbib` segue `main` em avanço rápido, só se limpo e sem script em curso; o tiro do espelho o encadeia (18:00, 18:50, 19:50 dom., arranque). Bancada de 9 casos. **Fechamento a decidir por Xavier após um tiro real.**"
         }
       ]
+    },
+    {
+      "id": "F25",
+      "d": "F",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache",
+        "pt": "Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber"
+      },
+      "v": {
+        "fr": "**Constaté le 09/10 à 21 h 49** : quatorze propositions ouvertes d'un coup dans l'Atelier (C4) ont déclenché quatorze événements `authority.proposal_opened`, traités en parallèle par `notify-event`, 72 courriels en deux secondes — Resend n'en accepte que dix par seconde (HTTP 429 `rate_limit_exceeded`) : **58 courriels perdus**, 14 passés. Le transport partagé (`_shared/transport/email.ts`, F7) ne rejoue pas un 429 et ne cadence rien ; `safeSendEmail` avale l'échec et `authority.ts` compte `sent++` quand même (la réponse disait « 72 envoyés »). La sonde de santé l'a vu (incident 23, `echecs_recents (58)`, courriel d'alerte à 21 h 50) : le dispositif de F15 a fait son travail, pas le transport. Tout événement qui s'adresse à beaucoup de personnes à la fois (un fil de l'Atelier, une annonce aux coordinations, un rappel groupé) peut reproduire la perte.",
+        "pt": "**09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23)."
+      },
+      "w": {
+        "fr": "Dans `_shared/transport/email.ts` : rejouer un 429 (et un 5xx) avec attente croissante, trois fois, en lisant `retry-after` ; cadencer les envois d'un même appel (au plus huit par seconde) ; rendre un résultat vrai (`ok: false` compté comme tel par les appelants : `authority.ts`, les autres domaines qui font `sent++`). Banc du transport : un faux Resend qui répond 429 deux fois puis 200 → un seul courriel, livré ; 72 destinataires → aucun 429 émis. Puis relire la sonde : l'incident 23 s'est refermé seul.",
+        "pt": "No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso."
+      },
+      "y": {
+        "fr": "Une personne qui ne reçoit pas le courriel ne sait pas qu'une proposition l'attend, qu'une réservation est prête, qu'un mot de passe a été demandé — et le système, lui, a dit « envoyé ». C'est la promesse de F7 (un seul envoi de mail) qui n'est tenue qu'à moitié.",
+        "pt": "Quem não recebe o e-mail não sabe que algo a espera — e o sistema disse « enviado »."
+      },
+      "f": {
+        "fr": [
+          "Un 429 de Resend est rejoué et le courriel finit par partir (banc).",
+          "Soixante-douze destinataires en un appel ne produisent aucun 429 (banc).",
+          "Un échec de transport est compté comme un échec par tous les appelants (`sent` vrai)."
+        ],
+        "pt": [
+          "Um 429 é repetido e o e-mail parte (bancada).",
+          "72 destinatários num só chamado: nenhum 429.",
+          "Um fracasso de transporte é contado como fracasso por todos os chamadores."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. Les 58 courriels du 09/10 ne seront pas renvoyés : les propositions restent visibles dans l'Atelier jusqu'au 16/10.",
+        "pt": "Nenhuma. Os 58 e-mails de 09/10 não serão reenviados: as propostas ficam no Ateliê até 16/10."
+      },
+      "r": [
+        "clôture F7",
+        "F15",
+        "C4",
+        "supabase/functions/_shared/transport/email.ts",
+        "supabase/functions/_shared/domain/authority.ts"
+      ],
+      "verif": null
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-09** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-09** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 6
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 8 de outubro de 2026 à noite** (`c06f9ed2`, medido em 09/10 às 0h15, depois que a fila da CI esvaziou os commits de 22h46) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 07/10 à noite, `9b95bc63`). Um dia com três sessões: **38 commits**, 11 migrações no repositório das quais **7 aplicadas** (as quatro últimas, de 23h05 a 23h52, ainda esperavam sua passagem pela CI — um commit por vez), 2 313 testes JS e 183 suítes SQL. O que mudou e por quê: **o catálogo** — **−34 fichas, todas por fusão** (duas na tela, depois por migração com acordo de Xavier: cinco tomos catalogados duas vezes, Goldman e Reclus, vinte e cinco fichas relidas uma a uma — DEDUP-15), nenhuma criada, seis rascunhos publicados; **o banco** — quatro tabelas e oito funções da correspondência entre bibliotecas (G19 lote 1, ainda vazias), as funções do H21 lote 6a e de E34, **+5 avisos 0029** (as portas da correspondência, vereditos escritos na auditoria na mesma noite), 40 «índice não usado» a menos porque os contadores zerados em 07/10 vão se enchendo; **as locales** — **607 valores copiados do pt-BR traduzidos em seis lotes** em es, it, de, en (guias, rótulos de campos, placeholders, contadores, painel de empréstimo), e **uma guarda CI com dois caminhos** que impede a recaída (`DOC-I18N-3`, frases nomeadas por chave, palavras por vocabulário de homógrafos, 887 relidos); **o repositório** — +68 chaves, +101 testes, +14 arquivos. **Uma linha de 07/10 estava errada**: a circulação contava «1» empréstimo não arquivado, sempre houve 7 (nenhum tem `archived_at`). **Atualizado nesta versão**: um fechamento-constatação sobre as locales («uma chave presente está traduzida» — falso). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21), a correspondência (G19 lotes 1 a 4bis, entregues esta noite); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar).
 
-**Frescor dos constatos em 2026-10-09.** **39 itens de 55** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-09.** **39 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C17, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I18, I21, I30, I32, I33, K2, K7, K10). Os **17** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -381,7 +381,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Aberto |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
-| **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | Aberto |
+| **C17** | Decidir se um número de tombo apagado pode ser dado de novo | `P2` | A verificar |
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
@@ -415,7 +415,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Em 29/08, 722 fichas de 1 305 (55 %) não tinham `country`; em 27/09, depois de três passagens (Wikidata `b418e149`, Library of Congress `abaa4755`, IdRef `62553dc6`), 674 de 1 505 (45 %).** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** **Decisão de Xavier em 08/10: enriquecimento Wikidata / LC / IdRef, proposto em revisão** — país de autoridade externa quando a identidade é segura, posto como proposta na Oficina, nunca de ofício.
 
@@ -474,11 +474,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C17 — Decidir se um número de tombo apagado pode ser dado de novo
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : biblioteconomia, SQL / PostgreSQL
 
 **Estado.** `CCLA.2026.93`, criado por engano em 27/09 a partir de um posto da BLMF em BTL-TL-000881, foi retirado em 28/09 (`96b4a104`, migração `20260928111729`, exemplar 2796). Em 29/09, o exemplar inicial do registro de ensaio «Je suis une légende» recebeu o mesmo número, `CCLA.2026.93` (verif do E6). Não é uma falha: `fn_next_tombo` devolve o maior número sob o prefixo, mais um (`20260815145252`), e a restrição `exemplares_unique_tombo` só vale entre exemplares presentes. Apagar o último exemplar de uma série libera o seu número. Nada diz se isso é desejado: nem o REGISTRO, nem as specs.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** **Decisão de Xavier em 08/10: um número dado nunca se devolve.** Escrever no REGISTRE; `fn_next_tombo` devolve o maior número já atribuído sob o prefixo, diário incluído; suíte SQL.
 
@@ -897,6 +897,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
 | **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
+| **F25** | Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber | `P1` | Aberto |
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
 
@@ -938,6 +939,28 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
+
+#### F25 — Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber
+
+`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript
+
+**Estado.** **09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23).
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso.
+
+**Por que importa.** Quem não recebe o e-mail não sabe que algo a espera — e o sistema disse « enviado ».
+
+**O que conta como terminado.**
+
+- Um 429 é repetido e o e-mail parte (bancada).
+- 72 destinatários num só chamado: nenhum 429.
+- Um fracasso de transporte é contado como fracasso por todos os chamadores.
+
+**Dependências.** Nenhuma. Os 58 e-mails de 09/10 não serão reenviados: as propostas ficam no Ateliê até 16/10.
+
+*Remissões : `clôture F7` · `F15` · `C4` · `supabase/functions/_shared/transport/email.ts` · `supabase/functions/_shared/domain/authority.ts`*
 
 ---
 
@@ -1960,4 +1983,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-09. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-09. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-08 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `c06f9ed2`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

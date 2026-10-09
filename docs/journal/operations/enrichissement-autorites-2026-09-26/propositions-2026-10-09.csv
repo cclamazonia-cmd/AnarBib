@@ -1,0 +1,22 @@
+id;nom;source;q;libelle;naissance;mort;pays;regle;sig;decision;autres
+10319;Paul Berman;wikidata;Q685711;Paul Berman;1949;;US;P27;biblio+metier;ambiguë;Q85521287 | Q133709929 {biblio}
+10329;Paul Berthelot;wikidata;Q3370632;Paul Berthelot;1881;1910;FR;P27;biblio+anarchisme;ambiguë;Q115004514 {metier}
+10388;Cristina de Campos;wikidata;Q93793957;Cristina de Campos;;;BR;P27;biblio+chercheur;à relire (un seul signal);
+10409;Paul Carton;wikidata;Q3370823;Paul Carton;1875;1947;FR;P27;biblio+metier;ambiguë;Q110211504 {biblio} | Q80720780
+10527;Henri Dubief;wikidata;Q96575696;Henri Dubief;1910;1995;FR;P27;biblio+metier;ambiguë;Q16056005 {biblio}
+10639;Hugo Garcia;wikidata;Q16326124;Hugo García Robles;1931;2013;UY;P27;biblio+metier;ambiguë;Q85767652
+10719;Brian Jackson;wikidata;Q18936006;Brian Jackson;1932;1983;GB;P27;biblio+metier;ambiguë;Q55163166 {chercheur} | Q4964177 {biblio} | Q2402879 | Q4964172 | Q16091880 | Q4964173 | Q100982983 | Q4964167 {biblio}
+10753;Paul Kenny;wikidata;Q7151758;Paul Kenny;1949;;GB;P27;biblio+metier;ambiguë;Q28043419 | Q99592140 | Q110232767 {biblio} | Q106231815 | Q98970822
+10971;Flor O'squarr;wikidata;Q105808686;Charles Flor O'Squarr;1830;1889;BE;P27;biblio+metier;à relire (exclue à la relecture);
+10976;César de Oliveira;wikidata;Q24701338;César de Oliveira;1941;1998;PT;P27;biblio+metier;ambiguë;Q30939636 {metier}
+11023;Manuel Pérez;wikidata;Q16105181;Manuel Pérez;1939;2025;CU;P27;biblio+metier;ambiguë;Q962854 {biblio} | Q1891675 | Q888747 | Q6752808 | Q110226636 {biblio} | Q3299323 {biblio}
+11094;Bruno Ribeiro;wikidata;Q108871706;Bruno Ribeiro;1989;;BR;P27;biblio+metier;ambiguë;Q4979379 {biblio} | Q26214256 {biblio} | Q110946321 | Q61038179 {chercheur} | Q94513743 {chercheur} | Q81319343 {chercheur} | Q92958308 {chercheur}
+11208;Jeff Stein;wikidata;Q6175050;Jeff Stein;1944;;US;P27;biblio+metier;ambiguë;Q114797371 | Q132767437
+11419;Clément Duval;wikidata;Q2556213;Clément Duval;1850;1935;FR;P27;biblio+metier+anarchisme;ambiguë;Q110089466 {biblio} | Q136401623
+11455;John Lyons;wikidata;Q1700903;John Lyons;1932;2020;GB;P27;biblio+metier;ambiguë;Q704704 | Q6245648 | Q2035240 {biblio} | Q6245637 | Q97610137 | Q75849731 | Q6245641 {biblio} | Q6245639
+11472;Jaguar;wikidata;Q6122865;Jaguar;1932;2025;BR;P27;biblio+metier;ambiguë;Q11309692 {biblio} | Q6122859
+11521;Rockwell;wikidata;Q271884;Norman Rockwell;1894;1978;US;P27;biblio+metier;ambiguë;Q1299664 {biblio} | Q108776331
+10223;Martín Albornoz;lc;no2010201643;Albornoz, Martín, 1978-;;;;lieu de naissance LC : Madrid — pays à lire à la main;vedette+preuve;accepte;
+10573;Germán Ferrari;lc;no2007068967;Ferrari, Germán;;;;lieu de naissance LC : Lomas de Zamora, Argentina — pays à lire à la main;vedette+preuve;accepte;
+11115;Miguel Rodríguez;lc;nr91005524;Rodríguez, Miguel, 1953-;;;;lieu de naissance LC : Mexico — pays à lire à la main;vedette+preuve;accepte;
+11127;Antonio Cleber Rudy;lc;no2013098633;Rudy, Antonio Cleber;;;;lieu de naissance LC : Rio Negro (Paraná, Brazil) — pays à lire à la main;vedette+preuve;accepte;
