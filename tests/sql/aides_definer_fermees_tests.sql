@@ -1,6 +1,7 @@
 -- =====================================================================
--- AnarBib — Suite : trente-quatre fonctions SECURITY DEFINER fermées aux
--- comptes connectés (advisor 0029, 451 → 417).
+-- AnarBib — Suite : trente-sept fonctions SECURITY DEFINER fermées aux
+-- comptes connectés (trente-quatre le 06/10, advisor 0029 451 → 417 ; trois
+-- de plus le 09/10, fermées dès leur naissance).
 -- Date : 2026-10-06
 -- Ref  : migration 20261006202320_aides_definer_sans_appelant_fermees
 --
@@ -10,7 +11,7 @@
 -- des déclencheurs, ou personne. La fermeture ne se défend que si cela reste
 -- vrai ; c'est ce que garde la suite :
 --
--- T1 les 34 sont fermées à anon, authenticated et PUBLIC — et existent.
+-- T1 les 37 sont fermées à anon, authenticated et PUBLIC — et existent.
 -- T2 aucune n'a d'appelant sous authenticated : ni politique, ni vue, ni
 --    dépendance de catalogue (hors déclencheur et DEFINER), ni fonction
 --    INVOKER. Si T2 rougit, ce n'est pas la liste qu'il faut corriger : le
@@ -27,6 +28,11 @@
 --    seul, hors des 34). T3 la tient ouverte et DEFINER ; T4 la frappe avec un
 --    compte inconnu et attend le refus métier 42501 `not_coordinator`, jamais
 --    le privilège. Audit : complément du 08/10, compte 0029 attendu 428.
+--    Et ses trois aides, fermées à `service_role` seul dès la migration du
+--    lot 1 — `fn_correspondance_coordonne`, `fn_correspondance_langue`,
+--    `fn_correspondance_poser_message` — rejoignent les fermées (34 → 37) :
+--    T1 et T2 valent pour elles aussi. Leurs seuls appelants sont DEFINER
+--    (`fn_correspondance_lit` et les cinq portes de `api`).
 --
 -- Rien n'est écrit : la suite se termine par un RAISE.
 -- =====================================================================
@@ -76,7 +82,10 @@ DECLARE
     'public.set_library_theme_config(text, text, text, text)',
     'api.revoke_my_reader_card(uuid)',
     'public.discard_book(bigint)',
-    'public.fn_ensure_current_user_profile()'
+    'public.fn_ensure_current_user_profile()',
+    'public.fn_correspondance_coordonne(uuid)',
+    'public.fn_correspondance_langue(text, uuid)',
+    'public.fn_correspondance_poser_message(bigint, uuid, text, text)'
   ];
   c_portes   text[] := ARRAY[
     'api.get_library_institutional_workspace(uuid)',
@@ -98,10 +107,10 @@ DECLARE
   ];
 BEGIN
   -- ── T1 ──────────────────────────────────────────────────────────────
-  v_t := 'T1 les 34 existent et sont fermees a anon, authenticated et PUBLIC';
+  v_t := 'T1 les 37 existent et sont fermees a anon, authenticated et PUBLIC';
   BEGIN
     v_txt := '';
-    IF cardinality(c_fermees) <> 34 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
+    IF cardinality(c_fermees) <> 37 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
     FOREACH v_f IN ARRAY c_fermees LOOP
       v_oid := to_regprocedure(v_f);
       IF v_oid IS NULL THEN v_txt := v_txt || 'absente:' || v_f || ' '; CONTINUE; END IF;
