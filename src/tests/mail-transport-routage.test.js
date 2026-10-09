@@ -30,7 +30,7 @@ let ecrits = [];
 
 let panneResend = false;
 
-function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc' }) {
+function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc', RESEND_RETRY_BASE_MS: '1', RESEND_MIN_INTERVAL_MS: '0' }) {   // F25 : rejeu et cadence réduits au banc
   const src = readFileSync(path.join(FONCTIONS, '_shared/transport/email.ts'), 'utf8');
   const code = transformSync(src, { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 

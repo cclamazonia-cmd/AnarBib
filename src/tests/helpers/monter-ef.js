@@ -53,6 +53,7 @@ export const ENV_BASE = {
   SUPABASE_URL: 'http://stub',
   SUPABASE_SECRET_KEYS: '{"default":"stub"}',
   RESEND_API_KEY: 'stub',
+  RESEND_RETRY_BASE_MS: '1', RESEND_MIN_INTERVAL_MS: '0',   // F25 : le rejeu et la cadence du transport, réduits au banc (un 500 simulé ne coûte pas trois secondes)
 };
 
 const VIDE = { data: null, error: null };

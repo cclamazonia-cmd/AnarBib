@@ -26,6 +26,44 @@ import { masquerAdresse } from "../core/journal-masque.ts";
 //   - corps : champs "html" et "text"
 // DECISION 1 (format de retour) : on retourne res.text() — la string brute,
 // exactement comme sendViaBrevo. safeSendEmail n'a donc rien a adapter.
+// ─── Rejeu et cadence (F25, 09/10/2026) ───────────────────────────────────
+// Resend n'accepte que dix requêtes par seconde. Le 09/10, quatorze propositions
+// d'Atelier versées d'un coup ont fait 72 envois en deux secondes : 58 refusés
+// (HTTP 429 rate_limit_exceeded), et rien ne les rejouait — les appelants
+// comptaient même l'échec comme un envoi. Ici :
+//   - cadence : les envois Resend d'un même isolat sont espacés (huit par
+//     seconde au plus ; RESEND_MIN_INTERVAL_MS, défaut 125) ;
+//   - rejeu : un 429, un 5xx ou une connexion rompue est rejoué jusqu'à trois
+//     fois, après le délai que Resend demande (Retry-After, plafonné à 10 s) ou
+//     une attente croissante avec un aléa (RESEND_RETRY_BASE_MS, défaut 400 :
+//     0,4 s, 0,8 s, 1,6 s) ; un autre 4xx (clé tournée, domaine suspendu,
+//     adresse refusée) n'est pas rejoué, il ne changerait pas.
+// Des isolats en parallèle ne se voient pas : le rejeu couvre ce que la cadence
+// ne peut pas. Un échec après rejeu reste noté dans mail_transport_failures.
+// RESEND_API_URL ne sert qu'au banc (un faux Resend) : absent en production.
+const dormir = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+function entierEnv(nom: string, defaut: number): number {
+  const v = parseInt((Deno.env.get(nom) || "").trim(), 10);
+  return Number.isFinite(v) && v >= 0 ? v : defaut;
+}
+let prochainCreneau = 0;
+async function cadencer(): Promise<void> {
+  const intervalle = entierEnv("RESEND_MIN_INTERVAL_MS", 125);
+  const maintenant = Date.now();
+  const creneau = Math.max(maintenant, prochainCreneau);
+  prochainCreneau = creneau + intervalle;
+  if (creneau > maintenant) await dormir(creneau - maintenant);
+}
+export function rejouable(status: number): boolean {
+  return status === 429 || status === 0 || (status >= 500 && status <= 599);
+}
+export function attenteAvantRejeu(retryAfter: string | null, tentative: number, base: number): number {
+  const ra = parseFloat(String(retryAfter || "").trim());
+  if (Number.isFinite(ra) && ra >= 0) return Math.min(Math.round(ra * 1000), 10000);
+  return Math.min(base * Math.pow(2, tentative), 4000) + Math.floor(Math.random() * Math.min(base, 250));
+}
+const REJEUX_MAX = 3;
+
 function formatAddress(email: string, name?: string): string {
   const n = name?.trim();
   return n ? `${n} <${email}>` : email;
@@ -86,17 +124,35 @@ async function sendViaResend(opts) {
   if (r.replyToEmail) {
     payload.reply_to = formatAddress(r.replyToEmail, r.replyToName);
   }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${RESEND_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Resend HTTP ${res.status}: ${body}`);
-  return body;
+  const url = (Deno.env.get("RESEND_API_URL") || "").trim() || "https://api.resend.com/emails";
+  const base = entierEnv("RESEND_RETRY_BASE_MS", 400);
+  let tentative = 0;
+  for (;;) {
+    await cadencer();
+    let status = 0, body = "", retryAfter: string | null = null;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${RESEND_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      status = res.status; body = await res.text(); retryAfter = res.headers?.get?.("retry-after") ?? null;
+      if (res.ok) return body;
+    } catch (err) {
+      status = 0; body = String((err as Error)?.message ?? err);
+    }
+    if (rejouable(status) && tentative < REJEUX_MAX) {
+      const attente = attenteAvantRejeu(retryAfter, tentative, base);
+      tentative++;
+      console.warn(`[transport] Resend HTTP ${status || "(réseau)"} (label=${opts.label ?? "?"}) : rejeu ${tentative}/${REJEUX_MAX} dans ${attente} ms`);
+      await dormir(attente);
+      continue;
+    }
+    throw new Error(status ? `Resend HTTP ${status}: ${body}` : `Resend injoignable : ${body}`);
+  }
 }
 
 async function sendViaConfiguredSmtp(opts) {

@@ -156,8 +156,8 @@ export async function handleTransparenceEnabled(payload: any) {
       context: ctx,
     });
     const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
-    await safeSendEmail(user, sub, html, text, "user_mail", ctx);
-    sent++;
+    const r = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+    if (r?.ok === true) sent++;   // F25 : un échec de transport n'est pas un envoi
   }
   return { sent, recipients: common.length };
 }
@@ -242,8 +242,8 @@ export async function handleConfigExpanded(payload: any) {
       context: ctx,
     });
     const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
-    await safeSendEmail(user, sub, html, text, "user_mail", ctx);
-    sent++;
+    const r = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+    if (r?.ok === true) sent++;   // F25 : un échec de transport n'est pas un envoi
   }
   return { sent, recipients: userIds.length };
 }
