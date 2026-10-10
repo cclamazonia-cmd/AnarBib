@@ -3112,7 +3112,7 @@
         "E32",
         "2026-10-10",
         {
-          "fr": "Plus aucune icône déclarée en emoji dans `src/` : les 106 déclarations restantes (sept écrans, dont la page « Je veux… ») passent au nom `AppIcon` que la table `LEGACY` leur donnait — même composant Lucide à l'écran —, `LEGACY` et son repli sont retirés d'`AppIcon`, et la garde `appicon-sans-emoji` tient la règle (`391d80c9`, déployé le 10/10 à 21 h 20 ; REGISTRE `IDENT-Q1` ✅). Les glyphes rendus en texte hors `AppIcon` (pastille ✓ / ! de l'encart de régime, bascules du widget d'accessibilité) ne sont pas des icônes et restent. Xavier pratique les écrans ainsi depuis une semaine, rien n'a changé à l'œil. **Clos le 10/10 par Xavier.**",
+          "fr": "Plus aucune icône déclarée en emoji dans `src/` : les 106 déclarations restantes (sept écrans, dont la page « Je veux… ») passent au nom `AppIcon` que la table `LEGACY` leur donnait — même composant Lucide à l'écran —, `LEGACY` et son repli sont retirés d'`AppIcon`, et la garde `appicon-sans-emoji` tient la règle (`391d80c9`, déployé le 10/10 à 21 h 20 ; REGISTRE `IDENT-Q1` ✅). Les glyphes rendus en texte hors `AppIcon` (pastille ✓ / ! de l'encart de régime, bascules du widget d'accessibilité) ne sont pas des icônes et restent. Xavier pratique les écrans ainsi depuis une semaine, rien n'a changé à l'œil. *Régression vue le soir même* : deux pages passaient leurs emojis d'onglet à `AppIcon` par un tableau `[clé, icône]`, hors de la forme `icon:` que la passe cherchait — icône de repli pendant une heure sur l'Atelier et la Fédération ; réparé avec E36 (`5b42c64e`), et la garde lit désormais tout pictogramme seul entre guillemets dans un fichier qui importe `AppIcon`. **Clos le 10/10 par Xavier.**",
           "pt": "Nenhum ícone declarado em emoji em `src/`: as 106 declarações restantes passam ao nome `AppIcon` (mesmo componente na tela), a tabela `LEGACY` sai, a guarda `appicon-sans-emoji` mantém a regra (`391d80c9`, 10/10). **Fechado em 10/10 por Xavier.**"
         }
       ]
@@ -5932,7 +5932,7 @@
       "id": "E36",
       "d": "E",
       "p": "P3",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql",
@@ -5973,7 +5973,12 @@
         "src/components/atelier/ConvRevuePanel.jsx",
         "C4"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**10/10 — livré, déployé et vérifié à 22 h 34** (`5b42c64e`). Neuf fonctions de l'Atelier réécrites sur leur définition vivante (md5, ancre comptée) : `fn_authority_list` lève `error.atelier.reserved`, `conv_revue_resume` / `conv_revue_list` lèvent `error.atelier.reservedStaff`, et les HINT `atelier.error.*` de `fn_authority_propose` / `apply` / `object`, `fn_work_title_validate`, `fn_work_proposal_check`, `fn_authority_split` — que rien ne traduisait, `localizeError` ne lit que `error.*` — deviennent `error.atelier.*` ; vingt-cinq clés dans les dix locales. La page pose la phrase une seule fois sur un 42501 et retire formulaire, file et œuvres. Suite SQL `atelier_reserve` (5, mutant rouge), `atelier_oeuvres` (10) sur les nouveaux noms, test d'écran `atelier-reserve`. Au passage, deux régressions d'E32 réparées : les onglets de l'Atelier et de la Fédération passaient leurs emojis à `AppIcon` par un tableau, hors de la forme que la passe cherchait, et affichaient l'icône de repli depuis le 10/10 à 21 h 20 ; la garde voit désormais un pictogramme seul entre guillemets dans tout fichier qui importe `AppIcon`. **Reste** : ton regard — le lien du courriel, avec le compte lecteur, doit lire la phrase une fois ; et les onglets de la Fédération doivent avoir retrouvé leurs icônes.",
+          "pt": "**10/10 — entregue e verificado às 22 h 34** (`5b42c64e`). Nove funções do Ateliê levantam HINT traduzíveis (`error.atelier.*`, 25 chaves nas dez locales) ; a página mostra a frase uma só vez. Duas regressões do E32 reparadas (abas do Ateliê e da Federação). **Resta** o seu olhar com a conta leitora."
+        }
+      ]
     }
   ]
 }
