@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "Ĝisdatigo de ĉi tiu ekzemplero, preparita de reimporto, atendas revizion: publikigu ĝin aŭ metu ĝin en la rubujon antaŭ ol malfermi alian malneton de ĉi tiu ekzemplero.",
   "error.import.item_update_superseded": "Ekde tiam alia ĝisdatigo de ĉi tiu ekzemplero estis preparita: ĉi tiu malneto ne revenas. Relegu la plej freŝan.",
   "error.import.update_page_too_many_items": "Tro da ekzempleroj de la dosiero por unu sola alvoko (maksimume 5 000): elektu malpli da linioj samtempe.",
-  "error.catalog.tombo.deja_attribue": "Ĉi tiu inventara numero jam estis donita: numero neniam estas donita denove, eĉ post forigo de la ekzemplero kiu portis ĝin. Lasu la kampon malplena por ricevi la sekvan numeron de la serio."
+  "error.catalog.tombo.deja_attribue": "Ĉi tiu inventara numero jam estis donita: numero neniam estas donita denove, eĉ post forigo de la ekzemplero kiu portis ĝin. Lasu la kampon malplena por ricevi la sekvan numeron de la serio.",
+  "catalogacao.copies.title": "Ekzempleroj",
+  "catalogacao.copies.count": "{n, plural, one {# ekzemplero} other {# ekzempleroj}}",
+  "catalogacao.copies.new": "Nova ekzemplero",
+  "catalogacao.copies.unpublished": "La skedo ankoraŭ ne estas publikigita: ĝiaj ekzempleroj naskiĝas ĉe la publikigo, en la nombro indikita sube. Importita ekzemplero jam aperas ĉi tie, ligita al la skedo.",
+  "catalogacao.copies.empty": "Ankoraŭ neniu ekzemplero.",
+  "catalogacao.copies.otherLibrary": "alia biblioteko",
+  "catalogacao.copies.resumeUpdate": "Daŭrigi la ĝisdatigon",
+  "catalogacao.copies.updatePending": "ĝisdatigo kuranta",
+  "catalogacao.copies.loadError": "La ekzempleroj ne povis esti ŝargitaj: {message}",
+  "catalogacao.copies.libraryUnknown": "Nekonata biblioteko"
 }

@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "Een update van dit exemplaar, voorbereid door een herimport, wacht op controle: publiceer ze of zet ze in de prullenbak voor je een ander concept van dit exemplaar opent.",
   "error.import.item_update_superseded": "Sindsdien is een andere update van dit exemplaar voorbereid: dit concept komt niet terug. Lees de recentste na.",
   "error.import.update_page_too_many_items": "Te veel exemplaren uit het bestand voor één aanroep (hoogstens 5 000): selecteer minder regels tegelijk.",
-  "error.catalog.tombo.deja_attribue": "Dit inventarisnummer is al gegeven: een nummer wordt nooit opnieuw gegeven, ook niet nadat het exemplaar dat het droeg is verwijderd. Laat het veld leeg om het volgende nummer van de reeks te krijgen."
+  "error.catalog.tombo.deja_attribue": "Dit inventarisnummer is al gegeven: een nummer wordt nooit opnieuw gegeven, ook niet nadat het exemplaar dat het droeg is verwijderd. Laat het veld leeg om het volgende nummer van de reeks te krijgen.",
+  "catalogacao.copies.title": "Exemplaren",
+  "catalogacao.copies.count": "{n, plural, one {# exemplaar} other {# exemplaren}}",
+  "catalogacao.copies.new": "Nieuw exemplaar",
+  "catalogacao.copies.unpublished": "De fiche is nog niet gepubliceerd: haar exemplaren ontstaan bij publicatie, in het aantal dat hieronder staat. Een geïmporteerd exemplaar staat hier al, gekoppeld aan de fiche.",
+  "catalogacao.copies.empty": "Nog geen exemplaren.",
+  "catalogacao.copies.otherLibrary": "andere bibliotheek",
+  "catalogacao.copies.resumeUpdate": "Bijwerken hervatten",
+  "catalogacao.copies.updatePending": "bijwerken bezig",
+  "catalogacao.copies.loadError": "De exemplaren konden niet worden geladen: {message}",
+  "catalogacao.copies.libraryUnknown": "Onbekende bibliotheek"
 }

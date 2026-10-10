@@ -281,7 +281,7 @@ export default function CatalogacaoPage() {
   // ═══════════════════════════════════════════════════════
 
   // P1.6-b.2 : pré-ciblage de l'attache depuis le bandeau doublon (BookDraftForm).
-  const [attachTarget, setAttachTarget] = useState('');
+  const [attachTarget, setAttachTarget] = useState(null); // { bibRef, nonce } — C29 lot 1
   // Ouverture de la fiche existante depuis le bandeau / la modale « doublon ».
   //
   // PAS de 'noopener' ici, et c'est délibéré. Les sessions STAFF vivent dans
@@ -303,7 +303,7 @@ export default function CatalogacaoPage() {
     if (!bookId) return;
     try {
       const { data } = await supabase.from('books').select('bib_ref').eq('id', Number(bookId)).single();
-      if (data?.bib_ref) setAttachTarget(String(data.bib_ref));
+      if (data?.bib_ref) setAttachTarget({ bibRef: String(data.bib_ref), nonce: Date.now() });
     } catch {}
     switchTab('indexPanel');
   }
@@ -523,7 +523,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm panelActive={activeTab === 'booksPanel'} batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} onEditExemplar={editPublishedExemplar} onOpenDraft={(id) => openForEdit('book', id)} />
+            <BookDraftForm panelActive={activeTab === 'booksPanel'} batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} onEditExemplar={editPublishedExemplar} onEditExemplarDraft={(id) => openForEdit('exemplar', id)} onOpenDraft={(id) => openForEdit('book', id)} />
           </div>
 
           {/* 2. Autoria */}
@@ -533,7 +533,7 @@ export default function CatalogacaoPage() {
 
           {/* 3. Indexação (exemplar + rótulo) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
-            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} onNavigateTab={switchTab} />
+            <ExemplarDraftForm mode={mode} batches={batches} prefill={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} onNavigateTab={switchTab} />
           </div>
 
           {/* 3b. Etiquetas (impressão das etiquetas de cote) */}

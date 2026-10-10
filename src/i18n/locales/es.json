@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "Una actualización de este ejemplar, preparada por una reimportación, espera su revisión: publícala o mándala a la papelera antes de abrir otro borrador de este ejemplar.",
   "error.import.item_update_superseded": "Desde entonces se preparó otra actualización de este ejemplar: este borrador no vuelve. Revisa la más reciente.",
   "error.import.update_page_too_many_items": "Demasiados ejemplares del archivo para una sola llamada (5 000 como máximo): selecciona menos líneas a la vez.",
-  "error.catalog.tombo.deja_attribue": "Este número de inventario ya fue dado: un número nunca se vuelve a dar, ni siquiera después de borrar el ejemplar que lo llevaba. Deja el campo vacío para recibir el siguiente número de la serie."
+  "error.catalog.tombo.deja_attribue": "Este número de inventario ya fue dado: un número nunca se vuelve a dar, ni siquiera después de borrar el ejemplar que lo llevaba. Deja el campo vacío para recibir el siguiente número de la serie.",
+  "catalogacao.copies.title": "Ejemplares",
+  "catalogacao.copies.count": "{n, plural, one {# ejemplar} other {# ejemplares}}",
+  "catalogacao.copies.new": "Nuevo ejemplar",
+  "catalogacao.copies.unpublished": "La ficha aún no está publicada: sus ejemplares nacen al publicar, en el número indicado más abajo. Un ejemplar importado ya aparece aquí, vinculado a la ficha.",
+  "catalogacao.copies.empty": "Ningún ejemplar por ahora.",
+  "catalogacao.copies.otherLibrary": "otra biblioteca",
+  "catalogacao.copies.resumeUpdate": "Retomar la actualización",
+  "catalogacao.copies.updatePending": "actualización en curso",
+  "catalogacao.copies.loadError": "No se pudieron cargar los ejemplares: {message}",
+  "catalogacao.copies.libraryUnknown": "Biblioteca desconocida"
 }

@@ -31,7 +31,7 @@ function getTrigram(name) {
   return clean ? clean.slice(0,3).padEnd(3,'X') : '---';
 }
 
-export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged, onNavigateTab }) {
+export default function ExemplarDraftForm({ mode, batches, prefill = null, editingId = null, onConsumed, onChanged, onNavigateTab }) {
   const { formatMessage: t } = useIntl();
   const confirmer = useConfirm();
   const { user } = useAuth();
@@ -221,13 +221,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   // P1.6-b.2 : pré-ciblage depuis le bandeau doublon — CatalogacaoPage passe le bib_ref
   // de la ficha existante ; on prépare un exemplaire neuf pointant dessus.
+  // C29 lot 1 : { bibRef, nonce } — le nonce rejoue la cible quand on redemande
+  // un exemplaire de la MÊME notice (une chaîne égale ne relançait pas l'effet).
   useEffect(() => {
-    if (!prefillBibRef) return;
+    if (!prefill?.bibRef) return;
     resetForm();
-    set('target_bib_ref', prefillBibRef);
-    resolveParentBook(prefillBibRef);
+    set('target_bib_ref', prefill.bibRef);
+    resolveParentBook(prefill.bibRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefillBibRef]);
+  }, [prefill?.bibRef, prefill?.nonce]);
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {

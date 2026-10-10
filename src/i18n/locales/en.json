@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "An update of this copy, prepared by a re-import, is awaiting review: publish it or move it to the trash before opening another draft of this copy.",
   "error.import.item_update_superseded": "Another update of this copy has been prepared since: this draft does not come back. Check the most recent one.",
   "error.import.update_page_too_many_items": "Too many copies in the file for a single call (5,000 at most): select fewer rows at a time.",
-  "error.catalog.tombo.deja_attribue": "This inventory number has already been given: a number is never given again, even after the copy that carried it was deleted. Leave the field empty to receive the next number in the series."
+  "error.catalog.tombo.deja_attribue": "This inventory number has already been given: a number is never given again, even after the copy that carried it was deleted. Leave the field empty to receive the next number in the series.",
+  "catalogacao.copies.title": "Copies",
+  "catalogacao.copies.count": "{n, plural, one {# copy} other {# copies}}",
+  "catalogacao.copies.new": "New copy",
+  "catalogacao.copies.unpublished": "The record is not published yet: its copies are created on publication, in the number given below. An imported copy already appears here, attached to the record.",
+  "catalogacao.copies.empty": "No copies yet.",
+  "catalogacao.copies.otherLibrary": "other library",
+  "catalogacao.copies.resumeUpdate": "Resume the update",
+  "catalogacao.copies.updatePending": "update in progress",
+  "catalogacao.copies.loadError": "The copies could not be loaded: {message}",
+  "catalogacao.copies.libraryUnknown": "Unknown library"
 }

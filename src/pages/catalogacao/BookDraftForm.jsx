@@ -14,6 +14,7 @@ import ContributorsPanel from './ContributorsPanel';
 import ReviewPanel from './ReviewPanel';
 import ShelfLabelPreview from './ShelfLabelPreview';
 import InitialCopiesBlock from './InitialCopiesBlock';
+import ExemplaresPanel from './ExemplaresPanel';
 import ReassignPanel from './ReassignPanel';
 import InfoCards from './InfoCards';
 import DivergencesNotice from '@/components/catalog/DivergencesNotice';
@@ -40,7 +41,7 @@ import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATE
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true, onOpenDraft }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, onEditExemplarDraft, prefillRecord = null, prefillFile = null, panelActive = true, onOpenDraft }) {
   const { formatMessage: t } = useIntl();
   const confirmer = useConfirm();
   const { user } = useAuth();
@@ -2405,6 +2406,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {/* ═══ Recursos digitais vinculados (E6 lot 2 : DigitalResourcesPanel) ═══ */}
           <DigitalResourcesPanel draftId={f('id')} ownerLibraryId={f('owner_library_id')} resources={digitalResources}
             onChanged={() => loadDigitalResources(f('id'))} setMsg={setMsg} />
+
+          {/* ═══ Exemplaires de la notice (C29 lot 1 : ExemplaresPanel) ═══ */}
+          <ExemplaresPanel publishedBookId={form.published_book_id} draftId={f('id')} reloadKey={importedCheck}
+            onNewCopy={onAttachToBook} onEditPublished={onEditExemplar} onEditDraft={onEditExemplarDraft} />
 
           {/* ═══ MARC JSON (registry-driven, tier 3) ═══ */}
           {rrf('marc_json')}

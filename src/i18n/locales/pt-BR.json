@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "Uma atualização deste exemplar, preparada por uma reimportação, aguarda revisão: publique-a ou mande-a para a lixeira antes de abrir outro rascunho deste exemplar.",
   "error.import.item_update_superseded": "Outra atualização deste exemplar foi preparada desde então: este rascunho não volta. Revise a mais recente.",
   "error.import.update_page_too_many_items": "Exemplares do arquivo demais para uma única chamada (no máximo 5 000): selecione menos linhas de cada vez.",
-  "error.catalog.tombo.deja_attribue": "Este número de tombo já foi dado: um número nunca é dado de novo, mesmo depois de apagar o exemplar que o tinha. Deixe o campo vazio para receber o próximo número da série."
+  "error.catalog.tombo.deja_attribue": "Este número de tombo já foi dado: um número nunca é dado de novo, mesmo depois de apagar o exemplar que o tinha. Deixe o campo vazio para receber o próximo número da série.",
+  "catalogacao.copies.title": "Exemplares",
+  "catalogacao.copies.count": "{n, plural, one {# exemplar} other {# exemplares}}",
+  "catalogacao.copies.new": "Novo exemplar",
+  "catalogacao.copies.unpublished": "A ficha ainda não foi publicada: seus exemplares nascem na publicação, no número indicado mais abaixo. Um exemplar importado já aparece aqui, vinculado à ficha.",
+  "catalogacao.copies.empty": "Nenhum exemplar por enquanto.",
+  "catalogacao.copies.otherLibrary": "outra biblioteca",
+  "catalogacao.copies.resumeUpdate": "Retomar a atualização",
+  "catalogacao.copies.updatePending": "atualização em curso",
+  "catalogacao.copies.loadError": "Não foi possível carregar os exemplares: {message}",
+  "catalogacao.copies.libraryUnknown": "Biblioteca desconhecida"
 }

@@ -7387,5 +7387,15 @@
   "error.catalog.item_update_pending": "Un aggiornamento di questo esemplare, preparato da una reimportazione, attende la revisione: pubblicalo o mettilo nel cestino prima di aprire un’altra bozza di questo esemplare.",
   "error.import.item_update_superseded": "Da allora è stato preparato un altro aggiornamento di questo esemplare: questa bozza non torna. Rileggi il più recente.",
   "error.import.update_page_too_many_items": "Troppi esemplari del file per una sola chiamata (5 000 al massimo): seleziona meno righe alla volta.",
-  "error.catalog.tombo.deja_attribue": "Questo numero d’inventario è già stato dato: un numero non si ridà mai, nemmeno dopo la cancellazione dell’esemplare che lo portava. Lascia il campo vuoto per ricevere il numero successivo della serie."
+  "error.catalog.tombo.deja_attribue": "Questo numero d’inventario è già stato dato: un numero non si ridà mai, nemmeno dopo la cancellazione dell’esemplare che lo portava. Lascia il campo vuoto per ricevere il numero successivo della serie.",
+  "catalogacao.copies.title": "Esemplari",
+  "catalogacao.copies.count": "{n, plural, one {# esemplare} other {# esemplari}}",
+  "catalogacao.copies.new": "Nuovo esemplare",
+  "catalogacao.copies.unpublished": "La scheda non è ancora pubblicata: i suoi esemplari nascono alla pubblicazione, nel numero indicato più sotto. Un esemplare importato compare già qui, legato alla scheda.",
+  "catalogacao.copies.empty": "Nessun esemplare per ora.",
+  "catalogacao.copies.otherLibrary": "altra biblioteca",
+  "catalogacao.copies.resumeUpdate": "Riprendere l’aggiornamento",
+  "catalogacao.copies.updatePending": "aggiornamento in corso",
+  "catalogacao.copies.loadError": "Impossibile caricare gli esemplari: {message}",
+  "catalogacao.copies.libraryUnknown": "Biblioteca sconosciuta"
 }
