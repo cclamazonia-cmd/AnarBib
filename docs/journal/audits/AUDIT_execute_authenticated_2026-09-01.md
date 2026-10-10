@@ -2043,3 +2043,20 @@ reste. Pas de nouvelle table, pas de politique. Au passage, `create_exemplar_dra
 copie désormais `circulation_policy` et `visibility` : un exemplaire « équipe uniquement » ne repassait public à la republication que
 par ce défaut de copie. Suite `c29_exemplaire_modifier_et_publier_tests` (9 cas : droits, garde, champs permis, brouillon vivant,
 atomicité). Comptes attendus, `public` + `api` : **0029 = 429** (428 le 09/10 au soir), **0028 = 29** (inchangé).
+
+### Complément du 10/10 — H21 lot 7 (`1dad4713`, migration `20261010212650`)
+
+Quatre portes nouvelles pour `authenticated`, aucune pour `anon`, toutes
+SECURITY DEFINER avec `search_path`, gardées par `ingest.fn_h21_acces_retraits` :
+coordination de la bibliothèque du run (bibliothèque active) ou administration du
+réseau ; un dépôt compagnon ou un entrepôt OAI passe à l'administration seule.
+Les aides `ingest.fn_h21_*` du lot et les fonctions de déclencheur sont fermées.
+
+| Fonction | Né le | Garde en plus | Verdict |
+|---|---|---|---|
+| `public.fn_import_set_export_complet(bigint, boolean)` | 10/10 (H21 lot 7) | run `uploaded`, jamais démarré, rien au journal d'envoi | **Saine.** Pose ou retire le drapeau « export complet » du run, avec qui et quand ; aucune écriture au catalogue. |
+| `public.fn_import_confirmer_export_complet(bigint)` | 10/10 (H21 lot 7) | exige le drapeau | **Saine.** Trace la confirmation du seuil (qui, quand) ; aucune écriture au catalogue. |
+| `public.fn_import_retraits(bigint, integer, integer)` | 10/10 (H21 lot 7) | pages de 200 | **Saine.** Lecture seule du constat des disparus du run. |
+| `public.fn_import_proposer_retraits(bigint)` | 10/10 (H21 lot 7) | verrou du run et verrou d'avis par bibliothèque ; 1 000 brouillons au plus par appel ; seul le fichier actuel de la source | **Saine.** Crée des brouillons de retrait ou de levée dans le lot du run ; le marqueur ne se pose qu'à leur publication, après révision, sous la garde de `publish_exemplar_draft`. |
+
+Compte attendu au prochain relevé : 0029 = **433** (428 + 4 de ce lot + 1 de C29, `fn_exemplaire_modifier_et_publier` ; compté en production le 10/10 par l’équivalent SQL public + api) ; 0028 inchangé.
