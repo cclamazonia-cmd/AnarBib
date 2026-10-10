@@ -5815,6 +5815,53 @@
           "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
         }
       ]
+    },
+    {
+      "id": "E36",
+      "d": "E",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql",
+        "react"
+      ],
+      "t": {
+        "fr": "L'Atelier dit « erreur technique (42501) » à un compte sans rôle d'équipe, au lieu de « réservé aux équipes du réseau »",
+        "pt": "O Ateliê diz « erro técnico (42501) » a uma conta sem papel de equipe, em vez de « reservado às equipes da rede »"
+      },
+      "v": {
+        "fr": "**Constaté par Xavier le 10/10** : le lien « Abrir o Ateliê » d'un courriel de proposition, ouvert dans un navigateur où un compte lecteur était connecté, affiche deux fois « Une erreur technique est survenue. Réessaie ; si le problème persiste, préviens l'équipe. (42501) » — pour la liste des propositions (`api.fn_authority_list`) et pour la file de vérification (`api.conv_revue_resume`, `conv_revue_list`). Les RPC lèvent bien 42501 « Atelier reservado a quem participa da rede », mais sans `HINT` traduisible ; `localizeError` retombe sur le message générique. La garde est juste (équipes, contributeurs du réseau, administration) : c'est le mot qui manque. Au passage, `fn_authority_propose` et `fn_authority_apply` lèvent avec les HINT `atelier.error.notContributor` / `atelier.error.notStaff`, qui n'existent dans aucune locale.",
+        "pt": "**Constatado por Xavier em 10/10**: o link de um e-mail de proposta, aberto num navegador com uma conta leitora, mostra duas vezes « erro técnico (42501) ». As RPC levantam 42501 sem HINT traduzível. Os HINT `atelier.error.notContributor` / `notStaff` não existem em nenhuma locale."
+      },
+      "w": {
+        "fr": "Dans `fn_authority_list`, `conv_revue_resume` et `conv_revue_list`, lever avec `hint = 'atelier.error.reserved'` ; poser la clé dans les dix locales (« L'Atelier des autorités est réservé aux équipes des bibliothèques, aux contributeurs du réseau et à l'administration. Connecte-toi avec un compte d'équipe. »), ainsi que `atelier.error.notContributor` et `atelier.error.notStaff` déjà cités par `fn_authority_propose` / `fn_authority_apply`. La page affiche le message à la place de la file, sans le répéter deux fois. Garde HINT ⇒ clé dans les dix locales (existante) ; test d'écran : un compte sans rôle lit la phrase.",
+        "pt": "Levantar com `hint = 'atelier.error.reserved'` nas três RPC ; chave nas dez locales, mais `notContributor` e `notStaff` ; a página mostra a frase uma só vez."
+      },
+      "y": {
+        "fr": "Une personne qui arrive par un courriel et lit « erreur technique » croit à une panne et prévient l'équipe ; il n'y a pas de panne, il y a un compte qui n'est pas le bon.",
+        "pt": "Quem chega por um e-mail e lê « erro técnico » acha que há uma pane ; não há pane, há a conta errada."
+      },
+      "f": {
+        "fr": [
+          "Un compte sans rôle d'équipe lit, sur /atelier-autoridades, une phrase qui dit à qui l'Atelier est réservé, une seule fois.",
+          "Les HINT cités par les RPC de l'Atelier existent dans les dix locales (garde CI verte)."
+        ],
+        "pt": [
+          "Uma conta sem papel lê uma frase que diz a quem o Ateliê é reservado.",
+          "Os HINT das RPC do Ateliê existem nas dez locales."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "src/pages/atelier/AtelierAutoridadesPage.jsx",
+        "src/components/atelier/ConvRevuePanel.jsx",
+        "C4"
+      ],
+      "verif": null
     }
   ]
 }

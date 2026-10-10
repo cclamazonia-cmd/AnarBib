@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-10** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-10** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 9 de outubro de 2026 à noite** (`47781985`, medido às 22h15 — pedido em `d116d42d`, dois commits depois C17 estava entregue e sua migração aplicada: o levantamento os inclui) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 08/10 à noite, `c06f9ed2`). **A CI está em dia com a cabeça do branch**: 454 migrações aplicadas = 454 no repositório, as quatro que esperavam ontem à noite passaram, mais H21 lote 6b, os tomos II e III de *Acción directa* e C17. O que mudou e por quê: **o catálogo** — −3 fichas, todas por fusão (dois tomos reunidos por migração com acordo de Xavier, uma fusão às 21h46), nenhuma criada, quatro retomadas publicadas; **o banco** — +25 funções (H21 lote 6b em `ingest`, C17 com seu registro `tombos_attribues`, a lista dos fios de correspondência), mais duas tabelas fechadas (daí +2 avisos 0008), **0029 em 428, exatamente a contagem esperada pela auditoria**, e a guarda CI dos DEFINER de lista fechada estendida à correspondência (uma porta, três ajudas); **a rede** — a correspondência vive (um fio, duas mensagens, BLMF para BTL), G19 fechado por Xavier; **o repositório** — +12 commits, +40 chaves, +39 testes, +2 suítes SQL, C17 entregue (um número de tombo nunca se redá). **Atualizado nesta versão**: C17 fechado por decisão de Xavier (os dois critérios cumpridos, o olhar na tela levado por E31). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração — a migração desta noite permite), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21; a recusa traduzida de um número liberado, C17); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar).
 
-**Frescor dos constatos em 2026-10-10.** **37 itens de 52** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-10.** **37 itens de 53** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -668,6 +668,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
+| **E36** | O Ateliê diz « erro técnico (42501) » a uma conta sem papel de equipe, em vez de « reservado às equipes da rede » | `P3` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -843,6 +844,27 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Xavier, conectado.
 
 *Remissões : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6` · `clôture F16` · `clôture G19`*
+
+#### E36 — O Ateliê diz « erro técnico (42501) » a uma conta sem papel de equipe, em vez de « reservado às equipes da rede »
+
+`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, react
+
+**Estado.** **Constatado por Xavier em 10/10**: o link de um e-mail de proposta, aberto num navegador com uma conta leitora, mostra duas vezes « erro técnico (42501) ». As RPC levantam 42501 sem HINT traduzível. Os HINT `atelier.error.notContributor` / `notStaff` não existem em nenhuma locale.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Levantar com `hint = 'atelier.error.reserved'` nas três RPC ; chave nas dez locales, mais `notContributor` e `notStaff` ; a página mostra a frase uma só vez.
+
+**Por que importa.** Quem chega por um e-mail e lê « erro técnico » acha que há uma pane ; não há pane, há a conta errada.
+
+**O que conta como terminado.**
+
+- Uma conta sem papel lê uma frase que diz a quem o Ateliê é reservado.
+- Os HINT das RPC do Ateliê existem nas dez locales.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `src/pages/atelier/AtelierAutoridadesPage.jsx` · `src/components/atelier/ConvRevuePanel.jsx` · `C4`*
 
 ---
 
@@ -1899,4 +1921,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-10. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-09 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `47781985`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-10. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-09 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `47781985`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
