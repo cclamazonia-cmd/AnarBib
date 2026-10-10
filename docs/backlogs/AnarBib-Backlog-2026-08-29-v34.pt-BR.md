@@ -578,9 +578,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, SQL / PostgreSQL
 
-**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce.
+**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce. **Lote 2 entregue em 10/10 (`1820b2e1`)**: « Novo exemplar » abre no painel um formulário curto em quatro tempos — onde (lista fechada das bibliotecas em que se é da equipe; uma só → escolhida de antemão), localização (número proposto por `fn_next_tombo`, editável), circulação e visibilidade herdadas da ficha, detalhes dobrados. « Salvar e publicar » cria o rascunho e chama `publish_exemplar_draft` tal como está; recusa → o rascunho fica e a lista o mostra.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Quatro lotes. *(1)* O painel « Exemplares » na notícia, em leitura, que leva ao editor já apontado. *(2)* O formulário curto no painel, só criação, em quatro tempos que se abrem um após o outro: onde, arrumação, circulação e visibilidade herdadas, e um painel dobrado. *(3)* « Editar » um exemplar publicado sem ver o rascunho: uma RPC encadeia rascunho, atualização e publicação numa transação, chamando `publish_exemplar_draft` tal como está. *(4)* O painel substitui `InitialCopiesBlock`; a aba guarda a massa e deixa de ser a porta de entrada.
 
@@ -589,14 +589,14 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **O que conta como terminado.**
 
 - Da ficha, veem-se todos os exemplares por biblioteca, publicados e em rascunho, e chega-se ao editor num clique (lote 1 — feito em 10/10).
-- Um exemplar se cria sem sair da ficha, em quatro tempos; o texto livre « Biblioteca » sumiu (lote 2).
+- Um exemplar se cria sem sair da ficha, em quatro tempos; o texto livre « Biblioteca » sumiu (lote 2 — feito em 10/10).
 - Mudar a localização de um exemplar publicado é um gesto: a RPC encadeia rascunho, atualização e publicação, provada por uma suíte SQL (lote 3).
 - Um só caminho de criação: o painel substitui os exemplares iniciais (lote 4).
 - Visto na tela por Xavier, conectado (E31).
 
 **Dependências.** Nada para os lotes 1 e 2 (só front, dez locales de saída). O lote 3 pede uma migração, sua suíte SQL e seu « Complemento » na auditoria das DEFINER. O lote 4 toca `publish_book_draft`.
 
-*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)`*
+*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)` · ``scripts/i18n-add-c29-lot2-formulaire-court.cjs``*
 
 ---
 
