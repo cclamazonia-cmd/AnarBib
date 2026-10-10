@@ -10,6 +10,7 @@
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import BadgeRetire from '@/components/catalog/BadgeRetire';
 
 export default function InfoCards({ publishedBookId, catalogLibraries, libraryId, contributors, onNavigateTab, onEditExemplar }) {
   const { formatMessage: t } = useIntl();
@@ -28,7 +29,7 @@ export default function InfoCards({ publishedBookId, catalogLibraries, libraryId
       if (cancelled) return;
       if (!holdings || holdings.length === 0) { setLinkedExemplars([]); setMyExemplars([]); return; }
       const { data: exs } = await supabase.from('exemplares')
-        .select('id, library_id, tombo, shelf_location')
+        .select('id, library_id, tombo, shelf_location, retire_at')
         .in('holding_id', holdings.map(h => h.id));
       if (cancelled) return;
       const byLib = {};
@@ -41,7 +42,7 @@ export default function InfoCards({ publishedBookId, catalogLibraries, libraryId
       // Exemplaires de la bibliothèque active, triés par tombo (ordre naturel).
       const mine = (exs || [])
         .filter(e => e.library_id === libraryId)
-        .map(e => ({ id: e.id, tombo: e.tombo || '', shelf_location: e.shelf_location || '' }))
+        .map(e => ({ id: e.id, tombo: e.tombo || '', shelf_location: e.shelf_location || '', retire_at: e.retire_at || null }))
         .sort((a, b) => a.tombo.localeCompare(b.tombo, undefined, { numeric: true, sensitivity: 'base' }));
       setMyExemplars(mine);
     })();
@@ -105,6 +106,8 @@ export default function InfoCards({ publishedBookId, catalogLibraries, libraryId
                         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }}
                         title={ex.shelf_location || undefined}>
                         <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ex.tombo || '—'}</span>
+                        {/* H21 lot 7 : sorti du catalogue d'origine */}
+                        <BadgeRetire exemplaire={ex} />
                         <span style={{ ...pillStyle, color: 'var(--brand-color-primary,#c0392b)', fontWeight: 700 }} aria-hidden="true">→</span>
                       </div>
                     );

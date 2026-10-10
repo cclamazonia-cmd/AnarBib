@@ -62,6 +62,9 @@ export default function ImportWizard() {
   const [sources, setSources] = useState([]);
   const [sourceId, setSourceId] = useState('');
   const [file, setFile] = useState(null);
+  // H21 lot 7 (09/10/2026, IMP-26 f) : « export complet » déclaré au dépôt,
+  // avant le dispatch (fn_import_set_export_complet), jamais après.
+  const [exportComplet, setExportComplet] = useState(false);
   // fontes
   const [isbn, setIsbn] = useState('');
   const [candidates, setCandidates] = useState([]);
@@ -162,6 +165,13 @@ export default function ImportWizard() {
       assertRpcOk(created);
       const newRunId = created?.run_id;
       if (!newRunId) throw new Error(t({ id: 'importacoes.noRunId' }));
+      if (exportComplet) {
+        const { data: completData, error: completErr } = await supabase.rpc('fn_import_set_export_complet', {
+          p_run_id: Number(newRunId), p_export_complet: true,
+        });
+        if (completErr) throw completErr;
+        assertRpcOk(completData);
+      }
       // DOC-RPC-4, même défaut qu'en ligne 360 d'ImportacoesPage : six refus
       // levés entre `fn_import_dispatch` et le relais `ingest.fn_dispatch_...`,
       // et aucun n'était attrapé. Ici l'assistant enchaînait sur l'étape 3 en
@@ -343,6 +353,15 @@ export default function ImportWizard() {
                 <span className="imp-note">{t({ id: 'importacoes.wizard.source.fileLabel' })}</span>
                 <input type="file" accept=".csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.marc,.iso,.marcxml,.xml,.json,.zip" onChange={(e) => setFile(e.target.files?.[0] || null)} disabled={busy} />
                 <span className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.wizard.source.fondsHint' })}</span>
+              </label>
+              <label className="imp-note" data-testid="wizard-export-complet"
+                style={{ display: 'flex', gap: 8, alignItems: 'flex-start', cursor: 'pointer' }}>
+                <input type="checkbox" checked={exportComplet} disabled={busy}
+                  onChange={(e) => setExportComplet(e.target.checked)} style={{ marginTop: 3 }} />
+                <span>
+                  <strong>{t({ id: 'importacoes.exportComplet.label' })}</strong>
+                  <br />{t({ id: 'importacoes.exportComplet.hint' })}
+                </span>
               </label>
               <div>
                 <button className="cat-btn primary" type="button" onClick={handleUpload} disabled={busy || !file || !sourceId}>

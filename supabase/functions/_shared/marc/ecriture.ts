@@ -39,7 +39,10 @@ export interface Contributeur {
   name: string; nature?: string | null; role?: string | null; roleCode?: string | null;
   primary?: boolean; authorId?: number | string | null; dates?: string | null;
 }
-export interface Exemplaire { tombo?: string | null; code?: string | null; callNumber?: string | null; note?: string | null }
+// H21 lot 7 (09/10/2026) : retiredAt — un exemplaire « sorti du catalogue
+// d'origine » n'est jamais écrit (fn_export_catalog_lote ne le rend déjà pas ;
+// filet ici, sinon il repartirait vers la source).
+export interface Exemplaire { tombo?: string | null; code?: string | null; callNumber?: string | null; note?: string | null; retiredAt?: string | null }
 export interface Sujet { id?: number | string | null; label: string }
 export interface NoticeExport {
   id?: number | string; bibRef?: string | null; originId?: string | null;
@@ -372,7 +375,7 @@ function exemplaires(d: Dialecte, rec: NoticeExport, opts: OptionsEcriture): Cha
   const m = DEFAULT_ITEM_MAPPINGS[d];
   const fixes = new Set([m.owner[0], m.item_type[0], m.public[0]].filter(Boolean));
   const out: ChampMarc[] = [];
-  for (const it of rec.items ?? []) {
+  for (const it of (rec.items ?? []).filter((x) => !x?.retiredAt)) {
     const c = champ(m.tag, '  ', [
       sz(m.owner[0], opts.bibliotheque?.nom),
       sz(m.code[0], txt(it.code) ?? txt(it.tombo)),

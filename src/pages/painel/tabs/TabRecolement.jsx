@@ -3,6 +3,7 @@ import { Button, Spinner } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
 import { generateMultiReportPdf } from '@/lib/reportPdf';
 import CardScanner from './CardScanner';
+import BadgeRetire from '@/components/catalog/BadgeRetire';
 
 // ═══════════════════════════════════════════════════════════
 // TabRecolement — aide au récolement (inventaire du fonds par scan)
@@ -115,7 +116,9 @@ export default function TabRecolement({ t, locale, libraryId, libraryName }) {
       });
       if (error || !data?.ok) { setLastScan({ kind: 'error' }); beep(false); setMsg(reasonMsg(data?.reason)); return; }
       setScannedCount(data.scanned_count || 0);
-      const kind = data.already_scanned ? 'already' : (data.in_acervo ? 'present' : 'intrus');
+      // H21 lot 7 (09/10/2026) : un exemplaire « sorti du catalogue d'origine »
+      // est dit retiré, ni présent attendu ni manquant.
+      const kind = data.already_scanned ? 'already' : (data.in_acervo ? (data.retire ? 'retire' : 'present') : 'intrus');
       setLastScan({ kind, title: data.title, tombo: data.tombo, id: data.exemplar_id });
       beep(kind !== 'intrus');
     } catch { setLastScan({ kind: 'error' }); beep(false); }
@@ -174,6 +177,9 @@ export default function TabRecolement({ t, locale, libraryId, libraryName }) {
     ]));
     (report.intrus || []).forEach((i) => rows.push([
       t({ id: 'recolement.report.intrus' }), i.tombo, '', i.lib, '', i.exemplar_id,
+    ]));
+    (report.retired || []).forEach((r) => rows.push([
+      t({ id: 'recolement.report.retired' }), r.tombo, r.shelf, '', r.title, r.exemplar_id,
     ]));
     const csv = '﻿' + rows.map((r) => r.map(esc).join(',')).join('\r\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -238,6 +244,7 @@ export default function TabRecolement({ t, locale, libraryId, libraryName }) {
     if (kind === 'present') text = `✓ ${title || ''} ${tombo ? `(${tombo})` : ''}`.trim();
     else if (kind === 'already') text = t({ id: 'recolement.last.already' }, { title: title || tombo || id });
     else if (kind === 'intrus') text = t({ id: 'recolement.last.intrus' }, { id });
+    else if (kind === 'retire') text = t({ id: 'recolement.last.retire' }, { title: title || tombo || id });
     else if (kind === 'unknown') text = t({ id: 'recolement.last.unknown' });
     else text = t({ id: 'recolement.error.generic' });
     return <p className={`ab-recolement-last ${cls}`}>{text}</p>;
@@ -331,6 +338,9 @@ export default function TabRecolement({ t, locale, libraryId, libraryName }) {
             <span>{t({ id: 'recolement.report.present' })}: <strong>{report.present_count}</strong></span>
             <span className="ab-recolement-stat--warn">{t({ id: 'recolement.report.missing' })}: <strong>{report.missing_count}</strong></span>
             <span className="ab-recolement-stat--warn">{t({ id: 'recolement.report.intrus' })}: <strong>{report.intrus_count}</strong></span>
+            {Number(report.retired_count || 0) > 0 && (
+              <span data-testid="recolement-retired-count">{t({ id: 'recolement.report.retired' })}: <strong>{report.retired_count}</strong></span>
+            )}
           </div>
 
           <div className="ab-recolement-actions">
@@ -352,6 +362,23 @@ export default function TabRecolement({ t, locale, libraryId, libraryName }) {
               </ul>
             )
             : <p className="ab-painel-hint">{t({ id: 'recolement.report.none' })}</p>}
+
+          {/* H21 lot 7 : les retirés, à part (« retiré », pas « manquant ») */}
+          {report.retired?.length > 0 && (
+            <>
+              <h3 className="ab-painel-subtitle">{t({ id: 'recolement.report.retiredTitle' })} ({report.retired_count})</h3>
+              <ul className="ab-recolement-list" data-testid="recolement-retired">
+                {report.retired.map((r) => (
+                  <li key={`r-${r.exemplar_id}`}>
+                    <code>{r.tombo || r.exemplar_id}</code> {r.title || ''}
+                    {r.shelf ? <em> — {r.shelf}</em> : null}
+                    {' '}<BadgeRetire exemplaire={r} />
+                    {r.scanned ? <em> — {t({ id: 'recolement.report.retiredScanned' })}</em> : null}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
           <h3 className="ab-painel-subtitle">{t({ id: 'recolement.report.intrusTitle' })} ({report.intrus_count})</h3>
           {report.intrus?.length

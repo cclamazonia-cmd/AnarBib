@@ -16,6 +16,7 @@ import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind, ACCEPTED_IMPORT_EXTENSIONS as ACCEPTED_EXTENSIONS } from '../../lib/importFileKind.js';
 import RunEncodingPanel from './RunEncodingPanel.jsx';
 import RunCoveragePanel from './RunCoveragePanel.jsx';
+import RunRetraitsPanel from './RunRetraitsPanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
 import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
@@ -361,6 +362,10 @@ export default function ImportacoesPage() {
   const [reprocessing, setReprocessing] = useState(false);
   // ── Profils d'import (axe Perfil) ──────────────────────
   const [adapterProfile, setAdapterProfile] = useState(''); // '' = Padrão (aucun)
+  // H21 lot 7 (09/10/2026, IMP-26 f) : « export complet » déclaré au dépôt —
+  // sans lui, aucune disparition n'est proposée au retrait. Posé avant le
+  // dispatch (fn_import_set_export_complet), jamais après.
+  const [exportComplet, setExportComplet] = useState(false);
   const [profiles, setProfiles] = useState([]);
   const [profileFormOpen, setProfileFormOpen] = useState(false);
   const [profileName, setProfileName] = useState('');
@@ -693,6 +698,15 @@ export default function ImportacoesPage() {
         if (profileErr) throw profileErr;
         assertRpcOk(profileData);
       }
+      // H21 lot 7 : l'export complet se déclare AVANT le dispatch (la base le
+      // refuse ensuite) ; un refus arrête tout, comme les réglages ci-dessus.
+      if (exportComplet) {
+        const { data: completData, error: completErr } = await supabase.rpc('fn_import_set_export_complet', {
+          p_run_id: Number(runId), p_export_complet: true,
+        });
+        if (completErr) throw completErr;
+        assertRpcOk(completData);
+      }
       setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
       // DOC-RPC-4. Cet appel ignorait `error` autant que ses deux voisins, mais
       // il rate DAVANTAGE : `fn_import_dispatch` lève quatre refus (accès
@@ -708,6 +722,7 @@ export default function ImportacoesPage() {
 
       setMsg({ text: t({ id: 'importacoes.runDispatched' }, { id: runId }), kind: 'ok' });
       setFile(null);
+      setExportComplet(false);
       await loadRuns();
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
@@ -1830,6 +1845,15 @@ export default function ImportacoesPage() {
                       </div>
                     </div>
                   </div>
+                  <label className="imp-note" data-testid="import-export-complet"
+                    style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '0 0 10px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={exportComplet} disabled={uploading}
+                      onChange={e => setExportComplet(e.target.checked)} style={{ marginTop: 3 }} />
+                    <span>
+                      <strong>{t({ id: 'importacoes.exportComplet.label' })}</strong>
+                      <br />{t({ id: 'importacoes.exportComplet.hint' })}
+                    </span>
+                  </label>
                   <button className="cat-btn primary" onClick={handleUploadAndProcess} disabled={uploading || !file || !sourceId}>
                     {uploading ? t({ id: 'importacoes.uploading' }) : t({ id: 'importacoes.arquivo.uploadAndProcess' })}
                   </button>
@@ -2131,6 +2155,10 @@ export default function ImportacoesPage() {
               {/* Couverture : ce que l'import a repris du fichier (H16). */}
               {selectedRunId && !runProcessing && !runFailed && selectedRun && (
                 <RunCoveragePanel run={selectedRun} />
+              )}
+              {/* H21 lot 7 : les exemplaires retirés (constat sur le fichier entier). */}
+              {selectedRunId && !runProcessing && !runFailed && selectedRun && (
+                <RunRetraitsPanel runId={selectedRunId} canAct={!depositLocked} />
               )}
 
               {/* Rows table (uniquement si traitement terminé) */}

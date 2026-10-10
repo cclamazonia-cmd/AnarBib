@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { coverageItemLabel } from '../../lib/importCoverage.js';
 import { libelleVerdict, VERDICTS as VERDICTS_EXEMPLAIRE } from '../../lib/importItemVerdicts.js';
 import { CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
+import { MOTIFS_ENGAGE } from '../../lib/importRetraits.js';
 
 // BatchReviewReport — rendu du rapport de revision d'un lot (05/09/2026).
 // H16 (26/09/2026) : section « couverture » — pour chaque import dont le lot
@@ -80,6 +81,12 @@ export default function BatchReviewReport({ report }) {
   const preparedItems = report.prepared_item_updates && typeof report.prepared_item_updates === 'object'
     ? report.prepared_item_updates : null;
   const preparedItemExamples = Array.isArray(preparedItems?.examples) ? preparedItems.examples : [];
+  // H21 lot 7 (09/10/2026, IMP-26 d, IMP-34) : les brouillons de retrait et de
+  // levée du lot (clé `retraits`, absente sans tel brouillon) ; pour chaque run,
+  // le constat (disparus engagés compris), le seuil et la confirmation.
+  const retraits = report.retraits && typeof report.retraits === 'object' ? report.retraits : null;
+  const retraitsExamples = Array.isArray(retraits?.examples) ? retraits.examples : [];
+  const retraitsRuns = Array.isArray(retraits?.runs) ? retraits.runs : [];
   const libelleChampExemplaire = (c) => (CHAMPS_EXEMPLAIRE.includes(c) ? t({ id: `importacoes.items.field.${c}` }) : c);
   // B30 (27/09/2026) : le rapport dit pour quelle bibliothèque il a été rendu
   // (report.batch.library_id / library_name ; nulle = administration du
@@ -335,6 +342,53 @@ export default function BatchReviewReport({ report }) {
             ))}
             {more(Number(preparedItems.count || 0), Math.min(preparedItemExamples.length, 40))}
           </ul>
+        </section>
+      )}
+
+      {retraits && Number(retraits.count || 0) > 0 && (
+        <section data-testid="review-retraits">
+          <h5 style={secTitle}>{t({ id: 'review.report.retraits' })}</h5>
+          <div>{t({ id: 'review.report.retraits.summary' }, {
+            retraits: Number(retraits.retraits || 0), levees: Number(retraits.levees || 0), published: Number(retraits.published || 0),
+          })}</div>
+          <ul style={list}>
+            {retraitsExamples.slice(0, 40).map((e) => (
+              <li key={e.item_draft_id} data-retrait-draft={e.item_draft_id} data-nature={e.nature}>
+                {t({ id: e.nature === 'levee' ? 'review.report.retraits.levee' : 'review.report.retraits.retrait' }, { tombo: e.tombo || '—' })}
+                {e.code ? <> · <code>{e.code}</code></> : null}
+                {e.titulo ? <> — {e.titulo}</> : null}
+              </li>
+            ))}
+            {more(Number(retraits.count || 0), Math.min(retraitsExamples.length, 40))}
+          </ul>
+          {retraitsRuns.map((r) => {
+            const bl = r.bilan || {};
+            const s = bl.seuil || {};
+            const engages = Array.isArray(r.engages) ? r.engages : [];
+            return (
+              <div key={r.run_id} data-retraits-run={r.run_id} style={{ marginTop: 6 }}>
+                <div style={muted}>{t({ id: 'review.report.retraits.run' }, {
+                  id: r.run_id, disparus: Number(s.disparus || 0), total: Number(s.total || 0), taux: s.taux ?? '—',
+                })}</div>
+                <div style={muted}>{t({ id: s.atteint
+                  ? (bl.confirme ? 'review.report.retraits.seuilConfirme' : 'review.report.retraits.seuilNonConfirme')
+                  : 'review.report.retraits.sousLeSeuil' })}</div>
+                {engages.length > 0 && (
+                  <>
+                    <div>{t({ id: 'review.report.retraits.engages' }, { n: Number(bl.counts?.disparu_engage || engages.length) })}</div>
+                    <ul style={list}>
+                      {engages.slice(0, 40).map((g) => (
+                        <li key={g.exemplar_id} data-engage={g.motif}>
+                          {g.tombo || g.exemplar_id}
+                          {MOTIFS_ENGAGE.includes(g.motif) ? <span style={muted}> · {t({ id: `importacoes.retraits.motif.${g.motif}` })}</span> : null}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </section>
       )}
 

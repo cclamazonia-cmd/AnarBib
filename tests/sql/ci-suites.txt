@@ -698,6 +698,14 @@ tests/sql/h21_lot6a_exemplaires_tests.sql
 # ligne, effet de bord), par le lot ; tout le reste intact (fonds, circulation) ; base
 # avancée selon IMP-31 d ; trace refusée à l'API ; 200 lignes < 8 s.
 tests/sql/h21_lot6b_exemplaires_maj_tests.sql
+# H21 lot 7 (09/10/2026, IMP-26 d/e/f, IMP-34) : les exemplaires retirés — drapeau
+# « export complet » avant le dispatch ; constat sur le fichier entier (disparu,
+# engagé, en brouillon, réapparu ; déplacé, réétiqueté, autre source, autre
+# bibliothèque, notice absente jamais) ; seuil 10 %/20 et confirmation ; proposer,
+# réviser, poser (le marqueur seul) ; refus à la publication ; non prêtable, non
+# réservable, hors PEB, hors disponibilité et OPAC, hors export, « retiré » au
+# récolement ; levée ; trace refusée à l'API ; 5 001 disparus < 8 s.
+tests/sql/h21_lot7_retires_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

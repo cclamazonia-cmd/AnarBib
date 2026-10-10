@@ -13,6 +13,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import BadgeRetire from '@/components/catalog/BadgeRetire';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -117,7 +118,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         ({ data } = await q);
       } else {
         let q = supabase.from('exemplares')
-          .select('id, bib_ref, tombo, shelf_location, label_title_override, label_author_override, label_cdd_override, updated_at')
+          .select('id, bib_ref, tombo, shelf_location, label_title_override, label_author_override, label_cdd_override, retire_at, updated_at')
           .order('updated_at', { ascending: false }).range(from, to);
         if (dSearch.trim()) q = q.or(`tombo.ilike.%${dSearch.trim()}%,bib_ref.ilike.%${dSearch.trim()}%,label_title_override.ilike.%${dSearch.trim()}%`);
         ({ data } = await q);
@@ -481,7 +482,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
             {/* Exemplar row */}
             {it._type === 'exemplar' && (
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '.95rem', fontWeight: 700 }}>{it.tombo || t({ id: 'catalogacao.queue.noTombo' })}</div>
+                <div style={{ fontSize: '.95rem', fontWeight: 700, display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                  {it.tombo || t({ id: 'catalogacao.queue.noTombo' })}
+                  {/* H21 lot 7 : sorti du catalogue d'origine */}
+                  <BadgeRetire exemplaire={it} />
+                </div>
                 <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
                   ref: {it.bib_ref || '—'}
                   {it.label_title_override && ` · ${it.label_title_override}`}
