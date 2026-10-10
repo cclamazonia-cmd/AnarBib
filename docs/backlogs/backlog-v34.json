@@ -3107,6 +3107,14 @@
           "fr": "Le job `rejeu-image` de `sql-tests.yml` rejoue toutes les migrations dans la base `postgres` de l'image `supabase/postgres` à chaque poussée, et son résultat se lit dans Actions (critère 1, depuis le 16/09). **Critère 2 tenu le 08/10 au soir** : le job a rougi pour une vraie raison — la migration du lot 4 de G19 vérifiait qu'`anon` n'avait pas UPDATE sur `libraries`, vrai en production, faux sur l'image où le privilège par défaut ouvre toute table à `anon` (journal 10250394) — et la raison a été corrigée dans la migration (`c06f9ed2`, REVOKE nominatif, sans effet en production), jamais dans le job ; les runs suivants sont verts. Le mécanisme (DOC-GRANT-2/3, I17) vaut donc aussi pour les tables, consigné en mémoire et au registre. **Clos le 10/10 par Xavier.**",
           "pt": "O job `rejeu-image` reaplica todas as migrações na imagem Supabase a cada push (critério 1). **Critério 2 cumprido em 08/10**: ficou vermelho por uma razão real (privilégio padrão de `anon` nas tabelas da imagem) e a razão foi corrigida na migração (`c06f9ed2`), nunca no job. **Fechado em 10/10 por Xavier.**"
         }
+      ],
+      [
+        "E32",
+        "2026-10-10",
+        {
+          "fr": "Plus aucune icône déclarée en emoji dans `src/` : les 106 déclarations restantes (sept écrans, dont la page « Je veux… ») passent au nom `AppIcon` que la table `LEGACY` leur donnait — même composant Lucide à l'écran —, `LEGACY` et son repli sont retirés d'`AppIcon`, et la garde `appicon-sans-emoji` tient la règle (`391d80c9`, déployé le 10/10 à 21 h 20 ; REGISTRE `IDENT-Q1` ✅). Les glyphes rendus en texte hors `AppIcon` (pastille ✓ / ! de l'encart de régime, bascules du widget d'accessibilité) ne sont pas des icônes et restent. Xavier pratique les écrans ainsi depuis une semaine, rien n'a changé à l'œil. **Clos le 10/10 par Xavier.**",
+          "pt": "Nenhum ícone declarado em emoji em `src/`: as 106 declarações restantes passam ao nome `AppIcon` (mesmo componente na tela), a tabela `LEGACY` sai, a guarda `appicon-sans-emoji` mantém a regra (`391d80c9`, 10/10). **Fechado em 10/10 por Xavier.**"
+        }
       ]
     ]
   },
@@ -5695,54 +5703,6 @@
         {
           "fr": "**09/10 — ajouté à la liste** : le refus traduit d'un numéro d'inventaire libéré, saisi à la main dans le formulaire d'exemplaire (C17, clos sur décision de Xavier sans ce regard ; la suite SQL prouve le refus, pas le message à l'écran — `error.catalog.tombo.deja_attribue`, dix locales).",
           "pt": "**09/10 — acrescentado à lista**: a recusa traduzida de um número de tombo liberado, digitado à mão no formulário de exemplar (C17, fechado por decisão de Xavier sem esse olhar; a suíte SQL prova a recusa, não a mensagem na tela — `error.catalog.tombo.deja_attribue`, dez locales)."
-        }
-      ]
-    },
-    {
-      "id": "E32",
-      "d": "E",
-      "p": "P3",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1)",
-        "pt": "Os ícones ainda em emoji passam a `AppIcon`, ao sabor dos retoques (IDENT-Q1)"
-      },
-      "v": {
-        "fr": "Le 05/10, la PR #32 du camarade (`ASR2026`) a posé `AppIcon` et ses règles (REGISTRE `IDENT-5` à `IDENT-8`, `0b2b0e14`). Mesuré le même jour (REGISTRE `IDENT-Q1`) : 198 lignes dans 52 fichiers de `src/` portent encore un emoji, dont 111 déclarations d'icône que `AppIcon` traduit par sa table `LEGACY`, déclarée transitoire. Décision de Xavier : elles migrent **au fil des retouches**, comme les requêtes de média de `MOB-Q2` (clôture E9). Seul le registre le portait.",
-        "pt": "Em 05/10, a PR #32 do camarada pôs `AppIcon` (REGISTRE `IDENT-5` a `IDENT-8`). Medido no mesmo dia (`IDENT-Q1`): 198 linhas em 52 arquivos com emoji, das quais 111 declarações de ícone traduzidas pela tabela transitória `LEGACY`. Decisão de Xavier: migram ao sabor dos retoques."
-      },
-      "w": {
-        "fr": "Chaque écran retouché, pour quelque raison que ce soit, passe ses icônes à `AppIcon` et sort ses emoji de `LEGACY` ; recompter à chaque relevé.",
-        "pt": "Cada tela retocada passa seus ícones a `AppIcon` e tira seus emojis de `LEGACY`; recontar a cada levantamento."
-      },
-      "y": {
-        "fr": "Un emoji se dessine différemment d'un système à l'autre et n'a pas de nom accessible fiable ; `AppIcon` en a un.",
-        "pt": "Um emoji muda de um sistema a outro e não tem nome acessível confiável; `AppIcon` tem."
-      },
-      "f": {
-        "fr": [
-          "`LEGACY` est vide : plus aucune déclaration d'icône en emoji dans `src/`."
-        ],
-        "pt": [
-          "`LEGACY` vazia: nenhuma declaração de ícone em emoji em `src/`."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "REGISTRE IDENT-5 à IDENT-8, IDENT-Q1",
-        "commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14"
-      ],
-      "verif": [
-        {
-          "fr": "**10/10 — livré, déployé et vérifié à 21 h 20** (`391d80c9`), sur le mot de Xavier (« pour E32, ça m'a l'air ok »). Mesuré avant : 106 déclarations d'icône en emoji dans sept écrans (`intentions.js` 55, `BibliotecaPage` 13, `CatalogacaoPage` 11, `RedePage` 11, `AccountPage` 6, `CatalogacaoWizard` 5, `PanelPage` 5), toutes rendues par `AppIcon` et traduites par sa table `LEGACY` : chaque emoji devient le nom qu'il désignait — même composant Lucide à l'écran, rien ne change. La table `LEGACY` et son repli sont retirés d'`AppIcon`. Deux glyphes de texte, qui ne passent pas par `AppIcon`, restent tels quels (pastille ✓ de `RegimeStateBox`, bascules ◐ ↕ ↖ ⏸ ⌨ du widget d'accessibilité ; son lien 🔗 devient le glyphe ⛓). Garde `appicon-sans-emoji` : aucune déclaration `icon:` / `icon=` / `name=` de `src/` ne porte un pictogramme, et `AppIcon` n'a plus de `LEGACY`. Build et vitest complet verts. Le critère (« `LEGACY` est vide ») est tenu : **à clore par Xavier**, après un coup d'œil aux onglets de la page Bibliothèque ou du catalogage.",
-          "pt": "**10/10 — entregue e verificado às 21 h 20** (`391d80c9`). 106 declarações de ícone em emoji em sete telas passam ao nome AppIcon (mesmo componente na tela) ; a tabela LEGACY sai ; guarda `appicon-sans-emoji`. Critério cumprido : **a fechar por Xavier**."
         }
       ]
     },

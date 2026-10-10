@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-10** · 53 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-10** · 52 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Mis à jour dans cette version** : C17 clos sur décision de Xavier (les deux critères tenus, le regard à l'écran porté par E31). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21 ; le refus traduit d'un numéro libéré, C17) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).
 
-**Fraîcheur des constats au 2026-10-10.** **38 items sur 53** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, E32, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-10.** **37 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -668,7 +668,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
 | **E31** | Ce qui attend un regard à l'écran, connecté | `P2` | Ouvert |
-| **E32** | Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1) | `P3` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -844,26 +843,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Xavier, connecté.
 
 *Renvois : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6` · `clôture F16` · `clôture G19`*
-
-#### E32 — Les icônes encore en emoji passent à `AppIcon`, au fil des retouches (IDENT-Q1)
-
-`P3` Différé · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : React / JavaScript
-
-**État.** Le 05/10, la PR #32 du camarade (`ASR2026`) a posé `AppIcon` et ses règles (REGISTRE `IDENT-5` à `IDENT-8`, `0b2b0e14`). Mesuré le même jour (REGISTRE `IDENT-Q1`) : 198 lignes dans 52 fichiers de `src/` portent encore un emoji, dont 111 déclarations d'icône que `AppIcon` traduit par sa table `LEGACY`, déclarée transitoire. Décision de Xavier : elles migrent **au fil des retouches**, comme les requêtes de média de `MOB-Q2` (clôture E9). Seul le registre le portait.
-
-*Vérifié : [object Object]*
-
-**Ce que c'est.** Chaque écran retouché, pour quelque raison que ce soit, passe ses icônes à `AppIcon` et sort ses emoji de `LEGACY` ; recompter à chaque relevé.
-
-**Pourquoi ça compte.** Un emoji se dessine différemment d'un système à l'autre et n'a pas de nom accessible fiable ; `AppIcon` en a un.
-
-**Ce qui compte comme fini.**
-
-- `LEGACY` est vide : plus aucune déclaration d'icône en emoji dans `src/`.
-
-**Dépendances.** Aucune.
-
-*Renvois : `REGISTRE IDENT-5 à IDENT-8, IDENT-Q1` · `commits ad5fb042, 300b1a69, 206b7b77, 0b2b0e14`*
 
 ---
 
@@ -1898,6 +1877,7 @@ CI verte : lint et suite unitaire. |
 | C17 | 2026-10-09 | **Clos le 09/10 sur décision de Xavier (« Passe-le en clos »), les deux critères tenus, le regard à l'écran reporté à E31.** Décider si un numéro d'inventaire supprimé peut être redonné. *Ce qui comptait comme fini* : la règle est écrite au REGISTRE · si un numéro ne doit jamais se redonner, une suite SQL le prouve. **Tranché le 08/10 : un numéro donné ne se redonne jamais** (REGISTRE `CAT-E21` — un numéro est une trace ; retiré, désherbé ou créé par erreur, il reste pris). **Fait le 09/10, déployé et vérifié à 21 h 59** (`5a5a94d6`, migration `20261009194632`) : `public.tombos_attribues`, le registre de tous les numéros jamais portés par un exemplaire, repris du stock (2 762) et du journal des suppressions (13 numéros, dont les cinq déjà redonnés — l'histoire reste écrite, elle ne se répète plus) ; deux déclencheurs sur `exemplares` : un numéro déjà donné que plus aucun exemplaire présent ne porte est refusé (`error.catalog.tombo.deja_attribue`, dix locales), tout numéro posé entre au registre ; `fn_next_tombo` rend le plus grand numéro jamais attribué, stock et registre. Suite `tombo_jamais_redonne` 6/6 (002 supprimé → le prochain est 003 ; 002 redonné à la main : refusé ; vers un numéro libéré : refusé ; vers un neuf : accepté), mutant sans le registre rouge (4/6). Table fermée à `anon` et `authenticated` (un avis 0008 de plus, voulu), au relevé du 09/10. **Vu le 10/10 par Xavier** : « Publier » avec `CCLA.2026.41` (libéré le 20/07) est refusé, message traduit. Le même essai a révélé deux trous, bouchés le soir même (**C17 bis**, `5841012a`, déployé à 21 h 15) : un brouillon d'exemplaire s'enregistrait avec un numéro déjà donné (la règle ne jouait qu'à la publication) — déclencheur BEFORE sur `exemplar_drafts`, un numéro libéré ou porté par un autre exemplaire présent est refusé dès l'enregistrement ; et un brouillon sans document cassait à la publication sur la colonne obligatoire (« erreur technique 23502 ») — `publish_exemplar_draft` dit `error.publish.bib_ref_required`, le formulaire aussi. Suite 9/9, mutant rouge. Les essais (notice « Blabla », brouillons 40 et 41) ont été retirés. |
 | I33 | 2026-10-09 | Le checkout d'exploitation du poste suit `main` sans geste humain : `anarbib-exploitation-suit.sh` (`2d3c8273`, 08/10), appelé en dernier geste par le tir du miroir (18:00, 18:50, dim. 19:50, une minute après le démarrage), avance `~/anarbib` en avance rapide seulement s'il est sur `main`, propre, et qu'aucun script d'exploitation ne tourne ; sinon il dit pourquoi (drapeau `.last-failure`) et ne bouge pas. **Éprouvé le 09/10** : au démarrage du poste à 20 h 06, le tir a avancé le checkout de `67703b6a` à `262bf350` (+14 commits, dont la table `tombos_attribues` classée le jour même), puis la sauvegarde courte de 20 h 11 est passée avec cette liste (snapshot `5b09c063`) ; à 20 h 11 le tir suivant a vu la sauvegarde en cours et a attendu. Banc `exploitation-suit-main` (9 cas), README ops. Les trois critères sont tenus. **Clos le 09/10 par Xavier.** |
 | I18 | 2026-10-10 | Le job `rejeu-image` de `sql-tests.yml` rejoue toutes les migrations dans la base `postgres` de l'image `supabase/postgres` à chaque poussée, et son résultat se lit dans Actions (critère 1, depuis le 16/09). **Critère 2 tenu le 08/10 au soir** : le job a rougi pour une vraie raison — la migration du lot 4 de G19 vérifiait qu'`anon` n'avait pas UPDATE sur `libraries`, vrai en production, faux sur l'image où le privilège par défaut ouvre toute table à `anon` (journal 10250394) — et la raison a été corrigée dans la migration (`c06f9ed2`, REVOKE nominatif, sans effet en production), jamais dans le job ; les runs suivants sont verts. Le mécanisme (DOC-GRANT-2/3, I17) vaut donc aussi pour les tables, consigné en mémoire et au registre. **Clos le 10/10 par Xavier.** |
+| E32 | 2026-10-10 | Plus aucune icône déclarée en emoji dans `src/` : les 106 déclarations restantes (sept écrans, dont la page « Je veux… ») passent au nom `AppIcon` que la table `LEGACY` leur donnait — même composant Lucide à l'écran —, `LEGACY` et son repli sont retirés d'`AppIcon`, et la garde `appicon-sans-emoji` tient la règle (`391d80c9`, déployé le 10/10 à 21 h 20 ; REGISTRE `IDENT-Q1` ✅). Les glyphes rendus en texte hors `AppIcon` (pastille ✓ / ! de l'encart de régime, bascules du widget d'accessibilité) ne sont pas des icônes et restent. Xavier pratique les écrans ainsi depuis une semaine, rien n'a changé à l'œil. **Clos le 10/10 par Xavier.** |
 
 ---
 
@@ -1929,4 +1909,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 53 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 52 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
