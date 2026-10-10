@@ -108,8 +108,13 @@ describe('transport Resend — rejeu et cadence (F25)', () => {
     await Promise.all(Array.from({ length: 10 }, () => sendEmail(opts())));
     expect(appels).toHaveLength(10);
     const t = appels.map((a) => a.t).sort((x, y) => x - y);
-    for (let i = 1; i < t.length; i++) expect(t[i] - t[i - 1]).toBeGreaterThanOrEqual(15);   // 20 ms moins la granularité de l'horloge
-    expect(Date.now() - debut).toBeGreaterThanOrEqual(9 * 15);
+    // Ce que la cadence garantit : le i-ème envoi ne part JAMAIS avant son créneau (début + i × intervalle).
+    // Elle ne garantit pas l'écart entre deux envois voisins : sous charge (CI du 10/10, run 10322871), un
+    // temporisateur part en retard et le suivant, dont le créneau est déjà passé, part aussitôt — écart de
+    // 12 ms pour 20 demandés, sans qu'aucun envoi n'ait été en avance. On mesure donc chaque envoi depuis le
+    // début, avec 2 ms de tolérance pour la granularité de l'horloge.
+    for (let i = 0; i < t.length; i++) expect(t[i] - debut, `envoi ${i}`).toBeGreaterThanOrEqual(i * 20 - 2);
+    expect(Date.now() - debut).toBeGreaterThanOrEqual(9 * 20 - 2);
   });
 
   it('les appelants qui comptent les envois ne comptent plus un échec (source)', () => {
