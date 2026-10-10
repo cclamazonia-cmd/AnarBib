@@ -2030,3 +2030,16 @@ ordonne `read_languages`) est INVOKER, `search_path` figé, fermée à `anon` et
 Lot 4 bis : **une porte de plus**, `api.fn_correspondance_fils(uuid)` — DEFINER, STABLE, `search_path` figé, EXECUTE à
 `authenticated` et `service_role`, fermée à `anon` ; garde `fn_correspondance_coordonne(p_library_id)` (42501 sinon) ; ne lit
 que les quatre tables de la correspondance de la bibliothèque appelante, les non-lus pour `auth.uid()`. Compte 0029 attendu : **428**.
+
+### Complément du 10/10 — C29 lot 3, modifier un exemplaire publié en un geste (migration `20261010204944_c29_lot3_modifier_un_exemplaire_en_un_geste`)
+
+**Une porte de plus**, `public.fn_exemplaire_modifier_et_publier(bigint, jsonb)` — DEFINER, `search_path` figé (`public, pg_temp`),
+EXECUTE à `authenticated` et `service_role`, fermée à `PUBLIC` et `anon`. Garde : `fn_caller_can_edit_draft_library(library_id, NULL)`
+sur la bibliothèque de l'exemplaire (staff de cette bibliothèque, ou administration du réseau ; `auth.uid()` nul → 42501) — la même
+que la reprise. Elle enchaîne dans une seule transaction `create_exemplar_draft_from_exemplar`, la mise à jour des douze champs permis
+(ni `tombo`, C17, ni `target_library_id`, ni fonds : un autre nom → 22023) et `publish_exemplar_draft` TEL QUEL, dont toutes les gardes
+s'appliquent ; un brouillon de mise à jour déjà vivant la fait refuser (`error.copies.update_pending`). Si la base refuse, rien ne
+reste. Pas de nouvelle table, pas de politique. Au passage, `create_exemplar_draft_from_exemplar` (déjà ouverte à `authenticated`)
+copie désormais `circulation_policy` et `visibility` : un exemplaire « équipe uniquement » ne repassait public à la republication que
+par ce défaut de copie. Suite `c29_exemplaire_modifier_et_publier_tests` (9 cas : droits, garde, champs permis, brouillon vivant,
+atomicité). Comptes attendus, `public` + `api` : **0029 = 429** (428 le 09/10 au soir), **0028 = 29** (inchangé).
