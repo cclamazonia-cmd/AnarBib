@@ -29,32 +29,14 @@ const ICONS = {
   zap: Zap, wrench: Wrench, close: X, circleAlert: CircleAlert, help: CircleHelp, info: Info,
 };
 
-// Transitional aliases keep page data readable while the interface migrates
-// away from platform-dependent emoji glyphs.
-const LEGACY = {
-  '🔍': 'search', '📗': 'book', '⏳': 'archive', '🕰️': 'archive', '✍️': 'penLine',
-  '💭': 'sparkles', '🔔': 'bell', '🏛️': 'landmark', '🗓️': 'calendar', '📚': 'library',
-  '🗺️': 'map', '📰': 'newspaper', '🪪': 'user', '🐞': 'warning', '☀️': 'dashboard',
-  '📥': 'inbox', '🔁': 'arrowLeftRight', '🪑': 'message', '🤝': 'users', '✅': 'check',
-  '📋': 'clipboard', '📷': 'image', '📄': 'document', '🖼️': 'image', '✒️': 'penLine',
-  '🗂️': 'folder', '🏷️': 'tags', '📨': 'mail', '📦': 'package', '🔀': 'arrowLeftRight',
-  '🗞️': 'newspaper', '🛠️': 'wrench', '⚖️': 'scale', '🎨': 'palette', '📣': 'megaphone',
-  '👥': 'users', '🔄': 'arrowLeftRight', '👤': 'user', '📤': 'arrowUp', '🎁': 'package',
-  '🔎': 'search', '🎪': 'calendar', '📊': 'gauge', '🚚': 'truck', '🧾': 'document',
-  '🗣️': 'message', '🫂': 'users', '🌱': 'sparkles', '🏠': 'building', '💌': 'mail',
-  '🧐': 'search', '📈': 'gauge', '🖨️': 'document', '✉️': 'mail', '🔑': 'key', '🌐': 'globe',
-  '🛰️': 'network', '🔖': 'bookmark', '📇': 'library', '⚠': 'warning', '⚠️': 'warning',
-  '🔒': 'shield', '📍': 'map', '🗑': 'trash', '🗄': 'archive',
-};
-
 const warnedNames = new Set();
 
 /** Neutral, monochrome interface icon. Lucide is ISC-licensed and renders as SVG. */
 export default function AppIcon({ name, size = 18, strokeWidth = 1.8, className = '', title, style, fill }) {
-  if (import.meta.env?.DEV && name && !ICONS[name] && !LEGACY[name] && !warnedNames.has(name)) {
+  if (import.meta.env?.DEV && name && !ICONS[name] && !warnedNames.has(name)) {
     warnedNames.add(name);
     console.warn(`[AppIcon] Unknown icon name: ${name}`);
   }
-  const Icon = ICONS[name] || ICONS[LEGACY[name]] || Info;
+  const Icon = ICONS[name] || Info;   // E32 (10/10/2026) : la table LEGACY des emojis est sortie — plus aucune déclaration d'icône n'en portait
   return <Icon className={className} style={style} size={size} strokeWidth={strokeWidth} fill={fill} role={title ? 'img' : undefined} aria-hidden={title ? undefined : true} aria-label={title} />;
 }

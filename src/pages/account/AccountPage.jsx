@@ -732,15 +732,15 @@ export default function AccountPage() {
   //   - `hint`  : plus affiché sous le libellé (il redit le sous-titre du panneau
   //               juste en dessous) mais conservé en infobulle + nom accessible.
   const ALL_TABS = [
-    { key: 'perfil', icon: '👤', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
+    { key: 'perfil', icon: 'user', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
     { key: 'reservar', icon: 'pin', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
-    { key: 'curso', icon: '📚', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
+    { key: 'curso', icon: 'library', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
     { key: 'historico', icon: 'history', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
-    { key: 'avisos', icon: '🔔', label: t({ id: 'account.tab.notifications' }), hint: t({ id: 'account.tab.notifications.hint' }), count: unreadCount, alert: true },
+    { key: 'avisos', icon: 'bell', label: t({ id: 'account.tab.notifications' }), hint: t({ id: 'account.tab.notifications.hint' }), count: unreadCount, alert: true },
     { key: 'desejos', icon: 'star', label: t({ id: 'account.tab.wishlist' }), hint: t({ id: 'account.tab.wishlist.hint' }), count: wishlist.length },
-    { key: 'notas', icon: '✍️', label: t({ id: 'account.tab.readingNotes' }), hint: t({ id: 'account.tab.readingNotes.hint' }), count: myReadingNotes.length },
-    { key: 'biblios', icon: '🏛️', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
-    { key: 'eventos', icon: '🗓️', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
+    { key: 'notas', icon: 'penLine', label: t({ id: 'account.tab.readingNotes' }), hint: t({ id: 'account.tab.readingNotes.hint' }), count: myReadingNotes.length },
+    { key: 'biblios', icon: 'landmark', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
+    { key: 'eventos', icon: 'calendar', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 

@@ -29,7 +29,7 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
 
   const STEPS = [
     {
-      icon: '📚',
+      icon: 'library',
       titleKey: 'catalogacao.wizard.step.welcome.title',
       bodyKey:  'catalogacao.wizard.step.welcome.body',
     },
@@ -46,25 +46,25 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
       tipKey:   'catalogacao.wizard.step.oeuvres.tip',
     },
     {
-      icon: '✍️',
+      icon: 'penLine',
       titleKey: 'catalogacao.wizard.step.autoria.title',
       bodyKey:  'catalogacao.wizard.step.autoria.body',
       tipKey:   'catalogacao.wizard.step.autoria.tip',
     },
     {
-      icon: '📦',
+      icon: 'package',
       titleKey: 'catalogacao.wizard.step.indexacao.title',
       bodyKey:  'catalogacao.wizard.step.indexacao.body',
       tipKey:   'catalogacao.wizard.step.indexacao.tip',
     },
     {
-      icon: '🏷️',
+      icon: 'tags',
       titleKey: 'catalogacao.wizard.step.etiquetas.title',
       bodyKey:  'catalogacao.wizard.step.etiquetas.body',
       tipKey:   'catalogacao.wizard.step.etiquetas.tip',
     },
     {
-      icon: '📋',
+      icon: 'clipboard',
       titleKey: 'catalogacao.wizard.step.fila.title',
       bodyKey:  'catalogacao.wizard.step.fila.body',
     },

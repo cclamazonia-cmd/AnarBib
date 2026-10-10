@@ -254,7 +254,7 @@ export default function AccessibilityWidget() {
               onToggle={() => toggle('spacing')}
             />
             <Toggle
-              icon="🔗"
+              icon="⛓"
               label={t({ id: 'a11y.underlineLinks' })}
               pressed={prefs.underlineLinks}
               onToggle={() => toggle('underlineLinks')}

@@ -55,17 +55,17 @@ export default function RedePage() {
   // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
   // toutes les pages a onglets.
   const TABS = useMemo(() => ([
-    { id: 'overview', icon: '🌐', label: t({ id: 'rede.tab.overview' }) },
-    { id: 'requests', icon: '📥', label: t({ id: 'rede.requests.label' }) },
-    { id: 'invitations', icon: '💌', label: t({ id: 'rede.tab.invitations' }) },
-    { id: 'reviews', icon: '🔎', label: t({ id: 'rede.tab.reviews' }) },
-    { id: 'libraries', icon: '🏛️', label: t({ id: 'rede.tab.libraries' }) },
-    { id: 'members', icon: '👥', label: t({ id: 'rede.tab.members' }) },
-    { id: 'admins', icon: '🔑', label: t({ id: 'rede.tab.admins' }) },
-    { id: 'reports', icon: '📊', label: t({ id: 'rede.tab.reports' }) },
-    { id: 'gazeta', icon: '📰', label: t({ id: 'rede.tab.gazeta' }) },
-    { id: 'lettre', icon: '✉️', label: t({ id: 'rede.tab.lettre' }) },
-    { id: 'oaisource', icon: '🛰️', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
+    { id: 'overview', icon: 'globe', label: t({ id: 'rede.tab.overview' }) },
+    { id: 'requests', icon: 'inbox', label: t({ id: 'rede.requests.label' }) },
+    { id: 'invitations', icon: 'mail', label: t({ id: 'rede.tab.invitations' }) },
+    { id: 'reviews', icon: 'search', label: t({ id: 'rede.tab.reviews' }) },
+    { id: 'libraries', icon: 'landmark', label: t({ id: 'rede.tab.libraries' }) },
+    { id: 'members', icon: 'users', label: t({ id: 'rede.tab.members' }) },
+    { id: 'admins', icon: 'key', label: t({ id: 'rede.tab.admins' }) },
+    { id: 'reports', icon: 'gauge', label: t({ id: 'rede.tab.reports' }) },
+    { id: 'gazeta', icon: 'newspaper', label: t({ id: 'rede.tab.gazeta' }) },
+    { id: 'lettre', icon: 'mail', label: t({ id: 'rede.tab.lettre' }) },
+    { id: 'oaisource', icon: 'network', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
   ]), [t]);
   // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
   // sinon un tel compte chargeait sans fin (05/10/2026).

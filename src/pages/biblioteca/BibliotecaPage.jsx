@@ -108,22 +108,22 @@ export default function BibliotecaPage() {
   // toutes les pages a onglets. `separator` marque le debut d'un groupe (ecart
   // AVANT la pastille : ici, tout ce qui regarde hors de la biblio).
   const ALL_TABS = [
-    { id: 'identity', icon: '🏛️', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
-    { id: 'comms', icon: '📣', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
+    { id: 'identity', icon: 'landmark', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
+    { id: 'comms', icon: 'megaphone', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
     { id: 'regulation', icon: 'scrollText', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
-    { id: 'privacy', icon: '🔒', label: t({ id: 'biblioteca.tab.privacy' }) },
-    { id: 'documents', icon: '📄', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
+    { id: 'privacy', icon: 'shield', label: t({ id: 'biblioteca.tab.privacy' }) },
+    { id: 'documents', icon: 'document', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
     // Paquet E.5 refactor (20/05/2026) : transitions de profil (gouvernance politique)
-    { id: 'transicoes', icon: '🔄', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
-    { id: 'team', icon: '👥', label: t({ id: 'biblioteca.tab.team' }) },
-    { id: 'leitores', icon: '👤', label: t({ id: 'biblioteca.tab.leitores' }) },
-    { id: 'eventos', icon: '🗓️', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
-    { id: 'exchanges', icon: '🔀', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
+    { id: 'transicoes', icon: 'arrowLeftRight', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
+    { id: 'team', icon: 'users', label: t({ id: 'biblioteca.tab.team' }) },
+    { id: 'leitores', icon: 'user', label: t({ id: 'biblioteca.tab.leitores' }) },
+    { id: 'eventos', icon: 'calendar', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
+    { id: 'exchanges', icon: 'arrowLeftRight', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
     { id: 'correspondance', icon: 'mail', label: t({ id: 'biblioteca.tab.correspondance' }), coordOnly: true },
-    { id: 'ill', icon: '🚚', label: t({ id: 'biblioteca.tab.ill' }) },
-    { id: 'reports', icon: '📊', label: t({ id: 'biblioteca.tab.reports' }) },
-    { id: 'notas', icon: '✍️', label: t({ id: 'biblioteca.tab.readingNotes' }) },
-    { id: 'tasks', icon: '📋', label: t({ id: 'biblioteca.tab.tasks' }) },
+    { id: 'ill', icon: 'truck', label: t({ id: 'biblioteca.tab.ill' }) },
+    { id: 'reports', icon: 'gauge', label: t({ id: 'biblioteca.tab.reports' }) },
+    { id: 'notas', icon: 'penLine', label: t({ id: 'biblioteca.tab.readingNotes' }) },
+    { id: 'tasks', icon: 'clipboard', label: t({ id: 'biblioteca.tab.tasks' }) },
   ];
   // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
   // Paquet E.5 refactor (20/05/2026) : filtrer aussi par governance_mode

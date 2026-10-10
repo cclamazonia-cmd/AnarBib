@@ -80,22 +80,22 @@ export default function CatalogacaoPage() {
   // l'ouverture de la page (demande de Xavier, 28/09/2026) : on part de ce qui
   // existe avant de saisir. Le groupe de la saisie commence donc APRES lui.
   const TABS = [
-    { id: 'catalogPanel',   icon: '📇', label: t({ id: 'catalogacao.tab.catalogo' }) },
-    { id: 'booksPanel',     icon: '📄', label: t({ id: 'catalogacao.tab.documento' }), separator: true },
-    { id: 'authorsPanel',   icon: '✒️', label: t({ id: 'catalogacao.tab.autoria' }) },
-    { id: 'indexPanel',     icon: '🔖', label: t({ id: 'catalogacao.tab.indexacao' }) },
-    { id: 'labelsPanel',    icon: '🏷️', label: t({ id: 'catalogacao.tab.etiquetas' }) },
+    { id: 'catalogPanel',   icon: 'library', label: t({ id: 'catalogacao.tab.catalogo' }) },
+    { id: 'booksPanel',     icon: 'document', label: t({ id: 'catalogacao.tab.documento' }), separator: true },
+    { id: 'authorsPanel',   icon: 'penLine', label: t({ id: 'catalogacao.tab.autoria' }) },
+    { id: 'indexPanel',     icon: 'bookmark', label: t({ id: 'catalogacao.tab.indexacao' }) },
+    { id: 'labelsPanel',    icon: 'tags', label: t({ id: 'catalogacao.tab.etiquetas' }) },
     // Flux d'ingestion distinct (depot de scans OCR) — isole entre 2 separateurs.
-    { id: 'ocrPanel',       icon: '📷', label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
-    { id: 'queuePanel',     icon: '📥', label: t({ id: 'catalogacao.tab.fila' }), separator: true },
-    { id: 'batchesPanel',   icon: '📦', label: t({ id: 'catalogacao.tab.lotes' }) },
+    { id: 'ocrPanel',       icon: 'image', label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
+    { id: 'queuePanel',     icon: 'inbox', label: t({ id: 'catalogacao.tab.fila' }), separator: true },
+    { id: 'batchesPanel',   icon: 'package', label: t({ id: 'catalogacao.tab.lotes' }) },
     ...(voitDivergences
       ? [{ id: 'divergencesPanel', icon: 'scale', label: t({ id: 'catalogacao.tab.divergences' }), count: nbDivergences }]
       : []),
-    { id: 'materiaPanel',   icon: '🗂️', label: t({ id: 'catalogacao.tab.materia' }), separator: true },
-    { id: 'periodicosPanel', icon: '📰', label: t({ id: 'catalogacao.tab.periodicos' }) },
+    { id: 'materiaPanel',   icon: 'folder', label: t({ id: 'catalogacao.tab.materia' }), separator: true },
+    { id: 'periodicosPanel', icon: 'newspaper', label: t({ id: 'catalogacao.tab.periodicos' }) },
     ...(arbitreDoublons
-      ? [{ id: 'dedupPanel', icon: '🔁', label: t({ id: 'catalogacao.tab.dedup' }) }]
+      ? [{ id: 'dedupPanel', icon: 'arrowLeftRight', label: t({ id: 'catalogacao.tab.dedup' }) }]
       : []),
   ];
 

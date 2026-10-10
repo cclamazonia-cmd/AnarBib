@@ -1585,21 +1585,21 @@ function PanelPageInner() {
     { key: 'acoes', icon: 'zap', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }), group: true },
     { key: 'reservas', icon: 'pin', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
     { key: 'consultas-locais', icon: 'book', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
-    { key: 'emprestimos', icon: '📚', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
-    { key: 'leitor', icon: '👤', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
+    { key: 'emprestimos', icon: 'library', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
+    { key: 'leitor', icon: 'user', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
     { key: 'historico', icon: 'history', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin ? [
       { key: 'contribuicoes', icon: 'ticket', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
     // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
     ...(isLibrarian ? [
-      { key: 'validacoes', icon: '✅', label: t({ id: 'panel.tab.validations' }), hint: t({ id: 'panel.tab.validations.hint' }), count: pendingValidCount, alert: true },
+      { key: 'validacoes', icon: 'check', label: t({ id: 'panel.tab.validations' }), hint: t({ id: 'panel.tab.validations.hint' }), count: pendingValidCount, alert: true },
     ] : []),
     // MOBILE P4 : récolement (inventaire par scan). Staff de terrain uniquement.
     ...(canRecolement ? [
-      { key: 'recolement', icon: '🔍', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
+      { key: 'recolement', icon: 'search', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
       // Capas (27/09/2026) : même staff de terrain que le récolement, même geste — le livre en main.
-      { key: 'capas', icon: '📷', label: t({ id: 'panel.tab.capas' }), hint: t({ id: 'panel.tab.capas.hint' }) },
+      { key: 'capas', icon: 'image', label: t({ id: 'panel.tab.capas' }), hint: t({ id: 'panel.tab.capas.hint' }) },
     ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
