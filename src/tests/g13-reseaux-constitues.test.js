@@ -77,7 +77,8 @@ describe('le filtre de réseaux du catalogue', () => {
     expect(src).toContain("apiRpc('fn_catalog_networks_v1')");
     expect(src).toMatch(/saveFilters\(\{[^}]*networkFilter/);
     expect(src).toContain("setLibraryFilter([]); setNetworkFilter([]);");
-    expect(src).toContain("t({ id: 'catalog.chip.network' })");
+    // E6 lot 3 (10/10/2026) : les puces des filtres actifs sont rendues par CatalogFiltersBar.
+    expect(lire('src/components/catalog/CatalogFiltersBar.jsx')).toContain("t({ id: 'catalog.chip.network' })");
     expect(src).toMatch(/setLibraryFilter\(libFromUrl \? \[libFromUrl\] : \[\]\);\n[^\n]*\n[^\n]*\n\s*setNetworkFilter\(\[\]\);/);
     expect(src).toContain("bibliothequesFiltrees(libraryFilter, reseauxActifs, catalogNetworks)");
   });

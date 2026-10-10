@@ -129,12 +129,15 @@ describe('catalogue — la cellule des bibliothèques et les exports (lot 2)', (
   it('la page importe ses aides et ne les définit plus (source)', () => {
     const page = lire('src/pages/public/CatalogPage.jsx');
     expect(page).toContain("from '@/lib/catalogOpac'");
-    expect(page).toContain("import LibraryCell from '@/components/catalog/LibraryCell'");
+    // E6 lot 4 : la cellule est rendue par CatalogResultsTable, qui l'importe ; la page ne la touche plus.
+    const table = lire('src/components/catalog/CatalogResultsTable.jsx');
+    expect(table).toContain("import LibraryCell from '@/components/catalog/LibraryCell'");
+    expect(page).not.toContain('LibraryCell');
     expect(page).toContain("import CatalogExportActions from '@/components/catalog/CatalogExportActions'");
     expect(page).toContain("import { useDebounce } from '@/hooks/useDebounce'");
     for (const def of ['function getStatusInfo(', 'function parseLibraryNames(', 'function exportCSV(', 'function exportPDF(', 'function LibraryCell(', 'function useDebounce(', 'const PUBLIC_COLS', 'const TIPO_ICONS']) {
       expect(page, def).not.toContain(def);
     }
-    expect(Buffer.byteLength(page, 'utf8')).toBeLessThan(105 * 1024);
+    expect(Buffer.byteLength(page, 'utf8')).toBeLessThan(65 * 1024); // lots 3-4 : 64 197 octets le 10/10/2026
   });
 });

@@ -37,7 +37,10 @@ describe('digitalBadge', () => {
 });
 
 describe('le catalogue ne lit plus has_online_reading pour ses badges', () => {
-  const src = readFileSync(path.resolve(__dirname, '../pages/public/CatalogPage.jsx'), 'utf8');
+  // E6 lot 4 (10/10/2026) : la table et ses rendus de lignes vivent dans src/components/catalog/CatalogResultsTable.jsx ;
+  // la page garde la requête d'accès numérique (useDigitalAccess) et lui passe accesNumerique.
+  const src = readFileSync(path.resolve(__dirname, '../pages/public/CatalogPage.jsx'), 'utf8')
+    + readFileSync(path.resolve(__dirname, '../components/catalog/CatalogResultsTable.jsx'), 'utf8');
   it('badge des éditions et des œuvres par l’accès réel', () => {
     expect(src).not.toMatch(/book\.has_online_reading\s*&&/);
     expect(src).toContain('useDigitalAccess(idsAffiches');

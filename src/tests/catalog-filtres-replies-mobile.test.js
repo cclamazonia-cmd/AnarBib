@@ -31,6 +31,9 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const page = readFileSync(path.resolve(here, '..', 'pages/public/CatalogPage.jsx'), 'utf8');
 // E6 lot 1 (10/10/2026) : ecranEtroit() vit dans src/lib/catalogOpac.js ; la page l'importe et l'appelle.
 const lib = readFileSync(path.resolve(here, '..', 'lib/catalogOpac.js'), 'utf8');
+// E6 lot 3 (10/10/2026) : le rendu du bloc « Filtres » vit dans src/components/catalog/CatalogFiltersBar.jsx ;
+// l'état (filtersOpen, filtersActiveCount, la sauvegarde) reste dans la page, qui le lui passe en props.
+const bar = readFileSync(path.resolve(here, '..', 'components/catalog/CatalogFiltersBar.jsx'), 'utf8');
 
 describe('Catalogue — « Filtres » naît replié sur écran étroit (E17)', () => {
   it("l'état initial : la préférence enregistrée, sinon la largeur de l'écran", () => {
@@ -47,19 +50,19 @@ describe('Catalogue — « Filtres » naît replié sur écran étroit (E17)', (
   });
 
   it('la largeur se lit une fois : aucun écouteur de matchMedia', () => {
-    expect((page + lib).split('matchMedia(').length - 1).toBe(1);
-    expect(page + lib).not.toMatch(/matchMedia\([^)]*\)\s*\.\s*(addEventListener|addListener|onchange)/);
+    expect((page + bar + lib).split('matchMedia(').length - 1).toBe(1);
+    expect(page + bar + lib).not.toMatch(/matchMedia\([^)]*\)\s*\.\s*(addEventListener|addListener|onchange)/);
   });
 
   it("sur écran étroit, le bloc ne se rouvre pas seul", () => {
-    const ouvertures = page.match(/setFiltersOpen\(true\)/g) || [];
+    const ouvertures = (page + bar).match(/setFiltersOpen\(true\)/g) || [];
     expect(ouvertures).toHaveLength(1);
     expect(page).toContain('if (!ecranEtroit()) setFiltersOpen(true);');
   });
 
   it('replié, il dit combien de filtres il cache', () => {
     expect(page).toContain('const filtersActiveCount = [');
-    const en_tete = page.slice(page.indexOf("t({ id: 'catalog.section.filters' })"), page.indexOf('{filtersOpen && (<>'));
+    const en_tete = bar.slice(bar.indexOf("t({ id: 'catalog.section.filters' })"), bar.indexOf('{filtersOpen && (<>'));
     expect(en_tete).toContain('!filtersOpen && filtersActiveCount > 0');
     expect(en_tete).toContain('className="ab-collapse-badge"');
     expect(en_tete).toContain('className="ab-sr-only"');
@@ -76,7 +79,8 @@ describe('Catalogue — « Filtres » replié emporte sa rangée d’actions sur
   const css = readFileSync(path.resolve(here, '..', 'pages/public/CatalogPage.css'), 'utf8');
 
   it('le bloc replié porte une classe, et elle seule', () => {
-    expect(page).toContain("className={`ab-toolbar${filtersOpen ? '' : ' ab-toolbar--replie'}`}");
+    expect(bar).toContain("className={`ab-toolbar${filtersOpen ? '' : ' ab-toolbar--replie'}`}");
+    expect(page).not.toContain('ab-toolbar--replie');
   });
 
   it('la rangée ne disparaît que sous 640 px, et que bloc replié', () => {
