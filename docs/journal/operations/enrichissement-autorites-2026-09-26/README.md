@@ -113,7 +113,7 @@ interrogé pour la nationalité `P27` des candidats retenus, `P297` pour le code
 |---|---|
 | introuvables dans Wikidata (et, pour la plupart, à la LC et à IdRef) | 424 |
 | aucun candidat Wikidata à deux signaux | 121 |
-| postérieures au 26/09 : jamais passées | 62 |
+| absentes des passes : 51 collectivités ou congrès (hors méthode), 1 sans type, 10 personnes créées le 27/09 | 62 |
 | plusieurs candidats à deux signaux (homonymes) | 22 |
 | acceptées en septembre, mais Wikidata ne donne pas de nationalité | 19 |
 | un candidat à deux signaux, sans nationalité ou sans code ISO | 10 |
@@ -130,5 +130,13 @@ Cleber Rudy BR). Chaque motif cite la source, les signaux et les candidats écar
 
 **Ce que la règle ne peut pas donner** : 424 fiches introuvables dans les sources ouvertes, 121 sans second signal — le
 critère « moins de 20 % sans pays » reste hors de portée de l'enrichissement automatique (45 % avant, 44 % si les quatorze
-sont acceptées). Les 62 fiches créées depuis le 26/09 n'ont jamais été passées : une passe Wikidata à refaire pour elles,
-avec la même règle, en propositions. Les refus détaillés sont dans `refus-2026-10-09.csv`.
+sont acceptées). Les refus détaillés sont dans `refus-2026-10-09.csv`.
+
+## Cinquième phase — les onze fiches jamais passées (10/10/2026)
+
+Les 62 fiches « absentes des passes » se lisent ainsi : 51 collectivités ou congrès (la méthode ne traite que les
+personnes), 1 sans type (Piero Ferroa), 10 personnes créées le 27/09, après l'export de septembre. `wd-rapprocher.mjs`
+rejoué sur ces onze (`LIMITE` par défaut, cache à part, hors dépôt) : **2 acceptées** à deux signaux — David E. Kaiser
+(Q5233184, *Postmortem* 1985, historien, US) et José Luis Gutiérrez Molina (Q51862284, *Germinal* 2012, historien, ES) —,
+1 à relire (Pedro Costa Musté, un seul signal), 1 ambiguë (Cristina Pereira), 7 introuvables. Les deux acceptées sont
+**proposées** dans l'Atelier le 10/10 (mêmes champs, même motif) : seize propositions C4 en tout, échéance du 16 au 17/10.

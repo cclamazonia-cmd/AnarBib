@@ -414,7 +414,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Au 29/08, 722 fiches sur 1 305 (55 %) n'avaient pas de `country` ; au 27/09, après trois passes (Wikidata `b418e149`, Library of Congress `abaa4755`, IdRef `62553dc6`), 674 sur 1 505 (45 %).** Or c'est `country` qui pilote la règle d'entrée du nom : sans lui, la détection des doubles patronymes hispaniques ne voit qu'une fraction des cas. Les 22 signalements sont un **plancher**, pas un total.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** **Décision de Xavier du 08/10 : enrichissement Wikidata / Library of Congress / IdRef, proposé en revue** — le pays vient d'une autorité externe quand l'identité est sûre (des dates concordantes, OU deux signaux indépendants : un titre du catalogue et une forme du nom, un identifiant déjà lié…), et il est posé en **proposition** dans l'Atelier des autorités (`authority_proposals`), jamais d'office. Les trois passes automatiques de septembre (`decisions*.csv`) sont la matière : rejouer avec le seuil « deux signaux » sur les 674 restantes, verser les candidates en propositions, et laisser l'Atelier les accepter ou les refuser une à une ; les bibliothèques nationales du Brésil et d'Argentine restent fermées, on ne les contourne pas.
 
