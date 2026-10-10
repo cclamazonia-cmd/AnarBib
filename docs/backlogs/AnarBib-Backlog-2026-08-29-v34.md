@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-10** · 53 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-10** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -17,7 +17,7 @@
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Mis à jour dans cette version** : C17 clos sur décision de Xavier (les deux critères tenus, le regard à l'écran porté par E31). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21 ; le refus traduit d'un numéro libéré, C17) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).
 
-**Fraîcheur des constats au 2026-10-10.** **37 items sur 53** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-10.** **38 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **16** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -385,6 +385,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C26** | Réviser et publier les 24 brouillons de l'acervo historique du CCLA (BLMF) | `P2` | Ouvert |
 | **C27** | Indexer les notices que le vocabulaire matière ne couvre pas | `P2` | Ouvert |
 | **C28** | Trancher trois paires de notices que DEDUP-14 a fait apparaître | `P2` | Ouvert |
+| **C29** | Les exemplaires d’une notice se créent, se modifient et se publient depuis la notice | `P2` | En cours |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
 
@@ -550,6 +551,30 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Xavier, à l'écran ; les livres en main si l'ISBN ne suffit pas.
 
 *Renvois : `commit 8e0fe538` · `REGISTRE DEDUP-13, DEDUP-14` · `merge_log`*
+
+#### C29 — Les exemplaires d’une notice se créent, se modifient et se publient depuis la notice
+
+`P2` Courant · État : **En cours** · Charge : quelques jours · Ce que ça demande : React / JavaScript, SQL / PostgreSQL
+
+**État.** Décidé le 10/10 avec Xavier (« Ça me convient. On y va. »), sur ce diagnostic : l’exemplaire vit loin de sa notice (onglet « Indexation », `ExemplarDraftForm.jsx` à 948 lignes et cinq étapes à plat, liste « mes cent derniers brouillons ») ; la fiche ne montre jamais ses exemplaires ensemble ; changer la cote d’un exemplaire publié prend six gestes et un brouillon ; la bibliothèque se dit de deux façons (texte libre « Biblioteca » reconnu de façon floue, et bloc « Réattribuer ») ; deux chemins de création (exemplaires initiaux à la publication, puis l’onglet). Même recette que le dépôt numérique (05/10) : un panneau dans la notice, une liste, un formulaire court en étapes, le stockage déduit. **Lot 1 livré le 10/10 (`0e78be83`)** : `ExemplaresPanel.jsx`, monté dans la fiche après les ressources numériques — exemplaires publiés (fonds de la notice, repli sur la référence) et brouillons vivants (référence, ou notice pour un exemplaire importé), rangés par bibliothèque, les miennes d’abord et modifiables, les autres en lecture seule ; « Nouvel exemplaire » et « Modifier » ouvrent l’éditeur existant pré-ciblé ; un exemplaire qui a déjà un brouillon de mise à jour propose « Reprendre la mise à jour » au lieu d’en ouvrir un second (`create_exemplar_draft_from_exemplar` n’est pas idempotent). Au passage : redemander un exemplaire de la MÊME fiche ne relançait pas la cible (chaîne égale, effet muet) — la cible porte un nonce. La carte « pour information » de l’aperçu reste telle quelle jusqu’au lot 4.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Quatre lots. *(1)* Le panneau « Exemplaires » dans la notice, en lecture, qui envoie vers l’éditeur pré-ciblé. *(2)* Le formulaire court dans le panneau, création seulement, en quatre temps qui s’ouvrent l’un après l’autre : où (liste fermée des bibliothèques où l’on est staff ; une seule → pré-choisie et masquée), rangement (tombo proposé par `fn_next_tombo`, modifiable ; secteur, meuble, étagère), circulation et visibilité héritées de la notice, et un volet replié (acquisition, provenance, notes, étiquette dont l’état se déduit). *(3)* « Modifier » un exemplaire publié sans voir le brouillon : une RPC enchaîne création du brouillon, mise à jour et publication en une transaction, en appelant `publish_exemplar_draft` tel quel ; le changement de bibliothèque garde sa confirmation. *(4)* Le panneau remplace `InitialCopiesBlock` ; l’onglet « Indexation » garde la masse (imports, lots, file, planche d’étiquettes) et cesse d’être la porte d’entrée ; « Publié — et maintenant ? » ouvre le panneau au lieu de changer d’onglet.
+
+**Pourquoi ça compte.** Ranger un livre reçu est le geste le plus fréquent d’une bibliothèque de quartier, et c’est celui qui demande aujourd’hui le plus de clics et le plus de savoir sur l’outil (une référence, un onglet, un brouillon, une republication). Les gardes existantes (B29, B30, tombo unique, détention par bibliothèque, exemplaires importés qui suivent leur notice) restent toutes : on change le chemin, pas les règles.
+
+**Ce qui compte comme fini.**
+
+- Depuis la fiche, on voit tous ses exemplaires par bibliothèque, publiés et en brouillon, et l’on atteint l’éditeur d’un clic (lot 1 — fait le 10/10).
+- Un exemplaire se crée sans quitter la fiche, en quatre temps ; le texte libre « Biblioteca » a disparu du rangement (lot 2).
+- Changer la cote d’un exemplaire publié est un geste : la RPC enchaîne brouillon, mise à jour et publication, et une suite SQL l’emprunte réellement (lot 3).
+- Un seul chemin de création : le panneau remplace les exemplaires initiaux ; l’onglet garde la masse (lot 4).
+- Vu à l’écran par Xavier, connecté (E31).
+
+**Dépendances.** Rien pour les lots 1 et 2 (front seul, dix locales d’emblée). Le lot 3 demande une migration, sa suite SQL et son « Complément » à l’audit des DEFINER. Le lot 4 touche `publish_book_draft` (exemplaires initiaux).
+
+*Renvois : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)`*
 
 ---
 
@@ -1931,4 +1956,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 53 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

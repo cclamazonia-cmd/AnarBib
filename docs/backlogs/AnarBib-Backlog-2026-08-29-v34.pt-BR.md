@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-10** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-10** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 9 de outubro de 2026 à noite** (`47781985`, medido às 22h15 — pedido em `d116d42d`, dois commits depois C17 estava entregue e sua migração aplicada: o levantamento os inclui) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (levantamento anterior: 08/10 à noite, `c06f9ed2`). **A CI está em dia com a cabeça do branch**: 454 migrações aplicadas = 454 no repositório, as quatro que esperavam ontem à noite passaram, mais H21 lote 6b, os tomos II e III de *Acción directa* e C17. O que mudou e por quê: **o catálogo** — −3 fichas, todas por fusão (dois tomos reunidos por migração com acordo de Xavier, uma fusão às 21h46), nenhuma criada, quatro retomadas publicadas; **o banco** — +25 funções (H21 lote 6b em `ingest`, C17 com seu registro `tombos_attribues`, a lista dos fios de correspondência), mais duas tabelas fechadas (daí +2 avisos 0008), **0029 em 428, exatamente a contagem esperada pela auditoria**, e a guarda CI dos DEFINER de lista fechada estendida à correspondência (uma porta, três ajudas); **a rede** — a correspondência vive (um fio, duas mensagens, BLMF para BTL), G19 fechado por Xavier; **o repositório** — +12 commits, +40 chaves, +39 testes, +2 suítes SQL, C17 entregue (um número de tombo nunca se redá). **Atualizado nesta versão**: C17 fechado por decisão de Xavier (os dois critérios cumpridos, o olhar na tela levado por E31). **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (disparo longo de 11/10 e depois `restore-test`), I33 (um disparo noturno depois de uma migração — a migração desta noite permite), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas edições); *na tela*: E31 (E6 lotes 2, 4, 5, 8; E35; telas do H21; a recusa traduzida de um número liberado, C17); *as decisões*: A1 (uma terceira administração de rede); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar), H32 (o aviso ao PMB Services, a enviar).
 
-**Frescor dos constatos em 2026-10-10.** **37 itens de 53** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-10.** **38 itens de 54** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Os **16** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -385,6 +385,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
 | **C28** | Decidir três pares de notícias que o DEDUP-14 fez aparecer | `P2` | Aberto |
+| **C29** | Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia | `P2` | Em curso |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -550,6 +551,30 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Xavier, na tela; os livros na mão se o ISBN não bastar.
 
 *Remissões : `commit 8e0fe538` · `REGISTRE DEDUP-13, DEDUP-14` · `merge_log`*
+
+#### C29 — Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia
+
+`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, SQL / PostgreSQL
+
+**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce.
+
+*Verificado : [object Object]*
+
+**O que é.** Quatro lotes. *(1)* O painel « Exemplares » na notícia, em leitura, que leva ao editor já apontado. *(2)* O formulário curto no painel, só criação, em quatro tempos que se abrem um após o outro: onde, arrumação, circulação e visibilidade herdadas, e um painel dobrado. *(3)* « Editar » um exemplar publicado sem ver o rascunho: uma RPC encadeia rascunho, atualização e publicação numa transação, chamando `publish_exemplar_draft` tal como está. *(4)* O painel substitui `InitialCopiesBlock`; a aba guarda a massa e deixa de ser a porta de entrada.
+
+**Por que importa.** Arrumar um livro recebido é o gesto mais frequente de uma biblioteca de bairro, e é hoje o que pede mais cliques e mais saber sobre a ferramenta. As guardas existentes (B29, B30, tombo único, detenção por biblioteca) ficam todas: muda-se o caminho, não as regras.
+
+**O que conta como terminado.**
+
+- Da ficha, veem-se todos os exemplares por biblioteca, publicados e em rascunho, e chega-se ao editor num clique (lote 1 — feito em 10/10).
+- Um exemplar se cria sem sair da ficha, em quatro tempos; o texto livre « Biblioteca » sumiu (lote 2).
+- Mudar a localização de um exemplar publicado é um gesto: a RPC encadeia rascunho, atualização e publicação, provada por uma suíte SQL (lote 3).
+- Um só caminho de criação: o painel substitui os exemplares iniciais (lote 4).
+- Visto na tela por Xavier, conectado (E31).
+
+**Dependências.** Nada para os lotes 1 e 2 (só front, dez locales de saída). O lote 3 pede uma migração, sua suíte SQL e seu « Complemento » na auditoria das DEFINER. O lote 4 toca `publish_book_draft`.
+
+*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)`*
 
 ---
 
@@ -1921,4 +1946,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-10. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-09 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `47781985`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-10. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-09 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `47781985`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
