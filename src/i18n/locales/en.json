@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Copy draft kept: it waits in the list, “Edit” opens it in the full editor.",
   "catalogacao.copies.form.publishFailed": "The draft is saved but publication was refused: {message}. “Edit” opens it in the full editor.",
   "catalogacao.copies.form.fullEditor": "Full editor",
-  "catalogacao.copies.form.fullEditorHint": "Opens the Indexing tab, already targeting this record: batches, label, reassignment."
+  "catalogacao.copies.form.fullEditorHint": "Opens the Indexing tab, already targeting this record: batches, label, reassignment.",
+  "catalogacao.copies.edit.title": "Edit copy {tombo}",
+  "catalogacao.copies.edit.library": "Kept at {library}.",
+  "catalogacao.copies.edit.tomboFixed": "The accession number does not change here: a number once given is never given again.",
+  "catalogacao.copies.edit.reassign": "Change library or batch: full editor",
+  "catalogacao.copies.edit.submit": "Save the changes",
+  "catalogacao.copies.edit.updated": "Copy {tombo} updated and republished.",
+  "error.copies.not_found": "This copy no longer exists.",
+  "error.copies.changes_invalid": "The submitted changes cannot be read.",
+  "error.copies.field_not_allowed": "This field cannot be changed here: neither the accession number nor the library. Use the full editor.",
+  "error.copies.update_pending": "This copy already has an update in progress: resume it in the editor rather than opening a second one."
 }

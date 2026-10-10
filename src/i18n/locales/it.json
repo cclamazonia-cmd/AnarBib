@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Bozza di esemplare tenuta: aspetta nell’elenco, « Modifica » la apre nell’editor completo.",
   "catalogacao.copies.form.publishFailed": "La bozza è salvata ma la pubblicazione è stata rifiutata: {message}. « Modifica » la apre nell’editor completo.",
   "catalogacao.copies.form.fullEditor": "Modulo completo",
-  "catalogacao.copies.form.fullEditorHint": "Apre la scheda Indicizzazione, già puntata su questa scheda: lotti, etichetta, riassegnazione."
+  "catalogacao.copies.form.fullEditorHint": "Apre la scheda Indicizzazione, già puntata su questa scheda: lotti, etichetta, riassegnazione.",
+  "catalogacao.copies.edit.title": "Modificare l’esemplare {tombo}",
+  "catalogacao.copies.edit.library": "Collocato a {library}.",
+  "catalogacao.copies.edit.tomboFixed": "Il numero di inventario non cambia qui: un numero dato non si ridà mai.",
+  "catalogacao.copies.edit.reassign": "Cambiare biblioteca o lotto: editor completo",
+  "catalogacao.copies.edit.submit": "Salvare le modifiche",
+  "catalogacao.copies.edit.updated": "Esemplare {tombo} aggiornato e ripubblicato.",
+  "error.copies.not_found": "Questo esemplare non esiste più.",
+  "error.copies.changes_invalid": "Le modifiche inviate non sono leggibili.",
+  "error.copies.field_not_allowed": "Questo campo non si cambia qui: né il numero di inventario né la biblioteca. Usa l’editor completo.",
+  "error.copies.update_pending": "Questo esemplare ha già un aggiornamento in corso: riprendilo nell’editor invece di aprirne un secondo."
 }

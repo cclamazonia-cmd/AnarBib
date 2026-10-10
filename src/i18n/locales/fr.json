@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Brouillon d’exemplaire gardé : il attend dans la liste, « Modifier » l’ouvre dans l’éditeur complet.",
   "catalogacao.copies.form.publishFailed": "Le brouillon est enregistré mais la publication a été refusée : {message}. « Modifier » l’ouvre dans l’éditeur complet.",
   "catalogacao.copies.form.fullEditor": "Éditeur complet",
-  "catalogacao.copies.form.fullEditorHint": "Ouvre l’onglet Indexation, pré-ciblé sur cette fiche : lots, étiquette, réattribution."
+  "catalogacao.copies.form.fullEditorHint": "Ouvre l’onglet Indexation, pré-ciblé sur cette fiche : lots, étiquette, réattribution.",
+  "catalogacao.copies.edit.title": "Modifier l’exemplaire {tombo}",
+  "catalogacao.copies.edit.library": "Rangé à {library}.",
+  "catalogacao.copies.edit.tomboFixed": "Le numéro d’inventaire ne change pas ici : un numéro donné ne se redonne jamais.",
+  "catalogacao.copies.edit.reassign": "Changer de bibliothèque ou de lot : éditeur complet",
+  "catalogacao.copies.edit.submit": "Enregistrer les changements",
+  "catalogacao.copies.edit.updated": "Exemplaire {tombo} mis à jour et republié.",
+  "error.copies.not_found": "Cet exemplaire n’existe plus.",
+  "error.copies.changes_invalid": "Les changements envoyés ne sont pas lisibles.",
+  "error.copies.field_not_allowed": "Ce champ ne se change pas ici : ni le numéro d’inventaire, ni la bibliothèque. Passe par l’éditeur complet.",
+  "error.copies.update_pending": "Cet exemplaire a déjà une mise à jour en cours : reprends-la dans l’éditeur plutôt que d’en ouvrir une seconde."
 }

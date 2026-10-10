@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Το προσχέδιο αντιτύπου διατηρήθηκε: περιμένει στη λίστα, η «Επεξεργασία» το ανοίγει στον πλήρη επεξεργαστή.",
   "catalogacao.copies.form.publishFailed": "Το προσχέδιο αποθηκεύτηκε αλλά η δημοσίευση απορρίφθηκε: {message}. Η «Επεξεργασία» το ανοίγει στον πλήρη επεξεργαστή.",
   "catalogacao.copies.form.fullEditor": "Πλήρης επεξεργαστής",
-  "catalogacao.copies.form.fullEditorHint": "Ανοίγει την καρτέλα Ευρετηρίαση, ήδη στοχευμένη σε αυτή την καρτέλα: παρτίδες, ετικέτα, ανακατανομή."
+  "catalogacao.copies.form.fullEditorHint": "Ανοίγει την καρτέλα Ευρετηρίαση, ήδη στοχευμένη σε αυτή την καρτέλα: παρτίδες, ετικέτα, ανακατανομή.",
+  "catalogacao.copies.edit.title": "Επεξεργασία του αντιτύπου {tombo}",
+  "catalogacao.copies.edit.library": "Τοποθετημένο στη {library}.",
+  "catalogacao.copies.edit.tomboFixed": "Ο αριθμός εισαγωγής δεν αλλάζει εδώ: ένας αριθμός που δόθηκε δεν ξαναδίνεται ποτέ.",
+  "catalogacao.copies.edit.reassign": "Αλλαγή βιβλιοθήκης ή παρτίδας: πλήρης επεξεργαστής",
+  "catalogacao.copies.edit.submit": "Αποθήκευση των αλλαγών",
+  "catalogacao.copies.edit.updated": "Το αντίτυπο {tombo} ενημερώθηκε και δημοσιεύτηκε ξανά.",
+  "error.copies.not_found": "Αυτό το αντίτυπο δεν υπάρχει πια.",
+  "error.copies.changes_invalid": "Οι αλλαγές που στάλθηκαν δεν είναι αναγνώσιμες.",
+  "error.copies.field_not_allowed": "Αυτό το πεδίο δεν αλλάζει εδώ: ούτε ο αριθμός εισαγωγής ούτε η βιβλιοθήκη. Χρησιμοποίησε τον πλήρη επεξεργαστή.",
+  "error.copies.update_pending": "Αυτό το αντίτυπο έχει ήδη μια ενημέρωση σε εξέλιξη: συνέχισέ την στον επεξεργαστή αντί να ανοίξεις δεύτερη."
 }

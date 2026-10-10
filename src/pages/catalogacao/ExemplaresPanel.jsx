@@ -1,4 +1,4 @@
-// src/pages/catalogacao/ExemplaresPanel.jsx — C29, lots 1 et 2 (10/10/2026)
+// src/pages/catalogacao/ExemplaresPanel.jsx — C29, lots 1 à 3 (10/10/2026)
 //
 // Les exemplaires d'une notice, DANS la notice — frère de DigitalResourcesPanel.
 // Jusqu'ici la fiche ne montrait jamais ses exemplaires ensemble : l'onglet
@@ -31,11 +31,15 @@
 // la publication échoue, le brouillon reste et la liste le montre, avec
 // « Modifier » vers l'éditeur complet. « Garder en brouillon » s'arrête avant.
 //
-// « Modifier » un exemplaire existant remonte encore au parent (onEditPublished,
-// onEditDraft → éditeur complet) : c'est le lot 3. Un exemplaire publié qui a
-// déjà un brouillon de mise à jour propose « Reprendre la mise à jour » au lieu
-// d'en ouvrir un second (create_exemplar_draft_from_exemplar n'est pas
-// idempotent). Rien ici n'écrit le formulaire de la notice.
+// Lot 3 — modifier un exemplaire publié sans voir le brouillon. « Modifier »
+// ouvre les mêmes temps 2 à 4, pré-remplis ; le numéro ne change pas ici
+// (C17) ni la bibliothèque (réattribution confirmée dans l'éditeur complet).
+// « Enregistrer les changements » appelle fn_exemplaire_modifier_et_publier
+// (migration 20261010204944) : reprise, champs permis, publication, en UNE
+// transaction — rien ne reste si la base refuse. Un exemplaire qui a déjà un
+// brouillon de mise à jour propose « Reprendre la mise à jour » vers l'éditeur
+// complet au lieu d'en ouvrir un second (create_exemplar_draft_from_exemplar
+// n'est pas idempotent). Rien ici n'écrit le formulaire de la notice.
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -43,10 +47,11 @@ import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useStaffLibraries, bibliothequesProposables } from '@/lib/useStaffLibraries';
-import { formatShelfLocation } from '@/lib/shelfLocation';
+import { formatShelfLocation, parseShelfLocation } from '@/lib/shelfLocation';
 
 const VIVANTS = ['draft', 'ready'];
 const CIRCULATIONS = ['ambos', 'emprestavel', 'consulta'];
+const COLS_EXEMPLAIRE = 'id, library_id, holding_id, bib_ref, tombo, shelf_location, circulation_policy, visibility, notes, acquisition_mode, acquisition_date, provenance_note, source_library, label_title_override, label_author_override, label_cdd_override, label_note';
 
 function parTombo(a, b) {
   return String(a.tombo || '').localeCompare(String(b.tombo || ''), undefined, { numeric: true, sensitivity: 'base' });
@@ -82,14 +87,14 @@ export function grouperParBibliotheque(exemplaires, brouillons, { staffLibraryId
     groupe(e.library_id).lignes.push({
       kind: 'published', id: e.id, tombo: e.tombo || '', shelf_location: e.shelf_location || '',
       circulation_policy: e.circulation_policy || '', visibility: e.visibility || 'public',
-      retake: reprises.get(String(e.id)) || null,
+      retake: reprises.get(String(e.id)) || null, source: e,
     });
   }
   for (const d of seuls) {
     groupe(d.target_library_id).lignes.push({
       kind: 'draft', id: d.id, tombo: d.tombo || '', shelf_location: d.shelf_location || '',
       circulation_policy: d.circulation_policy || '', visibility: d.visibility || 'public',
-      status: d.status || 'draft', retake: null,
+      status: d.status || 'draft', retake: null, source: d,
     });
   }
   const liste = [...groupes.values()];
@@ -118,11 +123,176 @@ export function etatEtiquette(book, saisie) {
 
 const FORMULAIRE_VIDE = {
   library_id: '', tombo: '', tomboPropose: '', serieAbsente: false,
-  sector: '', shelfUnit: '', shelfLevel: '', locNote: '',
+  sector: '', shelfUnit: '', shelfLevel: '', locNote: '', locLibrary: '', locRaw: '',
   circulation_policy: '', visibility: 'public',
   acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '', notes: '',
   label_title: '', label_author: '', label_cdd: '', label_note: '',
 };
+
+// Lot 3 : les valeurs d'un exemplaire publié, dans le gabarit du formulaire.
+// La cote garde ce que le format structuré ne reconnaît pas (raw) et, le cas
+// échéant, sa partie « Biblioteca » d'avant : rien ne se perd en réécrivant.
+export function valeursDepuisExemplaire(e) {
+  const loc = parseShelfLocation(e?.shelf_location || '');
+  return {
+    ...FORMULAIRE_VIDE,
+    library_id: e?.library_id || '', tombo: e?.tombo || '',
+    sector: loc.sector, shelfUnit: loc.shelfUnit, shelfLevel: loc.shelfLevel, locNote: loc.note, locLibrary: loc.library, locRaw: loc.raw,
+    circulation_policy: e?.circulation_policy || '', visibility: e?.visibility || 'public',
+    acquisition_mode: e?.acquisition_mode || '', acquisition_date: e?.acquisition_date || '',
+    provenance_note: e?.provenance_note || '', source_library: e?.source_library || '', notes: e?.notes || '',
+    label_title: e?.label_title_override || '', label_author: e?.label_author_override || '',
+    label_cdd: e?.label_cdd_override || '', label_note: e?.label_note || '',
+  };
+}
+
+function coteDe(v) {
+  return formatShelfLocation({ library: v.locLibrary, sector: v.sector, shelfUnit: v.shelfUnit, shelfLevel: v.shelfLevel, note: v.locNote, raw: v.locRaw });
+}
+
+// Les changements envoyés à fn_exemplaire_modifier_et_publier : les douze
+// champs permis, tous présents (une valeur vide efface).
+export function changementsPour(v) {
+  return {
+    shelf_location: coteDe(v) || '',
+    circulation_policy: v.circulation_policy || '',
+    visibility: v.visibility || 'public',
+    notes: v.notes.trim(),
+    acquisition_mode: v.acquisition_mode || '',
+    acquisition_date: v.acquisition_date || '',
+    provenance_note: v.provenance_note.trim(),
+    source_library: v.source_library.trim(),
+    label_title_override: v.label_title.trim(),
+    label_author_override: v.label_author.trim(),
+    label_cdd_override: v.label_cdd.trim(),
+    label_note: v.label_note.trim(),
+  };
+}
+
+const champ = { width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
+
+// Les temps 2 à 4, communs à la création (lot 2) et à la modification (lot 3).
+function Temps({ v, set, book, acqModes, t, tombo }) {
+  return (
+    <>
+      {/* 2. Rangement */}
+      <fieldset className="cat-dep__step" data-testid="copies-step-shelf">
+        <legend>{t({ id: 'catalogacao.copies.form.shelf' })}</legend>
+        <div className="cat-book-grid">
+          {tombo.mode === 'create' ? (
+            <div className="cat-field">
+              <label>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
+              <input type="text" value={v.tombo} onChange={(e) => set('tombo', e.target.value)} style={champ} data-testid="copies-tombo" />
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#888)', marginTop: 2 }}>
+                {tombo.serieAbsente ? t({ id: 'catalogacao.copies.form.tomboManual' }) : t({ id: 'catalogacao.copies.form.tomboHint' })}
+              </div>
+            </div>
+          ) : (
+            <div className="cat-field" data-testid="copies-tombo-fixed">
+              <label>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
+              <div style={{ ...champ, opacity: .7 }}>{v.tombo || '—'}</div>
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#888)', marginTop: 2 }}>{t({ id: 'catalogacao.copies.edit.tomboFixed' })}</div>
+            </div>
+          )}
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>
+            <input type="text" value={v.sector} onChange={(e) => set('sector', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.sectorRoom.ph' })} style={champ} />
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.shelfUnit' })}</label>
+            <input type="text" value={v.shelfUnit} onChange={(e) => set('shelfUnit', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.shelfUnit.ph' })} style={champ} />
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.shelfLevel' })}</label>
+            <input type="text" value={v.shelfLevel} onChange={(e) => set('shelfLevel', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.shelfLevel.ph' })} style={champ} />
+          </div>
+          <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+            <label>{t({ id: 'catalogacao.exemplar.locNote' })}</label>
+            <input type="text" value={v.locNote} onChange={(e) => set('locNote', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.locNote.ph' })} style={champ} />
+          </div>
+          {v.locRaw && (
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <label>{t({ id: 'catalogacao.exemplar.shelfRaw' })}</label>
+              <input type="text" value={v.locRaw} onChange={(e) => set('locRaw', e.target.value)} style={champ} />
+            </div>
+          )}
+        </div>
+      </fieldset>
+
+      {/* 3. Circulation et visibilité */}
+      <fieldset className="cat-dep__step" data-testid="copies-step-circulation">
+        <legend>{t({ id: 'catalogacao.copies.form.circulation' })}</legend>
+        {tombo.mode === 'create' && (
+          <div className="cat-dep__note" style={{ marginTop: 0, marginBottom: 8 }}>{t({ id: 'catalogacao.copies.form.circulationInherited' })}</div>
+        )}
+        <div className="cat-dep__choices">
+          {CIRCULATIONS.map((c) => (
+            <label key={c} className={`cat-dep__choice${v.circulation_policy === c ? ' is-on' : ''}`}>
+              <input type="radio" name={`copies-circulation-${tombo.mode}`} checked={v.circulation_policy === c} onChange={() => set('circulation_policy', c)} />
+              <span>{t({ id: `catalogacao.exemplar.circulationPolicy.${c}` })}</span>
+            </label>
+          ))}
+        </div>
+        <label className="cat-dep__check" style={{ marginTop: 8 }}>
+          <input type="checkbox" checked={v.visibility === 'staff_only'} onChange={(e) => set('visibility', e.target.checked ? 'staff_only' : 'public')} />
+          {t({ id: 'catalogacao.exemplar.visibility.staff_only' })}
+        </label>
+      </fieldset>
+
+      {/* 4. Détails, repliés */}
+      <details className="cat-dep__step" data-testid="copies-step-details">
+        <summary style={{ fontWeight: 700, fontSize: '.86rem', cursor: 'pointer', marginBottom: 8 }}>{t({ id: 'catalogacao.copies.form.details' })}</summary>
+        <div className="cat-book-grid">
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.acquisitionMode' })}</label>
+            <select value={v.acquisition_mode} onChange={(e) => set('acquisition_mode', e.target.value)} style={champ}>
+              <option value="">{t({ id: 'catalogacao.exemplar.acquisitionModeDefault' })}</option>
+              {acqModes.map((m) => <option key={m.code} value={m.code}>{m.label}</option>)}
+              {v.acquisition_mode && !acqModes.some((m) => m.code === v.acquisition_mode) && <option value={v.acquisition_mode}>{v.acquisition_mode}</option>}
+            </select>
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.acquisitionDate' })}</label>
+            <input type="date" value={v.acquisition_date} onChange={(e) => set('acquisition_date', e.target.value)} style={champ} />
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.sourceLibrary' })}</label>
+            <input type="text" value={v.source_library} onChange={(e) => set('source_library', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.sourceLibrary.ph' })} style={champ} />
+          </div>
+          <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+            <label>{t({ id: 'catalogacao.exemplar.provenanceNote' })}</label>
+            <input type="text" value={v.provenance_note} onChange={(e) => set('provenance_note', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.provenanceNote.ph' })} style={champ} />
+          </div>
+          <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+            <label>{t({ id: 'catalogacao.exemplar.notes' })}</label>
+            <input type="text" value={v.notes} onChange={(e) => set('notes', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.notes.ph' })} style={champ} data-testid="copies-notes" />
+          </div>
+        </div>
+        <div className="cat-dep__note" data-testid="copies-label-state">
+          {t({ id: 'catalogacao.copies.form.labelDeduced' }, { author: v.label_author || book?.autor || '—', title: v.label_title || book?.titulo || '—' })}
+        </div>
+        <div className="cat-book-grid">
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.labelTitle' })}</label>
+            <input type="text" value={v.label_title} onChange={(e) => set('label_title', e.target.value)} placeholder={book?.titulo || ''} style={champ} />
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.labelAuthor' })}</label>
+            <input type="text" value={v.label_author} onChange={(e) => set('label_author', e.target.value)} placeholder={book?.autor || ''} style={champ} />
+          </div>
+          <div className="cat-field">
+            <label>{t({ id: 'catalogacao.exemplar.labelCdd' })}</label>
+            <input type="text" value={v.label_cdd} onChange={(e) => set('label_cdd', e.target.value)} placeholder={book?.cdd || ''} style={champ} />
+          </div>
+          <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+            <label>{t({ id: 'catalogacao.exemplar.labelNote' })}</label>
+            <input type="text" value={v.label_note} onChange={(e) => set('label_note', e.target.value)} style={champ} />
+          </div>
+        </div>
+      </details>
+    </>
+  );
+}
 
 export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, onNewCopy, onEditPublished, onEditDraft }) {
   const { formatMessage: t } = useIntl();
@@ -136,10 +306,11 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState('');
   const [rechargement, setRechargement] = useState(0);
-  // Lot 2 : le formulaire court (null = fermé).
+  // Lot 2 : le formulaire court (null = fermé). Lot 3 : l'exemplaire en modification.
   const [nf, setNf] = useState(null);
+  const [ef, setEf] = useState(null);               // { id, tombo, ...valeurs }
   const [acqModes, setAcqModes] = useState([]);
-  const [envoi, setEnvoi] = useState(''); // '' | 'draft' | 'publish'
+  const [envoi, setEnvoi] = useState(''); // '' | 'draft' | 'publish' | 'edit'
   const [message, setMessage] = useState({ text: '', kind: '' });
 
   useEffect(() => {
@@ -167,16 +338,15 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
           bibRef = livre?.bib_ref || null;
           const { data: holdings, error: eH } = await supabase.from('book_holdings').select('id').eq('book_id', pubId);
           if (eH) throw eH;
-          const cols = 'id, library_id, holding_id, bib_ref, tombo, shelf_location, circulation_policy, visibility';
           const vus = new Map();
           if (holdings && holdings.length) {
-            const { data, error } = await supabase.from('exemplares').select(cols).in('holding_id', holdings.map((h) => h.id));
+            const { data, error } = await supabase.from('exemplares').select(COLS_EXEMPLAIRE).in('holding_id', holdings.map((h) => h.id));
             if (error) throw error;
             for (const e of data || []) vus.set(String(e.id), e);
           }
           if (bibRef) {
             // Repli : un exemplaire publié sans fonds résolu garde la référence.
-            const { data, error } = await supabase.from('exemplares').select(cols).eq('bib_ref', bibRef);
+            const { data, error } = await supabase.from('exemplares').select(COLS_EXEMPLAIRE).eq('bib_ref', bibRef);
             if (error) throw error;
             for (const e of data || []) vus.set(String(e.id), e);
           }
@@ -212,7 +382,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
   }, [publishedBookId, draftId, reloadKey, rechargement]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // La fiche change : un formulaire ouvert ne la concerne plus.
-  useEffect(() => { setNf(null); setMessage({ text: '', kind: '' }); }, [publishedBookId]);
+  useEffect(() => { setNf(null); setEf(null); setMessage({ text: '', kind: '' }); }, [publishedBookId]);
 
   const groupes = useMemo(
     () => grouperParBibliotheque(exemplaires, brouillons, { staffLibraryIds: staffConnu ? staffLibraryIds : [], isNetworkAdmin, libraries }),
@@ -228,15 +398,17 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
   );
   const nomBiblio = (id) => { const l = libraries.find((x) => x.id === id); return l ? (l.short_name || l.name) : id; };
 
+  function chargerModes() {
+    if (acqModes.length > 0) return;
+    supabase.from('catalog_ref_acquisition_modes').select('code, label').eq('is_active', true).order('sort_order')
+      .then(({ data }) => { if (Array.isArray(data)) setAcqModes(data); });
+  }
   function ouvrirFormulaire() {
-    setMessage({ text: '', kind: '' });
+    setMessage({ text: '', kind: '' }); setEf(null);
     const seule = rangeables.length === 1 ? rangeables[0].id : '';
     setNf({ ...FORMULAIRE_VIDE, library_id: seule, circulation_policy: circulationHeritee(book) });
     if (seule) proposerTombo(seule);
-    if (acqModes.length === 0) {
-      supabase.from('catalog_ref_acquisition_modes').select('code, label').eq('is_active', true).order('sort_order')
-        .then(({ data }) => { if (Array.isArray(data)) setAcqModes(data); });
-    }
+    chargerModes();
   }
   function set(k, v) { setNf((p) => (p ? { ...p, [k]: v } : p)); }
 
@@ -269,7 +441,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
         target_bib_ref: book.bib_ref,
         target_library_id: nf.library_id,
         tombo: nf.tombo.trim() || null,
-        shelf_location: formatShelfLocation({ sector: nf.sector, shelfUnit: nf.shelfUnit, shelfLevel: nf.shelfLevel, note: nf.locNote }) || null,
+        shelf_location: coteDe(nf) || null,
         label_title_override: nf.label_title.trim() || null,
         label_author_override: nf.label_author.trim() || null,
         label_cdd_override: nf.label_cdd.trim() || null,
@@ -309,7 +481,27 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
     }
   }
 
-  const champ = { width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
+  // ── Lot 3 : modifier un exemplaire publié, sans voir le brouillon ─────────
+  function ouvrirModification(e) {
+    setMessage({ text: '', kind: '' }); setNf(null);
+    setEf({ id: e.id, ...valeursDepuisExemplaire(e) });
+    chargerModes();
+  }
+  function setE(k, v) { setEf((p) => (p ? { ...p, [k]: v } : p)); }
+  async function enregistrerModification() {
+    if (!ef || envoi) return;
+    setEnvoi('edit'); setMessage({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.rpc('fn_exemplaire_modifier_et_publier', { p_exemplar_id: Number(ef.id), p_changes: changementsPour(ef) });
+      if (error) throw error;
+      setEf(null); setRechargement((n) => n + 1);
+      setMessage({ text: t({ id: 'catalogacao.copies.edit.updated' }, { tombo: ef.tombo || '—' }), kind: 'ok' });
+    } catch (e) {
+      setMessage({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setEnvoi('');
+    }
+  }
 
   return (
     <div className="cat-material-section cat-dep" style={{ gridColumn: 'span 3' }} data-testid="copies-panel">
@@ -318,7 +510,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
           {t({ id: 'catalogacao.copies.title' })}
           {total > 0 && <span className="cat-pill ok" style={{ marginLeft: 8, fontSize: '.65rem' }}>{t({ id: 'catalogacao.copies.count' }, { n: total })}</span>}
         </h4>
-        {publishedBookId && !nf && (
+        {publishedBookId && !nf && !ef && (
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={ouvrirFormulaire}
               disabled={staffConnu && rangeables.length === 0} data-testid="copies-new">
@@ -342,7 +534,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
       )}
       {erreur && <div className="cat-dep__note" role="alert">{t({ id: 'catalogacao.copies.loadError' }, { message: erreur })}</div>}
       {message.text && (
-        <div className={`cat-dep__note ${message.kind === 'error' ? 'is-error' : ''}`} role="status" data-testid="copies-message"
+        <div className="cat-dep__note" role="status" data-testid="copies-message"
           style={message.kind === 'error' ? { color: '#f87171' } : { color: '#7fd18f' }}>{message.text}</div>
       )}
       {chargement && total === 0 && <div className="cat-dep__empty">{t({ id: 'catalogacao.ui.refreshing' })}</div>}
@@ -361,8 +553,10 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
             {g.lignes.map((l) => {
               const meta = [l.shelf_location, circulation(l.circulation_policy),
                 l.visibility === 'staff_only' ? t({ id: 'catalogacao.exemplar.visibility.staff_only' }) : ''].filter(Boolean);
+              const enModification = ef && l.kind === 'published' && String(ef.id) === String(l.id);
               return (
-                <li key={`${l.kind}-${l.id}`} className="cat-dep__item" data-testid="copies-row" data-kind={l.kind} data-retake={l.retake ? '1' : '0'}>
+                <li key={`${l.kind}-${l.id}`} className="cat-dep__item" data-testid="copies-row" data-kind={l.kind} data-retake={l.retake ? '1' : '0'}
+                  style={enModification ? { borderColor: 'var(--color-ok, #4ade80)' } : undefined}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="cat-dep__item-title" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
                       <span>{l.tombo || t({ id: 'catalogacao.queue.noTombo' })}</span>
@@ -375,7 +569,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
                     </div>
                     {meta.length > 0 && <div className="cat-dep__item-meta">{meta.join(' · ')}</div>}
                   </div>
-                  {g.editable && (
+                  {g.editable && !enModification && (
                     <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                       {l.kind === 'draft' && onEditDraft && (
                         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => onEditDraft(l.id)}>{t({ id: 'common.edit' })}</button>
@@ -383,8 +577,8 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
                       {l.kind === 'published' && l.retake && onEditDraft && (
                         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => onEditDraft(l.retake.id)}>{t({ id: 'catalogacao.copies.resumeUpdate' })}</button>
                       )}
-                      {l.kind === 'published' && !l.retake && onEditPublished && (
-                        <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => onEditPublished(l.id)}>{t({ id: 'common.edit' })}</button>
+                      {l.kind === 'published' && !l.retake && (
+                        <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => ouvrirModification(l.source)} data-testid="copies-edit">{t({ id: 'common.edit' })}</button>
                       )}
                     </div>
                   )}
@@ -424,110 +618,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
             <div className="cat-dep__note" data-testid="copies-where-one">{t({ id: 'catalogacao.copies.form.whereOne' }, { library: nomBiblio(nf.library_id) })}</div>
           )}
 
-          {/* 2. Rangement */}
-          {etape2 && (
-            <fieldset className="cat-dep__step" data-testid="copies-step-shelf">
-              <legend>{t({ id: 'catalogacao.copies.form.shelf' })}</legend>
-              <div className="cat-book-grid">
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
-                  <input type="text" value={nf.tombo} onChange={(e) => set('tombo', e.target.value)} style={champ} data-testid="copies-tombo" />
-                  <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#888)', marginTop: 2 }}>
-                    {nf.serieAbsente ? t({ id: 'catalogacao.copies.form.tomboManual' }) : t({ id: 'catalogacao.copies.form.tomboHint' })}
-                  </div>
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>
-                  <input type="text" value={nf.sector} onChange={(e) => set('sector', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.sectorRoom.ph' })} style={champ} />
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.shelfUnit' })}</label>
-                  <input type="text" value={nf.shelfUnit} onChange={(e) => set('shelfUnit', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.shelfUnit.ph' })} style={champ} />
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.shelfLevel' })}</label>
-                  <input type="text" value={nf.shelfLevel} onChange={(e) => set('shelfLevel', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.shelfLevel.ph' })} style={champ} />
-                </div>
-                <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                  <label>{t({ id: 'catalogacao.exemplar.locNote' })}</label>
-                  <input type="text" value={nf.locNote} onChange={(e) => set('locNote', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.locNote.ph' })} style={champ} />
-                </div>
-              </div>
-            </fieldset>
-          )}
-
-          {/* 3. Circulation et visibilité, héritées de la fiche */}
-          {etape2 && (
-            <fieldset className="cat-dep__step" data-testid="copies-step-circulation">
-              <legend>{t({ id: 'catalogacao.copies.form.circulation' })}</legend>
-              <div className="cat-dep__note" style={{ marginTop: 0, marginBottom: 8 }}>{t({ id: 'catalogacao.copies.form.circulationInherited' })}</div>
-              <div className="cat-dep__choices">
-                {CIRCULATIONS.map((c) => (
-                  <label key={c} className={`cat-dep__choice${nf.circulation_policy === c ? ' is-on' : ''}`}>
-                    <input type="radio" name="copies-circulation" checked={nf.circulation_policy === c} onChange={() => set('circulation_policy', c)} />
-                    <span>{t({ id: `catalogacao.exemplar.circulationPolicy.${c}` })}</span>
-                  </label>
-                ))}
-              </div>
-              <label className="cat-dep__check" style={{ marginTop: 8 }}>
-                <input type="checkbox" checked={nf.visibility === 'staff_only'} onChange={(e) => set('visibility', e.target.checked ? 'staff_only' : 'public')} />
-                {t({ id: 'catalogacao.exemplar.visibility.staff_only' })}
-              </label>
-            </fieldset>
-          )}
-
-          {/* 4. Détails, repliés */}
-          {etape2 && (
-            <details className="cat-dep__step" data-testid="copies-step-details">
-              <summary style={{ fontWeight: 700, fontSize: '.86rem', cursor: 'pointer', marginBottom: 8 }}>{t({ id: 'catalogacao.copies.form.details' })}</summary>
-              <div className="cat-book-grid">
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.acquisitionMode' })}</label>
-                  <select value={nf.acquisition_mode} onChange={(e) => set('acquisition_mode', e.target.value)} style={champ}>
-                    <option value="">{t({ id: 'catalogacao.exemplar.acquisitionModeDefault' })}</option>
-                    {acqModes.map((m) => <option key={m.code} value={m.code}>{m.label}</option>)}
-                  </select>
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.acquisitionDate' })}</label>
-                  <input type="date" value={nf.acquisition_date} onChange={(e) => set('acquisition_date', e.target.value)} style={champ} />
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.sourceLibrary' })}</label>
-                  <input type="text" value={nf.source_library} onChange={(e) => set('source_library', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.sourceLibrary.ph' })} style={champ} />
-                </div>
-                <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-                  <label>{t({ id: 'catalogacao.exemplar.provenanceNote' })}</label>
-                  <input type="text" value={nf.provenance_note} onChange={(e) => set('provenance_note', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.provenanceNote.ph' })} style={champ} />
-                </div>
-                <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-                  <label>{t({ id: 'catalogacao.exemplar.notes' })}</label>
-                  <input type="text" value={nf.notes} onChange={(e) => set('notes', e.target.value)} placeholder={t({ id: 'catalogacao.exemplar.notes.ph' })} style={champ} />
-                </div>
-              </div>
-              <div className="cat-dep__note" data-testid="copies-label-state">
-                {t({ id: 'catalogacao.copies.form.labelDeduced' }, { author: nf.label_author || book?.autor || '—', title: nf.label_title || book?.titulo || '—' })}
-              </div>
-              <div className="cat-book-grid">
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.labelTitle' })}</label>
-                  <input type="text" value={nf.label_title} onChange={(e) => set('label_title', e.target.value)} placeholder={book?.titulo || ''} style={champ} />
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.labelAuthor' })}</label>
-                  <input type="text" value={nf.label_author} onChange={(e) => set('label_author', e.target.value)} placeholder={book?.autor || ''} style={champ} />
-                </div>
-                <div className="cat-field">
-                  <label>{t({ id: 'catalogacao.exemplar.labelCdd' })}</label>
-                  <input type="text" value={nf.label_cdd} onChange={(e) => set('label_cdd', e.target.value)} placeholder={book?.cdd || ''} style={champ} />
-                </div>
-                <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-                  <label>{t({ id: 'catalogacao.exemplar.labelNote' })}</label>
-                  <input type="text" value={nf.label_note} onChange={(e) => set('label_note', e.target.value)} style={champ} />
-                </div>
-              </div>
-            </details>
-          )}
+          {etape2 && <Temps v={nf} set={set} book={book} acqModes={acqModes} t={t} tombo={{ mode: 'create', serieAbsente: nf.serieAbsente }} />}
 
           <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
             <button type="button" className="ab-button ab-button--sm" onClick={() => enregistrer(true)} disabled={!pretAEnvoyer || !!envoi} data-testid="copies-submit-publish">
@@ -537,6 +628,32 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
               {envoi === 'draft' ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.copies.form.submitDraft' })}
             </button>
             <button type="button" className="ab-button ab-button--ghost ab-button--sm" onClick={() => setNf(null)} disabled={!!envoi}>{t({ id: 'common.cancel' })}</button>
+          </div>
+        </div>
+      )}
+
+      {ef && (
+        <div className="cat-dep__form" data-testid="copies-edit-form">
+          <h4 style={{ margin: '0 0 6px', fontSize: '.9rem' }}>{t({ id: 'catalogacao.copies.edit.title' }, { tombo: ef.tombo || '—' })}</h4>
+          <div className="cat-dep__note" style={{ marginTop: 0, marginBottom: 10 }}>
+            {t({ id: 'catalogacao.copies.edit.library' }, { library: nomBiblio(ef.library_id) })}
+            {onEditPublished && (
+              <>
+                {' '}
+                <button type="button" className="ab-button ab-button--ghost ab-button--sm" onClick={() => onEditPublished(ef.id)} data-testid="copies-edit-full">
+                  {t({ id: 'catalogacao.copies.edit.reassign' })}
+                </button>
+              </>
+            )}
+          </div>
+
+          <Temps v={ef} set={setE} book={book} acqModes={acqModes} t={t} tombo={{ mode: 'edit' }} />
+
+          <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+            <button type="button" className="ab-button ab-button--sm" onClick={enregistrerModification} disabled={!!envoi} data-testid="copies-edit-submit">
+              {envoi === 'edit' ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.copies.edit.submit' })}
+            </button>
+            <button type="button" className="ab-button ab-button--ghost ab-button--sm" onClick={() => setEf(null)} disabled={!!envoi}>{t({ id: 'common.cancel' })}</button>
           </div>
         </div>
       )}

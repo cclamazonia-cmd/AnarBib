@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Exemplaarconcept bewaard: het wacht in de lijst, „Bewerken“ opent het in de volledige editor.",
   "catalogacao.copies.form.publishFailed": "Het concept is opgeslagen maar de publicatie is geweigerd: {message}. „Bewerken“ opent het in de volledige editor.",
   "catalogacao.copies.form.fullEditor": "Volledige editor",
-  "catalogacao.copies.form.fullEditorHint": "Opent het tabblad Indexering, al gericht op deze fiche: partijen, etiket, hertoewijzing."
+  "catalogacao.copies.form.fullEditorHint": "Opent het tabblad Indexering, al gericht op deze fiche: partijen, etiket, hertoewijzing.",
+  "catalogacao.copies.edit.title": "Exemplaar {tombo} bewerken",
+  "catalogacao.copies.edit.library": "Geplaatst bij {library}.",
+  "catalogacao.copies.edit.tomboFixed": "Het inventarisnummer verandert hier niet: een uitgegeven nummer wordt nooit opnieuw uitgegeven.",
+  "catalogacao.copies.edit.reassign": "Bibliotheek of partij wijzigen: volledige editor",
+  "catalogacao.copies.edit.submit": "Wijzigingen opslaan",
+  "catalogacao.copies.edit.updated": "Exemplaar {tombo} bijgewerkt en opnieuw gepubliceerd.",
+  "error.copies.not_found": "Dit exemplaar bestaat niet meer.",
+  "error.copies.changes_invalid": "De verzonden wijzigingen zijn niet leesbaar.",
+  "error.copies.field_not_allowed": "Dit veld verander je hier niet: noch het inventarisnummer, noch de bibliotheek. Gebruik de volledige editor.",
+  "error.copies.update_pending": "Dit exemplaar heeft al een lopende bijwerking: hervat die in de editor in plaats van een tweede te openen."
 }

@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Exemplar-Entwurf behalten: er wartet in der Liste, „Bearbeiten“ öffnet ihn im vollständigen Editor.",
   "catalogacao.copies.form.publishFailed": "Der Entwurf ist gespeichert, aber die Veröffentlichung wurde abgelehnt: {message}. „Bearbeiten“ öffnet ihn im vollständigen Editor.",
   "catalogacao.copies.form.fullEditor": "Vollständiger Editor",
-  "catalogacao.copies.form.fullEditorHint": "Öffnet den Reiter Indexierung, bereits auf diesen Datensatz gerichtet: Stapel, Etikett, Neuzuordnung."
+  "catalogacao.copies.form.fullEditorHint": "Öffnet den Reiter Indexierung, bereits auf diesen Datensatz gerichtet: Stapel, Etikett, Neuzuordnung.",
+  "catalogacao.copies.edit.title": "Exemplar {tombo} bearbeiten",
+  "catalogacao.copies.edit.library": "Aufgestellt in {library}.",
+  "catalogacao.copies.edit.tomboFixed": "Die Inventarnummer ändert sich hier nicht: eine vergebene Nummer wird nie neu vergeben.",
+  "catalogacao.copies.edit.reassign": "Bibliothek oder Stapel wechseln: vollständiger Editor",
+  "catalogacao.copies.edit.submit": "Änderungen speichern",
+  "catalogacao.copies.edit.updated": "Exemplar {tombo} aktualisiert und neu veröffentlicht.",
+  "error.copies.not_found": "Dieses Exemplar existiert nicht mehr.",
+  "error.copies.changes_invalid": "Die gesendeten Änderungen sind nicht lesbar.",
+  "error.copies.field_not_allowed": "Dieses Feld lässt sich hier nicht ändern: weder die Inventarnummer noch die Bibliothek. Nutze den vollständigen Editor.",
+  "error.copies.update_pending": "Dieses Exemplar hat schon eine laufende Aktualisierung: setze sie im Editor fort, statt eine zweite zu öffnen."
 }

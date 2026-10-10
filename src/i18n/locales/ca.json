@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Esborrany d’exemplar desat: espera a la llista, « Modificar » l’obre a l’editor complet.",
   "catalogacao.copies.form.publishFailed": "L’esborrany s’ha desat però la publicació s’ha refusat: {message}. « Modificar » l’obre a l’editor complet.",
   "catalogacao.copies.form.fullEditor": "Editor complet",
-  "catalogacao.copies.form.fullEditorHint": "Obre la pestanya Indexació, ja apuntant a aquesta fitxa: lots, etiqueta, reassignació."
+  "catalogacao.copies.form.fullEditorHint": "Obre la pestanya Indexació, ja apuntant a aquesta fitxa: lots, etiqueta, reassignació.",
+  "catalogacao.copies.edit.title": "Modificar l’exemplar {tombo}",
+  "catalogacao.copies.edit.library": "Desat a {library}.",
+  "catalogacao.copies.edit.tomboFixed": "El número de registre no canvia aquí: un número donat no es torna a donar mai.",
+  "catalogacao.copies.edit.reassign": "Canviar de biblioteca o de lot: editor complet",
+  "catalogacao.copies.edit.submit": "Desar els canvis",
+  "catalogacao.copies.edit.updated": "Exemplar {tombo} actualitzat i tornat a publicar.",
+  "error.copies.not_found": "Aquest exemplar ja no existeix.",
+  "error.copies.changes_invalid": "Els canvis enviats no es poden llegir.",
+  "error.copies.field_not_allowed": "Aquest camp no es canvia aquí: ni el número de registre ni la biblioteca. Fes servir l’editor complet.",
+  "error.copies.update_pending": "Aquest exemplar ja té una actualització en curs: reprèn-la a l’editor en lloc d’obrir-ne una segona."
 }

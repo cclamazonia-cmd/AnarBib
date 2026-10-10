@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Rascunho de exemplar mantido: ele espera na lista, « Editar » o abre no editor completo.",
   "catalogacao.copies.form.publishFailed": "O rascunho foi salvo mas a publicação foi recusada: {message}. « Editar » o abre no editor completo.",
   "catalogacao.copies.form.fullEditor": "Editor completo",
-  "catalogacao.copies.form.fullEditorHint": "Abre a aba Indexação, já apontada para esta ficha: lotes, etiqueta, reatribuição."
+  "catalogacao.copies.form.fullEditorHint": "Abre a aba Indexação, já apontada para esta ficha: lotes, etiqueta, reatribuição.",
+  "catalogacao.copies.edit.title": "Editar o exemplar {tombo}",
+  "catalogacao.copies.edit.library": "Guardado em {library}.",
+  "catalogacao.copies.edit.tomboFixed": "O tombo não muda aqui: um número dado nunca se dá de novo.",
+  "catalogacao.copies.edit.reassign": "Mudar de biblioteca ou de lote: editor completo",
+  "catalogacao.copies.edit.submit": "Salvar as alterações",
+  "catalogacao.copies.edit.updated": "Exemplar {tombo} atualizado e republicado.",
+  "error.copies.not_found": "Este exemplar não existe mais.",
+  "error.copies.changes_invalid": "As alterações enviadas não são legíveis.",
+  "error.copies.field_not_allowed": "Este campo não muda aqui: nem o tombo, nem a biblioteca. Use o editor completo.",
+  "error.copies.update_pending": "Este exemplar já tem uma atualização em curso: retome-a no editor em vez de abrir uma segunda."
 }

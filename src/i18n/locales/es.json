@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Borrador de ejemplar guardado: espera en la lista, « Editar » lo abre en el editor completo.",
   "catalogacao.copies.form.publishFailed": "El borrador está guardado pero la publicación fue rechazada: {message}. « Editar » lo abre en el editor completo.",
   "catalogacao.copies.form.fullEditor": "Formulario completo",
-  "catalogacao.copies.form.fullEditorHint": "Abre la pestaña Indexación, ya apuntando a esta ficha: lotes, etiqueta, reasignación."
+  "catalogacao.copies.form.fullEditorHint": "Abre la pestaña Indexación, ya apuntando a esta ficha: lotes, etiqueta, reasignación.",
+  "catalogacao.copies.edit.title": "Modificar el ejemplar {tombo}",
+  "catalogacao.copies.edit.library": "Guardado en {library}.",
+  "catalogacao.copies.edit.tomboFixed": "El número de registro no cambia aquí: un número dado nunca se vuelve a dar.",
+  "catalogacao.copies.edit.reassign": "Cambiar de biblioteca o de lote: editor completo",
+  "catalogacao.copies.edit.submit": "Guardar los cambios",
+  "catalogacao.copies.edit.updated": "Ejemplar {tombo} actualizado y vuelto a publicar.",
+  "error.copies.not_found": "Este ejemplar ya no existe.",
+  "error.copies.changes_invalid": "Los cambios enviados no se pueden leer.",
+  "error.copies.field_not_allowed": "Este campo no se cambia aquí: ni el número de registro ni la biblioteca. Usa el editor completo.",
+  "error.copies.update_pending": "Este ejemplar ya tiene una actualización en curso: retómala en el editor en vez de abrir una segunda."
 }

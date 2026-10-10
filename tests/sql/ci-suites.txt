@@ -746,3 +746,5 @@ tests/sql/correspondance_lot1_tests.sql
 tests/sql/tombo_jamais_redonne_tests.sql
 # E36 (10/10/2026) : l'Atelier des autorités dit à qui il est réservé — HINT traduisibles sur les six RPC.
 tests/sql/atelier_reserve_tests.sql
+# C29 lot 3 (10/10/2026) : modifier un exemplaire publié en un geste — fn_exemplaire_modifier_et_publier (reprise, champs permis, publication : une transaction) ; la reprise copie circulation et visibilité.
+tests/sql/c29_exemplaire_modifier_et_publier_tests.sql

@@ -7440,5 +7440,15 @@
   "catalogacao.copies.form.draftKept": "Malneto de ekzemplero konservita: ĝi atendas en la listo, « Redakti » malfermas ĝin en la plena redaktilo.",
   "catalogacao.copies.form.publishFailed": "La malneto estas konservita sed la publikigo estis rifuzita: {message}. « Redakti » malfermas ĝin en la plena redaktilo.",
   "catalogacao.copies.form.fullEditor": "Plena redaktilo",
-  "catalogacao.copies.form.fullEditorHint": "Malfermas la langeton Indeksado, jam celantan ĉi tiun skedon: aroj, etikedo, reatribuo."
+  "catalogacao.copies.form.fullEditorHint": "Malfermas la langeton Indeksado, jam celantan ĉi tiun skedon: aroj, etikedo, reatribuo.",
+  "catalogacao.copies.edit.title": "Redakti la ekzempleron {tombo}",
+  "catalogacao.copies.edit.library": "Metita en {library}.",
+  "catalogacao.copies.edit.tomboFixed": "La inventarnumero ne ŝanĝiĝas ĉi tie: donita numero neniam estas redonita.",
+  "catalogacao.copies.edit.reassign": "Ŝanĝi bibliotekon aŭ aron: plena redaktilo",
+  "catalogacao.copies.edit.submit": "Konservi la ŝanĝojn",
+  "catalogacao.copies.edit.updated": "Ekzemplero {tombo} ĝisdatigita kaj republikigita.",
+  "error.copies.not_found": "Ĉi tiu ekzemplero ne plu ekzistas.",
+  "error.copies.changes_invalid": "La senditaj ŝanĝoj ne estas legeblaj.",
+  "error.copies.field_not_allowed": "Ĉi tiu kampo ne ŝanĝiĝas ĉi tie: nek la inventarnumero, nek la biblioteko. Uzu la plenan redaktilon.",
+  "error.copies.update_pending": "Ĉi tiu ekzemplero jam havas kurantan ĝisdatigon: daŭrigu ĝin en la redaktilo anstataŭ malfermi duan."
 }
