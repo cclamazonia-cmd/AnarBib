@@ -63,7 +63,7 @@ BEGIN
       RAISE EXCEPTION 'objection acceptee sans bibliotheque';
     EXCEPTION WHEN OTHERS THEN
       GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
-      IF v_hint <> 'atelier.error.notCoordenador' THEN RAISE EXCEPTION 'mauvais refus : % / %', SQLERRM, coalesce(v_hint,'NULL'); END IF;
+      IF v_hint <> 'error.atelier.notCoordenador' THEN RAISE EXCEPTION 'mauvais refus : % / %', SQLERRM, coalesce(v_hint,'NULL'); END IF;
     END;
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_leitora, 'role', 'authenticated')::text, true);
     v_res := api.fn_authority_object(v_prop, v_lib, 'Le titre français courant est « La Conquête du pain », déjà en place : proposition inutile.');
@@ -144,15 +144,15 @@ BEGIN
   BEGIN
     SELECT count(*) INTO v_n FROM public.authority_proposals;
     BEGIN PERFORM api.fn_authority_propose('titre', 'work', w1, NULL, '{"lang":"xx","title":"?"}'::jsonb, 'langue inconnue'); RAISE EXCEPTION 'langue inconnue acceptee';
-    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'atelier.error.workLang' THEN RAISE EXCEPTION 'titre: %', SQLERRM; END IF; END;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'error.atelier.workLang' THEN RAISE EXCEPTION 'titre: %', SQLERRM; END IF; END;
     BEGIN PERFORM api.fn_authority_propose('fusion', 'work', w1, w1, '{}'::jsonb, 'avec soi-meme'); RAISE EXCEPTION 'fusion avec soi-meme acceptee';
-    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'atelier.error.workMergeTarget' THEN RAISE EXCEPTION 'fusion: %', SQLERRM; END IF; END;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'error.atelier.workMergeTarget' THEN RAISE EXCEPTION 'fusion: %', SQLERRM; END IF; END;
     BEGIN PERFORM api.fn_authority_propose('rattachement', 'work', w1, NULL, jsonb_build_object('book_id', b3), 'deja dedans'); RAISE EXCEPTION 'rattachement inutile accepte';
-    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'atelier.error.workBookSame' THEN RAISE EXCEPTION 'rattachement: %', SQLERRM; END IF; END;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'error.atelier.workBookSame' THEN RAISE EXCEPTION 'rattachement: %', SQLERRM; END IF; END;
     BEGIN PERFORM api.fn_authority_propose('tomes', 'work', w4, NULL, jsonb_build_object('work_ids', jsonb_build_array(w4)), 'lui-meme'); RAISE EXCEPTION 'tome = serie accepte';
-    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'atelier.error.workTomes' THEN RAISE EXCEPTION 'tomes: %', SQLERRM; END IF; END;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'error.atelier.workTomes' THEN RAISE EXCEPTION 'tomes: %', SQLERRM; END IF; END;
     BEGIN PERFORM api.fn_authority_propose('edition', 'work', w1, NULL, '{}'::jsonb, 'type des autorites'); RAISE EXCEPTION 'type des autorites accepte sur une oeuvre';
-    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'atelier.error.workKind' THEN RAISE EXCEPTION 'kind: %', SQLERRM; END IF; END;
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; IF v_hint <> 'error.atelier.workKind' THEN RAISE EXCEPTION 'kind: %', SQLERRM; END IF; END;
     IF (SELECT count(*) FROM public.authority_proposals) = v_n THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : une proposition a ete ecrite malgre le refus'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;

@@ -744,3 +744,5 @@ tests/sql/correspondance_lot1_tests.sql
 # C17 (09/10/2026, CAT-E21) : un numéro d'inventaire donné ne se redonne jamais — registre des numéros,
 # refus d'un numéro libéré par une suppression, fn_next_tombo sur le plus grand numéro jamais attribué.
 tests/sql/tombo_jamais_redonne_tests.sql
+# E36 (10/10/2026) : l'Atelier des autorités dit à qui il est réservé — HINT traduisibles sur les six RPC.
+tests/sql/atelier_reserve_tests.sql

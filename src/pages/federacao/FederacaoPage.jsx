@@ -206,9 +206,9 @@ export default function FederacaoPage() {
   const visibleTabKeys = TAB_KEYS.filter(k => hasStaffAccess || !STAFF_ONLY_TABS.has(k));
   // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
   // toutes les pages a onglets. Icones par cle d'onglet, hors du map i18n.
-  const TAB_ICONS = {
-    inicio: '🏠', circulos: '🫂', carte: '🗺️', assembleias: '🗣️',
-    gazeta: '📰', carta: '✉️', entreajuda: '🤝', communs: '🌱',
+  const TAB_ICONS = {   // E32 (10/10/2026) : noms AppIcon, ceux que LEGACY donnait à ces emojis
+    inicio: 'building', circulos: 'users', carte: 'map', assembleias: 'message',
+    gazeta: 'newspaper', carta: 'mail', entreajuda: 'users', communs: 'sparkles',
   };
   const TABS = visibleTabKeys.map(k => ({ id: k, icon: TAB_ICONS[k], label: t({ id: `federacao.tab.${k}` }) }));
 

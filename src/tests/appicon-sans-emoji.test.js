@@ -40,6 +40,21 @@ describe('AppIcon — plus aucune icône déclarée en emoji (E32)', () => {
     expect(fautes, fautes.join('\n')).toEqual([]);
   });
 
+  it('un fichier qui importe AppIcon ne porte aucun pictogramme seul entre guillemets (tableaux [clé, icône] compris)', () => {
+    // E36 (10/10) : les onglets de l'Atelier passaient '✒️' et '📚' à AppIcon par un
+    // tableau [clé, icône], hors de la forme icon:/name= — sans LEGACY, l'icône de repli.
+    const COURT = /['"]([^'"\n]{1,4})['"]/g;
+    const fautes = [];
+    for (const p of fichiers(RACINE)) {
+      const src = readFileSync(p, 'utf8');
+      if (!/from ['"]@\/components\/ui\/AppIcon['"]/.test(src)) continue;
+      src.split('\n').forEach((l, i) => {
+        for (const m of l.matchAll(COURT)) if (PICTO.test(m[1])) fautes.push(`${path.relative(RACINE, p)}:${i + 1} ${m[0]}`);
+      });
+    }
+    expect(fautes, fautes.join('\n')).toEqual([]);
+  });
+
   it('AppIcon n’a plus de table LEGACY', () => {
     const src = readFileSync(path.join(RACINE, 'components/ui/AppIcon.jsx'), 'utf8');
     expect(src).not.toContain('const LEGACY');

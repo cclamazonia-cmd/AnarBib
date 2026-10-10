@@ -70,11 +70,15 @@ export default function AtelierAutoridadesPage() {
   const [objectingId, setObjectingId] = useState(null);
   const [objForm, setObjForm] = useState({ libraryId: '', reason: '' });
 
+  // E36 (10/10/2026) : un compte sans rôle d'équipe (42501) lit une phrase qui dit
+  // à qui l'Atelier est réservé, une seule fois — ni formulaire, ni file, ni œuvres.
+  const [reserve, setReserve] = useState('');
   const load = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase.schema('api').rpc('fn_authority_list');
     if (error) {
-      setMsg({ text: localizeError(error, t), kind: 'error' });
+      if (error.code === '42501') setReserve(localizeError(error, t));
+      else setMsg({ text: localizeError(error, t), kind: 'error' });
       setRows([]);
     } else {
       setRows(Array.isArray(data) ? data : []);
@@ -233,7 +237,7 @@ export default function AtelierAutoridadesPage() {
         </h1>
 
         <nav className="ab-tabbar" role="tablist" style={{ marginBottom: 16 }}>
-          {[['autoridades', '✒️'], ['obras', '📚']].map(([k, icon]) => (
+          {[['autoridades', 'penLine'], ['obras', 'library']].map(([k, icon]) => (
             <button key={k} className={`ab-tabbar__tab${tab === k ? ' active' : ''}`} role="tab" aria-selected={tab === k} onClick={() => switchTab(k)}>
               <AppIcon className="ab-tabbar__icon" name={icon} size="1em" />
               {t({ id: `atelier.tab.${k}` })}
@@ -241,7 +245,14 @@ export default function AtelierAutoridadesPage() {
           ))}
         </nav>
 
-        {tab === 'autoridades' && (<>
+        {reserve && (
+          <div role="status" style={{ padding: '12px 16px', borderRadius: 8, fontSize: '.92rem', lineHeight: 1.6, marginBottom: 16,
+            background: 'rgba(251,191,36,.10)', color: '#fbbf24', border: '1px solid rgba(251,191,36,.25)' }}>
+            {reserve}
+          </div>
+        )}
+
+        {!reserve && tab === 'autoridades' && (<>
         <p style={{ color: 'var(--brand-muted)', marginBottom: 16, fontSize: '.9rem', lineHeight: 1.6 }}>
           {t({ id: 'atelier.page.subtitle', defaultMessage: 'A fila de propostas de contribuição ao corpus compartilhado de autoridades (pessoas, coletividades, matérias). As decisões se dão por consentimento: sem objeção motivada até o prazo, a proposta é aplicada por um membro da equipe.' })}
         </p>
@@ -397,7 +408,7 @@ export default function AtelierAutoridadesPage() {
         )}
         </>)}
 
-        {tab === 'obras' && <WorksWorkshopPanel isStaff={myLibs.length > 0} onProposed={load} />}
+        {!reserve && tab === 'obras' && <WorksWorkshopPanel isStaff={myLibs.length > 0} onProposed={load} />}
 
         {loading ? (
           <p style={{ color: 'var(--brand-muted)', fontSize: '.88rem' }}>{t({ id: 'common.loading', defaultMessage: 'Carregando…' })}</p>
@@ -472,7 +483,7 @@ export default function AtelierAutoridadesPage() {
             oeuvres et vit desormais dans Catalogacao (CONV-O5, tranche le
             21/08). Une page dont le texte annonce « le corpus partage
             d'autorites » ne peut pas heberger la correction des notices. */}
-        {tab === 'autoridades' && (
+        {!reserve && tab === 'autoridades' && (
         <ConvRevuePanel
           lots={['autorite_patronyme', 'autorite_forme', 'autorite_casse', 'autorite_collectivite', 'autor_sans_autorite']}
           titleKey="atelier.revue.title"
