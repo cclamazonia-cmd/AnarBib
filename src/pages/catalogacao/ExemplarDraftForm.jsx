@@ -413,6 +413,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // ── Publish ─────────────────────────────────────────────
   async function handlePublish() {
     if (!f('id')) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
+    // C17 bis (10/10) : sans document (référence, fiche en brouillon ou exemplaire déjà publié), la base refuserait ; le dire ici.
+    if (!f('target_bib_ref').trim() && !f('book_draft_id') && !f('published_exemplar_id')) { setMsg({ text: t({ id: 'error.publish.bib_ref_required' }), kind: 'error' }); return; }
     if (!(await confirmer({ message: t({ id: 'catalogacao.exemplar.publishConfirm' }), confirmLabel: t({ id: 'confirm.action.publish' }) }))) return;
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
