@@ -29,13 +29,15 @@ import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const page = readFileSync(path.resolve(here, '..', 'pages/public/CatalogPage.jsx'), 'utf8');
+// E6 lot 1 (10/10/2026) : ecranEtroit() vit dans src/lib/catalogOpac.js ; la page l'importe et l'appelle.
+const lib = readFileSync(path.resolve(here, '..', 'lib/catalogOpac.js'), 'utf8');
 
 describe('Catalogue — « Filtres » naît replié sur écran étroit (E17)', () => {
   it("l'état initial : la préférence enregistrée, sinon la largeur de l'écran", () => {
     expect(page).toContain('useState(() => filterState.filtersOpen ?? !ecranEtroit())');
-    expect(page).toContain("window.matchMedia('(max-width: 640px)').matches");
+    expect(lib).toContain("window.matchMedia('(max-width: 640px)').matches");
     // la page doit se rendre là où matchMedia n'existe pas (jsdom, vieux navigateurs)
-    expect(page).toContain("typeof window.matchMedia === 'function'");
+    expect(lib).toContain("typeof window.matchMedia === 'function'");
     expect(page).not.toContain('const [filtersOpen, setFiltersOpen] = useState(true)');
   });
 
@@ -45,8 +47,8 @@ describe('Catalogue — « Filtres » naît replié sur écran étroit (E17)', (
   });
 
   it('la largeur se lit une fois : aucun écouteur de matchMedia', () => {
-    expect(page.split('matchMedia(').length - 1).toBe(1);
-    expect(page).not.toMatch(/matchMedia\([^)]*\)\s*\.\s*(addEventListener|addListener|onchange)/);
+    expect((page + lib).split('matchMedia(').length - 1).toBe(1);
+    expect(page + lib).not.toMatch(/matchMedia\([^)]*\)\s*\.\s*(addEventListener|addListener|onchange)/);
   });
 
   it("sur écran étroit, le bloc ne se rouvre pas seul", () => {
