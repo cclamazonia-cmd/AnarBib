@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-11** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-11** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 10
@@ -62,7 +62,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-11.** **41 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, E36, E37, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-11.** **39 itens de 54** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E38, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -692,9 +692,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
-| **E31** | O que espera um olhar na tela, com sessão | `P2` | Aberto |
-| **E36** | O Ateliê diz « erro técnico (42501) » a uma conta sem papel de equipe, em vez de « reservado às equipes da rede » | `P3` | A verificar |
-| **E37** | O menu das páginas fica visível no alto da tela, onde quer que se esteja na página | `P3` | A verificar |
+| **E38** | A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59 | `P2` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -851,62 +849,26 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `clôture E25` · `commit 0cc2b6d3`*
 
-#### E31 — O que espera um olhar na tela, com sessão
+#### E38 — A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
-**Estado.** Várias entregas de fim de setembro e início de outubro estão provadas em bancada e no banco, mas só se julgam na tela, com sessão. **Itens fechados, olhar faltando**: barra de estado e janela de confirmação (C21); « Publicado — e agora? » (C22); depósito digital em cinco etapas (C24); leitura reservada para membro da BTL (C20). **Itens abertos que também esperam**: C23, G16, C14, cada lote do E6. **Acrescentado em 06/10**: um convite real a uma tarefa, recebido (resto do F16).
+**Estado.** **Constatado por Xavier em 11/10** no Catálogo público: a busca «Kropotkine» «só devolve uma obra, não todas». Reproduzido: `?q=Kropotkine` devolve 2 fichas; `?q=Kropotkin`, 44 linhas. A autoridade «Piotr Kropotkin» (id 5) tem 59 fichas em 36 obras e **vinte e cinco formas ativas** em `author_name_aliases` (entre elas «Kropotkine»). A busca unificada (`api.search_catalog_v1`) lê essas formas e propõe a autoridade; a **busca livre** — digitar e Enter — passa por dois caminhos que nunca as leem: em lista plana, um `ilike` no cliente sobre oito colunas da vista (`SEARCH_COLS`); em lista por obra, `api.catalog_search_ids_v1(p_q)`, cuja palha é título, subtítulo, `autor`, `author_display`, editora, assuntos, cota, ISBN e títulos de obra.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : 11/10 — aberto a partir do olhar de Xavier (pergunta 14 da lista E31), reproduzido e diagnosticado na mesma noite.*
 
-**O que é.** Uma sessão com Xavier conectado, um ponto por vez; anotar « visto, conforme » ou o defeito achado (aberto como item).
+**O que é.** Dar aos dois caminhos a mesma matéria que a busca unificada: (1) uma coluna a mais nas vistas `catalog_list_anon_v1` / `session_v1` — as formas ativas das autoridades ligadas à ficha, agregadas, acrescentada NO FIM por `CREATE OR REPLACE VIEW` restituindo `WITH (security_invoker = true)`; (2) `catalog_search_ids_v1` acrescenta essas formas à sua palha e ao rank; (3) `SEARCH_COLS` recebe a coluna. Medir a vista antes/depois (`EXPLAIN` sob anon). Testes SQL e de tela.
 
-**Por que importa.** **O que ainda espera um olhar (08/10)**: lotes 2, 4, 5 e 8 da `AccountPage` (E6); a linha BTL « Indisponível para você » (E35); as telas de H21 lotes 1 a 5. **Vistos e fechados em 08/10**: C14, C23, G16. **Visto em 09/10**: correspondência entre bibliotecas (G19, fechado) — fio real BLMF → BTL na tela, sino recebido do lado da BTL; e-mail ao endereço coletivo da BTL e resposta da BTL na aba ainda por ver.
-
-**O que conta como terminado.**
-
-- Cada ponto da lista é visto na tela e anotado aqui.
-
-**Dependências.** Xavier, conectado.
-
-*Remissões : `clôtures C20, C21, C22, C24, C25` · `items C14, C23, G16, E6` · `clôture F16` · `clôture G19`*
-
-#### E36 — O Ateliê diz « erro técnico (42501) » a uma conta sem papel de equipe, em vez de « reservado às equipes da rede »
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL, react
-
-**Estado.** **Constatado por Xavier em 10/10**: o link de um e-mail de proposta, aberto num navegador com uma conta leitora, mostra duas vezes « erro técnico (42501) ». As RPC levantam 42501 sem HINT traduzível. Os HINT `atelier.error.notContributor` / `notStaff` não existem em nenhuma locale.
-
-*Verificado : [object Object]*
-
-**O que é.** Levantar com `hint = 'atelier.error.reserved'` nas três RPC ; chave nas dez locales, mais `notContributor` e `notStaff` ; a página mostra a frase uma só vez.
-
-**Por que importa.** Quem chega por um e-mail e lê « erro técnico » acha que há uma pane ; não há pane, há a conta errada.
+**Por que importa.** Um leitor francófono escreve «Kropotkine», um lusófono «Kropotkin» ou «Kropotkine, Pedro»: o catálogo tem as formas, precisa lê-las onde as pessoas digitam.
 
 **O que conta como terminado.**
 
-- Uma conta sem papel lê uma frase que diz a quem o Ateliê é reservado.
-- Os HINT das RPC do Ateliê existem nas dez locales.
+- `/catalogo?q=Kropotkine` devolve as mesmas obras que o filtro pela autoridade «Piotr Kropotkin», em lista plana e por obra.
+- Uma suíte SQL prova que os dois caminhos leem as formas ativas das autoridades, sem baixar o rank de um título exato.
 
-**Dependências.** Nenhuma.
+**Dependências.** Nenhuma. Vizinho de C3 e de B33.
 
-*Remissões : `src/pages/atelier/AtelierAutoridadesPage.jsx` · `src/components/atelier/ConvRevuePanel.jsx` · `C4`*
-
-#### E37 — O menu das páginas fica visível no alto da tela, onde quer que se esteja na página
-
-`P3` Adiado · Estado : **A verificar** · Carga : uma noite · O que exige : react
-
-**Estado.** **Pedido por Xavier em 11/10**: no fim de uma ficha longa, voltar ao menu obrigava a subir até o topo. **Entregue em 11/10**: a barra `.ab-topbar` é fixa ao rolar (`position: sticky`), com fundo quase opaco e desfocado; a Topbar publica a própria altura em `--ab-topbar-h`, e o que já grudava nas páginas (barra de estado da catalogação, prévia de cota, âncora do Ateliê) desce abaixo dela. Regra fechada por um teste.
-
-*Verificado : [object Object]*
-
-**O que é.** Verificar na tela, conectado: em /catalogacao, descer até o fim de uma ficha; o menu fica no alto e clicável; a barra de estado aparece ABAIXO do menu; no celular, abrir o menu ☰ no meio de uma página longa. Nas bibliotecas com tema, ajustar `--brand-topbar-bg` se preciso.
-
-**Por que importa.** A catalogação acontece no fim de fichas longas; cada mudança de página custava uma rolagem completa.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `src/components/layout/layout.css` · `src/components/layout/index.jsx` · `src/tests/bandeau-colle-en-haut.test.jsx` · `E31`*
+*Remissões : `src/lib/catalogFilters.js` · `src/lib/catalogWorks.js` · `supabase/migrations` · `tests/sql`*
 
 ---
 
@@ -1955,6 +1917,9 @@ CI verde. |
 | I18 | 2026-10-10 | O job `rejeu-image` reaplica todas as migrações na imagem Supabase a cada push (critério 1). **Critério 2 cumprido em 08/10**: ficou vermelho por uma razão real (privilégio padrão de `anon` nas tabelas da imagem) e a razão foi corrigida na migração (`c06f9ed2`), nunca no job. **Fechado em 10/10 por Xavier.** |
 | E32 | 2026-10-10 | Nenhum ícone declarado em emoji em `src/`: as 106 declarações restantes passam ao nome `AppIcon` (mesmo componente na tela), a tabela `LEGACY` sai, a guarda `appicon-sans-emoji` mantém a regra (`391d80c9`, 10/10). **Fechado em 10/10 por Xavier.** |
 | B38 | 2026-10-11 | Um exemplar «só equipe» (`visibility = staff_only`) ou «só consulta» (`circulation_policy = consulta`) não sai mais da biblioteca por um caminho desviado: as quatro funções de circulação que o contavam, escolhiam ou emprestavam leem agora visibilidade e política como o empréstimo direto (`fc2f2af9`, migração `20261011114157`, implantada em 11/10 às 13h52) — a reserva só conta o que se empresta, a conversão só escolhe isso (um exemplar de arquivo com id mais baixo que um público é evitado, provado), e o PEB recusa por adição e por criação com um HINT traduzido. Suíte de 9 casos, mutante provado, suítes de circulação verdes. Os dois critérios cumpridos; **fechado por Xavier em 11/10**. O buraco nunca servira: nenhum exemplar `staff_only` em produção no fechamento. |
+| E36 | 2026-10-11 | O Ateliê diz a quem está reservado: uma conta sem papel de equipe lê, em `/atelier-autoridades`, uma só frase no lugar da fila, e cada recusa das nove RPC fala (`error.atelier.*`, vinte e cinco chaves nas dez locales, `5b42c64e`). **Visto por Xavier em 11/10**: a frase, uma vez, sem «42501»; as abas da Federação recuperaram seus ícones. Fechado. |
+| E37 | 2026-10-11 | O menu das páginas fica visível no alto da tela, onde quer que se esteja: faixa fixa sobre fundo quase opaco e desfocado, altura publicada em `--ab-topbar-h`, os elementos já fixos e a rolagem até uma âncora se ajustam abaixo; regra fechada pelo teste `bandeau-colle-en-haut` (8) (`e0e7f402`, 11/10). **Visto por Xavier em 11/10**: no fim de uma ficha o menu fica no alto e clicável, a barra de estado aparece abaixo dele, a gaveta ☰ abre no meio de uma página longa no telefone, o fundo passa na BLMF com tema. Fechado. |
+| E31 | 2026-10-11 | O que esperava um olhar na tela, conectado, foi visto — **quinze perguntas feitas uma a uma em 11/10 à noite, quinze respostas de Xavier**. *Conformes*: C21, C22, C24, C17, os lotes 2, 4, 5 e 8 da `AccountPage` (E6), E35, C20, F16, os quatro lotes do Catálogo (E6) — com um defeito achado no caminho, que não é dos lotes: **a busca livre «Kropotkine» devolve uma ou duas obras em vez das 36 da autoridade** (aberto em E38). *Retirados da lista*: E33 (não se simula em produção) e as telas do H21 (esperam uma reimportação real da DIRA). Critério cumprido: cada ponto visto, conforme ou aberto em item. Fechado. |
 
 ---
 
@@ -1986,4 +1951,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-11. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-11. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
