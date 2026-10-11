@@ -855,7 +855,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Constatado por Xavier em 11/10** no Catálogo público: a busca «Kropotkine» «só devolve uma obra, não todas». Reproduzido: `?q=Kropotkine` devolve 2 fichas; `?q=Kropotkin`, 44 linhas. A autoridade «Piotr Kropotkin» (id 5) tem 59 fichas em 36 obras e **vinte e cinco formas ativas** em `author_name_aliases` (entre elas «Kropotkine»). A busca unificada (`api.search_catalog_v1`) lê essas formas e propõe a autoridade; a **busca livre** — digitar e Enter — passa por dois caminhos que nunca as leem: em lista plana, um `ilike` no cliente sobre oito colunas da vista (`SEARCH_COLS`); em lista por obra, `api.catalog_search_ids_v1(p_q)`, cuja palha é título, subtítulo, `autor`, `author_display`, editora, assuntos, cota, ISBN e títulos de obra.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Entregue pela sessão vizinha na mesma noite (ver Verificação); resta o olhar de Xavier na tela, depois da implantação: `/catalogo?q=Kropotkine` e «Pierre Kropotkine» devolvem as obras da autoridade, em lista plana e por obra; um erro de uma letra («kropotkn») encontra em aproximado com sua pastilha.
 
