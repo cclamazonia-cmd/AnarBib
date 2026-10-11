@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Aquest rastre d’importació no es posa a mà: prepara l’actualització des d’Importacions, o aplica la divergència des de la fitxa.",
   "importacoes.items.title": "{n, plural, one {# exemplar del fitxer} other {# exemplars del fitxer}}",
   "importacoes.items.noCode": "sense codi de barres",
-  "importacoes.items.verdict.none": "encara no comprovat (al proper «Aproximar» o «Promoure»)",
+  "importacoes.items.verdict.none": "encara no comprovat (al proper «Crear exemplar» o «Promou als esborranys»)",
   "importacoes.items.verdict.nouveau": "nou: esborrany d’exemplar",
   "importacoes.items.verdict.deja_la": "ja hi és",
   "importacoes.items.verdict.deja_en_brouillon": "ja en esborrany",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Des de la proposta s’ha dipositat un fitxer més recent d’aquesta font (o aquesta importació s’ha arxivat): no es publica res. El fitxer actual tornarà a dir què ha desaparegut.",
   "error.publish.item_retrait_in_newer_file": "Un fitxer més recent d’aquesta font encara descriu aquest exemplar: la retirada no es publica.",
   "error.catalog.discard.retired": "Aquest exemplar és fora del catàleg d’origen: un retirat mai s’esborra (es queda al seu lloc, a punt de reincorporar-se si reapareix).",
-  "error.catalog.item_retired_no_reassign": "Aquest exemplar és fora del catàleg d’origen: no canvia de biblioteca (la retirada només té sentit a la seva i ja no es podria treure)."
+  "error.catalog.item_retired_no_reassign": "Aquest exemplar és fora del catàleg d’origen: no canvia de biblioteca (la retirada només té sentit a la seva i ja no es podria treure).",
+  "importacoes.items.verdict.reattribue": "ha anat a «{bibliotheque}» (reassignat): no es torna a crear res",
+  "importacoes.items.count.reattribue": "{n, plural, one {# ha anat a una altra biblioteca} other {# han anat a una altra biblioteca}}"
 }

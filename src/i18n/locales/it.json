@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Questa traccia di importazione non si pone a mano: prepara l’aggiornamento da Importazioni, oppure applica la divergenza dalla scheda.",
   "importacoes.items.title": "{n, plural, one {# esemplare del file} other {# esemplari del file}}",
   "importacoes.items.noCode": "senza codice a barre",
-  "importacoes.items.verdict.none": "non ancora verificato (al prossimo «Riconcilia» o «Promuovi»)",
+  "importacoes.items.verdict.none": "non ancora verificato (al prossimo «Crea esemplare» o «Promuovi alle bozze»)",
   "importacoes.items.verdict.nouveau": "nuovo: bozza di esemplare",
   "importacoes.items.verdict.deja_la": "già presente",
   "importacoes.items.verdict.deja_en_brouillon": "già in bozza",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Dalla proposta è stato depositato un file più recente di questa fonte (o questa importazione è stata archiviata): non si pubblica nulla. Il file attuale dirà di nuovo cosa è scomparso.",
   "error.publish.item_retrait_in_newer_file": "Un file più recente di questa fonte descrive ancora questo esemplare: il ritiro non viene pubblicato.",
   "error.catalog.discard.retired": "Questo esemplare è uscito dal catalogo d’origine: un ritirato non si cancella mai (resta al suo posto, pronto per la revoca se ricompare).",
-  "error.catalog.item_retired_no_reassign": "Questo esemplare è uscito dal catalogo d’origine: non cambia biblioteca (il ritiro ha senso solo nella sua e non si potrebbe più revocare)."
+  "error.catalog.item_retired_no_reassign": "Questo esemplare è uscito dal catalogo d’origine: non cambia biblioteca (il ritiro ha senso solo nella sua e non si potrebbe più revocare).",
+  "importacoes.items.verdict.reattribue": "passato a «{bibliotheque}» (riassegnato): non si ricrea nulla",
+  "importacoes.items.count.reattribue": "{n, plural, one {# passato a un’altra biblioteca} other {# passati a un’altra biblioteca}}"
 }

@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Este rastro de importação não se coloca à mão: prepare a atualização em Importações, ou aplique a divergência a partir da ficha.",
   "importacoes.items.title": "{n, plural, one {# exemplar do arquivo} other {# exemplares do arquivo}}",
   "importacoes.items.noCode": "sem código de barras",
-  "importacoes.items.verdict.none": "ainda não verificado (no próximo «Aproximar» ou «Promover»)",
+  "importacoes.items.verdict.none": "ainda não verificado (no próximo «Criar exemplar» ou «Promover para os rascunhos»)",
   "importacoes.items.verdict.nouveau": "novo: rascunho de exemplar",
   "importacoes.items.verdict.deja_la": "já está na biblioteca",
   "importacoes.items.verdict.deja_en_brouillon": "já em rascunho",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Um arquivo mais recente desta fonte foi depositado desde a proposta (ou esta importação foi arquivada): nada é publicado. O arquivo atual dirá de novo o que desapareceu.",
   "error.publish.item_retrait_in_newer_file": "Um arquivo mais recente desta fonte ainda descreve este exemplar: a retirada não é publicada.",
   "error.catalog.discard.retired": "Este exemplar está fora do catálogo de origem: um retirado nunca é apagado (fica no lugar, pronto para ter a retirada suspensa se reaparecer).",
-  "error.catalog.item_retired_no_reassign": "Este exemplar está fora do catálogo de origem: não muda de biblioteca (a retirada só tem sentido na biblioteca dele e não poderia mais ser suspensa)."
+  "error.catalog.item_retired_no_reassign": "Este exemplar está fora do catálogo de origem: não muda de biblioteca (a retirada só tem sentido na biblioteca dele e não poderia mais ser suspensa).",
+  "importacoes.items.verdict.reattribue": "foi para «{bibliotheque}» (reatribuído): nada é recriado",
+  "importacoes.items.count.reattribue": "{n, plural, one {# foi para outra biblioteca} other {# foram para outra biblioteca}}"
 }

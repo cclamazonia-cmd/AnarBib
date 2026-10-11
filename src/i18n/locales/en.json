@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "This import trace cannot be set by hand: prepare the update from Imports, or apply the divergence from the record.",
   "importacoes.items.title": "{n, plural, one {# copy in the file} other {# copies in the file}}",
   "importacoes.items.noCode": "no barcode",
-  "importacoes.items.verdict.none": "not checked yet (at the next “Reconcile” or “Promote”)",
+  "importacoes.items.verdict.none": "not checked yet (at the next “Create copy” or “Promote to drafts”)",
   "importacoes.items.verdict.nouveau": "new: copy draft",
   "importacoes.items.verdict.deja_la": "already here",
   "importacoes.items.verdict.deja_en_brouillon": "already in a draft",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "A more recent file from this source has been uploaded since the proposal (or this run was archived): nothing is published. The current file will tell again what is missing.",
   "error.publish.item_retrait_in_newer_file": "A more recent file from this source still describes this copy: the withdrawal is not published.",
   "error.catalog.discard.retired": "This copy is removed from the source catalogue: a withdrawn copy is never deleted (it stays in place, ready to be reinstated if it comes back).",
-  "error.catalog.item_retired_no_reassign": "This copy is removed from the source catalogue: it does not change library (the withdrawal only makes sense in its own, and could no longer be lifted)."
+  "error.catalog.item_retired_no_reassign": "This copy is removed from the source catalogue: it does not change library (the withdrawal only makes sense in its own, and could no longer be lifted).",
+  "importacoes.items.verdict.reattribue": "gone to “{bibliotheque}” (reassigned): nothing is recreated",
+  "importacoes.items.count.reattribue": "{n} gone to another library"
 }

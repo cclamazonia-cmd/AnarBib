@@ -86,6 +86,9 @@
 -- recopiée le 08/10/2026 : si celle-ci est régénérée, recopier la sienne ici.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
+-- H21 lot 8 (11/10/2026, IMP-35) : les comptes par verdict (« Rapprocher »,
+-- rapport) portent « reattribue » (0 ici : aucun exemplaire réattribué) ; le
+-- cas lui-même est prouvé par tests/sql/h21_bout_en_bout_tests.sql (T06, T20).
 --   Bilan OK : 'H21-LOT6A-EXEMPLAIRES OK : N/N'
 -- =====================================================================
 DO $$
@@ -263,7 +266,7 @@ BEGIN
        AND (v_res->>'created_items')::int = 1 AND (v_res->>'created_exemplar_drafts')::int = 1
        AND (v_res->>'rows_already_held')::int = 1 AND (v_res->>'items_skipped_code_taken')::int = 3
        AND (v_res->>'rows_signalled')::int = 0
-       AND v_res->'verdicts' = '{"nouveau": 1, "deja_la": 3, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0}'::jsonb
+       AND v_res->'verdicts' = '{"nouveau": 1, "deja_la": 3, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0, "reattribue": 0}'::jsonb
        AND (SELECT count(*) FROM public.catalog_batches) = v_nb
        AND (SELECT count(*) FROM public.exemplar_drafts) = v_nx + 1
        AND (SELECT x.source_item_code = 'L6-AJOUT-2' AND x.source_item_id = '9002' AND x.import_source_id = v_src
@@ -314,7 +317,7 @@ BEGIN
        AND (SELECT count(*) FROM public.exemplar_drafts) = v_nx
        AND v_res->>'batch_id' IS NULL AND (v_res->>'created_items')::int = 0
        AND (v_res->>'rows_signalled')::int = 5 AND (v_res->>'rows_already_held')::int = 0
-       AND v_res->'verdicts' = '{"nouveau": 0, "deja_la": 2, "deja_en_brouillon": 0, "sans_code": 1, "deplace": 1, "reetiquete": 1, "code_repris": 2}'::jsonb
+       AND v_res->'verdicts' = '{"nouveau": 0, "deja_la": 2, "deja_en_brouillon": 0, "sans_code": 1, "deplace": 1, "reetiquete": 1, "code_repris": 2, "reattribue": 0}'::jsonb
        AND (SELECT count(*) FROM ingest.partner_catalog_staging_rows
              WHERE id IN (r3, r5, r6, r7, r8) AND editorial_decision = 'accept_duplicate' AND review_status = 'approved'
                AND NOT selected_for_draft AND created_exemplar_draft_id IS NULL AND created_book_draft_id IS NULL
@@ -364,7 +367,7 @@ BEGIN
     v_rap1 := public.fn_batch_review_report(v_lot1);
     IF (v_rap->'items_set_aside'->>'count')::int = 10
        AND (v_rap->'items_set_aside'->>'rows')::int = 7
-       AND v_rap->'items_set_aside'->'counts' = '{"deja_la": 5, "deja_en_brouillon": 0, "sans_code": 1, "deplace": 1, "reetiquete": 1, "code_repris": 2}'::jsonb
+       AND v_rap->'items_set_aside'->'counts' = '{"deja_la": 5, "deja_en_brouillon": 0, "sans_code": 1, "deplace": 1, "reetiquete": 1, "code_repris": 2, "reattribue": 0}'::jsonb
        AND jsonb_array_length(v_rap->'items_set_aside'->'examples') = 10
        AND v_rap->'items_set_aside'->'examples'->0->>'verdict' = 'code_repris'
        AND EXISTS (SELECT 1 FROM jsonb_array_elements(v_rap->'items_set_aside'->'examples') e
@@ -373,7 +376,7 @@ BEGIN
                       AND (e->>'row_id')::bigint = r5 AND e->>'code' = '33700003470461')
        AND NOT (v_rap1 ? 'items_set_aside')
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_rap->'items_set_aside' - 'examples')::text, 'NULL'), 300)
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce(((v_rap->'items_set_aside') - 'examples')::text, 'NULL'), 300)
          ||' lot1='||coalesce((v_rap1 ? 'items_set_aside')::text, '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
@@ -936,12 +939,12 @@ BEGIN
       v_hint := v_hint || '+accepte';
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_txt = PG_EXCEPTION_HINT; v_hint := v_hint || '+' || coalesce(v_txt, 'NULL'); EXECUTE 'RESET ROLE';
     END;
-    IF v_res->'verdicts' = '{"nouveau": 2, "deja_la": 0, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0}'::jsonb
+    IF v_res->'verdicts' = '{"nouveau": 2, "deja_la": 0, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0, "reattribue": 0}'::jsonb
        AND v_c2->0 @> '{"verdict": "nouveau", "expl_id": "1"}'::jsonb
        -- publiés tous deux ; deux exemplaires de BLMF à l'expl_id 1, de deux sources
        AND (SELECT count(*) FROM public.exemplares e WHERE e.library_id = v_lib AND e.import_source_id = v_src2) = 2
        AND (SELECT count(DISTINCT e.import_source_id) FROM public.exemplares e WHERE e.library_id = v_lib AND e.source_item_id = '1') = 2
-       AND v_res3->'verdicts' = '{"nouveau": 2, "deja_la": 1, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0}'::jsonb
+       AND v_res3->'verdicts' = '{"nouveau": 2, "deja_la": 1, "deja_en_brouillon": 0, "sans_code": 0, "deplace": 0, "reetiquete": 0, "code_repris": 0, "reattribue": 0}'::jsonb
        AND v_c3->0 @> jsonb_build_object('verdict', 'deja_la', 'exemplar_id', e1)
        AND v_c3->1 @> '{"verdict": "nouveau", "code": "S3-NEW"}'::jsonb
        AND v_hint = 'accepte+accepte'

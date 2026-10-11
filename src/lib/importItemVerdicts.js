@@ -5,7 +5,11 @@
 // icône) : Importations et le rapport de révision le partagent.
 // ═══════════════════════════════════════════════════════════
 
-export const VERDICTS = ['nouveau', 'deja_la', 'deja_en_brouillon', 'sans_code', 'deplace', 'reetiquete', 'code_repris'];
+// H21 lot 8 (11/10/2026, IMP-35) : « reattribue » — l'exemplaire de la source est
+// aujourd'hui dans une autre bibliothèque (réattribué) : jamais recréé, la ligne
+// n'apporte rien (ce n'est pas un signal).
+export const VERDICTS = ['nouveau', 'deja_la', 'deja_en_brouillon', 'sans_code', 'deplace', 'reetiquete', 'code_repris',
+  'reattribue'];
 // Les verdicts qui demandent un regard (la ligne n'est pas rejetée d'office).
 export const SIGNAUX = ['sans_code', 'deplace', 'reetiquete', 'code_repris'];
 
@@ -19,6 +23,7 @@ export function libelleVerdict(t, it, titreLigne) {
     ailleurs: it.book_titulo || (it.book_id ? `#${it.book_id}` : '—'),
     ancien: it.ancien_code || '—',
     nouveau: it.code || '—',
+    bibliotheque: it.library_name || '—',
   });
 }
 

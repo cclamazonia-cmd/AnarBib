@@ -52,6 +52,9 @@ const lire = (rel) => readFileSync(path.resolve(__dirname, rel), 'utf8');
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');
 const MIGRATION = readFileSync(path.join(MIGRATIONS,
   readdirSync(MIGRATIONS).find((f) => f.endsWith('_h21_lot6a_reconnaitre_les_exemplaires.sql'))), 'utf8');
+// H21 lot 8 (IMP-35) : le constat gagne « reattribue » dans la migration du lot 8
+const MIGRATION_L8 = readFileSync(path.join(MIGRATIONS,
+  readdirSync(MIGRATIONS).find((f) => f.endsWith('_h21_lot8_un_lot_ouvert_par_run.sql'))), 'utf8');
 const IMPORTACOES = lire('../pages/importacoes/ImportacoesPage.jsx');
 const FILE = lire('../pages/catalogacao/QueuePanel.jsx');
 const intl = createIntl({ locale: 'fr', messages: fr });
@@ -169,7 +172,9 @@ describe('Contrat et traductions', () => {
   it('les verdicts de l’écran sont ceux du constat (migration), et les signaux ceux qui empêchent le rejet d’office', () => {
     const constat = MIGRATION.slice(MIGRATION.indexOf('CREATE OR REPLACE FUNCTION ingest.fn_h21_constat_exemplaire'),
       MIGRATION.indexOf('CREATE OR REPLACE FUNCTION ingest.fn_h21_lot_ouvert_du_run'));
-    const verdicts = [...new Set([...constat.matchAll(/'verdict', '([a-z_]+)'/g)].map((m) => m[1]))];
+    const constatL8 = MIGRATION_L8.slice(MIGRATION_L8.indexOf('DO $h21l8_constat$'), MIGRATION_L8.indexOf('$h21l8_constat$;'));
+    const verdicts = [...new Set([...constat.matchAll(/'verdict', '([a-z_]+)'/g), ...constatL8.matchAll(/'verdict', '([a-z_]+)'/g)]
+      .map((m) => m[1]))];
     expect(verdicts.sort()).toEqual([...VERDICTS].sort());
     expect(MIGRATION).toContain(`v_c->>'verdict' in (${SIGNAUX.map((s) => `'${s}'`).join(', ')})`);
   });
@@ -196,9 +201,10 @@ describe('Contrat et traductions', () => {
   };
   const VALEURS = { n: 2, list: 'x', notice: 'A', ailleurs: 'B', ancien: 'C1', nouveau: 'C2', count: 3, rows: 2, tombo: 'T-1' };
 
-  it('25 clés', () => { expect(Object.keys(PARAMS)).toHaveLength(25); });
+  // H21 lot 8 (IMP-35) : + le compte de « reattribue »
+  it('26 clés', () => { expect(Object.keys(PARAMS)).toHaveLength(26); });
 
-  it.each(LOCALES)('%s — les 25 clés, formatables, avec leurs paramètres', (loc) => {
+  it.each(LOCALES)('%s — les 26 clés, formatables, avec leurs paramètres', (loc) => {
     const d = dico(loc);
     const i = createIntl({ locale: loc, messages: d, onError: (e) => { throw e; } });
     for (const [cle, params] of Object.entries(PARAMS)) {

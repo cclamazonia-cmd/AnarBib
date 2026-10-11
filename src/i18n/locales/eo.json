@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Ĉi tiu importa spuro ne estas metebla mane: preparu la ĝisdatigon en Importoj, aŭ apliku la diverĝon el la slipo.",
   "importacoes.items.title": "{n, plural, one {# ekzemplero de la dosiero} other {# ekzempleroj de la dosiero}}",
   "importacoes.items.noCode": "sen strekkodo",
-  "importacoes.items.verdict.none": "ankoraŭ ne kontrolita (ĉe la venonta «Proksimigi» aŭ «Promocii»)",
+  "importacoes.items.verdict.none": "ankoraŭ ne kontrolita (ĉe la venonta «Krei ekzempleron» aŭ «Promocii al malnetoj»)",
   "importacoes.items.verdict.nouveau": "nova: malneto de ekzemplero",
   "importacoes.items.verdict.deja_la": "jam ĉi tie",
   "importacoes.items.verdict.deja_en_brouillon": "jam en malneto",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Ekde la propono pli freŝa dosiero de ĉi tiu fonto estis deponita (aŭ ĉi tiu importo arkivita): nenio estas publikigita. La nuna dosiero denove diros, kio malaperis.",
   "error.publish.item_retrait_in_newer_file": "Pli freŝa dosiero de ĉi tiu fonto ankoraŭ priskribas ĉi tiun ekzempleron: la retiro ne estas publikigita.",
   "error.catalog.discard.retired": "Ĉi tiu ekzemplero estas ekster la origina katalogo: retirito neniam estas forigata (ĝi restas surloke, preta por nuligo se ĝi reaperas).",
-  "error.catalog.item_retired_no_reassign": "Ĉi tiu ekzemplero estas ekster la origina katalogo: ĝi ne ŝanĝas bibliotekon (la retiro havas sencon nur en la sia, kaj ne plu povus esti nuligita)."
+  "error.catalog.item_retired_no_reassign": "Ĉi tiu ekzemplero estas ekster la origina katalogo: ĝi ne ŝanĝas bibliotekon (la retiro havas sencon nur en la sia, kaj ne plu povus esti nuligita).",
+  "importacoes.items.verdict.reattribue": "iris al «{bibliotheque}» (reasignita): nenio estas rekreita",
+  "importacoes.items.count.reattribue": "{n} iris al alia biblioteko"
 }

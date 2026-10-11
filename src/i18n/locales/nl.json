@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Dit importspoor zet je niet met de hand: bereid de update voor in Imports, of pas de afwijking toe vanuit het record.",
   "importacoes.items.title": "{n, plural, one {# exemplaar uit het bestand} other {# exemplaren uit het bestand}}",
   "importacoes.items.noCode": "zonder streepjescode",
-  "importacoes.items.verdict.none": "nog niet nagegaan (bij de volgende „Koppelen” of „Promoveren”)",
+  "importacoes.items.verdict.none": "nog niet nagegaan (bij de volgende „Exemplaar aanmaken” of „Promoveren naar concepten”)",
   "importacoes.items.verdict.nouveau": "nieuw: exemplaarconcept",
   "importacoes.items.verdict.deja_la": "al aanwezig",
   "importacoes.items.verdict.deja_en_brouillon": "al in een concept",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Sinds het voorstel is een recenter bestand van deze bron geüpload (of deze import gearchiveerd): er wordt niets gepubliceerd. Het huidige bestand toont opnieuw wat ontbreekt.",
   "error.publish.item_retrait_in_newer_file": "Een recenter bestand van deze bron beschrijft dit exemplaar nog: de terugtrekking wordt niet gepubliceerd.",
   "error.catalog.discard.retired": "Dit exemplaar staat niet meer in de oorspronkelijke catalogus: een teruggetrokken exemplaar wordt nooit verwijderd (het blijft staan, klaar voor opheffing als het terugkomt).",
-  "error.catalog.item_retired_no_reassign": "Dit exemplaar staat niet meer in de oorspronkelijke catalogus: het verandert niet van bibliotheek (de terugtrekking heeft alleen in de eigen zin en zou niet meer opgeheven kunnen worden)."
+  "error.catalog.item_retired_no_reassign": "Dit exemplaar staat niet meer in de oorspronkelijke catalogus: het verandert niet van bibliotheek (de terugtrekking heeft alleen in de eigen zin en zou niet meer opgeheven kunnen worden).",
+  "importacoes.items.verdict.reattribue": "naar „{bibliotheque}” gegaan (opnieuw toegewezen): er wordt niets opnieuw aangemaakt",
+  "importacoes.items.count.reattribue": "{n} naar een andere bibliotheek gegaan"
 }

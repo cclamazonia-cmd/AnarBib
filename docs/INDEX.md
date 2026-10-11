@@ -94,7 +94,8 @@ docs/
 │   └── dpa-{de,en,es,fr,it,pt-BR}.md
 │
 ├── guides/                           Vadémécums pratiques du commun, servis dans l'app (10 langues chacun)
-│   └── guide-{digitalizar,indexar-assunto,scan-qr,thesaurus-ficedl}-{lang}.md
+│   ├── guide-{digitalizar,indexar-assunto,scan-qr,thesaurus-ficedl}-{lang}.md
+│   └── guide-reimport-pmb-{fr,pt-BR}.md   → le premier réimport d'un catalogue PMB (H21 lot 8, 11/10/2026) ; fr et pt-BR seulement, hors de l'app
 │
 ├── notes-audit/                      Chartes et audits de langue (langage inclusif v1/v2, charte relationnelle, audit i18n)
 │

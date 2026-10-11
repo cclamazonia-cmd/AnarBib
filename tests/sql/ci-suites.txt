@@ -706,6 +706,15 @@ tests/sql/h21_lot6b_exemplaires_maj_tests.sql
 # réservable, hors PEB, hors disponibilité et OPAC, hors export, « retiré » au
 # récolement ; levée ; trace refusée à l'API ; 5 001 disparus < 8 s.
 tests/sql/h21_lot7_retires_tests.sql
+# H21 lot 8 (11/10/2026, IMP-26 à IMP-34) : le réimport de bout en bout sur les exports du
+# jeu de test que PMB 8.1 a produits lui-même (tests/pmb/fixtures, -v2, -v2-seuil, -v3) —
+# suite ENGENDRÉE par src/tests/h21-bout-en-bout.test.js depuis tests/pmb/h21-bout-en-bout.gabarit.sql :
+# premier import, retouches dans AnarBib, deuxième import (reconnaître, comparer, rapprocher,
+# préparer, divergences, retraits, révision, publication), seuil, troisième import identique
+# (rien de nouveau), levée ; un seul lot par run (constat corrigé par la migration du lot) ;
+# 11/10 : IMP-35 (un exemplaire réattribué est « parti chez … », jamais recréé) et « préparable »
+# sans la partie notice d'une notice partagée ou plus détenue.
+tests/sql/h21_bout_en_bout_tests.sql
 # 04/10/2026 (H30) : « Retraiter » exige le fichier — sans objet dans le seau du run
 # (moisson OAI, candidat, dépôt direct, fichier disparu), refus tout de suite
 # (error.import.reparse_no_file), run et lignes intacts ; ordre des gardes.

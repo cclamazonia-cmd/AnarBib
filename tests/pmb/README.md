@@ -421,3 +421,32 @@ possible », sans autre geste à l'écran que « Rejeter ». La clé prend déso
 le numéro et la date du fascicule ou du tome (migration
 `le_rapprochement_distingue_le_fascicule_de_sa_revue`), et la suite passe par
 la détection (T0).
+
+## Les exports suivants, pour le réimport (H21 lot 8, 11/10/2026)
+
+Le réimport (H21) se prouve sur des fichiers que **PMB produit lui-même** :
+`banc/deuxieme-export-h21.sh` part de la base du premier export (la sauvegarde
+prise juste après, `PMB_BASE_DEPART`), y joue ce qu'une bibliothèque change
+entre deux exports (`banc/h21-v2.sql`, puis `h21-v2-seuil.sql` ou
+`h21-v3.sql`), fait exporter PMB et rend la base telle qu'elle était :
+
+```bash
+PMB_BASE_DEPART=~/pmb-banc/echange/sauvegardes/bibli-avant-cas-difficiles.sql \
+  bash tests/pmb/banc/deuxieme-export-h21.sh
+```
+
+Il écrit `fixtures/pmb-8.1.1.1_jeu-de-test-{v1-reexport,v2,v2-seuil,v3}.unimarc.{iso,txt}`.
+Chaque cas, avec ce qu'AnarBib en fait : `h21-bout-en-bout-cas.json` ; la
+preuve : `tests/sql/h21_bout_en_bout_tests.sql`, engendrée par
+`src/tests/h21-bout-en-bout.test.js` depuis `h21-bout-en-bout.gabarit.sql`
+(`REGENERER_H21L8=1`), avec l'export et les réponses de l'écran figés par
+`capturer-h21-bout-en-bout.sh`.
+
+Ce que PMB 8.1.1.1 écrit de lui-même dans un export suivant (mesuré) : la date
+de l'export (801 `$c`, et 100 `$a` des notices de bulletin), la date de mise à
+jour d'une notice changée (009 `$u`) ; rien d'autre — `v1-reexport`, la base
+de départ réexportée sans rien changer, ne diffère du premier export que par
+ces dates. Une « notice de bulletin » (`1-bull`, `2-bull`) n'est exportée que
+tant que son bulletin a un exemplaire : supprimer ses exemplaires la fait
+disparaître du fichier, et ils sont alors « hors fichier » pour AnarBib, pas
+« disparus ».

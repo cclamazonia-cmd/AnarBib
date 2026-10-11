@@ -39,17 +39,21 @@ const CLES = {
     ca: 'sense codi de barres', it: 'senza codice a barre', de: 'ohne Barcode', nl: 'zonder streepjescode',
     eo: 'sen strekkodo', el: 'χωρίς γραμμωτό κώδικα',
   },
+  // H21 lot 8 (11/10/2026) : le message cite les libellés RÉELS des boutons de
+  // chaque locale — « Rapprocher » (importacoes.fila.reconcile, sans son compte)
+  // et « Promouvoir vers les brouillons » (importacoes.wizard.promote.button) ;
+  // vérifié par src/tests/h21-lot8-ecran.test.jsx.
   'importacoes.items.verdict.none': {
-    fr: 'pas encore constaté (au prochain « Rapprocher » ou « Promouvoir »)',
-    'pt-BR': 'ainda não verificado (no próximo «Aproximar» ou «Promover»)',
-    en: 'not checked yet (at the next “Reconcile” or “Promote”)',
-    es: 'aún no comprobado (en el próximo «Aproximar» o «Promover»)',
-    ca: 'encara no comprovat (al proper «Aproximar» o «Promoure»)',
-    it: 'non ancora verificato (al prossimo «Riconcilia» o «Promuovi»)',
-    de: 'noch nicht geprüft (beim nächsten „Abgleichen“ oder „Übernehmen“)',
-    nl: 'nog niet nagegaan (bij de volgende „Koppelen” of „Promoveren”)',
-    eo: 'ankoraŭ ne kontrolita (ĉe la venonta «Proksimigi» aŭ «Promocii»)',
-    el: 'δεν έχει ελεγχθεί ακόμη (στην επόμενη «Αντιστοίχιση» ή «Προώθηση»)',
+    fr: 'pas encore constaté (au prochain « Rapprocher » ou « Promouvoir vers les brouillons »)',
+    'pt-BR': 'ainda não verificado (no próximo «Criar exemplar» ou «Promover para os rascunhos»)',
+    en: 'not checked yet (at the next “Create copy” or “Promote to drafts”)',
+    es: 'aún no comprobado (en el próximo «Crear ejemplar» o «Promover a los borradores»)',
+    ca: 'encara no comprovat (al proper «Crear exemplar» o «Promou als esborranys»)',
+    it: 'non ancora verificato (al prossimo «Crea esemplare» o «Promuovi alle bozze»)',
+    de: 'noch nicht geprüft (beim nächsten „Exemplar anlegen“ oder „In Entwürfe übernehmen“)',
+    nl: 'nog niet nagegaan (bij de volgende „Exemplaar aanmaken” of „Promoveren naar concepten”)',
+    eo: 'ankoraŭ ne kontrolita (ĉe la venonta «Krei ekzempleron» aŭ «Promocii al malnetoj»)',
+    el: 'δεν έχει ελεγχθεί ακόμη (στην επόμενη «Δημιουργία αντιτύπου» ή «Προαγωγή σε προσχέδια»)',
   },
   'importacoes.items.verdict.nouveau': {
     fr: 'nouveau : brouillon d’exemplaire', 'pt-BR': 'novo: rascunho de exemplar', en: 'new: copy draft',

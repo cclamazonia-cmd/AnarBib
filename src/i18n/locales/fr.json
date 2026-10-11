@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Cette trace d’import ne se pose pas à la main : prépare la mise à jour depuis Importations, ou applique la divergence depuis la notice.",
   "importacoes.items.title": "{n, plural, one {# exemplaire du fichier} other {# exemplaires du fichier}}",
   "importacoes.items.noCode": "sans code-barres",
-  "importacoes.items.verdict.none": "pas encore constaté (au prochain « Rapprocher » ou « Promouvoir »)",
+  "importacoes.items.verdict.none": "pas encore constaté (au prochain « Rapprocher » ou « Promouvoir vers les brouillons »)",
   "importacoes.items.verdict.nouveau": "nouveau : brouillon d’exemplaire",
   "importacoes.items.verdict.deja_la": "déjà là",
   "importacoes.items.verdict.deja_en_brouillon": "déjà en brouillon",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Un fichier plus récent de cette source a été déposé depuis la proposition (ou ce run a été archivé) : rien n’est publié. Le fichier actuel dira de nouveau ce qui a disparu.",
   "error.publish.item_retrait_in_newer_file": "Un fichier plus récent de cette source décrit encore cet exemplaire : le retrait n’est pas publié.",
   "error.catalog.discard.retired": "Cet exemplaire est sorti du catalogue d’origine : un retiré n’est jamais supprimé (il reste à sa place, prêt à être levé s’il réapparaît).",
-  "error.catalog.item_retired_no_reassign": "Cet exemplaire est sorti du catalogue d’origine : il ne change pas de bibliothèque (le retrait n’a de sens que dans la sienne, et ne pourrait plus être levé)."
+  "error.catalog.item_retired_no_reassign": "Cet exemplaire est sorti du catalogue d’origine : il ne change pas de bibliothèque (le retrait n’a de sens que dans la sienne, et ne pourrait plus être levé).",
+  "importacoes.items.verdict.reattribue": "parti chez « {bibliotheque} » (réattribué) : rien n’est recréé",
+  "importacoes.items.count.reattribue": "{n, plural, one {# parti chez une autre bibliothèque} other {# partis chez une autre bibliothèque}}"
 }

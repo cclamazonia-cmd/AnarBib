@@ -550,7 +550,9 @@ BEGIN
       INTO v_res FROM public.fn_import_list_run_rows(v_run2) l WHERE l.id IN (r48, r49, r51, r52, r47, r56, r57);
     EXECUTE 'RESET ROLE';
     IF v_res->(r48::text) = jsonb_build_object('app', 2, 'dr', d48, 'st', 'draft')
-       AND v_res->(r49::text) = jsonb_build_object('app', 1, 'dr', NULL, 'st', NULL)
+       -- H21 lot 8 (11/10/2026) : une notice partagée n'est pas préparable, comme
+       -- « Préparer » la juge (ignorée « partagee ») — 1 avant le lot 8
+       AND v_res->(r49::text) = jsonb_build_object('app', 0, 'dr', NULL, 'st', NULL)
        AND v_res->(r51::text) = jsonb_build_object('app', 0, 'dr', NULL, 'st', NULL)
        AND v_res->(r52::text) = jsonb_build_object('app', 0, 'dr', NULL, 'st', NULL)
        AND v_res->(r47::text) = jsonb_build_object('app', NULL, 'dr', NULL, 'st', NULL)

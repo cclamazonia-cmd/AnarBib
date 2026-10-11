@@ -7282,7 +7282,7 @@
   "error.import.trace_reserved": "Diese Importspur lässt sich nicht von Hand setzen: Bereite die Aktualisierung unter Importe vor oder übernimm die Abweichung vom Eintrag aus.",
   "importacoes.items.title": "{n, plural, one {# Exemplar der Datei} other {# Exemplare der Datei}}",
   "importacoes.items.noCode": "ohne Barcode",
-  "importacoes.items.verdict.none": "noch nicht geprüft (beim nächsten „Abgleichen“ oder „Übernehmen“)",
+  "importacoes.items.verdict.none": "noch nicht geprüft (beim nächsten „Exemplar anlegen“ oder „In Entwürfe übernehmen“)",
   "importacoes.items.verdict.nouveau": "neu: Exemplar-Entwurf",
   "importacoes.items.verdict.deja_la": "schon vorhanden",
   "importacoes.items.verdict.deja_en_brouillon": "schon im Entwurf",
@@ -7533,5 +7533,7 @@
   "error.publish.item_retrait_run_superseded": "Seit dem Vorschlag wurde eine neuere Datei dieser Quelle hochgeladen (oder dieser Import archiviert): Nichts wird veröffentlicht. Die aktuelle Datei zeigt erneut, was fehlt.",
   "error.publish.item_retrait_in_newer_file": "Eine neuere Datei dieser Quelle beschreibt dieses Exemplar noch: Der Rückzug wird nicht veröffentlicht.",
   "error.catalog.discard.retired": "Dieses Exemplar ist nicht mehr im Herkunftskatalog: Ein zurückgezogenes wird nie gelöscht (es bleibt, bereit zur Aufhebung, wenn es zurückkommt).",
-  "error.catalog.item_retired_no_reassign": "Dieses Exemplar ist nicht mehr im Herkunftskatalog: Es wechselt nicht die Bibliothek (der Rückzug gilt nur in seiner eigenen und ließe sich nicht mehr aufheben)."
+  "error.catalog.item_retired_no_reassign": "Dieses Exemplar ist nicht mehr im Herkunftskatalog: Es wechselt nicht die Bibliothek (der Rückzug gilt nur in seiner eigenen und ließe sich nicht mehr aufheben).",
+  "importacoes.items.verdict.reattribue": "zu „{bibliotheque}“ gegangen (neu zugeordnet): nichts wird neu angelegt",
+  "importacoes.items.count.reattribue": "{n} zu einer anderen Bibliothek gegangen"
 }

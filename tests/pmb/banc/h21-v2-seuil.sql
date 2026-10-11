@@ -1,0 +1,13 @@
+-- =====================================================================
+-- H21 lot 8 — la variante « au-dessus du seuil » du deuxième export : jouée
+-- APRÈS h21-v2.sql, sur la même base (tests/pmb/banc/deuxieme-export-h21.sh),
+-- sauvegardée avant et restaurée après ; PMB exporte ensuite le fichier
+-- (tests/pmb/fixtures/pmb-8.1.1.1_jeu-de-test-v2-seuil.*).
+--
+-- seuil-au-dessus : vingt et un exemplaires de plus supprimés de PMB (un
+-- export « complet » qui en a perdu beaucoup — le cas que le seuil d'IMP-34
+-- arrête : au moins 20 disparus ET plus de 10 % des exemplaires de la source).
+-- Ni l'exemplaire de la notice inchangée (expl_id 1), ni ceux que le
+-- deuxième export traite déjà, ni celui de la notice réattribuée (14).
+-- =====================================================================
+DELETE FROM exemplaires WHERE expl_id IN (2, 32, 3, 5, 7, 8, 9, 10, 11, 12, 13, 21, 22, 24, 25, 26, 27, 29, 30, 33, 34);

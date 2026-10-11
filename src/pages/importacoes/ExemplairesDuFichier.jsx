@@ -13,7 +13,9 @@
 //                      est sur une autre : signalé, jamais déplacé (IMP-33 d) ;
 //   reetiquete         réétiqueté dans PMB (ancien code → nouveau), même
 //                      identifiant interne : signalé, jamais appliqué (IMP-33 a) ;
-//   code_repris        le code est repris par un autre exemplaire PMB.
+//   code_repris        le code est repris par un autre exemplaire PMB ;
+//   reattribue         l'exemplaire de la source est aujourd'hui dans une autre
+//                      bibliothèque (réattribué) : jamais recréé (IMP-35).
 // Rien ne s'écrit ici : la liste est lue, le geste est à la main.
 // H21 lot 6b (08/10/2026, IMP-33 c) : pour un exemplaire « déjà là », la cote
 // et la note comparées à trois états (fn_import_list_run_rows.exemplaires_maj,
@@ -28,12 +30,13 @@ import { majDeLItem, champsQuiBougent } from '@/lib/importItemUpdates.js';
 
 const ICONE = {
   nouveau: 'sparkles', deja_la: 'check', deja_en_brouillon: 'penLine', sans_code: 'warning',
-  deplace: 'arrowLeftRight', reetiquete: 'tags', code_repris: 'circleAlert',
+  deplace: 'arrowLeftRight', reetiquete: 'tags', code_repris: 'circleAlert', reattribue: 'building',
 };
 const COULEUR = {
   nouveau: 'var(--brand-success, #4ade80)',
   deja_la: 'var(--brand-muted, #94a3b8)',
   deja_en_brouillon: 'var(--brand-info, #60a5fa)',
+  reattribue: 'var(--brand-muted, #94a3b8)',
 };
 
 export default function ExemplairesDuFichier({ items, titreLigne, maj = null }) {

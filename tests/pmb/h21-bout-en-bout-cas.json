@@ -1,0 +1,297 @@
+{
+ "commentaire": "H21 lot 8 (11/10/2026) — les cas des exports suivants du jeu de test PMB 8.1.1.1, produits par PMB lui-même (tests/pmb/banc/deuxieme-export-h21.sh : h21-v2.sql, h21-v2-seuil.sql, h21-v3.sql). Une notice = son 001 (notice_id PMB) ; un exemplaire = son expl_id (996 $9) et son code-barres (995 $f). « etape » : le test de tests/sql/h21_bout_en_bout_tests.sql qui prouve ce qu'AnarBib en fait. src/tests/h21-bout-en-bout.test.js vérifie que chaque cas est bien dans les fichiers, et que cette liste est fermée.",
+ "cas": [
+  {
+   "id": "notice-inchangee",
+   "fichier": "v2",
+   "notice": "1",
+   "etape": "T04, T06",
+   "commentaire": "« Bac en poche » : rien de changé dans PMB. Le deuxième export ne diffère du premier que par la date de l'export (801 $c) : reconnue, les 24 champs « inchangé », son exemplaire déjà là ; « Rapprocher » rejette la ligne d'office (elle n'apporte rien)."
+  },
+  {
+   "id": "exemplaire-inchange",
+   "fichier": "v2",
+   "notice": "1",
+   "expl_id": "1",
+   "etape": "T06",
+   "commentaire": "L'exemplaire de « Bac en poche », tel quel : constat « déjà là », cote et note « inchangé », rien d'écrit."
+  },
+  {
+   "id": "exemplaire-ajoute",
+   "fichier": "v2",
+   "notice": "2",
+   "expl_id": "35",
+   "code": "H21L8-AJOUT-2",
+   "etape": "T06, T11, T12",
+   "commentaire": "Un deuxième exemplaire créé dans PMB sur « Catfish blues » : constat « nouveau » ; « Rapprocher » en fait un brouillon dans le lot du run, publié après révision (code et expl_id de la source posés)."
+  },
+  {
+   "id": "cote-fichier-seul",
+   "fichier": "v2",
+   "notice": "3",
+   "expl_id": "3",
+   "etape": "T04, T07, T12",
+   "commentaire": "La cote de l'exemplaire de « Trois fêlés et un pendu » changée dans PMB (ER OPP → ER OPP 2), pas dans AnarBib : « changé dans le fichier seulement » ; « Préparer » en fait un brouillon de mise à jour, publié ; la base de l'exemplaire avance."
+  },
+  {
+   "id": "champ-pmb-seul",
+   "fichier": "v2",
+   "notice": "4",
+   "etape": "T04, T07, T11, T12",
+   "commentaire": "L'année de « Le dieu devenu homme » changée dans PMB (1998 → 1999) : « changé dans le fichier seulement » ; notice détenue par BLMF seule : « Préparer » fait le brouillon de mise à jour (l'année seule), révisé, publié ; la base avance à 1999."
+  },
+  {
+   "id": "note-fichier-seul",
+   "fichier": "v2",
+   "notice": "4",
+   "expl_id": "4",
+   "etape": "T04, T07, T12",
+   "commentaire": "Une note ajoutée dans PMB à l'exemplaire de « Le dieu devenu homme » : « changé dans le fichier seulement » ; brouillon de mise à jour d'exemplaire dans le même lot que celui de la notice, publié."
+  },
+  {
+   "id": "champ-anarbib-seul",
+   "fichier": "v2",
+   "notice": "5",
+   "etape": "T02, T04, T07, T12",
+   "commentaire": "« Sarah de Cordoue » : rien de changé dans PMB ; la librarian a changé l'éditeur dans AnarBib (« Éditer ») : « changé dans AnarBib seulement », rien à appliquer, la valeur AnarBib reste, la base aussi."
+  },
+  {
+   "id": "cote-anarbib-seul",
+   "fichier": "v2",
+   "notice": "5",
+   "expl_id": "5",
+   "etape": "T02, T04, T12",
+   "commentaire": "La cote de l'exemplaire de « Sarah de Cordoue » changée dans AnarBib par la librarian (« Modifier »), pas dans PMB : « changé dans AnarBib seulement », gardée."
+  },
+  {
+   "id": "note-deux-cotes",
+   "fichier": "v2",
+   "notice": "6",
+   "expl_id": "6",
+   "etape": "T02, T04, T12",
+   "commentaire": "La note de l'exemplaire de « Le mille-pattes » changée dans PMB ET, autrement, dans AnarBib par la coordination : conflit signalé, rien à appliquer, la note AnarBib intacte, la base garde l'ancienne."
+  },
+  {
+   "id": "responsabilites-changees",
+   "fichier": "v2",
+   "notice": "7",
+   "etape": "T04, T07, T12",
+   "commentaire": "« Le puits » perd sa traductrice dans PMB (702 supprimée) : responsabilités « changé dans le fichier seulement », montrées, jamais appliquées (IMP-31) ; les deux responsabilités restent dans AnarBib."
+  },
+  {
+   "id": "conflit",
+   "fichier": "v2",
+   "notice": "8",
+   "etape": "T02, T04, T12",
+   "commentaire": "L'année de « Ghetto 9 » changée dans PMB (1993 → 1994) et dans AnarBib par la coordination (1995) : conflit signalé (B 1993, A 1995, N 1994), rien d'appliqué, 1995 reste, la base garde 1993."
+  },
+  {
+   "id": "champ-vide-par-pmb",
+   "fichier": "v2",
+   "notice": "9",
+   "etape": "T04, T07, T12",
+   "commentaire": "La pagination de « Zaks » effacée dans PMB : montrée (N vide), jamais appliquée — un effacement ne s'applique pas ; 47 reste, la base aussi."
+  },
+  {
+   "id": "partagee-appliquee",
+   "fichier": "v2",
+   "notice": "10",
+   "etape": "T02, T05, T09, T12",
+   "commentaire": "« La chambre verte », que B détient aussi (un exemplaire ajouté depuis la notice) : l'année changée dans PMB est une divergence, vue des deux coordinations, jamais réécrite par « Préparer » (ignorée « partagée ») ; BLMF l'applique (brouillon prérempli, publié)."
+  },
+  {
+   "id": "partagee-ecartee",
+   "fichier": "v2",
+   "notice": "11",
+   "etape": "T02, T05, T09, T12",
+   "commentaire": "« Le chirurgien hollandais », partagée avec B : divergence sur l'année ; B l'écarte — la notice ne change pas, la base avance pour ce champ seul."
+  },
+  {
+   "id": "reattribuee",
+   "fichier": "v2",
+   "notice": "13",
+   "expl_id": "14",
+   "etape": "T02, T03, T04, T06, T07, T17, T20",
+   "commentaire": "« Monsieur Je-sais-tout », réattribuée à B par l’administration avant le réimport ; l’année changée dans PMB. Reconnue, « plus détenue » ; son exemplaire, parti chez B avec son code et son expl_id, est « parti chez B » (IMP-35) : « Rapprocher » ne le recrée pas et rejette la ligne d’office (elle n’apporte rien) ; « Préparer » : plus détenue, exemplaire d’une autre bibliothèque. Rien d’écrit chez B."
+  },
+  {
+   "id": "reetiquete",
+   "fichier": "v2",
+   "notice": "14",
+   "expl_id": "15",
+   "code": "H21L8-REETIQ-15",
+   "etape": "T04, T06, T11, T12",
+   "commentaire": "Nouvelle étiquette dans PMB sur l'exemplaire de « Paroles de bonheur » : même expl_id, autre code — « réétiqueté », signalé, rien d'écrit (l'exemplaire garde son code), écarté du lot."
+  },
+  {
+   "id": "sans-code",
+   "fichier": "v2",
+   "notice": "15",
+   "expl_id": "16",
+   "etape": "T04, T06, T11, T12",
+   "commentaire": "L'exemplaire de « La métamorphose des fleurs » a perdu son code-barres dans PMB : « sans code », signalé, rien d'écrit — et jamais « disparu » (l'expl_id le désigne encore)."
+  },
+  {
+   "id": "notice-absente",
+   "fichier": "v2",
+   "notice": "16",
+   "expl_id": "17",
+   "etape": "T03, T10, T14",
+   "commentaire": "« Rwanda » et son exemplaire supprimés de PMB : la ligne manque au fichier. AnarBib ne supprime rien : la notice reste, son exemplaire est « hors fichier », jamais « disparu »."
+  },
+  {
+   "id": "disparu-engage",
+   "fichier": "v2",
+   "notice": "17",
+   "expl_id": "19",
+   "etape": "T02, T10, T12",
+   "commentaire": "L'exemplaire de la carte routière supprimé de PMB, mais en prêt dans AnarBib : « disparu engagé (prêt) », jamais proposé au retrait, le prêt intact."
+  },
+  {
+   "id": "disparu-proposable",
+   "fichier": "v2",
+   "notice": "18",
+   "expl_id": "18",
+   "etape": "T10, T11, T12",
+   "commentaire": "Le DVD « Chili » supprimé de PMB, export complet coché, rien en cours : « disparu », proposé au retrait, révisé, publié — retiré (jamais supprimé)."
+  },
+  {
+   "id": "code-repris",
+   "fichier": "v2",
+   "notice": "19",
+   "expl_id": "36",
+   "code": "3370000451292",
+   "etape": "T04, T06, T11, T12",
+   "commentaire": "Le CD-ROM de « La Loire Angevine » supprimé dans PMB, et son code-barres recollé sur un nouvel exemplaire (autre expl_id) : « code repris », signalé, rien d'écrit ; l'exemplaire AnarBib garde son expl_id (20) et n'est pas « disparu »."
+  },
+  {
+   "id": "deplace",
+   "fichier": "v2",
+   "notice": "44",
+   "expl_id": "23",
+   "etape": "T04, T06, T11, T12",
+   "commentaire": "L'exemplaire de la charte (001 42) rangé dans PMB sous « Bruit de cochon » (001 44) : « déplacé », signalé, rien d'écrit — l'exemplaire reste sous sa notice dans AnarBib."
+  },
+  {
+   "id": "notice-nouvelle",
+   "fichier": "v2",
+   "notice": "61",
+   "expl_id": "37",
+   "code": "H21L8-NOUV-1",
+   "etape": "T03, T08, T11, T12",
+   "commentaire": "Une notice créée dans PMB avec un exemplaire neuf : « nouvelle » ; promue dans le lot du run (le même que « Rapprocher » et « Préparer »), révisée, publiée avec son exemplaire."
+  },
+  {
+   "id": "deplace-vers-nouvelle",
+   "fichier": "v2",
+   "notice": "61",
+   "expl_id": "28",
+   "etape": "T08, T11, T12",
+   "commentaire": "L'exemplaire de « Le Cochon d'Hollywood » (001 50) rangé dans PMB sous la notice nouvelle : écarté des brouillons de la promotion (« déplacé », signalé) ; il reste sous sa notice."
+  },
+  {
+   "id": "export-complet",
+   "fichier": "v2",
+   "etape": "T03, T10",
+   "commentaire": "« Export complet » coché au dépôt (avant l'envoi ; refusé après) : sans lui, aucune disparition ne serait proposée."
+  },
+  {
+   "id": "seuil-sous",
+   "fichier": "v2",
+   "etape": "T10",
+   "commentaire": "Deux disparus (18, 19) sur 32 exemplaires de la source chez BLMF (6,3 %) : sous le seuil (10 % ET 20), proposés sans confirmation."
+  },
+  {
+   "id": "seuil-au-dessus",
+   "fichier": "v2s",
+   "etape": "T15",
+   "commentaire": "La variante v2-seuil : vingt et un exemplaires de plus supprimés de PMB. Deux « notices de bulletin » (1-bull, 2-bull) disparaissent alors du fichier avec leurs exemplaires (PMB ne les exporte que tant que le bulletin en a) : leurs exemplaires sont « hors fichier ». Restent 20 disparus (19 + l'exemplaire en prêt) : seuil atteint, rien proposé sans la confirmation, proposé après."
+  },
+  {
+   "id": "disparu-plus-recent-que-le-run",
+   "fichier": "v3",
+   "notice": "53",
+   "code": "H21L8-V3-53",
+   "etape": "T16",
+   "commentaire": "Un exemplaire entré dans PMB après le deuxième export, importé par un run plus récent (archivé ensuite) : absent du fichier du run 2, mais né après lui — jamais « disparu » pour le run 2."
+  },
+  {
+   "id": "retire-reapparait",
+   "fichier": "v3",
+   "notice": "18",
+   "expl_id": "18",
+   "etape": "T18",
+   "commentaire": "Le DVD « Chili », retiré après le deuxième import, revient dans PMB (restauré, même expl_id, même code) : « retiré réapparu », levée proposée, révisée, publiée — de nouveau prêtable."
+  }
+ ],
+ "aller_retour": {
+  "commentaire": "Ce que l'export d'AnarBib après le deuxième import rend du deuxième fichier (src/tests/h21-bout-en-bout.test.js) : les notices du fichier, sauf celles qui manquent ici, plus celles qu'AnarBib garde ; les exemplaires du fichier, sauf là où AnarBib garde les siens (un signal n'écrit rien) ; et les valeurs AnarBib qu'un réimport ne remplace pas. Le retiré (18) n'est ni dans le fichier ni dans l'export : rien à nommer ici (la suite SQL le vérifie, T12).",
+  "notices_exclues": {
+   "13": "réattribuée à B : BLMF ne la détient plus, son export ne la porte pas"
+  },
+  "notices_en_plus": {
+   "16": "absente du deuxième fichier : AnarBib ne supprime rien"
+  },
+  "exemplaires": {
+   "14": {
+    "anarbib": [
+     "33700003453202"
+    ],
+    "pourquoi": "réétiqueté dans PMB : l'exemplaire garde son code"
+   },
+   "15": {
+    "anarbib": [
+     "33700004118010"
+    ],
+    "pourquoi": "sans code dans PMB : l'exemplaire garde le sien"
+   },
+   "16": {
+    "anarbib": [
+     "33700003286792"
+    ],
+    "pourquoi": "notice absente du fichier : son exemplaire reste"
+   },
+   "17": {
+    "anarbib": [
+     "3370000451291"
+    ],
+    "pourquoi": "disparu engagé (prêt) : jamais retiré"
+   },
+   "42": {
+    "anarbib": [
+     "3370000451295"
+    ],
+    "pourquoi": "déplacé dans PMB : il reste sous sa notice"
+   },
+   "44": {
+    "anarbib": [
+     "3370000451296"
+    ],
+    "pourquoi": "l'exemplaire déplacé vers elle n'y est pas"
+   },
+   "50": {
+    "anarbib": [
+     "3370000451300"
+    ],
+    "pourquoi": "déplacé vers la notice nouvelle : il reste sous sa notice"
+   },
+   "61": {
+    "anarbib": [
+     "H21L8-NOUV-1"
+    ],
+    "pourquoi": "l'exemplaire déplacé vers elle n'y est pas"
+   }
+  },
+  "valeurs_anarbib": {
+   "5": {
+    "publisher": "Éditions retouchées (AnarBib)"
+   },
+   "8": {
+    "publicationYear": "1995"
+   },
+   "11": {
+    "publicationYear": "1996"
+   }
+  }
+ }
+}
