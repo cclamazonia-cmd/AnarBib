@@ -5994,6 +5994,48 @@
           "pt": "**10/10 — entregue e verificado às 22 h 34** (`5b42c64e`). Nove funções do Ateliê levantam HINT traduzíveis (`error.atelier.*`, 25 chaves nas dez locales) ; a página mostra a frase uma só vez. Duas regressões do E32 reparadas (abas do Ateliê e da Federação). **Resta** o seu olhar com a conta leitora."
         }
       ]
+    },
+    {
+      "id": "E37",
+      "d": "E",
+      "p": "P3",
+      "s": "a-verifier",
+      "e": "S",
+      "sk": [
+        "react"
+      ],
+      "t": {
+        "fr": "Le menu des pages reste visible en haut de l’écran, où que l’on soit dans la page",
+        "pt": "O menu das páginas fica visível no alto da tela, onde quer que se esteja na página"
+      },
+      "v": {
+        "fr": "**Demandé par Xavier le 11/10** : au bas d’une longue fiche de catalogage (ou de n’importe quelle page), revenir au menu des pages obligeait à remonter tout en haut. **Livré le 11/10** : le bandeau `.ab-topbar` est collant (`position: sticky`, sous l’encoche en mode installé), sur un fond presque opaque et flou pour que le contenu passe dessous sans se mêler aux liens. Topbar publie sa hauteur réelle dans la variable CSS `--ab-topbar-h` sur `<html>` ; la barre d’état du catalogage, la prévia de cote et l’ancre de l’Atelier, qui se collaient déjà, posent leur `top` sous cette hauteur, et le défilement vers une ancre ou un champ (`scroll-padding-top`) s’arrête sous le bandeau. Tiroir mobile ouvert : le bandeau ne dépasse pas l’écran et ne publie pas la hauteur du tiroir. Règle désormais fermée par un test : tout nouvel élément collant d’une page qui monte le bandeau se décale de `--ab-topbar-h`.",
+        "pt": "**Pedido por Xavier em 11/10**: no fim de uma ficha longa, voltar ao menu obrigava a subir até o topo. **Entregue em 11/10**: a barra `.ab-topbar` é fixa ao rolar (`position: sticky`), com fundo quase opaco e desfocado; a Topbar publica a própria altura em `--ab-topbar-h`, e o que já grudava nas páginas (barra de estado da catalogação, prévia de cota, âncora do Ateliê) desce abaixo dela. Regra fechada por um teste."
+      },
+      "w": {
+        "fr": "Vérifier à l’écran, connecté : sur /catalogacao, descendre au bas d’une fiche ; le menu reste en haut et cliquable ; la barre d’état verte ou rouge d’un enregistrement apparaît SOUS le menu, pas derrière ; sur téléphone, ouvrir le tiroir ☰ au milieu d’une page longue. Le fond du bandeau passe-t-il bien sur les bibliothèques à thème (BLMF) ? Sinon, poser `--brand-topbar-bg` dans leur thème.",
+        "pt": "Verificar na tela, conectado: em /catalogacao, descer até o fim de uma ficha; o menu fica no alto e clicável; a barra de estado aparece ABAIXO do menu; no celular, abrir o menu ☰ no meio de uma página longa. Nas bibliotecas com tema, ajustar `--brand-topbar-bg` se preciso."
+      },
+      "y": {
+        "fr": "Le catalogage se fait au bas de longues fiches ; chaque changement de page coûtait un défilement complet.",
+        "pt": "A catalogação acontece no fim de fichas longas; cada mudança de página custava uma rolagem completa."
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "src/components/layout/layout.css",
+        "src/components/layout/index.jsx",
+        "src/tests/bandeau-colle-en-haut.test.jsx",
+        "E31"
+      ],
+      "verif": [
+        {
+          "fr": "**11/10** — test `bandeau-colle-en-haut` (8 cas : la variable posée et retirée, le tiroir ignoré, le contrat de source, la liste fermée des éléments collants des pages) ; lint, suite complète et build verts avant le push. Le regard à l’écran, connecté, reste à faire (E31).",
+          "pt": "**11/10** — teste `bandeau-colle-en-haut` (8 casos); lint, suíte completa e build verdes antes do push. O olhar na tela, conectado, fica por fazer (E31)."
+        }
+      ]
     }
   ]
 }

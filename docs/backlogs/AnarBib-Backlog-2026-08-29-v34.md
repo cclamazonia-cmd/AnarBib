@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-10** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-10** · 56 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 9 octobre 2026 au soir** (`47781985`, mesuré à 22 h 15 — demandé à `d116d42d`, deux commits plus tard C17 était livré et sa migration passée : le relevé les inclut) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 08/10 au soir, `c06f9ed2`). **La CI est à jour de la tête de branche** : 454 migrations appliquées = 454 au dépôt, les quatre qui attendaient hier soir sont passées, plus H21 lot 6b, les tomes II et III d'*Acción directa* et C17. Ce qui a bougé et pourquoi : **le catalogue** — −3 notices, toutes par fusion (deux tomes réunis par migration sur accord de Xavier, une fusion à 21 h 46), aucune créée, quatre reprises publiées ; **la base** — +25 fonctions (H21 lot 6b dans `ingest`, C17 avec son registre `tombos_attribues`, la liste des fils de correspondance), deux tables fermées de plus (d'où +2 avis 0008), **0029 à 428, exactement le compte attendu par l'audit**, et la garde CI des DEFINER à liste fermée étendue à la correspondance (une porte, trois aides) ; **le réseau** — la correspondance vit (un fil, deux messages, BLMF vers BTL), G19 clos par Xavier ; **le dépôt** — +12 commits, +40 clés, +39 tests, +2 suites SQL, C17 livré (un numéro d'inventaire ne se redonne jamais). **Mis à jour dans cette version** : C17 clos sur décision de Xavier (les deux critères tenus, le regard à l'écran porté par E31). **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (tir long du 11/10 puis `restore-test`), I33 (un tir du soir après une migration — la migration de ce soir le permet), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran* : E31 (E6 lots 2, 4, 5, 8 ; E35 ; écrans de H21 ; le refus traduit d'un numéro libéré, C17) ; *les décisions* : A1 (une troisième administration réseau) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer), H32 (le signalement à PMB Services, à envoyer).
 
-**Fraîcheur des constats au 2026-10-10.** **40 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, B38, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, E36, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-10.** **41 items sur 56** portent une vérification datée qui leur est propre (A1, A3, B36, B38, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, E36, E37, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -716,6 +716,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
 | **E31** | Ce qui attend un regard à l'écran, connecté | `P2` | Ouvert |
 | **E36** | L'Atelier dit « erreur technique (42501) » à un compte sans rôle d'équipe, au lieu de « réservé aux équipes du réseau » | `P3` | À vérifier |
+| **E37** | Le menu des pages reste visible en haut de l’écran, où que l’on soit dans la page | `P3` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -912,6 +913,22 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune.
 
 *Renvois : `src/pages/atelier/AtelierAutoridadesPage.jsx` · `src/components/atelier/ConvRevuePanel.jsx` · `C4`*
+
+#### E37 — Le menu des pages reste visible en haut de l’écran, où que l’on soit dans la page
+
+`P3` Différé · État : **À vérifier** · Charge : une soirée · Ce que ça demande : react
+
+**État.** **Demandé par Xavier le 11/10** : au bas d’une longue fiche de catalogage (ou de n’importe quelle page), revenir au menu des pages obligeait à remonter tout en haut. **Livré le 11/10** : le bandeau `.ab-topbar` est collant (`position: sticky`, sous l’encoche en mode installé), sur un fond presque opaque et flou pour que le contenu passe dessous sans se mêler aux liens. Topbar publie sa hauteur réelle dans la variable CSS `--ab-topbar-h` sur `<html>` ; la barre d’état du catalogage, la prévia de cote et l’ancre de l’Atelier, qui se collaient déjà, posent leur `top` sous cette hauteur, et le défilement vers une ancre ou un champ (`scroll-padding-top`) s’arrête sous le bandeau. Tiroir mobile ouvert : le bandeau ne dépasse pas l’écran et ne publie pas la hauteur du tiroir. Règle désormais fermée par un test : tout nouvel élément collant d’une page qui monte le bandeau se décale de `--ab-topbar-h`.
+
+*Vérifié : [object Object]*
+
+**Ce que c'est.** Vérifier à l’écran, connecté : sur /catalogacao, descendre au bas d’une fiche ; le menu reste en haut et cliquable ; la barre d’état verte ou rouge d’un enregistrement apparaît SOUS le menu, pas derrière ; sur téléphone, ouvrir le tiroir ☰ au milieu d’une page longue. Le fond du bandeau passe-t-il bien sur les bibliothèques à thème (BLMF) ? Sinon, poser `--brand-topbar-bg` dans leur thème.
+
+**Pourquoi ça compte.** Le catalogage se fait au bas de longues fiches ; chaque changement de page coûtait un défilement complet.
+
+**Dépendances.** Aucune.
+
+*Renvois : `src/components/layout/layout.css` · `src/components/layout/index.jsx` · `src/tests/bandeau-colle-en-haut.test.jsx` · `E31`*
 
 ---
 
@@ -1978,4 +1995,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-10. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 56 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-09 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `47781985` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
