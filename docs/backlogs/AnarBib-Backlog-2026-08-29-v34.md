@@ -692,7 +692,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
-| **E38** | La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59 | `P2` | Ouvert |
+| **E38** | La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59 | `P2` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -851,13 +851,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### E38 — La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : aucune compétence technique
 
 **État.** **Constaté par Xavier le 11/10** sur le Catalogue public : la recherche « Kropotkine » ne rend « toujours qu'une seule œuvre, pas toutes ». Reproduit : `/catalogo?q=Kropotkine` rend 2 notices (une de Fernand Planche *sur* Kropotkine, une édition dont le texte porte la graphie) ; `?q=Kropotkin` en rend 44 lignes, 8 œuvres dépliables. L'autorité « Piotr Kropotkin » (id 5) porte 59 notices sur 36 œuvres et **vingt-cinq formes actives** dans `author_name_aliases` — dont « Kropotkine », « Kropotkine, Pierre », « Kropotkine, Pedro » — et quarante variantes Wikidata dans `variant_forms`. La recherche unifiée (`api.search_catalog_v1`) lit ces formes et propose l'autorité, dont le choix filtre par `author_id` ; mais la **recherche libre** — saisie puis Entrée — passe par deux chemins qui ne les lisent jamais : en liste plate, un `ilike` client sur huit colonnes de la vue (`titulo`, `autor`, `editora`, `bib_ref`, `cdd`, `assuntos`, `subtitulo`, `isbn` — `SEARCH_COLS`, `src/lib/catalogFilters.js`) ; en liste par œuvre, `api.catalog_search_ids_v1(p_q)`, dont la meule est titre, sous-titre, `autor`, `author_display`, éditeur, sujets, cote, ISBN et titres d'œuvre. Une graphie qui n'est pas celle de la notice ni du nom préféré ne trouve donc rien.
 
-*Vérifié : 11/10 — ouvert sur le regard de Xavier (question 14 de la liste E31), reproduit et diagnostiqué le soir même.*
+*Vérifié : [object Object],[object Object]*
 
-**Ce que c'est.** Donner aux deux chemins la même matière que la recherche unifiée : (1) une colonne de plus dans `api.catalog_list_anon_v1` et `catalog_list_session_v1` — les formes actives des autorités liées à la notice (`author_name_aliases.alias_text` des `book_contributors`, agrégées, ajoutée EN FIN de vue par `CREATE OR REPLACE VIEW` en restituant `WITH (security_invoker = true)`) ; (2) `catalog_search_ids_v1` ajoute ces formes à sa meule (et au rang : la similarité avec la meilleure forme) ; (3) `SEARCH_COLS` reçoit la colonne. Sous RLS, l'`ilike` n'est pas leakproof : la colonne est lue par la vue DEFINER comme les autres (B33). Mesurer la vue avant/après sur 1/50/200 lignes (`EXPLAIN` sous anon). Tests : suite SQL (« Kropotkine », « Pierre Kropotkine », « c.n.t. » trouvent l'autorité par ses formes, un terme absent ne trouve rien, le rang ne baisse pas pour un titre exact) ; test d'écran : `?q=Kropotkine` rend autant d'œuvres que le filtre par autorité.
+**Ce que c'est.** Livré par la session voisine le soir même (voir Vérification) ; reste le regard de Xavier à l'écran, après déploiement : `/catalogo?q=Kropotkine` et « Pierre Kropotkine » rendent les œuvres de l'autorité, en liste plate comme par œuvre ; une faute d'une lettre (« kropotkn ») trouve en approché avec sa pastille.
 
 **Pourquoi ça compte.** Un lectorat francophone écrit « Kropotkine », un lusophone « Kropotkin » ou « Kropotkine, Pedro » : le catalogue a les formes, il faut qu'il les lise là où les gens tapent.
 

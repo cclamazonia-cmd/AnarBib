@@ -5927,11 +5927,10 @@
       "id": "E38",
       "d": "E",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
-        "sql",
-        "front"
+        "aucune"
       ],
       "t": {
         "fr": "La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59",
@@ -5942,8 +5941,8 @@
         "pt": "**Constatado por Xavier em 11/10** no Catálogo público: a busca «Kropotkine» «só devolve uma obra, não todas». Reproduzido: `?q=Kropotkine` devolve 2 fichas; `?q=Kropotkin`, 44 linhas. A autoridade «Piotr Kropotkin» (id 5) tem 59 fichas em 36 obras e **vinte e cinco formas ativas** em `author_name_aliases` (entre elas «Kropotkine»). A busca unificada (`api.search_catalog_v1`) lê essas formas e propõe a autoridade; a **busca livre** — digitar e Enter — passa por dois caminhos que nunca as leem: em lista plana, um `ilike` no cliente sobre oito colunas da vista (`SEARCH_COLS`); em lista por obra, `api.catalog_search_ids_v1(p_q)`, cuja palha é título, subtítulo, `autor`, `author_display`, editora, assuntos, cota, ISBN e títulos de obra."
       },
       "w": {
-        "fr": "Donner aux deux chemins la même matière que la recherche unifiée : (1) une colonne de plus dans `api.catalog_list_anon_v1` et `catalog_list_session_v1` — les formes actives des autorités liées à la notice (`author_name_aliases.alias_text` des `book_contributors`, agrégées, ajoutée EN FIN de vue par `CREATE OR REPLACE VIEW` en restituant `WITH (security_invoker = true)`) ; (2) `catalog_search_ids_v1` ajoute ces formes à sa meule (et au rang : la similarité avec la meilleure forme) ; (3) `SEARCH_COLS` reçoit la colonne. Sous RLS, l'`ilike` n'est pas leakproof : la colonne est lue par la vue DEFINER comme les autres (B33). Mesurer la vue avant/après sur 1/50/200 lignes (`EXPLAIN` sous anon). Tests : suite SQL (« Kropotkine », « Pierre Kropotkine », « c.n.t. » trouvent l'autorité par ses formes, un terme absent ne trouve rien, le rang ne baisse pas pour un titre exact) ; test d'écran : `?q=Kropotkine` rend autant d'œuvres que le filtre par autorité.",
-        "pt": "Dar aos dois caminhos a mesma matéria que a busca unificada: (1) uma coluna a mais nas vistas `catalog_list_anon_v1` / `session_v1` — as formas ativas das autoridades ligadas à ficha, agregadas, acrescentada NO FIM por `CREATE OR REPLACE VIEW` restituindo `WITH (security_invoker = true)`; (2) `catalog_search_ids_v1` acrescenta essas formas à sua palha e ao rank; (3) `SEARCH_COLS` recebe a coluna. Medir a vista antes/depois (`EXPLAIN` sob anon). Testes SQL e de tela."
+        "fr": "Livré par la session voisine le soir même (voir Vérification) ; reste le regard de Xavier à l'écran, après déploiement : `/catalogo?q=Kropotkine` et « Pierre Kropotkine » rendent les œuvres de l'autorité, en liste plate comme par œuvre ; une faute d'une lettre (« kropotkn ») trouve en approché avec sa pastille.",
+        "pt": "Entregue pela sessão vizinha na mesma noite (ver Verificação); resta o olhar de Xavier na tela, depois da implantação: `/catalogo?q=Kropotkine` e «Pierre Kropotkine» devolvem as obras da autoridade, em lista plana e por obra; um erro de uma letra («kropotkn») encontra em aproximado com sua pastilha."
       },
       "y": {
         "fr": "Un lectorat francophone écrit « Kropotkine », un lusophone « Kropotkin » ou « Kropotkine, Pedro » : le catalogue a les formes, il faut qu'il les lise là où les gens tapent.",
@@ -5969,10 +5968,16 @@
         "supabase/migrations",
         "tests/sql"
       ],
-      "verif": {
-        "fr": "11/10 — ouvert sur le regard de Xavier (question 14 de la liste E31), reproduit et diagnostiqué le soir même.",
-        "pt": "11/10 — aberto a partir do olhar de Xavier (pergunta 14 da lista E31), reproduzido e diagnosticado na mesma noite."
-      }
+      "verif": [
+        {
+          "fr": "11/10 — ouvert sur le regard de Xavier (question 14 de la liste E31), reproduit et diagnostiqué le soir même.",
+          "pt": "11/10 — aberto a partir do olhar de Xavier (pergunta 14 da lista E31), reproduzido e diagnosticado na mesma noite."
+        },
+        {
+          "fr": "**11/10 à 23 h 28 — livré par la session voisine** (`f38fffa8`, migration `20261011211012`), sur le même signalement, pendant que cet item s'écrivait : `private.fn_auteurs_par_nom` (les autorités dont la forme retenue, la forme de tri, les `variant_forms` ou les alias actifs contiennent chaque mot ; DEFINER, hors PostgREST, ne rend que des identifiants) et `private.fn_mots_proches` (un mot à une lettre près de 5 à 7 lettres, deux à partir de 8, jamais en deçà de 5 — `fuzzystrmatch`) ; `api.catalog_works_v1` accepte aussi une notice liée à une autorité qui porte ce nom et, si rien d'exact dans tout le catalogue, repart à une ou deux lettres près en le disant (`approx_author`, `approx_search`) ; `api.catalog_search_ids_v1` lit les autres noms par terme, puis une seconde passe approchée aux rangs négatifs ; à l'écran une pastille « Rien d'exact : résultats à une ou deux lettres près » (dix langues). Mesuré en production dans une transaction annulée : « kropotkine » 1 → 38 œuvres, « Pierre Kropotkine » 0 → 38, « Goldmann » 0 → 12, aucune notice perdue sur 31 recherches ; +40 à 60 ms en exact, ~300 ms quand le repli joue. Suite `recherche_variantes_approchee_tests` (11), `recherche-approchee` (6), addendum à l'audit `execute_anon`. La liste plate en profite pour la recherche libre ; son filtre auteur·rice reste un `ILIKE` PostgREST. **Reste** le regard de Xavier, après déploiement.",
+          "pt": "**11/10 às 23h28 — entregue pela sessão vizinha** (`f38fffa8`, migração `20261011211012`), sobre o mesmo relato: `private.fn_auteurs_par_nom` (as autoridades cuja forma retida, forma de ordenação, `variant_forms` ou aliases ativos contêm cada palavra) e `private.fn_mots_proches` (uma letra de diferença de 5 a 7 letras, duas a partir de 8); `api.catalog_works_v1` e `api.catalog_search_ids_v1` leem os outros nomes e, se nada exato, repartem em aproximado dizendo-o (pastilha em dez línguas). Medido em produção numa transação anulada: «kropotkine» 1 → 38 obras, «Pierre Kropotkine» 0 → 38, nenhuma ficha perdida em 31 buscas. Suíte SQL (11), teste de tela (6). **Resta** o olhar de Xavier, depois da implantação."
+        }
+      ]
     }
   ]
 }

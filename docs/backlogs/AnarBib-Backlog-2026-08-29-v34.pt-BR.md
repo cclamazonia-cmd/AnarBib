@@ -692,7 +692,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
-| **E38** | A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59 | `P2` | Aberto |
+| **E38** | A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59 | `P2` | A verificar |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -851,13 +851,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### E38 — A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : nenhuma competência técnica
 
 **Estado.** **Constatado por Xavier em 11/10** no Catálogo público: a busca «Kropotkine» «só devolve uma obra, não todas». Reproduzido: `?q=Kropotkine` devolve 2 fichas; `?q=Kropotkin`, 44 linhas. A autoridade «Piotr Kropotkin» (id 5) tem 59 fichas em 36 obras e **vinte e cinco formas ativas** em `author_name_aliases` (entre elas «Kropotkine»). A busca unificada (`api.search_catalog_v1`) lê essas formas e propõe a autoridade; a **busca livre** — digitar e Enter — passa por dois caminhos que nunca as leem: em lista plana, um `ilike` no cliente sobre oito colunas da vista (`SEARCH_COLS`); em lista por obra, `api.catalog_search_ids_v1(p_q)`, cuja palha é título, subtítulo, `autor`, `author_display`, editora, assuntos, cota, ISBN e títulos de obra.
 
-*Verificado : 11/10 — aberto a partir do olhar de Xavier (pergunta 14 da lista E31), reproduzido e diagnosticado na mesma noite.*
+*Verificado : [object Object],[object Object]*
 
-**O que é.** Dar aos dois caminhos a mesma matéria que a busca unificada: (1) uma coluna a mais nas vistas `catalog_list_anon_v1` / `session_v1` — as formas ativas das autoridades ligadas à ficha, agregadas, acrescentada NO FIM por `CREATE OR REPLACE VIEW` restituindo `WITH (security_invoker = true)`; (2) `catalog_search_ids_v1` acrescenta essas formas à sua palha e ao rank; (3) `SEARCH_COLS` recebe a coluna. Medir a vista antes/depois (`EXPLAIN` sob anon). Testes SQL e de tela.
+**O que é.** Entregue pela sessão vizinha na mesma noite (ver Verificação); resta o olhar de Xavier na tela, depois da implantação: `/catalogo?q=Kropotkine` e «Pierre Kropotkine» devolvem as obras da autoridade, em lista plana e por obra; um erro de uma letra («kropotkn») encontra em aproximado com sua pastilha.
 
 **Por que importa.** Um leitor francófono escreve «Kropotkine», um lusófono «Kropotkin» ou «Kropotkine, Pedro»: o catálogo tem as formas, precisa lê-las onde as pessoas digitam.
 
