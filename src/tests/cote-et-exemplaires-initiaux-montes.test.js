@@ -9,9 +9,10 @@
 // ne verraient casser :
 //   1. la prévia est MONTÉE dans la grille, au palier 3 seulement, entre la
 //      circulation et les sujets, et calcule la cote depuis la lib ;
-//   2. les exemplaires initiaux sont MONTÉS avant les boutons d'action, pour une
-//      fiche non publiée seulement, et remontent leurs saisies par onChange
-//      câblé sur `set` du parent ;
+//   2. les exemplaires initiaux sont MONTÉS — depuis C29 lot 4 (11/10/2026),
+//      dans le panneau Exemplaires de la fiche, pour une fiche non publiée
+//      seulement — et remontent leurs saisies par onChange câblé sur `set` du
+//      parent ;
 //   3. aucun des deux n'écrit le formulaire ni ne lit un état du parent.
 
 import { describe, it, expect } from 'vitest';
@@ -49,17 +50,17 @@ describe('prévia de cote (E6 lot 6) — réellement montée', () => {
 });
 
 describe('exemplaires initiaux (E6 lot 6) — réellement montés', () => {
-  it('sont rendus avant les boutons d’action, pour une fiche non publiée', () => {
-    const review = form.indexOf('<ReviewPanel');
-    const mount = form.indexOf('<InitialCopiesBlock');
-    const actions = form.indexOf('Action buttons');
-    expect(mount).toBeGreaterThan(review);
-    expect(mount).toBeLessThan(actions);
-    expect(form.slice(mount - 80, mount)).toMatch(/\{!f\('published_book_id'\) && \(/);
+  it('sont rendus dans le panneau Exemplaires, pour une fiche non publiée (C29 lot 4)', () => {
+    // Plus de montage direct dans la fiche : le parent passe les saisies au panneau…
+    expect(form.includes('<InitialCopiesBlock')).toBe(false);
+    expect(form.includes("import InitialCopiesBlock")).toBe(false);
+    const mount = form.indexOf('<ExemplaresPanel');
     const props = form.slice(mount, form.indexOf('/>', mount));
-    expect(props).toMatch(/importedItems=\{importedItems\} copies=\{f\('initial_copies'\)\}/);
-    expect(props).toMatch(/libraryIdValue=\{f\('initial_copies_library_id'\)\} isNetworkAdmin=\{isNetworkAdmin\}/);
-    expect(props).toMatch(/libraries=\{catalogLibraries\} onChange=\{set\}/);
+    expect(props).toMatch(/initialCopies=\{\{ importedItems, copies: f\('initial_copies'\), libraryIdValue: f\('initial_copies_library_id'\),\s*isNetworkAdmin, libraries: catalogLibraries, onChange: set, fichierSansExemplaire \}\}/);
+    // … et le panneau les rend, fiche non publiée seulement.
+    const panneau = src('pages/catalogacao/ExemplaresPanel.jsx');
+    expect(panneau).toContain("import InitialCopiesBlock from './InitialCopiesBlock';");
+    expect(panneau).toContain('{!publishedBookId && initialCopies && <InitialCopiesBlock {...initialCopies} />}');
   });
 
   it('remontent leurs deux saisies par onChange et n’écrivent rien', () => {
@@ -80,8 +81,8 @@ describe('exemplaires initiaux (E6 lot 6) — réellement montés', () => {
 // lisent le même signe : marc_json.ingest.raw_payload.item_tag.
 describe('exemplaires initiaux (IMP-25) — un fichier MARC sans exemplaire n’en fait pas créer', () => {
   it('le parent passe le signe, lu dans marc_json, et le bloc dit qu’aucun ne sera créé', () => {
-    const mount = form.indexOf('<InitialCopiesBlock');
-    expect(form.slice(mount, form.indexOf('/>', mount))).toMatch(/fichierSansExemplaire=\{fichierSansExemplaire\}/);
+    const mount = form.indexOf('<ExemplaresPanel');
+    expect(form.slice(mount, form.indexOf('/>', mount))).toMatch(/onChange: set, fichierSansExemplaire \}\}/);
     expect(form).toMatch(/JSON\.parse\(form\.marc_json \|\| '\{\}'\)\?\.ingest\?\.raw_payload\?\.item_tag/);
     expect(copies).toMatch(/data-testid="copies-none-imported"/);
     expect(copies).toMatch(/catalogacao\.publish\.copiesNoneImported/);

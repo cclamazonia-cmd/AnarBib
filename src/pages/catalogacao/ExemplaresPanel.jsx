@@ -40,7 +40,9 @@
 // brouillon de mise à jour propose « Reprendre la mise à jour » vers l'éditeur
 // complet au lieu d'en ouvrir un second (create_exemplar_draft_from_exemplar
 // n'est pas idempotent). Rien ici n'écrit le formulaire de la notice.
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import InitialCopiesBlock from './InitialCopiesBlock';
+import BadgeRetire from '@/components/catalog/BadgeRetire';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -51,7 +53,7 @@ import { formatShelfLocation, parseShelfLocation } from '@/lib/shelfLocation';
 
 const VIVANTS = ['draft', 'ready'];
 const CIRCULATIONS = ['ambos', 'emprestavel', 'consulta'];
-const COLS_EXEMPLAIRE = 'id, library_id, holding_id, bib_ref, tombo, shelf_location, circulation_policy, visibility, notes, acquisition_mode, acquisition_date, provenance_note, source_library, label_title_override, label_author_override, label_cdd_override, label_note';
+const COLS_EXEMPLAIRE = 'id, library_id, holding_id, bib_ref, tombo, shelf_location, circulation_policy, visibility, notes, acquisition_mode, acquisition_date, provenance_note, source_library, label_title_override, label_author_override, label_cdd_override, label_note, retire_at';
 
 function parTombo(a, b) {
   return String(a.tombo || '').localeCompare(String(b.tombo || ''), undefined, { numeric: true, sensitivity: 'base' });
@@ -294,7 +296,17 @@ function Temps({ v, set, book, acqModes, t, tombo }) {
   );
 }
 
-export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, onNewCopy, onEditPublished, onEditDraft }) {
+// Lot 4 (11/10/2026, décision de Xavier) — un seul endroit pour les exemplaires :
+//   - `initialCopies` : les saisies du bloc « Exemplaires à créer » d'une fiche
+//     non publiée (nombre, bibliothèque ; ou le rappel qu'un import les a
+//     fournis), rendues ICI plutôt qu'au pied de la fiche ; la mécanique
+//     serveur (publish_book_draft) ne change pas et le bloc remonte toujours
+//     ses saisies au parent par onChange ;
+//   - `ouvrirNouveau` { bookId, nonce } : « Ajouter un exemplaire » de
+//     « Publié, et maintenant ? » rouvre la fiche publiée et demande au panneau
+//     d'ouvrir son formulaire court, une fois par nonce, quand la fiche visée
+//     est bien celle qu'il montre — plus de détour par l'éditeur complet.
+export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, onNewCopy, onEditPublished, onEditDraft, initialCopies = null, ouvrirNouveau = null }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin } = useLibrary();
@@ -383,6 +395,22 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
 
   // La fiche change : un formulaire ouvert ne la concerne plus.
   useEffect(() => { setNf(null); setEf(null); setMessage({ text: '', kind: '' }); }, [publishedBookId]);
+
+  // Lot 4 : ouverture du formulaire court sur demande du parent (après une
+  // publication). On attend que le panneau montre la fiche visée et connaisse
+  // ses bibliothèques, on ouvre une seule fois par nonce, et on amène le
+  // panneau à l'écran (scroll-padding-top : sous le bandeau collant).
+  const racineRef = useRef(null);
+  const demandeTraitee = useRef(null);
+  useEffect(() => {
+    if (!ouvrirNouveau || !publishedBookId || !book) return;
+    if (String(ouvrirNouveau.bookId) !== String(publishedBookId)) return;
+    if (!staffConnu && !isNetworkAdmin) return;
+    if (demandeTraitee.current === ouvrirNouveau.nonce) return;
+    demandeTraitee.current = ouvrirNouveau.nonce;
+    ouvrirFormulaire();
+    setTimeout(() => racineRef.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' }), 0);
+  }, [ouvrirNouveau, publishedBookId, book, staffConnu, isNetworkAdmin]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const groupes = useMemo(
     () => grouperParBibliotheque(exemplaires, brouillons, { staffLibraryIds: staffConnu ? staffLibraryIds : [], isNetworkAdmin, libraries }),
@@ -504,7 +532,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
   }
 
   return (
-    <div className="cat-material-section cat-dep" style={{ gridColumn: 'span 3' }} data-testid="copies-panel">
+    <div className="cat-material-section cat-dep" style={{ gridColumn: 'span 3' }} data-testid="copies-panel" ref={racineRef}>
       <div className="cat-dep__head">
         <h4 style={{ margin: 0 }}>
           {t({ id: 'catalogacao.copies.title' })}
@@ -529,6 +557,8 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
       {!publishedBookId && (
         <div className="cat-dep__note" role="note" data-testid="copies-unpublished">{t({ id: 'catalogacao.copies.unpublished' })}</div>
       )}
+      {/* Lot 4 : les exemplaires à créer à la publication vivent ici (E6 lot 6 : InitialCopiesBlock). */}
+      {!publishedBookId && initialCopies && <InitialCopiesBlock {...initialCopies} />}
       {publishedBookId && staffConnu && rangeables.length === 0 && !isNetworkAdmin && (
         <div className="cat-dep__note" role="note">{t({ id: 'catalogacao.copies.form.noLibrary' })}</div>
       )}
@@ -560,6 +590,7 @@ export default function ExemplaresPanel({ publishedBookId, draftId, reloadKey, o
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="cat-dep__item-title" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
                       <span>{l.tombo || t({ id: 'catalogacao.queue.noTombo' })}</span>
+                      {l.kind === 'published' && l.source?.retire_at && <BadgeRetire exemplaire={l.source} />}
                       {l.kind === 'draft' && (
                         <span className={`cat-pill ${l.status === 'ready' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                           {t({ id: l.status === 'ready' ? 'catalogacao.status.ready' : 'catalogacao.status.draft' })}

@@ -26,10 +26,11 @@ const form = src('pages/catalogacao/BookDraftForm.jsx');
 const panel = src('pages/catalogacao/ReviewPanel.jsx');
 
 describe('panneau de révision de la fiche (E6 lot 5) — réellement monté', () => {
-  it('est rendu après la grille des champs, avant les exemplaires initiaux', () => {
+  // C29 lot 4 (11/10/2026) : les exemplaires initiaux vivent dans le panneau Exemplaires, dans la grille ; le repère d'après est désormais les boutons d'action.
+  it('est rendu après la grille des champs, avant les boutons d’action', () => {
     const marc = form.indexOf("{rrf('marc_json')}");
     const mount = form.indexOf('<ReviewPanel');
-    const copies = form.indexOf('Exemplaires initiaux');
+    const copies = form.indexOf('Action buttons');
     expect(marc).toBeGreaterThan(-1);
     expect(mount).toBeGreaterThan(marc);
     expect(mount).toBeLessThan(copies);

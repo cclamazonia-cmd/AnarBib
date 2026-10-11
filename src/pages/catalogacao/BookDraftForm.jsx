@@ -13,7 +13,6 @@ import LookupPanel from './LookupPanel';
 import ContributorsPanel from './ContributorsPanel';
 import ReviewPanel from './ReviewPanel';
 import ShelfLabelPreview from './ShelfLabelPreview';
-import InitialCopiesBlock from './InitialCopiesBlock';
 import ExemplaresPanel from './ExemplaresPanel';
 import ReassignPanel from './ReassignPanel';
 import InfoCards from './InfoCards';
@@ -108,7 +107,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const showMsg = useCallback((text, kind) => setMsg({ text, kind }), []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [dupModal, setDupModal] = useState(null); // { kind, detail, bookId } | null — modale d'avertissement doublon AVANT sauvegarde du brouillon
-  const [lastPublished, setLastPublished] = useState(null); // { bookId, title, workId, autor } | null — « Publié — et maintenant ? » (AfterPublishPanel)
+  const [lastPublished, setLastPublished] = useState(null); // { bookId, draftId, title, workId, autor } | null — « Publié — et maintenant ? » (AfterPublishPanel)
+  // C29 lot 4 : « Ajouter un exemplaire » rouvre la fiche publiée et demande au
+  // panneau Exemplaires d'ouvrir son formulaire court ({ bookId, nonce }).
+  const [copieDemandee, setCopieDemandee] = useState(null);
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
   // Doublons de documents (detection + fusion, P2a/P2b)
@@ -1528,7 +1530,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           workId = pub?.work_id || null;
         } catch { /* l'action « autre édition » sera simplement omise */ }
       }
-      setLastPublished(publishedId ? { bookId: publishedId, title: publishedTitle, autor: publishedAutor, workId } : null);
+      setLastPublished(publishedId ? { bookId: publishedId, draftId, title: publishedTitle, autor: publishedAutor, workId } : null);
       if (!publishedId) confirmSaved(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }));
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
@@ -1776,8 +1778,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           <div className="ab-pv-explain">{t({ id: 'catalogacao.preview.explain' })}</div>
         </div>
         {/* Cards « para informação » (E6 lot 8 : InfoCards) */}
-        <InfoCards publishedBookId={form.published_book_id} catalogLibraries={catalogLibraries} libraryId={libraryId}
-          contributors={contributors} onNavigateTab={onNavigateTab} onEditExemplar={onEditExemplar} />
+        <InfoCards contributors={contributors} onNavigateTab={onNavigateTab} />
       </aside>
     );
   }
@@ -1816,9 +1817,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           title={t({ id: 'catalogacao.next.title' }, { title: lastPublished.title })}
           onClose={() => setLastPublished(null)}
           actions={[
-            onAttachToBook && { id: 'exemplar', primary: true,
+            // C29 lot 4 : on reste dans la fiche — elle se rouvre publiée, et le
+            // panneau Exemplaires ouvre son formulaire court (bibliothèque et
+            // numéro proposés). L'éditeur complet reste à un clic dans le panneau.
+            onOpenDraft && lastPublished.draftId && { id: 'exemplar', primary: true,
               label: t({ id: 'catalogacao.next.addExemplar' }), hint: t({ id: 'catalogacao.next.addExemplarHint' }),
-              onClick: () => { onAttachToBook(lastPublished.bookId); setLastPublished(null); } },
+              onClick: () => {
+                setCopieDemandee({ bookId: lastPublished.bookId, nonce: Date.now() });
+                onOpenDraft(lastPublished.draftId);
+                setLastPublished(null);
+              } },
             lastPublished.workId && { id: 'edition',
               label: t({ id: 'catalogacao.next.otherEdition' }), hint: t({ id: 'catalogacao.next.otherEditionHint' }),
               onClick: () => {
@@ -2407,9 +2415,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           <DigitalResourcesPanel draftId={f('id')} ownerLibraryId={f('owner_library_id')} resources={digitalResources}
             onChanged={() => loadDigitalResources(f('id'))} setMsg={setMsg} />
 
-          {/* ═══ Exemplaires de la notice (C29 lot 1 : ExemplaresPanel) ═══ */}
+          {/* ═══ Exemplaires de la notice (C29 lot 1 : ExemplaresPanel ; lot 4 : un seul endroit —
+              les exemplaires initiaux d'une fiche non publiée y vivent aussi, et « Ajouter un
+              exemplaire » après publication y ouvre le formulaire court) ═══ */}
           <ExemplaresPanel publishedBookId={form.published_book_id} draftId={f('id')} reloadKey={importedCheck}
-            onNewCopy={onAttachToBook} onEditPublished={onEditExemplar} onEditDraft={onEditExemplarDraft} />
+            onNewCopy={onAttachToBook} onEditPublished={onEditExemplar} onEditDraft={onEditExemplarDraft}
+            ouvrirNouveau={copieDemandee}
+            initialCopies={{ importedItems, copies: f('initial_copies'), libraryIdValue: f('initial_copies_library_id'),
+              isNetworkAdmin, libraries: catalogLibraries, onChange: set, fichierSansExemplaire }} />
 
           {/* ═══ MARC JSON (registry-driven, tier 3) ═══ */}
           {rrf('marc_json')}
@@ -2421,13 +2434,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           materialLabel={MATERIAL_TYPES.find(m => m.value === materialType)?.label || materialType}
           isbdEnabled={isbdEnabled} isbdData={isbdData} zoneLabels={ZONE_LABELS}
           onPrepareIsbd={prepareIsbd} onClearIsbd={clearIsbd} />
-
-        {/* ── Exemplaires initiaux (fiche non encore publiée ; E6 lot 6 : InitialCopiesBlock) ── */}
-        {!f('published_book_id') && (
-          <InitialCopiesBlock importedItems={importedItems} copies={f('initial_copies')}
-            libraryIdValue={f('initial_copies_library_id')} isNetworkAdmin={isNetworkAdmin}
-            libraries={catalogLibraries} onChange={set} fichierSansExemplaire={fichierSansExemplaire} />
-        )}
 
         {/* ── Action buttons ─────────────────────────── */}
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>

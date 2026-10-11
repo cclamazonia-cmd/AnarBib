@@ -704,7 +704,6 @@ export const HOMOGRAPHE_COURT = {
   "ca": [
     "{current} de {total}",
     "{debut}–{fin} de {total}",
-    "{n} exempl.",
     "← Anterior",
     "1 item",
     "② Exemplar material",

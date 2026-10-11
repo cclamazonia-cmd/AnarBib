@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// AnarBib — C29 lots 1 à 3 (10/10/2026) : les exemplaires d'une notice, dans la notice.
+// AnarBib — C29 lots 1 à 4 (10-11/10/2026) : les exemplaires d'une notice, dans la notice.
 //
 // CE QUE CE TEST PROTÈGE.
 //   1. grouperParBibliotheque : mes bibliothèques d'abord et modifiables, les
@@ -26,6 +26,12 @@
 //      numériques ; la cible d'un nouvel exemplaire porte un nonce ; la migration
 //      du lot 3 existe, ferme anon, et sa suite est au manifeste.
 //   6. Les clés du panneau existent dans les 10 locales.
+//   7. Lot 4, un seul endroit (décision de Xavier, 11/10) : les exemplaires à
+//      créer d'une fiche non publiée vivent dans le panneau et remontent par
+//      onChange ; « Ajouter un exemplaire » après publication rouvre la fiche
+//      et le panneau ouvre son formulaire court, une fois par nonce, pour la
+//      fiche visée seulement ; la carte des exemplaires d'InfoCards et le
+//      bandeau 💡 d'Indexation n'existent plus, ni leurs clés.
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
@@ -386,6 +392,65 @@ describe('contrat de montage (source)', () => {
     const manifeste = lire('tests/sql/ci-suites.txt');
     expect(manifeste).toContain('tests/sql/c29_exemplaire_modifier_et_publier_tests.sql');
     expect(lire('tests/sql/c29_exemplaire_modifier_et_publier_tests.sql')).toContain('C29-MODIFIER-ET-PUBLIER OK');
+  });
+});
+
+describe('ExemplaresPanel — un seul endroit (lot 4)', () => {
+  const copiesInitiales = (onChange) => ({ importedItems: 0, copies: '2', libraryIdValue: '', isNetworkAdmin: false, libraries: DATA.libraries, onChange, fichierSansExemplaire: false });
+
+  it('fiche non publiée : le nombre d’exemplaires à créer vit dans le panneau et remonte par onChange', () => {
+    const onChange = vi.fn();
+    const { container } = rendre(<ExemplaresPanel publishedBookId={null} draftId={55} initialCopies={copiesInitiales(onChange)} />);
+    expect(container.querySelector('[data-testid="copies-unpublished"]')).not.toBeNull();
+    const nombre = container.querySelector('[data-testid="copies-panel"] input[type="number"]');
+    expect(nombre.value).toBe('2');
+    fireEvent.change(nombre, { target: { value: '3' } });
+    expect(onChange).toHaveBeenCalledWith('initial_copies', '3');
+  });
+
+  it('fiche publiée : le bloc des exemplaires à créer ne se montre pas, même passé', async () => {
+    const { container } = rendre(<ExemplaresPanel publishedBookId={7} draftId={55} initialCopies={copiesInitiales(vi.fn())} />);
+    await waitFor(() => expect(lignes(container).length).toBe(4));
+    expect(container.querySelector('[data-testid="copies-panel"] input[type="number"]')).toBeNull();
+  });
+
+  it('« Ajouter un exemplaire » : la demande ouvre le formulaire court de la fiche visée, une seule fois par nonce', async () => {
+    const arbre = (demande) => <IntlProvider locale="fr" messages={fr}><ExemplaresPanel publishedBookId={7} draftId={55} ouvrirNouveau={demande} /></IntlProvider>;
+    const { container, rerender } = render(arbre({ bookId: 7, nonce: 1 }));
+    await waitFor(() => expect(container.querySelector('[data-testid="copies-form"]')).not.toBeNull());
+    expect(container.querySelector('[data-testid="copies-tombo"]').value).toBe('BLMF-000011');
+    fireEvent.click(container.querySelector('[data-testid="copies-form"] button[type="button"].ab-button--ghost'));
+    expect(container.querySelector('[data-testid="copies-form"]')).toBeNull();
+    rerender(arbre({ bookId: 7, nonce: 1 }));
+    await new Promise((r) => setTimeout(r, 0));
+    expect(container.querySelector('[data-testid="copies-form"]')).toBeNull();
+    rerender(arbre({ bookId: 7, nonce: 2 }));
+    await waitFor(() => expect(container.querySelector('[data-testid="copies-form"]')).not.toBeNull());
+  });
+
+  it('une demande pour une autre fiche n’ouvre rien', async () => {
+    const { container } = rendre(<ExemplaresPanel publishedBookId={7} draftId={55} ouvrirNouveau={{ bookId: 8, nonce: 1 }} />);
+    await waitFor(() => expect(lignes(container).length).toBe(4));
+    expect(container.querySelector('[data-testid="copies-form"]')).toBeNull();
+  });
+
+  it('contrat de source : la fiche rouvre le brouillon publié et demande le formulaire ; la carte et le bandeau ont disparu, avec leurs clés', () => {
+    const form = lire('src/pages/catalogacao/BookDraftForm.jsx');
+    expect(form).toContain('setCopieDemandee({ bookId: lastPublished.bookId, nonce: Date.now() });');
+    expect(form).toContain('onOpenDraft(lastPublished.draftId);');
+    expect(form).toContain('ouvrirNouveau={copieDemandee}');
+    expect(form).toContain('{ bookId: publishedId, draftId, title: publishedTitle, autor: publishedAutor, workId }');
+    expect(form).not.toContain('onAttachToBook(lastPublished.bookId)');
+    expect(lire('src/pages/catalogacao/InfoCards.jsx')).not.toContain('indexPanel');
+    expect(lire('src/pages/catalogacao/ExemplarDraftForm.jsx')).not.toContain('autoExemplarInfo');
+    const retirees = ['catalogacao.exemplar.autoExemplarInfo', 'catalogacao.infocard.exemplarTitle', 'catalogacao.infocard.exemplarUnsaved',
+      'catalogacao.infocard.noExemplar', 'catalogacao.infocard.goExemplar', 'catalogacao.infocard.exemplarCount'];
+    for (const loc of readdirSync(path.join(RACINE, 'src/i18n/locales')).filter((f) => f.endsWith('.json'))) {
+      const j = JSON.parse(lire(`src/i18n/locales/${loc}`));
+      for (const cle of retirees) expect(cle in j, `${cle} encore dans ${loc}`).toBe(false);
+      expect(j['catalogacao.copies.unpublished']).toBeTruthy();
+      expect(j['catalogacao.next.addExemplarHint']).toBeTruthy();
+    }
   });
 });
 

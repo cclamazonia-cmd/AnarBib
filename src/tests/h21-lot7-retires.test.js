@@ -275,12 +275,13 @@ describe('L’assistant d’import, le catalogage, la fiche, le récolement (tex
   });
   it('le catalogage et la fiche lisent retire_at et montrent le badge ; le récolement dit « retiré »', () => {
     const cat = lire('../pages/catalogacao/CatalogPanel.jsx');
-    const fiche = lire('../pages/catalogacao/InfoCards.jsx');
+    // C29 lot 4 (11/10) : la fiche montre ses exemplaires dans ExemplaresPanel, plus dans InfoCards.
+    const fiche = lire('../pages/catalogacao/ExemplaresPanel.jsx');
     const rec = lire('../pages/painel/tabs/TabRecolement.jsx');
     expect(cat).toMatch(/\.select\('[^']*retire_at[^']*'\)/);
     expect(cat).toContain('<BadgeRetire exemplaire={it} />');
-    expect(fiche).toMatch(/\.select\('[^']*retire_at[^']*'\)/);
-    expect(fiche).toContain('<BadgeRetire exemplaire={ex} />');
+    expect(fiche).toMatch(/const COLS_EXEMPLAIRE = '[^']*retire_at'/);
+    expect(fiche).toContain('<BadgeRetire exemplaire={l.source} />');
     expect(rec).toContain("(data.retire ? 'retire' : 'present')");
     expect(rec).toContain('data-testid="recolement-retired"');
     expect(rec).toContain("t({ id: 'recolement.report.retired' })");

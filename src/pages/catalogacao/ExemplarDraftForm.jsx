@@ -515,11 +515,6 @@ export default function ExemplarDraftForm({ mode, batches, prefill = null, editi
         </div>
       </div>
 
-      {/* ── Bandeau info auto-exemplaire ──────────────── */}
-      <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.78rem', marginBottom: 12, background: 'rgba(29,78,216,.10)', color: '#93c5fd', border: '1px solid rgba(29,78,216,.2)' }}>
-        💡 {t({ id: 'catalogacao.exemplar.autoExemplarInfo' })}
-      </div>
-
       {/* ── Messages ─────────────────────────────────── */}
       <CatalogStatusBar msg={msg} onClose={() => setMsg({ text: '', kind: '' })} />
       {afterPublish && (
