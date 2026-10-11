@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-11** · 57 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-11** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 2
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 1
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
@@ -60,9 +60,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 11 de outubro de 2026
 
-**Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503, a retirar), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
+**Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava — 2 368 obras), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-11.** **42 itens de 57** trazem uma verificação datada própria (A1, A3, B36, B38, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, E36, E37, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-11.** **41 itens de 56** trazem uma verificação datada própria (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E31, E36, E37, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -89,7 +89,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 | | | |
 |---|---:|---|
-| Fichas | **2 569** | 2 762 exemplares, **2 369 obras**, **1 506 autoridades**, **2 660 fundos, nenhum vazio**. Nenhuma ficha criada, fundida nem apagada desde 09/10 à noite (nenhuma linha em `merge_log`), nenhum exemplar criado nem modificado, nenhum retirado (`retire_at`, H21 lote 7, ainda vazio). **+1 obra sem ficha**: a 2503, criada em 10/10 às 20h45 (Paris) — a hora dos testes de C17 de Xavier, cuja ficha foi apagada na mesma noite; a obra ficou, órfã, a retirar. Nenhuma ficha criada desde a 2749 de 07/10. |
+| Fichas | **2 569** | 2 762 exemplares, **2 369 obras**, **1 506 autoridades**, **2 660 fundos, nenhum vazio**. Nenhuma ficha criada, fundida nem apagada desde 09/10 à noite (nenhuma linha em `merge_log`), nenhum exemplar criado nem modificado, nenhum retirado (`retire_at`, H21 lote 7, ainda vazio). **+1 obra sem ficha**: a 2503, criada em 10/10 às 20h45 (Paris) — a hora dos testes de C17 de Xavier, cuja ficha foi apagada na mesma noite; a obra ficou, órfã; **retirada em 11/10 às 23h15** com acordo escrito de Xavier (2 368 obras). Nenhuma ficha criada desde a 2749 de 07/10. |
 | Rascunhos de catalogação | **2 438** | `draft` 1 842, `published` 595, `cancelled` 1 (2 418 em 09/10: **+20, todas retomadas de fichas publicadas fora de lote**, `action = update` (296 → 316), criadas e publicadas entre 10/10 às 21h01 e 11/10 às 12h14 — a catalogação do dia; o único cancelado continua sendo o 6393, C18). **Quatro lotes**, cada um com sua biblioteca (B30): MLEG 8 (411: 147 em curso, 264 publicados, aberto), BLMF 57 (**6**, todos publicados, fechado — o levantamento de 09/10 dizia 9, a conta não batia) e 66 «Acervo histórico CCLA» (24: 22 em curso, 2 publicados, aberto, C26), Solidaires 63 (1 673, aberto — falta revisar e publicar); 324 fora de lote. Nenhum rascunho de atualização por reimportação (H21 lote 4) existe ainda — a DIRA não reimportou. |
 | Indexação de assunto | **2 105 / 2 569** | fichas com pelo menos um assunto — **464 sem nenhum** (464 em 09/10; as vinte retomadas do dia não acrescentaram nem tiraram assunto a uma ficha sem nenhum). O que o vocabulário atual não cobre: item C27. |
 | Tesauro FICEDL | **621** | Sem mudança desde o levantamento de 09/10. termos (234 lugares, 227 assuntos, 159 datas, 1 misto), **10 locales completas**; **110 alinhamentos** para os assuntos locais. Sem mudança desde 28/09; o esboço SKOS revisado e o raspador off-line esperam (H13). |
@@ -347,7 +347,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
-| **B38** | Um exemplar «somente equipe» pode ser reservado, convertido em empréstimo e ir para PEB: quatro funções de circulação não filtram `visibility` | `P2` | A verificar |
 
 #### B36 — Reler, com os contadores de produção, os índices mantidos com ressalva
 
@@ -369,29 +368,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Adiado de propósito: um mês de contadores de produção depois do B32 (implantado em 28/09), não antes de 28/10.
 
 *Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
-
-#### B38 — Um exemplar «somente equipe» pode ser reservado, convertido em empréstimo e ir para PEB: quatro funções de circulação não filtram `visibility`
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** Constatado em 09/10: quatro funções de circulação não filtram `visibility = public`; um exemplar «somente equipe» pode ser reservado ou emprestado. Nenhum em produção hoje.
-
-*Verificado : 10/10 — aberto por constatação do lote 7 de H21, a pedido de Xavier.
-
-**11/10 — entregue** (`fc2f2af9`, migração `20261011114157`): nas quatro funções, o mesmo filtro do empréstimo direto (`visibility = 'public'`, `circulation_policy in ('emprestavel', 'ambos')`) na contagem da reserva e nas quatro escolhas da conversão (o exemplar é evitado), e uma recusa explícita nas duas funções PEB (P0001, HINT `error.circulation.item_staff_only` / `item_consult_only`, dez locales). Suíte de 9 casos, mutante provado (oito em nove vermelhos sem as linhas B38). Os dois critérios cumpridos; o fechamento cabe a Xavier.*
-
-**O que é.** Adicionar o filtro de visibilidade às quatro funções; testes e mutantes.
-
-**Por que importa.** Um exemplar de arquivo reservado à equipe não deve sair por um caminho desviado.
-
-**O que conta como terminado.**
-
-- As quatro funções evitam um exemplar `staff_only`.
-- Um teste por função.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `supabase/migrations` · `tests/sql`*
 
 ---
 
@@ -1978,6 +1954,7 @@ CI verde. |
 | I33 | 2026-10-09 | O checkout de operação segue `main` sem gesto humano: o disparo do espelho o avança em fast-forward só se estiver em `main`, limpo e sem script de operação rodando ; senão diz por quê e não mexe. Provado em 09/10 (+14 commits antes do backup curto, que passou). **Fechado em 09/10 por Xavier.** |
 | I18 | 2026-10-10 | O job `rejeu-image` reaplica todas as migrações na imagem Supabase a cada push (critério 1). **Critério 2 cumprido em 08/10**: ficou vermelho por uma razão real (privilégio padrão de `anon` nas tabelas da imagem) e a razão foi corrigida na migração (`c06f9ed2`), nunca no job. **Fechado em 10/10 por Xavier.** |
 | E32 | 2026-10-10 | Nenhum ícone declarado em emoji em `src/`: as 106 declarações restantes passam ao nome `AppIcon` (mesmo componente na tela), a tabela `LEGACY` sai, a guarda `appicon-sans-emoji` mantém a regra (`391d80c9`, 10/10). **Fechado em 10/10 por Xavier.** |
+| B38 | 2026-10-11 | Um exemplar «só equipe» (`visibility = staff_only`) ou «só consulta» (`circulation_policy = consulta`) não sai mais da biblioteca por um caminho desviado: as quatro funções de circulação que o contavam, escolhiam ou emprestavam leem agora visibilidade e política como o empréstimo direto (`fc2f2af9`, migração `20261011114157`, implantada em 11/10 às 13h52) — a reserva só conta o que se empresta, a conversão só escolhe isso (um exemplar de arquivo com id mais baixo que um público é evitado, provado), e o PEB recusa por adição e por criação com um HINT traduzido. Suíte de 9 casos, mutante provado, suítes de circulação verdes. Os dois critérios cumpridos; **fechado por Xavier em 11/10**. O buraco nunca servira: nenhum exemplar `staff_only` em produção no fechamento. |
 
 ---
 
@@ -2009,4 +1986,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-11. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 57 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-11. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
