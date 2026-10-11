@@ -347,7 +347,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
-| **B38** | Un exemplaire « équipe uniquement » se réserve, se convertit en prêt et part en PEB : quatre fonctions de circulation ne filtrent pas `visibility` | `P2` | Ouvert |
+| **B38** | Un exemplaire « équipe uniquement » se réserve, se convertit en prêt et part en PEB : quatre fonctions de circulation ne filtrent pas `visibility` | `P2` | À vérifier |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -372,11 +372,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B38 — Un exemplaire « équipe uniquement » se réserve, se convertit en prêt et part en PEB : quatre fonctions de circulation ne filtrent pas `visibility`
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Constaté le 09/10 par l’état des lieux du lot 7 de H21, confirmé par l’agent du lot : `fn_v2_create_reserva_by_holdings` compte les exemplaires sans filtre de visibilité ; `fn_v2_convert_reserva_linhas_to_emprestimo` prend n’importe quel exemplaire libre ; `fn_v2_add_emprestimo_interbibliotecas_itens` ne vérifie que `loanable` ; `fn_peb_create_loan_with_items` ne vérifie que l’engagement. Un exemplaire en `visibility = staff_only` (« Équipe uniquement (archive) ») y est donc compté, choisi ou prêté, alors que le prêt direct (`fn_v2_create_emprestimo_by_holdings`), la consultation et la recherche PEB le refusent. Le lot 7 n’y a ajouté que le filtre du retrait (`retire_at`). En production le 09/10 : 0 exemplaire en `staff_only` — le trou n’a pas encore servi.
 
-*Vérifié : 10/10 — ouvert sur constat de l’état des lieux du lot 7 de H21, à la demande de Xavier.*
+*Vérifié : 10/10 — ouvert sur constat de l’état des lieux du lot 7 de H21, à la demande de Xavier.
+
+**11/10 — livré, déployé à 13 h 52** (`fc2f2af9`, migration `20261011114157`) : sur la définition vivante des quatre fonctions, par ancres comptées et md5 de `prosrc` vérifiés, le même filtre que le prêt direct — `visibility = 'public'` et `circulation_policy in ('emprestavel', 'ambos')` — au compte des exemplaires de la réservation et aux quatre choix de la conversion (l'exemplaire est évité), et un refus explicite dans les deux fonctions PEB où l'exemplaire est désigné par son identifiant (P0001, HINT `error.circulation.item_staff_only` / `item_consult_only`, dix locales). Aucune signature ne change, aucune fonction ni porte nouvelle. Suite `b38_equipe_uniquement_ne_sort_pas_tests` (9) : rien à réserver ni à convertir sur un fonds d'archive ou de consultation ; un fonds avec un exemplaire d'archive d'identifiant *plus bas* qu'un public se réserve et la conversion prend le public ; PEB par ajout et par création refusés avec leur HINT. Mutant éprouvé : sans les lignes B38, huit tests sur neuf rougissent. Les suites de circulation existantes (réservations, emprunts, PEB, enveloppes de prêt, E34, couche supplantée, DEFINER fermées, salle des machines) restent vertes. **Les deux critères sont tenus sur pièces** (les quatre fonctions refusent ou évitent ; un test par fonction, avec un exemplaire d'archive d'id plus bas) ; la clôture revient à Xavier.*
 
 **Ce que c'est.** Ajouter `visibility = 'public'` (et `circulation_policy` là où le prêt direct le lit) aux choix et aux comptes de ces quatre fonctions, sur leur définition vivante, par ancres ; tests : un fonds avec un exemplaire `staff_only` d’id plus bas et un public — réservation, conversion, PEB prennent le public ou refusent ; mutants. Relire en même temps toute autre fonction qui choisit ou compte un exemplaire.
 

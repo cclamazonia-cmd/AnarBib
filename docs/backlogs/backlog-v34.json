@@ -3331,7 +3331,7 @@
       "id": "B38",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -3371,8 +3371,8 @@
         "tests/sql"
       ],
       "verif": {
-        "fr": "10/10 — ouvert sur constat de l’état des lieux du lot 7 de H21, à la demande de Xavier.",
-        "pt": "10/10 — aberto por constatação do lote 7 de H21, a pedido de Xavier."
+        "fr": "10/10 — ouvert sur constat de l’état des lieux du lot 7 de H21, à la demande de Xavier.\n\n**11/10 — livré, déployé à 13 h 52** (`fc2f2af9`, migration `20261011114157`) : sur la définition vivante des quatre fonctions, par ancres comptées et md5 de `prosrc` vérifiés, le même filtre que le prêt direct — `visibility = 'public'` et `circulation_policy in ('emprestavel', 'ambos')` — au compte des exemplaires de la réservation et aux quatre choix de la conversion (l'exemplaire est évité), et un refus explicite dans les deux fonctions PEB où l'exemplaire est désigné par son identifiant (P0001, HINT `error.circulation.item_staff_only` / `item_consult_only`, dix locales). Aucune signature ne change, aucune fonction ni porte nouvelle. Suite `b38_equipe_uniquement_ne_sort_pas_tests` (9) : rien à réserver ni à convertir sur un fonds d'archive ou de consultation ; un fonds avec un exemplaire d'archive d'identifiant *plus bas* qu'un public se réserve et la conversion prend le public ; PEB par ajout et par création refusés avec leur HINT. Mutant éprouvé : sans les lignes B38, huit tests sur neuf rougissent. Les suites de circulation existantes (réservations, emprunts, PEB, enveloppes de prêt, E34, couche supplantée, DEFINER fermées, salle des machines) restent vertes. **Les deux critères sont tenus sur pièces** (les quatre fonctions refusent ou évitent ; un test par fonction, avec un exemplaire d'archive d'id plus bas) ; la clôture revient à Xavier.",
+        "pt": "10/10 — aberto por constatação do lote 7 de H21, a pedido de Xavier.\n\n**11/10 — entregue** (`fc2f2af9`, migração `20261011114157`): nas quatro funções, o mesmo filtro do empréstimo direto (`visibility = 'public'`, `circulation_policy in ('emprestavel', 'ambos')`) na contagem da reserva e nas quatro escolhas da conversão (o exemplar é evitado), e uma recusa explícita nas duas funções PEB (P0001, HINT `error.circulation.item_staff_only` / `item_consult_only`, dez locales). Suíte de 9 casos, mutante provado (oito em nove vermelhos sem as linhas B38). Os dois critérios cumpridos; o fechamento cabe a Xavier."
       }
     },
     {

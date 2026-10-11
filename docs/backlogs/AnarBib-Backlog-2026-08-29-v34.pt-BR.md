@@ -347,7 +347,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
-| **B38** | Um exemplar «somente equipe» pode ser reservado, convertido em empréstimo e ir para PEB: quatro funções de circulação não filtram `visibility` | `P2` | Aberto |
+| **B38** | Um exemplar «somente equipe» pode ser reservado, convertido em empréstimo e ir para PEB: quatro funções de circulação não filtram `visibility` | `P2` | A verificar |
 
 #### B36 — Reler, com os contadores de produção, os índices mantidos com ressalva
 
@@ -372,11 +372,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B38 — Um exemplar «somente equipe» pode ser reservado, convertido em empréstimo e ir para PEB: quatro funções de circulação não filtram `visibility`
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** Constatado em 09/10: quatro funções de circulação não filtram `visibility = public`; um exemplar «somente equipe» pode ser reservado ou emprestado. Nenhum em produção hoje.
 
-*Verificado : 10/10 — aberto por constatação do lote 7 de H21, a pedido de Xavier.*
+*Verificado : 10/10 — aberto por constatação do lote 7 de H21, a pedido de Xavier.
+
+**11/10 — entregue** (`fc2f2af9`, migração `20261011114157`): nas quatro funções, o mesmo filtro do empréstimo direto (`visibility = 'public'`, `circulation_policy in ('emprestavel', 'ambos')`) na contagem da reserva e nas quatro escolhas da conversão (o exemplar é evitado), e uma recusa explícita nas duas funções PEB (P0001, HINT `error.circulation.item_staff_only` / `item_consult_only`, dez locales). Suíte de 9 casos, mutante provado (oito em nove vermelhos sem as linhas B38). Os dois critérios cumpridos; o fechamento cabe a Xavier.*
 
 **O que é.** Adicionar o filtro de visibilidade às quatro funções; testes e mutantes.
 
