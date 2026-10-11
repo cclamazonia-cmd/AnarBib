@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "naar „{bibliotheque}” gegaan (opnieuw toegewezen): er wordt niets opnieuw aangemaakt",
   "importacoes.items.count.reattribue": "{n} naar een andere bibliotheek gegaan",
   "error.circulation.item_staff_only": "Dit exemplaar is alleen voor het team (archief): het wordt niet uitgeleend en gaat niet uit in interbibliothecair leenverkeer.",
-  "error.circulation.item_consult_only": "Dit exemplaar is alleen ter inzage ter plaatse: het wordt niet uitgeleend en gaat niet uit in interbibliothecair leenverkeer."
+  "error.circulation.item_consult_only": "Dit exemplaar is alleen ter inzage ter plaatse: het wordt niet uitgeleend en gaat niet uit in interbibliothecair leenverkeer.",
+  "catalog.results.approx": "Niets exacts: resultaten met één of twee letters verschil",
+  "catalogacao.bio.titleIn.ptBR": "Biografie in het Portugees (Brazilië)",
+  "catalogacao.bio.titleIn.fr": "Biografie in het Frans",
+  "catalogacao.bio.titleIn.es": "Biografie in het Spaans",
+  "catalogacao.bio.titleIn.en": "Biografie in het Engels",
+  "catalogacao.bio.titleIn.it": "Biografie in het Italiaans",
+  "catalogacao.bio.titleIn.de": "Biografie in het Duits",
+  "catalogacao.bio.titleIn.ca": "Biografie in het Catalaans",
+  "catalogacao.bio.titleIn.eo": "Biografie in het Esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografie in het Nederlands",
+  "catalogacao.bio.titleIn.el": "Biografie in het Grieks"
 }

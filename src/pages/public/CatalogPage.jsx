@@ -314,12 +314,17 @@ export default function CatalogPage() {
     return () => document.removeEventListener('mousedown', onDown);
   }, [netMenuOpen]);
 
+  // Recherche approchée (11/10/2026) : rien d'exact, le serveur a cherché à une
+  // ou deux lettres près (approx_author / approx_search de catalog_works_v1, ou
+  // rangs négatifs de catalog_search_ids_v1 en liste plate) — l'écran le dit.
+  const [approxMatch, setApproxMatch] = useState(false);
+
   // Fetch
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     // Remis à zéro ici plutôt que sur chaque chemin de succès : si l'API répond,
     // le mode dégradé n'est simplement jamais réactivé plus bas.
-    if (!append) setDegradedSince(null);
+    if (!append) { setDegradedSince(null); setApproxMatch(false); }
     try {
       // OPAC par œuvre (décision 1 du 04/09/2026) : une ligne par œuvre, groupée
       // CÔTÉ SERVEUR (tri et pagination au niveau œuvre, une œuvre à cheval sur
@@ -342,6 +347,7 @@ export default function CatalogPage() {
           setTotalFetched(offset + page.length);
           setHasMore(page.length === WORKS_PAGE_SIZE);
           setTotalCount(Number(data?.total ?? 0));
+          if (!append) setApproxMatch(Boolean(data?.approx_author || data?.approx_search));
           return;
         } catch (werr) {
           console.warn('catalog_works_v1 indisponible, repli sur la liste plate repliée côté client :', werr);
@@ -361,7 +367,10 @@ export default function CatalogPage() {
         try {
           const { data: sr, error: srErr } = await supabase.schema('api')
             .rpc('catalog_search_ids_v1', { p_q: dSearch.trim() });
-          if (!srErr && Array.isArray(sr)) rankedIds = sr.map(r => r.book_id);
+          if (!srErr && Array.isArray(sr)) {
+            rankedIds = sr.map(r => r.book_id);
+            if (!append) setApproxMatch(sr.length > 0 && sr.every(r => Number(r.rank) < 0));
+          }
         } catch { /* repli ilike ci-dessous */ }
       }
       const useRpc = rankedIds !== null;
@@ -1160,6 +1169,9 @@ export default function CatalogPage() {
           {hasActiveFilters ? t({ id: 'catalog.stats.filtersActive' }) : t({ id: 'catalog.stats.noFilters' })}
         </Pill>
         <Pill>{t({ id: 'catalog.stats.sort' }, { label: sortLabel(sortValue, SORT_OPTIONS) })}</Pill>
+        {approxMatch && !loading && (
+          <Pill variant="warn"><span role="status">{t({ id: 'catalog.results.approx' })}</span></Pill>
+        )}
       </div>
 
       {/* Mode dégradé : l'API n'a pas répondu, la liste vient de l'instantané

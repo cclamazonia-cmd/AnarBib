@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "parti chez « {bibliotheque} » (réattribué) : rien n’est recréé",
   "importacoes.items.count.reattribue": "{n, plural, one {# parti chez une autre bibliothèque} other {# partis chez une autre bibliothèque}}",
   "error.circulation.item_staff_only": "Cet exemplaire est réservé à l’équipe (archive) : il ne se prête pas et ne part pas en prêt entre bibliothèques.",
-  "error.circulation.item_consult_only": "Cet exemplaire est en consultation sur place seulement : il ne se prête pas et ne part pas en prêt entre bibliothèques."
+  "error.circulation.item_consult_only": "Cet exemplaire est en consultation sur place seulement : il ne se prête pas et ne part pas en prêt entre bibliothèques.",
+  "catalog.results.approx": "Rien d’exact : résultats à une ou deux lettres près",
+  "catalogacao.bio.titleIn.ptBR": "Biographie en portugais (Brésil)",
+  "catalogacao.bio.titleIn.fr": "Biographie en français",
+  "catalogacao.bio.titleIn.es": "Biographie en espagnol",
+  "catalogacao.bio.titleIn.en": "Biographie en anglais",
+  "catalogacao.bio.titleIn.it": "Biographie en italien",
+  "catalogacao.bio.titleIn.de": "Biographie en allemand",
+  "catalogacao.bio.titleIn.ca": "Biographie en catalan",
+  "catalogacao.bio.titleIn.eo": "Biographie en espéranto",
+  "catalogacao.bio.titleIn.nl": "Biographie en néerlandais",
+  "catalogacao.bio.titleIn.el": "Biographie en grec"
 }

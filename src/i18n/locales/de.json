@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "zu „{bibliotheque}“ gegangen (neu zugeordnet): nichts wird neu angelegt",
   "importacoes.items.count.reattribue": "{n} zu einer anderen Bibliothek gegangen",
   "error.circulation.item_staff_only": "Dieses Exemplar ist nur für das Team (Archiv): Es wird nicht verliehen und geht nicht in die Fernleihe.",
-  "error.circulation.item_consult_only": "Dieses Exemplar ist nur zur Einsicht vor Ort: Es wird nicht verliehen und geht nicht in die Fernleihe."
+  "error.circulation.item_consult_only": "Dieses Exemplar ist nur zur Einsicht vor Ort: Es wird nicht verliehen und geht nicht in die Fernleihe.",
+  "catalog.results.approx": "Nichts Genaues: Treffer mit ein oder zwei Buchstaben Abweichung",
+  "catalogacao.bio.titleIn.ptBR": "Biografie auf Portugiesisch (Brasilien)",
+  "catalogacao.bio.titleIn.fr": "Biografie auf Französisch",
+  "catalogacao.bio.titleIn.es": "Biografie auf Spanisch",
+  "catalogacao.bio.titleIn.en": "Biografie auf Englisch",
+  "catalogacao.bio.titleIn.it": "Biografie auf Italienisch",
+  "catalogacao.bio.titleIn.de": "Biografie auf Deutsch",
+  "catalogacao.bio.titleIn.ca": "Biografie auf Katalanisch",
+  "catalogacao.bio.titleIn.eo": "Biografie auf Esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografie auf Niederländisch",
+  "catalogacao.bio.titleIn.el": "Biografie auf Griechisch"
 }

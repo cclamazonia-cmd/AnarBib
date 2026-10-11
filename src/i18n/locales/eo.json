@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "iris al «{bibliotheque}» (reasignita): nenio estas rekreita",
   "importacoes.items.count.reattribue": "{n} iris al alia biblioteko",
   "error.circulation.item_staff_only": "Ĉi tiu ekzemplero estas rezervita al la teamo (arkivo): ĝi ne pruntiĝas kaj ne iras en interbibliotekan prunton.",
-  "error.circulation.item_consult_only": "Ĉi tiu ekzemplero estas nur por surloka konsultado: ĝi ne pruntiĝas kaj ne iras en interbibliotekan prunton."
+  "error.circulation.item_consult_only": "Ĉi tiu ekzemplero estas nur por surloka konsultado: ĝi ne pruntiĝas kaj ne iras en interbibliotekan prunton.",
+  "catalog.results.approx": "Nenio ekzakta: rezultoj kun unu aŭ du literoj da diferenco",
+  "catalogacao.bio.titleIn.ptBR": "Biografio en la portugala (Brazilo)",
+  "catalogacao.bio.titleIn.fr": "Biografio en la franca",
+  "catalogacao.bio.titleIn.es": "Biografio en la hispana",
+  "catalogacao.bio.titleIn.en": "Biografio en la angla",
+  "catalogacao.bio.titleIn.it": "Biografio en la itala",
+  "catalogacao.bio.titleIn.de": "Biografio en la germana",
+  "catalogacao.bio.titleIn.ca": "Biografio en la kataluna",
+  "catalogacao.bio.titleIn.eo": "Biografio en Esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografio en la nederlanda",
+  "catalogacao.bio.titleIn.el": "Biografio en la greka"
 }

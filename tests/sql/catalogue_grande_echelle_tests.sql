@@ -187,10 +187,11 @@ BEGIN
      AND v_txt ~ 'set_config\(''enable_nestloop'', v_nestloop, true\)'
      AND (SELECT count(*) FROM information_schema.columns WHERE table_schema = 'api'
            AND table_name IN ('catalog_list_anon_v1', 'catalog_list_session_v1') AND column_name = 'volume') = 2
-     -- et la recherche d'identifiants a un ordre total (book_id départage les rangs égaux, deux branches)
+     -- et la recherche d'identifiants a un ordre total (book_id départage les rangs égaux) ; depuis le
+     -- 11/10/2026 une seule requête choisit sa vue (anon / session) : l'ordre s'y lit au moins une fois
      AND (SELECT count(*) FROM regexp_matches((SELECT p.prosrc FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
                                                  WHERE n.nspname = 'api' AND p.proname = 'catalog_search_ids_v1'),
-                                               'nulls last, s\.book_id', 'g')) = 2 THEN
+                                               'nulls last, s\.book_id', 'g')) >= 1 THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : la fonction, les vues ou catalog_search_ids_v1 n''ont pas la forme attendue'); END IF;
 

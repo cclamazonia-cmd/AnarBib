@@ -372,7 +372,9 @@ BEGIN
       ('api.subject_tree_v1'),
       ('api.thesaurus_export_v1'),
       ('api.work_public_detail'),
+      ('private.fn_auteurs_par_nom'),   -- 11/10/2026 : recherche par les autres noms de l'autorité (DEFINER, hors PostgREST)
       ('private.fn_cartography_public_rows'),
+      ('private.fn_mots_proches'),      -- 11/10/2026 : un mot à une ou deux lettres près (INVOKER, IMMUTABLE)
       ('public._anarbib_safe_date'),
       ('public._anarbib_trim_or_null'),
       ('public.catalog_bridge_block'),

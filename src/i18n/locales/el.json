@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "πήγε στο «{bibliotheque}» (ανατέθηκε αλλού): δεν ξαναδημιουργείται τίποτα",
   "importacoes.items.count.reattribue": "{n, plural, one {# πήγε σε άλλη βιβλιοθήκη} other {# πήγαν σε άλλη βιβλιοθήκη}}",
   "error.circulation.item_staff_only": "Αυτό το αντίτυπο είναι μόνο για την ομάδα (αρχείο): δεν δανείζεται και δεν βγαίνει σε διαδανεισμό.",
-  "error.circulation.item_consult_only": "Αυτό το αντίτυπο είναι μόνο για επιτόπια μελέτη: δεν δανείζεται και δεν βγαίνει σε διαδανεισμό."
+  "error.circulation.item_consult_only": "Αυτό το αντίτυπο είναι μόνο για επιτόπια μελέτη: δεν δανείζεται και δεν βγαίνει σε διαδανεισμό.",
+  "catalog.results.approx": "Τίποτα ακριβές: αποτελέσματα με διαφορά ενός ή δύο γραμμάτων",
+  "catalogacao.bio.titleIn.ptBR": "Βιογραφία στα πορτογαλικά (Βραζιλίας)",
+  "catalogacao.bio.titleIn.fr": "Βιογραφία στα γαλλικά",
+  "catalogacao.bio.titleIn.es": "Βιογραφία στα ισπανικά",
+  "catalogacao.bio.titleIn.en": "Βιογραφία στα αγγλικά",
+  "catalogacao.bio.titleIn.it": "Βιογραφία στα ιταλικά",
+  "catalogacao.bio.titleIn.de": "Βιογραφία στα γερμανικά",
+  "catalogacao.bio.titleIn.ca": "Βιογραφία στα καταλανικά",
+  "catalogacao.bio.titleIn.eo": "Βιογραφία στην εσπεράντο",
+  "catalogacao.bio.titleIn.nl": "Βιογραφία στα ολλανδικά",
+  "catalogacao.bio.titleIn.el": "Βιογραφία στα ελληνικά"
 }

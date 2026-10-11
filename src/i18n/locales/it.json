@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "passato a «{bibliotheque}» (riassegnato): non si ricrea nulla",
   "importacoes.items.count.reattribue": "{n, plural, one {# passato a un’altra biblioteca} other {# passati a un’altra biblioteca}}",
   "error.circulation.item_staff_only": "Questo esemplare è riservato all’équipe (archivio): non si presta e non parte in prestito interbibliotecario.",
-  "error.circulation.item_consult_only": "Questo esemplare è solo di consultazione in sede: non si presta e non parte in prestito interbibliotecario."
+  "error.circulation.item_consult_only": "Questo esemplare è solo di consultazione in sede: non si presta e non parte in prestito interbibliotecario.",
+  "catalog.results.approx": "Niente di esatto: risultati con una o due lettere di differenza",
+  "catalogacao.bio.titleIn.ptBR": "Biografia in portoghese (Brasile)",
+  "catalogacao.bio.titleIn.fr": "Biografia in francese",
+  "catalogacao.bio.titleIn.es": "Biografia in spagnolo",
+  "catalogacao.bio.titleIn.en": "Biografia in inglese",
+  "catalogacao.bio.titleIn.it": "Biografia in italiano",
+  "catalogacao.bio.titleIn.de": "Biografia in tedesco",
+  "catalogacao.bio.titleIn.ca": "Biografia in catalano",
+  "catalogacao.bio.titleIn.eo": "Biografia in esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografia in olandese",
+  "catalogacao.bio.titleIn.el": "Biografia in greco"
 }

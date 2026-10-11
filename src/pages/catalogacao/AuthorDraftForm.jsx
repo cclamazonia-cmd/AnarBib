@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl';
 import { useConfirm } from '@/contexts/ConfirmContext';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
@@ -29,6 +29,15 @@ const AUTHORITY_TYPE_VALUES = ['person', 'collective', 'publisher_series', 'plac
 
 // Locales du widget bio multilingue (= CHECK author_translations.lang).
 const ALLOWED_BIO_LANGS = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+// Titre de chaque champ (11/10/2026) : « Biographie en français », etc. —
+// les dix champs par langue SONT la biographie ; plus de champ général au-dessus
+// une fois l'autorité publiée.
+const BIO_TITLE_KEYS = {
+  'pt-BR': 'catalogacao.bio.titleIn.ptBR', fr: 'catalogacao.bio.titleIn.fr', es: 'catalogacao.bio.titleIn.es',
+  en: 'catalogacao.bio.titleIn.en', it: 'catalogacao.bio.titleIn.it', de: 'catalogacao.bio.titleIn.de',
+  ca: 'catalogacao.bio.titleIn.ca', eo: 'catalogacao.bio.titleIn.eo', nl: 'catalogacao.bio.titleIn.nl',
+  el: 'catalogacao.bio.titleIn.el',
+};
 
 const SOURCE_KIND_KEYS = {
   '': 'catalogacao.author.sourceKind.select',
@@ -40,18 +49,6 @@ const SOURCE_KIND_KEYS = {
   other: 'catalogacao.author.sourceKind.other',
 };
 const SOURCE_KIND_VALUES = ['', 'catalog', 'viaf', 'wikidata', 'publisher', 'book', 'other'];
-
-// ── Status keys (for draft list display) ─────────────────
-const STATUS_KEYS = {
-  draft: 'catalogacao.status.draft',
-  ready: 'catalogacao.status.ready',
-  published: 'catalogacao.status.published',
-  cancelled: 'catalogacao.status.cancelled',
-};
-const ACTION_KEYS = {
-  create: 'catalogacao.status.new',
-  update: 'catalogacao.status.retaken',
-};
 
 // ── Name helpers (sort name from preferred name) ──────────
 
@@ -83,8 +80,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // B30 : une autorité n'a pas de bibliothèque ; elle se range dans un lot
   // d'une bibliothèque où l'on est staff (l'administration : tous les lots).
   const { staffLibraryIds, loaded: staffConnu } = useStaffLibraries();
-  const [drafts, setDrafts] = useState([]);
-  const [draftsLoading, setDraftsLoading] = useState(false);
   const [form, setForm] = useState({});
   // B29 (CAT-E18 2) : un brouillon d'autorité se lit partout, mais ne s'écrit
   // (ni ne se publie) que par qui l'a créé, ou par l'administration du réseau.
@@ -142,19 +137,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty'); }
   function setM(k, v) { setMeta(p => ({ ...p, [k]: v })); if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty'); }
 
-  // ── Load drafts list ────────────────────────────────────
-  const loadDrafts = useCallback(async () => {
-    setDraftsLoading(true);
-    try {
-      const { data } = await supabase.from('author_drafts')
-        .select('id, preferred_name, sort_name, status, action, published_author_id, batch_id, updated_at')
-        .eq('retake_untouched', false)   // reprises jamais enregistrées : hors liste (20261003202521)
-        .order('updated_at', { ascending: false }).limit(100);
-      setDrafts(data || []);
-    } catch {} finally { setDraftsLoading(false); }
-  }, []);
-
-  useEffect(() => { loadDrafts(); }, [loadDrafts]);
+  // Plus de liste des brouillons récents en tête du formulaire (11/10/2026) :
+  // un brouillon d'autorité se rouvre depuis la file (editingId ci-dessous).
 
   // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
   useEffect(() => {
@@ -449,7 +433,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
       fillFromRecord(result);
       setDraftState('saved');
-      await loadDrafts();
       onChanged?.();
       confirmSaved(isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }));
     } catch (err) {
@@ -477,7 +460,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         );
       }
       setDraftState('published');
-      await loadDrafts();
       onChanged?.();
       setMsg({ text: '', kind: '' });
       setAfterPublish({ name: f('preferred_name'), authorId: newAuthorId ? Number(newAuthorId) : null });
@@ -578,7 +560,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupName }), kind: 'ok' });
       await findAuthorDuplicates(); // rafraichir
-      await loadDrafts();
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setDupBusy(null); }
@@ -682,9 +663,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         <div style={{ display: 'flex', gap: 6 }}>
           <button type="button" className="ab-button ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.newDraft'})}</button>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.clearForm'})}</button>
-          <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadDrafts} disabled={draftsLoading}>
-            {draftsLoading ? t({ id: 'catalogacao.ui.refreshing' }) : t({ id: 'catalogacao.ui.refreshList' })}
-          </button>
         </div>
       </div>
 
@@ -709,34 +687,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               onClick: () => { setAfterPublish(null); onNavigateTab('queuePanel'); } },
           ]}
         />
-      )}
-
-      {/* ── Existing drafts list ──────────────────────── */}
-      {drafts.length > 0 && (
-        <div style={{ marginBottom: 16, maxHeight: 200, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
-          {drafts.map((d, i) => (
-            <div key={d.id} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap',
-              padding: '6px 10px', cursor: 'pointer',
-              background: String(d.id) === f('id') ? 'rgba(29,78,216,.12)' : i % 2 === 0 ? 'rgba(0,0,0,.1)' : 'transparent',
-              borderBottom: '1px solid rgba(255,255,255,.04)',
-            }} onClick={async () => {
-              const { data } = await supabase.from('author_drafts').select('*').eq('id', d.id).single();
-              if (data) fillFromRecord(data);
-            }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '.82rem', fontWeight: 600 }}>{d.preferred_name || t({ id: 'catalogacao.queue.noName' })}</div>
-                <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                  {d.sort_name || '—'} · {t({ id: STATUS_KEYS[d.status] || d.status }).toLowerCase()} · {t({ id: ACTION_KEYS[d.action] || d.action }).toLowerCase()}
-                  {d.published_author_id ? ` · pub #${d.published_author_id}` : ''}
-                </div>
-              </div>
-              <span className={`cat-pill ${d.status === 'draft' ? 'info' : 'ok'}`} style={{ fontSize: '.62rem', flexShrink: 0 }}>
-                {t({ id: STATUS_KEYS[d.status] || d.status })}
-              </span>
-            </div>
-          ))}
-        </div>
       )}
 
       {/* ── Form ─────────────────────────────────────── */}
@@ -1003,7 +953,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           )}
 
           {/* ── Biography + Notes ─────────────────────── */}
-          {inp('biography', t({id:'catalogacao.author.bio'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.bioPlaceholder'}), hint: t({id:'catalogacao.ph.bioHint'}) })}
+          {(!f('published_author_id') || (bioTranslations.length === 0 && f('biography').trim())) && inp('biography',
+            f('published_author_id')
+              ? t({id:'catalogacao.author.bio'})
+              : t({ id: BIO_TITLE_KEYS[ALLOWED_BIO_LANGS.includes(locale) ? locale : 'pt-BR'] }),
+            { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.bioPlaceholder'}) })}
 
           {/* ── Biography translations widget (auteur publie uniquement) ─── */}
           {/* Cle sur published_author_id : jamais l'id de brouillon (collision
@@ -1017,11 +971,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           )}
           {f('published_author_id') && (
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <details>
-                <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '.88rem', marginBottom: 6 }}>
-                  {t({id:'catalogacao.bio.translations'})} {bioTranslations.length > 0 && `(${bioTranslations.map(bt => bt.lang).join(', ')})`}
-                </summary>
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 8, marginTop: 8 }}>
+              <div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 8 }}>
                   {ALLOWED_BIO_LANGS.map(lang => {
                     const existing = bioTranslations.find(bt => bt.lang === lang);
                     const isDirty = bioDirty.has(lang);
@@ -1030,7 +981,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     return (
                       <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 6, flexWrap: 'wrap' }}>
-                          <span style={{ fontWeight: 700, fontSize: '.82rem' }}>{lang}</span>
+                          <label htmlFor={`bio-${lang}`} style={{ fontWeight: 700, fontSize: '.82rem' }}>{t({ id: BIO_TITLE_KEYS[lang] })}</label>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                             {isDirty ? (
                               <span style={{ fontSize: '.66rem', color: '#fbbf24' }}>{t({id:'catalogacao.bio.statusModified'})}</span>
@@ -1050,6 +1001,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                           </span>
                         </div>
                         <textarea
+                          id={`bio-${lang}`}
+                          lang={lang}
                           rows={3}
                           style={{ width: '100%', fontSize: '.82rem', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.1)', background: 'rgba(0,0,0,.2)', color: '#f4f4f4', resize: 'vertical' }}
                           value={existing?.biography || ''}
@@ -1085,7 +1038,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     confirmSaved(t({id:'common.dataSaved'}));
                   } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
                 }}>{t({id:'catalogacao.bio.save'})}</button>
-              </details>
+              </div>
             </div>
           )}
 
@@ -1204,7 +1157,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                 <strong>{t({ id: 'catalogacao.author.archProvenance' })}</strong> {[f('source_kind'), f('source_label'), f('viaf_id') && `VIAF: ${f('viaf_id')}`, f('wikidata_id') && `WD: ${f('wikidata_id')}`].filter(Boolean).join(' · ') || '—'}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>{t({ id: 'catalogacao.author.archPublicOutput' })}</strong> {[f('biography') ? t({ id: 'catalogacao.author.archBioYes' }) : t({ id: 'catalogacao.author.archBioNo' }), f('birth_year') && `${f('birth_year')}–${f('death_year') || '…'}`, f('country')].filter(Boolean).join(' · ')}
+                <strong>{t({ id: 'catalogacao.author.archPublicOutput' })}</strong> {[(f('biography') || bioTranslations.some(bt => bt.biography?.trim())) ? t({ id: 'catalogacao.author.archBioYes' }) : t({ id: 'catalogacao.author.archBioNo' }), f('birth_year') && `${f('birth_year')}–${f('death_year') || '…'}`, f('country')].filter(Boolean).join(' · ')}
               </div>
               <div>
                 <strong>{t({ id: 'catalogacao.author.archDraft' })}</strong> {draftState === 'new' ? t({ id: 'catalogacao.author.archNew' }) : draftState === 'saved' ? t({ id: 'catalogacao.author.archSaved' }, { id: f('id') }) : draftState === 'dirty' ? t({ id: 'catalogacao.msg.unsavedChanges' }) : draftState === 'published' ? t({ id: 'catalogacao.msg.alreadyPublished' }) : draftState}

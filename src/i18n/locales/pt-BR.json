@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "foi para «{bibliotheque}» (reatribuído): nada é recriado",
   "importacoes.items.count.reattribue": "{n, plural, one {# foi para outra biblioteca} other {# foram para outra biblioteca}}",
   "error.circulation.item_staff_only": "Este exemplar é reservado à equipe (arquivo): não se empresta e não sai em empréstimo entre bibliotecas.",
-  "error.circulation.item_consult_only": "Este exemplar é só de consulta local: não se empresta e não sai em empréstimo entre bibliotecas."
+  "error.circulation.item_consult_only": "Este exemplar é só de consulta local: não se empresta e não sai em empréstimo entre bibliotecas.",
+  "catalog.results.approx": "Nada exato: resultados com uma ou duas letras de diferença",
+  "catalogacao.bio.titleIn.ptBR": "Biografia em português (Brasil)",
+  "catalogacao.bio.titleIn.fr": "Biografia em francês",
+  "catalogacao.bio.titleIn.es": "Biografia em espanhol",
+  "catalogacao.bio.titleIn.en": "Biografia em inglês",
+  "catalogacao.bio.titleIn.it": "Biografia em italiano",
+  "catalogacao.bio.titleIn.de": "Biografia em alemão",
+  "catalogacao.bio.titleIn.ca": "Biografia em catalão",
+  "catalogacao.bio.titleIn.eo": "Biografia em esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografia em neerlandês",
+  "catalogacao.bio.titleIn.el": "Biografia em grego"
 }

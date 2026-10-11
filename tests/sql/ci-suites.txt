@@ -767,3 +767,6 @@ tests/sql/atelier_reserve_tests.sql
 tests/sql/c29_exemplaire_modifier_et_publier_tests.sql
 # B38 (11/10/2026) : un exemplaire « équipe uniquement » ou « consultation seule » ne se réserve pas, ne se convertit pas en prêt et ne part pas en PEB — quatre fonctions de circulation lisent visibility et circulation_policy comme le prêt direct.
 tests/sql/b38_equipe_uniquement_ne_sort_pas_tests.sql
+# Recherche (11/10/2026) : le filtre auteur·rice et la recherche libre lisent les autres noms de l'autorité liée (variantes, alias),
+# puis, si rien d'exact ne sort, s'approchent à une ou deux lettres près (private.fn_mots_proches, fn_auteurs_par_nom).
+tests/sql/recherche_variantes_approchee_tests.sql

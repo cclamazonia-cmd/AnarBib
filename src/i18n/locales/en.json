@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "gone to “{bibliotheque}” (reassigned): nothing is recreated",
   "importacoes.items.count.reattribue": "{n} gone to another library",
   "error.circulation.item_staff_only": "This copy is staff-only (archive): it cannot be lent and cannot go out on interlibrary loan.",
-  "error.circulation.item_consult_only": "This copy is for on-site consultation only: it cannot be lent and cannot go out on interlibrary loan."
+  "error.circulation.item_consult_only": "This copy is for on-site consultation only: it cannot be lent and cannot go out on interlibrary loan.",
+  "catalog.results.approx": "No exact match: results within one or two letters",
+  "catalogacao.bio.titleIn.ptBR": "Biography in Portuguese (Brazil)",
+  "catalogacao.bio.titleIn.fr": "Biography in French",
+  "catalogacao.bio.titleIn.es": "Biography in Spanish",
+  "catalogacao.bio.titleIn.en": "Biography in English",
+  "catalogacao.bio.titleIn.it": "Biography in Italian",
+  "catalogacao.bio.titleIn.de": "Biography in German",
+  "catalogacao.bio.titleIn.ca": "Biography in Catalan",
+  "catalogacao.bio.titleIn.eo": "Biography in Esperanto",
+  "catalogacao.bio.titleIn.nl": "Biography in Dutch",
+  "catalogacao.bio.titleIn.el": "Biography in Greek"
 }

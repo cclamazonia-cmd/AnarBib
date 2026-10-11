@@ -7531,5 +7531,16 @@
   "importacoes.items.verdict.reattribue": "ha anat a «{bibliotheque}» (reassignat): no es torna a crear res",
   "importacoes.items.count.reattribue": "{n, plural, one {# ha anat a una altra biblioteca} other {# han anat a una altra biblioteca}}",
   "error.circulation.item_staff_only": "Aquest exemplar és reservat a l’equip (arxiu): no es presta i no surt en préstec interbibliotecari.",
-  "error.circulation.item_consult_only": "Aquest exemplar és només de consulta a sala: no es presta i no surt en préstec interbibliotecari."
+  "error.circulation.item_consult_only": "Aquest exemplar és només de consulta a sala: no es presta i no surt en préstec interbibliotecari.",
+  "catalog.results.approx": "Res d’exacte: resultats amb una o dues lletres de diferència",
+  "catalogacao.bio.titleIn.ptBR": "Biografia en portuguès (Brasil)",
+  "catalogacao.bio.titleIn.fr": "Biografia en francès",
+  "catalogacao.bio.titleIn.es": "Biografia en castellà",
+  "catalogacao.bio.titleIn.en": "Biografia en anglès",
+  "catalogacao.bio.titleIn.it": "Biografia en italià",
+  "catalogacao.bio.titleIn.de": "Biografia en alemany",
+  "catalogacao.bio.titleIn.ca": "Biografia en català",
+  "catalogacao.bio.titleIn.eo": "Biografia en esperanto",
+  "catalogacao.bio.titleIn.nl": "Biografia en neerlandès",
+  "catalogacao.bio.titleIn.el": "Biografia en grec"
 }

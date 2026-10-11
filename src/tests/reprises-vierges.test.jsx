@@ -110,7 +110,9 @@ describe('la file et les listes ne montrent pas les reprises vierges', () => {
 
   it('compteurs de la page et listes des éditeurs', () => {
     expect(src('CatalogacaoPage.jsx').match(/_drafts'\)\.select\('id', \{ count: 'exact', head: true \}\)\.in\('status', \['draft', 'ready'\]\)\.eq\('retake_untouched', false\)/g)).toHaveLength(3);
-    for (const f of ['AuthorDraftForm.jsx', 'ExemplarDraftForm.jsx']) expect(src(f)).toContain(".eq('retake_untouched', false)");
+    expect(src('ExemplarDraftForm.jsx')).toContain(".eq('retake_untouched', false)");
+    // 11/10/2026 : l'éditeur d'autorité n'a plus de liste de brouillons récents
+    expect(src('AuthorDraftForm.jsx')).not.toContain("from('author_drafts')\n        .select('id, preferred_name");
   });
 
   it('les trois éditeurs suivent la reprise chargée et confirment l\'enregistrement', () => {

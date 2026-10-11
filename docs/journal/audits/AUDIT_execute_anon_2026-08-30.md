@@ -215,3 +215,14 @@ Elle rejoint donc la section A : appelée depuis 21 policies, dont celles évalu
 ## Addendum — 05/10/2026 : `api.fn_catalog_networks_v1()` (G13)
 
 Le filtre « réseau » du catalogue public lit l'appartenance des bibliothèques aux réseaux constitués (FICEDL, RebAL, NORLA…) dans les fiches de carte. Or `cartography_entries` n'est lisible que par fonction (politique `deny_direct_access_secdef_only`) : une vue `security_invoker` n'y verrait rien sous `anon`. La fonction est donc `DEFINER`, **ouverte à `anon` par décision**, et ne rend que ce que la carte publique montre déjà : les réseaux de nature « documentation » qui ont au moins une bibliothèque visible de l'appelant (`fn_library_visible_to_caller`, la règle de `api.libraries_public_v1`) **par une fiche publique**, avec le slug, le sigle et le nom de ces bibliothèques. Ni contact, ni coordonnées, ni fiche non publique. Elle entre dans les listes `T10` et `T12` de `grants_herites_tests.sql` ; le lint 0028 doit compter une fonction de plus.
+
+---
+
+## Addendum — 11/10/2026 : `private.fn_auteurs_par_nom` et `private.fn_mots_proches` (recherche approchée)
+
+La recherche du catalogue (`api.catalog_works_v1`, `api.catalog_search_ids_v1`, toutes deux `INVOKER`) lit désormais les autres noms de l'autorité liée à une notice — `variant_forms` (Wikidata, toutes langues) et alias actifs (`author_name_aliases`) — puis, si rien d'exact ne sort, s'approche à une ou deux lettres près (migration `20261011211012`). Deux aides, toutes deux dans `private` (hors PostgREST : aucune porte ne les sert par `/rest/v1/rpc`), **ouvertes à `anon` par décision** parce que le catalogue public les exécute sous ce rôle :
+
+- `private.fn_auteurs_par_nom(text, boolean)` — `SECURITY DEFINER` : les alias n'ont aucune politique de lecture (RLS sans politique) et les autorités ne se lisent sous `anon` que par politique. Elle ne rend que des **identifiants d'autorités** dont les noms contiennent les mots demandés ; la ligne du catalogue publie déjà ces identifiants (`author_id`, `author_chips`). Ni nom, ni alias, ni note ne sort de la fonction.
+- `private.fn_mots_proches(text, text)` — `INVOKER`, `IMMUTABLE` : une distance d'édition (`extensions.levenshtein_less_equal`) entre deux textes que l'appelant lui donne. Rien n'est lu.
+
+`REVOKE … FROM PUBLIC` puis `GRANT EXECUTE … TO anon, authenticated, service_role`, gardé à la sortie de la migration (`aclexplode`, `has_function_privilege`). Elles entrent dans la liste **T12** de `grants_herites_tests.sql` ; **T10** (DEFINER de `public` et `api`) et le lint 0028 ne comptent pas `private` : ils ne bougent pas.
