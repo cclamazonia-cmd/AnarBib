@@ -17,15 +17,39 @@
   }
 }
 
+/* Le défilement vers une ancre ou un champ (focus, scrollIntoView) s'arrête
+   sous le bandeau collant, pas derrière lui. `--ab-topbar-h` est posée par
+   Topbar (layout/index.jsx) ; sans bandeau (ReaderPage), elle vaut 0. */
+html { scroll-padding-top: calc(var(--ab-topbar-h, 0px) + 8px); }
+
 /* ── Topbar ──────────────────────────────────────────────── */
 
+/* Collant (Xavier, 11/10/2026) : le menu des pages reste accessible en haut de
+   l'écran, même au bas d'une longue fiche. Fond presque opaque et flou : le
+   contenu passe dessous sans se mêler aux liens. `top` suit l'encoche en mode
+   installé. z-index 100 : au-dessus de ce qui se colle DANS les pages (barre
+   d'état du catalogage : 30 ; prévia : 0), sous les fenêtres modales (1000) et
+   les toasts (9990, 9999). Marge négative : la barre déborde de 12 px dans les
+   gouttières du shell pour que logo et liens restent alignés sur le contenu.
+   RÈGLE pour tout autre élément collant d'une page qui monte le bandeau : son
+   `top` vaut `calc(var(--ab-topbar-h, 0px) + …)`, sinon il se glisse
+   derrière (cf. .cat-status, .ab-preview, .ab-atl-anchor ; test
+   bandeau-colle-en-haut). */
 .ab-topbar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin: 0 -12px 16px;
+  padding: 8px 12px;
+  border-radius: 0 0 var(--brand-radius-sm) var(--brand-radius-sm);
+  background: var(--brand-topbar-bg, rgba(8, 8, 8, .82));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .ab-topbar__brand {
@@ -130,6 +154,13 @@
     align-items: center;
   }
   .ab-topbar__sep { display: none; }
+
+  /* Tiroir ouvert : le bandeau collant ne doit pas dépasser l'écran (neuf liens
+     de 44 px sur un téléphone en paysage) ; il défile dans sa hauteur. */
+  .ab-topbar:has(.ab-topbar__nav--open) {
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+  }
 }
 
 /* ── Hero — rouge profond AnarBib ────────────────────────── */

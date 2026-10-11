@@ -31,7 +31,7 @@
 /* Layout deux colonnes */
 .ab-atl-grid{ display:grid; grid-template-columns:330px minmax(0, 1fr); gap:26px; align-items:start; }
 @media (max-width:880px){ .ab-atl-grid{ grid-template-columns:minmax(0, 1fr); } }
-.ab-atl-anchor{ position:sticky; top:18px; display:flex; flex-direction:column; gap:16px; }
+.ab-atl-anchor{ position:sticky; top:calc(var(--ab-topbar-h, 0px) + 18px); display:flex; flex-direction:column; gap:16px; }
 @media (max-width:880px){ .ab-atl-anchor{ position:static; } }
 
 /* Anneau de progression */

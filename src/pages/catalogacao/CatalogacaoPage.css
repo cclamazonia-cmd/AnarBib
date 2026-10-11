@@ -157,9 +157,10 @@
 
 /* ── Barre d'état collante (CatalogStatusBar, 04/10/2026) ─────
    Une seule apparence pour tous les panneaux, visible où que l'on soit dans
-   le formulaire. Fond opaque : elle passe par-dessus les champs en défilant. */
+   le formulaire. Fond opaque : elle passe par-dessus les champs en défilant.
+   `top` : sous le bandeau collant (--ab-topbar-h, layout.css), pas derrière. */
 .cat-status {
-  position: sticky; top: 8px; z-index: 30;
+  position: sticky; top: calc(var(--ab-topbar-h, 0px) + 8px); z-index: 30;
   display: flex; align-items: flex-start; gap: 10px;
   padding: 10px 12px; margin-bottom: 14px; border-radius: 8px;
   font-size: .92rem; line-height: 1.4;
@@ -434,7 +435,7 @@
 
 /* ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────────── */
 .ab-work { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
-.ab-preview { position: sticky; top: 18px; }
+.ab-preview { position: sticky; top: calc(var(--ab-topbar-h, 0px) + 18px); }
 /* L'aperçu réutilise .ab-sheet du design-system (cf. ui.css), pas de carte custom. */
 .ab-pv-card { padding: 16px; }
 .ab-pv-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }

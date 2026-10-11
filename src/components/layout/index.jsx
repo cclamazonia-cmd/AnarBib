@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -74,9 +74,37 @@ export function Topbar() {
   // Referme le tiroir à chaque navigation.
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
+  // Bandeau collant (Xavier, 11/10/2026) : le menu des pages reste visible en
+  // haut de l'écran où que l'on soit dans la page (layout.css, .ab-topbar). Sa
+  // hauteur varie (logos, retour à la ligne des liens, largeur d'écran) : on la
+  // publie en variable CSS `--ab-topbar-h` sur <html>, pour que ce qui se colle
+  // aussi (barre d'état du catalogage, prévia de cote, ancre de l'Atelier) et le
+  // défilement vers une ancre (scroll-padding-top) s'arrêtent SOUS le bandeau,
+  // pas derrière lui. Tiroir mobile ouvert : on ne publie pas sa hauteur, le
+  // reste de la page n'a pas à descendre d'un écran. Sans ResizeObserver
+  // (jsdom), une mesure au montage puis à chaque redimensionnement.
+  const barRef = useRef(null);
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return undefined;
+    const racine = document.documentElement;
+    const publier = () => {
+      if (el.querySelector('.ab-topbar__nav--open')) return;
+      racine.style.setProperty('--ab-topbar-h', `${Math.round(el.getBoundingClientRect().height)}px`);
+    };
+    publier();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', publier);
+      return () => { window.removeEventListener('resize', publier); racine.style.removeProperty('--ab-topbar-h'); };
+    }
+    const observateur = new ResizeObserver(publier);
+    observateur.observe(el);
+    return () => { observateur.disconnect(); racine.style.removeProperty('--ab-topbar-h'); };
+  }, []);
+
 
   return (
-    <nav className="ab-topbar">
+    <nav className="ab-topbar" ref={barRef}>
       <Link to="/" className="ab-topbar__brand">
         {/* Deux emplacements, deux echelles : le RESEAU, puis la BIBLIOTHEQUE
             de session. C'est le sens du bandeau et il ne change pas.
