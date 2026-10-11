@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "This copy is removed from the source catalogue: a withdrawn copy is never deleted (it stays in place, ready to be reinstated if it comes back).",
   "error.catalog.item_retired_no_reassign": "This copy is removed from the source catalogue: it does not change library (the withdrawal only makes sense in its own, and could no longer be lifted).",
   "importacoes.items.verdict.reattribue": "gone to “{bibliotheque}” (reassigned): nothing is recreated",
-  "importacoes.items.count.reattribue": "{n} gone to another library"
+  "importacoes.items.count.reattribue": "{n} gone to another library",
+  "error.circulation.item_staff_only": "This copy is staff-only (archive): it cannot be lent and cannot go out on interlibrary loan.",
+  "error.circulation.item_consult_only": "This copy is for on-site consultation only: it cannot be lent and cannot go out on interlibrary loan."
 }

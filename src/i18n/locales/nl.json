@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Dit exemplaar staat niet meer in de oorspronkelijke catalogus: een teruggetrokken exemplaar wordt nooit verwijderd (het blijft staan, klaar voor opheffing als het terugkomt).",
   "error.catalog.item_retired_no_reassign": "Dit exemplaar staat niet meer in de oorspronkelijke catalogus: het verandert niet van bibliotheek (de terugtrekking heeft alleen in de eigen zin en zou niet meer opgeheven kunnen worden).",
   "importacoes.items.verdict.reattribue": "naar „{bibliotheque}” gegaan (opnieuw toegewezen): er wordt niets opnieuw aangemaakt",
-  "importacoes.items.count.reattribue": "{n} naar een andere bibliotheek gegaan"
+  "importacoes.items.count.reattribue": "{n} naar een andere bibliotheek gegaan",
+  "error.circulation.item_staff_only": "Dit exemplaar is alleen voor het team (archief): het wordt niet uitgeleend en gaat niet uit in interbibliothecair leenverkeer.",
+  "error.circulation.item_consult_only": "Dit exemplaar is alleen ter inzage ter plaatse: het wordt niet uitgeleend en gaat niet uit in interbibliothecair leenverkeer."
 }

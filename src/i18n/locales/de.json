@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Dieses Exemplar ist nicht mehr im Herkunftskatalog: Ein zurückgezogenes wird nie gelöscht (es bleibt, bereit zur Aufhebung, wenn es zurückkommt).",
   "error.catalog.item_retired_no_reassign": "Dieses Exemplar ist nicht mehr im Herkunftskatalog: Es wechselt nicht die Bibliothek (der Rückzug gilt nur in seiner eigenen und ließe sich nicht mehr aufheben).",
   "importacoes.items.verdict.reattribue": "zu „{bibliotheque}“ gegangen (neu zugeordnet): nichts wird neu angelegt",
-  "importacoes.items.count.reattribue": "{n} zu einer anderen Bibliothek gegangen"
+  "importacoes.items.count.reattribue": "{n} zu einer anderen Bibliothek gegangen",
+  "error.circulation.item_staff_only": "Dieses Exemplar ist nur für das Team (Archiv): Es wird nicht verliehen und geht nicht in die Fernleihe.",
+  "error.circulation.item_consult_only": "Dieses Exemplar ist nur zur Einsicht vor Ort: Es wird nicht verliehen und geht nicht in die Fernleihe."
 }

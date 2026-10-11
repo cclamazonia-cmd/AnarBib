@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Este exemplar está fora do catálogo de origem: um retirado nunca é apagado (fica no lugar, pronto para ter a retirada suspensa se reaparecer).",
   "error.catalog.item_retired_no_reassign": "Este exemplar está fora do catálogo de origem: não muda de biblioteca (a retirada só tem sentido na biblioteca dele e não poderia mais ser suspensa).",
   "importacoes.items.verdict.reattribue": "foi para «{bibliotheque}» (reatribuído): nada é recriado",
-  "importacoes.items.count.reattribue": "{n, plural, one {# foi para outra biblioteca} other {# foram para outra biblioteca}}"
+  "importacoes.items.count.reattribue": "{n, plural, one {# foi para outra biblioteca} other {# foram para outra biblioteca}}",
+  "error.circulation.item_staff_only": "Este exemplar é reservado à equipe (arquivo): não se empresta e não sai em empréstimo entre bibliotecas.",
+  "error.circulation.item_consult_only": "Este exemplar é só de consulta local: não se empresta e não sai em empréstimo entre bibliotecas."
 }

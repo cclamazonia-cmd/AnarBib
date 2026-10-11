@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Questo esemplare è uscito dal catalogo d’origine: un ritirato non si cancella mai (resta al suo posto, pronto per la revoca se ricompare).",
   "error.catalog.item_retired_no_reassign": "Questo esemplare è uscito dal catalogo d’origine: non cambia biblioteca (il ritiro ha senso solo nella sua e non si potrebbe più revocare).",
   "importacoes.items.verdict.reattribue": "passato a «{bibliotheque}» (riassegnato): non si ricrea nulla",
-  "importacoes.items.count.reattribue": "{n, plural, one {# passato a un’altra biblioteca} other {# passati a un’altra biblioteca}}"
+  "importacoes.items.count.reattribue": "{n, plural, one {# passato a un’altra biblioteca} other {# passati a un’altra biblioteca}}",
+  "error.circulation.item_staff_only": "Questo esemplare è riservato all’équipe (archivio): non si presta e non parte in prestito interbibliotecario.",
+  "error.circulation.item_consult_only": "Questo esemplare è solo di consultazione in sede: non si presta e non parte in prestito interbibliotecario."
 }

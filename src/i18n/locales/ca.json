@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Aquest exemplar és fora del catàleg d’origen: un retirat mai s’esborra (es queda al seu lloc, a punt de reincorporar-se si reapareix).",
   "error.catalog.item_retired_no_reassign": "Aquest exemplar és fora del catàleg d’origen: no canvia de biblioteca (la retirada només té sentit a la seva i ja no es podria treure).",
   "importacoes.items.verdict.reattribue": "ha anat a «{bibliotheque}» (reassignat): no es torna a crear res",
-  "importacoes.items.count.reattribue": "{n, plural, one {# ha anat a una altra biblioteca} other {# han anat a una altra biblioteca}}"
+  "importacoes.items.count.reattribue": "{n, plural, one {# ha anat a una altra biblioteca} other {# han anat a una altra biblioteca}}",
+  "error.circulation.item_staff_only": "Aquest exemplar és reservat a l’equip (arxiu): no es presta i no surt en préstec interbibliotecari.",
+  "error.circulation.item_consult_only": "Aquest exemplar és només de consulta a sala: no es presta i no surt en préstec interbibliotecari."
 }

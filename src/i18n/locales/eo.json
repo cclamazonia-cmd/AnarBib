@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Ĉi tiu ekzemplero estas ekster la origina katalogo: retirito neniam estas forigata (ĝi restas surloke, preta por nuligo se ĝi reaperas).",
   "error.catalog.item_retired_no_reassign": "Ĉi tiu ekzemplero estas ekster la origina katalogo: ĝi ne ŝanĝas bibliotekon (la retiro havas sencon nur en la sia, kaj ne plu povus esti nuligita).",
   "importacoes.items.verdict.reattribue": "iris al «{bibliotheque}» (reasignita): nenio estas rekreita",
-  "importacoes.items.count.reattribue": "{n} iris al alia biblioteko"
+  "importacoes.items.count.reattribue": "{n} iris al alia biblioteko",
+  "error.circulation.item_staff_only": "Ĉi tiu ekzemplero estas rezervita al la teamo (arkivo): ĝi ne pruntiĝas kaj ne iras en interbibliotekan prunton.",
+  "error.circulation.item_consult_only": "Ĉi tiu ekzemplero estas nur por surloka konsultado: ĝi ne pruntiĝas kaj ne iras en interbibliotekan prunton."
 }

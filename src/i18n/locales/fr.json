@@ -7529,5 +7529,7 @@
   "error.catalog.discard.retired": "Cet exemplaire est sorti du catalogue d’origine : un retiré n’est jamais supprimé (il reste à sa place, prêt à être levé s’il réapparaît).",
   "error.catalog.item_retired_no_reassign": "Cet exemplaire est sorti du catalogue d’origine : il ne change pas de bibliothèque (le retrait n’a de sens que dans la sienne, et ne pourrait plus être levé).",
   "importacoes.items.verdict.reattribue": "parti chez « {bibliotheque} » (réattribué) : rien n’est recréé",
-  "importacoes.items.count.reattribue": "{n, plural, one {# parti chez une autre bibliothèque} other {# partis chez une autre bibliothèque}}"
+  "importacoes.items.count.reattribue": "{n, plural, one {# parti chez une autre bibliothèque} other {# partis chez une autre bibliothèque}}",
+  "error.circulation.item_staff_only": "Cet exemplaire est réservé à l’équipe (archive) : il ne se prête pas et ne part pas en prêt entre bibliothèques.",
+  "error.circulation.item_consult_only": "Cet exemplaire est en consultation sur place seulement : il ne se prête pas et ne part pas en prêt entre bibliothèques."
 }
