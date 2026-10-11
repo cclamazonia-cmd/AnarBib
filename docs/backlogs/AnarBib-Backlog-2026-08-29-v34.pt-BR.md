@@ -407,7 +407,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
 | **C28** | Decidir três pares de notícias que o DEDUP-14 fez aparecer | `P2` | Aberto |
-| **C29** | Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia | `P2` | Em curso |
+| **C29** | Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia | `P2` | A verificar |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -576,11 +576,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### C29 — Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia
 
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript, SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : React / JavaScript, SQL / PostgreSQL
 
-**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce. **Lote 2 entregue em 10/10 (`1820b2e1`)**: « Novo exemplar » abre no painel um formulário curto em quatro tempos — onde (lista fechada das bibliotecas em que se é da equipe; uma só → escolhida de antemão), localização (número proposto por `fn_next_tombo`, editável), circulação e visibilidade herdadas da ficha, detalhes dobrados. « Salvar e publicar » cria o rascunho e chama `publish_exemplar_draft` tal como está; recusa → o rascunho fica e a lista o mostra. **Lote 3 entregue em 10/10 (`a2341ef0`, migração `20261010204944`)**: `fn_exemplaire_modifier_et_publier` encadeia numa transação a retomada, os doze campos permitidos e `publish_exemplar_draft` tal como está — nem o tombo, nem a biblioteca; se a base recusa, nada fica. De passagem, a retomada copia agora circulação e visibilidade.
+**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce. **Lote 2 entregue em 10/10 (`1820b2e1`)**: « Novo exemplar » abre no painel um formulário curto em quatro tempos — onde (lista fechada das bibliotecas em que se é da equipe; uma só → escolhida de antemão), localização (número proposto por `fn_next_tombo`, editável), circulação e visibilidade herdadas da ficha, detalhes dobrados. « Salvar e publicar » cria o rascunho e chama `publish_exemplar_draft` tal como está; recusa → o rascunho fica e a lista o mostra. **Lote 3 entregue em 10/10 (`a2341ef0`, migração `20261010204944`)**: `fn_exemplaire_modifier_et_publier` encadeia numa transação a retomada, os doze campos permitidos e `publish_exemplar_draft` tal como está — nem o tombo, nem a biblioteca; se a base recusa, nada fica. De passagem, a retomada copia agora circulação e visibilidade. **Lote 4 entregue em 11/10 (`8fc1c0f2`)**, sobre quatro decisões de Xavier após uma auditoria das duplicações entre Documento e Indexação: o cartão de exemplares dos InfoCards sai (o painel o substitui); « Adicionar um exemplar » após a publicação reabre a ficha e o painel abre o formulário curto; o bloco « Exemplares a criar » de uma ficha não publicada vive no painel; o aviso 💡 da Indexação, falso desde 17/06, sai com a sua chave.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Quatro lotes. *(1)* O painel « Exemplares » na notícia, em leitura, que leva ao editor já apontado. *(2)* O formulário curto no painel, só criação, em quatro tempos que se abrem um após o outro: onde, arrumação, circulação e visibilidade herdadas, e um painel dobrado. *(3)* « Editar » um exemplar publicado sem ver o rascunho: uma RPC encadeia rascunho, atualização e publicação numa transação, chamando `publish_exemplar_draft` tal como está. *(4)* O painel substitui `InitialCopiesBlock`; a aba guarda a massa e deixa de ser a porta de entrada.
 
@@ -591,12 +591,12 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - Da ficha, veem-se todos os exemplares por biblioteca, publicados e em rascunho, e chega-se ao editor num clique (lote 1 — feito em 10/10).
 - Um exemplar se cria sem sair da ficha, em quatro tempos; o texto livre « Biblioteca » sumiu (lote 2 — feito em 10/10).
 - Mudar a localização de um exemplar publicado é um gesto: a RPC encadeia rascunho, atualização e publicação, provada por uma suíte SQL (lote 3 — feito em 10/10).
-- Um só caminho de criação: o painel substitui os exemplares iniciais (lote 4).
+- Um só lugar para os exemplares de uma ficha: cartão e bloco « Exemplares a criar » não existem mais ao lado do painel, e « Adicionar um exemplar » abre nele o formulário curto (lote 4 — feito em 11/10).
 - Visto na tela por Xavier, conectado (E31).
 
 **Dependências.** Nada para os lotes 1 e 2 (só front, dez locales de saída). O lote 3 pede uma migração, sua suíte SQL e seu « Complemento » na auditoria das DEFINER. O lote 4 toca `publish_book_draft`.
 
-*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)` · ``scripts/i18n-add-c29-lot2-formulaire-court.cjs`` · `migration `20261010204944_c29_lot3_modifier_un_exemplaire_en_un_geste`` · ``tests/sql/c29_exemplaire_modifier_et_publier_tests.sql`` · `AUDIT_execute_authenticated_2026-09-01, Complément du 10/10`*
+*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)` · ``scripts/i18n-add-c29-lot2-formulaire-court.cjs`` · `migration `20261010204944_c29_lot3_modifier_un_exemplaire_en_un_geste`` · ``tests/sql/c29_exemplaire_modifier_et_publier_tests.sql`` · `AUDIT_execute_authenticated_2026-09-01, Complément du 10/10` · ``scripts/i18n-c29-lot4-un-seul-endroit.cjs`` · `E31`*
 
 ---
 
