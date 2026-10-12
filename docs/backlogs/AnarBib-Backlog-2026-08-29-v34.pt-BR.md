@@ -349,7 +349,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
-| **B39** | Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota | `P2` | Aberto |
+| **B39** | Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota | `P2` | A verificar |
 
 #### B36 — Reler, com os contadores de produção, os índices mantidos com ressalva
 
@@ -374,11 +374,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### B39 — Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
 
 **Estado.** **Constatação da v18** (capítulos 9.1, 10 e 12): a biblioteca de formação `blmf-teste` tem onze membros, cinco exemplares e nenhuma circulação, e «falseia todo quadro que não a nomeia». O projeto escolheu manter as fixtures em produção; a v18 aceita com uma condição: uma etiqueta que toda medida possa ler, por uma consulta. Verificado em 12/10: nada no banco distingue `blmf-teste` nem as contas `formacao-e1..e5`.
 
-*Verificado : 12/10 — aberto na leitura detalhada da v18, a pedido de Xavier.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma coluna `libraries.is_training` (verdadeira em `blmf-teste`) e o mesmo marcador nas contas de formação; uma ajuda ou vista de medida que o levantamento, a supervisão e o próximo Livro branco leem; as contagens da rede publicadas *fora das fixtures*. Inscrever no REGISTRO a escolha com sua contrapartida (J12). Guarda: um teste que fica vermelho se uma biblioteca `*-teste` não está etiquetada.
 

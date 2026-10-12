@@ -349,7 +349,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
-| **B39** | Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note | `P2` | Ouvert |
+| **B39** | Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note | `P2` | À vérifier |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -374,11 +374,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### B39 — Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
 
 **État.** **Constat de la v18** (chapitres 9.1, 10 — précision 3 — et 12) : la bibliothèque de formation `blmf-teste` compte onze membres dont neuf actifs, cinq exemplaires et aucune circulation, et « elle fausse tout tableau qui ne la nomme pas ». Le projet a choisi de garder ses fixtures sur la production (la formation se fait sur le vrai outil — soirée du 10/10) ; la v18 juge le choix défendable à une condition : « un étiquetage que toute mesure puisse lire », et « la v19 devra pouvoir le faire par une requête, pas par une note ». Vérifié le 12/10 : rien en base ne distingue `blmf-teste` ni les comptes `formacao-e1..e5` d'une bibliothèque et de lecteurs réels — le relevé « L'état réel » les compte dans « Bibliothèques = 6 » et « Comptes = 23 », et les nomme en note. Ligne rouge v18 : « aucune mesure d'usage qui compte une fixture ».
 
-*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18 (précision 3 et ligne rouge), à la demande de Xavier.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une colonne `libraries.is_training` (défaut faux, posée à vrai sur `blmf-teste` par migration) et le même marqueur sur les comptes de formation (`profiles`, ou l'appartenance à une bibliothèque de formation) ; une aide `private.fn_hors_fixtures()` ou une vue de mesure que le relevé « L'état réel », la supervision et le prochain Livre blanc lisent ; les comptes du réseau (bibliothèques, membres, circulation) publiés *hors fixtures*, avec la ligne des fixtures à part. Inscrire au REGISTRE le choix « fixtures de formation en production » avec cette contrepartie (J12). Garde : un test qui rougit si une bibliothèque nommée `*-teste` n'est pas étiquetée.
 

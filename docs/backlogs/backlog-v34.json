@@ -5981,7 +5981,7 @@
       "id": "B39",
       "d": "B",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sql"
@@ -6022,10 +6022,16 @@
         "docs/backlogs/backlog-v34.json",
         "docs/REGISTRE_decisions.md"
       ],
-      "verif": {
-        "fr": "12/10 — ouvert à la lecture détaillée de la v18 (précision 3 et ligne rouge), à la demande de Xavier.",
-        "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
-      }
+      "verif": [
+        {
+          "fr": "12/10 — ouvert à la lecture détaillée de la v18 (précision 3 et ligne rouge), à la demande de Xavier.",
+          "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
+        },
+        {
+          "fr": "**12/10 — livré, déployé à 13 h 57** (`c1fda3d1`, migration `20261012112742`) : `libraries.is_training` (défaut faux), posé sur `blmf-teste` par la migration et, pour toujours, par le déclencheur `tg_libraries_is_training_normaliser` sur tout slug qui dit *test*, *teste*, *formacao*, *formation* ou *training* — il pose l'étiquette, ne la retire jamais. Un compte de formation est un compte dont toutes les appartenances sont dans des bibliothèques de formation (pas de second marqueur : la personne qui forme, membre d'une vraie bibliothèque, reste réelle). `private.fn_mesures_hors_fixtures()` (INVOKER, search_path figé, rôle de service seul — aucune porte nouvelle) rend le réseau en deux colonnes, réel / formation, avec la date. **Lue en production à 13 h 57** : bibliothèques 5 réelles (5 actives) + 1 de formation (blmf-teste) ; comptes 19 réels dont 17 confirmés + 4 de formation ; appartenances actives 17 + 9 ; exemplaires 2757 + 5 ; circulation vivante réelle 7 / 21 / 22 / 0 (emprunts / réservations / consultations / PEB), 0 en formation. Suite `b39_fixtures_etiquetees` (5), banc isolé vert. **Reste** : le relevé « L'état réel » publie ces deux colonnes à son prochain passage (méthode mise à jour), et le REGISTRE porte le choix « fixtures en production » avec cette contrepartie (DOC-MESURE-2, J12 clos par la session voisine) ; le regard de Xavier.",
+          "pt": "**12/10 — entregue, implantado às 13h57** (`c1fda3d1`): `libraries.is_training`, posto em `blmf-teste` e, para sempre, pelo gatilho sobre todo slug que diz *test*, *formacao*, *formation* ou *training*. Uma conta de formação = todas as filiações em bibliotecas de formação. `private.fn_mesures_hors_fixtures()` (INVOKER, papel de serviço) devolve a rede em duas colunas, real / formação, com a data. **Lida em produção**: bibliotecas 5 reais + 1 de formação; contas 19 reais + 4 de formação; exemplares 2757 + 5; circulação viva real 7 / 21 / 22 / 0. Suíte (5). **Resta**: o levantamento publica as duas colunas; o olhar de Xavier."
+        }
+      ]
     }
   ]
 }
