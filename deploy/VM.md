@@ -74,9 +74,15 @@ carte), c'est la valeur de `.env.example`.
 
 ## 6. Exposer, sauvegarder, mettre à jour, restaurer
 
-- **Domaine et TLS** : Caddy obtient le certificat seul si la VM a une IP publique et un
-  enregistrement `A` (et `AAAA`) vers elle. Sinon, `deploy/tunnel/README.md` : un VPS
-  frontal en passage TCP brut, sans secret.
+- **Domaine et TLS** : Caddy obtient le certificat seul si la VM a une IP publique, un
+  enregistrement `A` (et `AAAA` seulement si l'IPv6 de la VM est réellement joignable) vers
+  elle, et les ports 80 et 443 entrants. Sinon, `deploy/tunnel/README.md` : un VPS frontal
+  en passage TCP brut, sans secret. Une seule machine sert le front et l'API (`Caddyfile`,
+  `{$API_DOMAIN}`) : un seul nom suffit.
+  Pour la VM d'essai d'octobre 2026, le nom est **`essai.anarbib.is`** (zone chez ISNIC,
+  hors juridiction américaine). Ce nom est une instance à part, **pas une route de repli de
+  la production** : il n'entre ni dans `.domains` de la vitrine, ni dans les sites de
+  `ci.yml`, ni dans `URI_ALLOW_LIST` du projet hébergé.
 - **Sauvegardes** : [`deploy/ops/vm/`](ops/vm/README.md) — un script lancé par des unités
   système sur la machine elle-même : chaque jour les trois fichiers que `restore.sh` attend
   (recette exacte du CLI Supabase) plus les secrets du Vault, chaque dimanche le volume des
