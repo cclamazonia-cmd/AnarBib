@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 53 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **39 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, E38, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **38 items sur 53** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -692,7 +692,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
-| **E38** | La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59 | `P2` | À vérifier |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -848,27 +847,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Une personne hispanophone.
 
 *Renvois : `clôture E25` · `commit 0cc2b6d3`*
-
-#### E38 — La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : aucune compétence technique
-
-**État.** **Constaté par Xavier le 11/10** sur le Catalogue public : la recherche « Kropotkine » ne rend « toujours qu'une seule œuvre, pas toutes ». Reproduit : `/catalogo?q=Kropotkine` rend 2 notices (une de Fernand Planche *sur* Kropotkine, une édition dont le texte porte la graphie) ; `?q=Kropotkin` en rend 44 lignes, 8 œuvres dépliables. L'autorité « Piotr Kropotkin » (id 5) porte 59 notices sur 36 œuvres et **vingt-cinq formes actives** dans `author_name_aliases` — dont « Kropotkine », « Kropotkine, Pierre », « Kropotkine, Pedro » — et quarante variantes Wikidata dans `variant_forms`. La recherche unifiée (`api.search_catalog_v1`) lit ces formes et propose l'autorité, dont le choix filtre par `author_id` ; mais la **recherche libre** — saisie puis Entrée — passe par deux chemins qui ne les lisent jamais : en liste plate, un `ilike` client sur huit colonnes de la vue (`titulo`, `autor`, `editora`, `bib_ref`, `cdd`, `assuntos`, `subtitulo`, `isbn` — `SEARCH_COLS`, `src/lib/catalogFilters.js`) ; en liste par œuvre, `api.catalog_search_ids_v1(p_q)`, dont la meule est titre, sous-titre, `autor`, `author_display`, éditeur, sujets, cote, ISBN et titres d'œuvre. Une graphie qui n'est pas celle de la notice ni du nom préféré ne trouve donc rien.
-
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Livré par la session voisine le soir même (voir Vérification) ; reste le regard de Xavier à l'écran, après déploiement : `/catalogo?q=Kropotkine` et « Pierre Kropotkine » rendent les œuvres de l'autorité, en liste plate comme par œuvre ; une faute d'une lettre (« kropotkn ») trouve en approché avec sa pastille.
-
-**Pourquoi ça compte.** Un lectorat francophone écrit « Kropotkine », un lusophone « Kropotkin » ou « Kropotkine, Pedro » : le catalogue a les formes, il faut qu'il les lise là où les gens tapent.
-
-**Ce qui compte comme fini.**
-
-- `/catalogo?q=Kropotkine` rend les mêmes œuvres que le filtre par l'autorité « Piotr Kropotkin », en liste plate comme par œuvre.
-- Une suite SQL prouve que les deux chemins lisent les formes actives des autorités, et que le rang d'un titre exact ne recule pas.
-
-**Dépendances.** Aucune. Voisin de C3 (la revue des autorités enrichit les formes) et de B33 (trigramme sous RLS).
-
-*Renvois : `src/lib/catalogFilters.js` · `src/lib/catalogWorks.js` · `supabase/migrations` · `tests/sql`*
 
 ---
 
@@ -1930,6 +1908,7 @@ CI verte : lint et suite unitaire. |
 | E36 | 2026-10-11 | L'Atelier dit à qui il est réservé : un compte sans rôle d'équipe lit, sur `/atelier-autoridades`, une seule phrase à la place de la file, et chaque refus des neuf RPC de l'Atelier parle (`error.atelier.*`, vingt-cinq clés dans les dix locales, `5b42c64e`, déployé le 10/10 à 22 h 34). **Vu par Xavier le 11/10** : depuis le lien du courriel de proposition, avec le compte lecteur, la phrase, une fois, sans « 42501 » ; les onglets de la Fédération ont retrouvé leurs icônes (régression d'E32 réparée au passage). Clos. |
 | E37 | 2026-10-11 | Le menu des pages reste visible en haut de l'écran, où que l'on soit dans la page : bandeau collant sur fond presque opaque et flou, hauteur publiée dans `--ab-topbar-h`, les éléments déjà collants (barre d'état du catalogage, prévia de cote, ancre de l'Atelier) et le défilement vers une ancre se calent dessous ; règle fermée par le test `bandeau-colle-en-haut` (8) (`e0e7f402`, 11/10). **Vu par Xavier le 11/10**, connecté : au bas d'une fiche de catalogage le menu reste en haut et cliquable, la barre d'état d'un enregistrement apparaît sous lui, le tiroir ☰ s'ouvre au milieu d'une page longue sur téléphone, le fond passe sur la BLMF à thème. Clos. |
 | E31 | 2026-10-11 | Ce qui attendait un regard à l'écran, connecté, a été vu — **quinze questions posées une à une le 11/10 au soir, quinze réponses de Xavier**. *Conformes* : la barre d'état collante et la fenêtre de confirmation du catalogage (C21) ; le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; le refus traduit d'un numéro libéré saisi à la main (C17) ; les lots 2, 4, 5 et 8 d'`AccountPage` (E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; la lecture réservée pour une personne membre de la BTL (C20) ; une invitation réelle à une tâche, envoyée et reçue (F16) ; les quatre lots du Catalogue (E6) — avec un défaut trouvé en chemin, qui n'est pas des lots : **la recherche libre « Kropotkine » ne rend qu'une œuvre ou deux au lieu des 36 de l'autorité** (ouvert en E38). Les 8/10 avaient déjà clos C14, C23 et G16. *Retirés de la liste* : E33 (Mon compte quand la base ne répond pas : ne se simule pas en production) et les écrans de H21 (ils attendent un réimport réel de DIRA, pas un regard). Le critère est tenu : chaque point vu, conforme ou ouvert en item. Clos. Les regards à venir se portent désormais sur l'item qu'ils concernent, pas sur une liste à part. |
+| E38 | 2026-10-12 | La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos. |
 
 ---
 
@@ -1961,4 +1940,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 53 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

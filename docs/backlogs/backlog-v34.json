@@ -3147,6 +3147,14 @@
           "fr": "Ce qui attendait un regard à l'écran, connecté, a été vu — **quinze questions posées une à une le 11/10 au soir, quinze réponses de Xavier**. *Conformes* : la barre d'état collante et la fenêtre de confirmation du catalogage (C21) ; le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; le refus traduit d'un numéro libéré saisi à la main (C17) ; les lots 2, 4, 5 et 8 d'`AccountPage` (E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; la lecture réservée pour une personne membre de la BTL (C20) ; une invitation réelle à une tâche, envoyée et reçue (F16) ; les quatre lots du Catalogue (E6) — avec un défaut trouvé en chemin, qui n'est pas des lots : **la recherche libre « Kropotkine » ne rend qu'une œuvre ou deux au lieu des 36 de l'autorité** (ouvert en E38). Les 8/10 avaient déjà clos C14, C23 et G16. *Retirés de la liste* : E33 (Mon compte quand la base ne répond pas : ne se simule pas en production) et les écrans de H21 (ils attendent un réimport réel de DIRA, pas un regard). Le critère est tenu : chaque point vu, conforme ou ouvert en item. Clos. Les regards à venir se portent désormais sur l'item qu'ils concernent, pas sur une liste à part.",
           "pt": "O que esperava um olhar na tela, conectado, foi visto — **quinze perguntas feitas uma a uma em 11/10 à noite, quinze respostas de Xavier**. *Conformes*: C21, C22, C24, C17, os lotes 2, 4, 5 e 8 da `AccountPage` (E6), E35, C20, F16, os quatro lotes do Catálogo (E6) — com um defeito achado no caminho, que não é dos lotes: **a busca livre «Kropotkine» devolve uma ou duas obras em vez das 36 da autoridade** (aberto em E38). *Retirados da lista*: E33 (não se simula em produção) e as telas do H21 (esperam uma reimportação real da DIRA). Critério cumprido: cada ponto visto, conforme ou aberto em item. Fechado."
         }
+      ],
+      [
+        "E38",
+        "2026-10-12",
+        {
+          "fr": "La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos.",
+          "pt": "A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado."
+        }
       ]
     ]
   },
@@ -5920,70 +5928,6 @@
         {
           "fr": "**09/10 — livré, déployé et vérifié à 22 h 29** (`6b03ebe4`). `_shared/transport/email.ts` : cadence par isolat (huit envois Resend par seconde au plus), rejeu d'un 429, d'un 5xx ou d'une connexion rompue jusqu'à trois fois après `Retry-After` (plafonné à 10 s) ou une attente croissante (0,4 s, 0,8 s, 1,6 s, avec un aléa), un autre 4xx n'est pas rejoué, l'échec après rejeu reste noté pour la sonde ; `authority.ts` et `partnership.ts` ne comptent plus un échec comme un envoi. Banc `mail-transport-rejeu-cadence` (6 cas, faux Resend horodaté) ; les 38 bancs qui passent par le transport restent verts avec des délais réduits. Critères 1 et 2 tenus au banc, critère 3 tenu pour les trois compteurs trouvés (`sent++`) — les autres domaines lisaient déjà `ok`. **Reste** : la prochaine action en masse réelle (une série de propositions, une convocation) sans aucun 429 dans `mail_transport_failures` ; d'ici là, les actions en masse se font par petits lots espacés. L'incident 23 s'est refermé seul.",
           "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
-        }
-      ]
-    },
-    {
-      "id": "E38",
-      "d": "E",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "La recherche libre du catalogue ignore les formes des autorités : « Kropotkine » rend deux notices, l'autorité en a 59",
-        "pt": "A busca livre do catálogo ignora as formas das autoridades: «Kropotkine» devolve duas fichas, a autoridade tem 59"
-      },
-      "v": {
-        "fr": "**Constaté par Xavier le 11/10** sur le Catalogue public : la recherche « Kropotkine » ne rend « toujours qu'une seule œuvre, pas toutes ». Reproduit : `/catalogo?q=Kropotkine` rend 2 notices (une de Fernand Planche *sur* Kropotkine, une édition dont le texte porte la graphie) ; `?q=Kropotkin` en rend 44 lignes, 8 œuvres dépliables. L'autorité « Piotr Kropotkin » (id 5) porte 59 notices sur 36 œuvres et **vingt-cinq formes actives** dans `author_name_aliases` — dont « Kropotkine », « Kropotkine, Pierre », « Kropotkine, Pedro » — et quarante variantes Wikidata dans `variant_forms`. La recherche unifiée (`api.search_catalog_v1`) lit ces formes et propose l'autorité, dont le choix filtre par `author_id` ; mais la **recherche libre** — saisie puis Entrée — passe par deux chemins qui ne les lisent jamais : en liste plate, un `ilike` client sur huit colonnes de la vue (`titulo`, `autor`, `editora`, `bib_ref`, `cdd`, `assuntos`, `subtitulo`, `isbn` — `SEARCH_COLS`, `src/lib/catalogFilters.js`) ; en liste par œuvre, `api.catalog_search_ids_v1(p_q)`, dont la meule est titre, sous-titre, `autor`, `author_display`, éditeur, sujets, cote, ISBN et titres d'œuvre. Une graphie qui n'est pas celle de la notice ni du nom préféré ne trouve donc rien.",
-        "pt": "**Constatado por Xavier em 11/10** no Catálogo público: a busca «Kropotkine» «só devolve uma obra, não todas». Reproduzido: `?q=Kropotkine` devolve 2 fichas; `?q=Kropotkin`, 44 linhas. A autoridade «Piotr Kropotkin» (id 5) tem 59 fichas em 36 obras e **vinte e cinco formas ativas** em `author_name_aliases` (entre elas «Kropotkine»). A busca unificada (`api.search_catalog_v1`) lê essas formas e propõe a autoridade; a **busca livre** — digitar e Enter — passa por dois caminhos que nunca as leem: em lista plana, um `ilike` no cliente sobre oito colunas da vista (`SEARCH_COLS`); em lista por obra, `api.catalog_search_ids_v1(p_q)`, cuja palha é título, subtítulo, `autor`, `author_display`, editora, assuntos, cota, ISBN e títulos de obra."
-      },
-      "w": {
-        "fr": "Livré par la session voisine le soir même (voir Vérification) ; reste le regard de Xavier à l'écran, après déploiement : `/catalogo?q=Kropotkine` et « Pierre Kropotkine » rendent les œuvres de l'autorité, en liste plate comme par œuvre ; une faute d'une lettre (« kropotkn ») trouve en approché avec sa pastille.",
-        "pt": "Entregue pela sessão vizinha na mesma noite (ver Verificação); resta o olhar de Xavier na tela, depois da implantação: `/catalogo?q=Kropotkine` e «Pierre Kropotkine» devolvem as obras da autoridade, em lista plana e por obra; um erro de uma letra («kropotkn») encontra em aproximado com sua pastilha."
-      },
-      "y": {
-        "fr": "Un lectorat francophone écrit « Kropotkine », un lusophone « Kropotkin » ou « Kropotkine, Pedro » : le catalogue a les formes, il faut qu'il les lise là où les gens tapent.",
-        "pt": "Um leitor francófono escreve «Kropotkine», um lusófono «Kropotkin» ou «Kropotkine, Pedro»: o catálogo tem as formas, precisa lê-las onde as pessoas digitam."
-      },
-      "f": {
-        "fr": [
-          "`/catalogo?q=Kropotkine` rend les mêmes œuvres que le filtre par l'autorité « Piotr Kropotkin », en liste plate comme par œuvre.",
-          "Une suite SQL prouve que les deux chemins lisent les formes actives des autorités, et que le rang d'un titre exact ne recule pas."
-        ],
-        "pt": [
-          "`/catalogo?q=Kropotkine` devolve as mesmas obras que o filtro pela autoridade «Piotr Kropotkin», em lista plana e por obra.",
-          "Uma suíte SQL prova que os dois caminhos leem as formas ativas das autoridades, sem baixar o rank de um título exato."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Voisin de C3 (la revue des autorités enrichit les formes) et de B33 (trigramme sous RLS).",
-        "pt": "Nenhuma. Vizinho de C3 e de B33."
-      },
-      "r": [
-        "src/lib/catalogFilters.js",
-        "src/lib/catalogWorks.js",
-        "supabase/migrations",
-        "tests/sql"
-      ],
-      "verif": [
-        {
-          "fr": "11/10 — ouvert sur le regard de Xavier (question 14 de la liste E31), reproduit et diagnostiqué le soir même.",
-          "pt": "11/10 — aberto a partir do olhar de Xavier (pergunta 14 da lista E31), reproduzido e diagnosticado na mesma noite."
-        },
-        {
-          "fr": "**11/10 à 23 h 28 — livré par la session voisine** (`f38fffa8`, migration `20261011211012`), sur le même signalement, pendant que cet item s'écrivait : `private.fn_auteurs_par_nom` (les autorités dont la forme retenue, la forme de tri, les `variant_forms` ou les alias actifs contiennent chaque mot ; DEFINER, hors PostgREST, ne rend que des identifiants) et `private.fn_mots_proches` (un mot à une lettre près de 5 à 7 lettres, deux à partir de 8, jamais en deçà de 5 — `fuzzystrmatch`) ; `api.catalog_works_v1` accepte aussi une notice liée à une autorité qui porte ce nom et, si rien d'exact dans tout le catalogue, repart à une ou deux lettres près en le disant (`approx_author`, `approx_search`) ; `api.catalog_search_ids_v1` lit les autres noms par terme, puis une seconde passe approchée aux rangs négatifs ; à l'écran une pastille « Rien d'exact : résultats à une ou deux lettres près » (dix langues). Mesuré en production dans une transaction annulée : « kropotkine » 1 → 38 œuvres, « Pierre Kropotkine » 0 → 38, « Goldmann » 0 → 12, aucune notice perdue sur 31 recherches ; +40 à 60 ms en exact, ~300 ms quand le repli joue. Suite `recherche_variantes_approchee_tests` (11), `recherche-approchee` (6), addendum à l'audit `execute_anon`. La liste plate en profite pour la recherche libre ; son filtre auteur·rice reste un `ILIKE` PostgREST. **Reste** le regard de Xavier, après déploiement.",
-          "pt": "**11/10 às 23h28 — entregue pela sessão vizinha** (`f38fffa8`, migração `20261011211012`), sobre o mesmo relato: `private.fn_auteurs_par_nom` (as autoridades cuja forma retida, forma de ordenação, `variant_forms` ou aliases ativos contêm cada palavra) e `private.fn_mots_proches` (uma letra de diferença de 5 a 7 letras, duas a partir de 8); `api.catalog_works_v1` e `api.catalog_search_ids_v1` leem os outros nomes e, se nada exato, repartem em aproximado dizendo-o (pastilha em dez línguas). Medido em produção numa transação anulada: «kropotkine» 1 → 38 obras, «Pierre Kropotkine» 0 → 38, nenhuma ficha perdida em 31 buscas. Suíte SQL (11), teste de tela (6). **Resta** o olhar de Xavier, depois da implantação."
-        },
-        {
-          "fr": "**11/10 à 23 h 47 — déployé et vérifié en ligne** (CI verte, 461 migrations, `private.fn_auteurs_par_nom` et `fn_mots_proches` en place, le nouveau `CatalogPage` servi) : `api.catalog_search_ids_v1('Kropotkine')` rend 60 notices sur 37 œuvres ; à l'écran, `/catalogo?q=Kropotkine` rend **60 notices en liste plate** et **38 lignes par œuvre, dont 8 œuvres dépliables**, sans pastille d'approché, aucune erreur console. Le premier affichage après le déploiement a montré un instant l'ancien résultat (2 lignes et la pastille) avant que le mode par œuvre ne se recharge ; au second chargement, tout est en place. **Reste** le regard de Xavier.",
-          "pt": "**11/10 às 23h47 — implantado e verificado on-line** (CI verde, 461 migrações, funções em vigor, novo `CatalogPage` servido): `catalog_search_ids_v1('Kropotkine')` devolve 60 fichas em 37 obras; na tela, `/catalogo?q=Kropotkine` devolve **60 fichas em lista plana** e **38 linhas por obra, 8 obras desdobráveis**, sem pastilha de aproximado, nenhum erro de console. **Resta** o olhar de Xavier."
-        },
-        {
-          "fr": "**12/10 au matin — « En liste plate, non » (Xavier), reproduit et livré, déployé à 9 h 52** (`60ffe977`, migration `20261012074224`) : avec « Kropotkine » dans le champ *Auteur·rice*, la liste par œuvre rendait 37 lignes (`catalog_works_v1` résout le nom par `private.fn_auteurs_par_nom`) mais la liste plate **une** notice — là, le filtre est un `ILIKE` PostgREST sur `autor` / `author_display`, bâti côté client, aveugle aux alias et aux variantes. Livré : `api.catalog_author_ids_v1(nom, approche)`, porte de lecture INVOKER (search_path figé, EXECUTE à anon et authenticated, fermée à PUBLIC, ligne ajoutée à la liste fermée T12 ; aucune DEFINER nouvelle) qui rend les identifiants d'autorité que `fn_auteurs_par_nom` trouve ; en liste plate la page résout le nom par cette porte — exact, puis à une ou deux lettres près en le disant par la même pastille — et le filtre accepte le lien principal (`author_id`), n'importe quel contributeur (`author_chips`) **ou** le texte mot à mot (les notices sans autorité restent trouvées) ; jamais quand une autorité est déjà choisie ni pendant le parcours A–Z ; porte indisponible = l'`ILIKE` seul, jamais pire qu'avant. Suite SQL `e38_liste_plate_auteur_par_ses_noms` (5), tests `catalogFilters` (+4) et `e38-liste-plate-auteur` (source) ; syntaxe du filtre éprouvée sur la vue publique de production (59 notices pour l'autorité 5, contre 1 par le texte seul) ; build et vitest complet verts (2 505). **Reste** le regard de Xavier : en liste plate, « Kropotkine » dans *Auteur·rice* rend-il les mêmes notices que par œuvre ?",
-          "pt": "**12/10 de manhã — «Em lista plana, não» (Xavier), reproduzido e entregue, implantado às 9h52** (`60ffe977`, migração `20261012074224`): com «Kropotkine» no campo *Autor·a*, a lista por obra devolvia 37 linhas mas a lista plana **uma** ficha — ali o filtro é um `ILIKE` PostgREST no cliente, cego aos aliases e variantes. Entregue: `api.catalog_author_ids_v1(nome, aproximado)`, porta de leitura INVOKER (lista fechada T12; nenhuma DEFINER nova) que devolve os identificadores de autoridade que `fn_auteurs_par_nom` encontra; em lista plana a página resolve o nome por essa porta — exato, depois a uma ou duas letras dizendo-o — e o filtro aceita o vínculo principal, qualquer contribuidor **ou** o texto palavra a palavra. Suíte SQL (5), testes de filtro (+4) e de fonte; build e vitest completo verdes. **Resta** o olhar de Xavier."
         }
       ]
     }
