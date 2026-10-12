@@ -30,11 +30,11 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 |---|---|---|
 | [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.7 du 30/08/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
-| [`GLB/Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. Série versée au dépôt le 02/09/2026 (arbitrage J8) : chaque version entre ici le jour où elle sert de référence. | v17 du 01/09/2026 — 🟢 référence (livre blanc vivant) |
+| [`GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. Série versée au dépôt le 02/09/2026 (arbitrage J8) : chaque version entre ici le jour où elle sert de référence. | v18 du 11/10/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.1 (septembre 2026 : OPAC par œuvre, bloc Œuvre, onglets « Œuvres scindées » / « Volumes ») — 🟢 stable |
 | [`multiformat-viewers.md`](./multiformat-viewers.md) | Doc technique du viewer multi-format (PDF en prod, audio/vidéo/image disponibles côté code). | 08/05/2026 — 🟢 stable |
 
-> Le `livre-blanc-v0.1.md` (point d'étape de mai) est supersédé par le GLB v17 et part en archive. Le GLB est le livre blanc vivant ; v0.1 reste consultable pour mémoire dans `archive/` (à déplacer).
+> Le `livre-blanc-v0.1.md` (point d'étape de mai) est supersédé par le GLB (v18) et part en archive. Le GLB est le livre blanc vivant ; v0.1 reste consultable pour mémoire dans `archive/` (à déplacer).
 
 ---
 
@@ -74,8 +74,8 @@ docs/
 │   └── archive/                      → anciennes versions (v8→v32, .docx et .md)
 │
 ├── GLB/                              Grand Livre Blanc (livre blanc vivant)
-│   ├── AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx
-│   └── archive/                      → v15, v16…
+│   ├── Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf   (+ .docx)
+│   └── archive/                      → refonte du 29/05, v15, v16 (27/05 et 02/07), v17 (01/09)
 │
 ├── cartographie/                     Carte du réseau (uMap) — ⚠️ contenu très majoritairement NON VERSIONNÉ
 │   ├── AnarBib_recensement_bibliotheques_libertaires.docx   ← seul fichier suivi par git
@@ -106,7 +106,7 @@ docs/
 ├── drafts/                           Brouillons techniques non promus (SQL en attente d'arbitrage)
 │
 └── archive/                          Documents supersédés conservés
-    ├── livre-blanc-v0.1.md           → supersédé par le GLB v17
+    ├── livre-blanc-v0.1.md           → supersédé par le GLB (v18)
     └── db-migrations-legacy-pre-woodpecker/   → 44 migrations d'avant la CI
 ```
 
@@ -149,9 +149,9 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 Le livre blanc vivant d'AnarBib — état politique et technique, trajectoire, doctrine.
 
-**Version courante** : `Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf` (quatrième lecture exacte du backend — 30/04, 19/05, 02/07, 01/09). Les versions antérieures sont dans `GLB/archive/`, dont la refonte du 29/05 (`AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) qui a longtemps porté à tort le numéro « v17 » et le statut de référence vivante — c'est l'anomalie de numérotation que le v17 du 01/09 documente en son chapitre 14 bis, résorbée le 02/09 (item J8).
+**Version courante** : `Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (cinquième lecture exacte du backend — 30/04, 19/05, 02/07, 01/09, 11/10 ; `.docx` à côté). Les versions antérieures sont dans `GLB/archive/` — dont le v17 du 01/09 (`Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf`) et la refonte du 29/05 (`AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) qui a longtemps porté à tort le numéro « v17 » et le statut de référence vivante — c'est l'anomalie de numérotation que le v17 du 01/09 documente en son chapitre 14 bis, résorbée le 02/09 (item J8).
 
-> **Chaînon manquant** : le v16 du 2 juillet 2026 — la troisième lecture exacte, base du v17 — n'a jamais été versé et reste à retrouver. Le jour où il refait surface, il entre dans `GLB/archive/` sans autre décision.
+> **Chaînon retrouvé (12/10/2026, J12)** : le v16 du 2 juillet 2026 — la troisième lecture exacte, base du v17 — est versé dans `GLB/archive/` sous `Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`, 02/07 à 21 h 06). Le fichier `Grand_Livre_blanc_AnarBib_v16.docx` du même dossier est le v16 du 27 mai, construit par addendum sur la v14 : deux v16, deux dates, la série est complète.
 
 ### `cartographie/` — Carte du réseau
 
@@ -189,7 +189,7 @@ Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr
 
 **« Je veux la liste des tâches à faire »** → [`backlogs/INDEX.md`](./backlogs/INDEX.md) puis la version courante.
 
-**« Je découvre le projet »** → le **Grand Livre Blanc v17** (`GLB/`) puis [`manual.md`](./manual.md).
+**« Je découvre le projet »** → le **Grand Livre Blanc v18** (`GLB/`) puis [`manual.md`](./manual.md).
 
 **« Je veux comprendre la gouvernance du projet »** → [`governance/guide-gouvernance-fr.md`](./governance/guide-gouvernance-fr.md) (vue d'ensemble) puis `specs/spec-gouvernance-roles.md` et `specs/spec-administrateur-reseau-v0.4.md` (détails techniques).
 
