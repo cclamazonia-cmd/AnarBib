@@ -3152,8 +3152,8 @@
         "E38",
         "2026-10-12",
         {
-          "fr": "La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos.",
-          "pt": "A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado."
+          "fr": "La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos. **Troisième livraison, le 12/10 à 14 h 52, à la demande de Xavier après la clôture** (`4dfbaa47`, migration `20261012121812`) : en liste plate, l'approché trouve aussi les notices **sans autorité liée** — la porte INVOKER `api.catalog_author_book_ids_v1` rend les notices retenues par la règle de `catalog_works_v1` (approché sur le texte de toutes les notices, plafond 501 ; au-delà, le chemin de `60ffe977` reste) ; la résolution sort de `CatalogPage.jsx` dans `src/lib/catalogAuthorFilter.js` (la page passait le plafond de 65 Ko). « Goldmn » 18 → 19 notices, vu à l'écran sans compte. Front publié par un commit vide (`e752798d`) après un 503 de git-pages (**I34**). Suites `recherche_variantes_approchee` (14) et `liste-plate-approche-sans-lien.test.js` (7). Reste le regard de Xavier sur cette suite.",
+          "pt": "A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado. **Terceira entrega, 12/10 às 14h52, a pedido de Xavier depois do fechamento** (`4dfbaa47`, migração `20261012121812`): em lista plana, o aproximado encontra também as fichas **sem autoridade ligada** — a porta INVOKER `api.catalog_author_book_ids_v1` (regra de `catalog_works_v1`, teto 501; além disso, o caminho de `60ffe977` continua). «Goldmn» 18 → 19 fichas, visto na tela sem conta. Front publicado por um commit vazio (`e752798d`) depois de um 503 do git-pages (**I34**). Falta o olhar de Xavier sobre esta sequência."
         }
       ],
       [
@@ -6005,6 +6005,32 @@
           "pt": "**12/10 — o que resta depende do painel**: a leitura Reports → Database entre 19h45 e 20h00 de 07/10 pede a sessão Supabase de Xavier; nenhuma API do MCP a dá. O suspeito continua a memória da instância MICRO. **Resta**: a captura por Xavier, depois a decisão MICRO → SMALL."
         }
       ]
+    },
+    {
+      "id": "I34",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Faire savoir quand la publication du front échoue (Deploy Pages non bloquant)",
+        "pt": "Avisar quando a publicação do front falha (Deploy Pages não bloqueante)"
+      },
+      "v": {
+        "fr": "Constaté le 12/10/2026 sur le run 1693 (`4dfbaa47`, E38 suite) : les trois pas « Deploy Pages (git-pages) » — `app.anarbib.org`, `app.anarbib.is`, `app.anarbib.org.br` — ont échoué en deux secondes (« unauthorized … cannot fetch authorized forge user: GET https://codeberg.org/api/v1/user returned 503 Service Unavailable »). Ils sont `continue-on-error: true`, **par choix** (un échec Codeberg ne doit pas priver `backend`, qui en dépend, du déploiement des migrations) : le job `app` est resté vert, `acquittement` aussi, aucune alerte n'est partie. La migration `20261012121812` est passée ; le site, lui, a servi le build de 07:45 UTC jusqu'à la republication par un commit vide (`e752798d`, en ligne à 12:45 UTC) — base et front désaccordés une vingtaine de minutes sans que rien ne le dise. Seul l'en-tête `Last-Modified` de `index.html` le montrait ; le bouton « Re-run » n'est pas offert au navigateur de session (pas de droit d'écriture sur le dépôt).",
+        "pt": "Constatado em 12/10/2026 no run 1693 (`4dfbaa47`): os três passos «Deploy Pages (git-pages)» falharam («cannot fetch authorized forge user: … 503»). São `continue-on-error: true` por escolha (uma falha do Codeberg não deve privar `backend` das migrações): `app` ficou verde, nenhum alerta saiu. A migração passou; o site serviu o build de 07:45 UTC até a republicação por um commit vazio (`e752798d`, 12:45 UTC) — base e front desencontrados uns vinte minutos sem aviso."
+      },
+      "w": {
+        "fr": "Garder le pas non bloquant pour `backend`, mais : (1) le rejouer une fois après une pause (60 s) quand il échoue — le 503 de Codeberg est d'ordinaire bref ; (2) en fin de job `app`, comparer le `index.html` servi par chacun des trois domaines (requête sans cache) à `dist/index.html`, et s'ils diffèrent après quelques minutes, faire sonner `alerte` (ou ouvrir un incident `service_health_incidents`) sans faire rougir `app` ni retenir `backend` ; (3) écrire au runbook de déploiement la parade du commit vide `ci: republier le front`. **Critère** : un push dont la publication échoue produit une alerte reçue par Xavier, et un second essai automatique a lieu avant.",
+        "pt": "Manter o passo não bloqueante para `backend`, mas: (1) repeti-lo uma vez após 60 s quando falha; (2) no fim do job `app`, comparar o `index.html` servido pelos três domínios com `dist/index.html` e, se diferirem, disparar `alerte` sem deixar `app` vermelho; (3) registrar no runbook a solução do commit vazio. **Critério**: uma publicação que falha gera um alerta recebido por Xavier, depois de uma segunda tentativa automática."
+      },
+      "y": {
+        "fr": "Une CI verte ne prouve pas que le front est en ligne : une correction paraît livrée alors que l'écran sert l'ancienne version, et une migration qui change la forme d'une réponse peut casser un front resté en arrière — en silence.",
+        "pt": "Uma CI verde não prova que o front está no ar: uma correção parece entregue enquanto a tela serve a versão antiga, e uma migração que muda a forma de uma resposta pode quebrar um front atrasado — em silêncio."
+      }
     },
     {
       "id": "F25",

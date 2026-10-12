@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -23,7 +23,7 @@
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 11
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **41 itens de 55** trazem uma verificação datada própria (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **41 itens de 56** trazem uma verificação datada própria (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1366,6 +1366,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
 | **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | A verificar |
 | **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
+| **I34** | Avisar quando a publicação do front falha (Deploy Pages não bloqueante) | `P1` | Aberto |
 
 #### I2 — Concluir a migração para a auto-hospedagem
 
@@ -1454,6 +1455,18 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Xavier (acesso ao painel, decisão de custo).
 
 *Remissões : `exports supabase_logs.csv du 07/10 (passerelle, 17:58 → 18:25 UTC)` · `journaux Postgres et PostgREST du 07/10` · `job backend 10213611`*
+
+#### I34 — Avisar quando a publicação do front falha (Deploy Pages não bloqueante)
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+
+**Estado.** Constatado em 12/10/2026 no run 1693 (`4dfbaa47`): os três passos «Deploy Pages (git-pages)» falharam («cannot fetch authorized forge user: … 503»). São `continue-on-error: true` por escolha (uma falha do Codeberg não deve privar `backend` das migrações): `app` ficou verde, nenhum alerta saiu. A migração passou; o site serviu o build de 07:45 UTC até a republicação por um commit vazio (`e752798d`, 12:45 UTC) — base e front desencontrados uns vinte minutos sem aviso.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Manter o passo não bloqueante para `backend`, mas: (1) repeti-lo uma vez após 60 s quando falha; (2) no fim do job `app`, comparar o `index.html` servido pelos três domínios com `dist/index.html` e, se diferirem, disparar `alerte` sem deixar `app` vermelho; (3) registrar no runbook a solução do commit vazio. **Critério**: uma publicação que falha gera um alerta recebido por Xavier, depois de uma segunda tentativa automática.
+
+**Por que importa.** Uma CI verde não prova que o front está no ar: uma correção parece entregue enquanto a tela serve a versão antiga, e uma migração que muda a forma de uma resposta pode quebrar um front atrasado — em silêncio.
 
 ---
 
@@ -1945,7 +1958,7 @@ CI verde. |
 | E36 | 2026-10-11 | O Ateliê diz a quem está reservado: uma conta sem papel de equipe lê, em `/atelier-autoridades`, uma só frase no lugar da fila, e cada recusa das nove RPC fala (`error.atelier.*`, vinte e cinco chaves nas dez locales, `5b42c64e`). **Visto por Xavier em 11/10**: a frase, uma vez, sem «42501»; as abas da Federação recuperaram seus ícones. Fechado. |
 | E37 | 2026-10-11 | O menu das páginas fica visível no alto da tela, onde quer que se esteja: faixa fixa sobre fundo quase opaco e desfocado, altura publicada em `--ab-topbar-h`, os elementos já fixos e a rolagem até uma âncora se ajustam abaixo; regra fechada pelo teste `bandeau-colle-en-haut` (8) (`e0e7f402`, 11/10). **Visto por Xavier em 11/10**: no fim de uma ficha o menu fica no alto e clicável, a barra de estado aparece abaixo dele, a gaveta ☰ abre no meio de uma página longa no telefone, o fundo passa na BLMF com tema. Fechado. |
 | E31 | 2026-10-11 | O que esperava um olhar na tela, conectado, foi visto — **quinze perguntas feitas uma a uma em 11/10 à noite, quinze respostas de Xavier**. *Conformes*: C21, C22, C24, C17, os lotes 2, 4, 5 e 8 da `AccountPage` (E6), E35, C20, F16, os quatro lotes do Catálogo (E6) — com um defeito achado no caminho, que não é dos lotes: **a busca livre «Kropotkine» devolve uma ou duas obras em vez das 36 da autoridade** (aberto em E38). *Retirados da lista*: E33 (não se simula em produção) e as telas do H21 (esperam uma reimportação real da DIRA). Critério cumprido: cada ponto visto, conforme ou aberto em item. Fechado. |
-| E38 | 2026-10-12 | A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado. |
+| E38 | 2026-10-12 | A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado. **Terceira entrega, 12/10 às 14h52, a pedido de Xavier depois do fechamento** (`4dfbaa47`, migração `20261012121812`): em lista plana, o aproximado encontra também as fichas **sem autoridade ligada** — a porta INVOKER `api.catalog_author_book_ids_v1` (regra de `catalog_works_v1`, teto 501; além disso, o caminho de `60ffe977` continua). «Goldmn» 18 → 19 fichas, visto na tela sem conta. Front publicado por um commit vazio (`e752798d`) depois de um 503 do git-pages (**I34**). Falta o olhar de Xavier sobre esta sequência. |
 | J12 | 2026-10-12 | **Fechado em 12/10 com provas, os dois critérios cumpridos — seis dias antes do prazo de `DOC-GLB-1`.** *(1)* A v18 e o v16 de 02/07 estão em `docs/GLB/` desde `8fdbc0d0` (13h09), o INDEX os nomeia, o elo já não falta; o adendo de 27/05 traz agora a data no nome (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, decisão de Xavier). *(2)* Os três códigos estão no REGISTRO v0.84: `DOC-TIERS-1` (uma prova por um terceiro conta em dobro, o fechamento diz «exercido por um terceiro»), `DOC-MESURE-1` (um número contado desde um instante traz a data do seu último reset), `DOC-MESURE-2` (uma fixture em produção não é uso; a etiquetagem mecânica é `B39`); as duas convenções estão escritas em «Como ler este documento», e `B36` já aplica a segunda. Decisões de Xavier de 12/10, sobre quatro perguntas postas na leitura da v18. |
 | B40 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier (opção mista), os dois critérios cumpridos.** *(1)* `DOC-SURFACE-1` no REGISTRO (v0.85): uma função `api` sem chamador e fechada a todos os papéis se apaga; uma superfície dormente só se guarda se uma spec datada a reclamar. *(2)* **Sete apagadas** pela migração `20261012111851` (`107d9ccc`, aplicada pela CI): `attach_exemplar`, `clear_loan_return_schedule`, `schedule_loan_return`, `mark_loan_return_missed`, `refuse_pickup_slot`, `conv_controle_qualite`, `conv_controle_resumo`; **duas mantidas fechadas à chave** para `G9` (`fn_cartography_create_entry`, `fn_cartography_toggle_public`). Antes do DROP: `prosrc` dos quatro esquemas, visões, policies, triggers, crons e repositório relidos — 0 chamador; a lista fechada T12 (aberturas a `anon`) não continha nenhuma. Um arquivo `_rollback_` recria as sete como estavam. Suítes realinhadas e verdes. A conta do GLB v19: 199 funções `api`, 12 → 5 sem chamador. |
 
@@ -1979,4 +1992,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
