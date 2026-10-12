@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **41 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, C28, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -430,7 +430,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
-| **C28** | Decidir três pares de notícias que o DEDUP-14 fez aparecer | `P2` | Aberto |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -576,26 +575,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Xavier, para a validação.
 
 *Remissões : `clôture C7` · `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md`*
-
-#### C28 — Decidir três pares de notícias que o DEDUP-14 fez aparecer
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia
-
-**Estado.** Em 28/09, o `DEDUP-14` (`8e0fe538`) fez propor quatro pares até então mascarados pela obra. **Medido em 05/10**: 504/727 fundido em 28/09; restam três, sem veredito: BTL-TL-000301 / BLMF 0000054 (291 e 2264), BTL-TL-001525 / BLMF 0000258 (1432 e 2446), BTL-TL-001808 / BLMF 0000060 (1699 e 2267).
-
-*Verificado : [object Object]*
-
-**O que é.** Para cada par, abrir a lista das edições e decidir: « Mesma edição: fundir » (`DEDUP-13`), ou manter as duas e dizer por quê.
-
-**Por que importa.** Duas notícias para uma mesma edição duplicam o catálogo público; duas edições tomadas por uma perderiam uma descrição.
-
-**O que conta como terminado.**
-
-- Cada um dos três pares está fundido ou declarado distinto, com a razão escrita.
-
-**Dependências.** Xavier, na tela; os livros na mão se o ISBN não bastar.
-
-*Remissões : `commit 8e0fe538` · `REGISTRE DEDUP-13, DEDUP-14` · `merge_log`*
 
 ---
 
@@ -1855,6 +1834,7 @@ CI verde. |
 | C29 | 2026-10-12 | **Fechado em 12/10: visto na tela por Xavier, conectado — os quatro lotes conformes.** Lista por biblioteca na ficha, criação sem sair da ficha, cota alterada num gesto, cartão e bloco antigos desaparecidos. |
 | K10 | 2026-10-12 | **Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*. |
 | G9 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos há muito.** *(1)* A carta pública é uma rota da aplicação (`/cartografia`), servida sem terceiros desde E5 (07/09). *(2)* A §2 `MAP` do REGISTRO remete à §34 desde J5 (29/08). O que resta da spec v1.0 (MAP-I, MAP-J) não tem item: a reabrir com identificador novo se a janela se abrir. |
+| C28 | 2026-10-12 | **Fechado em 12/10: os três pares decididos, cada um fundido.** Dois a 06 e 08/10 (Xavier); o terceiro (1699 / 2267, *Os Anarquistas e as Eleições*, Imaginário, 2000, mesmo ISBN em dez e treze dígitos) a 12/10 por `fn_fusion_notices` sob a identidade de árbitro de Xavier: a ficha da BTL fica, recebe a capa da BLMF, e o fundo da BLMF passa para ela. |
 
 ---
 
@@ -1886,4 +1866,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
