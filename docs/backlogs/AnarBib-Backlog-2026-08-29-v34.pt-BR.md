@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 57 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,15 +17,15 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 9
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 11
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 5
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
-    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
+    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 5
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
 - [Manutenção deste documento](#manutenção-deste-documento)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **42 itens de 57** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **37 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -379,7 +379,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Constatação da v18** (capítulos 9.1, 10 e 12): a biblioteca de formação `blmf-teste` tem onze membros, cinco exemplares e nenhuma circulação, e «falseia todo quadro que não a nomeia». O projeto escolheu manter as fixtures em produção; a v18 aceita com uma condição: uma etiqueta que toda medida possa ler, por uma consulta. Verificado em 12/10: nada no banco distingue `blmf-teste` nem as contas `formacao-e1..e5`.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Uma coluna `libraries.is_training` (verdadeira em `blmf-teste`) e o mesmo marcador nas contas de formação; uma ajuda ou vista de medida que o levantamento, a supervisão e o próximo Livro branco leem; as contagens da rede publicadas *fora das fixtures*. Inscrever no REGISTRO a escolha com sua contrapartida (J12). Guarda: um teste que fica vermelho se uma biblioteca `*-teste` não está etiquetada.
 
@@ -431,7 +431,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
 | **C28** | Decidir três pares de notícias que o DEDUP-14 fez aparecer | `P2` | Aberto |
-| **C29** | Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia | `P2` | A verificar |
 
 #### C3 — Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos
 
@@ -597,30 +596,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Xavier, na tela; os livros na mão se o ISBN não bastar.
 
 *Remissões : `commit 8e0fe538` · `REGISTRE DEDUP-13, DEDUP-14` · `merge_log`*
-
-#### C29 — Os exemplares de uma notícia se criam, se editam e se publicam a partir da notícia
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : React / JavaScript, SQL / PostgreSQL
-
-**Estado.** Decidido em 10/10 com Xavier, sobre este diagnóstico: o exemplar vive longe da notícia (aba « Indexação », formulário de 948 linhas em cinco etapas planas, lista « meus cem últimos rascunhos »); a ficha nunca mostra seus exemplares juntos; mudar a localização de um exemplar publicado leva seis gestos e um rascunho; a biblioteca se diz de duas formas; dois caminhos de criação. Mesma receita do depósito digital (05/10). **Lote 1 entregue em 10/10 (`0e78be83`)**: `ExemplaresPanel.jsx`, montado na ficha depois dos recursos digitais — exemplares publicados e rascunhos vivos, por biblioteca, as minhas primeiro e editáveis, as outras só leitura; « Novo exemplar » e « Editar » abrem o editor existente já apontado; um exemplar que já tem rascunho de atualização propõe « Retomar » em vez de abrir um segundo. De passagem: pedir de novo um exemplar da MESMA ficha não relançava o alvo — agora leva um nonce. **Lote 2 entregue em 10/10 (`1820b2e1`)**: « Novo exemplar » abre no painel um formulário curto em quatro tempos — onde (lista fechada das bibliotecas em que se é da equipe; uma só → escolhida de antemão), localização (número proposto por `fn_next_tombo`, editável), circulação e visibilidade herdadas da ficha, detalhes dobrados. « Salvar e publicar » cria o rascunho e chama `publish_exemplar_draft` tal como está; recusa → o rascunho fica e a lista o mostra. **Lote 3 entregue em 10/10 (`a2341ef0`, migração `20261010204944`)**: `fn_exemplaire_modifier_et_publier` encadeia numa transação a retomada, os doze campos permitidos e `publish_exemplar_draft` tal como está — nem o tombo, nem a biblioteca; se a base recusa, nada fica. De passagem, a retomada copia agora circulação e visibilidade. **Lote 4 entregue em 11/10 (`8fc1c0f2`)**, sobre quatro decisões de Xavier após uma auditoria das duplicações entre Documento e Indexação: o cartão de exemplares dos InfoCards sai (o painel o substitui); « Adicionar um exemplar » após a publicação reabre a ficha e o painel abre o formulário curto; o bloco « Exemplares a criar » de uma ficha não publicada vive no painel; o aviso 💡 da Indexação, falso desde 17/06, sai com a sua chave.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Quatro lotes. *(1)* O painel « Exemplares » na notícia, em leitura, que leva ao editor já apontado. *(2)* O formulário curto no painel, só criação, em quatro tempos que se abrem um após o outro: onde, arrumação, circulação e visibilidade herdadas, e um painel dobrado. *(3)* « Editar » um exemplar publicado sem ver o rascunho: uma RPC encadeia rascunho, atualização e publicação numa transação, chamando `publish_exemplar_draft` tal como está. *(4)* O painel substitui `InitialCopiesBlock`; a aba guarda a massa e deixa de ser a porta de entrada.
-
-**Por que importa.** Arrumar um livro recebido é o gesto mais frequente de uma biblioteca de bairro, e é hoje o que pede mais cliques e mais saber sobre a ferramenta. As guardas existentes (B29, B30, tombo único, detenção por biblioteca) ficam todas: muda-se o caminho, não as regras.
-
-**O que conta como terminado.**
-
-- Da ficha, veem-se todos os exemplares por biblioteca, publicados e em rascunho, e chega-se ao editor num clique (lote 1 — feito em 10/10).
-- Um exemplar se cria sem sair da ficha, em quatro tempos; o texto livre « Biblioteca » sumiu (lote 2 — feito em 10/10).
-- Mudar a localização de um exemplar publicado é um gesto: a RPC encadeia rascunho, atualização e publicação, provada por uma suíte SQL (lote 3 — feito em 10/10).
-- Um só lugar para os exemplares de uma ficha: cartão e bloco « Exemplares a criar » não existem mais ao lado do painel, e « Adicionar um exemplar » abre nele o formulário curto (lote 4 — feito em 11/10).
-- Visto na tela por Xavier, conectado (E31).
-
-**Dependências.** Nada para os lotes 1 e 2 (só front, dez locales de saída). O lote 3 pede uma migração, sua suíte SQL e seu « Complemento » na auditoria das DEFINER. O lote 4 toca `publish_book_draft`.
-
-*Remissões : ``ExemplaresPanel.jsx`, `c29-exemplaires-dans-la-notice.test.jsx`` · ``DigitalResourcesPanel.jsx` (le modèle, 05/10)` · `items B29, B30, C17, E6 lot 6 et lot 8` · `E31 (regard à l’écran)` · ``scripts/i18n-add-c29-lot2-formulaire-court.cjs`` · `migration `20261010204944_c29_lot3_modifier_un_exemplaire_en_un_geste`` · ``tests/sql/c29_exemplaire_modifier_et_publier_tests.sql`` · `AUDIT_execute_authenticated_2026-09-01, Complément du 10/10` · ``scripts/i18n-c29-lot4-un-seul-endroit.cjs`` · `E31`*
 
 ---
 
@@ -933,7 +908,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte.
 
@@ -953,7 +928,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23).
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso.
 
@@ -1128,7 +1103,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **H33** | «Aproximar» num arquivo grande ultrapassa o limite de 8 s das chamadas da API | `P2` | A verificar |
 | **H34** | Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo | `P2` | A verificar |
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
@@ -1137,29 +1111,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **H15** | A importação lê um arquivo que não está em UTF-8 em vez de corrompê-lo em silêncio | `P1` | A verificar |
 | **H16** | Um relatório de cobertura por importação: cada zona do arquivo que a importação não aproveita é contada e mostrada | `P1` | A verificar |
 | **H21** | Reimportar um catálogo atualiza o que a importação já conhece em vez de duplicá-lo | `P2` | A verificar |
-| **H26** | O export de um catálogo grande não depende mais da memória de uma edge function | `P2` | A verificar |
 | **H29** | De volta ao PMB, um exemplar mantém seu tipo, sua seção e seu código estatístico | `P2` | Aberto |
-
-#### H33 — «Aproximar» num arquivo grande ultrapassa o limite de 8 s das chamadas da API
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado.** Medido em 11/10: «Aproximar» em 200 linhas × 25 exemplares leva de 8 a 80 s; o limite da API é 8 s.
-
-*Verificado : 11/10 — aberto por medição do lote 8 de H21. **12/10 — entregue, a verificar** (`1441c8e2`, migração `20261012123726`): «Aproximar» 200 × 25 de 26 s para 1,6 s; promoção de 10–21 s para 3,0 s; mesmas regras e respostas.*
-
-**O que é.** Achar onde vai o tempo; uma passada SQL ou paginação por exemplares; medição na suíte.
-
-**Por que importa.** A primeira reimportação real da DIRA passará por aqui.
-
-**O que conta como terminado.**
-
-- «Aproximar» 200 × 25 em menos de 8 s.
-- Uma medição na suíte.
-
-**Dependências.** Depois de **H21**.
-
-*Remissões : `supabase/migrations` · `tests/sql`*
 
 #### H34 — Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo
 
@@ -1254,7 +1206,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Achado em 26/09, confirmado em produção: a CHECK de `detected_format` não aceitava nem `marc_iso2709` (escrito pela EF) nem `marc21` (enviado pelo front para `.mrc`/`.marc`). Todo import ISO 2709 falhava — na criação ou na atualização final. Nenhum run MARC jamais rodou. O PMB exporta em `.marc`.
 
-*Verificado : 26/09 — migração aplicada pela CI; CHECK em produção com `marc_iso2709`; banco da EF real escreve `marc_iso2709`. **28/09** — ainda nenhum run `marc_iso2709` em produção (levantamento feito para **H17**): o critério 2 espera. Além de «pronta para revisão», um lote MARC não teria sido publicado (idioma bruto contra a CHECK BCP-47): corrigido em 28/09 (`2ee5f7a7`, ver **H17**). **29/09** — `import_format_marc_tests` (4 testes) roda na CI desde `d008bb51`; última bateria anotada: SQL 149/149, antes do push de `2348cb86`. **06/10** — H17, H18 e H19 fechados; a primeira importação ISO 2709 real verifica também responsabilidades, exemplares (DIRA) e fascículos ligados ao periódico.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** **Entregue em 26/09** (`d008bb51`, migração `20260926184500`): `marc_iso2709` aceito, `marc21` recusado (vocabulário, não formato); uma só `detectFileKind`; guarda vitest e suíte SQL. Falta: **uma primeira importação ISO 2709 real em produção**.
 
@@ -1275,7 +1227,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `index.ts` (l. 623) e `marc.ts` (l. 303) decodificam **sempre em UTF-8**, sem `fatal`; só o MARC-8 gera aviso. Uma base PMB em ISO-8859-1 teria os acentos trocados por U+FFFD **sem nenhum aviso**; idem para um CSV em Windows-1252. **Medido no banco PMB em 26/09**: 29 de 50 registros com U+FFFD em latin-1, e um falso « MARC-8 » em todo UNIMARC. **Entregue em 26/09**: UTF-8 estrito, recuo windows-1252 suposto e dito, `forced_encoding`, MARC-8 só em MARC21, 100 $a relido; RPC com `p_forced_encoding` em fusão; reprocessamento recusado após promoção; tela com seletor, painel e « Reprocessar », 10 locales.
 
-*Verificado : 26/09 — a variante latin-1 dá exatamente os mesmos registros que o UTF-8 (testes nas fixtures PMB e banco da EF real); suíte SQL 6/6. Falta: uma importação latin-1 real em produção e o painel visto na tela.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Decodificar em UTF-8 estrito (`fatal: true`); se falhar, reler em Windows-1252 e **dizê-lo** nos avisos do run. No ISO 2709 UNIMARC, ler também 100 $a/26-29. Ajustar `forced_encoding` em `adapter_overrides`. Testar com fixture latin-1.
 
@@ -1297,7 +1249,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** O registro bruto é guardado (`raw_payload` → `book_drafts.marc_json` → `books.marc_json`; 2 250 rascunhos com ele em 26/09), mas **nada diz quais zonas foram deixadas de lado**. A perda não aparece nem em Importações nem no relatório de revisão de lote.
 
-*Verificado : 26/09 — suíte SQL 5/5; banco da EF real no export PMB e num CSV; tela renderizada em fr e el. Implantado em 26/09 à noite: migração aplicada pela CI, `coverage` presente em produção, EF reimplantadas e sondadas.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** No parse, calcular por run o inventário de zonas/subzonas (presentes, aproveitadas, ignoradas, ocorrências, exemplo); para CSV, colunas não mapeadas. Guardar em `summary`, mostrar em Importações, anexar a `fn_batch_review_report`, baixável para enviar à biblioteca. Dez locales. **Entregue em 26/09**: cobertura MARC/CSV/RIS no `summary` do run, chave `coverage` no relatório de revisão, painel na tela e **CSV para baixar**, 10 locales. Medido no export PMB: 111 subcampos, 17 aproveitados. **Falta**: a coleta OAI ainda não escreve cobertura; ver o painel numa importação real.
 
@@ -1319,7 +1271,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A marcha em paralelo supõe continuar catalogando no PMB e reimportar. Hoje, um reimport passa pela detecção de duplicatas: não há noção de «registro já importado, a atualizar». `book_drafts.action` já conhece `update`.
 
-*Verificado : 26/09 — `action` ∈ {create, update}. **29/09** — passou para «em curso» com `69dbeec7`; nenhum dos nove lotes entregue na noite de 29/09. Constatação de produção que motivou a regra (REGISTRO `IMP-26` a, 28/09): 198 atualizações publicadas, 33 delas em registros hoje compartilhados e 3 por uma biblioteca que não detinha o registro. A tabela de cobertura o diz à DIRA: o 001 é guardado e devolvido no export, mas um reimport ainda não o usa (`docs/interop/couverture-pmb.md`, `466324aa`). **01/10 — lote 0 entregue** (`1385431b` base, `d4f97afc` tela; migração `20261001200931` aplicada pela CI, `created_by` vazio; REGISTRO `IMP-27`): um registro ou um exemplar vinculado nascido de uma importação só é publicado pela primeira vez num lote revisado, mesmo fora do lote; já publicado (e no catálogo), é republicado fora do lote; a aprovação cobre os rascunhos congelados no pedido, e a coordenação pede de novo a revisão para os acréscimos; um lote de vinculação passa pela revisão; uma seleção entra no lote aberto da importação e «Promover a seleção» só promove ela; «vinculado» nunca vira registro; esvaziar a lixeira de um rascunho importado descarta a linha, que só a restauração desse rascunho retoma; «Reprocessar» recusado na hora para uma importação com linha descartada ou exemplar vinculado na lixeira; a tela diz as linhas ignoradas. Seis passadas de revisão contraditória; SQL 158/158, vitest 1 666; verificado em produção em 01/10. **Registrado**: a corrida entre «Reprocessar» aceito e o apagamento pela edge function, e «Reprocessar» de uma importação sem arquivo (**H30**, **H31**); as fusões `api.merge_*` (lote 5); a lixeira de um exemplar vinculado libera a linha (lote 6); o assistente de importação não lê `skipped_rows`; uma linha cujo registro proposto foi descartado fica «pendente»; uma aba aberta numa importação excluída recebe «Run N introuvable» bruto. **A decidir por Xavier**: um exemplar vinculado tirado da lixeira depois do pedido deve seguir a lista da rodada? Depois de uma reatribuição, o registro guarda para a biblioteca de destino o identificador de origem vindo do PMB da primeira? **05/10 — lote 1 entregue** (`32afb117`, `ba6ec496`; migração `20261005103427`; REGISTRO `IMP-28`): uma linha reimportada cujo identificador de origem já é conhecido vira «Já importada», sem passes aproximados; vincula-se ou rejeita-se, nunca registro novo nem atualização; «não possui mais» é sinalizado; o identificador fica com a biblioteca cujo PMB o emitiu; um exemplar vinculado tirado da lixeira depois do pedido espera nova rodada. Fixture PMB reimportada: 64 «Já importada» de 64. **Registrado (05/10)**: (1) o aviso de chave ambígua não aparece na tela; (2) enquanto um exemplar vinculado espera, republicar o registro é recusado (`items_on_update`); (3) a view `api.partner_catalog_import_rows_workflow_ui` não conhece `known_record`. **05/10 — lote 2 entregue** (`84c455cd`, migração `20261005172708`; REGISTRO `IMP-29`): `ingest.book_import_baselines` guarda, por identificador de origem, o que o último arquivo aceito trouxe; uma só regra de correspondência; base escrita na publicação, na absorção (que a avança) e na vinculação (que só a cria); 264 bases retomadas em produção. **Registrado**: o esquema ingest não tem backup (decisão de 05/10: incluí-lo no fluxo longo). **05/10, à noite** — o ponto « o esquema `ingest` não tem backup » está resolvido: **I29**, fechado em 05/10 (`f5e3f5ed`); direitos e esquemas `private`/`api`: **I30**. **06/10 — lote 3 entregue** (`e8101139`, migração `20261006182421`; REGISTRO `IMP-30`): cada linha reconhecida compara 24 campos entre a base, o AnarBib e o arquivo, seis veredictos, nada aplicado; cálculo por páginas a partir da tela; valores do AnarBib mascarados para um registro fora da visão. **06/10 — lote 4 entregue** (`44ae324a`, migração `20261006203239`; REGISTRO `IMP-31`): gesto «Preparar a atualização»; só a biblioteca única detentora recebe um rascunho, cópia do registro com os campos alterados só no arquivo; autorias e campos esvaziados mostrados, nunca aplicados; publicação recusada se o registro mudou, ficou compartilhado, sumiu, ou se a base ou a `bib_ref` mudaram. **07/10 — lote 5 entregue** (`2cb5fd31`, migração `20261007175456`; REGISTRO `IMP-32`): num registro compartilhado, o recálculo aponta uma divergência por campo, nunca escreve no catálogo; cada coordenação detentora a vê (aba «Divergências», faixa no registro); campo a campo, «Descartar» (a base avança) ou «Aplicar» (rascunho pré-preenchido publicado pela detentora). **08/10 — lote 6a entregue** (`e225f463`, migração `20261008173955`; REGISTRO `IMP-33`): cada exemplar do arquivo recebe um veredicto (novo, já presente, já em rascunho, sem código, deslocado, reetiquetado, código retomado); só «novo» cria um rascunho; o `expl_id` da 996 do PMB é lido como segundo sinal. **09/10 — lote 6b entregue** (`22a8a8f1`, migração `20261008231259`): cota e nota de um exemplar comparadas em três estados; o que mudou só no arquivo se aplica por um rascunho de exemplar submetido à revisão; nunca uma criação, nunca o exemplar de outra biblioteca. **10/10 — lote 7 em andamento** (retirados, `IMP-34`); constatações do cético registradas na ficha; a falha de visibilidade da circulação vai para **B38**. **10/10 — lote 7 entregue** (`1dad4713`, migração `20261010212650`; REGISTRO `IMP-34`): exemplares retirados como constatação reversível, propostos e revisados, nunca um exemplar comprometido, nunca apagados; só o arquivo atual da fonte propõe. **11/10 — lote 8 entregue, H21 a verificar** (`ead5f0fb`, migração `20261011090153`; REGISTRO `IMP-35`): reimportação PMB provada de ponta a ponta com fixtures produzidas pelo próprio PMB; nenhum duplicado, diferenças mostradas, conflito sinalizado; guia da primeira reimportação (fr, pt-BR). A fechar por decisão de Xavier.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Aproximar por `(biblioteca, identificador de origem)`; rascunhos `update` com a diferença mostrada na revisão; exemplares acrescentados/retirados; conflito se o registro foi editado no AnarBib — **nunca sobrescrever em silêncio**. **Decidido em 29/09 por Xavier (REGISTRE `IMP-26`)**: retomar um registro à mão é reservado às bibliotecas que o detêm; uma divergência num registro compartilhado é tratada por qualquer detentora, e descartá-la faz avançar a base; «retirado» é uma constatação reversível (não emprestável, oculto no OPAC, fora do export, nunca apagado), proposta só para exemplares vindos da mesma fonte, num arquivo MARC declarado «export completo»; H21 visa só a DIRA; `accept_duplicate` quer dizer «vinculado», nunca uma criação. **Plano em nove lotes** (0 a 8).
 
@@ -1331,26 +1283,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Conflito sinalizado, não sobrescrito.
 
 **Dependências.** Depois de **H20** e **H19**. Antes de qualquer migração.
-
-*Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
-
-#### H26 — O export de um catálogo grande não depende mais da memória de uma edge function
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** `export-catalog-lote` monta tudo em memória; `export-fonds-bundle` já é limitado (150 arquivos, 80 MB). Maior catálogo da rede: 2 184 detenções (26/09). Limite real não medida; tamanho da DIRA desconhecido. **Entregue em 28/09** (`8c80de27`): exportação paginada, arquivo montado pela tela Importações; 306 ms em produção para as 2 167 notícias da BTL. **Falta**: medir 10 000 e 50 000 notícias.
-
-*Verificado : 28/09 — migrações aplicadas pela CI (`created_by` vazio), `deployed-functions` = `8c80de27`.*
-
-**O que é.** Medir a limite com catálogo sintético (10 000, 50 000); se baixa, geração assíncrona (fila, arquivo no Storage, link quando pronto).
-
-**Por que importa.** Um export que falha no dia em que a biblioteca quer sair vale menos que nenhum.
-
-**O que conta como terminado.**
-
-- Limite medida e escrita; além dela, export assíncrono testado.
-
-**Dependências.** Depois de **H24**. Tamanho da DIRA via **G15**.
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
 
@@ -1386,7 +1318,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 |---|---|---|---|
 | **I2** | Concluir a migração para a auto-hospedagem | `P1` | Aberto |
 | **I21** | O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil | `P1` | Aberto |
-| **I30** | Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api` | `P1` | A verificar |
 | **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
 | **I34** | Avisar quando a publicação do front falha (Deploy Pages não bloqueante) | `P1` | Aberto |
 
@@ -1434,28 +1365,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Bloqueia **I2**. O depósito terceiro e o segundo detentor pertencem à mesma conversa que **A1** (Bolonha).
 
 *Remissões : `claude/DECISION_herbesfolles_offre_confirmee_2026-09-07` · `claude/NOTE_sortie_services_etats_uniens_2026-09-05` · `claude/REPRISE_claude_code_PR28_revoke_anon_2026-09-06 (deploy/.env)`*
-
-#### I30 — Uma restauração devolve um banco que funciona: os direitos de `public` e os esquemas `private` e `api`
-
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : administração de sistemas, SQL / PostgreSQL
-
-**Estado.** Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção.
-
-**Por que importa.** Um backup se julga pela restauração: sem os direitos, o banco volta mudo ou aberto demais.
-
-**O que conta como terminado.**
-
-- Os direitos de `public` voltam idênticos à produção.
-- `private` e `api` estão num fluxo, ou o runbook diz e prova como são reconstruídos.
-- Uma restauração de ensaio em banco devolve os mesmos direitos e funções que a produção, com controle ferramentado.
-
-**Dependências.** Depois do **I29**. Vizinho do **B22**.
-
-*Remissões : `deploy/ops/anarbib-bg2.sh` · `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md` · `REGISTRE §BG2`*
 
 #### I32 — Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco
 
@@ -1533,7 +1442,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **K3** | Manter o registro público das contas | `P2` | Aberto |
 | **K7** | Conduzir a formação das duas coordenações BLMF até a autonomia | `P1` | Em curso |
 | **K8** | Terminar o texto de orientação sobre as ferramentas de bibliotecas militantes | `P2` | Aberto |
-| **K10** | Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs* | `P2` | A verificar |
 
 #### K1 — Fazer adotar a ata de criação do Fundo AnarBib
 
@@ -1647,26 +1555,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Ligado a **K5** e **H7**.
 
 *Remissões : `ORIENTATION_outils_bibliotheques_militantes_2026-08-26`*
-
-#### K10 — Três artigos prometidos ao *Monde libertaire*, um por mês — e um programa proposto à *Trous Noirs*
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : língua materna
-
-**Estado.** Sessão de 30/08: o e-mail a Monique e Serge (Radio Libertaire, *Trous Noirs*) escreve «Le Monde libertaire en publie trois articles dans les mois qui viennent, un par mois». **Não verificado**: nem a entrega do primeiro artigo, nem o envio do e-mail, nem a resposta. Nenhum item do backlog carregava esse compromisso.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Dizer aqui onde estão os três artigos (entregue, revisto, publicado) e se o e-mail saiu; depois manter o ritmo — um artigo por mês é uma dívida que se vê.
-
-**Por que importa.** Uma promessa feita a um jornal militante compromete o projeto tanto quanto um deploy: lê-se nos números em que o artigo falta.
-
-**O que conta como terminado.**
-
-- Três datas de publicação, ou uma renegociação escrita do ritmo.
-
-**Dependências.** Vizinho de **K5**; sem dependência técnica.
-
-*Remissões : `session Cowork « Monde libertaire article publication », 30/08/2026`*
 
 ---
 
@@ -1983,6 +1871,11 @@ CI verde. |
 | E38 | 2026-10-12 | A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado. **Terceira entrega, 12/10 às 14h52, a pedido de Xavier depois do fechamento** (`4dfbaa47`, migração `20261012121812`): em lista plana, o aproximado encontra também as fichas **sem autoridade ligada** — a porta INVOKER `api.catalog_author_book_ids_v1` (regra de `catalog_works_v1`, teto 501; além disso, o caminho de `60ffe977` continua). «Goldmn» 18 → 19 fichas, visto na tela sem conta. Front publicado por um commit vazio (`e752798d`) depois de um 503 do git-pages (**I34**). Falta o olhar de Xavier sobre esta sequência. |
 | J12 | 2026-10-12 | **Fechado em 12/10 com provas, os dois critérios cumpridos — seis dias antes do prazo de `DOC-GLB-1`.** *(1)* A v18 e o v16 de 02/07 estão em `docs/GLB/` desde `8fdbc0d0` (13h09), o INDEX os nomeia, o elo já não falta; o adendo de 27/05 traz agora a data no nome (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, decisão de Xavier). *(2)* Os três códigos estão no REGISTRO v0.84: `DOC-TIERS-1` (uma prova por um terceiro conta em dobro, o fechamento diz «exercido por um terceiro»), `DOC-MESURE-1` (um número contado desde um instante traz a data do seu último reset), `DOC-MESURE-2` (uma fixture em produção não é uso; a etiquetagem mecânica é `B39`); as duas convenções estão escritas em «Como ler este documento», e `B36` já aplica a segunda. Decisões de Xavier de 12/10, sobre quatro perguntas postas na leitura da v18. |
 | B40 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier (opção mista), os dois critérios cumpridos.** *(1)* `DOC-SURFACE-1` no REGISTRO (v0.85): uma função `api` sem chamador e fechada a todos os papéis se apaga; uma superfície dormente só se guarda se uma spec datada a reclamar. *(2)* **Sete apagadas** pela migração `20261012111851` (`107d9ccc`, aplicada pela CI): `attach_exemplar`, `clear_loan_return_schedule`, `schedule_loan_return`, `mark_loan_return_missed`, `refuse_pickup_slot`, `conv_controle_qualite`, `conv_controle_resumo`; **duas mantidas fechadas à chave** para `G9` (`fn_cartography_create_entry`, `fn_cartography_toggle_public`). Antes do DROP: `prosrc` dos quatro esquemas, visões, policies, triggers, crons e repositório relidos — 0 chamador; a lista fechada T12 (aberturas a `anon`) não continha nenhuma. Um arquivo `_rollback_` recria as sete como estavam. Suítes realinhadas e verdes. A conta do GLB v19: 199 funções `api`, 12 → 5 sem chamador. |
+| H26 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos no banco.** Limite medido e escrito no REGISTRO `IMP-24`; exportação assíncrona provada (28/09). |
+| H33 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier.** « Aproximar » 200 × 25 em 1,6 s, promoção em 3,0 s (`1441c8e2`). Uma medida a 9,1 s sob carga de CI: **nota mantida** — reduzir a página de promoção se `T08` ficar vermelho. A publicação de um lote grande é **H34**. |
+| I30 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, sobre o veredicto do dia.** Direitos de `public` idênticos; `private` e `api` no fluxo longo e inteiros; controlo instrumentado (`restore-test` repõe os direitos, compara a impressão e nomeia o que difere, `5939637b`). Primeiro restore-test real em 12/10: quatro defeitos corrigidos no dia. Única diferença: os objetos das sete migrações implantadas desde o dump. |
+| C29 | 2026-10-12 | **Fechado em 12/10: visto na tela por Xavier, conectado — os quatro lotes conformes.** Lista por biblioteca na ficha, criação sem sair da ficha, cota alterada num gesto, cartão e bloco antigos desaparecidos. |
+| K10 | 2026-10-12 | **Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*. |
 
 ---
 
@@ -2014,4 +1907,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 57 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
