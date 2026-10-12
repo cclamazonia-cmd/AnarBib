@@ -14,6 +14,12 @@
 --
 -- 06/10/2026 (20261006202320) : trois jumelles de T3 ne sont appelées que
 -- par des fonctions DEFINER ; fermées à la porte, gardées par T4.
+--
+-- 12/10/2026 (20261012111851, DOC-SURFACE-1, B40) : cinq des huit api fermées à clé sont
+-- SUPPRIMÉES (attach_exemplar, clear_loan_return_schedule, mark_loan_return_missed,
+-- refuse_pickup_slot, schedule_loan_return) ; les deux helpers réservés au rôle
+-- de service et les trois implémentations public restent. T1 et T2 comptent
+-- désormais cinq fermées et six murs ; T5 garde l'absence des cinq.
 
 DO $$
 DECLARE
@@ -23,14 +29,13 @@ DECLARE
   v_test_name text;
   v_liste text;
 BEGIN
-  -- T1 : les dix fermées à la porte du navigateur (get_remaining_renewals : voir T3)
-  v_test_name := 'T1 les dix fermées';
+  -- T1 : les cinq fermées à la porte du navigateur (get_remaining_renewals : voir T3)
+  v_test_name := 'T1 les cinq fermées';
   SELECT string_agg(n.nspname||'.'||p.proname, ', ') INTO v_liste
   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE ((n.nspname = 'api' AND p.proname IN (
-           'attach_exemplar','clear_loan_return_schedule','get_due_date_for_loan',
-           'get_library_circulation_policy_rules_ui',
-           'mark_loan_return_missed','refuse_pickup_slot','schedule_loan_return'))
+           'get_due_date_for_loan',
+           'get_library_circulation_policy_rules_ui'))
      OR (n.nspname = 'public' AND p.proname IN (
            'fn_v2_schedule_emprestimo_return','fn_v2_clear_emprestimo_return_schedule',
            'fn_v2_mark_emprestimo_return_missed')))
@@ -39,13 +44,11 @@ BEGIN
   IF v_liste IS NULL THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : encore ouvertes — ' || v_liste); END IF;
 
-  -- T2 : les onze existent toujours — les murs restent
-  v_test_name := 'T2 les onze existent';
+  -- T2 : les six existent toujours — les murs restent
+  v_test_name := 'T2 les six existent';
   SELECT string_agg(x.nsp||'.'||x.nom, ', ') INTO v_liste
-  FROM (VALUES ('api','attach_exemplar'),('api','clear_loan_return_schedule'),
-               ('api','get_due_date_for_loan'),('api','get_library_circulation_policy_rules_ui'),
-               ('api','get_remaining_renewals'),('api','mark_loan_return_missed'),
-               ('api','refuse_pickup_slot'),('api','schedule_loan_return'),
+  FROM (VALUES ('api','get_due_date_for_loan'),('api','get_library_circulation_policy_rules_ui'),
+               ('api','get_remaining_renewals'),
                ('public','fn_v2_schedule_emprestimo_return'),
                ('public','fn_v2_clear_emprestimo_return_schedule'),
                ('public','fn_v2_mark_emprestimo_return_missed')) x(nsp, nom)
@@ -99,6 +102,16 @@ BEGIN
   ) a;
   IF v_liste IS NULL THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || v_liste); END IF;
+
+  -- T5 : les cinq supprimées le 12/10 (DOC-SURFACE-1) n'existent plus dans api
+  v_test_name := 'T5 les cinq supprimées';
+  SELECT string_agg(p.proname, ', ') INTO v_liste
+  FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname = 'api'
+    AND p.proname IN ('attach_exemplar','clear_loan_return_schedule','mark_loan_return_missed',
+                      'refuse_pickup_slot','schedule_loan_return');
+  IF v_liste IS NULL THEN v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : encore présentes — ' || v_liste); END IF;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'CIRCULATION_SUPPLANTEE ECHEC : %/% — %', v_failed, v_passed + v_failed, array_to_string(v_failures, ' | ');

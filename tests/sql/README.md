@@ -26,8 +26,7 @@ Tests d'acceptation des wrappers `api.*` créés au paquet 19 + helper `fn_check
 - Section 4 : `api.return_loan_total` + `api.return_loan_partial` — 8 tests
 - Section 5 : `api.extend_loan_as_library` — 3 tests
 - Section 6 : `api.renew_my_loan` (ownership crucial) — 5 tests
-- Section 7 : `api.schedule_loan_return` + `api.clear_loan_return_schedule` — 6 tests
-- Section 8 : `api.mark_loan_return_missed` — 3 tests
+- Sections 7 et 8 : retirées le 12/10/2026 — `api.schedule_loan_return`, `api.clear_loan_return_schedule` et `api.mark_loan_return_missed` sont supprimées (DOC-SURFACE-1, B40) ; leur absence est gardée par `surface_morte_anon_fermee_tests.sql`
 
 **Types de tests** :
 - Rejet `auth` (28000) : appel anonyme

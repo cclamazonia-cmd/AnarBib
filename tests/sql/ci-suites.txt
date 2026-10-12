@@ -294,6 +294,8 @@ tests/sql/t1_accueil_collegial_tests.sql
 # trois wrappers de planification de retour sans aucun appelant ne sont plus
 # exécutables par anon ; depuis l'arbitrage du lot circulation (20260902103305)
 # ils sont fermés à authenticated aussi. Réf. 20260902092104.
+# 12/10/2026 (20261012111851, DOC-SURFACE-1, B40) : les trois sont supprimees ; la suite
+# garde leur absence et la presence des implementations public, fermees.
 tests/sql/surface_morte_anon_fermee_tests.sql
 
 # La carte se taille, elle ne s'efface qu'a la main (B20 lot cartographie,
@@ -307,6 +309,8 @@ tests/sql/cartographie_surface_taillee_tests.sql
 # conventions, 02/09/2026) : conv_controle_qualite / conv_controle_resumo
 # fermees a anon+authenticated ; l'instrument reste entier (vues private
 # presentes, postgres garde EXECUTE). Ref. 20260902100917.
+# 12/10/2026 (20261012111851, DOC-SURFACE-1, B40) : les deux fonctions api sont supprimees ;
+# les vues private restent, la console les lit directement.
 tests/sql/conventions_console_fermee_tests.sql
 
 # Une aile jamais ouverte se ferme a cle (B20 lot circulation, 02/09/2026) :
@@ -314,6 +318,8 @@ tests/sql/conventions_console_fermee_tests.sql
 # d'agendamento jamais servie, 0 ligne) fermees a anon+authenticated ; les
 # jumelles cablees (negociation de creneau, calcul d'echeance, flux brouillon)
 # gardees ouvertes, couples schema+nom explicites. Ref. 20260902103305.
+# 12/10/2026 (20261012111851, DOC-SURFACE-1, B40) : cinq des huit api supprimees ; les deux
+# helpers du role de service et les trois implementations public restent.
 tests/sql/circulation_couche_supplantee_tests.sql
 
 # Differer sans date, c'est classer — le solde du 2 septembre (B20, echeance
