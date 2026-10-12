@@ -1,0 +1,12 @@
+[Unit]
+Description=AnarBib VM — sauvegarde hebdomadaire des fichiers (volume Storage, sauf fond de carte)
+Documentation=file:/opt/anarbib/deploy/ops/vm/README.md
+After=docker.service
+Requires=docker.service
+OnFailure=anarbib-vm-sauvegarde-echec@%n.service
+
+[Service]
+Type=oneshot
+# Première passe = tout le volume ; les suivantes ne déplacent que le neuf.
+TimeoutStartSec=7200
+ExecStart=/opt/anarbib/deploy/ops/vm/anarbib-vm-sauvegarde.sh backup storage

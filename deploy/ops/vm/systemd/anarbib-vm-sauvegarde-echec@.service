@@ -1,0 +1,10 @@
+[Unit]
+Description=AnarBib VM — trace d'échec de %i
+
+[Service]
+Type=oneshot
+# Un échec laisse un drapeau lisible par qui se connecte à la machine ; la
+# supervision, elle, est en base : la sonde health-probe de l'instance ouvre
+# un incident et écrit aux admins quand le témoin de vie manque. systemd
+# détecte les erreurs, pas les silences — c'est la sonde qui voit les deux.
+ExecStart=/bin/sh -c 'mkdir -p /var/lib/anarbib-sauvegarde && printf "%%s %%s\n" "$(date -Is)" "%i" >> /var/lib/anarbib-sauvegarde/echecs.log'

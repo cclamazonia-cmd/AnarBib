@@ -1,0 +1,12 @@
+[Unit]
+Description=AnarBib VM — déclencheur de la sauvegarde hebdomadaire des fichiers (dimanche 04:30 Europe/Paris)
+
+[Timer]
+# Après le tir de la base du même jour (03:30) : les deux partagent un verrou,
+# le second attend le premier s'il n'a pas fini.
+OnCalendar=Sun *-*-* 04:30:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

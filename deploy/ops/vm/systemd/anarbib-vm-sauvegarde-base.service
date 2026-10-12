@@ -1,0 +1,12 @@
+[Unit]
+Description=AnarBib VM — sauvegarde quotidienne de la base (schéma, données, historique, Vault)
+Documentation=file:/opt/anarbib/deploy/ops/vm/README.md
+After=docker.service
+Requires=docker.service
+OnFailure=anarbib-vm-sauvegarde-echec@%n.service
+
+[Service]
+Type=oneshot
+# Un tir dure quelques minutes ; une heure borne un tir qui dérape (dépôt distant muet).
+TimeoutStartSec=3600
+ExecStart=/opt/anarbib/deploy/ops/vm/anarbib-vm-sauvegarde.sh backup base

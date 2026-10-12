@@ -1,0 +1,12 @@
+[Unit]
+Description=AnarBib VM — rétention et compactage mensuels du dépôt restic
+Documentation=file:/opt/anarbib/deploy/ops/vm/README.md
+After=docker.service
+OnFailure=anarbib-vm-sauvegarde-echec@%n.service
+
+[Service]
+Type=oneshot
+# Le prune ne tourne pas dans les tirs de sauvegarde (il rendrait leur durée
+# imprévisible) : il a son propre rendez-vous, comme dans la chaîne #BG2.
+TimeoutStartSec=10800
+ExecStart=/opt/anarbib/deploy/ops/vm/anarbib-vm-sauvegarde.sh prune

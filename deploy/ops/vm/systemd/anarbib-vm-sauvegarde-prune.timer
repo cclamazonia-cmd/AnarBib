@@ -1,0 +1,10 @@
+[Unit]
+Description=AnarBib VM — déclencheur mensuel du prune (le 1er, 05:30 Europe/Paris)
+
+[Timer]
+OnCalendar=*-*-01 05:30:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=AnarBib VM — déclencheur de la sauvegarde quotidienne de la base (03:30 Europe/Paris)
+
+[Timer]
+# Fuseau nommé : systemd gère l'heure d'été et d'hiver. Changer le fuseau si
+# l'instance est exploitée ailleurs. Persistent=true rattrape un tir manqué
+# (machine éteinte) au démarrage suivant.
+OnCalendar=*-*-* 03:30:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
