@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
-import { localizeError } from '@/lib/localizeError';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -11,8 +10,6 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { useParams } from 'react-router-dom';
 import { Button, Pill, Spinner, Skeleton } from '@/components/ui';
 import AppIcon from '@/components/ui/AppIcon';
-import { parseAddressText } from '@/lib/addressFormat';
-import Modal from '@/components/ui/Modal';
 import { useToast } from '@/contexts/ToastContext';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
@@ -20,14 +17,16 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import PanelOnboarding from '@/components/painel/PanelOnboarding';
 import { useSort } from './_shared';
-import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
-import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { usePanelHistorico } from './hooks/usePanelHistorico';
 import { usePanelEmprestimos } from './hooks/usePanelEmprestimos';
 import { construireTachesDuJour } from './dailyTasks';
 import { usePanelReservas } from './hooks/usePanelReservas';
 import { usePanelAcoes } from './hooks/usePanelAcoes';
+import { usePanelConsultas } from './hooks/usePanelConsultas';
+import { usePanelLeitor } from './hooks/usePanelLeitor';
+import ConsultaModals from './ConsultaModals';
+import PaymentModal from './PaymentModal';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
 const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
@@ -263,11 +262,6 @@ function PanelPageInner() {
 
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
-  // Paquet 27.A.4 (5.B) : modal Agender consulta avec date+heure+note.
-  const [scheduleTarget, setScheduleTarget] = useState(null);
-  const [scheduleForm, setScheduleForm] = useState({ date: '', startsAt: '', endsAt: '', note: '' });
-  const [scheduling, setScheduling] = useState(false);
-  const [scheduleError, setScheduleError] = useState('');
   // Fuseau horaire de la bibliothèque : la planification de consultation se fait
   // en heure-biblio (cohérent avec la validation backend fn_validate_consulta_
   // schedule_window). Chargé une fois depuis library_service_state pour l'afficher
@@ -291,62 +285,18 @@ function PanelPageInner() {
   // affichage transitoire en fuseau navigateur). Passe aux onglets + tableau de bord.
   const displayTz = consultationTz || 'America/Belem';
 
-  // Gerir leitor
-  const [readerLookup, setReaderLookup] = useState('');
-  const [readerProfile, setReaderProfile] = useState(null);
-  const [readerMsg, setReaderMsg] = useState('');
-  // CARD-LOCAL-1 : méta de correspondance (identité locale, biblio d'origine si repli)
-  const [readerMatchInfo, setReaderMatchInfo] = useState(null);
-  // State local du formulaire d'édition d'adresse, séparé de readerProfile.address
-  // pour éviter la boucle parse→format→parse à chaque frappe (qui mangeait les
-  // espaces de fin via .trim() dans parseAddressText). Initialisé/réinitialisé
-  // depuis readerProfile.address quand celui-ci change (cf. useEffect ci-dessous).
-  const [editAddrState, setEditAddrState] = useState({
-    line1: '', line2: '', unit: '', postal_code: '',
-    district: '', city: '', state_region: '', country: ''
-  });
-  // Feedback du clic « Enregistrer le profil », affiché DANS le formulaire
-  // d'édition (à côté du bouton) et non plus dans la zone globale qui
-  // se trouve hors viewport quand le formulaire est déplié.
-  const [editProfileMsg, setEditProfileMsg] = useState('');
-  const [restrictReason, setRestrictReason] = useState('');
-  // EA-10 (chantier D) : etat de restriction (local membership + global profile)
-  const [restrictionState, setRestrictionState] = useState(null);
-  const [restrictBusy, setRestrictBusy] = useState(false);
-  const [freezeReason, setFreezeReason] = useState('');
-
   // Cotisation (coordenador/administrador uniquement)
   // E.0 (paquet profils 19/05) : membership_enabled vient du LibraryContext.
   // Alias local conserve pour minimiser les modifications dans le reste du fichier.
   const membershipEnabled = membership_enabled;
-  const setMembershipEnabled = () => {}; // no-op (source de verite = contexte)
-  const [membershipRules, setMembershipRules] = useState([]);
-  const [membershipOverview, setMembershipOverview] = useState([]);
-  const [membershipFilter, setMembershipFilter] = useState('all'); // all, up_to_date, expired, never_paid
-  const [readerPayments, setReaderPayments] = useState([]);
-  const [paymentModal, setPaymentModal] = useState(null); // null ou { user_id, display_name, ... }
-  const [paymentDraft, setPaymentDraft] = useState(null);
-  // PATCH 07/05/2026 audit i18n : flag séparé pour la coloration erreur/succès
-  // (l'ancienne détection paymentMsg.startsWith('Erro') ne marchait qu'en pt-BR/fr)
-  const [paymentMsg, setPaymentMsg] = useState('');
-  const [paymentMsgIsError, setPaymentMsgIsError] = useState(false);
-  const [paymentSaving, setPaymentSaving] = useState(false);
-
-  // ── Synchronisation editAddrState ↔ readerProfile.address ──
-  // Quand on charge un·e nouveau·lle lecteur·rice, on (ré)initialise le state
-  // local d'édition d'adresse en parsant readerProfile.address. Et on remet
-  // à zéro le message de feedback local.
-  useEffect(() => {
-    if (readerProfile?.address !== undefined) {
-      setEditAddrState(parseAddressText(readerProfile.address));
-    } else {
-      setEditAddrState({
-        line1: '', line2: '', unit: '', postal_code: '',
-        district: '', city: '', state_region: '', country: ''
-      });
-    }
-    setEditProfileMsg('');
-  }, [readerProfile?.id]);
+  // E6 lot C : « Gérer un·e lecteur·rice » et la cotisation (recherche, restriction,
+  // règles, aperçu, paiement) vivent dans usePanelLeitor ; la modale de paiement dans PaymentModal.
+  const leitor = usePanelLeitor({ t, libraryId, isLibrarian, isCoordOrAdmin, membershipEnabled, tab });
+  const { readerLookup, setReaderLookup, readerProfile, setReaderProfile, readerMatchInfo, readerMsg, setReaderMsg,
+    editAddrState, setEditAddrState, editProfileMsg, setEditProfileMsg, restrictReason, setRestrictReason, restrictionState,
+    setRestrictionState, restrictBusy, setRestrictBusy, freezeReason, setFreezeReason, readerPayments, membershipRules, searchReader,
+    openPaymentModal, membershipFilter, setMembershipFilter, membershipOverview, getMembershipFilterCount, fmtMembershipStatus,
+    loadMembershipOverview } = leitor; // la modale de paiement lit le reste dans {...leitor}
 
   // ── Load ──────────────────────────────────────────────
 
@@ -417,227 +367,10 @@ function PanelPageInner() {
     toggleExpandedLoan, extendLoan, returnLoanItem, extendLoanItem }
     = usePanelEmprestimos({ t, loadLoans, notifyError });
 
-  // ── Consultation workflow ─────────────────────────────
-
-  // Paquet 27.A.3 (5.A) : migration vers wrapper api.advance_consulta (SECURITY INVOKER).
-  // scheduleParams optionnel : { startsAt, endsAt, timezone } pour stage 'consulta_agendada'.
-  async function setConsultaWorkflow(consultaId, lineNo, stage, note, scheduleParams, opts = {}) {
-    try {
-      const params = {
-        p_consulta_id: consultaId,
-        p_line_nos: [lineNo],
-        p_target_stage: stage,
-        p_workflow_note: note || null,
-      };
-      if (scheduleParams) {
-        params.p_consultation_starts_at = scheduleParams.startsAt || null;
-        params.p_consultation_ends_at = scheduleParams.endsAt || null;
-        params.p_consultation_timezone = scheduleParams.timezone || null;
-      }
-      const { data: rpcData, error } = await supabase.schema('api').rpc('advance_consulta', params);
-      if (error) throw error;
-      assertRpcOk(rpcData);
-      loadConsultas();
-    } catch (e) {
-      // opts.rethrow : laisse l'appelant (modal de planification) afficher inline
-      // le message précis du backend (fenêtre, durée, heures pleines, capacité…)
-      // au lieu d'un toast générique.
-      if (opts.rethrow) throw e;
-      notifyError(localizeError(e, t, 'panel.error.consultaWorkflow'), e);
-    }
-  }
-
-  // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
-  function openScheduleModal(consulta) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const yyyy = tomorrow.getFullYear();
-    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-    const dd = String(tomorrow.getDate()).padStart(2, '0');
-    setScheduleTarget(consulta);
-    setScheduleForm({ date: `${yyyy}-${mm}-${dd}`, startsAt: '14:00', endsAt: '15:00', note: '' });
-    setScheduleError('');
-  }
-
-  function closeScheduleModal() {
-    if (scheduling) return;
-    setScheduleTarget(null);
-    setScheduleError('');
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // B6 (15/05/2026) : modal d'annulation biblio avec note obligatoire
-  // Fix spec consultas v2.1 §6.2 / §8.1
-  // ═══════════════════════════════════════════════════════════
-  const [cancelTarget, setCancelTarget] = useState(null);
-  const [cancelForm, setCancelForm] = useState({ note: '' });
-  const [cancelError, setCancelError] = useState('');
-  const [cancelling, setCancelling] = useState(false);
-
-  function openCancelModal(consulta) {
-    setCancelTarget(consulta);
-    setCancelForm({ note: '' });
-    setCancelError('');
-  }
-
-  function closeCancelModal() {
-    if (cancelling) return;
-    setCancelTarget(null);
-    setCancelError('');
-  }
-
-  async function handleCancelSubmit() {
-    if (!cancelTarget) return;
-    const note = cancelForm.note.trim();
-    setCancelError('');
-    if (note.length < 5) {
-      setCancelError(t({ id: 'panel.consultation.cancel.errorNoteTooShort' }));
-      return;
-    }
-    if (note.length > 300) {
-      setCancelError(t({ id: 'panel.consultation.cancel.errorNoteTooLong' }));
-      return;
-    }
-    setCancelling(true);
-    try {
-      await setConsultaWorkflow(
-        cancelTarget.consulta_id,
-        cancelTarget.line_no,
-        'cancelada_biblioteca',
-        note
-      );
-      setCancelTarget(null);
-      setCancelForm({ note: '' });
-    } catch (err) {
-      const msg = err?.message || '';
-      if (msg.includes('cancel_note_required')) {
-        setCancelError(t({ id: 'panel.consultation.cancel.errorBackend' }));
-      } else {
-        setCancelError(localizeError(err, t, 'panel.consultation.cancel.errorGeneric'));
-      }
-    } finally {
-      setCancelling(false);
-    }
-  }
-
-  async function handleScheduleSubmit() {
-    if (!scheduleTarget) return;
-    const { date, startsAt, endsAt, note } = scheduleForm;
-    setScheduleError('');
-    if (!date || !startsAt || !endsAt) {
-      setScheduleError(t({ id: 'panel.consultation.schedule.errorRequired' }));
-      return;
-    }
-    const todayStr = new Date().toISOString().slice(0, 10);
-    if (date < todayStr) {
-      setScheduleError(t({ id: 'panel.consultation.schedule.errorPastDate' }));
-      return;
-    }
-    if (endsAt && endsAt <= startsAt) {
-      setScheduleError(t({ id: 'panel.consultation.schedule.errorEndBeforeStart' }));
-      return;
-    }
-    if (note && note.length > 300) {
-      setScheduleError(t({ id: 'panel.consultation.schedule.errorNoteTooLong' }));
-      return;
-    }
-    const startsIso = new Date(`${date}T${startsAt}:00`).toISOString();
-    const endsIso = endsAt ? new Date(`${date}T${endsAt}:00`).toISOString() : null;
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null;
-    setScheduling(true);
-    try {
-      await setConsultaWorkflow(
-        scheduleTarget.consulta_id,
-        scheduleTarget.line_no,
-        'consulta_agendada',
-        note || null,
-        { startsAt: startsIso, endsAt: endsIso, timezone: tz },
-        { rethrow: true }
-      );
-      setScheduleTarget(null);
-    } catch (e) {
-      // Surface le message précis du backend (hors fenêtre, durée 1–4h, heures
-      // pleines/demies, capacité…) au lieu du toast générique. localizeError sans
-      // fallback : les messages délibérés (P0001) passent, le jargon est masqué.
-      setScheduleError(localizeError(e, t));
-    } finally {
-      setScheduling(false);
-    }
-  }
-
-  // ── Gerir leitor ─────────────────────────────────────
-
-  async function searchReader() {
-    if (!readerLookup.trim()) { setReaderMsg(t({id:'panel.loan.errorMissing'})); return; }
-    setReaderMsg(t({id:'common.searching'}));
-    try {
-      // CARD-LOCAL-1 : recherche par UUID / e-mail / identité locale, scopée à la
-      // biblio courante avec repli « toutes mes biblios » (biblio d'origine signalée).
-      const { data, error } = await supabase.rpc('fn_painel_search_reader', { p_lookup: normalizePublicId(readerLookup), p_library_id: libraryId });
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      const p = res?.profile || null;
-      if (!p) { setReaderMsg(t({id:'panel.reader.notFound'})); setReaderProfile(null); setReaderMatchInfo(null); return; }
-      setReaderProfile(p);
-      setReaderMatchInfo(res ? {
-        matchedVia: res.matched_via || null,
-        matchedLibraryId: res.matched_library_id || null,
-        matchedLibraryName: res.matched_library_name || null,
-        localIdentity: res.local_identity || null,
-        membershipStatus: res.membership_status || null, // Suite 7
-        isFallback: !!res.is_fallback,
-      } : null);
-      setReaderMsg('');
-      // EA-10 : charger l'etat de restriction (local + global)
-      try {
-        const { data: rs } = await supabase.schema('api').rpc('get_member_restriction', { p_user_id: p.id, p_library_id: libraryId });
-        setRestrictionState(rs?.ok ? rs : null);
-      } catch { setRestrictionState(null); }
-      // Charger l'historique de cotisation pour ce lecteur (tout staff peut gérer
-      // les cotisations au quotidien — décision gouvernance 10/06, sauf gel global).
-      if (membershipEnabled && isLibrarian) {
-        const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: p.id });
-        setReaderPayments(payments || []);
-      } else {
-        setReaderPayments([]);
-      }
-    } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: localizeError(e, t)})); setReaderProfile(null); setReaderMatchInfo(null); }
-  }
-
-  // ── Cotisation ───────────────────────────────────────
-
-  // Chargement de la config et des règles de cotisation
-  const loadMembershipConfig = useCallback(async () => {
-    if (!libraryId || !isLibrarian) return;
-    try {
-      // E.0 (paquet profils 19/05) : membership_enabled est deja expose par le
-      // LibraryContext. Plus de SELECT redondant ici. On charge uniquement les regles.
-      const { data: rules } = await supabase
-        .from('library_membership_rules')
-        .select('*')
-        .eq('library_id', libraryId)
-        .eq('is_active', true)
-        .order('display_order');
-      setMembershipRules(rules || []);
-    } catch (e) { console.warn('loadMembershipConfig:', e); }
-  }, [libraryId, isLibrarian]);
-
-  // Chargement de l'aperçu global (tableau Contribuições)
-  const loadMembershipOverview = useCallback(async () => {
-    if (!libraryId || !isCoordOrAdmin) return;
-    try {
-      const { data, error } = await supabase
-        .from('v_membership_overview_panel')
-        .select('*')
-        .eq('library_id', libraryId)
-        .order('display_name', { ascending: true });
-      if (error) throw error;
-      setMembershipOverview(data || []);
-    } catch (e) { console.warn('loadMembershipOverview:', e); }
-  }, [libraryId, isCoordOrAdmin]);
-
-  useEffect(() => { loadMembershipConfig(); }, [loadMembershipConfig]);
-  useEffect(() => { if (tab === 'contribuicoes') loadMembershipOverview(); }, [tab, loadMembershipOverview]);
+  // E6 lot C : le parcours des consultations (étape, planification, annulation
+  // avec motif) vit dans usePanelConsultas ; ses deux modales dans ConsultaModals.
+  const consultas = usePanelConsultas({ t, loadConsultas, notifyError });
+  const { setConsultaWorkflow, openScheduleModal, openCancelModal } = consultas;
 
   // VALID-C4 — compteur des inscriptions en attente (badge d'onglet Validações).
   // Rafraîchi au changement d'onglet (donc après une validation dans l'onglet).
@@ -652,94 +385,6 @@ function PanelPageInner() {
     })();
     return () => { cancelled = true; };
   }, [isLibrarian, libraryId, tab]);
-
-  // Ouvrir le modal de paiement
-  function openPaymentModal(target) {
-    if (membershipRules.length === 0) {
-      setPaymentMsg(t({ id: 'membership.payment.noRulesAvailable' }));
-      setPaymentMsgIsError(true);
-      return;
-    }
-    const firstRule = membershipRules[0];
-    setPaymentModal(target);
-    setPaymentDraft({
-      user_id: target.user_id,
-      rule_id: firstRule.id,
-      amount_paid: firstRule.amount_suggested ?? firstRule.amount_min ?? 0,
-      payment_method: 'cash',
-      paid_at: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
-      notes: '',
-    });
-    setPaymentMsg('');
-    setPaymentMsgIsError(false);
-  }
-
-  function closePaymentModal() {
-    setPaymentModal(null);
-    setPaymentDraft(null);
-    setPaymentMsg('');
-    setPaymentMsgIsError(false);
-  }
-
-  // Quand on change de règle, pré-remplir le montant
-  function onPaymentRuleChange(newRuleId) {
-    const rule = membershipRules.find(r => r.id === newRuleId);
-    setPaymentDraft(p => ({
-      ...p,
-      rule_id: newRuleId,
-      amount_paid: rule?.amount_suggested ?? rule?.amount_min ?? 0,
-    }));
-  }
-
-  async function submitPayment() {
-    if (!paymentDraft) return;
-    setPaymentSaving(true);
-    setPaymentMsg('');
-    setPaymentMsgIsError(false);
-    try {
-      const { data, error } = await supabase.rpc('fn_record_membership_payment', {
-        p_user_id: paymentDraft.user_id,
-        p_rule_id: paymentDraft.rule_id,
-        p_amount_paid: Number(paymentDraft.amount_paid) || 0,
-        p_payment_method: paymentDraft.payment_method,
-        p_paid_at: new Date(paymentDraft.paid_at + 'T12:00:00Z').toISOString(),
-        p_notes: paymentDraft.notes?.trim() || null,
-      });
-      if (error) throw error;
-      const result = Array.isArray(data) ? data[0] : data;
-      setPaymentMsg(t({ id: 'membership.payment.recorded' }, { from: result.valid_from, until: result.valid_until || '∞' }));
-      setPaymentMsgIsError(false);
-      // Refresh des données affichées
-      await loadMembershipOverview();
-      if (readerProfile && readerProfile.id === paymentDraft.user_id) {
-        const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: readerProfile.id });
-        setReaderPayments(payments || []);
-      }
-      // Fermer le modal après 1s pour que le user voie le message
-      setTimeout(() => closePaymentModal(), 1500);
-    } catch (e) {
-      setPaymentMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(e, t) }));
-      setPaymentMsgIsError(true);
-    } finally {
-      setPaymentSaving(false);
-    }
-  }
-
-  function fmtMembershipStatus(status, days) {
-    if (status === 'up_to_date') {
-      if (days != null && days <= 30) return { label: t({ id: 'membership.status.upToDate' }), variant: 'warn', detail: t({ id: 'membership.daysUntilExpiry.plural' }, { days }) };
-      return { label: t({ id: 'membership.status.upToDate' }), variant: 'ok', detail: null };
-    }
-    if (status === 'expired') return { label: t({ id: 'membership.status.expired' }), variant: 'danger', detail: null };
-    if (status === 'never_paid') return { label: t({ id: 'membership.status.neverPaid' }), variant: 'warn', detail: null };
-    if (status === 'lifetime') return { label: t({ id: 'membership.status.lifetime' }), variant: 'ok', detail: null };
-    return { label: t({ id: 'membership.status.notApplicable' }), variant: 'default', detail: null };
-  }
-
-  function getMembershipFilterCount(filter) {
-    if (filter === 'all') return membershipOverview.length;
-    return membershipOverview.filter(m => m.dues_status === filter).length;
-  }
 
   // ── Render ───────────────────────────────────────────
 
@@ -1268,109 +913,7 @@ function PanelPageInner() {
 
           </Suspense>
 
-          {/* ═══ Modal d'enregistrement de paiement ═══════════════ */}
-          {paymentModal && paymentDraft && (
-            <div onClick={closePaymentModal} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-              <div onClick={e => e.stopPropagation()} style={{ background: 'var(--brand-bg, #1a1a1a)', borderRadius: 12, padding: 20, maxWidth: 500, width: '100%', border: '1px solid rgba(255,255,255,.1)', maxHeight: '90vh', overflow: 'auto' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 6 }}>
-                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{t({ id: 'membership.payment.modalTitle' })}</h3>
-                  <button onClick={closePaymentModal} style={{ background: 'none', border: 'none', color: 'var(--brand-muted)', fontSize: '1.4rem', cursor: 'pointer', padding: 0, lineHeight: 1 }}>×</button>
-                </div>
-                <div style={{ fontSize: '.88rem', color: 'var(--brand-muted)', marginBottom: 12 }}>
-                  {t({ id: 'membership.payment.forReader' }, { name: paymentModal.display_name })}
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
-                    {t({ id: 'membership.payment.rule' })}
-                    <select
-                      value={paymentDraft.rule_id || ''}
-                      onChange={e => onPaymentRuleChange(e.target.value)}
-                      className="ab-painel-input"
-                      style={{ marginTop: 4 }}
-                    >
-                      {membershipRules.map(r => (
-                        <option key={r.id} value={r.id}>
-                          {r.name} — {r.amount_min > 0 ? t({id:'membership.rule.minAmount'}, {amount: r.amount_min, currency: r.currency}) : t({ id: 'membership.rule.freePrice' })}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
-                    {t({ id: 'membership.payment.amount' })}
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      value={paymentDraft.amount_paid}
-                      onChange={e => setPaymentDraft(p => ({ ...p, amount_paid: e.target.value }))}
-                      disabled={paymentDraft.payment_method === 'exemption'}
-                      className="ab-painel-input"
-                      style={{ marginTop: 4, opacity: paymentDraft.payment_method === 'exemption' ? 0.5 : 1 }}
-                    />
-                  </label>
-
-                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
-                    {t({ id: 'membership.payment.method' })}
-                    <select
-                      value={paymentDraft.payment_method}
-                      onChange={e => { const m = e.target.value; setPaymentDraft(p => ({ ...p, payment_method: m, amount_paid: m === 'exemption' ? 0 : p.amount_paid })); }}
-                      className="ab-painel-input"
-                      style={{ marginTop: 4 }}
-                    >
-                      <option value="cash">{t({ id: 'membership.method.cash' })}</option>
-                      <option value="transfer">{t({ id: 'membership.method.transfer' })}</option>
-                      <option value="card">{t({ id: 'membership.method.card' })}</option>
-                      <option value="check">{t({ id: 'membership.method.check' })}</option>
-                      <option value="in_kind">{t({ id: 'membership.method.in_kind' })}</option>
-                      <option value="exemption">{t({ id: 'membership.method.exemption' })}</option>
-                      <option value="other">{t({ id: 'membership.method.other' })}</option>
-                    </select>
-                  </label>
-
-                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
-                    {t({ id: 'membership.payment.paidAt' })}
-                    <input
-                      type="date"
-                      value={paymentDraft.paid_at}
-                      onChange={e => setPaymentDraft(p => ({ ...p, paid_at: e.target.value }))}
-                      className="ab-painel-input"
-                      style={{ marginTop: 4 }}
-                    />
-                  </label>
-
-                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
-                    {t({ id: 'membership.payment.notes' })}
-                    <textarea
-                      rows={2}
-                      value={paymentDraft.notes || ''}
-                      onChange={e => setPaymentDraft(p => ({ ...p, notes: e.target.value }))}
-                      className="ab-painel-input"
-                      placeholder={t({ id: 'membership.payment.notesPlaceholder' })}
-                      style={{ marginTop: 4, fontFamily: 'inherit', resize: 'vertical' }}
-                    />
-                  </label>
-
-                  {paymentMsg && (
-                    <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.85rem', background: paymentMsgIsError ? 'rgba(220,38,38,.1)' : 'rgba(74,222,128,.1)', color: paymentMsgIsError ? '#f87171' : '#4ade80' }}>
-                      {paymentMsg}
-                    </div>
-                  )}
-
-                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                    <Button onClick={submitPayment} disabled={paymentSaving}>
-                      {paymentSaving ? t({ id: 'common.saving' }) : t({ id: 'membership.payment.submit' })}
-                    </Button>
-                    <Button variant="secondary" onClick={closePaymentModal} disabled={paymentSaving}>
-                      {t({ id: 'common.cancel' })}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
+          <PaymentModal t={t} {...leitor} />
         </div>
       </div>
 
@@ -1383,127 +926,7 @@ function PanelPageInner() {
       />
 
       <Footer />
-          {/* Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta */}
-      <Modal
-        isOpen={!!scheduleTarget}
-        onClose={closeScheduleModal}
-        title={t({ id: 'panel.consultation.schedule.title' })}
-        size="medium"
-      >
-        <div className="ab-modal__body">
-          {scheduleTarget && (
-            <>
-              <p style={{ marginBottom: 8 }}>
-                <strong>{t({ id: 'panel.consultation.schedule.subtitle' })} :</strong>{' '}
-                {scheduleTarget.user_name || scheduleTarget.user_email || scheduleTarget.user_public_id || '?'}
-              </p>
-              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.schedule.book' })} : {scheduleTarget.titulo || scheduleTarget.bib_ref || '?'}
-              </p>
-            </>
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.schedule.dateLabel' })}
-              </span>
-              <input type="date" value={scheduleForm.date} onChange={(e) => setScheduleForm(f => ({ ...f, date: e.target.value }))} className="ab-input" disabled={scheduling} />
-            </label>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
-                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                  {t({ id: 'panel.consultation.schedule.startsAtLabel' })}
-                </span>
-                <input type="time" value={scheduleForm.startsAt} onChange={(e) => setScheduleForm(f => ({ ...f, startsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
-                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                  {t({ id: 'panel.consultation.schedule.endsAtLabel' })}
-                </span>
-                <input type="time" value={scheduleForm.endsAt} onChange={(e) => setScheduleForm(f => ({ ...f, endsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
-              </label>
-            </div>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.schedule.noteLabel' })}
-              </span>
-              <textarea value={scheduleForm.note} onChange={(e) => setScheduleForm(f => ({ ...f, note: e.target.value }))} placeholder={t({ id: 'panel.consultation.schedule.notePlaceholder' })} className="ab-input" rows={3} maxLength={300} disabled={scheduling} />
-              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.schedule.noteHint' })} ({scheduleForm.note.length}/300)
-              </span>
-            </label>
-            <p style={{ fontSize: '.75rem', color: 'var(--brand-muted)', marginTop: 4 }}>
-              {t({ id: 'panel.consultation.schedule.timezoneHint' }, { tz: consultationTz || 'America/Belem' })}
-            </p>
-            {scheduleError && (
-              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{scheduleError}</p>
-            )}
-          </div>
-        </div>
-        <div className="ab-modal__actions">
-          <Button variant="secondary" onClick={closeScheduleModal} disabled={scheduling}>
-            {t({ id: 'panel.consultation.schedule.cancelButton' })}
-          </Button>
-          <Button onClick={handleScheduleSubmit} disabled={scheduling}>
-            {scheduling ? t({ id: 'panel.consultation.schedule.submitting' }) : t({ id: 'panel.consultation.schedule.submitButton' })}
-          </Button>
-        </div>
-      </Modal>
-
-      {/* B6 (15/05/2026) : modal d'annulation biblio avec note obligatoire */}
-      <Modal
-        isOpen={!!cancelTarget}
-        onClose={closeCancelModal}
-        title={t({ id: 'panel.consultation.cancel.title' })}
-        size="medium"
-      >
-        <div className="ab-modal__body">
-          {cancelTarget && (
-            <>
-              <p style={{ marginBottom: 8 }}>
-                <strong>{t({ id: 'panel.consultation.cancel.subtitle' })} :</strong>{' '}
-                {cancelTarget.user_name || cancelTarget.user_email || cancelTarget.user_public_id || '?'}
-              </p>
-              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.cancel.book' })} : {cancelTarget.titulo || cancelTarget.bib_ref || '?'}
-              </p>
-            </>
-          )}
-          <p style={{ marginBottom: 12, fontSize: '.9rem' }}>
-            {t({ id: 'panel.consultation.cancel.description' })}
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.cancel.noteLabel' })}
-              </span>
-              <textarea
-                value={cancelForm.note}
-                onChange={(e) => setCancelForm({ note: e.target.value })}
-                placeholder={t({ id: 'panel.consultation.cancel.notePlaceholder' })}
-                className="ab-input"
-                rows={4}
-                maxLength={300}
-                disabled={cancelling}
-              />
-              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
-                {t({ id: 'panel.consultation.cancel.noteHint' })} ({cancelForm.note.length}/300, min 5)
-              </span>
-            </label>
-            {cancelError && (
-              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{cancelError}</p>
-            )}
-          </div>
-        </div>
-        <div className="ab-modal__actions">
-          <Button variant="secondary" onClick={closeCancelModal} disabled={cancelling}>
-            {t({ id: 'panel.consultation.cancel.backButton' })}
-          </Button>
-          <Button onClick={handleCancelSubmit} disabled={cancelling || cancelForm.note.trim().length < 5}>
-            {cancelling ? t({ id: 'panel.consultation.cancel.submitting' }) : t({ id: 'panel.consultation.cancel.confirmButton' })}
-          </Button>
-        </div>
-      </Modal>
+      <ConsultaModals t={t} consultationTz={consultationTz} {...consultas} />
     </PageShell>
   );
 }
