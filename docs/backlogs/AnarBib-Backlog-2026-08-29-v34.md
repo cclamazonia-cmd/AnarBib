@@ -1461,7 +1461,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
-| **J12** | Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1) | `P1` | Ouvert |
+| **J12** | Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1) | `P1` | En cours |
 
 #### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
 
@@ -1485,11 +1485,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### J12 — Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1)
 
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+`P1` Prioritaire · État : **En cours** · Charge : une soirée · Ce que ça demande : aucune compétence technique
 
 **État.** **Le Grand Livre blanc v18 (11/10/2026, 27 pages) le demande lui-même**, chapitres 12 et 14 bis : « le présent v18 doit entrer au dépôt le jour où il sert de référence, et ses deux précisions de doctrine qui méritent un code (tiers, compteurs) doivent le recevoir dans la semaine, faute de quoi la v18 enfreindrait la règle que la v17 a fait écrire » (DOC-GLB-1, REGISTRE, 02/09). Vérifié le 12/10 : `docs/GLB/` ne porte que le v17 ; `docs/GLB/archive/` porte la refonte du 29/05 ; `docs/INDEX.md` désigne le v17 comme référence vivante et dit du v16 du 2 juillet qu'il « reste à retrouver » — or il existe, `.docx` + `.pdf` du 02/07 à 21 h 06, dans le dossier des rapports du mainteneur, comme la v18 (`.docx` + `.pdf` du 11/10 à 23 h 39). Les trois règles à coder : *précision 1*, une épreuve par un tiers vaut plus qu'une épreuve par l'auteur, et la clôture doit distinguer « exercé » de « exercé par un tiers » ; *précision 2*, une mesure d'usage se publie avec la date d'origine de ses compteurs, ou ne se publie pas (scans d'index, exécutions de cron, relevés de sonde, échecs de transport) ; *ligne rouge v18*, aucune mesure d'usage qui compte une fixture (voir B39 pour l'étiquetage). Échéance : le 18/10.
 
-*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** (1) `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`), `docs/GLB/archive/Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`) ; `docs/INDEX.md` : v18 référence vivante, v17 en archive, le chaînon manquant retrouvé ; (2) REGISTRE : trois codes datés — l'épreuve par un tiers (DOC-TIERS-1), la mesure datée de ses compteurs (DOC-MESURE-1), la fixture hors mesure (DOC-MESURE-2) — chacun avec ce qu'il rend opposable ; (3) le backlog : la convention des clôtures dit « exercé par un tiers » quand c'est le cas, et le relevé « L'état réel » porte, pour chaque chiffre compté depuis un instant, la date d'origine de ses compteurs (B36 le fait déjà).
 

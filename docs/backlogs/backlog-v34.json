@@ -5957,7 +5957,7 @@
       "id": "J12",
       "d": "J",
       "p": "P1",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "aucune"
@@ -5998,10 +5998,16 @@
         "docs/REGISTRE_decisions.md",
         "docs/backlogs/backlog-v34.json"
       ],
-      "verif": {
-        "fr": "12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.",
-        "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
-      }
+      "verif": [
+        {
+          "fr": "12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.",
+          "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
+        },
+        {
+          "fr": "**12/10 à 13 h 09 — part 1 faite** (`8fdbc0d0`) : `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`, empreinte identique au fichier du mainteneur), le v16 du 2 juillet dans `docs/GLB/archive/` sous son nom daté (à côté du v16 du 27 mai, qui reste), le v17 en archive, `docs/INDEX.md` à jour (v18 référence vivante, cinquième lecture exacte, « chaînon retrouvé »). **Reste** : les trois codes au REGISTRE et les deux conventions du backlog (« exercé par un tiers » dans les clôtures ; la date d'origine des compteurs dans le relevé), avant le 18/10.",
+          "pt": "**12/10 às 13h09 — parte 1 feita** (`8fdbc0d0`): v18 em `docs/GLB/`, v16 de 2 de julho e v17 no arquivo, INDEX atualizado. **Resta**: os três códigos no REGISTRO e as duas convenções do backlog, antes de 18/10."
+        }
+      ]
     },
     {
       "id": "B39",

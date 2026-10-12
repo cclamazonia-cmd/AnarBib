@@ -1461,7 +1461,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-| **J12** | Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1) | `P1` | Aberto |
+| **J12** | Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1) | `P1` | Em curso |
 
 #### J10 — Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão
 
@@ -1485,11 +1485,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### J12 — Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1)
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
+`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : nenhuma competência técnica
 
 **Estado.** **O Grande Livro branco v18 (11/10/2026) o pede ele mesmo** (capítulos 12 e 14 bis): entrar no repositório no dia em que serve de referência, e suas duas precisões de doutrina (terceiro, contadores) receberem código na semana (DOC-GLB-1). Verificado em 12/10: `docs/GLB/` só tem a v17; o INDEX diz que a v16 de 2 de julho «resta a encontrar» — mas ela existe, `.docx` + `.pdf` de 02/07, na pasta de relatórios do mantenedor, como a v18. As três regras: a prova por um terceiro (e o fechamento distingue «exercido» de «exercido por um terceiro»); uma medida de uso se publica com a data de origem dos seus contadores; nenhuma medida de uso que conte uma fixture (B39). Prazo: 18/10.
 
-*Verificado : 12/10 — aberto na leitura detalhada da v18, a pedido de Xavier.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** (1) v18 e v16 em `docs/GLB/`, INDEX atualizado; (2) REGISTRO: três códigos datados; (3) backlog: os fechamentos dizem «exercido por um terceiro» quando é o caso, e o levantamento traz a data de origem dos contadores.
 
