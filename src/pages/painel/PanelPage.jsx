@@ -19,13 +19,15 @@ import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import PanelOnboarding from '@/components/painel/PanelOnboarding';
-import { fmtD, useSort } from './_shared';
+import { useSort } from './_shared';
 import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { usePanelHistorico } from './hooks/usePanelHistorico';
 import { usePanelEmprestimos } from './hooks/usePanelEmprestimos';
 import { construireTachesDuJour } from './dailyTasks';
+import { usePanelReservas } from './hooks/usePanelReservas';
+import { usePanelAcoes } from './hooks/usePanelAcoes';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
 const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
@@ -251,7 +253,6 @@ function PanelPageInner() {
   // Audit UX 25/05/2026 (P1) : les appels useSort sont deplaces plus bas,
   // apres la definition des listes ACTIVES, pour porter sur celles-ci.
   const [internalTasks, setInternalTasks] = useState([]);
-  const [selectedRes, setSelectedRes] = useState(new Set());
 
   const { historyTypes, historyData, historyHasMore, historyLoading, toggleHistoryType,
     loadHistorySection, refreshHistorico, historyPageSize, changeHistoryPageSize }
@@ -262,10 +263,6 @@ function PanelPageInner() {
 
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
-  const [resStage, setResStage] = useState('');
-  const [resNote, setResNote] = useState('');
-  const [resSchedule, setResSchedule] = useState('');
-  const [actionMsg, setActionMsg] = useState('');
   // Paquet 27.A.4 (5.B) : modal Agender consulta avec date+heure+note.
   const [scheduleTarget, setScheduleTarget] = useState(null);
   const [scheduleForm, setScheduleForm] = useState({ date: '', startsAt: '', endsAt: '', note: '' });
@@ -293,32 +290,6 @@ function PanelPageInner() {
   // avec repli America/Belem tant que consultationTz n'est pas charge (evite un
   // affichage transitoire en fuseau navigateur). Passe aux onglets + tableau de bord.
   const displayTz = consultationTz || 'America/Belem';
-
-  // PATCH 08/05/2026 paquet 3B : state pour le formulaire accordion de
-  // contre-proposition staff. Un seul form ouvert à la fois (la ligne
-  // qui matche reservaId+lineNo). null = aucune ligne en mode édition.
-  // Champs datetime et note pré-remplis depuis le créneau actuel quand on
-  // ouvre le form, mais éditables librement par le staff.
-  const [negotiationForm, setNegotiationForm] = useState(null);
-  // Forme attendue : { reservaId, lineNo, datetime: 'YYYY-MM-DDTHH:MM', note: '' }
-
-  // Ações
-  const [borrowerLookup, setBorrowerLookup] = useState('');
-  const [loanRefs, setLoanRefs] = useState('');
-  // Paquet 16 v2 (10/05/2026) : preview echeance + guard double-clic
-  const [loanPreview, setLoanPreview] = useState(null);
-  const [loanBusy, setLoanBusy] = useState(false);
-  const [loanMsg, setLoanMsg] = useState('');
-  const [returnId, setReturnId] = useState('');
-  const [returnSubIds, setReturnSubIds] = useState('');
-  const [returnMsg, setReturnMsg] = useState('');
-  // EA-03 (29/05/2026) : prévisualisation symétrique de la sortie d'emprunt
-  // pour les retours total et partiel. 2 phases (preview puis confirmation)
-  // avec clé de cohérence : la preview est invalidée dès que l'input change.
-  // Calcul de preview entièrement côté front à partir de `loans` (déjà chargé) :
-  // pas de RPC supplémentaire.
-  const [returnTotalPreview, setReturnTotalPreview] = useState(null);
-  const [returnPartialPreview, setReturnPartialPreview] = useState(null);
 
   // Gerir leitor
   const [readerLookup, setReaderLookup] = useState('');
@@ -434,510 +405,13 @@ function PanelPageInner() {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  // ── Reservation workflow ──────────────────────────────
-
-  // PATCH 07/05/2026 : migration de fn_v2_set_reserva_linhas_workflow vers les
-  // wrappers api.advance_reservation et api.mark_no_show (phase 2 spec).
-  // Le wrapper valide la matrice de transitions (saut illégal rejeté) et le rôle.
-  // La cible 'retirada_no_show' / 'nao_retirada' passe par le raccourci dédié.
-  // Le notifyEvent manuel est supprimé : le trigger DB s'en charge.
-
-  async function applyResWorkflow() {
-    if (!resStage) { setActionMsg(t({id:'panel.action.selectStep'})); return; }
-    const items = [...selectedRes];
-    if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
-    setActionMsg(t({id:'panel.action.applying'}));
-    try {
-      const isNoShow = (resStage === 'retirada_no_show' || resStage === 'nao_retirada');
-      for (const key of items) {
-        const [rid, lno] = key.split('-').map(Number);
-        let error;
-        if (isNoShow) {
-          ({ error } = await supabase.schema('api').rpc('mark_no_show', {
-            p_reserva_id: rid, p_line_no: lno,
-          }));
-        } else {
-          // Construction des options jsonb pour advance_reservation
-          const opts = {};
-          if (resNote) opts.note = resNote;
-          if (resSchedule) opts.pickup_scheduled_for = resSchedule;
-          ({ error } = await supabase.schema('api').rpc('advance_reservation', {
-            p_reserva_id: rid, p_line_no: lno,
-            p_target_stage: resStage,
-            p_options: opts,
-          }));
-        }
-        if (error) throw error;
-      }
-      setActionMsg(t({id:'panel.action.stepApplied'},{count:items.length}));
-      setSelectedRes(new Set());
-      loadReservas();
-    } catch (e) {
-      // L'API peut renvoyer transition_not_allowed, pickup_scheduled_for_required,
-      // target_stage_has_dedicated_rpc, etc. localizeError traduit le code.
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.consultaWorkflow')}));
-    }
-  }
-
-  async function cancelSelectedRes() {
-    const items = [...selectedRes];
-    if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
-    // PATCH 07/05/2026 : migration vers api.cancel_reservation_as_library.
-    // - Réservé aux coordenadores (coordenador_required si librarian)
-    // - Raison obligatoire ≥ 5 chars si stage avancé (retirada_agendada,
-    //   re-retirada_agendada, retirada_a_combinar, pronta_para_retirada).
-    //   Le wrapper renvoie reason_required_min_5_chars sinon.
-    // Le trigger DB cascade ensuite vers liberada_para_circulacao avec
-    // final_reason='cancelled_by_library'.
-    setActionMsg(t({id:'panel.action.cancelling'}));
-    try {
-      for (const key of items) {
-        const [rid, lno] = key.split('-').map(Number);
-        const { error } = await supabase.schema('api').rpc('cancel_reservation_as_library', {
-          p_reserva_id: rid, p_line_no: lno,
-          p_reason: resNote || null,
-        });
-        if (error) throw error;
-      }
-      setActionMsg(t({id:'panel.action.reservationsCancelled'},{count:items.length}));
-      setSelectedRes(new Set());
-      loadReservas();
-    } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
-    }
-  }
-
-  async function confirmSelectedPickup() {
-    const items = [...selectedRes];
-    if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
-    // PATCH 07/05/2026 : migration vers api.confirm_pickup_v1 (phase 2 spec).
-    // Restriction stricte : workflow_stage doit être pronta_para_retirada
-    // (le wrapper rejette pickup_only_from_pronta_para_retirada sinon).
-    // Conversion atomique réserve → emprunt. Retourne le loan_id (bigint).
-    // Le notifyEvent manuel est supprimé : trigger DB s'en charge.
-    // PATCH v2 07/05/2026 : affichage des loan_ids retournés pour confirmation visuelle
-    // immédiate au staff (preuve technique synchrone que la conversion a réussi,
-    // indépendamment de la livraison du mail).
-    setActionMsg(t({id:'panel.action.confirmingPickup'}));
-    try {
-      const loanIds = [];
-      for (const key of items) {
-        const [rid, lno] = key.split('-').map(Number);
-        const { data, error } = await supabase.schema('api').rpc('confirm_pickup_v1', {
-          p_reserva_id: rid, p_line_no: lno,
-          p_loan_options: {},
-        });
-        if (error) throw error;
-        if (data) loanIds.push(data);
-      }
-      setActionMsg(
-        loanIds.length
-          ? t({id:'panel.action.pickupConfirmedWithIds'}, { count: loanIds.length, loanIds: loanIds.join(', #') })
-          : t({id:'panel.action.pickupConfirmed'}, { count: items.length })
-      );
-      setSelectedRes(new Set());
-      loadReservas();
-      loadLoans();
-    } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
-    }
-  }
-
-  // ── Negociação simétrica de creneau (paquet 3B) ───────
-  // PATCH 08/05/2026 : 3 handlers pour la négociation symétrique côté staff.
-  // Tous routés via supabase.schema('api').rpc(...) — JAMAIS via la syntaxe
-  // foireuse rpc(name, params, { schema: 'api' }) qui appelle silencieusement
-  // public.* à la place.
-
-  // Handler 1 : staff confirme le créneau contre-proposé par le lecteur·rice
-  // → api.fn_confirm_pickup_slot_as_library (paquet 2 bis)
-  // Précondition côté DB : pickup_proposed_by = 'leitor'.
-  // Effet : transition vers pronta_para_retirada, pickup_proposed_by = NULL.
-  async function confirmReaderSlot(rid, lno) {
-    setActionMsg(t({id:'panel.action.confirmingReaderSlot'}));
-    try {
-      const { error } = await supabase.schema('api').rpc('fn_confirm_pickup_slot_as_library', {
-        p_reserva_id: rid,
-        p_line_no: lno,
-      });
-      if (error) throw error;
-      setActionMsg(t({id:'panel.action.readerSlotConfirmed'}));
-      // Si le form de contre-proposition était ouvert sur cette ligne, on le ferme
-      if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
-        setNegotiationForm(null);
-      }
-      loadReservas();
-    } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
-    }
-  }
-
-  // Handler 2 : ouvre le form accordion de contre-proposition pour une ligne
-  // donnée. Pré-remplit avec le créneau actuel converti en format
-  // datetime-local (YYYY-MM-DDTHH:MM) et une note vide.
-  function openCounterProposalForm(rid, lno, currentSlot) {
-    let prefilled = '';
-    if (currentSlot) {
-      try {
-        const d = new Date(currentSlot);
-        // toLocaleString avec format ISO-like pour datetime-local input
-        // (datetime-local attend "YYYY-MM-DDTHH:MM" en heure locale)
-        const pad = (n) => String(n).padStart(2, '0');
-        prefilled = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-      } catch { /* fallback string vide */ }
-    }
-    setNegotiationForm({ reservaId: rid, lineNo: lno, datetime: prefilled, note: '' });
-  }
-
-  // Handler 3 : envoie la contre-proposition staff (depuis le form ouvert)
-  // → api.fn_propose_pickup_slot_as_library (paquet 2)
-  // PATCH 09/05/2026 paquet 5b : sémantique v3.
-  // La RPC accepte aussi bien une première proposition (depuis solicitada
-  // ou em_preparacao) qu'une re-proposition (depuis retirada_a_combinar avec
-  // pickup_proposed_by='leitor'). Cible toujours retirada_a_combinar.
-  async function submitCounterProposal() {
-    if (!negotiationForm) return;
-    if (!negotiationForm.datetime) {
-      setActionMsg(t({id:'panel.action.counterProposalDatetimeRequired'}));
-      return;
-    }
-    setActionMsg(t({id:'panel.action.sendingCounterProposal'}));
-    try {
-      // datetime-local renvoie une string en heure LOCALE sans timezone.
-      // On la convertit en ISO via new Date(...) qui interprète en local.
-      const isoDatetime = new Date(negotiationForm.datetime).toISOString();
-      const { error } = await supabase.schema('api').rpc('fn_propose_pickup_slot_as_library', {
-        p_reserva_id: negotiationForm.reservaId,
-        p_line_no: negotiationForm.lineNo,
-        p_pickup_at: isoDatetime,
-        p_note: negotiationForm.note?.trim() || null,
-      });
-      if (error) throw error;
-      setActionMsg(t({id:'panel.action.counterProposalSent'}));
-      setNegotiationForm(null);
-      loadReservas();
-    } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
-    }
-  }
-
-  // Handler 4 : annulation par staff avec motif (réutilise le wrapper existant
-  // api.cancel_reservation_as_library, qui exige une raison ≥ 5 chars si stage
-  // avancé). Prompt minimal — UX modale future possible.
-  async function cancelWithReason(rid, lno) {
-    const reason = window.prompt(t({id:'panel.reservations.action.cancelReason.prompt'}));
-    if (!reason || reason.trim().length < 5) {
-      // Annulation par l'utilisateur ou raison trop courte (la DB rejetterait sinon)
-      return;
-    }
-    setActionMsg(t({id:'panel.action.cancelling'}));
-    try {
-      const { error } = await supabase.schema('api').rpc('cancel_reservation_as_library', {
-        p_reserva_id: rid,
-        p_line_no: lno,
-        p_reason: reason.trim(),
-      });
-      if (error) throw error;
-      setActionMsg(t({id:'panel.action.reservationsCancelled'},{count: 1}));
-      if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
-        setNegotiationForm(null);
-      }
-      loadReservas();
-    } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
-    }
-  }
-
-  // ── Ações: saída e devolução ──────────────────────────
-
-  async function registrarSaida() {
-    // Paquet 16 v2 (10/05/2026) : 2 phases (preview puis confirmation) + guard double-clic
-    // Paquet 19 (10/05/2026) : utilise api.create_loan_at_counter au lieu de fn_v2_create_emprestimo_by_holdings
-    if (loanBusy) return;
-    const refs = loanRefs.split(/[,;\s]+/).map(r => r.trim()).filter(Boolean);
-    if (!borrowerLookup.trim() || !refs.length) { setLoanMsg(t({ id: 'panel.loan.errorMissing' })); return; }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 2 : confirmation - on a deja une preview valide
-    // ════════════════════════════════════════════════════
-    if (loanPreview && loanPreview.refsKey === refs.join('|') && loanPreview.borrowerKey === borrowerLookup.trim()) {
-      setLoanBusy(true);
-      setLoanMsg(t({id:'panel.loan.registering'}));
-      try {
-        const { error } = await supabase.schema('api').rpc('create_loan_at_counter', {
-          p_user_id: loanPreview.borrowerId, p_holding_ids: loanPreview.holdingIds,
-        });
-        if (error) throw error;
-        setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: loanPreview.borrowerName }));
-        // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
-        // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
-        setBorrowerLookup(''); setLoanRefs('');
-        setLoanPreview(null);
-        loadLoans();
-      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.loan.errorMissing')})); }
-      finally { setLoanBusy(false); }
-      return;
-    }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 1 : preview - resoudre borrower + holdings + projection
-    // ════════════════════════════════════════════════════
-    setLoanBusy(true);
-    setLoanMsg(t({id:'panel.loan.resolving'}));
-    try {
-      // Resolve borrower — CARD-LOCAL : même résolution que « gerir leitor·a »
-      // (fn_painel_search_reader), qui accepte aussi l'identité locale (n°
-      // lecteur·rice) en plus de l'UUID / ID public / e-mail, scopée à la biblio
-      // courante avec repli « toutes mes biblios ». Renvoie { profile, … }.
-      const lookupRes = await supabase.rpc('fn_painel_search_reader', { p_lookup: normalizePublicId(borrowerLookup), p_library_id: libraryId });
-      if (lookupRes.error) throw lookupRes.error;
-      const lookupData = Array.isArray(lookupRes.data) ? lookupRes.data[0] : lookupRes.data;
-      const borrower = lookupData?.profile || null;
-      if (!borrower?.id) { setLoanMsg(t({ id: 'panel.loan.readerNotFound' })); return; }
-
-      // Resolve holdings
-      const resolveRes = await supabase.rpc('fn_v2_resolve_catalog_refs_for_current_user', { p_refs: refs });
-      if (resolveRes.error) throw resolveRes.error;
-      const holdingIds = (resolveRes.data || []).filter(r => r.matched && Number(r.session_holding_id) > 0).map(r => Number(r.session_holding_id));
-      if (!holdingIds.length) { setLoanMsg(t({ id: 'panel.loan.noValidRefs' })); return; }
-
-      // Get loan projection (paquet 16)
-      const bookIds = (resolveRes.data || []).filter(r => r.matched && Number(r.book_id) > 0).map(r => Number(r.book_id));
-      const projectionRes = await supabase.schema('api').rpc('get_batch_loan_projection', {
-        p_library_id: libraryId,
-        p_user_id: borrower.id,
-        p_book_ids: bookIds,
-        p_holding_ids: holdingIds,
-        p_quantity: holdingIds.length,
-        p_as_of_date: new Date().toISOString().slice(0, 10),
-      });
-      if (projectionRes.error) throw projectionRes.error;
-      const proj = Array.isArray(projectionRes.data) ? projectionRes.data[0] : projectionRes.data;
-
-      // Stocker la preview
-      setLoanPreview({
-        borrowerId: borrower.id,
-        borrowerName: borrower.first_name || borrower.email,
-        borrowerKey: borrowerLookup.trim(),
-        holdingIds,
-        refsKey: refs.join('|'),
-        dueDate: proj?.due_date,
-        ruleLabel: proj?.rule_label,
-        loanAllowed: proj?.loan_allowed !== false,
-      });
-
-      if (proj?.loan_allowed === false) {
-        setLoanMsg(t({id:'panel.loan.preview.notAllowed'}, { rule: proj.rule_label || '' }));
-      } else {
-        setLoanMsg(t({id:'panel.loan.preview.confirm'}, {
-          name: borrower.first_name || borrower.email,
-          count: holdingIds.length,
-          dueDate: fmtD(proj?.due_date) || '—',
-          rule: proj?.rule_label || '—',
-        }));
-      }
-    } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.loan.errorMissing')})); }
-    finally { setLoanBusy(false); }
-  }
-
-  // Paquet 16 v2 : annuler la preview pour reprendre la saisie
-  function cancelLoanPreview() {
-    setLoanPreview(null);
-    setLoanMsg('');
-  }
-
-  async function registrarDevolucaoTotal() {
-    const id = parseInt(returnId);
-    if (!id) { setReturnMsg(t({id:'panel.loan.enterLoanId'})); return; }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 2 : confirmation - preview valide et cohérente
-    // ════════════════════════════════════════════════════
-    if (returnTotalPreview && returnTotalPreview.id === id) {
-      setReturnMsg(t({id:'panel.loan.returning'}));
-      try {
-        // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
-        const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: id });
-        if (error) throw error;
-        setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
-        // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
-        // (via fn_v2_refresh_emprestimo_status_global) dispatch déjà l'event
-        // approprié selon la transition (devolvido OU devolvido_apos_parcial).
-        setReturnId('');
-        setReturnTotalPreview(null);
-        loadLoans();
-      } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
-      return;
-    }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 1 : preview - vérifier emprunt + lister items à clore
-    // ════════════════════════════════════════════════════
-    // EA-03 (29/05/2026) : on cherche l'emprunt dans `loans` (et non
-    // `activeLoans`) pour pouvoir distinguer "inconnu" (jamais existé / archivé)
-    // de "déjà totalement clôturé" (tous items à 'devolvido' mais encore dans
-    // le scope chargé). Si aucun item ouvert à clore, on rejette.
-    const matchingItems = loans.filter(l => l.emprestimo_id === id);
-    if (!matchingItems.length) {
-      setReturnMsg(t({id:'panel.return.total.notFound'},{id}));
-      return;
-    }
-    const openItems = matchingItems.filter(l => l.item_status === 'aberto');
-    if (!openItems.length) {
-      setReturnMsg(t({id:'panel.return.total.alreadyClosed'},{id}));
-      return;
-    }
-    const borrowerName = matchingItems[0].user_name
-      || matchingItems[0].user_email
-      || matchingItems[0].user_public_id
-      || '?';
-    setReturnTotalPreview({
-      id,
-      borrowerName,
-      itemCount: openItems.length,
-    });
-    setReturnMsg(t({id:'panel.return.total.preview.confirm'}, {
-      id,
-      borrower: borrowerName,
-      count: openItems.length,
-    }));
-  }
-
-  async function registrarDevolucaoParcial() {
-    const subIds = returnSubIds.split(/[,;\s]+/).map(s => s.trim()).filter(Boolean);
-    if (!subIds.length) { setReturnMsg(t({id:'panel.loan.enterSubIds'})); return; }
-
-    // Clé de cohérence : chaîne canonique des sub_ids (triée pour être
-    // insensible à l'ordre de saisie).
-    const subIdsKey = subIds.slice().sort().join('|');
-
-    // ════════════════════════════════════════════════════
-    // PHASE 2 : confirmation - preview valide et cohérente
-    // ════════════════════════════════════════════════════
-    if (returnPartialPreview && returnPartialPreview.subIdsKey === subIdsKey) {
-      setReturnMsg(t({id:'panel.loan.returning'}));
-      // BUG-retour-partiel-faux-succès (28/05/2026) : on conserve la
-      // défense en profondeur (filets backend + check data === 0) même
-      // si la preview a déjà filtré les cas mal formés / inapplicables.
-      // Cas couvert : un item passe en 'devolvido' entre la preview et
-      // la confirmation (course condition rare mais possible).
-      const rejected = [];
-      const ok = [];
-      for (const item of returnPartialPreview.okCandidates) {
-        try {
-          const { data, error } = await supabase.schema('api').rpc('return_loan_partial', {
-            p_emprestimo_id: item.empId, p_line_nos: [item.lineNo],
-          });
-          if (error) throw error;
-          if (data === 0 || data === null) {
-            rejected.push(item.sub_id);
-          } else {
-            ok.push(item.sub_id);
-          }
-        } catch (e) {
-          rejected.push(item.sub_id);
-        }
-      }
-      // Message consolidé reprenant les 3 catégories (pre-preview + post-RPC).
-      const parts = [];
-      if (ok.length) {
-        parts.push(t({id:'panel.return.partialRegistered'},{ids: ok.join(', ')}));
-      }
-      if (returnPartialPreview.malformed.length) {
-        parts.push(t({id:'panel.return.malformedSubIds'},{ids: returnPartialPreview.malformed.join(', ')}));
-      }
-      const allRejected = [
-        ...returnPartialPreview.preRejected.map(r => r.sub_id),
-        ...rejected,
-      ];
-      if (allRejected.length) {
-        parts.push(t({id:'panel.return.rejectedSubIds'},{ids: allRejected.join(', ')}));
-      }
-      setReturnMsg(parts.join(' · '));
-      if (ok.length) {
-        setReturnSubIds('');
-        setReturnPartialPreview(null);
-        loadLoans();
-      }
-      return;
-    }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 1 : preview - catégoriser les sub_ids
-    // ════════════════════════════════════════════════════
-    // EA-03 (29/05/2026) : tri front en 3 catégories AVANT exécution :
-    //   - malformed : parsing échoué (book_id au lieu de sub_id, etc.)
-    //   - preRejected : sub_id valide mais item inconnu ou déjà rendu
-    //   - okCandidates : sub_id valide ET item ouvert → à rendre
-    // Le même tri était fait après-coup côté front depuis le fix d'hier
-    // soir ; maintenant on l'expose en preview pour que l'utilisateur·rice
-    // puisse vérifier avant de confirmer.
-    const malformed = [];
-    const preRejected = [];
-    const okCandidates = [];
-    for (const subId of subIds) {
-      const [empId, lineNo] = subId.split('.').map(Number);
-      if (!empId || !lineNo) { malformed.push(subId); continue; }
-      const item = loans.find(l => l.emprestimo_id === empId && l.line_no === lineNo);
-      if (!item) {
-        preRejected.push({ sub_id: subId, reason: 'unknown' });
-      } else if (item.item_status !== 'aberto') {
-        preRejected.push({ sub_id: subId, reason: 'alreadyReturned' });
-      } else {
-        okCandidates.push({
-          sub_id: subId,
-          empId,
-          lineNo,
-          titulo: item.titulo || item.bib_ref || '—',
-        });
-      }
-    }
-
-    // Si rien à rendre : message d'erreur immédiat sans pré-loader de preview.
-    if (!okCandidates.length) {
-      const parts = [];
-      if (malformed.length) {
-        parts.push(t({id:'panel.return.malformedSubIds'},{ids: malformed.join(', ')}));
-      }
-      if (preRejected.length) {
-        parts.push(t({id:'panel.return.rejectedSubIds'},{ids: preRejected.map(r => r.sub_id).join(', ')}));
-      }
-      setReturnMsg(parts.join(' · '));
-      return;
-    }
-
-    // Au moins un ok candidate : on stocke la preview et on demande confirmation.
-    setReturnPartialPreview({
-      subIdsKey,
-      okCandidates,
-      malformed,
-      preRejected,
-    });
-    const parts = [
-      t({id:'panel.return.partial.preview.confirm'}, {
-        count: okCandidates.length,
-        ids: okCandidates.map(c => c.sub_id).join(', '),
-      }),
-    ];
-    if (malformed.length) {
-      parts.push(t({id:'panel.return.partial.preview.malformed'}, { count: malformed.length }));
-    }
-    if (preRejected.length) {
-      parts.push(t({id:'panel.return.partial.preview.rejected'}, { count: preRejected.length }));
-    }
-    setReturnMsg(parts.join(' · '));
-  }
-
-  // EA-03 (29/05/2026) : annulation symétrique de cancelLoanPreview, pour
-  // les deux flux de retour. Reset le state preview + efface le message.
-  function cancelReturnTotalPreview() {
-    setReturnTotalPreview(null);
-    setReturnMsg('');
-  }
-  function cancelReturnPartialPreview() {
-    setReturnPartialPreview(null);
-    setReturnMsg('');
-  }
+  // E6 lot B : la sortie et le retour au comptoir (deux phases, aperçu puis
+  // confirmation) vivent dans usePanelAcoes ; le crochet lit loans et rappelle loadLoans.
+  const { borrowerLookup, setBorrowerLookup, loanRefs, setLoanRefs, loanPreview, setLoanPreview, loanBusy, loanMsg,
+    returnId, setReturnId, returnSubIds, setReturnSubIds, returnMsg, registrarSaida, cancelLoanPreview,
+    registrarDevolucaoTotal, registrarDevolucaoParcial, returnTotalPreview, setReturnTotalPreview,
+    returnPartialPreview, setReturnPartialPreview, cancelReturnTotalPreview, cancelReturnPartialPreview }
+    = usePanelAcoes({ t, libraryId, loans, loadLoans });
 
   const { loteStatusFilter, setLoteStatusFilter, loteSortKey, setLoteSortKey, expandedLoans,
     toggleExpandedLoan, extendLoan, returnLoanItem, extendLoanItem }
@@ -1267,18 +741,6 @@ function PanelPageInner() {
     return membershipOverview.filter(m => m.dues_status === filter).length;
   }
 
-  // ── Toggle selection ─────────────────────────────────
-
-  function toggleRes(key) {
-    setSelectedRes(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; });
-  }
-  function toggleAllRes() {
-    // Audit UX 25/05/2026 (P1) : la selection « tout » porte sur les
-    // reservations ACTIVES affichees, pas sur le tableau brut.
-    if (selectedRes.size === activeRes.length) setSelectedRes(new Set());
-    else setSelectedRes(new Set(activeRes.map(r => `${r.reserva_id}-${r.line_no}`)));
-  }
-
   // ── Render ───────────────────────────────────────────
 
   // FIX BUG #1: Each tab now has a distinct hint key (was duplicating label).
@@ -1385,6 +847,12 @@ function PanelPageInner() {
   const sortRes = useSort(stageFilteredRes);
   const sortCon = useSort(stageFilteredCon);
   const sortLoans = useSort(activeLoans);
+  // E6 lot B : la sélection, le menu d'étape et les gestes sur les réservations
+  // vivent dans usePanelReservas ; le crochet lit activeRes (« tout sélectionner »).
+  const { selectedRes, resStage, setResStage, resNote, setResNote, resSchedule, setResSchedule, actionMsg,
+    negotiationForm, setNegotiationForm, applyResWorkflow, cancelSelectedRes, confirmSelectedPickup,
+    confirmReaderSlot, openCounterProposalForm, submitCounterProposal, cancelWithReason, toggleRes, toggleAllRes }
+    = usePanelReservas({ t, activeRes, loadReservas, loadLoans });
   // P3 : comptage des items actifs par etape, pour les pills de filtre.
   const resStageCounts = useMemo(() => {
     const m = new Map();
