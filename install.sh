@@ -330,16 +330,16 @@ t() {
     nl:mail_title)     echo "📧 Instelling van de e-maildienst voor de meldingen:" ;;
     el:mail_title)     echo "📧 Ρύθμιση της υπηρεσίας e-mail για τις ειδοποιήσεις:" ;;
 
-    fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail) — À VENIR, pas encore pris en charge" ;;
-    en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox) — COMING SOON, not supported yet" ;;
-    pt:mail_opt1)      echo "   [1] Servidor SMTP padrão (sua própria caixa de correio) — EM BREVE, ainda não suportado" ;;
-    es:mail_opt1)      echo "   [1] Servidor SMTP estándar (tu propio buzón) — POR VENIR, todavía no soportado" ;;
-    it:mail_opt1)      echo "   [1] Server SMTP standard (la tua casella di posta) — IN ARRIVO, non ancora supportato" ;;
-    de:mail_opt1)      echo "   [1] Standard-SMTP-Server (dein eigenes Postfach) — KOMMT NOCH, noch nicht unterstützt" ;;
-    ca:mail_opt1)      echo "   [1] Servidor SMTP estàndard (la teva bústia) — EN CAMÍ, encara no admès" ;;
-    eo:mail_opt1)      echo "   [1] Norma SMTP-servilo (via propra leterkesto) — VENONTA, ankoraŭ ne subtenata" ;;
-    nl:mail_opt1)      echo "   [1] Standaard SMTP-server (je eigen mailbox) — KOMT NOG, nog niet ondersteund" ;;
-    el:mail_opt1)      echo "   [1] Τυπικός διακομιστής SMTP (το δικό σου γραμματοκιβώτιο) — ΕΡΧΕΤΑΙ, δεν υποστηρίζεται ακόμη" ;;
+    fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail)" ;;
+    en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox)" ;;
+    pt:mail_opt1)      echo "   [1] Servidor SMTP padrão (sua própria caixa de correio)" ;;
+    es:mail_opt1)      echo "   [1] Servidor SMTP estándar (tu propio buzón)" ;;
+    it:mail_opt1)      echo "   [1] Server SMTP standard (la tua casella di posta)" ;;
+    de:mail_opt1)      echo "   [1] Standard-SMTP-Server (dein eigenes Postfach)" ;;
+    ca:mail_opt1)      echo "   [1] Servidor SMTP estàndard (la teva bústia)" ;;
+    eo:mail_opt1)      echo "   [1] Norma SMTP-servilo (via propra leterkesto)" ;;
+    nl:mail_opt1)      echo "   [1] Standaard SMTP-server (je eigen mailbox)" ;;
+    el:mail_opt1)      echo "   [1] Τυπικός διακομιστής SMTP (το δικό σου γραμματοκιβώτιο)" ;;
 
     fr:mail_opt2)      echo "   [2] Clé API Resend (service tiers clé en main)" ;;
     en:mail_opt2)      echo "   [2] Resend API key (third-party turnkey service)" ;;
@@ -352,67 +352,47 @@ t() {
     nl:mail_opt2)      echo "   [2] Resend API-sleutel (externe kant-en-klare dienst)" ;;
     el:mail_opt2)      echo "   [2] Κλειδί API Resend (εξωτερική έτοιμη υπηρεσία)" ;;
 
-    fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés) — À VENIR, pas encore prise en charge" ;;
-    en:mail_opt3)      echo "   [3] Local simulation (emails logged) — COMING SOON, not supported yet" ;;
-    pt:mail_opt3)      echo "   [3] Simulação local (e-mails registrados) — EM BREVE, ainda não suportada" ;;
-    es:mail_opt3)      echo "   [3] Simulación local (correos registrados) — POR VENIR, todavía no soportada" ;;
-    it:mail_opt3)      echo "   [3] Simulazione locale (e-mail registrate) — IN ARRIVO, non ancora supportata" ;;
-    de:mail_opt3)      echo "   [3] Lokale Simulation (E-Mails protokolliert) — KOMMT NOCH, noch nicht unterstützt" ;;
-    ca:mail_opt3)      echo "   [3] Simulació local (correus registrats) — EN CAMÍ, encara no admesa" ;;
-    eo:mail_opt3)      echo "   [3] Loka simulado (retleteroj protokolitaj) — VENONTA, ankoraŭ ne subtenata" ;;
-    nl:mail_opt3)      echo "   [3] Lokale simulatie (e-mails gelogd) — KOMT NOG, nog niet ondersteund" ;;
-    el:mail_opt3)      echo "   [3] Τοπική προσομοίωση (καταγραφή e-mail) — ΕΡΧΕΤΑΙ, δεν υποστηρίζεται ακόμη" ;;
+    fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés)" ;;
+    en:mail_opt3)      echo "   [3] Local simulation (emails logged)" ;;
+    pt:mail_opt3)      echo "   [3] Simulação local (e-mails registrados)" ;;
+    es:mail_opt3)      echo "   [3] Simulación local (correos registrados)" ;;
+    it:mail_opt3)      echo "   [3] Simulazione locale (e-mail registrate)" ;;
+    de:mail_opt3)      echo "   [3] Lokale Simulation (E-Mails protokolliert)" ;;
+    ca:mail_opt3)      echo "   [3] Simulació local (correus registrats)" ;;
+    eo:mail_opt3)      echo "   [3] Loka simulado (retleteroj protokolitaj)" ;;
+    nl:mail_opt3)      echo "   [3] Lokale simulatie (e-mails gelogd)" ;;
+    el:mail_opt3)      echo "   [3] Τοπική προσομοίωση (καταγραφή e-mail)" ;;
 
-    fr:mail_prompt)    printf "Votre choix [1/2/3] (seul 2 fonctionne aujourd'hui) : " ;;
-    en:mail_prompt)    printf "Your choice [1/2/3] (only 2 works today): " ;;
-    pt:mail_prompt)    printf "Sua escolha [1/2/3] (só a 2 funciona hoje): " ;;
-    es:mail_prompt)    printf "Tu elección [1/2/3] (hoy solo funciona la 2): " ;;
-    it:mail_prompt)    printf "La tua scelta [1/2/3] (oggi funziona solo la 2): " ;;
-    de:mail_prompt)    printf "Deine Wahl [1/2/3] (heute funktioniert nur die 2): " ;;
-    ca:mail_prompt)    printf "La teva tria [1/2/3] (avui només funciona la 2): " ;;
-    eo:mail_prompt)    printf "Via elekto [1/2/3] (hodiaŭ nur la 2 funkcias): " ;;
-    nl:mail_prompt)    printf "Jouw keuze [1/2/3] (vandaag werkt alleen 2): " ;;
-    el:mail_prompt)    printf "Η επιλογή σου [1/2/3] (σήμερα λειτουργεί μόνο η 2): " ;;
-    fr:mail_not_yet)   echo "Pas de transport configuré : les fonctions serveur ne savent envoyer que par Resend (option 2)."
-                       echo "   SMTP et simulation viendront avec le transport hybride (backlog F7). D'ici là, AUCUN courriel"
-                       echo "   ne partira et chaque envoi échouera avec « RESEND_API_KEY absente » — bruyamment, jamais en silence."
-                       echo "   Relancez ./install.sh avec une clé Resend quand vous en aurez une." ;;
-    en:mail_not_yet)   echo "No transport configured: the server functions can only send through Resend (option 2)."
-                       echo "   SMTP and simulation will come with the hybrid transport (backlog F7). Until then NO email"
-                       echo "   will leave, and each send will fail with 'RESEND_API_KEY absente' — loudly, never silently."
-                       echo "   Run ./install.sh again with a Resend key when you have one." ;;
-    pt:mail_not_yet)   echo "Nenhum transporte configurado: as funções do servidor só sabem enviar pelo Resend (opção 2)."
-                       echo "   SMTP e simulação virão com o transporte híbrido (backlog F7). Até lá NENHUM e-mail"
-                       echo "   sairá, e cada envio falhará com « RESEND_API_KEY absente » — de forma ruidosa, nunca em silêncio."
-                       echo "   Rode ./install.sh de novo com uma chave Resend quando tiver uma." ;;
-    es:mail_not_yet)   echo "Sin transporte configurado: las funciones del servidor solo saben enviar por Resend (opción 2)."
-                       echo "   SMTP y simulación llegarán con el transporte híbrido (backlog F7). Hasta entonces NINGÚN correo"
-                       echo "   saldrá, y cada envío fallará con « RESEND_API_KEY absente » — ruidosamente, nunca en silencio."
-                       echo "   Volvé a ejecutar ./install.sh con una clave Resend cuando tengas una." ;;
-    it:mail_not_yet)   echo "Nessun trasporto configurato: le funzioni del server sanno inviare solo tramite Resend (opzione 2)."
-                       echo "   SMTP e simulazione arriveranno con il trasporto ibrido (backlog F7). Fino ad allora NESSUNA e-mail"
-                       echo "   partirà, e ogni invio fallirà con « RESEND_API_KEY absente » — rumorosamente, mai in silenzio."
-                       echo "   Rilancia ./install.sh con una chiave Resend quando ne avrai una." ;;
-    de:mail_not_yet)   echo "Kein Transport konfiguriert: die Server-Funktionen können nur über Resend senden (Option 2)."
-                       echo "   SMTP und Simulation kommen mit dem hybriden Transport (Backlog F7). Bis dahin geht KEINE E-Mail"
-                       echo "   hinaus, und jeder Versand scheitert mit « RESEND_API_KEY absente » — laut, nie stillschweigend."
-                       echo "   Starte ./install.sh erneut mit einem Resend-Schlüssel, sobald du einen hast." ;;
-    ca:mail_not_yet)   echo "Cap transport configurat: les funcions del servidor només saben enviar per Resend (opció 2)."
-                       echo "   SMTP i simulació arribaran amb el transport híbrid (backlog F7). Fins llavors CAP correu"
-                       echo "   no sortirà, i cada enviament fallarà amb « RESEND_API_KEY absente » — sorollosament, mai en silenci."
-                       echo "   Torna a executar ./install.sh amb una clau Resend quan en tinguis una." ;;
-    eo:mail_not_yet)   echo "Neniu transporto agordita: la servilaj funkcioj scias sendi nur per Resend (opcio 2)."
-                       echo "   SMTP kaj simulado venos kun la hibrida transporto (backlog F7). Ĝis tiam NENIU retletero"
-                       echo "   foriros, kaj ĉiu sendo malsukcesos kun « RESEND_API_KEY absente » — laŭte, neniam silente."
-                       echo "   Relanĉu ./install.sh kun Resend-ŝlosilo kiam vi havos unu." ;;
-    nl:mail_not_yet)   echo "Geen transport ingesteld: de serverfuncties kunnen alleen via Resend versturen (optie 2)."
-                       echo "   SMTP en simulatie komen met het hybride transport (backlog F7). Tot dan vertrekt er GEEN e-mail,"
-                       echo "   en elke verzending mislukt met « RESEND_API_KEY absente » — luid, nooit in stilte."
-                       echo "   Start ./install.sh opnieuw met een Resend-sleutel zodra je er een hebt." ;;
-    el:mail_not_yet)   echo "Καμία μεταφορά δεν ρυθμίστηκε: οι συναρτήσεις του διακομιστή στέλνουν μόνο μέσω Resend (επιλογή 2)."
-                       echo "   Το SMTP και η προσομοίωση θα έρθουν με την υβριδική μεταφορά (backlog F7). Ως τότε ΚΑΝΕΝΑ e-mail"
-                       echo "   δεν θα φύγει, και κάθε αποστολή θα αποτυγχάνει με « RESEND_API_KEY absente » — θορυβωδώς, ποτέ σιωπηλά."
-                       echo "   Ξανατρέξε το ./install.sh με ένα κλειδί Resend μόλις αποκτήσεις ένα." ;;
+    fr:mail_prompt)    printf "Votre choix [1/2/3] : " ;;
+    en:mail_prompt)    printf "Your choice [1/2/3]: " ;;
+    pt:mail_prompt)    printf "Sua escolha [1/2/3]: " ;;
+    es:mail_prompt)    printf "Tu elección [1/2/3]: " ;;
+    it:mail_prompt)    printf "La tua scelta [1/2/3]: " ;;
+    de:mail_prompt)    printf "Deine Wahl [1/2/3]: " ;;
+    ca:mail_prompt)    printf "La teva tria [1/2/3]: " ;;
+    eo:mail_prompt)    printf "Via elekto [1/2/3]: " ;;
+    nl:mail_prompt)    printf "Jouw keuze [1/2/3]: " ;;
+    el:mail_prompt)    printf "Η επιλογή σου [1/2/3]: " ;;
+    fr:mail_not_yet)   echo "Aucun transport choisi : aucun courriel ne partira, et chaque envoi échouera bruyamment, jamais en silence."
+                       echo "   Relancez ./install.sh, ou remplissez deploy/functions.env (MAIL_TRANSPORT=smtp, resend ou mock)." ;;
+    en:mail_not_yet)   echo "No transport chosen: no email will go out, and every send will fail loudly, never silently."
+                       echo "   Run ./install.sh again, or fill in deploy/functions.env (MAIL_TRANSPORT=smtp, resend or mock)." ;;
+    pt:mail_not_yet)   echo "Nenhum transporte escolhido: nenhum e-mail sairá, e cada envio falhará ruidosamente, nunca em silêncio."
+                       echo "   Execute ./install.sh de novo, ou preencha deploy/functions.env (MAIL_TRANSPORT=smtp, resend ou mock)." ;;
+    es:mail_not_yet)   echo "Ningún transporte elegido: no saldrá ningún correo, y cada envío fallará ruidosamente, nunca en silencio."
+                       echo "   Volvé a ejecutar ./install.sh, o completá deploy/functions.env (MAIL_TRANSPORT=smtp, resend o mock)." ;;
+    it:mail_not_yet)   echo "Nessun trasporto scelto: nessuna e-mail partirà, e ogni invio fallirà rumorosamente, mai in silenzio."
+                       echo "   Rilancia ./install.sh, oppure compila deploy/functions.env (MAIL_TRANSPORT=smtp, resend o mock)." ;;
+    de:mail_not_yet)   echo "Kein Transport gewählt: keine E-Mail geht hinaus, und jeder Versand schlägt laut fehl, nie stumm."
+                       echo "   Starte ./install.sh erneut, oder fülle deploy/functions.env aus (MAIL_TRANSPORT=smtp, resend oder mock)." ;;
+    ca:mail_not_yet)   echo "Cap transport triat: no sortirà cap correu, i cada enviament fallarà sorollosament, mai en silenci."
+                       echo "   Torna a executar ./install.sh, o omple deploy/functions.env (MAIL_TRANSPORT=smtp, resend o mock)." ;;
+    eo:mail_not_yet)   echo "Neniu transporto elektita: neniu retletero foriros, kaj ĉiu sendo malsukcesos laŭte, neniam silente."
+                       echo "   Relanĉu ./install.sh, aŭ plenigu deploy/functions.env (MAIL_TRANSPORT=smtp, resend aŭ mock)." ;;
+    nl:mail_not_yet)   echo "Geen transport gekozen: er gaat geen e-mail uit, en elke verzending mislukt luid, nooit stil."
+                       echo "   Start ./install.sh opnieuw, of vul deploy/functions.env in (MAIL_TRANSPORT=smtp, resend of mock)." ;;
+    el:mail_not_yet)   echo "Δεν επιλέχθηκε μεταφορά: κανένα e-mail δεν θα φύγει, και κάθε αποστολή θα αποτύχει θορυβωδώς, ποτέ σιωπηλά."
+                       echo "   Τρέξε ξανά το ./install.sh, ή συμπλήρωσε το deploy/functions.env (MAIL_TRANSPORT=smtp, resend ή mock)." ;;
 
     fr:smtp_title)     echo "→ Configuration SMTP :" ;;
     en:smtp_title)     echo "→ SMTP configuration:" ;;
@@ -1168,19 +1148,35 @@ fi
 
 # Mail configuration (interactive, only if not already set)
 #
-# 16/09/2026 — l'installateur ne promet que ce que les fonctions serveur
-# tiennent. Les Edge Functions de main (_shared/transport/email.ts et les deux
-# copies dans notify-*) ne connaissent que Resend : sans RESEND_API_KEY, chaque
-# envoi lève « RESEND_API_KEY absente ». Le transport hybride (SMTP, simulation
-# sur MAIL_TRANSPORT=mock explicite) était la PR #29, fermée par son auteur le
-# 16/09 sans remplacement : backlog F7. Tant qu'il n'est pas dans main, les
-# options [1] et [3] sont annoncées « à venir », ne configurent rien, et le
-# disent ; la touche Entrée ne choisit rien non plus. Le bloc de saisie SMTP
-# reviendra avec F7 — ses libellés (smtp_*) sont gardés pour ça.
+# 12/10/2026 — les fonctions serveur (_shared/transport/email.ts, F7) lisent
+# trois transports : MAIL_TRANSPORT=smtp (SMTP_HOST…), resend (RESEND_API_KEY)
+# et mock (simulation explicite, courriels journalisés, DOC-SILENCE-1). Le menu
+# propose donc les trois et écrit celui qu'on choisit. Entrée seule ne choisit
+# rien : aucun courriel ne part, et on le dit. Le bloc est sauté si
+# functions.env porte déjà un transport (SMTP_HOST, RESEND_API_KEY, ou
+# MAIL_TRANSPORT=mock) — c'est ce que fait l'assistant graphique de l'ISO
+# Debian, qui remplit functions.env avant d'appeler ce script.
+# Les invites restent celles que cet assistant attend (pexpect) : « Votre
+# choix [1/2/3] », « Clé API Resend », « Adresse d'expédition vérifiée sur
+# Resend » — garde : src/tests/install-sh-transport-mail.test.js.
 CURRENT_SMTP="$(grep '^SMTP_HOST=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
 CURRENT_RESEND="$(grep '^RESEND_API_KEY=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
+CURRENT_TRANSPORT="$(grep '^MAIL_TRANSPORT=' deploy/functions.env 2>/dev/null | cut -d= -f2- || echo "")"
 
-if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
+# Pose CLÉ=VALEUR dans deploy/functions.env (remplace la ligne, ou l'ajoute).
+# La valeur passe par sed : on protège \, & et | (un mot de passe SMTP peut
+# contenir n'importe quoi).
+ecrire_fenv() {
+  local cle="$1" val
+  val="$(printf '%s' "$2" | sed -e 's/[\\&|]/\\&/g')"
+  if grep -q "^${cle}=" deploy/functions.env; then
+    sed -i "s|^${cle}=.*|${cle}=${val}|" deploy/functions.env
+  else
+    printf '%s=%s\n' "$cle" "$2" >> deploy/functions.env
+  fi
+}
+
+if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ] && [ "$CURRENT_TRANSPORT" != "mock" ]; then
   echo ""
   t mail_title
   t mail_opt1
@@ -1190,18 +1186,47 @@ if [ -t 0 ] && [ -z "$CURRENT_SMTP" ] && [ -z "$CURRENT_RESEND" ]; then
   read -r MAIL_CHOICE
 
   case "$MAIL_CHOICE" in
+    1)
+      echo ""
+      t smtp_title
+      CFG_SMTP_HOST=""
+      while [ -z "$CFG_SMTP_HOST" ]; do
+        t smtp_host; read -r CFG_SMTP_HOST
+      done
+      t smtp_port; read -r CFG_SMTP_PORT
+      [ -n "$CFG_SMTP_PORT" ] || CFG_SMTP_PORT="587"
+      t smtp_user; read -r CFG_SMTP_USER
+      t smtp_pass; read -rs CFG_SMTP_PASS; echo ""
+      t smtp_sender "$CFG_SMTP_USER"; read -r CFG_SMTP_SENDER
+      [ -n "$CFG_SMTP_SENDER" ] || CFG_SMTP_SENDER="$CFG_SMTP_USER"
+      CFG_SMTP_SECURE="false"
+      [ "$CFG_SMTP_PORT" = "465" ] && CFG_SMTP_SECURE="true"
+      ecrire_fenv MAIL_TRANSPORT smtp
+      ecrire_fenv SMTP_HOST     "$CFG_SMTP_HOST"
+      ecrire_fenv SMTP_PORT     "$CFG_SMTP_PORT"
+      ecrire_fenv SMTP_USER     "$CFG_SMTP_USER"
+      ecrire_fenv SMTP_PASS     "$CFG_SMTP_PASS"
+      ecrire_fenv SMTP_SECURE   "$CFG_SMTP_SECURE"
+      ecrire_fenv SENDER_EMAIL  "$CFG_SMTP_SENDER"
+      unset CFG_SMTP_PASS
+      succes "$(t ok_smtp "$CFG_SMTP_HOST:$CFG_SMTP_PORT")"
+      ;;
     2)
       echo ""
       t resend_title
       t resend_key;    read -r CFG_RESEND_KEY
       t resend_sender; read -r CFG_RESEND_SENDER
-      sed -i "s|^MAIL_TRANSPORT=.*|MAIL_TRANSPORT=resend|"           deploy/functions.env
-      sed -i "s|^RESEND_API_KEY=.*|RESEND_API_KEY=${CFG_RESEND_KEY}|" deploy/functions.env
-      sed -i "s|^SENDER_EMAIL=.*|SENDER_EMAIL=${CFG_RESEND_SENDER}|"  deploy/functions.env
+      ecrire_fenv MAIL_TRANSPORT resend
+      ecrire_fenv RESEND_API_KEY "$CFG_RESEND_KEY"
+      ecrire_fenv SENDER_EMAIL   "$CFG_RESEND_SENDER"
       succes "$(t ok_resend "$CFG_RESEND_SENDER")"
       ;;
+    3)
+      ecrire_fenv MAIL_TRANSPORT mock
+      succes "$(t ok_mock)"
+      ;;
     *)
-      # [1], [3], Entrée ou autre : rien n'est écrit, et on dit pourquoi.
+      # Entrée ou autre : rien n'est écrit, et on dit pourquoi.
       echo ""
       avertir "$(t mail_not_yet)"
       ;;

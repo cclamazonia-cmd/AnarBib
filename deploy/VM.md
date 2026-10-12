@@ -52,7 +52,7 @@ ignoré par git). Sans ces valeurs, l'application tourne, mais :
 
 | Variable | Sans elle | Où l'obtenir |
 |---|---|---|
-| `RESEND_API_KEY`, `SENDER_EMAIL` | **aucun courriel ne part** (inscriptions, invitations, alertes), et chaque envoi ouvre un incident — c'est voulu, `DOC-SILENCE-1` | un compte Resend ; `SENDER_EMAIL` sur un domaine dont on contrôle le DNS (SPF/DKIM). Une box résidentielle ne peut pas émettre en direct (port 25, pas de rDNS) |
+| `MAIL_TRANSPORT` + `RESEND_API_KEY`/`SENDER_EMAIL`, ou `SMTP_HOST`… | **aucun courriel ne part** (inscriptions, invitations, alertes), et chaque envoi ouvre un incident — c'est voulu, `DOC-SILENCE-1` | le menu `[1/2/3]` d'`install.sh` écrit le transport choisi : SMTP (votre serveur), Resend (compte tiers), ou `mock` (simulation : courriels journalisés, rien ne part). `SENDER_EMAIL` sur un domaine dont on contrôle le DNS (SPF/DKIM). Une box résidentielle ne peut pas émettre en direct (port 25, pas de rDNS) |
 | `ALTCHA_HMAC_SECRET` | inscription et formulaires publics refusés (anti-robot, échec fermé) | `openssl rand -hex 32` |
 | `WEBHOOK_SECRET_*`, `GAZETTE_CRON_SECRET` | les dépêches base → fonctions (événements, prêts, gazette) sont refusées | `openssl rand -hex 32` chacun ; **la même valeur doit exister côté base** (secrets du Vault, 21 en production, exportés par le flux de sauvegarde `long`). `install.sh` ne les pose pas aujourd'hui et `bootstrap.sh` ne fabrique que le sel : sur une instance neuve, c'est un point à éprouver (§ 7) ; après restauration, ce sont les valeurs du dump qui comptent |
 | `HEALTH_ALERT_CC`, `NETWORK_ADMIN_CC` | les alertes de la sonde (`health-probe`) ne vont qu'aux admins réseau en base | adresses de qui lit les alertes — pour la VM d'essai, ASR2026 |
