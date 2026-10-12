@@ -23,27 +23,29 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
 
 const page = src('pages/biblioteca/BibliotecaPage.jsx');
+const section = src('pages/biblioteca/RegulationSection.jsx');
 const membership = src('pages/biblioteca/MembershipSection.jsx');
 const deposit = src('pages/biblioteca/DepositSection.jsx');
 
 describe('cotisation et dépôt de garantie (E6, lot 3) — réellement montés', () => {
   it('sont rendus dans l’onglet regulation, la cotisation avant le dépôt', () => {
+    // E6 lot 5 (12/10) : l'onglet Règlement vit dans RegulationSection, montée sous tab==='regulation'
     const tab = page.indexOf("{tab==='regulation'");
-    const policies = page.indexOf('<PolicySetManager', tab);
-    const m = page.indexOf('<MembershipSection');
-    const d = page.indexOf('<DepositSection');
     const docs = page.indexOf("{tab==='documents'");
     expect(tab).toBeGreaterThan(-1);
+    expect(page.indexOf('<RegulationSection', tab)).toBeLessThan(docs);
+    const policies = section.indexOf('<PolicySetManager');
+    const m = section.indexOf('<MembershipSection');
+    const d = section.indexOf('<DepositSection');
     expect(m).toBeGreaterThan(policies);
     expect(d).toBeGreaterThan(m);
-    expect(d).toBeLessThan(docs);
-    expect(page.indexOf("import MembershipSection from './MembershipSection';")).toBeGreaterThan(-1);
-    expect(page.indexOf("import DepositSection from './DepositSection';")).toBeGreaterThan(-1);
+    expect(section.indexOf("import MembershipSection from './MembershipSection';")).toBeGreaterThan(-1);
+    expect(section.indexOf("import DepositSection from './DepositSection';")).toBeGreaterThan(-1);
   });
 
   it('reçoivent la fiche et leur liste de règles, avec les setters', () => {
-    const m = page.slice(page.indexOf('<MembershipSection'), page.indexOf('/>', page.indexOf('<MembershipSection')));
-    const d = page.slice(page.indexOf('<DepositSection'), page.indexOf('/>', page.indexOf('<DepositSection')));
+    const m = section.slice(section.indexOf('<MembershipSection'), section.indexOf('/>', section.indexOf('<MembershipSection')));
+    const d = section.slice(section.indexOf('<DepositSection'), section.indexOf('/>', section.indexOf('<DepositSection')));
     expect(m).toMatch(/libraryId=\{libraryId\} lib=\{lib\} setLib=\{setLib\}/);
     expect(m).toMatch(/rules=\{membershipRules\} setRules=\{setMembershipRules\} setMsg=\{setMsg\}/);
     expect(d).toMatch(/libraryId=\{libraryId\} lib=\{lib\} setLib=\{setLib\}/);

@@ -16,14 +16,10 @@ import ReadingNotesModeration from '@/components/biblioteca/ReadingNotesModerati
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import LibraryDigitalPolicySection from '@/components/library/LibraryDigitalPolicySection';
-import PolicySetManager from '@/components/library/PolicySetManager';
-import RegimeStateBox from '@/components/library/RegimeStateBox';
 import WorkspaceInspectorModal from '@/components/library/WorkspaceInspectorModal';
 import ExchangeProposalForm from '@/components/library/ExchangeProposalForm';
 import ExchangeRequestsList from '@/components/library/ExchangeRequestsList';
 import ExchangeFollowupPanel from '@/components/library/ExchangeFollowupPanel';
-import LibraryContactProfileSection from '@/components/library/LibraryContactProfileSection';
-import LibraryPublicContactSection from '@/components/library/LibraryPublicContactSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import LibraryNumberingSection from '@/components/library/LibraryNumberingSection'; /* E21 : serie de tombos et cote (15/09/2026) */
 import TeamPanel from '@/components/team/TeamPanel';
@@ -34,14 +30,14 @@ import StabilizedPartnershipsSection from '@/components/library/StabilizedPartne
 import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
 import IllSection from './IllSection';
 import TasksSection from './TasksSection';
-import MembershipSection from './MembershipSection';
-import DepositSection from './DepositSection';
 import CorrespondanceSection from './CorrespondanceSection'; /* G19 lot 2 : l'onglet Correspondance (08/10/2026) */
 import ReadLanguagesField from './ReadLanguagesField'; /* G19 lot 4 : les langues que l'équipe lit */
 import OpeningHoursSection from './OpeningHoursSection'; /* E6 lot 4 (12/10/2026) */
 import PublicFicheSection from './PublicFicheSection';
 import ReaderIdentitySection from './ReaderIdentitySection';
 import ReportsSection from './ReportsSection';
+import CommsSection from './CommsSection'; /* E6 lot 5 (12/10/2026) */
+import RegulationSection from './RegulationSection';
 import { fs, ls, bx } from './styles';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
@@ -53,14 +49,6 @@ import { TASK_STATES, taskStatusLabel } from '@/lib/taskStatus';
 // ILL_STATUS built inside component with t()
 // TASK_STATUS built inside component with t()
 
-// NOTIFICATION_FLAGS keys — labels resolved via t() inside the component
-const NOTIFICATION_FLAG_KEYS = [
-  'reservation_created', 'reservation_status', 'reservation_workflow', 'local_consultation',
-  'loan_lifecycle', 'loan_reminders', 'loan_overdue',
-  'profile_restriction', 'cotisation_payment_mail',
-  'admin_copy_reservations', 'admin_copy_loans', 'tech_alerts', 'task_alerts',
-];
-
 // Perf (12/06/2026) : onglets dont l'affichage consomme les groupes de donnees
 // « lourds » (membres, PEB, intercambios, taches). Leur 1re visite declenche
 // loadHeavy() ; les autres onglets se contentent du noyau charge au montage.
@@ -69,7 +57,7 @@ const HEAVY_TABS = ['ill', 'exchanges', 'tasks', 'reports'];
 export default function BibliotecaPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role, governance_mode, patchLibrary, libraryResolved } = useLibrary();
-  const { formatMessage: t, locale } = useIntl();
+  const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   // Rôle connu, OU résolution finie sans rôle (compte sans bibliothèque) :
   // sinon un tel compte chargeait sans fin (05/10/2026).
@@ -149,7 +137,6 @@ export default function BibliotecaPage() {
   const [refreshState, setRefreshState] = useState('idle');
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
-  const regFileRef = useRef(null);
 
   // ── Dados ───────────────────────────────────────────────
   const [lib, setLib] = useState(null);
@@ -354,21 +341,6 @@ export default function BibliotecaPage() {
   function setL(k,v){ setLib(p=>p?{...p,[k]:v}:p); }
   function setC(k,v){ setCommons(p=>p?{...p,[k]:v}:p); }
   function setSS(k,v){ setServiceState(p=>p?{...p,[k]:v}:p); }
-  function setMC(k,v){ setMailChannel(p=>p?{...p,[k]:v}:p); }
-
-  // Helper i18n : pour les seeds système (system_seed_key non-NULL), tente de
-  // traduire via i18n applicative ; sinon retombe sur le texte stocké en base.
-  // Usage : seedT(rule, 'rule_label', 'rule.label') → cherche
-  // `circulation.systemRule.{key}.label` ; si pas trouvée, retourne rule.rule_label.
-  function seedT(entity, fallbackField, i18nSubKey) {
-    if (entity?.system_seed_key) {
-      const fullKey = `circulation.${i18nSubKey.startsWith('set.') ? 'systemSet' : 'systemRule'}.${entity.system_seed_key}.${i18nSubKey.split('.').pop()}`;
-      const translated = t({ id: fullKey, defaultMessage: '__MISSING__' });
-      if (translated !== '__MISSING__') return translated;
-    }
-    return entity?.[fallbackField];
-  }
-  function setNP(k,v){ setNotifPolicy(p=>p?{...p,[k]:v}:p); }
 
   async function saveTable(table, data, filterCol = 'library_id') {
     setSaving(true); setMsg({ text: '', kind: '' });
@@ -397,118 +369,6 @@ export default function BibliotecaPage() {
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
-  }
-
-  async function saveComms() {
-    setSaving(true); setMsg({ text: '', kind: '' });
-    try {
-      // INTERRUPTEUR-UNIQUE (30/08/2026) : `email_delivery_mode` (library_commons)
-      // n'etait applique NULLE PART — ni par les fonctions notify-*, ni par register.
-      // L'ecran affichait donc un selecteur « Modo de envio » qui ne coupait rien,
-      // juste au-dessus des vrais champs du canal. Il est retire ; le seul
-      // commutateur est desormais celui de library_mail_channels (`active` pour
-      // couper, `delivery_mode` pour le transport), honore par transportDisabledReason
-      // dans _shared/context/library-mail-routing.ts.
-      if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email }).eq('library_id', libraryId);
-      // La RPC remplace la ligne ENTIERE : on lui repasse les champs que cet
-      // ecran n edite pas (transport_state, transport_channel, last_tested_at),
-      // sans quoi une sauvegarde des adresses effacerait le resultat du dernier
-      // test de transport.
-      if (mailChannel) {
-        const { error: mcErr } = await supabase.rpc('upsert_library_mail_channel', {
-          p_library_id: libraryId,
-          p_channel: {
-            delivery_mode: mailChannel.delivery_mode || 'platform_shared',
-            admin_notification_email: mailChannel.admin_notification_email || null,
-            weekly_report_email: mailChannel.weekly_report_email || null,
-            severe_alert_email: mailChannel.severe_alert_email || null,
-            transport_state: mailChannel.transport_state || 'not_tested',
-            transport_channel: mailChannel.transport_channel || null,
-            last_tested_at: mailChannel.last_tested_at || null,
-            active: mailChannel.active !== false,
-          },
-        });
-        if (mcErr) throw mcErr;
-      }
-      if (notifPolicy) {
-        // PATCH 08/05/2026 paquet 3A : sauvegarde aussi les 2 paramètres de
-        // négociation symétrique (toggle + timeout). Validation timeout côté
-        // frontend (la DB a aussi un CHECK 7..60 en défense en profondeur).
-        const timeoutDays = Number(notifPolicy.reservation_negotiation_timeout_days);
-        if (Number.isFinite(timeoutDays) && (timeoutDays < 7 || timeoutDays > 60)) {
-          throw new Error(t({ id: 'biblioteca.reservation.timeoutDays.outOfRange' }));
-        }
-        const flags = {}; NOTIFICATION_FLAG_KEYS.forEach(k => { flags[k + '_enabled'] = notifPolicy[k + '_enabled'] || false; });
-        await supabase.from('library_notification_policies').update({
-          ...flags,
-          reservation_allow_reader_counter_proposal: notifPolicy.reservation_allow_reader_counter_proposal ?? true,
-          reservation_negotiation_timeout_days: Number.isFinite(timeoutDays) ? timeoutDays : 21,
-          updated_by: user?.id
-        }).eq('library_id', libraryId);
-      }
-      setMsg({ text: t({ id: 'biblioteca.comms.savedOk' }), kind: 'ok' });
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
-    finally { setSaving(false); }
-  }
-
-  // ── Upload regimento ────────────────────────────────────
-  async function uploadRegimento() {
-    const file = regFileRef.current?.files?.[0];
-    if (!file) { setMsg({ text: 'Selecione um arquivo PDF.', kind: 'error' }); return; }
-    setSaving(true); setMsg({ text: t({id:'biblioteca.regulation.sending'}), kind: 'info' });
-    try {
-      const slug = lib?.slug || 'library';
-      const path = `regimentos/${slug}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-      const { error: upErr } = await supabase.storage.from('library-regimentos-public').upload(path, file, { upsert: true });
-      if (upErr) throw upErr;
-      // FIX A.1 BUG #6: deactivate any existing active regimento before
-      // inserting the new one. There's a unique constraint
-      // uq_library_regulation_documents_one_active_per_kind that allows only
-      // one active document per kind per library.
-      await supabase.from('library_regulation_documents')
-        .update({ is_active: false })
-        .eq('library_id', libraryId)
-        .eq('doc_kind', 'regimento')
-        .eq('is_active', true);
-      // FIX BUG #3: 'publicado' is rejected by CHECK constraint; valid values are
-      // 'draft_only', 'published', 'archived'. Was breaking the upload silently.
-      const { error: insErr } = await supabase.from('library_regulation_documents').insert({
-        library_id: libraryId, doc_kind: 'regimento', publication_status: 'published',
-        is_active: true, storage_bucket: 'library-regimentos-public', storage_path_public: path,
-        version_label: t({ id: 'biblioteca.regulation.versionPrefix' }, { date: new Date().toLocaleDateString(locale) }),
-        created_by: user?.id,
-      });
-      if (insErr) throw insErr;
-      setMsg({ text: t({ id: 'biblioteca.regulation.published' }), kind: 'ok' });
-      regFileRef.current.value = '';
-      await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
-    finally { setSaving(false); }
-  }
-
-  // ── Retrait d'un règlement périmé ────────────────────────
-  // Archivage réversible par défaut ; suppression dure réservée aux brouillons
-  // jamais publiés (côté RPC). Jamais le règlement actif ni un doc référencé.
-  async function removeRegimento(doc) {
-    const isDraft = doc.publication_status === 'draft_only' && !doc.is_active;
-    const label = doc.version_label || String(doc.id);
-    const confirmMsg = isDraft
-      ? t({ id: 'biblioteca.regulation.removeConfirmDelete' }, { label })
-      : t({ id: 'biblioteca.regulation.removeConfirmArchive' }, { label });
-    if (!window.confirm(confirmMsg)) return;
-    setSaving(true); setMsg({ text: '', kind: '' });
-    try {
-      const { data, error } = await supabase.rpc('remove_library_regulation_document', { p_document_id: doc.id });
-      if (error) throw error;
-      if (data?.action === 'deleted' && Array.isArray(data.storage_paths) && data.storage_paths.length) {
-        // Suppression best-effort du PDF (le fichier peut déjà être absent).
-        try { await supabase.storage.from(data.storage_bucket || 'library-regimentos-public').remove(data.storage_paths); } catch { /* no-op */ }
-      }
-      setMsg({ text: t({ id: data?.action === 'deleted' ? 'biblioteca.regulation.deleted' : 'biblioteca.regulation.archived' }), kind: 'ok' });
-      await loadAll();
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setSaving(false); }
   }
 
   const logoUrl = commons?.logo_file_key ? `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/${commons.logo_file_key.includes('/')?commons.logo_file_key:`themes/${commons.logo_file_key}/logo-${commons.logo_file_key}.png`}` : null;
@@ -654,166 +514,18 @@ export default function BibliotecaPage() {
           <button className="cat-btn primary" onClick={saveIdentity} disabled={saving}>{saving?t({id:'common.saving'}):t({id:'biblioteca.identity.save'})}</button>
         </div>)}
 
-        {/* ═══ 2. Comunicações ══════════════════════════ */}
-        {tab==='comms' && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.comms.title' })}</h3>
-          {commons && <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.emailIdentity' })}</h4>
-            <div className="cat-book-grid">
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.displayName' })}</label><input type="text" value={commons.display_name||''} onChange={e=>setC('display_name',e.target.value)} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.sendEmail' })}</label><input type="email" value={commons.contact_email||''} onChange={e=>setC('contact_email',e.target.value)} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.replyEmail' })}</label><input type="email" value={commons.reply_to_email||''} onChange={e=>setC('reply_to_email',e.target.value)} style={fs} /></div>
-            </div>
-          </div>}
-          {mailChannel && <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.adminRecipients' })}</h4>
-            <div className="cat-book-grid">
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.adminEmail' })}</label><input type="email" value={mailChannel.admin_notification_email||''} onChange={e=>setMC('admin_notification_email',e.target.value)} style={fs} placeholder="admin@biblioteca.org" /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.weeklyEmail' })}</label><input type="email" value={mailChannel.weekly_report_email||''} onChange={e=>setMC('weekly_report_email',e.target.value)} style={fs} placeholder="equipe@biblioteca.org" /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.alertEmail' })}</label><input type="email" value={mailChannel.severe_alert_email||''} onChange={e=>setMC('severe_alert_email',e.target.value)} style={fs} placeholder="urgente@biblioteca.org" /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.transport' })}</label>
-                <select value={mailChannel.delivery_mode||'platform_shared'} onChange={e=>setMC('delivery_mode',e.target.value)} style={fs}>
-                  <option value="platform_shared">{t({ id: 'biblioteca.comms.transport.platform_shared' })}</option>
-                  <option value="platform_shared_local_reply">{t({ id: 'biblioteca.comms.transport.platform_shared_local_reply' })}</option>
-                  <option value="library_own_transport">{t({ id: 'biblioteca.comms.transport.library_own_transport' })}</option>
-                </select>
-              </div>
-              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={mailChannel.active!==false} onChange={e=>setMC('active',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.comms.channelActive'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.comms.channelActive.hint'})}</span></span></label></div>
-            </div>
-          </div>}
-          {/* EA-20 : editeur du profil de contact de la biblioteca
-              (library_contact_profiles), dans le composant separe
-              LibraryContactProfileSection. */}
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.contactProfile.title' })}</h4>
-            <LibraryContactProfileSection libraryId={libraryId} canEdit={isCoord} />
-          </div>
-          {/* Vitrine publique de contact (chantier carte ma bibliotheque, etape 2) :
-              coordonnees que la biblio choisit de montrer a SES lecteur-rices,
-              distinct du contact confidentiel ci-dessus. Composant auto-encadre. */}
-          <LibraryPublicContactSection libraryId={libraryId} canEdit={isCoord} />
-          {notifPolicy && <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.notifTypes' })}</h4>
-            <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap:6 }}>
-              {NOTIFICATION_FLAG_KEYS.map(k => (
-                <label key={k} style={{ display:'flex', gap:8, alignItems:'center', fontSize:'.88rem', cursor:'pointer', padding:'4px 0' }}>
-                  <input type="checkbox" checked={notifPolicy[k+'_enabled']||false} onChange={e=>setNP(k+'_enabled',e.target.checked)} />
-                  {t({ id: `notif.type.${k}`, defaultMessage: k.replace(/_/g, ' ') })}
-                </label>
-              ))}
-            </div>
-          </div>}
-          {/* PATCH 08/05/2026 paquet 3A : politique de négociation symétrique
-              des créneaux de retrait. Toggle pour autoriser/refuser les
-              contre-propositions de leitor(o/a/e)s + champ timeout (7..60 j,
-              padrão 21 j). Sauvegardés via saveComms() vers library_notification_policies. */}
-          {notifPolicy && <div style={bx}>
-            <h4 style={{ margin:'0 0 6px' }}>{t({ id: 'biblioteca.reservation.title' })}</h4>
-            <p style={{ fontSize:'.85rem', color:'var(--brand-muted)', margin:'0 0 14px' }}>
-              {t({ id: 'biblioteca.reservation.subtitle' })}
-            </p>
+        {/* ═══ 2. Comunicações (E6 lot 5 : CommsSection) ═══ */}
+        {tab==='comms' && (
+          <CommsSection libraryId={libraryId} isCoord={isCoord} user={user} commons={commons} setC={setC}
+            mailChannel={mailChannel} setMailChannel={setMailChannel} notifPolicy={notifPolicy} setNotifPolicy={setNotifPolicy} setMsg={setMsg} />
+        )}
 
-            <label style={{ display:'flex', gap:10, alignItems:'flex-start', cursor:'pointer', padding:'4px 0' }}>
-              <input
-                type="checkbox"
-                checked={notifPolicy.reservation_allow_reader_counter_proposal ?? true}
-                onChange={e => setNP('reservation_allow_reader_counter_proposal', e.target.checked)}
-                style={{ marginTop:3 }}
-              />
-              <span style={{ flex:1 }}>
-                <span style={{ fontSize:'.92rem', fontWeight:600 }}>
-                  {t({ id: 'biblioteca.reservation.allowCounterProposal' })}
-                </span>
-                <span style={{ display:'block', fontSize:'.82rem', color:'var(--brand-muted)', marginTop:3 }}>
-                  {t({ id: 'biblioteca.reservation.allowCounterProposal.hint' })}
-                </span>
-              </span>
-            </label>
-
-            <div className="cat-field" style={{ marginTop:14, maxWidth:280 }}>
-              <label style={ls}>{t({ id: 'biblioteca.reservation.timeoutDays' })}</label>
-              <input
-                type="number"
-                min={7}
-                max={60}
-                step={1}
-                value={notifPolicy.reservation_negotiation_timeout_days ?? 21}
-                onChange={e => {
-                  const n = parseInt(e.target.value, 10);
-                  setNP('reservation_negotiation_timeout_days', Number.isFinite(n) ? n : '');
-                }}
-                style={fs}
-              />
-              <span style={{ display:'block', fontSize:'.82rem', color:'var(--brand-muted)', marginTop:5 }}>
-                {t({ id: 'biblioteca.reservation.timeoutDays.hint' })}
-              </span>
-            </div>
-          </div>}
-          <button className="cat-btn primary" onClick={saveComms} disabled={saving}>{saving?t({id:'common.saving'}):t({id:'biblioteca.comms.save'})}</button>
-        </div>)}
-
-        {/* ═══ 3. Regimento e circulação ════════════════ */}
-        {tab==='regulation' && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.regulation.title' })}</h3>
-          {/* EA-06 (21/05/2026) : encart de lecture du regime.
-              Diagnostic synthetique du croisement jeu actif x texte actif. */}
-          <RegimeStateBox libraryId={libraryId} regulationDocs={regDocs} />
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.docs' })}</h4>
-            {regDocs.filter(doc => !doc.archived_at).map(doc => (
-              <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
-                <div>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||t({ id: 'biblioteca.regulation.versionFallback' }, { id: doc.id })}</div>
-                  <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                    {doc.doc_kind ? t({ id: `biblioteca.regulation.docKind.${doc.doc_kind}`, defaultMessage: doc.doc_kind }) : '—'}
-                    {' · '}
-                    {doc.publication_status ? t({ id: `biblioteca.regulation.pubStatus.${doc.publication_status}`, defaultMessage: doc.publication_status }) : '—'}
-                    {doc.is_active && <> · <span className="cat-pill ok" style={{ fontSize:'.65rem' }}>{t({ id: 'common.active' })}</span></>}
-                  </div>
-                </div>
-                <div style={{ display:'flex', gap:8, alignItems:'center', flexShrink:0 }}>
-                  {doc.storage_path_public && <a href={`${SUPABASE_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
-                  {isCoord && !doc.is_active && (
-                    <button type="button" className="cat-btn secondary" disabled={saving}
-                      onClick={() => removeRegimento(doc)}
-                      title={t({ id: 'biblioteca.regulation.removeHint' })}
-                      style={{ fontSize:'.82rem', padding:'5px 12px', color:'var(--danger, #e06666)' }}>
-                      {t({ id: 'biblioteca.regulation.remove' })}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            <div style={{ marginTop:12, display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
-              <label style={{ display:'inline-block', padding:'8px 16px', borderRadius:8, background:'var(--brand-panel-bg)', border:'1px solid rgba(255,255,255,.15)', cursor:'pointer', fontSize:'.88rem', fontWeight:600 }}>
-                {t({ id: 'biblioteca.regulation.choosePdf' })}
-                <input type="file" accept=".pdf,application/pdf" ref={regFileRef} style={{ display:'none' }} />
-              </label>
-              <button className="cat-btn primary" onClick={uploadRegimento} disabled={saving} style={{ fontSize:'.88rem' }}>
-                {saving ? t({ id: 'biblioteca.regulation.uploading' }) : t({ id: 'biblioteca.regulation.uploadNew' })}
-              </button>
-            </div>
-          </div>
-          {/* EA-05 (21/05/2026) : gestionnaire de jeux de regles de circulation.
-              Remplace l'editeur inline mono-jeu par PolicySetManager, qui
-              gere tous les jeux (draft/active/archived) + leurs regles via RPC. */}
-          <PolicySetManager
-            libraryId={libraryId}
-            canEdit={isCoord}
-            regulationDocs={regDocs}
-            seedT={seedT}
-          />
-
-          {/* ─── Cotisation associative (E6 lot 3 : MembershipSection) ─── */}
-          <MembershipSection libraryId={libraryId} lib={lib} setLib={setLib}
-            rules={membershipRules} setRules={setMembershipRules} setMsg={setMsg} />
-
-          {/* ─── Dépôt de garantie (DEPOT-1/6 ; E6 lot 3 : DepositSection) ───
-              Opt-in strict par biblio : OFF par défaut → rien n'apparaît
-              au comptoir / dans /conta / dans les rapports. */}
-          <DepositSection libraryId={libraryId} lib={lib} setLib={setLib}
-            rules={depositRules} setRules={setDepositRules} setMsg={setMsg} />
-        </div>)}
+        {/* ═══ 3. Regimento e circulação (E6 lot 5 : RegulationSection) ═══ */}
+        {tab==='regulation' && (
+          <RegulationSection libraryId={libraryId} isCoord={isCoord} user={user} lib={lib} setLib={setLib} regDocs={regDocs}
+            membershipRules={membershipRules} setMembershipRules={setMembershipRules} depositRules={depositRules} setDepositRules={setDepositRules}
+            setMsg={setMsg} onChanged={loadAll} />
+        )}
 
         {/* ═══ 4. Documentos e relações externas ═══════ */}
         {tab==='documents' && (<div>
