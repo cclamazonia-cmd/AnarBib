@@ -56,6 +56,19 @@
 --     la liste contre la boucle d'avant (constat puis INSERT, un par un) ; un
 --     changement d'un seul côté le fait tomber (repris du banc du sceptique,
 --     12/10/2026).
+-- T11 (H33 bis, 12/10/2026) mesure : le recalcul de la comparaison et le
+--     constat des retraits, à 5 000 exemplaires (5 000 retirés réapparus),
+--     chacun < 8 s ; leurs constats passent par la liste
+--     (ingest.fn_h33_constater_exemplaires). T10 compare aussi cette liste
+--     sans naissance au constat scalaire (et se joue avant T07).
+-- T12 (H33 bis) plus aucune fonction n'appelle le constat scalaire, sauf lui ;
+--     la garde C17 bis lit le registre des tombos par sa clé
+--     (enable_seqscan = off, preuve par le compteur de parcours de l'index) ;
+--     la comparaison des notices est calculée une fois (MATERIALIZED).
+-- T13 (H33 bis) la levée, à la publication, constate en liste : celle d'un
+--     retiré réétiqueté se publie ; celle d'un retiré qui n'est plus « déjà
+--     là » ni réétiqueté est refusée, même quand sa ligne porte un autre
+--     exemplaire « déjà là ».
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'H33-RAPPROCHER-GROS-FICHIER OK : N/N'
 -- =====================================================================
@@ -342,6 +355,140 @@ BEGIN
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' ecart(s) | '||left(v_e, 600)); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ── T10 ─────────────────────────────────────────────────────────────
+  -- (H33 bis : joué avant les mesures, sur une table de brouillons encore
+  -- petite — le constat scalaire, sa référence, n'est plus d'aucun chemin
+  -- de l'écran et garde ses plans d'une table vide.)
+  -- L'étape « brouillons vivants » est écrite deux fois : dans le constat
+  -- (ingest.fn_h21_constat_exemplaire, un exemplaire) et dans l'EXECUTE de
+  -- ingest.fn_h33_juger_exemplaires (une liste). Ce tirage les tient d'accord :
+  -- la liste contre la boucle d'avant (le constat scalaire, puis l'INSERT de
+  -- chaque « nouveau » avant l'exemplaire suivant), annulée à chaque tirage.
+  v_t := 'T10 tirage deterministe : la liste rend ce que rendaient le constat et l''INSERT, un par un (bras 2 ne dans l''appel compris)';
+  DECLARE
+    w_L2 uuid := gen_random_uuid();
+    w_S bigint; w_S2 bigint; w_BK bigint; w_BK2 bigint; w_H bigint; w_BD bigint; w_BD2 bigint; w_BDx bigint;
+    w_codes text[] := ARRAY['A', 'B', 'C', ' C ', 'D', 'PA', 'PB', 'PC', 'XL', 'XR', NULL, '  '];
+    w_ids text[] := ARRAY['i1', 'i2', 'i3', 'pa', 'pb', 'xl', 'xr', NULL, ''];
+    w_it int; w_n int; w_k int; w_items jsonb; w_o jsonb; w_old jsonb[]; w_rang jsonb; w_j jsonb;
+    w_c jsonb; w_id bigint; w_eo jsonb; w_en jsonb;
+    w_ecarts int := 0; w_total int := 0; w_par int := 0; w_avant int := 0; w_bras2 int := 0; w_detail text := '';
+    w_lib uuid; w_src bigint; w_tgt uuid; w_bdc bigint; w_code text; w_iid text; w_impl boolean;
+    w_cst jsonb; w_total2 int := 0; w_ecarts2 int := 0;   -- H33 bis : la liste sans naissance
+  BEGIN
+    PERFORM setseed(0.4242);
+    v_t0 := clock_timestamp();
+    INSERT INTO public.libraries (id, slug, name, is_active, visibility_level) VALUES (w_L2, 'h33-t10-b', 'H33 T10 B', true, 'public');
+    INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
+    VALUES ('H33 T10 S', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO w_S;
+    INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
+    VALUES ('H33 T10 S2', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO w_S2;
+    INSERT INTO public.books (titulo, bib_ref) VALUES ('H33 T10 1', 'H33T10-1') RETURNING id INTO w_BK;
+    INSERT INTO public.books (titulo, bib_ref) VALUES ('H33 T10 2', 'H33T10-2') RETURNING id INTO w_BK2;
+    INSERT INTO public.book_holdings (book_id, library_id, loanable) VALUES (w_BK, v_lib, true) RETURNING id INTO w_H;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
+    VALUES ('H33T10-1', 'H33T10-E1', v_lib, w_H, 'XL', 'xl', w_S, 'ambos');
+    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice', v_lib, 'draft') RETURNING id INTO w_BD;
+    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice bis', v_lib, 'draft') RETURNING id INTO w_BD2;
+    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice B', w_L2, 'draft') RETURNING id INTO w_BDx;
+    INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, source_item_code, source_item_id, import_source_id)
+    VALUES ('create', 'draft', 'pending', v_lib, 'PA', 'zz', NULL), ('create', 'cancelled', 'pending', v_lib, 'PC', 'pc', w_S),
+           ('create', 'draft', 'pending', w_L2, 'B', 'i2', w_S);
+    INSERT INTO public.exemplar_drafts (action, status, label_status, book_draft_id, target_library_id, source_item_code, source_item_id, import_source_id)
+    VALUES ('create', 'ready', 'pending', w_BD, NULL, 'PB', 'pb', w_S), ('create', 'draft', 'pending', w_BDx, NULL, 'D', 'i3', w_S);
+
+    FOR w_it IN 1..80 LOOP
+      w_n := 4 + floor(random() * 14)::int;
+      w_items := '[]'::jsonb;
+      FOR w_k IN 1..w_n LOOP
+        w_lib := CASE WHEN random() < 0.08 THEN NULL ELSE v_lib END;
+        w_src := CASE WHEN random() < 0.15 THEN NULL WHEN random() < 0.1 THEN w_S2 ELSE w_S END;
+        w_tgt := CASE WHEN random() < 0.55 THEN v_lib WHEN random() < 0.8 THEN NULL ELSE w_L2 END;
+        w_bdc := CASE WHEN random() < 0.5 THEN NULL WHEN random() < 0.6 THEN w_BD WHEN random() < 0.5 THEN w_BD2 ELSE w_BDx END;
+        w_code := w_codes[1 + floor(random() * array_length(w_codes, 1))::int];
+        w_iid := w_ids[1 + floor(random() * array_length(w_ids, 1))::int];
+        w_impl := random() < 0.05;
+        w_items := w_items || jsonb_build_array(jsonb_build_object('lib', w_lib, 'src', w_src,
+                     'book', CASE WHEN random() < 0.5 THEN w_BK ELSE w_BK2 END,
+                     'code', CASE WHEN w_impl THEN NULL ELSE w_code END, 'item_id', CASE WHEN w_impl THEN NULL ELSE w_iid END,
+                     'implicite', w_impl, 'tgt', w_tgt, 'bd', w_bdc));
+      END LOOP;
+      -- H33 bis : le constat de la liste SANS naissance
+      -- (ingest.fn_h33_constater_exemplaires) rend, pour chacun, le constat
+      -- scalaire au même instant (rien d'inséré entre-temps)
+      w_cst := ingest.fn_h33_constater_exemplaires(w_items);
+      FOR w_k IN 1..w_n LOOP
+        w_total2 := w_total2 + 1;
+        w_c := CASE WHEN (w_items->(w_k - 1)->>'implicite')::boolean
+                    THEN jsonb_build_object('verdict', 'nouveau', 'implicite', true)
+                    ELSE ingest.fn_h21_constat_exemplaire((w_items->(w_k - 1)->>'lib')::uuid, (w_items->(w_k - 1)->>'src')::bigint,
+                           (w_items->(w_k - 1)->>'book')::bigint, w_items->(w_k - 1)->>'code', w_items->(w_k - 1)->>'item_id') END;
+        IF (w_cst->(w_k - 1)->>'k')::int <> w_k OR (w_cst->(w_k - 1)->'c') IS DISTINCT FROM w_c THEN
+          w_ecarts2 := w_ecarts2 + 1;
+          IF w_ecarts2 <= 2 THEN w_detail := w_detail || format(' [liste sans naissance, tirage %s, rang %s : scalaire %s | liste %s]', w_it, w_k, w_c, w_cst->(w_k - 1)->'c'); END IF;
+        END IF;
+      END LOOP;
+      -- la boucle d'avant : constat, puis INSERT de chaque « nouveau », annulés ensuite
+      w_old := '{}'; w_rang := '{}';
+      BEGIN
+        w_k := 0;
+        FOR w_o IN SELECT x FROM jsonb_array_elements(w_items) x LOOP
+          w_k := w_k + 1;
+          IF (w_o->>'implicite')::boolean THEN
+            w_c := jsonb_build_object('verdict', 'nouveau', 'implicite', true);
+          ELSE
+            w_c := ingest.fn_h21_constat_exemplaire((w_o->>'lib')::uuid, (w_o->>'src')::bigint, (w_o->>'book')::bigint,
+                                                    w_o->>'code', w_o->>'item_id');
+          END IF;
+          IF w_c->>'verdict' = 'nouveau' THEN
+            INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, book_draft_id,
+                                                source_item_code, source_item_id, import_source_id)
+            VALUES ('create', 'draft', 'pending', (w_o->>'tgt')::uuid, (w_o->>'bd')::bigint,
+                    nullif(btrim(w_o->>'code'), ''), nullif(btrim(w_o->>'item_id'), ''), (w_o->>'src')::bigint)
+            RETURNING id INTO w_id;
+            w_rang := w_rang || jsonb_build_object(w_id::text, w_k);
+          END IF;
+          w_old := w_old || w_c;
+        END LOOP;
+        RAISE EXCEPTION 'h33_t10_annuler';
+      EXCEPTION WHEN raise_exception THEN
+        IF SQLERRM <> 'h33_t10_annuler' THEN RAISE; END IF;
+      END;
+      -- la liste
+      w_j := ingest.fn_h33_juger_exemplaires(w_items);
+      FOR w_k IN 1..w_n LOOP
+        w_total := w_total + 1;
+        w_eo := w_old[w_k];
+        IF w_eo ? 'draft_id' AND w_rang ? (w_eo->>'draft_id') THEN
+          -- brouillon né dans l'appel : son rang dans la liste
+          w_eo := (w_eo - 'draft_id') || jsonb_build_object('par', (w_rang->>(w_eo->>'draft_id'))::int);
+          IF (w_items->(w_k - 1)->>'tgt') IS DISTINCT FROM (w_items->(w_k - 1)->>'lib') THEN w_bras2 := w_bras2 + 1; END IF;
+        ELSIF w_eo ? 'draft_id' THEN
+          w_avant := w_avant + 1;
+        END IF;
+        w_en := w_j->(w_k - 1)->'c';
+        IF w_j->(w_k - 1) ? 'par' THEN
+          w_en := w_en || jsonb_build_object('par', (w_j->(w_k - 1)->>'par')::int);
+          w_par := w_par + 1;
+        END IF;
+        IF (w_j->(w_k - 1)->>'k')::int <> w_k OR w_en IS DISTINCT FROM w_eo THEN
+          w_ecarts := w_ecarts + 1;
+          IF w_ecarts <= 2 THEN w_detail := w_detail || format(' [tirage %s, rang %s : avant %s | liste %s]', w_it, w_k, w_eo, w_en); END IF;
+        END IF;
+      END LOOP;
+    END LOOP;
+    v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    RAISE NOTICE 'H33-TIRAGE % exemplaires jugés, % écart(s) ; % « déjà en brouillon » nés dans l''appel (dont % par le bras 2), % d''avant l''appel ; liste sans naissance : % écart(s) sur % : % ms',
+      w_total, w_ecarts, w_par, w_bras2, w_avant, w_ecarts2, w_total2, round(v_ms);
+    -- le tirage doit avoir exercé les trois cas, sinon il ne prouve rien
+    IF w_ecarts = 0 AND w_ecarts2 = 0 AND w_total2 = w_total
+       AND w_total > 500 AND w_par > 20 AND w_bras2 > 5 AND w_avant > 20
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||w_ecarts||' ecart(s) sur '||w_total
+                                              ||', liste sans naissance '||w_ecarts2||' sur '||w_total2
+                                              ||' (par '||w_par||', bras 2 '||w_bras2||', avant '||w_avant||')'||w_detail); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   -- ── T07 ─────────────────────────────────────────────────────────────
   v_t := 'T07 mesure : Rapprocher 200 lignes x 25 exemplaires neufs, puis la page suivante, chacun < 8 s';
   DECLARE v_runm bigint; v_bm bigint[]; v_rows bigint[]; v_res jsonb; v_res2 jsonb; p int;
@@ -417,6 +564,67 @@ BEGIN
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms ; items='||coalesce(v_res->>'items_created', '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
+  -- ── T11 ─────────────────────────────────────────────────────────────
+  -- H33 bis (12/10/2026) : les lecteurs du constat passent par la liste
+  -- (ingest.fn_h33_constater_exemplaires). Un run neuf de la source (le
+  -- fichier actuel : les retraits ne se constatent que sur lui), 200 lignes
+  -- reconnues x 25 exemplaires, tous dans la bibliothèque et RETIRÉS ;
+  -- exemplar_drafts porte les 10 000 brouillons de T07. Le recalcul de la
+  -- comparaison (5 000 constats « déjà là ») et le constat des retraits
+  -- (5 000 retirés réapparus).
+  v_t := 'T11 mesure : recalcul et constat des retraits a 5 000 exemplaires (5 000 retires reapparus) < 8 s chacun';
+  DECLARE v_runm bigint; v_rows bigint[]; v_res jsonb; v_res2 jsonb; v_ms2 numeric; v_nrec int;
+  BEGIN
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
+    VALUES (v_src, v_lib, 'essai/h33r.iso', 'h33r.iso', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_runm;
+    WITH ins AS (
+      INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, normalized_payload, raw_payload, match_status, editorial_decision, proposed_book_id)
+      SELECT v_runm, r, 'H33R-' || r, 'H33 retraits ' || r,
+             jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', 'H33R-' || r || '-' || j,
+                                                                            'source_item_id', 'r' || r || '-' || j,
+                                                                            'call_number', 'R ' || j)) FROM generate_series(1, 25) j)),
+             '{"item_tag":"995"}'::jsonb, 'known_record', 'pending', b.id
+        FROM generate_series(1, 200) r
+        JOIN public.books b ON b.bib_ref = 'H33T-M-' || r
+      RETURNING id)
+    SELECT array_agg(id ORDER BY id) INTO v_rows FROM ins;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
+    SELECT b.bib_ref, 'H33R-E-' || r || '-' || j, v_lib, h.id, 'H33R-' || r || '-' || j, 'r' || r || '-' || j, v_src, 'ambos'
+      FROM generate_series(1, 200) r
+      CROSS JOIN generate_series(1, 25) j
+      JOIN public.books b ON b.bib_ref = 'H33T-M-' || r
+      JOIN public.book_holdings h ON h.book_id = b.id AND h.library_id = v_lib;
+    PERFORM set_config('anarbib.h21_marqueur_retrait', 'on', true);
+    UPDATE public.exemplares SET retire_at = now(), retire_run_id = v_runm WHERE tombo LIKE 'H33R-E-%';
+    PERFORM set_config('anarbib.h21_marqueur_retrait', '', true);
+    -- exemplares est une table stable, aux statistiques à jour en production
+    -- (2 762 exemplaires au 12/10/2026) ; ici, 5 000 viennent de naître dans la
+    -- transaction : sans cet ANALYZE, chaque constat au catalogue parcourt la
+    -- table (3,5 ms au lieu de 0,07 ms). exemplar_drafts aussi : au banc, les
+    -- suites annulées le laissent souvent à « 0 ligne sur N pages » (jamais en
+    -- production, où les brouillons publiés restent) ; les sous-requêtes
+    -- « ORDER BY id LIMIT 1 » par exemplaire de ingest.fn_h21_exemplaires_maj
+    -- et de ingest.fn_h21_retraits_constat y parcourent alors toute la clé
+    -- primaire (27 s et 21 s mesurés). Le cas « brouillons sans statistiques
+    -- fraîches » de H33 est celui de T07.
+    ANALYZE public.exemplares, public.exemplar_drafts;
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_t0 := clock_timestamp();
+    v_res := public.fn_import_recomparer(v_runm, v_rows);
+    v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    v_t0 := clock_timestamp();
+    v_res2 := public.fn_import_retraits(v_runm, 200, 0);
+    v_ms2 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    EXECUTE 'RESET ROLE';
+    v_nrec := (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE run_id = v_runm
+                 AND (exemplaires_comparaison->>'deja_la')::int = 25);
+    RAISE NOTICE 'H33-MESURE recalcul 200 lignes x 25 (5 000 constats) : % ms ; constat des retraits (5 000 retires reapparus) : % ms', round(v_ms), round(v_ms2);
+    IF v_nrec = 200 AND (v_res2->'counts'->>'retire_reapparu')::int = 5000 AND v_ms < 8000 AND v_ms2 < 8000
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms / '||round(v_ms2)||' ms ; deja_la x25 '||v_nrec
+                                              ||' ; '||left(coalesce((v_res2 - 'items')::text, 'NULL'), 300)); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   -- ── T09 ─────────────────────────────────────────────────────────────
   v_t := 'T09 la borne d''une page d''appel : 201 lignes ou 5 001 exemplaires refuses (HINT), rien d''ecrit';
   DECLARE v_runm bigint; v_runq bigint; v_rows bigint[]; v_one bigint[]; v_rowsq bigint[]; v_av bigint; v_hints text := '';
@@ -472,118 +680,86 @@ BEGIN
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_hints); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
-  -- ── T10 ─────────────────────────────────────────────────────────────
-  -- L'étape « brouillons vivants » est écrite deux fois : dans le constat
-  -- (ingest.fn_h21_constat_exemplaire, un exemplaire) et dans l'EXECUTE de
-  -- ingest.fn_h33_juger_exemplaires (une liste). Ce tirage les tient d'accord :
-  -- la liste contre la boucle d'avant (le constat scalaire, puis l'INSERT de
-  -- chaque « nouveau » avant l'exemplaire suivant), annulée à chaque tirage.
-  v_t := 'T10 tirage deterministe : la liste rend ce que rendaient le constat et l''INSERT, un par un (bras 2 ne dans l''appel compris)';
-  DECLARE
-    w_L2 uuid := gen_random_uuid();
-    w_S bigint; w_S2 bigint; w_BK bigint; w_BK2 bigint; w_H bigint; w_BD bigint; w_BD2 bigint; w_BDx bigint;
-    w_codes text[] := ARRAY['A', 'B', 'C', ' C ', 'D', 'PA', 'PB', 'PC', 'XL', 'XR', NULL, '  '];
-    w_ids text[] := ARRAY['i1', 'i2', 'i3', 'pa', 'pb', 'xl', 'xr', NULL, ''];
-    w_it int; w_n int; w_k int; w_items jsonb; w_o jsonb; w_old jsonb[]; w_rang jsonb; w_j jsonb;
-    w_c jsonb; w_id bigint; w_eo jsonb; w_en jsonb;
-    w_ecarts int := 0; w_total int := 0; w_par int := 0; w_avant int := 0; w_bras2 int := 0; w_detail text := '';
-    w_lib uuid; w_src bigint; w_tgt uuid; w_bdc bigint; w_code text; w_iid text; w_impl boolean;
+  -- ── T12 ─────────────────────────────────────────────────────────────
+  v_t := 'T12 H33 bis : plus aucun constat scalaire hors de lui-meme ; registre des tombos lu par sa cle ; comparaison calculee une fois';
+  DECLARE v_scal text; v_avant bigint; v_apres bigint; v_cfg text[];
   BEGIN
-    PERFORM setseed(0.4242);
-    v_t0 := clock_timestamp();
-    INSERT INTO public.libraries (id, slug, name, is_active, visibility_level) VALUES (w_L2, 'h33-t10-b', 'H33 T10 B', true, 'public');
-    INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
-    VALUES ('H33 T10 S', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO w_S;
-    INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
-    VALUES ('H33 T10 S2', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO w_S2;
-    INSERT INTO public.books (titulo, bib_ref) VALUES ('H33 T10 1', 'H33T10-1') RETURNING id INTO w_BK;
-    INSERT INTO public.books (titulo, bib_ref) VALUES ('H33 T10 2', 'H33T10-2') RETURNING id INTO w_BK2;
-    INSERT INTO public.book_holdings (book_id, library_id, loanable) VALUES (w_BK, v_lib, true) RETURNING id INTO w_H;
-    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
-    VALUES ('H33T10-1', 'H33T10-E1', v_lib, w_H, 'XL', 'xl', w_S, 'ambos');
-    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice', v_lib, 'draft') RETURNING id INTO w_BD;
-    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice bis', v_lib, 'draft') RETURNING id INTO w_BD2;
-    INSERT INTO public.book_drafts (titulo, owner_library_id, status) VALUES ('H33 T10 notice B', w_L2, 'draft') RETURNING id INTO w_BDx;
-    INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, source_item_code, source_item_id, import_source_id)
-    VALUES ('create', 'draft', 'pending', v_lib, 'PA', 'zz', NULL), ('create', 'cancelled', 'pending', v_lib, 'PC', 'pc', w_S),
-           ('create', 'draft', 'pending', w_L2, 'B', 'i2', w_S);
-    INSERT INTO public.exemplar_drafts (action, status, label_status, book_draft_id, target_library_id, source_item_code, source_item_id, import_source_id)
-    VALUES ('create', 'ready', 'pending', w_BD, NULL, 'PB', 'pb', w_S), ('create', 'draft', 'pending', w_BDx, NULL, 'D', 'i3', w_S);
-
-    FOR w_it IN 1..80 LOOP
-      w_n := 4 + floor(random() * 14)::int;
-      w_items := '[]'::jsonb;
-      FOR w_k IN 1..w_n LOOP
-        w_lib := CASE WHEN random() < 0.08 THEN NULL ELSE v_lib END;
-        w_src := CASE WHEN random() < 0.15 THEN NULL WHEN random() < 0.1 THEN w_S2 ELSE w_S END;
-        w_tgt := CASE WHEN random() < 0.55 THEN v_lib WHEN random() < 0.8 THEN NULL ELSE w_L2 END;
-        w_bdc := CASE WHEN random() < 0.5 THEN NULL WHEN random() < 0.6 THEN w_BD WHEN random() < 0.5 THEN w_BD2 ELSE w_BDx END;
-        w_code := w_codes[1 + floor(random() * array_length(w_codes, 1))::int];
-        w_iid := w_ids[1 + floor(random() * array_length(w_ids, 1))::int];
-        w_impl := random() < 0.05;
-        w_items := w_items || jsonb_build_array(jsonb_build_object('lib', w_lib, 'src', w_src,
-                     'book', CASE WHEN random() < 0.5 THEN w_BK ELSE w_BK2 END,
-                     'code', CASE WHEN w_impl THEN NULL ELSE w_code END, 'item_id', CASE WHEN w_impl THEN NULL ELSE w_iid END,
-                     'implicite', w_impl, 'tgt', w_tgt, 'bd', w_bdc));
-      END LOOP;
-      -- la boucle d'avant : constat, puis INSERT de chaque « nouveau », annulés ensuite
-      w_old := '{}'; w_rang := '{}';
-      BEGIN
-        w_k := 0;
-        FOR w_o IN SELECT x FROM jsonb_array_elements(w_items) x LOOP
-          w_k := w_k + 1;
-          IF (w_o->>'implicite')::boolean THEN
-            w_c := jsonb_build_object('verdict', 'nouveau', 'implicite', true);
-          ELSE
-            w_c := ingest.fn_h21_constat_exemplaire((w_o->>'lib')::uuid, (w_o->>'src')::bigint, (w_o->>'book')::bigint,
-                                                    w_o->>'code', w_o->>'item_id');
-          END IF;
-          IF w_c->>'verdict' = 'nouveau' THEN
-            INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, book_draft_id,
-                                                source_item_code, source_item_id, import_source_id)
-            VALUES ('create', 'draft', 'pending', (w_o->>'tgt')::uuid, (w_o->>'bd')::bigint,
-                    nullif(btrim(w_o->>'code'), ''), nullif(btrim(w_o->>'item_id'), ''), (w_o->>'src')::bigint)
-            RETURNING id INTO w_id;
-            w_rang := w_rang || jsonb_build_object(w_id::text, w_k);
-          END IF;
-          w_old := w_old || w_c;
-        END LOOP;
-        RAISE EXCEPTION 'h33_t10_annuler';
-      EXCEPTION WHEN raise_exception THEN
-        IF SQLERRM <> 'h33_t10_annuler' THEN RAISE; END IF;
-      END;
-      -- la liste
-      w_j := ingest.fn_h33_juger_exemplaires(w_items);
-      FOR w_k IN 1..w_n LOOP
-        w_total := w_total + 1;
-        w_eo := w_old[w_k];
-        IF w_eo ? 'draft_id' AND w_rang ? (w_eo->>'draft_id') THEN
-          -- brouillon né dans l'appel : son rang dans la liste
-          w_eo := (w_eo - 'draft_id') || jsonb_build_object('par', (w_rang->>(w_eo->>'draft_id'))::int);
-          IF (w_items->(w_k - 1)->>'tgt') IS DISTINCT FROM (w_items->(w_k - 1)->>'lib') THEN w_bras2 := w_bras2 + 1; END IF;
-        ELSIF w_eo ? 'draft_id' THEN
-          w_avant := w_avant + 1;
-        END IF;
-        w_en := w_j->(w_k - 1)->'c';
-        IF w_j->(w_k - 1) ? 'par' THEN
-          w_en := w_en || jsonb_build_object('par', (w_j->(w_k - 1)->>'par')::int);
-          w_par := w_par + 1;
-        END IF;
-        IF (w_j->(w_k - 1)->>'k')::int <> w_k OR w_en IS DISTINCT FROM w_eo THEN
-          w_ecarts := w_ecarts + 1;
-          IF w_ecarts <= 2 THEN w_detail := w_detail || format(' [tirage %s, rang %s : avant %s | liste %s]', w_it, w_k, w_eo, w_en); END IF;
-        END IF;
-      END LOOP;
-    END LOOP;
-    v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
-    RAISE NOTICE 'H33-TIRAGE % exemplaires jugés, % écart(s) ; % « déjà en brouillon » nés dans l''appel (dont % par le bras 2), % d''avant l''appel : % ms',
-      w_total, w_ecarts, w_par, w_bras2, w_avant, round(v_ms);
-    -- le tirage doit avoir exercé les trois cas, sinon il ne prouve rien
-    IF w_ecarts = 0 AND w_total > 500 AND w_par > 20 AND w_bras2 > 5 AND w_avant > 20
+    SELECT string_agg(n.nspname || '.' || p.proname, ', ') INTO v_scal
+      FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE p.prosrc ~ 'fn_h21_constat_exemplaire\('
+       AND p.oid <> 'ingest.fn_h21_constat_exemplaire(uuid, bigint, bigint, text, text)'::regprocedure;
+    SELECT p.proconfig INTO v_cfg FROM pg_proc p WHERE p.oid = 'public.tg_exemplar_draft_tombo_refuse()'::regprocedure;
+    -- la garde C17 bis passe par la clé du registre, quelles que soient ses
+    -- statistiques (le registre a grossi de 5 000 numéros en T11)
+    v_avant := pg_stat_get_xact_numscans('public.tombos_attribues_pkey'::regclass);
+    INSERT INTO public.exemplar_drafts (action, status, label_status, target_library_id, tombo)
+    VALUES ('create', 'draft', 'pending', v_lib, 'H33-T12-NEUF');
+    v_apres := pg_stat_get_xact_numscans('public.tombos_attribues_pkey'::regclass);
+    IF v_scal IS NULL AND v_cfg @> ARRAY['enable_seqscan=off'] AND v_apres > v_avant
+       AND position('with calc as materialized (' IN pg_get_functiondef('ingest.fn_h21_stocker_comparaisons(bigint, bigint[])'::regprocedure)) > 0
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||w_ecarts||' ecart(s) sur '||w_total
-                                              ||' (par '||w_par||', bras 2 '||w_bras2||', avant '||w_avant||')'||w_detail); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : scalaire='||coalesce(v_scal, '∅')||' ; config='||coalesce(v_cfg::text, '∅')
+                                              ||' ; parcours de la cle '||v_avant||' -> '||v_apres); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T13 ─────────────────────────────────────────────────────────────
+  v_t := 'T13 H33 bis : la levee d''un retire reetiquete se publie ; refusee quand son exemplaire n''est plus deja la ni reetiquete, meme a cote d''un autre qui l''est';
+  DECLARE w_S bigint; w_bk bigint; w_h bigint; w_x bigint; w_y bigint; w_z bigint; w_run bigint; w_p jsonb; w_lot bigint;
+          w_dx bigint; w_dy bigint; w_rev jsonb; w_hy text; w_px bigint;
+  BEGIN
+    INSERT INTO public.network_administrators (user_id, status) VALUES ('22222222-2222-2222-2222-222222222222', 'active') ON CONFLICT DO NOTHING;
+    INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
+    VALUES ('H33 T13 S', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO w_S;
+    INSERT INTO public.books (titulo, bib_ref) VALUES ('H33 T13', 'H33T13-1') RETURNING id INTO w_bk;
+    INSERT INTO public.book_holdings (book_id, library_id, loanable) VALUES (w_bk, v_lib, true) RETURNING id INTO w_h;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
+    VALUES ('H33T13-1', 'H33T13-X', v_lib, w_h, 'C13-X', 'x13', w_S, 'ambos') RETURNING id INTO w_x;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
+    VALUES ('H33T13-1', 'H33T13-Y', v_lib, w_h, 'C13-Y', 'y13', w_S, 'ambos') RETURNING id INTO w_y;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, source_item_id, import_source_id, circulation_policy)
+    VALUES ('H33T13-1', 'H33T13-Z', v_lib, w_h, 'C13-Z', 'z13', w_S, 'ambos') RETURNING id INTO w_z;
+    PERFORM set_config('anarbib.h21_marqueur_retrait', 'on', true);
+    UPDATE public.exemplares SET retire_at = now() - interval '1 day' WHERE id IN (w_x, w_y);
+    PERFORM set_config('anarbib.h21_marqueur_retrait', '', true);
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
+    VALUES (w_S, v_lib, 'essai/h33t13.iso', 'h33t13.iso', 'marc_iso2709', 'ready_for_review') RETURNING id INTO w_run;
+    -- X réapparaît réétiqueté (même expl_id, autre code) ; Y déjà là, à côté de Z
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, normalized_payload, raw_payload, match_status, editorial_decision, proposed_book_id)
+    VALUES (w_run, 1, 'H33T13-1', 'H33 T13 1', '{"items":[{"source_item_code":"C13-NEWX","source_item_id":"x13"}]}', '{"item_tag":"995"}', 'known_record', 'pending', w_bk),
+           (w_run, 2, 'H33T13-2', 'H33 T13 2', '{"items":[{"source_item_code":"C13-Y","source_item_id":"y13"},{"source_item_code":"C13-Z","source_item_id":"z13"}]}',
+            '{"item_tag":"995"}', 'known_record', 'pending', w_bk);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    w_p := public.fn_import_proposer_retraits(w_run);
+    w_lot := (w_p->>'batch_id')::bigint;
+    w_rev := public.fn_batch_review_request(w_lot, NULL);
+    EXECUTE 'RESET ROLE';
+    SELECT max(id) FILTER (WHERE published_exemplar_id = w_x), max(id) FILTER (WHERE published_exemplar_id = w_y)
+      INTO w_dx, w_dy FROM public.exemplar_drafts WHERE import_retrait->>'nature' = 'levee';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', '22222222-2222-2222-2222-222222222222', 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    PERFORM public.fn_batch_review_verdict((w_rev->>'review_id')::bigint, 'approved', NULL);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    -- Y n'est plus « déjà là » (son code, avec un autre expl_id de la même
+    -- source : code repris) ; Z, dans la même ligne, l'est toujours
+    UPDATE ingest.partner_catalog_staging_rows
+       SET normalized_payload = '{"items":[{"source_item_code":"C13-Y","source_item_id":"y-autre"},{"source_item_code":"C13-Z","source_item_id":"z13"}]}'
+     WHERE run_id = w_run AND row_no = 2;
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    BEGIN PERFORM public.publish_exemplar_draft(w_dy); w_hy := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS w_hy = PG_EXCEPTION_HINT; END;
+    w_px := public.publish_exemplar_draft(w_dx);
+    EXECUTE 'RESET ROLE';
+    IF (w_p->>'levees')::int = 2 AND w_dx IS NOT NULL AND w_dy IS NOT NULL
+       AND w_hy = 'error.publish.item_levee_gone_from_file' AND w_px = w_x
+       AND (SELECT retire_at IS NULL FROM public.exemplares WHERE id = w_x)
+       AND (SELECT retire_at IS NOT NULL FROM public.exemplares WHERE id = w_y)
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(w_p::text, 'NULL')||' / Y '||coalesce(w_hy, '∅')
+                                              ||' / X '||coalesce(w_px::text, '∅')); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'H33-RAPPROCHER-GROS-FICHIER OK : %/% tests passés', v_passed, v_passed;

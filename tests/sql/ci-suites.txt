@@ -782,6 +782,8 @@ tests/sql/e38_liste_plate_auteur_par_ses_noms_tests.sql
 tests/sql/b39_fixtures_etiquetees_tests.sql
 # H33 (12/10/2026) : « Rapprocher » et « Promouvoir » un gros fichier sous 8 s — le constat et les écritures en une passe
 # (ingest.fn_h33_juger_exemplaires) ; mêmes verdicts que la boucle, ordre compris, puis mesures 200 x 25 (et la page suivante).
+# H33 bis (12/10/2026) : le constat en liste partout (ingest.fn_h33_constater_exemplaires) — T10 tient la liste et le constat scalaire d'accord,
+# T11 mesure le recalcul et les retraits à 5 000 exemplaires, T12-T13 la garde C17 bis par l'index, la comparaison calculée une fois, la levée.
 tests/sql/h33_rapprocher_gros_fichier_tests.sql
 # AUT-VAR (12/10/2026) : « Rattacher aux œuvres » lit toutes les formes de l'autorité (Wikidata par langue, fusions, formes variantes et pseudonymes saisis) ;
 # les deux détections de doublons reconnaissent un Wikidata/VIAF/ISNI commun ; publier un brouillon sans graphies ne vide plus celles de l'autorité.
