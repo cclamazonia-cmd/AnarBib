@@ -29,8 +29,8 @@
 # restauration réelle d'un dump :
 #
 #   * `storage` est lui aussi un PRODUCTEUR de schéma, pas un consommateur.
-#     Un dump Supabase contient les lignes de `storage.buckets` (seize en
-#     production) ; démarré à l'étape des « autres services », Storage
+#     Un dump Supabase contient les lignes de `storage.buckets` (dix-sept en
+#     production depuis le 07/09/2026) ; démarré à l'étape des « autres services », Storage
 #     arrivait APRÈS la restauration, et le chargement des données mourait
 #     sur « relation "storage.buckets" does not exist ». Autrement dit :
 #     ce mode ne pouvait restaurer AUCUN dump réel.
@@ -336,10 +336,17 @@ PLAFONDS=$(docker compose exec -T db sh -c 'ls /migrations/*_plafonds_buckets_nu
 # étape qui borne la taille des fichiers téléversés.
 #
 # Et le corriger sans regarder les buckets en aurait fabriqué un autre : la
-# migration LÈVE UNE EXCEPTION si un bucket attendu manque. Une fois Storage
-# réellement prêt (étape 7 bis), `storage.buckets` existe mais est VIDE en mode
-# dépôt — la rejouer telle quelle tuerait le script. Aucune migration ne crée
-# les buckets : elles ne font que les modifier. Ils arrivent avec le dump.
+# migration LÈVE UNE EXCEPTION si un bucket attendu manque.
+#
+# ⚠️ CE BLOC DISAIT « aucune migration ne crée de bucket, ils arrivent avec le
+# dump » et traitait zéro bucket comme un cas attendu. C'ÉTAIT VRAI LE 26/08,
+# ET FAUX DEPUIS LE 28/08 : `20260828000000_storage_buckets_reconstructibles`
+# crée les seize buckets de la production, `20260907234500_bucket_map_tiles`
+# le dix-septième — à l'étape 5, puisque Storage a construit son schéma à
+# l'étape 4. Zéro bucket après le rejeu du dépôt n'est donc plus « attendu » :
+# c'est une pile qui n'aura ni couverture, ni PDF, ni EPUB, et le bilan doit
+# rougir. (Relu le 12/10/2026 en préparant la VM d'ASR2026.)
+BUCKETS_ATTENDUS=17
 if [ -z "$PLAFONDS" ]; then
   echo "⚠ Migration des plafonds introuvable dans /migrations — buckets sans borne."
 elif [ "$(sql "select to_regclass('storage.buckets') is not null")" != "t" ]; then
@@ -347,15 +354,28 @@ elif [ "$(sql "select to_regclass('storage.buckets') is not null")" != "t" ]; th
   echo "  Le service Storage n'a pas construit son schéma (voir étape 7 bis)."
   ECHEC_PLAFONDS=1
 elif [ "$(sql "select count(*) from storage.buckets")" = "0" ]; then
-  echo "· Aucun bucket dans cette instance — rien à borner."
-  echo "  Attendu en mode --depuis-le-depot : AUCUNE migration ne CRÉE de bucket,"
-  echo "  elles ne font que les modifier. Les buckets arrivent avec le dump"
-  echo "  (--depuis-une-sauvegarde) ; leurs fichiers se rsyncent depuis la"
-  echo "  sauvegarde « storage »."
+  if [ "$MODE" = "depot" ]; then
+    echo "✗ Aucun bucket après le rejeu des migrations."
+    echo "  20260828000000_storage_buckets_reconstructibles et 20260907234500_bucket_map_tiles"
+    echo "  auraient dû en créer $BUCKETS_ATTENDUS : soit Storage n'avait pas construit son schéma"
+    echo "  à l'étape 5 (vérifier l'étape 4), soit l'insertion a été refusée (droits sur"
+    echo "  storage.buckets). Sans bucket, ni couverture, ni PDF, ni EPUB ne peuvent être versés."
+  else
+    echo "✗ Aucun bucket dans la sauvegarde restaurée : le dump ne porte pas storage.buckets."
+    echo "  Vérifier que schema.sql et data.sql viennent bien d'un `supabase db dump` complet."
+  fi
+  ECHEC_PLAFONDS=1
 else
   docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "$PLAFONDS"
+  NB_BUCKETS=$(sql "select count(*) from storage.buckets")
   SANS_BORNE=$(sql "select count(*) from storage.buckets where file_size_limit is null")
-  echo "✓ Plafonds posés. Buckets encore sans plafond : $SANS_BORNE"
+  if [ "$NB_BUCKETS" -lt "$BUCKETS_ATTENDUS" ]; then
+    echo "✗ $NB_BUCKETS bucket(s) en base pour $BUCKETS_ATTENDUS attendus — il en manque."
+    sql "select id from storage.buckets order by id" | sed 's/^/    /'
+    ECHEC_PLAFONDS=1
+  else
+    echo "✓ Plafonds posés sur $NB_BUCKETS buckets. Buckets encore sans plafond : $SANS_BORNE"
+  fi
 fi
 
 # -----------------------------------------------------------------------------
