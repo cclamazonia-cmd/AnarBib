@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 56 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 10
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -56,13 +56,15 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Os identificadores nunca são reutilizados.** Um item liquidado guarda seu número e passa para a seção dos encerramentos. As remissões entre colchetes apontam para o REGISTRO, uma spec ou um identificador herdado de um backlog anterior: permitem recuperar o rastro, não fazem autoridade por si mesmas.
 
+**Duas convenções desde 12/10/2026** (`DOC-TIERS-1`, `DOC-MESURE-1`). Um fechamento escreve **«exercido por um terceiro»** quando a prova foi feita por alguém que não escreveu o código, e «exercido» caso contrário — o Livro branco seguinte conta as duas colunas. Todo número contado desde um instante (varreduras de índice, execuções de cron, leituras de sonda, falhas de transporte) traz, em «O estado real» como numa ficha, **a data de origem dos seus contadores**; sem ela não decide nada.
+
 ---
 
 ## O estado real em 11 de outubro de 2026
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **42 itens de 56** trazem uma verificação datada própria (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, J12, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **41 itens de 55** trazem uma verificação datada própria (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -356,9 +358,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** O B10 (27/09) retirou 22 índices e manteve outros com ressalva. **22 redundantes ainda usados** (até 10,8 milhões de varreduras em `book_holdings_book_id_idx`) estão nomeados com seus contadores em `index_redondants_garde_tests.sql` (`af98dee8`): retirá-los deslocaria planos quentes para o índice que os cobre, a medir antes de decidir. **108 índices estavam a zero varreduras**, fora chaves estrangeiras e redundantes: 12 retirados (`3ac1c910`), os outros mantidos, com veredito, em `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`. O B32 (28/09) tornou usáveis os índices das visões materializadas do catálogo; três continuam sem varredura no seu levantamento (`autor_norm_trgm_idx`, `library_slug_idx`, `titulo_trgm_idx`). Esses encontros só viviam nos fechamentos do B10 e do B32.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
-**O que é.** Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 02/09 (B9): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada.
+**O que é.** Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 07/10 (I32; B9 para o método): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada.
 
 **Por que importa.** Um índice sem leitor custa uma escrita a cada inserção; um índice retirado por engano faz uma consulta quente cair em varredura sequencial. Decidir sobre um mês de leituras em produção, não sobre uma bancada.
 
@@ -367,7 +369,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - Cada índice nomeado em v tem seu veredito escrito, datado do levantamento.
 - Os índices retirados o são por migração; nenhuma chave estrangeira perde seu índice, e `index_redondants_garde_tests` está atualizado.
 
-**Dependências.** Adiado de propósito: um mês de contadores de produção depois do B32 (implantado em 28/09), não antes de 28/10.
+**Dependências.** Adiado de propósito: releitura **em 28/10**, contando desde o reinício de 07/10 (três semanas), **perímetro B10 e B32 apenas** — os índices mantidos com ressalva em 27/09 e os três das visões materializadas. Nenhum índice de uma camada nunca exercida (notas de leitura, assembleias, círculos, EEB, compartilhamento digital) entra na releitura, seja qual for o seu contador (`DOC-MESURE-1`). Decisão de Xavier, 12/10.
 
 *Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
 
@@ -639,9 +641,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
-**O que é.** Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
+**O que é.** **Primeiro**: revisar e publicar o lote 63 (1 673 rascunhos) pela tela dos lotes, pela própria coordenação da Solidaires, com as ferramentas entregues — relatório de revisão (H16), publicação por lote (B30), numeração e cotas (E21). **Depois**: criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
 
 **Por que importa.** Um título que contém «n°» nem sempre é um fascículo — às vezes é um título de coleção, às vezes um erro de digitação. A flag sinaliza, não decide. E a rede conta hoje apenas 4 títulos de periódicos: este lote os multiplicaria por quatro, e testaria o subsistema de verdade.
 
@@ -651,7 +653,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - As 87 candidatas foram submetidas, e cada veredicto é humano.
 - O comportamento observado nos quatro registros *Encontros com a Civilização brasileira* confirma a regra antifalsos-duplicados: dois pares saem, dois ficam.
 
-**Dependências.** **Bloqueado por C2**, portanto por **G7** e **A1**. A revisão da spec (**D1**) pode ser feita sem esperar.
+**Dependências.** Desbloqueado desde 24/09; **P1 confirmado por Xavier em 12/10**. O projeto fornece as ferramentas e acompanha, não cataloga no lugar de um coletivo: a revisão é da Solidaires. Se a Solidaires não tiver começado em **26/10**, subir para `A1` / `G1` — a quinta biblioteca com acervo passa por este lote, e a condição posta à v19 (uma segunda biblioteca que empreste) também.
 
 *Remissões : `spec-periodiques-v0.1 §10` · `REPRISE_claude_code_2026-08-27`*
 
@@ -1461,7 +1463,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **J10** | Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão | `P3` | Aberto |
-| **J12** | Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1) | `P1` | Em curso |
 
 #### J10 — Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão
 
@@ -1482,27 +1483,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de Bolonha. Sem dependência técnica.
 
 *Remissões : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
-
-#### J12 — Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1)
-
-`P1` Prioritário · Estado : **Em curso** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** **O Grande Livro branco v18 (11/10/2026) o pede ele mesmo** (capítulos 12 e 14 bis): entrar no repositório no dia em que serve de referência, e suas duas precisões de doutrina (terceiro, contadores) receberem código na semana (DOC-GLB-1). Verificado em 12/10: `docs/GLB/` só tem a v17; o INDEX diz que a v16 de 2 de julho «resta a encontrar» — mas ela existe, `.docx` + `.pdf` de 02/07, na pasta de relatórios do mantenedor, como a v18. As três regras: a prova por um terceiro (e o fechamento distingue «exercido» de «exercido por um terceiro»); uma medida de uso se publica com a data de origem dos seus contadores; nenhuma medida de uso que conte uma fixture (B39). Prazo: 18/10.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** (1) v18 e v16 em `docs/GLB/`, INDEX atualizado; (2) REGISTRO: três códigos datados; (3) backlog: os fechamentos dizem «exercido por um terceiro» quando é o caso, e o levantamento traz a data de origem dos contadores.
-
-**Por que importa.** A série só é legível se cada versão está no repositório, e uma linha vermelha sem código é um desejo.
-
-**O que conta como terminado.**
-
-- A v18 e a v16 de 02/07 estão em `docs/GLB/`, o INDEX as nomeia.
-- Os três códigos existem no REGISTRO, datados antes de 18/10, e o backlog aplica as duas convenções.
-
-**Dependências.** B39.
-
-*Remissões : `docs/GLB` · `docs/INDEX.md` · `docs/REGISTRE_decisions.md` · `docs/backlogs/backlog-v34.json`*
 
 ---
 
@@ -1965,6 +1945,7 @@ CI verde. |
 | E37 | 2026-10-11 | O menu das páginas fica visível no alto da tela, onde quer que se esteja: faixa fixa sobre fundo quase opaco e desfocado, altura publicada em `--ab-topbar-h`, os elementos já fixos e a rolagem até uma âncora se ajustam abaixo; regra fechada pelo teste `bandeau-colle-en-haut` (8) (`e0e7f402`, 11/10). **Visto por Xavier em 11/10**: no fim de uma ficha o menu fica no alto e clicável, a barra de estado aparece abaixo dele, a gaveta ☰ abre no meio de uma página longa no telefone, o fundo passa na BLMF com tema. Fechado. |
 | E31 | 2026-10-11 | O que esperava um olhar na tela, conectado, foi visto — **quinze perguntas feitas uma a uma em 11/10 à noite, quinze respostas de Xavier**. *Conformes*: C21, C22, C24, C17, os lotes 2, 4, 5 e 8 da `AccountPage` (E6), E35, C20, F16, os quatro lotes do Catálogo (E6) — com um defeito achado no caminho, que não é dos lotes: **a busca livre «Kropotkine» devolve uma ou duas obras em vez das 36 da autoridade** (aberto em E38). *Retirados da lista*: E33 (não se simula em produção) e as telas do H21 (esperam uma reimportação real da DIRA). Critério cumprido: cada ponto visto, conforme ou aberto em item. Fechado. |
 | E38 | 2026-10-12 | A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado. |
+| J12 | 2026-10-12 | **Fechado em 12/10 com provas, os dois critérios cumpridos — seis dias antes do prazo de `DOC-GLB-1`.** *(1)* A v18 e o v16 de 02/07 estão em `docs/GLB/` desde `8fdbc0d0` (13h09), o INDEX os nomeia, o elo já não falta; o adendo de 27/05 traz agora a data no nome (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, decisão de Xavier). *(2)* Os três códigos estão no REGISTRO v0.84: `DOC-TIERS-1` (uma prova por um terceiro conta em dobro, o fechamento diz «exercido por um terceiro»), `DOC-MESURE-1` (um número contado desde um instante traz a data do seu último reset), `DOC-MESURE-2` (uma fixture em produção não é uso; a etiquetagem mecânica é `B39`); as duas convenções estão escritas em «Como ler este documento», e `B36` já aplica a segunda. Decisões de Xavier de 12/10, sobre quatro perguntas postas na leitura da v18. |
 
 ---
 
@@ -1996,4 +1977,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 56 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

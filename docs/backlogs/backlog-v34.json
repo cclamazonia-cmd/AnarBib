@@ -338,8 +338,8 @@
       "pt": "Este documento substitui o backlog v33 de 17 de junho de 2026. O v33 trazia uma faixa de aviso de frescor acrescentada em 28 de agosto; já não bastava.\n\nO v34 não é uma atualização do v33: é uma **reescrita sobre estado verificado**. Na sua redação, em 29 de agosto de 2026, cada afirmação de estado foi relida contra duas fontes primárias — o banco de produção consultado em somente-leitura e o repositório Codeberg no commit `1d00ed2c`. Nenhum item foi transportado com base na fé de um documento. Entre o v33 e aquele dia, 216 das 221 migrações então aplicadas haviam sido escritas, além de 655 commits.\n\n**Este parágrafo conta uma gênese, não um estado.** Os números que descrevem o presente vivem em « O estado real », levantado à parte e datado; ele foi refeito já em 1º de setembro de 2026 — metade dos valores de 29 de agosto havia mudado em três dias — e o é desde então a cada levantamento (o último: 5 de outubro de 2026, à noite). Confundir os dois é exatamente o erro que tornou o v33 inutilizável.\n\nEste trabalho produziu um resultado que comanda a leitura de todo o resto: **a documentação erra nos dois sentidos**. Declara abertos canteiros entregues há semanas, e declara entregues coisas que ninguém jamais exerceu. A seção « Desvios levantados » os nomeia um a um."
     },
     "howto": {
-      "fr": "**Ce document n'arbitre rien.** La préséance documentaire du projet reste celle de `docs/INDEX.md` : le `REGISTRE_decisions.md` fait foi, puis la spec du domaine, puis ce backlog. Si une ligne d'ici contredit le REGISTRE, c'est le REGISTRE qui a raison et cette ligne est un défaut à signaler.\n\n**Pour commencer sans rien demander à personne**, lisez `docs/CHANTIERS_OUVERTS.md` : sept portes d'entrée qui ne demandent aucune coordination. Le présent backlog est ce qui vient après, quand on veut savoir ce qui reste et pourquoi.\n\n**Avant de prendre un item, ouvrez un ticket sur Codeberg.** Deux personnes qui écrivent le même correctif, c'est une soirée perdue pour l'une des deux. C'est la seule règle de coordination du projet, et elle tient en une ligne.\n\n**Chaque fiche dit six choses** : ce que c'est, l'état vérifié au 29/08, pourquoi ça compte, ce qui compte comme fini, ce que ça demande, et ce dont ça dépend. Si l'une manque, la fiche est incomplète — dites-le plutôt que de deviner.\n\n**Les identifiants ne sont jamais réutilisés.** Un item soldé garde son numéro et passe à la section des clôtures. Les renvois entre crochets pointent vers le REGISTRE, une spec ou un identifiant hérité d'un backlog antérieur : ils permettent de retrouver la trace, ils ne font pas autorité par eux-mêmes.",
-      "pt": "**Este documento não arbitra nada.** A precedência documental do projeto continua sendo a de `docs/INDEX.md`: o `REGISTRE_decisions.md` faz fé, depois a spec do domínio, depois este backlog. Se uma linha daqui contradiz o REGISTRO, é o REGISTRO que tem razão e essa linha é um defeito a sinalizar.\n\n**Para começar sem pedir nada a ninguém**, leia `docs/CHANTIERS_OUVERTS.md`: sete portas de entrada que não exigem nenhuma coordenação. O presente backlog é o que vem depois, quando se quer saber o que falta e por quê.\n\n**Antes de pegar um item, abra uma issue no Codeberg.** Duas pessoas escrevendo a mesma correção é uma noite perdida para uma das duas. É a única regra de coordenação do projeto, e cabe em uma linha.\n\n**Cada ficha diz seis coisas**: o que é, o estado verificado em 29/08, por que importa, o que conta como terminado, o que exige, e do que depende. Se uma faltar, a ficha está incompleta — diga isso em vez de adivinhar.\n\n**Os identificadores nunca são reutilizados.** Um item liquidado guarda seu número e passa para a seção dos encerramentos. As remissões entre colchetes apontam para o REGISTRO, uma spec ou um identificador herdado de um backlog anterior: permitem recuperar o rastro, não fazem autoridade por si mesmas."
+      "fr": "**Ce document n'arbitre rien.** La préséance documentaire du projet reste celle de `docs/INDEX.md` : le `REGISTRE_decisions.md` fait foi, puis la spec du domaine, puis ce backlog. Si une ligne d'ici contredit le REGISTRE, c'est le REGISTRE qui a raison et cette ligne est un défaut à signaler.\n\n**Pour commencer sans rien demander à personne**, lisez `docs/CHANTIERS_OUVERTS.md` : sept portes d'entrée qui ne demandent aucune coordination. Le présent backlog est ce qui vient après, quand on veut savoir ce qui reste et pourquoi.\n\n**Avant de prendre un item, ouvrez un ticket sur Codeberg.** Deux personnes qui écrivent le même correctif, c'est une soirée perdue pour l'une des deux. C'est la seule règle de coordination du projet, et elle tient en une ligne.\n\n**Chaque fiche dit six choses** : ce que c'est, l'état vérifié au 29/08, pourquoi ça compte, ce qui compte comme fini, ce que ça demande, et ce dont ça dépend. Si l'une manque, la fiche est incomplète — dites-le plutôt que de deviner.\n\n**Les identifiants ne sont jamais réutilisés.** Un item soldé garde son numéro et passe à la section des clôtures. Les renvois entre crochets pointent vers le REGISTRE, une spec ou un identifiant hérité d'un backlog antérieur : ils permettent de retrouver la trace, ils ne font pas autorité par eux-mêmes.\n\n**Deux conventions depuis le 12/10/2026** (`DOC-TIERS-1`, `DOC-MESURE-1`). Une clôture écrit **« exercé par un tiers »** quand l'épreuve a été faite par quelqu'un qui n'a pas écrit le code, et « exercé » sinon — le Livre blanc suivant compte les deux colonnes. Tout chiffre compté depuis un instant (parcours d'index, exécutions de cron, relevés de sonde, échecs de transport) porte, dans « L'état réel » comme dans une fiche, **la date d'origine de ses compteurs** ; sans elle il ne tranche rien.",
+      "pt": "**Este documento não arbitra nada.** A precedência documental do projeto continua sendo a de `docs/INDEX.md`: o `REGISTRE_decisions.md` faz fé, depois a spec do domínio, depois este backlog. Se uma linha daqui contradiz o REGISTRO, é o REGISTRO que tem razão e essa linha é um defeito a sinalizar.\n\n**Para começar sem pedir nada a ninguém**, leia `docs/CHANTIERS_OUVERTS.md`: sete portas de entrada que não exigem nenhuma coordenação. O presente backlog é o que vem depois, quando se quer saber o que falta e por quê.\n\n**Antes de pegar um item, abra uma issue no Codeberg.** Duas pessoas escrevendo a mesma correção é uma noite perdida para uma das duas. É a única regra de coordenação do projeto, e cabe em uma linha.\n\n**Cada ficha diz seis coisas**: o que é, o estado verificado em 29/08, por que importa, o que conta como terminado, o que exige, e do que depende. Se uma faltar, a ficha está incompleta — diga isso em vez de adivinhar.\n\n**Os identificadores nunca são reutilizados.** Um item liquidado guarda seu número e passa para a seção dos encerramentos. As remissões entre colchetes apontam para o REGISTRO, uma spec ou um identificador herdado de um backlog anterior: permitem recuperar o rastro, não fazem autoridade por si mesmas.\n\n**Duas convenções desde 12/10/2026** (`DOC-TIERS-1`, `DOC-MESURE-1`). Um fechamento escreve **«exercido por um terceiro»** quando a prova foi feita por alguém que não escreveu o código, e «exercido» caso contrário — o Livro branco seguinte conta as duas colunas. Todo número contado desde um instante (varreduras de índice, execuções de cron, leituras de sonda, falhas de transporte) traz, em «O estado real» como numa ficha, **a data de origem dos seus contadores**; sem ela não decide nada."
     },
     "calendrier": {
       "fr": "Les gels de septembre sont passés : la chaîne auto-hébergée est dégelée depuis le 14/09, et les dates de Bologne (11-13/09) sont derrière nous. La fenêtre en cours n'a plus de gel ; elle a des rendez-vous, chacun porté par un item.\n\n| Date | Ce qui s'applique |\n|---|---|\n| **vers le 15/10/2026** | F19 : une nouvelle semaine de journaux d'envoi à relire après le correctif de `register` du 08/10 — aucune adresse complète (sept requêtes de 24 h sur `function_logs`). |\n| **10/10/2026** | Soirée de formation BLMF (K7). D'ici la dernière soirée, la barre de navigation ne change pas (E20). |\n| **11/10/2026, 20:00** | Premier tir long avec `ingest`, `private`, `api` et les droits (I29, I30) : « Dump long OK », puis `restore-test` et l'empreinte des droits comparée à la production. |\n| **vers le 28/10/2026** | B36 : relire aux compteurs de production les index gardés sous réserve, et le temps de l'appel mesuré par B33 — les compteurs sont repartis de zéro le 07/10 à 20:19 (I32). |\n| **après la dernière soirée de formation** | E20 : la barre se regroupe par nature — Public, Moi, Travail. |\n\nUn item marqué **gelé** n'est pas un item mort : c'est un item dont la date de reprise est écrite.",
@@ -3155,6 +3155,14 @@
           "fr": "La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos.",
           "pt": "A busca do catálogo lê os outros nomes das autoridades — forma retida, forma de ordenação, variantes Wikidata, aliases ativos — e perdoa uma ou duas letras quando nada exato responde, dizendo-o por uma pastilha. Relatado por Xavier em 11/10. **Duas entregas**: 11/10 às 23h28, pela sessão vizinha (`f38fffa8`) — lista por obra e busca livre; 12/10 às 9h52 (`60ffe977`), sobre o relato «em lista plana, não» — a porta INVOKER `api.catalog_author_ids_v1` e o filtro cliente da lista plana («Kropotkine» 1 → 59 fichas). **Visto por Xavier em 12/10, conforme em lista plana e por obra.** Fechado."
         }
+      ],
+      [
+        "J12",
+        "2026-10-12",
+        {
+          "fr": "**Clos le 12/10 sur pièces, les deux critères tenus — six jours avant l'échéance de `DOC-GLB-1`.** *(1)* La v18 et le v16 du 02/07 sont dans `docs/GLB/` depuis `8fdbc0d0` (13 h 09), l'INDEX les nomme, le chaînon n'est plus manquant ; l'addendum du 27/05 porte désormais sa date dans son nom (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, décision Xavier). *(2)* Les trois codes sont au REGISTRE v0.84 : `DOC-TIERS-1` (une épreuve par un tiers compte double, la clôture dit « exercé par un tiers »), `DOC-MESURE-1` (un chiffre compté depuis un instant porte la date de son dernier reset), `DOC-MESURE-2` (une fixture en production n'est pas de l'usage ; l'étiquetage mécanique est `B39`) ; les deux conventions sont écrites dans « Comment lire ce document », et `B36` applique déjà la seconde. Décisions Xavier du 12/10, sur quatre questions posées à la lecture de la v18.",
+          "pt": "**Fechado em 12/10 com provas, os dois critérios cumpridos — seis dias antes do prazo de `DOC-GLB-1`.** *(1)* A v18 e o v16 de 02/07 estão em `docs/GLB/` desde `8fdbc0d0` (13h09), o INDEX os nomeia, o elo já não falta; o adendo de 27/05 traz agora a data no nome (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, decisão de Xavier). *(2)* Os três códigos estão no REGISTRO v0.84: `DOC-TIERS-1` (uma prova por um terceiro conta em dobro, o fechamento diz «exercido por um terceiro»), `DOC-MESURE-1` (um número contado desde um instante traz a data do seu último reset), `DOC-MESURE-2` (uma fixture em produção não é uso; a etiquetagem mecânica é `B39`); as duas convenções estão escritas em «Como ler este documento», e `B36` já aplica a segunda. Decisões de Xavier de 12/10, sobre quatro perguntas postas na leitura da v18."
+        }
       ]
     ]
   },
@@ -3335,8 +3343,8 @@
         "pt": "O B10 (27/09) retirou 22 índices e manteve outros com ressalva. **22 redundantes ainda usados** (até 10,8 milhões de varreduras em `book_holdings_book_id_idx`) estão nomeados com seus contadores em `index_redondants_garde_tests.sql` (`af98dee8`): retirá-los deslocaria planos quentes para o índice que os cobre, a medir antes de decidir. **108 índices estavam a zero varreduras**, fora chaves estrangeiras e redundantes: 12 retirados (`3ac1c910`), os outros mantidos, com veredito, em `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`. O B32 (28/09) tornou usáveis os índices das visões materializadas do catálogo; três continuam sem varredura no seu levantamento (`autor_norm_trgm_idx`, `library_slug_idx`, `titulo_trgm_idx`). Esses encontros só viviam nos fechamentos do B10 e do B32."
       },
       "w": {
-        "fr": "Vers le 28/10, relire `pg_stat_user_indexes` en production — compteurs remis à zéro au redémarrage du 02/09 (B9) : dater le relevé et noter tout redémarrage depuis. Pour chaque index nommé ci-dessus : le garder, raison écrite, ou le retirer par migration, raison écrite, comme B10 et B33. Pour les 22 redondants empruntés, comparer les plans des requêtes qui les empruntent avec l'index couvrant avant tout retrait.",
-        "pt": "Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 02/09 (B9): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada."
+        "fr": "Vers le 28/10, relire `pg_stat_user_indexes` en production — compteurs remis à zéro au redémarrage du 07/10 (I32 ; B9 pour la méthode) : dater le relevé et noter tout redémarrage depuis. Pour chaque index nommé ci-dessus : le garder, raison écrite, ou le retirer par migration, raison écrite, comme B10 et B33. Pour les 22 redondants empruntés, comparer les plans des requêtes qui les empruntent avec l'index couvrant avant tout retrait.",
+        "pt": "Por volta de 28/10, reler `pg_stat_user_indexes` em produção — contadores zerados no reinício de 07/10 (I32; B9 para o método): datar o levantamento e anotar qualquer reinício desde então. Para cada índice nomeado acima: mantê-lo, com motivo escrito, ou retirá-lo por migração, com motivo escrito, como no B10 e no B33. Para os 22 redundantes usados, comparar os planos das consultas que os usam com o índice que os cobre antes de qualquer retirada."
       },
       "y": {
         "fr": "Un index sans lecteur coûte une écriture à chaque insertion ; un index retiré à tort fait basculer une requête chaude en parcours séquentiel. Trancher sur un mois de lectures en production, pas sur un banc.",
@@ -3353,8 +3361,8 @@
         ]
       },
       "dep": {
-        "fr": "Différé à dessein : un mois de compteurs de production après B32 (déployé le 28/09), pas avant le 28/10.",
-        "pt": "Adiado de propósito: um mês de contadores de produção depois do B32 (implantado em 28/09), não antes de 28/10."
+        "fr": "Différé à dessein : relecture **le 28/10**, en comptant depuis le reset du 07/10 (trois semaines), **périmètre B10 et B32 seulement** — les index gardés sous réserve le 27/09 et les trois des vues matérialisées. Aucun index d'une couche jamais exercée (notes de lecture, assemblées, cercles, PEB, partage numérique) n'entre dans la relecture, quel que soit son compteur (`DOC-MESURE-1`). Décision Xavier, 12/10.",
+        "pt": "Adiado de propósito: releitura **em 28/10**, contando desde o reinício de 07/10 (três semanas), **perímetro B10 e B32 apenas** — os índices mantidos com ressalva em 27/09 e os três das visões materializadas. Nenhum índice de uma camada nunca exercida (notas de leitura, assembleias, círculos, EEB, compartilhamento digital) entra na releitura, seja qual for o seu contador (`DOC-MESURE-1`). Decisão de Xavier, 12/10."
       },
       "r": [
         "docs/journal/audits/AUDIT_performance_B10_2026-09-27.md",
@@ -3370,6 +3378,10 @@
         {
           "fr": "**07/10 — compteurs remis à zéro par la panne.** Le redémarrage de la base (I32, 20:19) a remis `pg_stat_user_indexes` à zéro : l'avis « index inutilisé » compte 440 index le 07/10 au soir, et l'avis de performance monte de 257 à 466 sans qu'une seule ligne de la base ait changé. La relecture prévue vers le 28/10 compte donc depuis le 07/10 — trois semaines d'usage, pas quatre.",
           "pt": "**07/10 — contadores zerados pela queda.** O reinício do banco (I32, 20h19) zerou `pg_stat_user_indexes`: o aviso « índice não usado » conta 440 índices em 07/10 à noite. A releitura prevista por volta de 28/10 conta desde 07/10 — três semanas de uso."
+        },
+        {
+          "fr": "**12/10 — date et périmètre confirmés par Xavier** (sur le GLB v18 ch. 8.2) : le 28/10, périmètre B10 et B32 seulement, compteurs lus depuis le 07/10 et datés ainsi dans le relevé (`DOC-MESURE-1`). L'advisor comptait 386 index « inutilisés » le 11/10 (440 le 07/10, 400 le 08/10) : la liste se vide à mesure que l'usage revient, elle ne se lit pas avant la date.",
+          "pt": "**12/10 — data e perímetro confirmados por Xavier** (sobre o GLB v18 cap. 8.2): em 28/10, perímetro B10 e B32 apenas, contadores lidos desde 07/10 e assim datados no levantamento (`DOC-MESURE-1`). O advisor contava 386 índices « não usados » em 11/10 (440 em 07/10, 400 em 08/10): a lista esvazia à medida que o uso volta, não se lê antes da data."
         }
       ]
     },
@@ -3664,8 +3676,8 @@
         "pt": "O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo."
       },
       "w": {
-        "fr": "Créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.",
-        "pt": "Criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente."
+        "fr": "**D'abord** : réviser et publier le lot 63 (1 673 brouillons) depuis l'écran des lots, par la coordination de Solidaires elle-même, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Ensuite** : créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.",
+        "pt": "**Primeiro**: revisar e publicar o lote 63 (1 673 rascunhos) pela tela dos lotes, pela própria coordenação da Solidaires, com as ferramentas entregues — relatório de revisão (H16), publicação por lote (B30), numeração e cotas (E21). **Depois**: criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente."
       },
       "y": {
         "fr": "Un titre qui contient « n° » n'est pas toujours un fascicule — c'est parfois un titre de collection, parfois une coquille. Le drapeau signale, il ne décide pas. Et le réseau ne compte aujourd'hui que 4 titres de périodiques : ce lot les multiplierait par quatre, et éprouverait le sous-système pour de bon.",
@@ -3684,8 +3696,8 @@
         ]
       },
       "dep": {
-        "fr": "**Bloqué par C2**, donc par **G7** et **A1**. La révision de la spec (**D1**) peut se faire sans attendre.",
-        "pt": "**Bloqueado por C2**, portanto por **G7** e **A1**. A revisão da spec (**D1**) pode ser feita sem esperar."
+        "fr": "Débloqué depuis le 24/09 ; **P1 confirmé par Xavier le 12/10**. Le projet outille et accompagne, il ne catalogue pas à la place d'un collectif : la révision est celle de Solidaires. Si Solidaires n'a pas commencé le **26/10**, remonter à `A1` / `G1` — la cinquième bibliothèque dotée d'un fonds passe par ce lot, et la condition posée à la v19 (une seconde bibliothèque qui prête) aussi.",
+        "pt": "Desbloqueado desde 24/09; **P1 confirmado por Xavier em 12/10**. O projeto fornece as ferramentas e acompanha, não cataloga no lugar de um coletivo: a revisão é da Solidaires. Se a Solidaires não tiver começado em **26/10**, subir para `A1` / `G1` — a quinta biblioteca com acervo passa por este lote, e a condição posta à v19 (uma segunda biblioteca que empreste) também."
       },
       "r": [
         "spec-periodiques-v0.1 §10",
@@ -3703,6 +3715,10 @@
         {
           "fr": "**12/10 — monté en P1 sur proposition de la v18** (ordre d'exécution #6, arbitrage « devenu pressant ») : « 1 673 brouillons importés le 28/08, admis le 15/09, non révisés le 11/10. L'arbitrage d'août — admission d'abord, import ensuite — a été rendu ; il reste à faire le travail qu'il conditionnait, et ce travail est du catalogage, pas du code. C'est la seule voie vers une cinquième bibliothèque dotée d'un fonds, et elle ne dépend que de bras. » La révision du lot 63 (Solidaires) est l'objet, D3 en est la part documentaire (fascicules et monographies suspectes) ; la publication du fonds passe par C-lot 63. Reclassement à confirmer ou à défaire par Xavier.",
           "pt": "**12/10 — subido a P1 por proposta da v18** (ordem #6): 1 673 rascunhos importados em 28/08, admitidos em 15/09, não revisados em 11/10 — a única via para uma quinta biblioteca com acervo, e só depende de braços. Reclassificação a confirmar ou desfazer por Xavier."
+        },
+        {
+          "fr": "**12/10 — reclassement en P1 confirmé par Xavier**, et les bras choisis : la coordination de Solidaires (un compte actif), avec les outils déjà livrés — plutôt que le mainteneur, ce que la v18 appelle précisément à éviter (quinze à vingt soirées pour 1 673 notices, et un collectif qui ne catalogue pas son fonds). Échéance : un début de révision avant le 26/10, sinon la question remonte à `A1` / `G1`.",
+          "pt": "**12/10 — reclassificação em P1 confirmada por Xavier**, e os braços escolhidos: a coordenação da Solidaires (uma conta ativa), com as ferramentas já entregues — e não o mantenedor, o que a v18 pede justamente para evitar (quinze a vinte noites para 1 673 fichas, e um coletivo que não cataloga o próprio acervo). Prazo: um começo de revisão antes de 26/10, senão a questão sobe para `A1` / `G1`."
         }
       ]
     },
@@ -5950,62 +5966,6 @@
         {
           "fr": "**09/10 — livré, déployé et vérifié à 22 h 29** (`6b03ebe4`). `_shared/transport/email.ts` : cadence par isolat (huit envois Resend par seconde au plus), rejeu d'un 429, d'un 5xx ou d'une connexion rompue jusqu'à trois fois après `Retry-After` (plafonné à 10 s) ou une attente croissante (0,4 s, 0,8 s, 1,6 s, avec un aléa), un autre 4xx n'est pas rejoué, l'échec après rejeu reste noté pour la sonde ; `authority.ts` et `partnership.ts` ne comptent plus un échec comme un envoi. Banc `mail-transport-rejeu-cadence` (6 cas, faux Resend horodaté) ; les 38 bancs qui passent par le transport restent verts avec des délais réduits. Critères 1 et 2 tenus au banc, critère 3 tenu pour les trois compteurs trouvés (`sent++`) — les autres domaines lisaient déjà `ok`. **Reste** : la prochaine action en masse réelle (une série de propositions, une convocation) sans aucun 429 dans `mail_transport_failures` ; d'ici là, les actions en masse se font par petits lots espacés. L'incident 23 s'est refermé seul.",
           "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
-        }
-      ]
-    },
-    {
-      "id": "J12",
-      "d": "J",
-      "p": "P1",
-      "s": "en-cours",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1)",
-        "pt": "Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1)"
-      },
-      "v": {
-        "fr": "**Le Grand Livre blanc v18 (11/10/2026, 27 pages) le demande lui-même**, chapitres 12 et 14 bis : « le présent v18 doit entrer au dépôt le jour où il sert de référence, et ses deux précisions de doctrine qui méritent un code (tiers, compteurs) doivent le recevoir dans la semaine, faute de quoi la v18 enfreindrait la règle que la v17 a fait écrire » (DOC-GLB-1, REGISTRE, 02/09). Vérifié le 12/10 : `docs/GLB/` ne porte que le v17 ; `docs/GLB/archive/` porte la refonte du 29/05 ; `docs/INDEX.md` désigne le v17 comme référence vivante et dit du v16 du 2 juillet qu'il « reste à retrouver » — or il existe, `.docx` + `.pdf` du 02/07 à 21 h 06, dans le dossier des rapports du mainteneur, comme la v18 (`.docx` + `.pdf` du 11/10 à 23 h 39). Les trois règles à coder : *précision 1*, une épreuve par un tiers vaut plus qu'une épreuve par l'auteur, et la clôture doit distinguer « exercé » de « exercé par un tiers » ; *précision 2*, une mesure d'usage se publie avec la date d'origine de ses compteurs, ou ne se publie pas (scans d'index, exécutions de cron, relevés de sonde, échecs de transport) ; *ligne rouge v18*, aucune mesure d'usage qui compte une fixture (voir B39 pour l'étiquetage). Échéance : le 18/10.",
-        "pt": "**O Grande Livro branco v18 (11/10/2026) o pede ele mesmo** (capítulos 12 e 14 bis): entrar no repositório no dia em que serve de referência, e suas duas precisões de doutrina (terceiro, contadores) receberem código na semana (DOC-GLB-1). Verificado em 12/10: `docs/GLB/` só tem a v17; o INDEX diz que a v16 de 2 de julho «resta a encontrar» — mas ela existe, `.docx` + `.pdf` de 02/07, na pasta de relatórios do mantenedor, como a v18. As três regras: a prova por um terceiro (e o fechamento distingue «exercido» de «exercido por um terceiro»); uma medida de uso se publica com a data de origem dos seus contadores; nenhuma medida de uso que conte uma fixture (B39). Prazo: 18/10."
-      },
-      "w": {
-        "fr": "(1) `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`), `docs/GLB/archive/Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`) ; `docs/INDEX.md` : v18 référence vivante, v17 en archive, le chaînon manquant retrouvé ; (2) REGISTRE : trois codes datés — l'épreuve par un tiers (DOC-TIERS-1), la mesure datée de ses compteurs (DOC-MESURE-1), la fixture hors mesure (DOC-MESURE-2) — chacun avec ce qu'il rend opposable ; (3) le backlog : la convention des clôtures dit « exercé par un tiers » quand c'est le cas, et le relevé « L'état réel » porte, pour chaque chiffre compté depuis un instant, la date d'origine de ses compteurs (B36 le fait déjà).",
-        "pt": "(1) v18 e v16 em `docs/GLB/`, INDEX atualizado; (2) REGISTRO: três códigos datados; (3) backlog: os fechamentos dizem «exercido por um terceiro» quando é o caso, e o levantamento traz a data de origem dos contadores."
-      },
-      "y": {
-        "fr": "La série n'est lisible que si chaque version est au dépôt, et une ligne rouge sans code est un vœu — la v17 l'a prouvé et la v18 le rappelle.",
-        "pt": "A série só é legível se cada versão está no repositório, e uma linha vermelha sem código é um desejo."
-      },
-      "f": {
-        "fr": [
-          "La v18 et le v16 du 02/07 sont dans `docs/GLB/`, l'INDEX les nomme, le chaînon manquant n'est plus manquant.",
-          "Les trois codes existent au REGISTRE, datés d'avant le 18/10, et le backlog applique les deux conventions (tiers, date des compteurs)."
-        ],
-        "pt": [
-          "A v18 e a v16 de 02/07 estão em `docs/GLB/`, o INDEX as nomeia.",
-          "Os três códigos existem no REGISTRO, datados antes de 18/10, e o backlog aplica as duas convenções."
-        ]
-      },
-      "dep": {
-        "fr": "B39 (l'étiquetage des fixtures donne sa contrepartie à la ligne rouge).",
-        "pt": "B39."
-      },
-      "r": [
-        "docs/GLB",
-        "docs/INDEX.md",
-        "docs/REGISTRE_decisions.md",
-        "docs/backlogs/backlog-v34.json"
-      ],
-      "verif": [
-        {
-          "fr": "12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.",
-          "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
-        },
-        {
-          "fr": "**12/10 à 13 h 09 — part 1 faite** (`8fdbc0d0`) : `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`, empreinte identique au fichier du mainteneur), le v16 du 2 juillet dans `docs/GLB/archive/` sous son nom daté (à côté du v16 du 27 mai, qui reste), le v17 en archive, `docs/INDEX.md` à jour (v18 référence vivante, cinquième lecture exacte, « chaînon retrouvé »). **Reste** : les trois codes au REGISTRE et les deux conventions du backlog (« exercé par un tiers » dans les clôtures ; la date d'origine des compteurs dans le relevé), avant le 18/10.",
-          "pt": "**12/10 às 13h09 — parte 1 feita** (`8fdbc0d0`): v18 em `docs/GLB/`, v16 de 2 de julho e v17 no arquivo, INDEX atualizado. **Resta**: os três códigos no REGISTRO e as duas convenções do backlog, antes de 18/10."
         }
       ]
     },

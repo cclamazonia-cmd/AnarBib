@@ -28,7 +28,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 
 | Document | Rôle | Statut |
 |---|---|---|
-| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.7 du 30/08/2026 — 🟢 référence normative |
+| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.84 du 12/10/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
 | [`GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. Série versée au dépôt le 02/09/2026 (arbitrage J8) : chaque version entre ici le jour où elle sert de référence. | v18 du 11/10/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.1 (septembre 2026 : OPAC par œuvre, bloc Œuvre, onglets « Œuvres scindées » / « Volumes ») — 🟢 stable |
@@ -151,7 +151,7 @@ Le livre blanc vivant d'AnarBib — état politique et technique, trajectoire, d
 
 **Version courante** : `Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (cinquième lecture exacte du backend — 30/04, 19/05, 02/07, 01/09, 11/10 ; `.docx` à côté). Les versions antérieures sont dans `GLB/archive/` — dont le v17 du 01/09 (`Grand_Livre_blanc_AnarBib_v17_2026-09-01.pdf`) et la refonte du 29/05 (`AnarBib_Grand_Livre_blanc_refonte_2026-05-29.docx`) qui a longtemps porté à tort le numéro « v17 » et le statut de référence vivante — c'est l'anomalie de numérotation que le v17 du 01/09 documente en son chapitre 14 bis, résorbée le 02/09 (item J8).
 
-> **Chaînon retrouvé (12/10/2026, J12)** : le v16 du 2 juillet 2026 — la troisième lecture exacte, base du v17 — est versé dans `GLB/archive/` sous `Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`, 02/07 à 21 h 06). Le fichier `Grand_Livre_blanc_AnarBib_v16.docx` du même dossier est le v16 du 27 mai, construit par addendum sur la v14 : deux v16, deux dates, la série est complète.
+> **Chaînon retrouvé (12/10/2026, J12)** : le v16 du 2 juillet 2026 — la troisième lecture exacte, base du v17 — est versé dans `GLB/archive/` sous `Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`, 02/07 à 21 h 06). Le v16 du 27 mai, construit par addendum sur la v14, portait jusque-là le nom nu `Grand_Livre_blanc_AnarBib_v16.docx` ; il est renommé `Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx` le 12/10 (décision Xavier), sans autre changement : deux v16, deux dates, deux noms, la série est complète.
 
 ### `cartographie/` — Carte du réseau
 

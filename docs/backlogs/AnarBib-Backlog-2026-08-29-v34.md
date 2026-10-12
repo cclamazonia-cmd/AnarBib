@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 56 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -56,13 +56,15 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Les identifiants ne sont jamais réutilisés.** Un item soldé garde son numéro et passe à la section des clôtures. Les renvois entre crochets pointent vers le REGISTRE, une spec ou un identifiant hérité d'un backlog antérieur : ils permettent de retrouver la trace, ils ne font pas autorité par eux-mêmes.
 
+**Deux conventions depuis le 12/10/2026** (`DOC-TIERS-1`, `DOC-MESURE-1`). Une clôture écrit **« exercé par un tiers »** quand l'épreuve a été faite par quelqu'un qui n'a pas écrit le code, et « exercé » sinon — le Livre blanc suivant compte les deux colonnes. Tout chiffre compté depuis un instant (parcours d'index, exécutions de cron, relevés de sonde, échecs de transport) porte, dans « L'état réel » comme dans une fiche, **la date d'origine de ses compteurs** ; sans elle il ne tranche rien.
+
 ---
 
 ## L'état réel au 11 octobre 2026
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **42 items sur 56** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, J12, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **41 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -356,9 +358,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** B10 (27/09) a retiré 22 index et en a gardé d'autres sous réserve. **22 redondants encore empruntés** (jusqu'à 10,8 millions de parcours pour `book_holdings_book_id_idx`) sont nommés avec leurs compteurs dans `index_redondants_garde_tests.sql` (`af98dee8`) : les retirer déplacerait des plans chauds vers l'index couvrant, à mesurer avant de décider. **108 index étaient à zéro parcours**, hors clés étrangères et redondants : 12 retirés (`3ac1c910`), les autres gardés, verdict par verdict, dans `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md`. B32 (28/09) a rendu empruntables les index des vues matérialisées du catalogue ; trois restent sans parcours à son relevé (`autor_norm_trgm_idx`, `library_slug_idx`, `titulo_trgm_idx`), et `autor_norm_trgm_idx` n'a pas de lecteur connu dans le code. Ces rendez-vous ne vivaient que dans les clôtures de B10 et B32.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
-**Ce que c'est.** Vers le 28/10, relire `pg_stat_user_indexes` en production — compteurs remis à zéro au redémarrage du 02/09 (B9) : dater le relevé et noter tout redémarrage depuis. Pour chaque index nommé ci-dessus : le garder, raison écrite, ou le retirer par migration, raison écrite, comme B10 et B33. Pour les 22 redondants empruntés, comparer les plans des requêtes qui les empruntent avec l'index couvrant avant tout retrait.
+**Ce que c'est.** Vers le 28/10, relire `pg_stat_user_indexes` en production — compteurs remis à zéro au redémarrage du 07/10 (I32 ; B9 pour la méthode) : dater le relevé et noter tout redémarrage depuis. Pour chaque index nommé ci-dessus : le garder, raison écrite, ou le retirer par migration, raison écrite, comme B10 et B33. Pour les 22 redondants empruntés, comparer les plans des requêtes qui les empruntent avec l'index couvrant avant tout retrait.
 
 **Pourquoi ça compte.** Un index sans lecteur coûte une écriture à chaque insertion ; un index retiré à tort fait basculer une requête chaude en parcours séquentiel. Trancher sur un mois de lectures en production, pas sur un banc.
 
@@ -367,7 +369,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 - Chaque index nommé dans v a son verdict écrit, daté du relevé.
 - Les index retirés le sont par migration ; aucune clé étrangère ne perd son index, et `index_redondants_garde_tests` est à jour.
 
-**Dépendances.** Différé à dessein : un mois de compteurs de production après B32 (déployé le 28/09), pas avant le 28/10.
+**Dépendances.** Différé à dessein : relecture **le 28/10**, en comptant depuis le reset du 07/10 (trois semaines), **périmètre B10 et B32 seulement** — les index gardés sous réserve le 27/09 et les trois des vues matérialisées. Aucun index d'une couche jamais exercée (notes de lecture, assemblées, cercles, PEB, partage numérique) n'entre dans la relecture, quel que soit son compteur (`DOC-MESURE-1`). Décision Xavier, 12/10.
 
 *Renvois : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
 
@@ -639,9 +641,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
-**Ce que c'est.** Créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.
+**Ce que c'est.** **D'abord** : réviser et publier le lot 63 (1 673 brouillons) depuis l'écran des lots, par la coordination de Solidaires elle-même, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Ensuite** : créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.
 
 **Pourquoi ça compte.** Un titre qui contient « n° » n'est pas toujours un fascicule — c'est parfois un titre de collection, parfois une coquille. Le drapeau signale, il ne décide pas. Et le réseau ne compte aujourd'hui que 4 titres de périodiques : ce lot les multiplierait par quatre, et éprouverait le sous-système pour de bon.
 
@@ -651,7 +653,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 - Les 87 candidates ont été soumises, et chaque verdict est humain.
 - Le comportement observé sur les quatre notices *Encontros com a Civilização brasileira* confirme la règle anti-faux-doublons : deux paires en sortent, deux y restent.
 
-**Dépendances.** **Bloqué par C2**, donc par **G7** et **A1**. La révision de la spec (**D1**) peut se faire sans attendre.
+**Dépendances.** Débloqué depuis le 24/09 ; **P1 confirmé par Xavier le 12/10**. Le projet outille et accompagne, il ne catalogue pas à la place d'un collectif : la révision est celle de Solidaires. Si Solidaires n'a pas commencé le **26/10**, remonter à `A1` / `G1` — la cinquième bibliothèque dotée d'un fonds passe par ce lot, et la condition posée à la v19 (une seconde bibliothèque qui prête) aussi.
 
 *Renvois : `spec-periodiques-v0.1 §10` · `REPRISE_claude_code_2026-08-27`*
 
@@ -1461,7 +1463,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
-| **J12** | Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1) | `P1` | En cours |
 
 #### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
 
@@ -1482,27 +1483,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après Bologne. Sans dépendance technique.
 
 *Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
-
-#### J12 — Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1)
-
-`P1` Prioritaire · État : **En cours** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** **Le Grand Livre blanc v18 (11/10/2026, 27 pages) le demande lui-même**, chapitres 12 et 14 bis : « le présent v18 doit entrer au dépôt le jour où il sert de référence, et ses deux précisions de doctrine qui méritent un code (tiers, compteurs) doivent le recevoir dans la semaine, faute de quoi la v18 enfreindrait la règle que la v17 a fait écrire » (DOC-GLB-1, REGISTRE, 02/09). Vérifié le 12/10 : `docs/GLB/` ne porte que le v17 ; `docs/GLB/archive/` porte la refonte du 29/05 ; `docs/INDEX.md` désigne le v17 comme référence vivante et dit du v16 du 2 juillet qu'il « reste à retrouver » — or il existe, `.docx` + `.pdf` du 02/07 à 21 h 06, dans le dossier des rapports du mainteneur, comme la v18 (`.docx` + `.pdf` du 11/10 à 23 h 39). Les trois règles à coder : *précision 1*, une épreuve par un tiers vaut plus qu'une épreuve par l'auteur, et la clôture doit distinguer « exercé » de « exercé par un tiers » ; *précision 2*, une mesure d'usage se publie avec la date d'origine de ses compteurs, ou ne se publie pas (scans d'index, exécutions de cron, relevés de sonde, échecs de transport) ; *ligne rouge v18*, aucune mesure d'usage qui compte une fixture (voir B39 pour l'étiquetage). Échéance : le 18/10.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** (1) `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`), `docs/GLB/archive/Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`) ; `docs/INDEX.md` : v18 référence vivante, v17 en archive, le chaînon manquant retrouvé ; (2) REGISTRE : trois codes datés — l'épreuve par un tiers (DOC-TIERS-1), la mesure datée de ses compteurs (DOC-MESURE-1), la fixture hors mesure (DOC-MESURE-2) — chacun avec ce qu'il rend opposable ; (3) le backlog : la convention des clôtures dit « exercé par un tiers » quand c'est le cas, et le relevé « L'état réel » porte, pour chaque chiffre compté depuis un instant, la date d'origine de ses compteurs (B36 le fait déjà).
-
-**Pourquoi ça compte.** La série n'est lisible que si chaque version est au dépôt, et une ligne rouge sans code est un vœu — la v17 l'a prouvé et la v18 le rappelle.
-
-**Ce qui compte comme fini.**
-
-- La v18 et le v16 du 02/07 sont dans `docs/GLB/`, l'INDEX les nomme, le chaînon manquant n'est plus manquant.
-- Les trois codes existent au REGISTRE, datés d'avant le 18/10, et le backlog applique les deux conventions (tiers, date des compteurs).
-
-**Dépendances.** B39 (l'étiquetage des fixtures donne sa contrepartie à la ligne rouge).
-
-*Renvois : `docs/GLB` · `docs/INDEX.md` · `docs/REGISTRE_decisions.md` · `docs/backlogs/backlog-v34.json`*
 
 ---
 
@@ -1975,6 +1955,7 @@ CI verte : lint et suite unitaire. |
 | E37 | 2026-10-11 | Le menu des pages reste visible en haut de l'écran, où que l'on soit dans la page : bandeau collant sur fond presque opaque et flou, hauteur publiée dans `--ab-topbar-h`, les éléments déjà collants (barre d'état du catalogage, prévia de cote, ancre de l'Atelier) et le défilement vers une ancre se calent dessous ; règle fermée par le test `bandeau-colle-en-haut` (8) (`e0e7f402`, 11/10). **Vu par Xavier le 11/10**, connecté : au bas d'une fiche de catalogage le menu reste en haut et cliquable, la barre d'état d'un enregistrement apparaît sous lui, le tiroir ☰ s'ouvre au milieu d'une page longue sur téléphone, le fond passe sur la BLMF à thème. Clos. |
 | E31 | 2026-10-11 | Ce qui attendait un regard à l'écran, connecté, a été vu — **quinze questions posées une à une le 11/10 au soir, quinze réponses de Xavier**. *Conformes* : la barre d'état collante et la fenêtre de confirmation du catalogage (C21) ; le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; le refus traduit d'un numéro libéré saisi à la main (C17) ; les lots 2, 4, 5 et 8 d'`AccountPage` (E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; la lecture réservée pour une personne membre de la BTL (C20) ; une invitation réelle à une tâche, envoyée et reçue (F16) ; les quatre lots du Catalogue (E6) — avec un défaut trouvé en chemin, qui n'est pas des lots : **la recherche libre « Kropotkine » ne rend qu'une œuvre ou deux au lieu des 36 de l'autorité** (ouvert en E38). Les 8/10 avaient déjà clos C14, C23 et G16. *Retirés de la liste* : E33 (Mon compte quand la base ne répond pas : ne se simule pas en production) et les écrans de H21 (ils attendent un réimport réel de DIRA, pas un regard). Le critère est tenu : chaque point vu, conforme ou ouvert en item. Clos. Les regards à venir se portent désormais sur l'item qu'ils concernent, pas sur une liste à part. |
 | E38 | 2026-10-12 | La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos. |
+| J12 | 2026-10-12 | **Clos le 12/10 sur pièces, les deux critères tenus — six jours avant l'échéance de `DOC-GLB-1`.** *(1)* La v18 et le v16 du 02/07 sont dans `docs/GLB/` depuis `8fdbc0d0` (13 h 09), l'INDEX les nomme, le chaînon n'est plus manquant ; l'addendum du 27/05 porte désormais sa date dans son nom (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, décision Xavier). *(2)* Les trois codes sont au REGISTRE v0.84 : `DOC-TIERS-1` (une épreuve par un tiers compte double, la clôture dit « exercé par un tiers »), `DOC-MESURE-1` (un chiffre compté depuis un instant porte la date de son dernier reset), `DOC-MESURE-2` (une fixture en production n'est pas de l'usage ; l'étiquetage mécanique est `B39`) ; les deux conventions sont écrites dans « Comment lire ce document », et `B36` applique déjà la seconde. Décisions Xavier du 12/10, sur quatre questions posées à la lecture de la v18. |
 
 ---
 
@@ -2006,4 +1987,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 56 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
