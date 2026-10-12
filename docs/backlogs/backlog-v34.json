@@ -3211,6 +3211,14 @@
           "fr": "**Clos le 12/10 sur la parole de Xavier.** *Le Monde libertaire* a condensé les trois articles en un, paru dans le numéro d'octobre 2026 : le rythme a été renégocié de fait, et c'est ce que le critère demandait (« trois dates, ou une renégociation »). L'émission a été proposée à *Trous Noirs*. Ce qui suit — une réponse de *Trous Noirs*, un second article un jour — n'est pas un engagement en cours.",
           "pt": "**Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*."
         }
+      ],
+      [
+        "G9",
+        "2026-10-12",
+        {
+          "fr": "**Clos le 12/10 sur décision de Xavier, les deux critères tenus depuis longtemps.** *(1)* La carte publique est une route de l'application (`/cartografia`), servie sans requête vers un tiers depuis E5 (07/09 : fond PMTiles sur notre Storage, lu par Range). *(2)* Le §2 `MAP` du REGISTRE porte son renvoi vers le §34 depuis J5 (29/08). L'item était gelé « post-Bologne » pour la spec v1.0 (MAP-A..L, tranchés le 18/06) ; ce qui reste de cette spec n'a pas d'item : MAP-I (statut du PEB sur la carte interne) et MAP-J (auto-déclaration modérée) sont différés au REGISTRE §34, et la fenêtre reste « fin 2026 ou 2027 » — à rouvrir sous un identifiant neuf, avec ses propres critères, si la fenêtre s'ouvre.",
+          "pt": "**Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos há muito.** *(1)* A carta pública é uma rota da aplicação (`/cartografia`), servida sem terceiros desde E5 (07/09). *(2)* A §2 `MAP` do REGISTRO remete à §34 desde J5 (29/08). O que resta da spec v1.0 (MAP-I, MAP-J) não tem item: a reabrir com identificador novo se a janela se abrir."
+        }
       ]
     ]
   },
@@ -4337,56 +4345,6 @@
         {
           "fr": "**12/10 — bloqué sur la liste** : les « neuf archives repérées dans le réseau NORLA » ne sont écrites nulle part — ni dans le dépôt (seul le backlog les cite), ni dans la vitrine (`data/carte-publique.geojson`, 109 entrées, aucune propriété de réseau), ni dans les cadrages (NORLA y est un exemple d'archive d'éphémères). Sans les neuf noms, rien à confronter. **Reste** : Xavier dépose la liste (noms, villes, adresses des sites) ; la confrontation et les entrées manquantes suivent dans la soirée.",
           "pt": "**12/10 — bloqueado na lista**: as « nove arquivos NORLA » não estão escritos em lado nenhum (nem no repositório, nem na montra, nem nos enquadramentos). **Resta**: Xavier deposita a lista; o confronto segue."
-        }
-      ]
-    },
-    {
-      "id": "G9",
-      "d": "G",
-      "p": "P3",
-      "s": "gele",
-      "e": "L",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Implémenter la cartographie du réseau selon la spec v1.0",
-        "pt": "Implementar a cartografia da rede segundo a spec v1.0"
-      },
-      "v": {
-        "fr": "Les arbitrages sont tranchés depuis le 18/06 : table dédiée, i18n hybride, carte publique comme route de l'application, moteur Leaflet, OpenStreetMap et Nominatim auto-hébergés, entrées non membres affichées avec un filtre clair. `MAP-I` (statut du prêt entre bibliothèques sur la carte interne) et `MAP-J` (auto-déclaration « ajouter ma bibliothèque » avec modération) restent différés. **L'implémentation est calendée post-Bologne, fin 2026 ou 2027.**",
-        "pt": "As arbitragens estão decididas desde 18/06: tabela dedicada, i18n híbrida, mapa público como rota do aplicativo, motor Leaflet, OpenStreetMap e Nominatim auto-hospedados, entradas não membros exibidas com um filtro claro. `MAP-I` (estatuto do empréstimo entre bibliotecas no mapa interno) e `MAP-J` (autodeclaração «adicionar minha biblioteca» com moderação) continuam adiados."
-      },
-      "w": {
-        "fr": "Reprendre la spec v1.0 quand la fenêtre s'ouvre. Attention : le REGISTRE porte **deux sections `MAP`** — le §2 est un squelette où tout est ouvert, le §34 est la version tranchée. Le §2 n'a ni tampon de supersession ni renvoi vers le §34 : **c'est le §34 qui vaut**.",
-        "pt": "Retomar a spec v1.0 quando a janela se abrir. Atenção: o REGISTRO traz **duas seções `MAP`** — a §2 é um esqueleto onde tudo está aberto, a §34 é a versão decidida. A §2 não tem carimbo de supersessão nem remissão à §34: **é a §34 que vale**."
-      },
-      "y": {
-        "fr": "La carte est le premier objet qu'une bibliothèque qui découvre le réseau va regarder. Elle mérite d'être faite quand il y aura du temps pour la faire bien, et pas dans la fenêtre d'avant Bologne.",
-        "pt": "O mapa é o primeiro objeto que uma biblioteca que descobre a rede vai olhar. Merece ser feito quando houver tempo para fazê-lo bem, e não na janela anterior a Bolonha."
-      },
-      "f": {
-        "fr": [
-          "La carte publique est une route de l'application, servie sans requête vers un tiers (voir **E5**).",
-          "Le §2 du REGISTRE porte un renvoi vers le §34."
-        ],
-        "pt": [
-          "O mapa público é uma rota do aplicativo, servido sem requisição a terceiro (ver **E5**).",
-          "A §2 do REGISTRO traz uma remissão à §34."
-        ]
-      },
-      "dep": {
-        "fr": "Après Bologne. Lié à **E5** et **J5**.",
-        "pt": "Depois de Bolonha. Ligado a **E5** e **J5**."
-      },
-      "r": [
-        "spec-cartographie-reseau.md v1.0",
-        "REGISTRE §34 MAP"
-      ],
-      "verif": [
-        {
-          "fr": "**12/10, revue des clôtures possibles — les deux critères sont tenus** : *(1)* la carte publique est une route de l'application (`/cartografia`), servie sans requête vers un tiers depuis E5 (07/09, PMTiles sur notre Storage) ; *(2)* le §2 `MAP` du REGISTRE porte son renvoi vers le §34 depuis J5 (29/08). La spec v1.0 elle-même (MAP-A..L) reste « post-Bologne, fin 2026 ou 2027 » : si l'item doit survivre à ses critères, il faut lui en écrire d'autres. **Clôture proposée, décision de Xavier.**",
-          "pt": "**12/10 — os dois critérios estão cumpridos** (rota `/cartografia` sem terceiros desde E5 ; remissão §2 → §34 desde J5). **Fecho proposto, decisão de Xavier.**"
         }
       ]
     },

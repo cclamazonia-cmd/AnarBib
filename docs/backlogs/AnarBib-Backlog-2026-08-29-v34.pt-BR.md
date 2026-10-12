@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 5
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **42 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, C28, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G9, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **41 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, C28, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -955,7 +955,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G1** | Percorrer os circuitos construídos e jamais usados | `P0` | Aberto |
 | **G6** | Fazer um empréstimo entre bibliotecas de ponta a ponta pela sua tela | `P2` | Aberto |
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
-| **G9** | Implementar a cartografia da rede segundo a spec v1.0 | `P3` | Congelado |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
 
@@ -1028,27 +1027,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma. **Entrada sem competência técnica.**
 
 *Remissões : `VEILLE_leftovers_maydayrooms_2026-08-19 §3.4` · `REGISTRE §34 MAP-E`*
-
-#### G9 — Implementar a cartografia da rede segundo a spec v1.0
-
-`P3` Adiado · Estado : **Congelado** · Carga : várias semanas · O que exige : React / JavaScript
-
-**Estado.** As arbitragens estão decididas desde 18/06: tabela dedicada, i18n híbrida, mapa público como rota do aplicativo, motor Leaflet, OpenStreetMap e Nominatim auto-hospedados, entradas não membros exibidas com um filtro claro. `MAP-I` (estatuto do empréstimo entre bibliotecas no mapa interno) e `MAP-J` (autodeclaração «adicionar minha biblioteca» com moderação) continuam adiados.
-
-*Verificado : [object Object]*
-
-**O que é.** Retomar a spec v1.0 quando a janela se abrir. Atenção: o REGISTRO traz **duas seções `MAP`** — a §2 é um esqueleto onde tudo está aberto, a §34 é a versão decidida. A §2 não tem carimbo de supersessão nem remissão à §34: **é a §34 que vale**.
-
-**Por que importa.** O mapa é o primeiro objeto que uma biblioteca que descobre a rede vai olhar. Merece ser feito quando houver tempo para fazê-lo bem, e não na janela anterior a Bolonha.
-
-**O que conta como terminado.**
-
-- O mapa público é uma rota do aplicativo, servido sem requisição a terceiro (ver **E5**).
-- A §2 do REGISTRO traz uma remissão à §34.
-
-**Dependências.** Depois de Bolonha. Ligado a **E5** e **J5**.
-
-*Remissões : `spec-cartographie-reseau.md v1.0` · `REGISTRE §34 MAP`*
 
 #### G10 — Liquidar as três questões de onboarding marcadas «o mais rápido possível»
 
@@ -1876,6 +1854,7 @@ CI verde. |
 | I30 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, sobre o veredicto do dia.** Direitos de `public` idênticos; `private` e `api` no fluxo longo e inteiros; controlo instrumentado (`restore-test` repõe os direitos, compara a impressão e nomeia o que difere, `5939637b`). Primeiro restore-test real em 12/10: quatro defeitos corrigidos no dia. Única diferença: os objetos das sete migrações implantadas desde o dump. |
 | C29 | 2026-10-12 | **Fechado em 12/10: visto na tela por Xavier, conectado — os quatro lotes conformes.** Lista por biblioteca na ficha, criação sem sair da ficha, cota alterada num gesto, cartão e bloco antigos desaparecidos. |
 | K10 | 2026-10-12 | **Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*. |
+| G9 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos há muito.** *(1)* A carta pública é uma rota da aplicação (`/cartografia`), servida sem terceiros desde E5 (07/09). *(2)* A §2 `MAP` do REGISTRO remete à §34 desde J5 (29/08). O que resta da spec v1.0 (MAP-I, MAP-J) não tem item: a reabrir com identificador novo se a janela se abrir. |
 
 ---
 
@@ -1907,4 +1886,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
