@@ -1834,7 +1834,7 @@ CI verde. |
 | C29 | 2026-10-12 | **Fechado em 12/10: visto na tela por Xavier, conectado — os quatro lotes conformes.** Lista por biblioteca na ficha, criação sem sair da ficha, cota alterada num gesto, cartão e bloco antigos desaparecidos. |
 | K10 | 2026-10-12 | **Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*. |
 | G9 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos há muito.** *(1)* A carta pública é uma rota da aplicação (`/cartografia`), servida sem terceiros desde E5 (07/09). *(2)* A §2 `MAP` do REGISTRO remete à §34 desde J5 (29/08). O que resta da spec v1.0 (MAP-I, MAP-J) não tem item: a reabrir com identificador novo se a janela se abrir. |
-| C28 | 2026-10-12 | **Fechado em 12/10: os três pares decididos, cada um fundido.** Dois a 06 e 08/10 (Xavier); o terceiro (1699 / 2267, *Os Anarquistas e as Eleições*, Imaginário, 2000, mesmo ISBN em dez e treze dígitos) a 12/10 por `fn_fusion_notices` sob a identidade de árbitro de Xavier: a ficha da BTL fica, recebe a capa da BLMF, e o fundo da BLMF passa para ela. |
+| C28 | 2026-10-12 | **Fechado em 12/10: os três pares decididos, cada um fundido.** Dois a 06 e 08/10 (Xavier); o terceiro (1699 / 2267, *Os Anarquistas e as Eleições*, Imaginário, 2000, mesmo ISBN em dez e treze dígitos) a 12/10 por `fn_fusion_notices` sob a identidade de árbitro de Xavier: a ficha da BTL fica, recebe a capa da BLMF, e o fundo da BLMF passa para ela. A obra 171, órfã, foi retirada na mesma noite com acordo de Xavier. |
 
 ---
 
