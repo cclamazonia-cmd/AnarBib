@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 56 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 57 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **41 items sur 56** portent une vérification datée qui leur est propre (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **42 items sur 57** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B41, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -350,6 +350,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
 | **B39** | Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note | `P2` | À vérifier |
+| **B41** | Recompter un seul fonds donne à une notice partagée la disponibilité de ce seul fonds jusqu’au recompte de nuit | `P3` | Ouvert |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -392,6 +393,27 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune. J12 inscrit le choix au REGISTRE.
 
 *Renvois : `supabase/migrations` · `tests/sql` · `docs/backlogs/backlog-v34.json` · `docs/REGISTRE_decisions.md`*
+
+#### B41 — Recompter un seul fonds donne à une notice partagée la disponibilité de ce seul fonds jusqu’au recompte de nuit
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Constaté le 12/10 par la relecture de H34 (comportement antérieur, gardé tel quel) : `fn_v2_recompute_holdings_availability(fonds)` pose sur la notice (`books.available_count`) la disponibilité des seuls fonds recomptés ensemble ; sur une notice détenue par plusieurs bibliothèques, un prêt ou un retour dans l’une efface du compte les exemplaires des autres jusqu’au recompte complet du cron de 04:43. Le 12/10 : 0 écart sur les 87 notices à plusieurs fonds de la production.
+
+*Vérifié : 12/10 — ouvert sur constat de la relecture de H34.*
+
+**Ce que c'est.** Quand la fonction recompte des fonds, recompter la notice sur TOUS ses fonds (somme), sans repasser par tout le réseau ; test : notice à deux bibliothèques, prêt dans l’une, la disponibilité de la notice compte encore l’autre ; vérifier l’OPAC (vues matérialisées) et l’écran de circulation.
+
+**Pourquoi ça compte.** L’OPAC peut dire « indisponible » une notice que l’autre bibliothèque peut prêter, pendant des heures.
+
+**Ce qui compte comme fini.**
+
+- La disponibilité d’une notice partagée reste la somme de ses fonds après tout prêt, retour ou réservation.
+- Un test à deux bibliothèques.
+
+**Dépendances.** Après **H34**.
+
+*Renvois : `supabase/migrations` · `tests/sql`*
 
 ---
 
@@ -1107,7 +1129,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **H33** | « Rapprocher » sur un gros fichier dépasse le plafond de 8 s des appels de l’API | `P2` | À vérifier |
-| **H34** | Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire | `P2` | Ouvert |
+| **H34** | Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire | `P2` | À vérifier |
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 | **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
@@ -1141,11 +1163,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H34 — Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Mesuré le 12/10 par H33 (point 5 de sa spécification, `scratchpad/h33/sonde-promo`) : publier un lot importé de 5 000 exemplaires prend environ 208 s aux volumes de la production. Par exemplaire publié, `fn_v2_recompute_holdings_availability` recompte les exemplaires de tout le réseau (≈ 110 s au total) et `fn_next_tombo` relit tous les numéros du préfixe de la bibliothèque (≈ 49 s). Un run n’ayant qu’un lot ouvert (H21 lot 8), l’import complet de DIRA (plus de 3 000 livres) passera par une publication de cette taille ; les appels de l’API sont coupés à 8 s.
 
-*Vérifié : 12/10 — ouvert sur mesure de H33.*
+*Vérifié : 12/10 — ouvert sur mesure de H33. **12/10 — lot 1 livré** (`34ba2ab9`, migration `20261012153013` appliquée par la CI, `created_by` vide) : `fn_v2_recompute_holdings_availability` ne lit plus que les fonds visés (sans argument : tout le réseau, comme avant) ; pendant `publish_catalog_batch`, les fonds touchés sont notés (`private.fn_h34_noter_fonds`) et recomptés une fois à la fin (`private.fn_h34_recompter_fonds_notes`) ; `fn_next_tombo` lit le dernier numéro par deux index d’expression (`exemplares_tombo_serie_idx`, `tombos_attribues_serie_idx`), verrou d’avis et registre C17 inchangés. Comptes et numéros identiques à l’ancien chemin (comparaison colonne par colonne, concurrence sans doublon) ; 5 000 exemplaires de 132 s à 18,5 s ; suite h34, 15 mutants. Le job `rejeu-image` tombait sur les droits (image vierge : EXECUTE à authenticated) → REVOKE nominatif ajouté dans la migration avant sa vérification (`c98b7293`, sans effet en production). **12/10 — lot 2 livré** (`e08ec17c`, migration `20261012173204` ; REGISTRE `IMP-36`, décision de Xavier) : un lot approuvé se publie par pages de 60 notices et 400 exemplaires au plus (une notice jamais séparée de ses exemplaires), une transaction par page, recompte en fin de page ; état `publishing` entre deux pages (brouillons figés par déclencheur, état réservé à la publication et à une nouvelle demande de révision) ; page refusée = rien écrit, reprise au clic suivant ; second appel concurrent refusé (`publication_busy`) ; panneau des lots qui enchaîne et « Reprendre la publication ». Même état final qu’une publication d’un bloc ; 2 061 exemplaires en 6 pages de ~2 s ; suite h34 19 tests, 11 mutants ; huit suites qui publiaient le lot PMB d’un appel bouclent désormais. S’applique à tous les lots, manuels compris (signalé à Xavier). **Consigné** : rouvrir un lot `publishing` reste réservé à l’administration ; un brouillon lié par `book_draft_id` sans `batch_id` n’est pas figé ; sans verrou, la contrainte d’unicité des cotes resterait le dernier filet (erreur brute) ; `remaining` compte tous les brouillons vivants du lot ; recompter un fonds donne à la notice la seule disponibilité de ce fonds → **B41**.*
 
 **Ce que c'est.** Recompter la disponibilité une fois par fonds touché en fin de publication (et non par exemplaire, ni sur tout le réseau) ; tirer les numéros d’inventaire par série (une lecture du dernier numéro, puis incrément, sous verrou), sans jamais redonner un numéro (C17) ; mesure dans une suite : publication d’un lot de 5 000 exemplaires sous 8 s par appel, ou publication par pages si une borne reste nécessaire (ce serait une règle nouvelle : la soumettre à Xavier).
 
@@ -2002,4 +2024,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 56 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 57 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
