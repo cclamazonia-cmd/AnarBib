@@ -77,12 +77,12 @@ carte), c'est la valeur de `.env.example`.
 - **Domaine et TLS** : Caddy obtient le certificat seul si la VM a une IP publique et un
   enregistrement `A` (et `AAAA`) vers elle. Sinon, `deploy/tunnel/README.md` : un VPS
   frontal en passage TCP brut, sans secret.
-- **Sauvegardes** : la chaîne `deploy/ops/` (trois flux restic) tourne aujourd'hui depuis le
-  poste de maintenance contre la production ; sa version « depuis la VM » (unités système,
-  `pg_dump` local, dépôt restic distant) est le prochain lot. En attendant, un `pg_dump`
-  quotidien de la base (`docker compose exec -T db pg_dump -U supabase_admin postgres`) et
-  une copie hors machine du volume Docker `storage-data` (les fichiers des buckets) valent
-  mieux que rien.
+- **Sauvegardes** : [`deploy/ops/vm/`](ops/vm/README.md) — un script lancé par des unités
+  système sur la machine elle-même : chaque jour les trois fichiers que `restore.sh` attend
+  (recette exacte du CLI Supabase) plus les secrets du Vault, chaque dimanche le volume des
+  fichiers, vers un dépôt restic **hors de la machine** ; témoins en base lus par la sonde de
+  l'instance. Installation en dix lignes, restauration documentée. (La chaîne `deploy/ops/`
+  d'à côté, elle, sauvegarde la production hébergée depuis le poste de maintenance.)
 - **Mise à jour** : `deploy/deploy.sh` (git pull, migrations en attente, vues, fonctions,
   front, contrôle de santé). Pas de forge, pas de CI.
 - **Restauration d'une sauvegarde réelle** : README § « À lire avant » — le dépôt, les trois
