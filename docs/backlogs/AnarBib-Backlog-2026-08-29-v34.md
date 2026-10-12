@@ -1418,7 +1418,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Consigné à la clôture d'I29 (05/10), hors de son périmètre, et porté par aucun item. **Les deux flux de la sauvegarde #BG2 sont pris en `--no-privileges`** (`deploy/ops/anarbib-bg2.sh`) : aucun `GRANT` ni `REVOKE` n'y figure. Le runbook (`RUNBOOK_restauration_BG2_2026-07-01.md`, §3.2-ter) ne repose les droits que d'`ingest`. Après une restauration, les tables de `public` n'ont plus leurs accès pour `anon` et `authenticated` — l'application ne lit plus rien —, et toute fonction recréée reprend l'`EXECUTE` à `PUBLIC` que Postgres donne par défaut : les fonctions `DEFINER` que les listes fermées surveillent (T10, T12) s'ouvriraient à `anon`. **Les schémas `private` et `api` ne sont dans aucun flux** : `api` porte les fonctions de l'OPAC, `private` les aides que des politiques RLS appellent ; une base restaurée depuis BG2 seul ne les a pas, et les reconstruire par le rejeu des migrations ne rend pas la production (B22).
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Mesurer en production (lecture seule) les droits de `public`, `ingest`, `private` et `api` et leur contenu ; faire porter les droits par les dumps (ou, à défaut, par un script de repose au runbook, comme pour `ingest`) ; faire entrer `private` et `api` dans le flux long ; prouver sur banc qu'une restauration rend les mêmes droits et les mêmes fonctions que la production, et outiller ce contrôle.
 

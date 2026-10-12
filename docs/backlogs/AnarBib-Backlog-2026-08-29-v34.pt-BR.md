@@ -1418,7 +1418,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Registrado no fechamento do I29. Os dois fluxos do backup #BG2 são feitos em `--no-privileges`: nenhum `GRANT`/`REVOKE`; o runbook só repõe os direitos de `ingest`. Depois de uma restauração, `public` perde os acessos de `anon`/`authenticated` e toda função recriada volta a ser executável por `PUBLIC`. Os esquemas `private` e `api` não estão em nenhum fluxo.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Medir na produção; levar os direitos nos dumps (ou repô-los por script); incluir `private` e `api` no fluxo longo; provar em banco que uma restauração devolve os mesmos direitos e funções que a produção.
 
