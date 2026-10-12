@@ -23,7 +23,7 @@ export const SEARCH_COLS = ['titulo', 'autor', 'editora', 'bib_ref', 'cdd', 'ass
  * écrasait silencieusement la première (la recherche libre était donc IGNORÉE
  * dès qu'on cochait ≥ 2 bibliothèques). La consolidation corrige ce bug.
  */
-export function buildServerFilters({ search, authorFilter, authorIdFilter, alphaFilter, publisherFilter, yearFilter, libraryShortNames, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
+export function buildServerFilters({ search, authorFilter, authorIdFilter, alphaFilter, publisherFilter, yearFilter, libraryShortNames, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter, authorIds = null }) {
   const f = {};
   const andClauses = [];
 
@@ -58,7 +58,20 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
     // et affichée « Confederación Nacional del Trabajo » (06/10). Un groupe or()
     // par mot, dans le `and` consolidé.
     const words = authorFilter.split(/[\s,;]+/).map(w => w.replace(/[(),"]/g, '')).filter(Boolean).slice(0, 6);
-    for (const w of words) andClauses.push(`or(autor.ilike.%${w}%,author_display.ilike.%${w}%)`);
+    const motClauses = words.map(w => `or(autor.ilike.%${w}%,author_display.ilike.%${w}%)`);
+    const ids = Array.isArray(authorIds) ? authorIds.map(Number).filter(Number.isFinite) : [];
+    if (ids.length > 0 && motClauses.length > 0) {
+      // E38 (12/10/2026) : la page a résolu le nom en identifiants d'autorité
+      // (api.catalog_author_ids_v1 : forme retenue, forme de tri, variantes,
+      // alias — comme catalog_works_v1 en liste par œuvre). Une notice compte
+      // si son lien principal (author_id) ou l'un de ses contributeurs
+      // (author_chips) porte l'une de ces autorités, OU si son texte porte
+      // chaque mot — l'ILIKE reste pour les notices sans autorité liée.
+      const parLien = [`author_id.in.(${ids.join(',')})`, ...ids.map(id => `author_chips.cs.[{"author_id":${id}}]`)];
+      andClauses.push(`or(${[...parLien, `and(${motClauses.join(',')})`].join(',')})`);
+    } else {
+      for (const c of motClauses) andClauses.push(c);
+    }
   }
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
 

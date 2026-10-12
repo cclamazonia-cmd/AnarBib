@@ -375,9 +375,26 @@ export default function CatalogPage() {
       }
       const useRpc = rankedIds !== null;
 
+      // E38 (12/10/2026) : en liste plate, le filtre auteur·rice lit aussi les
+      // autres noms de l'autorité (forme de tri, variantes, alias) comme le fait
+      // catalog_works_v1 en liste par œuvre — par la porte api.catalog_author_ids_v1.
+      // Rien d'exact : la même résolution à une ou deux lettres près, et l'écran
+      // le dit (pastille). L'ILIKE mot à mot reste, pour les notices sans lien.
+      let authorIds = null;
+      if (dAuthor.trim() && !String(authorIdFilter || '').trim() && !String(alphaFilter || '').trim()) {
+        try {
+          const { data: exact } = await apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim() });
+          authorIds = Array.isArray(exact) ? exact : [];
+          if (authorIds.length === 0) {
+            const { data: proches } = await apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim(), p_approche: true });
+            if (Array.isArray(proches) && proches.length > 0) { authorIds = proches; if (!append) setApproxMatch(true); }
+          }
+        } catch { authorIds = null; /* repli : l'ILIKE seul, jamais pire que l'existant */ }
+      }
+
       // Avec le RPC, le terme de recherche est géré côté serveur → on ne l'ajoute
       // PAS au ilike (search:''), mais tous les autres filtres restent actifs.
-      const filters = buildServerFilters({ search: useRpc ? '' : dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      const filters = buildServerFilters({ authorIds, search: useRpc ? '' : dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
 
       // #OPAC8 — filtre par sujet : résout les book_id via book_subjects (table dédiée).
       let subjectIds = null;

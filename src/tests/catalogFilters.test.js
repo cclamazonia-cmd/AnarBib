@@ -108,6 +108,33 @@ describe('buildServerFilters — filtre texte par auteur·rice', () => {
     const f = buildServerFilters({ ...base, search: 'vida', authorFilter: 'Emma Goldman' });
     expect(f.and).toBe(`(${orGroup('vida')},${mot('Emma')},${mot('Goldman')})`);
   });
+
+  // E38 (12/10/2026) : la page résout le nom en identifiants d'autorité ; le
+  // filtre accepte le lien (author_id, author_chips) OU le texte mot à mot.
+  it('avec des identifiants d\'autorité : lien principal, contributeurs, OU le texte mot à mot', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Kropotkine', authorIds: [5] });
+    expect(f.and).toBe(`(or(author_id.in.(5),author_chips.cs.[{"author_id":5}],and(${mot('Kropotkine')})))`);
+  });
+
+  it('plusieurs identifiants et plusieurs mots', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Pierre Kropotkine', authorIds: [5, 77] });
+    expect(f.and).toBe(`(or(author_id.in.(5,77),author_chips.cs.[{"author_id":5}],author_chips.cs.[{"author_id":77}],and(${mot('Pierre')},${mot('Kropotkine')})))`);
+  });
+
+  it('sans identifiant (aucune autorité trouvée, ou porte indisponible) : le texte seul, comme avant', () => {
+    expect(buildServerFilters({ ...base, authorFilter: 'Goldman', authorIds: [] }).and).toBe(`(${mot('Goldman')})`);
+    expect(buildServerFilters({ ...base, authorFilter: 'Goldman', authorIds: null }).and).toBe(`(${mot('Goldman')})`);
+    expect(buildServerFilters({ ...base, authorFilter: 'Goldman', authorIds: ['x'] }).and).toBe(`(${mot('Goldman')})`);
+  });
+
+  it('le filtre par identifiant choisi (authorIdFilter) et le parcours A–Z passent avant', () => {
+    const f = buildServerFilters({ ...base, authorFilter: 'Kropotkine', authorIdFilter: '5', authorIds: [5, 6] });
+    expect(f.author_id).toBe('eq.5');
+    expect(f.and).toBeUndefined();
+    const g = buildServerFilters({ ...base, authorFilter: 'Kropotkine', alphaFilter: 'K', authorIds: [5] });
+    expect(g.autor).toBe('ilike.K%');
+    expect(g.and).toBeUndefined();
+  });
 });
 
 describe('buildServerFilters — filtre de langue (CONV-7)', () => {
