@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 49 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,13 +10,13 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 11 de outubro de 2026](#o-estado-real-em-11-de-outubro-de-2026)
+- [O estado real em 12 de outubro de 2026](#o-estado-real-em-12-de-outubro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 2
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
@@ -60,61 +60,61 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 11 de outubro de 2026
+## O estado real em 12 de outubro de 2026
 
-**Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
+**Levantamento de 12 de outubro de 2026 à noite** (`91b7e803`, medido às 22h15) — produção consultada só em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 11/10 ao meio-dia, `24b37717`). **A fila da CI leva um commit**: 472 migrações aplicadas, 473 no repositório (H33 bis, vizinha). **Primeira foto em duas colunas**: desde B39, bibliotecas, contas e circulação leem-se real / formação por consulta. O que mudou: **o banco** — +14 migrações num dia e meio, +7 funções líquidas, **avisos de segurança no mesmo total de 11/10 (493)**, índices «não usados» em 363; **o catálogo** — −3 fichas, −9 autoridades, −21 obras, todas por fusão ou retirada com acordo, nenhuma obra sem ficha; **a rede** — 5 + 1 bibliotecas, 19 + 4 contas, 9 / 21 / 22 / 0; **o repositório** — +66 commits, +35 ficheiros, +20 chaves, +174 testes JS, +8 suítes SQL. **Fechados desde 11/10**: B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 neste levantamento** — quinze fechos, **50 itens, o ponto mais baixo desde a v34**. **O que falta fechar, e por quem** — *num facto por vir*: F19, F25, H15, H16, H21, H28 (DIRA), H34; *na tela*: nada; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-12.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **39 itens de 49** trazem uma verificação datada própria (A1, A3, B36, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **202** | Sem mudança desde o levantamento de 09/10. todas com RLS ativado, **364 policies** em todos os esquemas (`public` 314, `storage` 47, `cron` 2, `ingest` 1). +1 tabela desde 08/10 à noite, sem policy: `tombos_attribues`, o registro dos números de tombo já dados (C17, `5a5a94d6`, 09/10 às 21h46) — fechada a `anon` e `authenticated`, escrita só por gatilho, daí um aviso 0008 a mais. |
-| Tabelas `ingest` | **13** | todas com RLS; só uma tem policy (`book_import_baselines_select_staff`), as outras 12 não têm (aviso 0008). Sem mudança desde 09/10 (`ingest.exemplar_import_baselines`, H21 lote 6b). O esquema continua fechado a `anon` e `authenticated`. O primeiro disparo longo de backup com `ingest` é o de 11/10 à noite (I30 o lê). |
-| Views `api` | **68** | Sem mudança desde o levantamento de 09/10. **67 SECURITY INVOKER, 1 DEFINER** (`library_email_identity`, a única tolerada pela suíte `vues_api_definer_tests`). Sem mudança desde 24/09. |
-| Funções aplicativas | **1 120** | `public` 777 · `api` 207 · `ingest` 110 · `private` 26. Das quais **842 SECURITY DEFINER** (829 em 09/10, +13). +17 desde 09/10 à noite, por quatro migrações de 10/10: nove em `ingest` e seis em `public` para H21 lote 7 (os exemplares retirados: propor, confirmar, «export completo», dois gatilhos de guarda — IMP-34, quatro portas DEFINER escritas na auditoria), `create_exemplar_draft_from_exemplar` e `fn_exemplaire_modifier_et_publier` (C29 lote 3), `tg_exemplar_draft_tombo_refuse` (C17 bis). E36 não acrescenta nenhuma: nove funções do Ateliê reescritas, mesmos nomes. |
-| Migrações aplicadas | **458** | **458 aplicadas em produção = 458 numeradas no repositório**, todas pela CI (`created_by` vazio; as 57 com autor são anteriores a 24/09). +4 desde o levantamento de 09/10 à noite, todas de 10/10: C17 bis, E36 (o Ateliê diz a quem está reservado), C29 lote 3 (modificar um exemplar publicado num gesto), H21 lote 7 (os exemplares retirados). Última aplicada: `20261010212650`. |
-| Jobs `pg_cron` | **43** | Sem mudança desde o levantamento de 09/10. ativos — os dois últimos adicionados: `anarbib-consultas-expire-daily` (03h10, um pedido de consulta expira 60 dias após a criação, F1) e `anarbib-purge-untouched-retakes` (uma retomada nunca salva se esquece, C19). Uma instância restaurada os reencontra por `private.fn_crons_replanifier()` (I26). |
-| Avisos de segurança | **493** | 0 ERROR · **433** WARN sobre as DEFINER expostas a `authenticated` (0029; 428 em 09/10: +5 — as quatro portas do H21 lote 7 e `fn_exemplaire_modifier_et_publier` do C29 lote 3, cada uma com seu «Complemento» na auditoria de 10/10; **433 é exatamente a contagem esperada**), **29** sobre as expostas a `anon` (0028; = a lista T10, sem mudança), **1** `search_path` não fixado (0011, `fn_locale_from_idioma`, intencional, B32), **30** INFO «RLS sem policy» (0008; 12 tabelas `ingest` e 18 `public`, fechadas de propósito; sem mudança). |
-| Avisos de desempenho | **416** | **390** «índice não usado» (391 em 09/10, 400 em 08/10, 440 em 07/10: os contadores de uso zerados na pane de 07/10 continuam se enchendo, mais um índice serviu em dois dias), **17** chaves estrangeiras sem índice (todas em tabelas de trabalho, sob a guarda CI de lista fechada), **8** tabelas sem chave primária (`conv_backup` ×6, `import_blmf_*` ×2: tabelas de refugo conhecidas), **1** sobre as conexões do servidor Auth (teto de 10, intencional numa instância MICRO). B36 relê os índices por volta de 28/10, contando desde 07/10. |
-| Esquemas de refugo | **1** | Sem mudança desde o levantamento de 09/10. Só `conv_backup` — **sete tabelas**, todas de 20/08 (cópias de `authors`, `author_drafts`, `books`, `book_drafts` e três listas de revisão: caixa, patronímicos, títulos). Carregam a revisão humana de C3/C5 e **não se purgam** enquanto as fichas não forem relidas. |
+| Tabelas `public` | **202** | todas com RLS, 314 policies; sem mudança desde 11/10 (B39 acrescentou uma coluna, `libraries.is_training`, não uma tabela). |
+| Tabelas `ingest` | **13** | todas com RLS; só uma tem policy, as outras 12 não (aviso 0008). Sem mudança desde 09/10. O primeiro disparo longo com `ingest` foi em 11/10 às 20h14 (172 tabelas, 13 de `ingest`, I30) e o primeiro `restore-test` real as devolveu todas (12/10). |
+| Views `api` | **68** | sem mudança; 67 em `security_invoker`, só uma sem a opção (`library_email_identity`). O `restore-test` de 12/10 devolveu-as 68/68 após a segunda passagem (uma só passagem perdia 30). |
+| Funções aplicativas | **1 127** | `public` 780 · `api` 202 · `ingest` 112 · `private` 33. Das quais **841 SECURITY DEFINER** (842 em 11/10). +7 líquido desde 11/10 ao meio-dia, por treze migrações: **−7** em `api` (B40, sete portas sem chamador apagadas), **+3 em `private`** (busca por variantes, B39), **+2 em `ingest`** (H33, H34), **+3 em `public`**. B38 e E38 reescreveram sem acrescentar. |
+| Migrações aplicadas | **472** | **472 aplicadas em produção, 473 numeradas no repositório**: a última (`20261012200132`, H33 bis, sessão vizinha, 22h01) está na fila da CI na hora do levantamento. Todas pela CI. **+14 desde 11/10 ao meio-dia**, o dia mais carregado do mês: B38, a busca por variantes, E38, B40, o fundo de mapa, **B39**, H33, AUT-VAR, H34 lotes 1 e 2, os oito pares no mesmo Wikidata. Última aplicada: `20261012173204`. |
+| Jobs `pg_cron` | **43** | ativos, nenhum inativo; sem mudança desde 09/10 — nenhuma migração de 11 ou 12/10 agenda um job. |
+| Avisos de segurança | **493** | 0 ERROR · **433** WARN sobre as DEFINER expostas a `authenticated` (0029; = 11/10), **29** sobre as expostas a `anon` (0028; sem mudança), **1** `search_path` não fixado (0011, intencional, B32), **30** INFO «RLS sem policy» (0008; sem mudança). O total é o mesmo de 11/10, após catorze migrações: cada porta nova foi fechada ao ser posta. |
+| Avisos de desempenho | **389** | **363** «índice não usado» (390 em 11/10, 440 em 07/10: os contadores zerados em 07/10 continuam a encher-se), **17** chaves estrangeiras sem índice (sem mudança), **8** tabelas sem chave primária (refugo conhecido), **1** sobre as conexões do Auth (teto de 10, intencional). B36 relê os índices em 28/10. |
+| Esquemas de refugo | **1** | `conv_backup`, sete tabelas; sem mudança. As nove tabelas transitórias fora de todo fluxo de backup saíram da impressão do `restore-test`. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **52** | + `_shared`; sem mudança desde 05/10. F3 fechado em 08/10 (`read-pdf` e `mail-i18n-test` apagadas da plataforma por Xavier, 50 funções implantadas). Inclui o roteador `main`, nunca implantado (I3). As outras implantadas pela CI (marcador `deployed-functions`, em `65d5355a` em 10/10 às 23h52; a fila da CI está em dia com a cabeça do branch na hora do levantamento, runner em repouso). |
-| Declarações `verify_jwt` | **38** | Sem mudança desde o levantamento de 09/10. **todas em `false`** — contagem das linhas `^verify_jwt = ` em `supabase/config.toml`. O Bearer não prova nada, portanto: cada função verifica quem a chama (segredo compartilhado ou sessão relida). |
+| Pastas no repositório | **52** | + `_shared`; sem mudança desde 05/10. Inclui o roteador `main`, nunca implantado (I3). As outras implantadas pela CI: marcador em `aba26160` (12/10, 22h00). **A fila da CI leva um commit** na hora do levantamento (H33 bis), runner ocupado. |
+| Declarações `verify_jwt` | **38** | em `supabase/config.toml`; sem mudança. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 569** | 2 762 exemplares, **2 369 obras**, **1 506 autoridades**, **2 660 fundos, nenhum vazio**. Nenhuma ficha criada, fundida nem apagada desde 09/10 à noite (nenhuma linha em `merge_log`), nenhum exemplar criado nem modificado, nenhum retirado (`retire_at`, H21 lote 7, ainda vazio). **+1 obra sem ficha**: a 2503, criada em 10/10 às 20h45 (Paris) — a hora dos testes de C17 de Xavier, cuja ficha foi apagada na mesma noite; a obra ficou, órfã; **retirada em 11/10 às 23h15** com acordo escrito de Xavier, com sua expressão vazia (2 363 obras à noite). **As treze outras obras sem ficha** (doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada) foram retiradas às 23h16 com o mesmo acordo, com suas expressões: **2 350 obras, nenhuma sem ficha**. Nenhuma ficha criada desde a 2749 de 07/10. |
-| Rascunhos de catalogação | **2 438** | `draft` 1 842, `published` 595, `cancelled` 1 (2 418 em 09/10: **+20, todas retomadas de fichas publicadas fora de lote**, `action = update` (296 → 316), criadas e publicadas entre 10/10 às 21h01 e 11/10 às 12h14 — a catalogação do dia; o único cancelado continua sendo o 6393, C18). **Quatro lotes**, cada um com sua biblioteca (B30): MLEG 8 (411: 147 em curso, 264 publicados, aberto), BLMF 57 (**6**, todos publicados, fechado — o levantamento de 09/10 dizia 9, a conta não batia) e 66 «Acervo histórico CCLA» (24: 22 em curso, 2 publicados, aberto, C26), Solidaires 63 (1 673, aberto — falta revisar e publicar); 324 fora de lote. Nenhum rascunho de atualização por reimportação (H21 lote 4) existe ainda — a DIRA não reimportou. |
-| Indexação de assunto | **2 105 / 2 569** | fichas com pelo menos um assunto — **464 sem nenhum** (464 em 09/10; as vinte retomadas do dia não acrescentaram nem tiraram assunto a uma ficha sem nenhum). O que o vocabulário atual não cobre: item C27. |
-| Tesauro FICEDL | **621** | Sem mudança desde o levantamento de 09/10. termos (234 lugares, 227 assuntos, 159 datas, 1 misto), **10 locales completas**; **110 alinhamentos** para os assuntos locais. Sem mudança desde 28/09; o esboço SKOS revisado e o raspador off-line esperam (H13). |
-| Periódicos | **4** | Sem mudança desde o levantamento de 09/10. títulos, **5 fascículos vinculados**, sem mudança desde 29/09. |
+| Fichas | **2 566** | 2 762 exemplares, **2 348 obras**, **1 497 autoridades**, **2 659 fundos, nenhum vazio**. Desde 11/10: **−3 fichas, todas por fusão** (duas em 11/10 por Xavier; 2267 em 1699 em 12/10 à noite, C28 fechado); **−9 autoridades por fusão** (AUT-VAR, sessão vizinha); **−21 obras**: quinze retiradas com acordo escrito de Xavier, seis por diferença às migrações AUT-VAR — **nenhuma obra sem ficha**; −1 fundo. Nenhum exemplar criado, modificado nem retirado. Nenhuma ficha criada desde a 2749 de 07/10. |
+| Rascunhos de catalogação | **2 460** | `draft` 1 842, `published` 617, `cancelled` 1 (2 438 em 11/10: **+22, todas retomadas de fichas publicadas fora de lote**, `action = update` 316 → 338). **Quatro lotes**: MLEG 8 (411: 147 em curso, 264 publicados), BLMF 57 (6, fechado) e 66 (24: 22 em curso, 2 publicados, C26), Solidaires 63 (1 673, aberto — D3, início de revisão esperado antes de 26/10); 346 fora de lote. Nenhum rascunho de reimportação ainda. |
+| Indexação de assunto | **2 102 / 2 566** | fichas com pelo menos um assunto — **464 sem nenhum** (464 em 11/10). O que o vocabulário não cobre: item C27. |
+| Tesauro FICEDL | **621** | descritores do instantâneo de 03/09 (H13), 110 ligações; sem mudança. **O site da FICEDL responde de novo** desde 12/10 às 17h50: a sonda diária está posta (H2), o e-mail das sete perguntas pode partir. |
+| Periódicos | **4** | títulos, 5 fichas ligadas; sem mudança. |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **6** | **ativas, em 6 linhas**: BTL, BLMF, MLEG, Solidaires, anarchief.org e a biblioteca de formação `blmf-teste` (fixtures em produção). A correspondência: um fio, duas mensagens (BLMF para BTL), sem mudança desde 09/10; as dezesseis propostas do Ateliê (C4) esperam seu consentimento até 16/10. |
-| Contas | **23** | Sem mudança desde o levantamento de 09/10. **26** vínculos ativos; **23 linhas** em `auth.users`, **21 confirmadas** (dois convites nunca honrados). Sem mudança desde 05/10. |
-| Administrador(a/e)s da rede | **2** | Sem mudança desde o levantamento de 09/10. o camarada (`ASR2026`) está cooptado desde 05/10 — primeiro uso real do circuito de cooptação, que encontrou seis defeitos no caminho (G1, G18). A1 continua aberto: uma terceira pessoa, de outro coletivo, e uma decisão federal tomada a três. |
-| Circulação viva | **7 / 21 / 22 / 0** | Sem mudança desde o levantamento de 09/10. empréstimos / reservas / consultas / PEB **sem `archived_at`** — e **nenhum está aberto**: os 7 empréstimos estão «encerrado» (o último, nº 70, de 07/10, devolvido às 20h33), as 21 reservas e as 22 consultas «encerrada», os 3 PEB devolvidos e arquivados. Nenhum movimento desde 07/10 às 20h33. As 22 consultas não têm prazo: a regra dos 60 dias só vale para as novas (F23). |
+| Bibliotecas | **5 + 1** | **por consulta, desde B39** (`private.fn_mesures_hors_fixtures()`, 22h18): **5 reais, todas ativas** — BTL, BLMF, MLEG, Solidaires, anarchief.org — **e 1 de formação**, `blmf-teste`, etiquetada na base. A correspondência: um fio, duas mensagens; as dezasseis propostas do Ateliê (C4) continuam `open`, até 16/10. |
+| Contas | **19 + 4** | **19 contas reais, 17 confirmadas, e 4 de formação**; 23 linhas em `auth.users`, 21 confirmadas. Filiações ativas: **17 reais + 9 de formação**. Exemplares: **2 757 reais + 5 de formação**. Sem mudança desde a primeira leitura de B39. |
+| Administrador(a/e)s da rede | **2** | ativas (Xavier e o camarada ASR2026, cooptado em 05/10); A1 espera uma terceira administração. |
+| Circulação viva | **9 / 21 / 22 / 0** | empréstimos / reservas / consultas / PEB **não arquivados**, **todos em bibliotecas reais, 0 em formação** (B39). Todos «encerrado». **+2 empréstimos desde 11/10** (7 → 9): os n.º 71 e 72, criados e encerrados em 12/10 na BLMF — o olhar de Xavier sobre a aba Ações do Painel. Nenhuma falha de transporte de e-mail desde 11/10. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **3 286** | +30 desde o levantamento de 09/10 à noite (`47781985`), contagem feita no espelho nu completo — o clone de trabalho do WSL é raso. O dia 10/10 e a manhã de 11/10, em duas sessões: **C29 lotes 1, 2 e 3** (os exemplares de uma ficha, na ficha; um formulário curto em quatro tempos; modificar um exemplar publicado num gesto), **E36** (o Ateliê diz a quem está reservado, vinte e cinco recusas traduzidas), **E32 fechado** por Xavier (nenhum ícone em emoji), **C17 bis**, **E6: o Catálogo no fim dos seus quatro lotes** (116 → 64 Ko), **H21 lote 7** (os exemplares retirados, IMP-34), **E37** (o menu fica visível no alto), **B38 aberto** (quatro funções de circulação não filtram `visibility`), as dezesseis propostas de C4 refeitas, **I18 e I33 fechados** por Xavier, F25 corrigido no seu teste (um falso vermelho de CI sob carga), e os levantamentos. |
-| Arquivos `src/` | **566** | +19 desde 09/10 à noite: onze telas e ajudas (`ExemplaresPanel.jsx` e o formulário curto de C29; `RunRetraitsPanel.jsx`, `BadgeRetire.jsx` e `importRetraits.js` do H21 lote 7; `CatalogFiltersBar.jsx`, `CatalogResultsTable.jsx`, `AuthorLinks.jsx`, `LibraryCell.jsx`, `CatalogExportActions.jsx`, `catalogOpac.js` e `useDebounce.js` do E6) e oito arquivos de teste; 192 arquivos de teste em `src/tests`. |
-| Chaves i18n | **7 535** | paridade estrita nas dez locales (7 535 cada, guardada na CI). +146 desde 09/10 à noite (7 389): C29 lotes 1 a 3, E36 (vinte e cinco recusas do Ateliê), H21 lote 7 (as retiradas, o «export completo» e suas ajudas), C17 bis, E37. A guarda `DOC-I18N-3` (nenhum valor copiado do pt-BR em es, it, de, en) se mantém. |
-| Testes | **2 449 + 188** | **2 449 testes JS** (vitest, gate bloqueante, 192 arquivos passados e 3 pulados, 5 testes pulados; rodados inteiros em 11/10 às 12h49 sobre `24b37717`: tudo verde; 2 352 em 09/10: +97 — C29, E36, E6 lotes 1 a 4, H21 lote 7, E37, C17 bis) e **188 suítes SQL** na CI (185 em 09/10: +3 — C17 bis, o Ateliê reservado, C29 lote 3). Um falso vermelho em 10/10 (run 10322871): o teste de cadência F25 media o intervalo entre dois envios vizinhos, que a cadência não garante sob carga; mede desde o início agora (`65d5355a`). |
-| Marcadores de dívida | **22** | pelo método fixo (`git grep -E 'TODO|FIXME'` fora de `docs/`) — **dos quais 4 falsos**: a palavra «TODOS» das ajudas em pt-BR e em espanhol do «export completo» do H21 lote 7, nas duas locales e no script que as põe. **18 reais, dos quais 4 em `src/`, como em cada levantamento desde 15/09.** Nenhum é tarefa aberta; nomeiam escolhas assumidas. |
+| Commits | **3 352** | +66 desde o levantamento de 11/10 (`24b37717`), contado no espelho nu. Um dia e meio a duas sessões: **B38** (fechado), os quinze olhares (E36, E37, E31 fechados), **E38** (fechado), a busca por variantes (vizinha), o Livro Branco v18 (**J12**, **B40** fechados, **B39** entregue), os lotes VM, **I30** (primeiro `restore-test` real, fechado), **H33** (fechado) e **H34** lotes 1 e 2, AUT-VAR, **E6**: Painel e Biblioteca (vistos por Xavier), a sonda FICEDL (**H2**), cinco fechos por caixas marcadas, **G9** e **C28** fechados. |
+| Arquivos `src/` | **601** | +35 desde 11/10: dezassete telas, hooks e ajudas e dezoito ficheiros de teste; 212 ficheiros de teste. **Acima de 60 Ko, fora das locales**: `ImportacoesPage` 164 Ko (E6 espera por H34), `BookDraftForm` 134, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 65, `QueuePanel` 62; o Painel está em 48, a Biblioteca em 43. |
+| Chaves i18n | **7 555** | paridade estrita nas dez locales (7 555 cada). +20 desde 11/10: B38, H34, o menu de e-mail do instalador. A guarda `DOC-I18N-3` mantém-se. |
+| Testes | **2 618 + 196** | **2 618 testes JS** (210 ficheiros passados, 3 pulados; rodados inteiros em 12/10 às 22h17 sobre `91b7e803`: tudo verde; 2 444 em 11/10: **+174**) e **196 suítes SQL** na CI (188 em 11/10: **+8**). Três vermelhos de CI no dia, todos nas suítes SQL do vizinho durante H34, corrigidos por ele; um run zumbi após a pane do Codeberg, cancelado. |
+| Marcadores de dívida | **22** | pelo método fixo — **dos quais 4 falsos** («TODOS», como em 11/10). **18 reais, 6 em `src/`** (4 em 11/10: dois a mais com H34). Nenhum é tarefa aberta. |
 
 ---
 
@@ -349,7 +349,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
-| **B39** | Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota | `P2` | A verificar |
 | **B41** | Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno | `P3` | Aberto |
 
 #### B36 — Reler, com os contadores de produção, os índices mantidos com ressalva
@@ -372,27 +371,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Adiado de propósito: releitura **em 28/10**, contando desde o reinício de 07/10 (três semanas), **perímetro B10 e B32 apenas** — os índices mantidos com ressalva em 27/09 e os três das visões materializadas. Nenhum índice de uma camada nunca exercida (notas de leitura, assembleias, círculos, EEB, compartilhamento digital) entra na releitura, seja qual for o seu contador (`DOC-MESURE-1`). Decisão de Xavier, 12/10.
 
 *Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
-
-#### B39 — Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota
-
-`P2` Corrente · Estado : **A verificar** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** **Constatação da v18** (capítulos 9.1, 10 e 12): a biblioteca de formação `blmf-teste` tem onze membros, cinco exemplares e nenhuma circulação, e «falseia todo quadro que não a nomeia». O projeto escolheu manter as fixtures em produção; a v18 aceita com uma condição: uma etiqueta que toda medida possa ler, por uma consulta. Verificado em 12/10: nada no banco distingue `blmf-teste` nem as contas `formacao-e1..e5`.
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** Uma coluna `libraries.is_training` (verdadeira em `blmf-teste`) e o mesmo marcador nas contas de formação; uma ajuda ou vista de medida que o levantamento, a supervisão e o próximo Livro branco leem; as contagens da rede publicadas *fora das fixtures*. Inscrever no REGISTRO a escolha com sua contrapartida (J12). Guarda: um teste que fica vermelho se uma biblioteca `*-teste` não está etiquetada.
-
-**Por que importa.** Um número de uso que conta contas de formação como leitores é exato e falso.
-
-**O que conta como terminado.**
-
-- A biblioteca de formação e suas contas têm um marcador no banco, posto por migração e guardado por um teste.
-- O levantamento e a supervisão publicam as contagens da rede fora das fixtures por uma consulta.
-
-**Dependências.** Nenhuma. J12 inscreve a escolha no REGISTRO.
-
-*Remissões : `supabase/migrations` · `tests/sql` · `docs/backlogs/backlog-v34.json` · `docs/REGISTRE_decisions.md`*
 
 #### B41 — Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno
 
@@ -1835,6 +1813,7 @@ CI verde. |
 | K10 | 2026-10-12 | **Fechado em 12/10 pela palavra de Xavier.** O *Monde libertaire* condensou os três artigos num só, publicado em outubro de 2026; a emissão foi proposta a *Trous Noirs*. |
 | G9 | 2026-10-12 | **Fechado em 12/10 por decisão de Xavier, os dois critérios cumpridos há muito.** *(1)* A carta pública é uma rota da aplicação (`/cartografia`), servida sem terceiros desde E5 (07/09). *(2)* A §2 `MAP` do REGISTRO remete à §34 desde J5 (29/08). O que resta da spec v1.0 (MAP-I, MAP-J) não tem item: a reabrir com identificador novo se a janela se abrir. |
 | C28 | 2026-10-12 | **Fechado em 12/10: os três pares decididos, cada um fundido.** Dois a 06 e 08/10 (Xavier); o terceiro (1699 / 2267, *Os Anarquistas e as Eleições*, Imaginário, 2000, mesmo ISBN em dez e treze dígitos) a 12/10 por `fn_fusion_notices` sob a identidade de árbitro de Xavier: a ficha da BTL fica, recebe a capa da BLMF, e o fundo da BLMF passa para ela. A obra 171, órfã, foi retirada na mesma noite com acordo de Xavier. |
+| B39 | 2026-10-12 | **Fechado em 12/10 no levantamento da noite, por decisão de Xavier, os dois critérios cumpridos.** *(1)* `libraries.is_training` posto por migração em `blmf-teste`, guardado pelo gatilho sobre o slug; suíte (5). *(2)* **O levantamento publica real e formação por consulta** (`private.fn_mesures_hors_fixtures()`): 5 + 1 bibliotecas, 19 + 4 contas, 17 + 9 filiações, 2 757 + 5 exemplares, circulação 9 / 21 / 22 / 0, 0 em formação. |
 
 ---
 
@@ -1866,4 +1845,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 49 itens em 11 domínios. O estado numérico foi levantado em 2026-10-12 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `91b7e803`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
