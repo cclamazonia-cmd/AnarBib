@@ -431,6 +431,12 @@ $h34_tombo$;
 -- ─────────────────────────────────────────────────────────────────────
 -- 7. Vérification structurelle
 -- ─────────────────────────────────────────────────────────────────────
+-- Rejeu depuis zéro (job rejeu-image, 12/10/2026) : une image Supabase vierge donne EXECUTE à
+-- `authenticated` sur toute fonction de public créée par la pile ; la production ne le donne qu'à
+-- postgres. REVOKE nominatif (DOC-GRANT-2) : sans effet en production, il aligne le rejeu.
+REVOKE ALL ON FUNCTION public.fn_v2_recompute_holdings_availability(bigint[], bigint[]) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.fn_recompute_holdings_on_exemplar_change() FROM PUBLIC, anon, authenticated;
+
 DO $h34_verif$
 DECLARE
   v_e text := '';
