@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Biografía en catalán",
   "catalogacao.bio.titleIn.eo": "Biografía en esperanto",
   "catalogacao.bio.titleIn.nl": "Biografía en neerlandés",
-  "catalogacao.bio.titleIn.el": "Biografía en griego"
+  "catalogacao.bio.titleIn.el": "Biografía en griego",
+  "error.import.page_too_large": "Como máximo 200 líneas por llamada: selecciona menos.",
+  "importacoes.fila.pagesAvantRefus": "Antes de este rechazo, {created, plural, one {se creó # borrador} other {se crearon # borradores}} con las páginas ya enviadas."
 }

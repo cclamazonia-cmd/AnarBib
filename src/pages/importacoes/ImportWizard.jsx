@@ -9,6 +9,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind } from '../../lib/importFileKind.js';
+import { pagesParExemplaires, cumulerReponses } from '../../lib/importItemUpdates.js';
 
 // =============================================================================
 // ImportWizard — assistant « Novo import » (IMP-8).
@@ -245,6 +246,7 @@ export default function ImportWizard() {
     if (!newRowIds.length) return;
     setBusy(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
+    const reponses = [];
     try {
       // Un refus de la décision s'arrête ici : on ne promeut pas sans elle.
       const { error: editorialError } = await supabase.rpc('fn_import_set_editorial', {
@@ -257,12 +259,22 @@ export default function ImportWizard() {
       // H21 lot 0 (29/09/2026) : ces lignes-là, et elles seules (p_row_ids) —
       // pas ce qu'un autre onglet, ou une collègue dans le run lookup du jour,
       // aurait accepté entre-temps.
-      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId), p_row_ids: newRowIds });
-      if (error) throw error;
-      setPromoteResult(data || {});
+      // H33 (12/10/2026) : par pages de 200 lignes et 5 000 exemplaires du
+      // fichier au plus (la base refuse au-delà : le plafond de 8 s des appels) ;
+      // chaque page rejoint le lot ouvert du run.
+      const parId = new Map(lignesDeLAssistant.map((r) => [r.id, r]));
+      for (const page of pagesParExemplaires(newRowIds.map((id) => parId.get(id) || { id }))) {
+        const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId), p_row_ids: page });
+        if (error) throw error;
+        reponses.push(data || {});
+      }
+      setPromoteResult(cumulerReponses(reponses));
       setMsg({ text: '', kind: '' });
     } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
+      // une page refusée après d'autres : ce que les pages faites ont créé
+      // (dans le lot du run), puis le refus — comme Importations
+      const created = Number(cumulerReponses(reponses).created_drafts || 0);
+      setMsg({ text: `${created > 0 ? `${t({ id: 'importacoes.fila.pagesAvantRefus' }, { created })} ` : ''}${localizeError(err, t)}`, kind: 'error' });
     } finally { setBusy(false); }
   }
 

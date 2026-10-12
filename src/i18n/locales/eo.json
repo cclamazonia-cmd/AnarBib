@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Biografio en la kataluna",
   "catalogacao.bio.titleIn.eo": "Biografio en Esperanto",
   "catalogacao.bio.titleIn.nl": "Biografio en la nederlanda",
-  "catalogacao.bio.titleIn.el": "Biografio en la greka"
+  "catalogacao.bio.titleIn.el": "Biografio en la greka",
+  "error.import.page_too_large": "Maksimume 200 linioj por alvoko: elektu malpli.",
+  "importacoes.fila.pagesAvantRefus": "Antaŭ ĉi tiu rifuzo, {created, plural, one {# malneto estis kreita} other {# malnetoj estis kreitaj}} de la jam senditaj paĝoj."
 }

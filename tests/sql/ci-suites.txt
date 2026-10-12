@@ -780,3 +780,6 @@ tests/sql/recherche_variantes_approchee_tests.sql
 tests/sql/e38_liste_plate_auteur_par_ses_noms_tests.sql
 # B39 (12/10/2026) : les fixtures de formation sont étiquetées (libraries.is_training, déclencheur sur le slug) et private.fn_mesures_hors_fixtures() compte le réseau hors fixtures.
 tests/sql/b39_fixtures_etiquetees_tests.sql
+# H33 (12/10/2026) : « Rapprocher » et « Promouvoir » un gros fichier sous 8 s — le constat et les écritures en une passe
+# (ingest.fn_h33_juger_exemplaires) ; mêmes verdicts que la boucle, ordre compris, puis mesures 200 x 25 (et la page suivante).
+tests/sql/h33_rapprocher_gros_fichier_tests.sql

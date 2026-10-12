@@ -19,7 +19,7 @@ import RunCoveragePanel from './RunCoveragePanel.jsx';
 import RunRetraitsPanel from './RunRetraitsPanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
-import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
+import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -879,6 +879,7 @@ export default function ImportacoesPage() {
     if (!ids.length) return;
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
+    const reponses = [];
     try {
       // La décision d'abord, et son refus s'arrête ici : on ne promeut pas des
       // lignes dont la décision n'a pas été posée.
@@ -891,8 +892,16 @@ export default function ImportacoesPage() {
       if (editorialError) throw editorialError;
       // H21 lot 0 (29/09/2026) : la sélection, et elle seule (p_row_ids) ;
       // sans elle, la promotion emportait toutes les lignes acceptées du run.
-      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId), p_row_ids: ids });
-      if (error) throw error;
+      // H33 (12/10/2026) : par pages de 200 lignes et 5 000 exemplaires du
+      // fichier au plus (la base refuse au-delà : le plafond de 8 s des appels) ;
+      // chaque page rejoint le lot ouvert du run.
+      const parId = new Map(filteredRunRows.map(r => [r.id, r]));
+      for (const page of pagesParExemplaires(ids.map(id => parId.get(id) || { id }))) {
+        const { data: reponse, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId), p_row_ids: page });
+        if (error) throw error;
+        reponses.push(reponse || {});
+      }
+      const data = cumulerReponses(reponses);
       // Rien d'éligible (déjà promues, décidées ailleurs entre-temps) : la RPC
       // rend { selected_count: 0 } sans created_drafts ni erreur — ce n'est pas
       // un succès, et l'écran le dit.
@@ -904,7 +913,10 @@ export default function ImportacoesPage() {
       await loadRuns();
       await loadRunRows(selectedRunId);
     } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
+      // une page refusée après d'autres : ce que les pages faites ont créé,
+      // puis le refus
+      const created = Number(cumulerReponses(reponses).created_drafts || 0);
+      setMsg({ text: `${created > 0 ? `${t({ id: 'importacoes.fila.pagesAvantRefus' }, { created })} ` : ''}${localizeError(err, t)}`, kind: 'error' });
       // Deux appels : la décision a pu être posée avant l'échec de la
       // promotion. Recharger montre l'état réel (la ligne reste cochable).
       await loadRunRows(selectedRunId);
@@ -926,12 +938,22 @@ export default function ImportacoesPage() {
     if (!ids.length) return;
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.fila.reconciling' }), kind: 'info' });
+    const reponses = [];
     try {
-      const { data, error } = await supabase.rpc('fn_import_reconcile_duplicates', {
-        p_run_id: Number(selectedRunId),
-        p_row_ids: ids,
-      });
-      if (error) throw error;
+      // H33 (12/10/2026) : par pages de 200 lignes et 5 000 exemplaires du
+      // fichier au plus (la base refuse au-delà : le plafond de 8 s des appels).
+      // Une page suivante voit les brouillons des précédentes : les verdicts
+      // sont ceux d'un seul appel ; les comptes s'additionnent.
+      const parId = new Map(filteredRunRows.map(r => [r.id, r]));
+      for (const page of pagesParExemplaires(ids.map(id => parId.get(id) || { id }))) {
+        const { data: reponse, error } = await supabase.rpc('fn_import_reconcile_duplicates', {
+          p_run_id: Number(selectedRunId),
+          p_row_ids: page,
+        });
+        if (error) throw error;
+        reponses.push(reponse || {});
+      }
+      const data = cumulerReponses(reponses);
       // H19 : un exemplaire dont le code d'origine est déjà dans la bibliothèque
       // n'est pas recréé ; une ligne entièrement détenue est marquée rejetée.
       const skipped = Number(data?.items_skipped_code_taken || 0);
@@ -961,7 +983,16 @@ export default function ImportacoesPage() {
       await loadRuns();
       await loadRunRows(selectedRunId);
     } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
+      // une page refusée après d'autres : ce que les pages faites ont fait
+      // (comptes, verdicts des exemplaires, lignes signalées), puis le refus
+      const fait = cumulerReponses(reponses);
+      setMsg({ text: [
+        reponses.length ? t({ id: 'importacoes.fila.reconciledCounts' }, {
+          created: Number(fait.created_items || 0), skipped: Number(fait.items_skipped_code_taken || 0),
+          held: Number(fait.rows_already_held || 0) }) : '',
+        reponses.length ? resumeVerdicts(t, fait.verdicts, fait.rows_signalled) : '',
+        localizeError(err, t),
+      ].filter(Boolean).join(' '), kind: 'error' });
       await loadRunRows(selectedRunId);
     } finally {
       setPromotingSel(false);

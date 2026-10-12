@@ -55,6 +55,32 @@ export function pagesParExemplaires(lignes, maxLignes = PLAFOND_LIGNES, maxExemp
   return pages;
 }
 
+// H33 (12/10/2026) : « Rapprocher » et « Promouvoir » vont aussi par pages
+// (même plafond : la base refuse au-delà, error.import.page_too_large et
+// error.import.update_page_too_many_items). Les réponses des pages d'un même
+// geste, réunies : les comptes s'additionnent, les comptes par verdict aussi ;
+// le reste (lot, run) est celui de la dernière page.
+const COMPTES_ADDITIFS = ['created_items', 'created_exemplar_drafts', 'items_skipped_code_taken', 'rows_already_held',
+  'rows_signalled', 'skipped_rows', 'requested_rows', 'created_drafts', 'items_created', 'selected_count', 'owner_stamped'];
+export function cumulerReponses(reponses) {
+  const total = {};
+  for (const r of Array.isArray(reponses) ? reponses : []) {
+    if (!r || typeof r !== 'object') continue;
+    for (const [k, v] of Object.entries(r)) {
+      if (COMPTES_ADDITIFS.includes(k)) {
+        total[k] = Number(total[k] || 0) + Number(v || 0);
+      } else if (k === 'verdicts' && v && typeof v === 'object') {
+        const acc = { ...(total.verdicts || {}) };
+        for (const [verdict, n] of Object.entries(v)) acc[verdict] = Number(acc[verdict] || 0) + Number(n || 0);
+        total.verdicts = acc;
+      } else {
+        total[k] = v;
+      }
+    }
+  }
+  return total;
+}
+
 // Le nombre d'exemplaires « déjà là » que le geste préparerait sur cette ligne
 // (cote ou note changée dans le fichier seulement, base présente, pas encore
 // préparé, ligne non rejetée) — compté par la base.

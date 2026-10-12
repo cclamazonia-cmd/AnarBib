@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Biografie in het Catalaans",
   "catalogacao.bio.titleIn.eo": "Biografie in het Esperanto",
   "catalogacao.bio.titleIn.nl": "Biografie in het Nederlands",
-  "catalogacao.bio.titleIn.el": "Biografie in het Grieks"
+  "catalogacao.bio.titleIn.el": "Biografie in het Grieks",
+  "error.import.page_too_large": "Hoogstens 200 regels per aanroep: selecteer er minder.",
+  "importacoes.fila.pagesAvantRefus": "Vóór deze weigering {created, plural, one {is # concept} other {zijn # concepten}} aangemaakt door de al verzonden pagina’s."
 }

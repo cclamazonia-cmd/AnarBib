@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Biografia en català",
   "catalogacao.bio.titleIn.eo": "Biografia en esperanto",
   "catalogacao.bio.titleIn.nl": "Biografia en neerlandès",
-  "catalogacao.bio.titleIn.el": "Biografia en grec"
+  "catalogacao.bio.titleIn.el": "Biografia en grec",
+  "error.import.page_too_large": "Com a màxim 200 línies per crida: selecciona’n menys.",
+  "importacoes.fila.pagesAvantRefus": "Abans d’aquest rebuig, {created, plural, one {s’ha creat # esborrany} other {s’han creat # esborranys}} amb les pàgines ja enviades."
 }

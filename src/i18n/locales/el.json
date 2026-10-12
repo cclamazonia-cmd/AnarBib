@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Βιογραφία στα καταλανικά",
   "catalogacao.bio.titleIn.eo": "Βιογραφία στην εσπεράντο",
   "catalogacao.bio.titleIn.nl": "Βιογραφία στα ολλανδικά",
-  "catalogacao.bio.titleIn.el": "Βιογραφία στα ελληνικά"
+  "catalogacao.bio.titleIn.el": "Βιογραφία στα ελληνικά",
+  "error.import.page_too_large": "Το πολύ 200 γραμμές ανά κλήση: επίλεξε λιγότερες.",
+  "importacoes.fila.pagesAvantRefus": "Πριν από αυτή την άρνηση, {created, plural, one {δημιουργήθηκε # πρόχειρο} other {δημιουργήθηκαν # πρόχειρα}} από τις σελίδες που έχουν ήδη σταλεί."
 }

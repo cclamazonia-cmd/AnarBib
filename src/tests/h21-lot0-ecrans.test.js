@@ -135,6 +135,7 @@ import fr from '@/i18n/locales/fr.json';
 import { localizeError } from '@/lib/localizeError';
 // H21 lot 6a : « Rapprocher » compose aussi les comptes par verdict des exemplaires.
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
+import { pagesParExemplaires, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
 
 // ── Décor de la page MONTÉE (dernier describe) ─────────────────
 // Un faux Supabase qui répond par nom de RPC et garde les appels, une
@@ -215,6 +216,7 @@ async function jouerGeste(nom, { lignes, selection, reponse, runRowsLoading = fa
     t: (d, v) => dit(d.id, v),
     localizeError: (err) => `localisé : ${err.message}`,
     resumeVerdicts,   // H21 lot 6a ('' sans verdicts : les messages d'avant)
+    pagesParExemplaires, cumulerReponses,   // H33 (12/10/2026) : par pages de 200 lignes / 5 000 exemplaires
     supabase: { rpc: async (n, args) => { journal.push(`rpc:${n}`); appels.push([n, args]); return reponse; } },
     setPromotingSel: (v) => journal.push(`occupé:${v}`),
     setMsg: (m) => { journal.push('message'); messages.push(m); },
@@ -268,7 +270,9 @@ describe('Importations — « Créer N brouillons » ne promeut que la sélectio
 
   it('passe p_row_ids : les lignes choisies, et elles seules', () => {
     const f = promouvoir();
-    expect(f).toMatch(/supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(selectedRunId\), p_row_ids: ids \}\)/);
+    // H33 (12/10/2026) : la sélection, découpée en pages (200 lignes, 5 000
+    // exemplaires du fichier) — chaque page est une part des lignes choisies.
+    expect(f).toMatch(/for \(const page of pagesParExemplaires\(ids\.map\(id => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data: reponse, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(selectedRunId\), p_row_ids: page \}\)/);
     // le paramètre existe sous ce nom dans la signature de la migration
     expect(MIGRATION).toContain('p_batch_notes text DEFAULT NULL::text, p_row_ids bigint[] DEFAULT NULL::bigint[])');
   });
@@ -554,7 +558,9 @@ describe('Importations — « Rapprocher » lit skipped_rows et dit le rapproche
 
   it('lit data.skipped_rows de fn_import_reconcile_duplicates, que la migration rend dans ses deux sorties', () => {
     const f = rapprocher();
-    expect(f).toMatch(/const \{ data, error \} = await supabase\.rpc\('fn_import_reconcile_duplicates'/);
+    // H33 (12/10/2026) : par pages ; les réponses réunies (cumulerReponses)
+    expect(f).toMatch(/const \{ data: reponse, error \} = await supabase\.rpc\('fn_import_reconcile_duplicates'/);
+    expect(f).toContain('const data = cumulerReponses(reponses);');
     expect(f).toContain('Number(data?.skipped_rows || 0)');
     const bloc = corps(MIGRATION, 'DO $h21_rapprocher$', '$h21_rapprocher$;');
     // retour anticipé (tout est ignoré) et retour de la fonction d'exemplaires
@@ -926,7 +932,8 @@ describe('Assistant d\'import — la promotion porte sur ses lignes', () => {
     const f = promouvoir();
     expect(f).toMatch(/const \{ error: editorialError \} = await supabase\.rpc\('fn_import_set_editorial'/);
     expect(f.indexOf('if (editorialError) throw editorialError;')).toBeLessThan(f.indexOf("supabase.rpc('fn_import_promote'"));
-    expect(f).toMatch(/supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: newRowIds \}\)/);
+    // H33 (12/10/2026) : ces lignes-là, découpées en pages
+    expect(f).toMatch(/for \(const page of pagesParExemplaires\(newRowIds\.map\(\(id\) => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: page \}\)/);
     expect(f).toContain('const newRowIds = lignesDeLAssistant.filter(aPromouvoir).map((r) => r.id);');
     expect(f).toContain('if (!newRowIds.length) return;');
   });

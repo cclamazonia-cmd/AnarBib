@@ -7542,5 +7542,7 @@
   "catalogacao.bio.titleIn.ca": "Biografie auf Katalanisch",
   "catalogacao.bio.titleIn.eo": "Biografie auf Esperanto",
   "catalogacao.bio.titleIn.nl": "Biografie auf Niederländisch",
-  "catalogacao.bio.titleIn.el": "Biografie auf Griechisch"
+  "catalogacao.bio.titleIn.el": "Biografie auf Griechisch",
+  "error.import.page_too_large": "Höchstens 200 Zeilen pro Aufruf: wähle weniger aus.",
+  "importacoes.fila.pagesAvantRefus": "Vor dieser Ablehnung {created, plural, one {wurde # Entwurf} other {wurden # Entwürfe}} durch die bereits gesendeten Seiten angelegt."
 }
