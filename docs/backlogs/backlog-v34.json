@@ -3179,7 +3179,7 @@
       "id": "H33",
       "d": "H",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql"
@@ -3219,8 +3219,58 @@
         "tests/sql"
       ],
       "verif": {
-        "fr": "11/10 — ouvert sur mesure du lot 8 de H21.",
-        "pt": "11/10 — aberto por medição do lote 8 de H21."
+        "fr": "11/10 — ouvert sur mesure du lot 8 de H21. **12/10 — livré, à vérifier** (`1441c8e2`, migration `20261012123726` appliquée par la CI, `created_by` vide). **Cause** : « déjà en brouillon » relisait `exemplar_drafts` pour chaque exemplaire avec un plan mis en cache quand la table était presque vide (seq scan, 4 999 lignes filtrées à chaque appel ; pire après un autovacuum qui remet relpages à 0 : 46 s pour 5 000 constats) — d’où 8 à 80 s selon les passages, pas la charge. **Correctif** : `ingest.fn_h33_juger_exemplaires` juge la liste en lisant les brouillons une seule fois (EXECUTE planifié aux tailles du moment), dans l’ordre et avec les verdicts de l’ancienne boucle (constat « au catalogue » `ingest.fn_h21_constat_exemplaire_au_catalogue` engendré depuis le constat vivant) ; « Rapprocher » et la promotion insèrent en une passe, fonds résolu une fois par notice. Mêmes gardes, mêmes réponses : banc différentiel et banc aléatoire (T10, graine fixe, 885 exemplaires) à 0 écart. Borne : 200 lignes et 5 000 exemplaires par appel (`error.import.page_too_large`) ; l’écran et l’assistant découpent par pages et disent ce que les pages précédentes ont fait si une page est refusée. **Mesures** : Rapprocher 200 × 25 de 26 s (jusqu’à 80) à 1,6 s, page suivante de 48 s à 1,8 s ; promotion 200 × 25 de 10–21 s à 3,0 s. SQL 194/194 (H33 : 10), vitest 2 472, 20 mutants tués ; un sceptique (aucun bloquant). **Consigné** : la promotion peut frôler 8 s sous la charge d’une CI (9,1 s mesuré une fois pendant une CI ; 3,0 s au calme) — réduire la page de promotion si T08 rougit ; le constat scalaire reste emprunté par le recalcul des trois états et les retraits (une connexion du pool au plan figé peut y mettre 12 à 46 s pour 5 000 constats) — à faire passer par `fn_h33_juger_exemplaires` ; `resolve_library_holding_bridge` compare sur `trim()` sans index (3,5 s pour 200 appels sans statistiques ; 44 ms avec) — prochain goulot d’une très grosse bibliothèque ; la publication d’un gros lot importé est hors délai → **H34**.",
+        "pt": "11/10 — aberto por medição do lote 8 de H21. **12/10 — entregue, a verificar** (`1441c8e2`, migração `20261012123726`): «Aproximar» 200 × 25 de 26 s para 1,6 s; promoção de 10–21 s para 3,0 s; mesmas regras e respostas."
+      }
+    },
+    {
+      "id": "H34",
+      "d": "H",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire",
+        "pt": "Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo"
+      },
+      "v": {
+        "fr": "Mesuré le 12/10 par H33 (point 5 de sa spécification, `scratchpad/h33/sonde-promo`) : publier un lot importé de 5 000 exemplaires prend environ 208 s aux volumes de la production. Par exemplaire publié, `fn_v2_recompute_holdings_availability` recompte les exemplaires de tout le réseau (≈ 110 s au total) et `fn_next_tombo` relit tous les numéros du préfixe de la bibliothèque (≈ 49 s). Un run n’ayant qu’un lot ouvert (H21 lot 8), l’import complet de DIRA (plus de 3 000 livres) passera par une publication de cette taille ; les appels de l’API sont coupés à 8 s.",
+        "pt": "Medido em 12/10: publicar 5 000 exemplares leva ~208 s; recálculo de disponibilidade por exemplar e leitura de todos os tombos."
+      },
+      "w": {
+        "fr": "Recompter la disponibilité une fois par fonds touché en fin de publication (et non par exemplaire, ni sur tout le réseau) ; tirer les numéros d’inventaire par série (une lecture du dernier numéro, puis incrément, sous verrou), sans jamais redonner un numéro (C17) ; mesure dans une suite : publication d’un lot de 5 000 exemplaires sous 8 s par appel, ou publication par pages si une borne reste nécessaire (ce serait une règle nouvelle : la soumettre à Xavier).",
+        "pt": "Recalcular uma vez por fundo; tombos em série; medição na suíte; paginação seria regra nova."
+      },
+      "y": {
+        "fr": "Sans cela, l’import complet de DIRA échouera à la publication, après une révision faite pour rien.",
+        "pt": "Sem isso, a importação completa da DIRA falhará na publicação."
+      },
+      "f": {
+        "fr": [
+          "Publication d’un lot importé de 5 000 exemplaires sous 8 s par appel, au banc et sous charge de CI.",
+          "Numéros d’inventaire toujours uniques et jamais redonnés (C17).",
+          "Une mesure dans une suite SQL."
+        ],
+        "pt": [
+          "Publicação de 5 000 exemplares em menos de 8 s.",
+          "Tombos únicos (C17).",
+          "Medição na suíte."
+        ]
+      },
+      "dep": {
+        "fr": "Après **H33**. Avant l’import complet de DIRA.",
+        "pt": "Depois de **H33**. Antes da importação completa da DIRA."
+      },
+      "r": [
+        "supabase/migrations",
+        "tests/sql"
+      ],
+      "verif": {
+        "fr": "12/10 — ouvert sur mesure de H33.",
+        "pt": "12/10 — aberto por medição de H33."
       }
     },
     {

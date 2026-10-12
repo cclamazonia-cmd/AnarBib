@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 11
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **40 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **41 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1106,7 +1106,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 | | | | |
 |---|---|---|---|
-| **H33** | « Rapprocher » sur un gros fichier dépasse le plafond de 8 s des appels de l’API | `P2` | Ouvert |
+| **H33** | « Rapprocher » sur un gros fichier dépasse le plafond de 8 s des appels de l’API | `P2` | À vérifier |
+| **H34** | Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire | `P2` | Ouvert |
 | **H2** | Poser à la FICEDL les sept questions qui bloquent l'export du thésaurus | `P1` | Bloqué |
 | **H6** | Aligner les vocabulaires militants qui ne se connaissent pas | `P2` | Ouvert |
 | **H12** | Les listes hors thésaurus de la FICEDL — communes du Bettini, lieux d'édition du Bianco : demander l'export tel quel, jamais l'intégration | `P3` | Ouvert |
@@ -1119,11 +1120,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 #### H33 — « Rapprocher » sur un gros fichier dépasse le plafond de 8 s des appels de l’API
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Mesuré le 11/10 par le lot 8 de H21 (sonde `scratchpad/l8/p2`) : « Rapprocher » sur 200 lignes × 25 exemplaires neufs prend de 8 à 80 s selon la charge et l’ordre de passage, avant comme après le lot 8 (défaut antérieur). Le constat d’exemplaire seul fait 5 000 exemplaires en 0,5 s : le coût est ailleurs (création des brouillons d’exemplaire, déclencheurs, lot du run). Les appels de l’API sont coupés à 8 s (`statement_timeout` d’authenticator) : sur un vrai fonds à plusieurs exemplaires par notice, « Rapprocher » échouerait par page entière.
 
-*Vérifié : 11/10 — ouvert sur mesure du lot 8 de H21.*
+*Vérifié : 11/10 — ouvert sur mesure du lot 8 de H21. **12/10 — livré, à vérifier** (`1441c8e2`, migration `20261012123726` appliquée par la CI, `created_by` vide). **Cause** : « déjà en brouillon » relisait `exemplar_drafts` pour chaque exemplaire avec un plan mis en cache quand la table était presque vide (seq scan, 4 999 lignes filtrées à chaque appel ; pire après un autovacuum qui remet relpages à 0 : 46 s pour 5 000 constats) — d’où 8 à 80 s selon les passages, pas la charge. **Correctif** : `ingest.fn_h33_juger_exemplaires` juge la liste en lisant les brouillons une seule fois (EXECUTE planifié aux tailles du moment), dans l’ordre et avec les verdicts de l’ancienne boucle (constat « au catalogue » `ingest.fn_h21_constat_exemplaire_au_catalogue` engendré depuis le constat vivant) ; « Rapprocher » et la promotion insèrent en une passe, fonds résolu une fois par notice. Mêmes gardes, mêmes réponses : banc différentiel et banc aléatoire (T10, graine fixe, 885 exemplaires) à 0 écart. Borne : 200 lignes et 5 000 exemplaires par appel (`error.import.page_too_large`) ; l’écran et l’assistant découpent par pages et disent ce que les pages précédentes ont fait si une page est refusée. **Mesures** : Rapprocher 200 × 25 de 26 s (jusqu’à 80) à 1,6 s, page suivante de 48 s à 1,8 s ; promotion 200 × 25 de 10–21 s à 3,0 s. SQL 194/194 (H33 : 10), vitest 2 472, 20 mutants tués ; un sceptique (aucun bloquant). **Consigné** : la promotion peut frôler 8 s sous la charge d’une CI (9,1 s mesuré une fois pendant une CI ; 3,0 s au calme) — réduire la page de promotion si T08 rougit ; le constat scalaire reste emprunté par le recalcul des trois états et les retraits (une connexion du pool au plan figé peut y mettre 12 à 46 s pour 5 000 constats) — à faire passer par `fn_h33_juger_exemplaires` ; `resolve_library_holding_bridge` compare sur `trim()` sans index (3,5 s pour 200 appels sans statistiques ; 44 ms avec) — prochain goulot d’une très grosse bibliothèque ; la publication d’un gros lot importé est hors délai → **H34**.*
 
 **Ce que c'est.** Trouver où part le temps (EXPLAIN, mesure par étape : `fn_create_exemplar_drafts_from_import_rows`, déclencheurs sur `exemplar_drafts`, lot du run, verrous) ; passer en une passe SQL ce qui boucle par exemplaire, comme au lot 6b ; sinon borner l’appel par un plafond d’exemplaires et découper à l’écran (modèle `pagesParExemplaires` du 6b) ; une mesure dans la suite : 200 lignes × 25 exemplaires neufs sous 8 s.
 
@@ -1135,6 +1136,28 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Une mesure dans une suite SQL.
 
 **Dépendances.** Après **H21** (lots 6a à 8).
+
+*Renvois : `supabase/migrations` · `tests/sql`*
+
+#### H34 — Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Mesuré le 12/10 par H33 (point 5 de sa spécification, `scratchpad/h33/sonde-promo`) : publier un lot importé de 5 000 exemplaires prend environ 208 s aux volumes de la production. Par exemplaire publié, `fn_v2_recompute_holdings_availability` recompte les exemplaires de tout le réseau (≈ 110 s au total) et `fn_next_tombo` relit tous les numéros du préfixe de la bibliothèque (≈ 49 s). Un run n’ayant qu’un lot ouvert (H21 lot 8), l’import complet de DIRA (plus de 3 000 livres) passera par une publication de cette taille ; les appels de l’API sont coupés à 8 s.
+
+*Vérifié : 12/10 — ouvert sur mesure de H33.*
+
+**Ce que c'est.** Recompter la disponibilité une fois par fonds touché en fin de publication (et non par exemplaire, ni sur tout le réseau) ; tirer les numéros d’inventaire par série (une lecture du dernier numéro, puis incrément, sous verrou), sans jamais redonner un numéro (C17) ; mesure dans une suite : publication d’un lot de 5 000 exemplaires sous 8 s par appel, ou publication par pages si une borne reste nécessaire (ce serait une règle nouvelle : la soumettre à Xavier).
+
+**Pourquoi ça compte.** Sans cela, l’import complet de DIRA échouera à la publication, après une révision faite pour rien.
+
+**Ce qui compte comme fini.**
+
+- Publication d’un lot importé de 5 000 exemplaires sous 8 s par appel, au banc et sous charge de CI.
+- Numéros d’inventaire toujours uniques et jamais redonnés (C17).
+- Une mesure dans une suite SQL.
+
+**Dépendances.** Après **H33**. Avant l’import complet de DIRA.
 
 *Renvois : `supabase/migrations` · `tests/sql`*
 
@@ -1966,4 +1989,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-12** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-12** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 10
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 11
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **40 itens de 54** trazem uma verificação datada própria (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **41 itens de 55** trazem uma verificação datada própria (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, H34, I2, I21, I30, I32, J10, K2, K7, K10). Os **14** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1106,7 +1106,8 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **H33** | «Aproximar» num arquivo grande ultrapassa o limite de 8 s das chamadas da API | `P2` | Aberto |
+| **H33** | «Aproximar» num arquivo grande ultrapassa o limite de 8 s das chamadas da API | `P2` | A verificar |
+| **H34** | Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo | `P2` | Aberto |
 | **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
@@ -1119,11 +1120,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### H33 — «Aproximar» num arquivo grande ultrapassa o limite de 8 s das chamadas da API
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Medido em 11/10: «Aproximar» em 200 linhas × 25 exemplares leva de 8 a 80 s; o limite da API é 8 s.
 
-*Verificado : 11/10 — aberto por medição do lote 8 de H21.*
+*Verificado : 11/10 — aberto por medição do lote 8 de H21. **12/10 — entregue, a verificar** (`1441c8e2`, migração `20261012123726`): «Aproximar» 200 × 25 de 26 s para 1,6 s; promoção de 10–21 s para 3,0 s; mesmas regras e respostas.*
 
 **O que é.** Achar onde vai o tempo; uma passada SQL ou paginação por exemplares; medição na suíte.
 
@@ -1135,6 +1136,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - Uma medição na suíte.
 
 **Dependências.** Depois de **H21**.
+
+*Remissões : `supabase/migrations` · `tests/sql`*
+
+#### H34 — Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Medido em 12/10: publicar 5 000 exemplares leva ~208 s; recálculo de disponibilidade por exemplar e leitura de todos os tombos.
+
+*Verificado : 12/10 — aberto por medição de H33.*
+
+**O que é.** Recalcular uma vez por fundo; tombos em série; medição na suíte; paginação seria regra nova.
+
+**Por que importa.** Sem isso, a importação completa da DIRA falhará na publicação.
+
+**O que conta como terminado.**
+
+- Publicação de 5 000 exemplares em menos de 8 s.
+- Tombos únicos (C17).
+- Medição na suíte.
+
+**Dependências.** Depois de **H33**. Antes da importação completa da DIRA.
 
 *Remissões : `supabase/migrations` · `tests/sql`*
 
@@ -1956,4 +1979,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-12. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-11 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `24b37717`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
