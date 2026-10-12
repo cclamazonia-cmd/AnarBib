@@ -786,3 +786,6 @@ tests/sql/h33_rapprocher_gros_fichier_tests.sql
 # AUT-VAR (12/10/2026) : « Rattacher aux œuvres » lit toutes les formes de l'autorité (Wikidata par langue, fusions, formes variantes et pseudonymes saisis) ;
 # les deux détections de doublons reconnaissent un Wikidata/VIAF/ISNI commun ; publier un brouillon sans graphies ne vide plus celles de l'autorité.
 tests/sql/aut_var_formes_variantes_tests.sql
+# H34 (12/10/2026) : publier un gros lot importé — la disponibilité recomptée une fois par fonds touché (déclencheur qui note pendant
+# publish_catalog_batch), fn_next_tombo par index ; comptes identiques à la définition d'avant, numéros jamais redonnés, mesures.
+tests/sql/h34_publier_un_gros_lot_tests.sql
