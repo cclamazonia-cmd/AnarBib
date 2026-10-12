@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiRpc, SUPABASE_URL } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -32,15 +32,17 @@ import EventosPanel from '@/components/biblioteca/EventosPanel';
 import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
 import StabilizedPartnershipsSection from '@/components/library/StabilizedPartnershipsSection';
 import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
-import PebHistorySection from '@/components/library/PebHistorySection';
 import IllSection from './IllSection';
 import TasksSection from './TasksSection';
 import MembershipSection from './MembershipSection';
 import DepositSection from './DepositSection';
 import CorrespondanceSection from './CorrespondanceSection'; /* G19 lot 2 : l'onglet Correspondance (08/10/2026) */
 import ReadLanguagesField from './ReadLanguagesField'; /* G19 lot 4 : les langues que l'équipe lit */
+import OpeningHoursSection from './OpeningHoursSection'; /* E6 lot 4 (12/10/2026) */
+import PublicFicheSection from './PublicFicheSection';
+import ReaderIdentitySection from './ReaderIdentitySection';
+import ReportsSection from './ReportsSection';
 import { fs, ls, bx } from './styles';
-import FinanceReportsSection from '@/components/biblioteca/FinanceReportsSection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -148,19 +150,6 @@ export default function BibliotecaPage() {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const regFileRef = useRef(null);
-  // CARD-LOCAL-2/N5 : « dernier identifiant attribué » dérivé (hint config, coord).
-  const [lastAssignedIdentity, setLastAssignedIdentity] = useState(null);
-  useEffect(() => {
-    if (tab !== 'identity' || !isCoord || !libraryId) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data } = await supabase.schema('api').rpc('get_last_assigned_reader_identity', { p_library_id: libraryId });
-        if (!cancelled) setLastAssignedIdentity(data ?? null);
-      } catch { if (!cancelled) setLastAssignedIdentity(null); }
-    })();
-    return () => { cancelled = true; };
-  }, [tab, isCoord, libraryId]);
 
   // ── Dados ───────────────────────────────────────────────
   const [lib, setLib] = useState(null);
@@ -188,9 +177,6 @@ export default function BibliotecaPage() {
   const [serviceState, setServiceState] = useState(null);
   const [openingHours, setOpeningHours] = useState({ slots: [], public_note: '' });
   const [fichePublic, setFichePublic] = useState({ contact_is_public: false, hours_is_public: false });
-  const [fpSaving, setFpSaving] = useState('');
-  const [ohSaving, setOhSaving] = useState(false);
-  const [ohMsg, setOhMsg] = useState('');
   const [regDocs, setRegDocs] = useState([]);
   const [docGov, setDocGov] = useState(null);
   // members reste chargé : utilisé par generateReportText() même si l'onglet team
@@ -370,43 +356,6 @@ export default function BibliotecaPage() {
   function setSS(k,v){ setServiceState(p=>p?{...p,[k]:v}:p); }
   function setMC(k,v){ setMailChannel(p=>p?{...p,[k]:v}:p); }
 
-  // ── Horaires/permanences hebdomadaires ──────────────────
-  // day ISO 1..7 (lundi=1) ; le 2024-01-01 est un lundi → base de calcul Intl.
-  const dayName = useCallback((d) => {
-    try { return new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(new Date(2024, 0, Number(d) || 1)); }
-    catch { return String(d); }
-  }, [locale]);
-  // PUBLIB-OPTIN-1/2 (#PUB3) : bascule d'une section en public (coordenador), via RPC.
-  async function toggleFiche(which, value){
-    setFpSaving(which);
-    try {
-      const fn = which === 'contact' ? 'fn_set_library_contact_public' : 'fn_set_library_hours_public';
-      const { error } = await apiRpc(fn, { p_library_id: libraryId, p_is_public: value });
-      if (error) throw error;
-      setFichePublic(p => ({ ...p, [which === 'contact' ? 'contact_is_public' : 'hours_is_public']: value }));
-    } catch { /* silencieux : l'état ne bascule pas si l'RPC échoue */ }
-    finally { setFpSaving(''); }
-  }
-  function addSlot(){ setOpeningHours(p => ({ ...p, slots: [...p.slots, { day:1, start:'18:00', end:'20:00', label:'' }] })); setOhMsg(''); }
-  function updateSlot(i,k,v){ setOpeningHours(p => ({ ...p, slots: p.slots.map((s,j)=> j===i ? { ...s, [k]: v } : s) })); setOhMsg(''); }
-  function removeSlot(i){ setOpeningHours(p => ({ ...p, slots: p.slots.filter((_,j)=> j!==i) })); setOhMsg(''); }
-  async function saveHours(){
-    setOhSaving(true); setOhMsg('');
-    try {
-      const clean = (openingHours.slots || [])
-        .filter(s => s && s.start && s.end)
-        .map(s => ({ day: Number(s.day) || 1, start: String(s.start), end: String(s.end), label: (s.label || '').trim() || undefined }));
-      const { error } = await apiRpc('fn_upsert_library_opening_hours', { p_library_id: libraryId, p_slots: clean, p_public_note: openingHours.public_note || null });
-      if (error) throw error;
-      setOpeningHours(p => ({ ...p, slots: clean.map(s => ({ ...s, label: s.label || '' })) }));
-      setOhMsg(t({ id: 'biblioteca.msg.saved' }));
-    } catch (e) {
-      setOhMsg(localizeError(e, t));
-    } finally {
-      setOhSaving(false);
-    }
-  }
-
   // Helper i18n : pour les seeds système (system_seed_key non-NULL), tente de
   // traduire via i18n applicative ; sinon retombe sur le texte stocké en base.
   // Usage : seedT(rule, 'rule_label', 'rule.label') → cherche
@@ -562,122 +511,6 @@ export default function BibliotecaPage() {
     } finally { setSaving(false); }
   }
 
-  // ── Generate report text ────────────────────────────────
-  function generateReportText() {
-    const now = new Date().toLocaleDateString();
-    const libName = lib?.name || libraryName;
-    const lines = [
-      t({id:'biblioteca.report.headerLine'},{lib:libName}),
-      t({id:'biblioteca.report.dateLine'},{date:now}),
-      '',
-      t({id:'biblioteca.report.docsInCatalog'},{count:stats.books}),
-      t({id:'biblioteca.report.authorities'},{count:stats.authors}),
-      t({id:'biblioteca.report.localExemplars'},{count:stats.exemplars}),
-      t({id:'biblioteca.report.registeredReaders'},{count:stats.readers}),
-      t({id:'biblioteca.report.openLoans'},{count:stats.loansOpen}),
-      t({id:'biblioteca.report.reservationsActive'},{count:stats.reservationsActive}),
-      t({id:'biblioteca.report.consultationsActive'},{count:stats.consultationsActive}),
-      t({id:'biblioteca.report.librarians'},{count:members.filter(m => m.role === 'librarian').length}),
-      '',
-      t({id:'biblioteca.report.team'}) + ':',
-      ...members.map(m => {
-        const p = m.profiles || {};
-        const personName = [p.first_name, p.last_name].filter(Boolean).join(' ') || p.email || '—';
-        const roleLabel = (m.role === 'librarian' || m.role === 'reader' || m.role === 'coordenador' || m.role === 'administrador')
-          ? t({id:`roles.${m.role}`})
-          : m.role;
-        return `  ${personName} — ${roleLabel}`;
-      }),
-      '',
-      t({id:'biblioteca.report.tasks'}) + ':',
-      ...(tasks.length ? tasks.map(tk => `  [${TASK_STATUS[tk.status] || tk.status}] ${tk.title} (${TASK_PRIO[tk.priority] || tk.priority})${tk.owner ? ` — ${tk.owner}` : ''}`) : ['  ' + t({id:'biblioteca.report.noTasksRegistered'})]),
-      // #ILL-reports volet A : section PEB du compte-rendu. Chiffres dérivés
-      // de illLoans (la file active exclut déjà les PEB archivés), puis liste
-      // des PEB EN COURS uniquement (ni devolvido ni cancelado), avec le sens
-      // du prêt, le partenaire et les titres des exemplaires.
-      ...(() => {
-        const ILL_TERMINAL = ['devolvido', 'cancelado'];
-        const ongoing = illLoans.filter(l => !ILL_TERMINAL.includes(l.status_global));
-        const overdue = illLoans.filter(l => l.status_global === 'atrasado');
-        const terminalPending = illLoans.filter(l => ILL_TERMINAL.includes(l.status_global));
-        const out = [
-          '',
-          t({id:'biblioteca.report.illSection'}) + ':',
-          '  ' + t({id:'biblioteca.report.illOngoing'}, {count: ongoing.length}),
-          '  ' + t({id:'biblioteca.report.illOverdue'}, {count: overdue.length}),
-          '  ' + t({id:'biblioteca.report.illTerminalPending'}, {count: terminalPending.length}),
-        ];
-        if (ongoing.length) {
-          out.push('  ' + t({id:'biblioteca.report.illOngoingList'}) + ':');
-          for (const loan of ongoing) {
-            const isLender = loan.lender_library_id === libraryId;
-            const partnerId = isLender ? loan.borrower_library_id : loan.lender_library_id;
-            const partnerLib = allLibraries.find(l => l.id === partnerId);
-            const partnerName = partnerLib?.short_name || partnerLib?.name || '—';
-            const sens = isLender
-              ? t({id:'biblioteca.report.illLendTo'}, {partner: partnerName})
-              : t({id:'biblioteca.report.illBorrowFrom'}, {partner: partnerName});
-            const statusLabel = t({id:`ill.status.${loan.status_global}`});
-            out.push(`    #${loan.id} — ${sens} — ${statusLabel}`);
-            // titres des exemplaires : illItemsByLoan est chargé dans le meme
-            // loadAll() que illLoans, donc toujours synchrone ici.
-            const items = illItemsByLoan[loan.id] || [];
-            if (items.length) {
-              const titles = items
-                .map(it => it.titulo_cache || it.bib_ref || '—')
-                .join(' ; ');
-              out.push(`      ${titles}`);
-            }
-          }
-        }
-        return out;
-      })(),
-      // #EA-11 : section Trocas du compte-rendu. Trois chiffres dérivés de
-      // exchanges (trocas impliquant la bibliothèque, requérante ou cible) :
-      // propostas (créées sur 7 jours), aceitas (acceptées sur 7 jours) et en
-      // cours (acceptées dont la phase d'exécution n'est ni completed ni
-      // cancelled — phase manquante/illisible = en cours).
-      ...(() => {
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        const proposed = exchanges.filter(e => new Date(e.created_at) >= sevenDaysAgo).length;
-        const accepted = exchanges.filter(e => e.status === 'accepted' && e.decided_at && new Date(e.decided_at) >= sevenDaysAgo).length;
-        const ongoing = exchanges.filter(e => e.status === 'accepted' && (() => {
-          try {
-            const o = JSON.parse(e.object_ref || 'null');
-            const ph = o && o.execution_followup && o.execution_followup.phase;
-            return !['completed', 'cancelled'].includes(ph);
-          } catch {
-            return true;
-          }
-        })()).length;
-        return [
-          '',
-          t({id:'biblioteca.report.exchangesSection'}) + ':',
-          '  ' + t({id:'biblioteca.report.exchangesProposed'}, {count: proposed}),
-          '  ' + t({id:'biblioteca.report.exchangesAccepted'}, {count: accepted}),
-          '  ' + t({id:'biblioteca.report.exchangesOngoing'}, {count: ongoing}),
-        ];
-      })(),
-    ];
-    return lines.join('\n');
-  }
-
-  async function sendReport() {
-    // EA-13 (etape 8) : envoi SERVEUR du rapport hebdomadaire via l'Edge Function
-    // notify-weekly-report (Resend), debloque par la cloture de #110. Remplace le
-    // placeholder mailto: historique. Destinataire resolu cote EF sur
-    // weekly_report_email ; autorisation gardee par la RPC (staff de la biblio).
-    const email = mailChannel?.weekly_report_email?.trim();
-    if (!email) { setMsg({ text: t({id:'biblioteca.report.noWeeklyEmail'}), kind: 'error' }); return; }
-    try {
-      const { error } = await supabase.rpc('fn_send_weekly_report_now', { p_library_id: libraryId });
-      if (error) throw error;
-      setMsg({ text: t({ id: 'biblioteca.report.sent' }, { email }), kind: 'ok' });
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    }
-  }
-
   const logoUrl = commons?.logo_file_key ? `${SUPABASE_URL}/storage/v1/object/public/library-ui-assets/${commons.logo_file_key.includes('/')?commons.logo_file_key:`themes/${commons.logo_file_key}/logo-${commons.logo_file_key}.png`}` : null;
 
   if (!libraryId) return (
@@ -806,93 +639,12 @@ export default function BibliotecaPage() {
           </div>}
           {/* E21 (15/09/2026) : la serie de numeros d'inventaire et la cote se reglent ici, plus en SQL */}
           <LibraryNumberingSection libraryId={libraryId} canEdit={isCoord} />
-          {/* OPENING-HOURS — horaires/permanences hebdomadaires (migration 20260617004224) */}
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.openingHours.title' })}</h4>
-            <p style={{ margin:'0 0 12px', fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.openingHours.hint' })}</p>
-            {openingHours.slots.length === 0 ? (
-              <p style={{ margin:'0 0 12px', fontSize:'.85rem', color:'var(--brand-muted)', fontStyle:'italic' }}>{t({ id: 'biblioteca.openingHours.empty' })}</p>
-            ) : (
-              <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:12 }}>
-                {openingHours.slots.map((s,i) => (
-                  <div key={i} style={{ display:'flex', flexWrap:'wrap', gap:8, alignItems:'flex-end', padding:'10px 12px', background:'rgba(0,0,0,.12)', borderRadius:8, border:'1px solid rgba(255,255,255,.06)' }}>
-                    <div style={{ minWidth:'min(130px, 100%)' }}>
-                      <select value={s.day||1} onChange={e=>updateSlot(i,'day',Number(e.target.value))} style={fs}>
-                        {[1,2,3,4,5,6,7].map(d => <option key={d} value={d}>{dayName(d)}</option>)}
-                      </select>
-                    </div>
-                    <div style={{ width:110 }}>
-                      <label style={{...ls,fontSize:'.72rem',marginBottom:2}}>{t({ id: 'biblioteca.openingHours.start' })}</label>
-                      <input type="time" value={s.start||''} onChange={e=>updateSlot(i,'start',e.target.value)} style={fs} />
-                    </div>
-                    <div style={{ width:110 }}>
-                      <label style={{...ls,fontSize:'.72rem',marginBottom:2}}>{t({ id: 'biblioteca.openingHours.end' })}</label>
-                      <input type="time" value={s.end||''} onChange={e=>updateSlot(i,'end',e.target.value)} style={fs} />
-                    </div>
-                    <div style={{ flex:'1 1 160px', minWidth:'min(140px, 100%)' }}>
-                      <input type="text" value={s.label||''} onChange={e=>updateSlot(i,'label',e.target.value)} style={fs} placeholder={t({ id: 'biblioteca.openingHours.labelPlaceholder' })} maxLength={80} />
-                    </div>
-                    <button type="button" onClick={()=>removeSlot(i)} style={{ padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', cursor:'pointer', lineHeight:1 }} aria-label={t({ id: 'common.remove' })}>×</button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <button type="button" onClick={addSlot} style={{ padding:'8px 14px', borderRadius:8, border:'1px solid rgba(255,255,255,.18)', background:'rgba(255,255,255,.05)', color:'#f4f4f4', cursor:'pointer', fontSize:'.85rem', marginBottom:14 }}>{t({ id: 'biblioteca.openingHours.addSlot' })}</button>
-            <div className="cat-field" style={{ marginBottom:12 }}>
-              <label style={ls}>{t({ id: 'biblioteca.openingHours.note' })}</label>
-              <textarea value={openingHours.public_note||''} onChange={e=>{ setOpeningHours(p=>({...p,public_note:e.target.value})); setOhMsg(''); }} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.openingHours.notePlaceholder' })} maxLength={300} />
-            </div>
-            <div style={{ display:'flex', gap:12, alignItems:'center' }}>
-              <button type="button" className="ab-button" onClick={saveHours} disabled={ohSaving}>{t({ id: 'common.save' })}</button>
-              {ohMsg && <span style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{ohMsg}</span>}
-            </div>
-          </div>
-          {/* FICHE-PUBLIQUE (#PUB3) — opt-in niveau 2 : ce qui apparaît sur /bibliotecas/:slug */}
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.publicFiche.title' })}</h4>
-            <p style={{ margin:'0 0 4px', fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.publicFiche.hint' })}</p>
-            <p style={{ margin:'0 0 12px', fontSize:'.78rem', color:'var(--brand-muted)', fontStyle:'italic' }}>{t({ id: 'biblioteca.publicFiche.requiresPublic' })}</p>
-            <label style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, cursor: fpSaving==='contact'?'wait':'pointer' }}>
-              <input type="checkbox" checked={fichePublic.contact_is_public} disabled={fpSaving==='contact'} onChange={e=>toggleFiche('contact', e.target.checked)} />
-              <span>{t({ id: 'biblioteca.publicFiche.contactToggle' })}</span>
-            </label>
-            <label style={{ display:'flex', gap:8, alignItems:'center', marginBottom:12, cursor: fpSaving==='hours'?'wait':'pointer' }}>
-              <input type="checkbox" checked={fichePublic.hours_is_public} disabled={fpSaving==='hours'} onChange={e=>toggleFiche('hours', e.target.checked)} />
-              <span>{t({ id: 'biblioteca.publicFiche.hoursToggle' })}</span>
-            </label>
-            <p style={{ margin:0, fontSize:'.78rem', color:'var(--brand-muted)' }}>⚠ {t({ id: 'biblioteca.publicFiche.collective' })}</p>
-          </div>
-          {/* CARD-LOCAL-2/3 (N5) — modèle d'identité lecteur·rice + mode de validation */}
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.readerIdentity.title' })}</h4>
-            <p style={{ margin:'0 0 10px', fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.readerIdentity.hint' })}</p>
-            <div className="cat-book-grid">
-              <div className="cat-field">
-                <label style={ls}>{t({ id: 'biblioteca.readerIdentity.model' })}</label>
-                <select value={lib.reader_identity_model||'free_number'} onChange={e=>setL('reader_identity_model',e.target.value)} style={fs}>
-                  <option value="free_number">{t({id:'biblioteca.readerIdentity.model.free_number'})}</option>
-                  <option value="sequenced_number">{t({id:'biblioteca.readerIdentity.model.sequenced_number'})}</option>
-                  <option value="name">{t({id:'biblioteca.readerIdentity.model.name'})}</option>
-                  <option value="none">{t({id:'biblioteca.readerIdentity.model.none'})}</option>
-                </select>
-              </div>
-              <div className="cat-field">
-                <label style={ls}>{t({ id: 'biblioteca.readerIdentity.mode' })}</label>
-                <select value={lib.reader_validation_mode||'presential'} onChange={e=>setL('reader_validation_mode',e.target.value)} style={fs}>
-                  <option value="presential">{t({id:'biblioteca.readerIdentity.mode.presential'})}</option>
-                  <option value="remote">{t({id:'biblioteca.readerIdentity.mode.remote'})}</option>
-                  <option value="none">{t({id:'biblioteca.readerIdentity.mode.none'})}</option>
-                </select>
-              </div>
-              {/* #LIB-SIGNUP-UI — interrupteur d'ouverture des inscriptions publiques (accepts_public_signup) */}
-              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={lib.accepts_public_signup||false} onChange={e=>setL('accepts_public_signup',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.readerIdentity.publicSignup'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.readerIdentity.publicSignup.hint'})}</span></span></label></div>
-              {lastAssignedIdentity != null && lastAssignedIdentity !== '' && (
-                <div className="cat-field" style={{ gridColumn:'span 3' }}>
-                  <span style={{ fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.readerIdentity.lastAssigned' }, { value: lastAssignedIdentity })}</span>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* OPENING-HOURS — horaires/permanences hebdomadaires (E6 lot 4 : OpeningHoursSection) */}
+          <OpeningHoursSection libraryId={libraryId} openingHours={openingHours} setOpeningHours={setOpeningHours} />
+          {/* FICHE-PUBLIQUE (#PUB3) — opt-in niveau 2 (E6 lot 4 : PublicFicheSection) */}
+          <PublicFicheSection libraryId={libraryId} fichePublic={fichePublic} setFichePublic={setFichePublic} />
+          {/* CARD-LOCAL-2/3 (N5) — modèle d'identité lecteur·rice + mode de validation (E6 lot 4 : ReaderIdentitySection) */}
+          <ReaderIdentitySection libraryId={libraryId} isCoord={isCoord} lib={lib} setL={setL} />
           <LibraryVisualAssetsSection
             libraryId={libraryId}
             librarySlug={lib.slug}
@@ -1112,7 +864,7 @@ export default function BibliotecaPage() {
             <TeamPanel /> qui affiche aussi les status (suspended,
             pending_removal, inactive) et préparera la Phase B (actions
             via les RPCs fn_team_*). Le state `members` reste chargé dans
-            loadAll() car generateReportText() le consomme. */}
+            loadAll() car le rapport (ReportsSection) le consomme. */}
         {tab==='team' && (
           <div>
             <h3 style={{ marginBottom: 12 }}>{t({ id: 'biblioteca.team.title' })}</h3>
@@ -1161,65 +913,11 @@ export default function BibliotecaPage() {
         )}
 
         {/* ═══ 8. Relatórios e resumos ═════════════════ */}
-        {tab==='reports' && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.reports.title' })}</h3>
-          <div style={bx}>
-            <div className="cat-book-grid">
-              {[{v:stats.books,l:t({id:'catalog.stats.documents'})},{v:stats.authors,l:t({id:'catalog.stats.authorities'})},{v:stats.exemplars,l:t({id:'catalog.stats.exemplars'})},{v:stats.readers,l:t({id:'biblioteca.stats.readersActive'})},{v:stats.loansOpen,l:t({id:'biblioteca.stats.loansOpen'})},{v:stats.loansOverdue,l:t({id:'biblioteca.stats.loansOverdue'}),warn:stats.loansOverdue>0},{v:stats.loansCreated7d,l:t({id:'biblioteca.stats.loansCreated7d'})},{v:stats.loansCreated30d,l:t({id:'biblioteca.stats.loansCreated30d'})},{v:stats.loansReturned7d,l:t({id:'biblioteca.stats.loansReturned7d'})},{v:stats.reservationsActive,l:t({id:'biblioteca.stats.reservationsActive'})},{v:stats.consultationsActive,l:t({id:'biblioteca.stats.consultationsActive'})},{v:stats.trocasActive,l:t({id:'biblioteca.stats.trocasActive'})},{v:stats.librariansActive,l:t({id:'biblioteca.stats.librariansActive'})}].map((s,i)=>(
-                <div key={i} style={{ padding:14, borderRadius:8, background:s.warn?'rgba(220,38,38,.15)':'rgba(0,0,0,.15)', textAlign:'center', border:s.warn?'1px solid rgba(220,38,38,.4)':'none' }}>
-                  <div style={{ fontSize:'1.5rem', fontWeight:800 }}>{s.v}</div><div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {stats.topBooks && stats.topBooks.length > 0 && (
-            <div style={bx}>
-              <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.topBooks90d' })}</h4>
-              <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
-                {t({ id: 'biblioteca.reports.topBooks90dHint' })}
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-                {stats.topBooks.map((b, i) => (
-                  <div key={i} style={{ display:'flex', justifyContent:'space-between', gap:12, padding:'8px 12px', borderRadius:6, background:'rgba(0,0,0,.12)' }}>
-                    <div style={{ flex:1, minWidth:0 }}>
-                      <div style={{ fontSize:'.92rem', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.titulo || t({ id: 'common.untitled' })}</div>
-                      <div style={{ fontSize:'.78rem', color:'var(--brand-muted)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.autor || t({ id: 'common.unknownAuthor' })}</div>
-                    </div>
-                    <div style={{ fontSize:'.92rem', fontWeight:700, alignSelf:'center', whiteSpace:'nowrap' }}>{t({ id: 'biblioteca.reports.topBooks.loanCount' }, { count: b.cnt })}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {/* #ILL-archive (25/05/2026) : consultation des PEB archivés.
-              Composant dédié, lit la vue api.peb_history_v1, permet de
-              désarchiver. Réservé au staff (l'onglet Rapports l'est déjà).
-              #ILL-reports volet B : onChange=loadAll pour que la file active
-              se rafraîchisse quand un PEB est désarchivé. */}
-          <PebHistorySection libraryId={libraryId} allLibraries={allLibraries} onChange={loadAll} />
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.generate' })}</h4>
-            <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
-              {t({ id: 'biblioteca.reports.generateHint' })}
-            </div>
-            <textarea value={generateReportText()} readOnly rows={12} style={{...fs, fontFamily:'monospace', fontSize:'.82rem', resize:'vertical', marginBottom:10}} />
-            <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-              <button className="cat-btn primary" onClick={()=>{ navigator.clipboard?.writeText(generateReportText()); setMsg({text:t({id:'biblioteca.report.copiedToast'}),kind:'ok'}); }} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.copy' })}</button>
-              <button className="cat-btn secondary" onClick={sendReport} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.sendEmail' })}</button>
-              <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>{t({ id: 'biblioteca.tasks.recipient' })} {mailChannel?.weekly_report_email || t({ id: 'common.notConfigured' })}</span>
-            </div>
-          </div>
-
-          {/* Suivi financier exportable (cotisations + dépôts de garantie, DEPOT-9).
-              Chaque sous-section ne s'affiche que si le système est actif. */}
-          <FinanceReportsSection
-            libraryId={libraryId}
-            membershipEnabled={!!lib?.membership_enabled}
-            depositEnabled={!!lib?.deposit_enabled}
-            members={members}
-          />
-        </div>)}
+        {tab==='reports' && (
+          <ReportsSection libraryId={libraryId} libraryName={libraryName} lib={lib} stats={stats} members={members} tasks={tasks}
+            illLoans={illLoans} illItemsByLoan={illItemsByLoan} exchanges={exchanges} allLibraries={allLibraries} mailChannel={mailChannel}
+            taskStatus={TASK_STATUS} taskPrio={TASK_PRIO} setMsg={setMsg} onChanged={loadAll} />
+        )}
 
         {/* ═══ Notes de lecture — modération (Lot 3) ═══ */}
         {tab==='notas' && <ReadingNotesModeration libraryId={libraryId} />}

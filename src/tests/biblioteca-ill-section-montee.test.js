@@ -48,7 +48,9 @@ describe('section PEB de la page Bibliothèque (E6, lot 1) — réellement mont�
     // la liste et ses exemplaires restent au parent : loadHeavy les charge, le rapport les lit
     expect(page).toMatch(/const \[illLoans, setIllLoans\] = useState\(\[\]\)/);
     expect(page).toMatch(/const \[illItemsByLoan, setIllItemsByLoan\] = useState\(\{\}\)/);
-    expect(page).toMatch(/const items = illItemsByLoan\[loan\.id\] \|\| \[\];/);
+    // E6 lot 4 (12/10) : le rapport vit dans ReportsSection, qui reçoit illItemsByLoan en props
+    expect(src('pages/biblioteca/ReportsSection.jsx')).toMatch(/const items = illItemsByLoan\[loan\.id\] \|\| \[\];/);
+    expect(page).toMatch(/illItemsByLoan=\{illItemsByLoan\} exchanges=\{exchanges\}/);
   });
 
   it('a emporté ses sept états, ses fonctions et le partage numérique', () => {
