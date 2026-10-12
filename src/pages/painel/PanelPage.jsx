@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
-import { decodeSystemNote } from '@/lib/systemNotes';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import LibraryContextBanner from '@/components/LibraryContextBanner';
@@ -23,7 +23,9 @@ import { fmtD, useSort } from './_shared';
 import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
-import { taskStatusLabel } from '@/lib/taskStatus';
+import { usePanelHistorico } from './hooks/usePanelHistorico';
+import { usePanelEmprestimos } from './hooks/usePanelEmprestimos';
+import { construireTachesDuJour } from './dailyTasks';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
 const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
@@ -251,141 +253,15 @@ function PanelPageInner() {
   const [internalTasks, setInternalTasks] = useState([]);
   const [selectedRes, setSelectedRes] = useState(new Set());
 
-  // === Onglet Historique (#143.2) =============================
-  // Pills cochables multi-selection pour filtrer par type d'item.
-  // Initialise au type le plus utilise (dynamique selon les comptes).
-  const [historyTypes, setHistoryTypes] = useState(null);
-
-  const dominantHistoryType = useMemo(() => {
-    const counts = {
-      reservas: (reservations || []).filter(r => ['cancelada_leitor','cancelada_biblioteca','convertida_em_emprestimo','expirada','liberada_para_circulacao'].includes(r.item_status)).length,
-      consultas: (consultations || []).filter(c => ['cancelada_biblioteca','cancelada_leitor','consultada','expirada'].includes(c.item_status)).length,
-      emprestimos: (loans || []).filter(l => l.status_global === 'encerrado').length,
-    };
-    if (counts.consultas >= counts.reservas && counts.consultas >= counts.emprestimos) return 'consultas';
-    if (counts.reservas >= counts.emprestimos) return 'reservas';
-    return 'emprestimos';
-  }, [reservations, consultations, loans]);
-
-  useEffect(() => {
-    if (historyTypes === null && dominantHistoryType) {
-      setHistoryTypes(new Set([dominantHistoryType]));
-    }
-  }, [dominantHistoryType, historyTypes]);
-
-  const toggleHistoryType = (type) => {
-    setHistoryTypes(prev => {
-      const next = new Set(prev || []);
-      if (next.has(type)) next.delete(type);
-      else next.add(type);
-      return next;
-    });
-  };
-
-  // Donnees historiques (chargees a la demande, paginees par 50)
-  const [historyData, setHistoryData] = useState({ reservas: [], consultas: [], emprestimos: [] });
-  const [historyOffsets, setHistoryOffsets] = useState({ reservas: 0, consultas: 0, emprestimos: 0 });
-  const [historyHasMore, setHistoryHasMore] = useState({ reservas: true, consultas: true, emprestimos: true });
-  const [historyLoading, setHistoryLoading] = useState({ reservas: false, consultas: false, emprestimos: false });
-
-  // EA-11 (29/05/2026) : taille de page configurable par l'utilisateur·rice
-  // (selecteur 25/50/100 cote TabHistorico). State au niveau PanelPage parce
-  // que loadHistorySection en a besoin et que le handler de changement doit
-  // pouvoir reset historyData/Offsets/HasMore pour relancer le chargement.
-  const [historyPageSize, setHistoryPageSize] = useState(50);
-  const HISTORY_VIEW_NAMES = {
-    reservas: 'painel_reservations_history_v1',
-    consultas: 'painel_consultas_history_v1',
-    emprestimos: 'painel_loans_history_v1'
-  };
-
-  const changeHistoryPageSize = useCallback((newSize) => {
-    setHistoryPageSize(newSize);
-    // Reset complet : on relance le chargement de la 1ere page a la nouvelle
-    // taille. Le useEffect d'auto-load detecte historyData[type].length === 0
-    // et appelle loadHistorySection si type est dans historyTypes.
-    setHistoryData({ reservas: [], consultas: [], emprestimos: [] });
-    setHistoryOffsets({ reservas: 0, consultas: 0, emprestimos: 0 });
-    setHistoryHasMore({ reservas: true, consultas: true, emprestimos: true });
-  }, []);
-
-  const loadHistorySection = useCallback(async (type, append = false) => {
-    if (historyLoading[type]) return;
-    setHistoryLoading(prev => ({ ...prev, [type]: true }));
-    
-    const offset = append ? historyOffsets[type] : 0;
-    const viewName = HISTORY_VIEW_NAMES[type];
-    
-    try {
-      const { data, error } = await supabase
-        .schema('api').from(viewName)
-        .select('*')
-        .range(offset, offset + historyPageSize - 1);
-      
-      if (error) {
-        console.error(`load ${type} history error:`, error);
-        setHistoryLoading(prev => ({ ...prev, [type]: false }));
-        return;
-      }
-      
-      const items = data || [];
-      const hasMore = items.length === historyPageSize;
-      
-      setHistoryData(prev => ({
-        ...prev,
-        [type]: append ? [...prev[type], ...items] : items
-      }));
-      setHistoryOffsets(prev => ({ ...prev, [type]: offset + items.length }));
-      setHistoryHasMore(prev => ({ ...prev, [type]: hasMore }));
-    } catch (err) {
-      console.error(`load ${type} history exception:`, err);
-    } finally {
-      setHistoryLoading(prev => ({ ...prev, [type]: false }));
-    }
-  }, [historyLoading, historyOffsets, historyPageSize]);
-
-  // Auto-load des sections cochees a l'ouverture de l'onglet
-  useEffect(() => {
-    if (tab !== 'historico' || !historyTypes) return;
-    for (const type of ['reservas', 'consultas', 'emprestimos']) {
-      if (historyTypes.has(type) && historyData[type].length === 0 && historyHasMore[type] && !historyLoading[type]) {
-        loadHistorySection(type, false);
-      }
-    }
-  }, [tab, historyTypes, historyData, historyHasMore, historyLoading, loadHistorySection]);
-  // === Fin onglet Historique ==================================
+  const { historyTypes, historyData, historyHasMore, historyLoading, toggleHistoryType,
+    loadHistorySection, refreshHistorico, historyPageSize, changeHistoryPageSize }
+    = usePanelHistorico({ tab, reservations, consultations, loans });
   // Audit UX 25/05/2026 (P3) : filtre par etape de workflow pour les onglets
   // Reservations et Consultations. 'all' = toutes les etapes. Modele :
   // membershipFilter de l'onglet Contribuicoes.
-  // E.2 (OT-1, 28/05/2026) : refresh par onglet — Histórico ne dépend pas de
-  // loadData global, il a sa propre logique loadHistorySection par type.
-  // On rappelle loadHistorySection(type, false) pour chaque type actif.
-  const refreshHistorico = useCallback(() => {
-    const types = historyTypes || new Set();
-    types.forEach(type => loadHistorySection(type, false));
-  }, [historyTypes, loadHistorySection]);
 
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
-  // EA-08 (chantier B, 27/05/2026) : tri et filtre sur l'onglet Empréstimos
-  // (initialement emprestimos-lote, désormais fusionné en emprestimos via E.3/EA-07).
-  // Aligne l'experience avec les trois autres onglets-objet. Valeurs canoniques
-  // de emprestimo_status derivees de fn_v2_refresh_emprestimo_status_global
-  // (dump du 27/05) : aberto, parcialmente_devolvido, encerrado. L'onglet
-  // n'affichant que les actifs, 'encerrado' n'apparait jamais.
-  const [loteStatusFilter, setLoteStatusFilter] = useState('all');
-  const [loteSortKey, setLoteSortKey] = useState('due_at_asc');
-  // E.3 / EA-07 (29/05/2026) : onglet Empréstimos fusionné. Les lignes
-  // d'emprunt sont dépliables, le set contient les emprestimo_id ouverts.
-  const [expandedLoans, setExpandedLoans] = useState(() => new Set());
-  const toggleExpandedLoan = useCallback((empId) => {
-    setExpandedLoans(prev => {
-      const next = new Set(prev);
-      if (next.has(empId)) next.delete(empId);
-      else next.add(empId);
-      return next;
-    });
-  }, []);
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
@@ -1063,62 +939,9 @@ function PanelPageInner() {
     setReturnMsg('');
   }
 
-  // ── Empréstimo actions ─────────────────────────────────
-
-  async function extendLoan(empId) {
-    try {
-      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
-      // DOC-RPC-4. Ce site et son jumeau `extendLoanItem` sont le pendant STAFF
-      // de `renew_my_loan`, le cas qui a fondé DOC-SILENCE-1 — et ils étaient
-      // restés en l'état parce que la requête du relevé ne voit pas les façades
-      // à deux sauts : `api.extend_loan_as_library` →
-      // `public.fn_v2_extend_emprestimo_once` → `public.fn_v2_extend_core`,
-      // qui est la seule à poser `ok`.
-      // Vérifié en base le 31/08/2026 : `fn_v2_extend_core` ne lève JAMAIS. Elle
-      // rend `ok:false` sur huit refus d'entrée (`not_authenticated`, `not_found`,
-      // `circulation_disabled`, `dues_blocked`, `no_active_membership`,
-      // `restricted`) et, ligne à ligne, sur `overdue`, `reserved_by_other`,
-      // `not_renewable`, `quota_exceeded`, `already_extended` — son `ok` final
-      // vaut `v_any_renewed`, donc « faux » dès qu'aucune ligne n'a bougé.
-      // Avec `const { error }`, la charge utile était jetée à la destructuration :
-      // le `ok` n'était pas ignoré, il était INATTEIGNABLE. La bibliothécaire
-      // cliquait « prolonger », rien ne levait, `loadLoans()` rafraîchissait, et
-      // l'échéance n'avait pas bougé — sans un mot.
-      const { data, error } = await supabase.schema('api').rpc('extend_loan_as_library', { p_emprestimo_id: empId });
-      if (error) throw error;
-      assertRpcOk(data);
-      loadLoans();
-    } catch (e) {
-      notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
-    }
-  }
-
-  async function returnLoanItem(empId, lineNos) {
-    try {
-      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
-      const { error } = await supabase.schema('api').rpc('return_loan_partial', {
-        p_emprestimo_id: empId, p_line_nos: lineNos,
-      });
-      if (error) throw error;
-      loadLoans();
-    } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
-  }
-
-  async function extendLoanItem(empId, lineNo) {
-    try {
-      // Granularité Phase 4 : extension PAR ITEM via wrapper api.* (non-DEFINER).
-      // Même défaut et même correctif qu'`extendLoan` ci-dessus, où le pourquoi
-      // est écrit en entier — même chaîne à deux sauts jusqu'à `fn_v2_extend_core`.
-      const { data, error } = await supabase.schema('api').rpc('extend_loan_item_as_library', {
-        p_emprestimo_id: empId, p_line_no: lineNo,
-      });
-      if (error) throw error;
-      assertRpcOk(data);
-      loadLoans();
-    } catch (e) {
-      notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
-    }
-  }
+  const { loteStatusFilter, setLoteStatusFilter, loteSortKey, setLoteSortKey, expandedLoans,
+    toggleExpandedLoan, extendLoan, returnLoanItem, extendLoanItem }
+    = usePanelEmprestimos({ t, loadLoans, notifyError });
 
   // ── Consultation workflow ─────────────────────────────
 
@@ -1266,113 +1089,6 @@ function PanelPageInner() {
     } finally {
       setScheduling(false);
     }
-  }
-
-  // ── Task builder for trabalho do dia ──────────────────
-
-  function buildDailyTasks() {
-    const tasks = [];
-    const today = new Date().toISOString().slice(0, 10);
-
-    activeRes.forEach(r => {
-      const stage = r.workflow_stage_effective || '';
-      const pickupDay = r.pickup_scheduled_for ? new Date(r.pickup_scheduled_for).toISOString().slice(0, 10) : '';
-
-      // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
-      // retirada_agendada = créneau verrouillé : si pickupDay = aujourd'hui,
-      // c'est un retrait prévu aujourd'hui → tâche prioritaire bucket 'hoje'.
-      // re-retirada_agendada conservé en filet pour résas historiques fossiles.
-      if (['retirada_agendada', 're-retirada_agendada'].includes(stage) && pickupDay === today) {
-        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for, displayTz), actionType: 'reserva', reserva_id: r.reserva_id });
-      }
-      if (stage === 'solicitada') {
-        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.newReservation'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${r.bib_ref} · ${t({id:'panel.task.detail.created'})}: ${fmtD(r.reserva_created_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
-      }
-      if (stage === 'pronta_para_retirada') {
-        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.readyForPickup'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.validity'})}: ${fmtD(r.expires_at, displayTz)}`, actionType: 'reserva', reserva_id: r.reserva_id });
-      }
-      if (String(r.pickup_reply_status || '') === 'recusado_leitor') {
-        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.readerRefused'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: r.pickup_reply_note || t({id:'panel.task.detail.reschedule'}), actionType: 'reserva', reserva_id: r.reserva_id });
-      }
-      // PATCH 08/05/2026 paquet 3B : tâche prioritaire "Leitor(a/e) contra-propôs"
-      // déclenchée quand pickup_proposed_by = 'leitor' (= le lecteur a renvoyé
-      // une contre-proposition que le staff doit traiter rapidement).
-      // Priorité haute : la balle est dans le camp staff, action requise.
-      // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
-      // La négociation se déroule désormais dans retirada_a_combinar (forme
-      // verbale = action en cours), plus dans retirada_agendada/re-retirada_agendada.
-      if (r.pickup_proposed_by === 'leitor' && stage === 'retirada_a_combinar') {
-        const iter = r.negotiation_iteration_count ?? 0;
-        tasks.push({
-          priority: 'alta',
-          bucket: 'atencao',
-          kind: t({id:'panel.task.readerCounterProposed'}),
-          label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
-          detail: t({id:'panel.task.detail.proposedSlot'}) + ': ' + fmtD(r.pickup_scheduled_for, displayTz)
-                  + ' · ' + t({id:'panel.task.detail.iteration'}, { count: iter, max: 3 }),
-          actionType: 'reserva',
-          reserva_id: r.reserva_id,
-        });
-      }
-      if (stage === 'nao_retirada') {
-        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: decodeSystemNote(r.workflow_note, t) || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
-      }
-      // PATCH 09/05/2026 paquet 4 (approche A) : rendre visible le stage
-      // retirada_a_combinar dans Trabalho do dia. Sinon ces résas restent
-      // invisibles côté staff et le travail d'agendamento est oublié.
-      // Priorité moyenne : action attendue mais sans urgence comme un
-      // contra-proposta. Bucket atencao pour cohérence avec les autres
-      // « il y a quelque chose à faire ».
-      if (stage === 'retirada_a_combinar') {
-        tasks.push({
-          priority: 'media',
-          bucket: 'atencao',
-          kind: t({id:'panel.task.toScheduleWithReader'}),
-          label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
-          detail: decodeSystemNote(r.workflow_note, t) || t({id:'panel.task.detail.scheduleHint'}),
-          actionType: 'reserva',
-          reserva_id: r.reserva_id,
-        });
-      }
-    });
-
-    overdueLoans.forEach(l => {
-      const effectiveDue = l.extended_until || l.due_at;
-      const due = effectiveDue ? new Date(effectiveDue) : null;
-      const diff = due ? Math.ceil((new Date() - due) / 86400000) : 0;
-      tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.overdueItem'}), label: `${l.user_name || l.user_email || l.user_public_id || '?'} · ${l.titulo}`, detail: t({id:'panel.task.detail.deadline'}) + ': ' + fmtD(effectiveDue) + ' · ' + t({id:'panel.task.detail.daysOverdue'},{days:diff}) + ' · ' + l.sub_id, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
-    });
-
-    activeLoans.filter(l => {
-      const effectiveDue = l.extended_until || l.due_at;
-      return effectiveDue && new Date(effectiveDue).toISOString().slice(0, 10) === today;
-    }).forEach(l => {
-      const effectiveDue = l.extended_until || l.due_at;
-      tasks.push({ priority: 'media', bucket: 'hoje', kind: t({id:'panel.task.dueTodayItem'}), label: `${l.user_name || l.user_email || l.user_public_id || '?'} · ${l.titulo}`, detail: `${t({id:'panel.task.detail.deadline'})}: ${fmtD(effectiveDue)} · ${l.sub_id}`, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
-    });
-
-    consultations.filter(c => c.workflow_stage_effective === 'solicitada').forEach(c => {
-      tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.consultToProcess'}), label: `${c.user_name || c.user_email || c.user_public_id || '?'} · ${c.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${c.bib_ref}`, actionType: 'consulta', consulta_id: c.consulta_id });
-    });
-
-    // Internal tasks from biblioteca
-    internalTasks.forEach(tk => {
-      const dueDay = tk.due_date || '';
-      const isOverdue = dueDay && dueDay < today;
-      const isDueToday = dueDay === today;
-      const priLabel = tk.priority === 'alta' ? t({id:'panel.task.priority.high'}) : tk.priority === 'baixa' ? t({id:'panel.task.priority.low'}) : t({id:'panel.task.priority.normal'});
-      const statusLabel = taskStatusLabel(t, tk.status);
-      tasks.push({
-        priority: isOverdue || tk.priority === 'alta' ? 'alta' : 'media',
-        bucket: isDueToday ? 'hoje' : isOverdue ? 'atencao' : 'acompanhamento',
-        kind: `${t({id:'panel.summary.internalTasks'})} (${priLabel})`,
-        label: tk.title || '—',
-        detail: `${statusLabel}${tk.owner ? ` · ${tk.owner}` : ''}${dueDay ? ` · ${t({id:'panel.task.detail.prazo'})}: ${dueDay}` : ''}${isOverdue ? ` · ${t({id:'panel.task.detail.overdue'})}` : ''}`,
-        actionType: 'tarefa', task_id: tk.id,
-      });
-    });
-
-    return tasks.sort((a, b) => (a.priority === 'alta' ? 0 : 1) - (b.priority === 'alta' ? 0 : 1));
   }
 
   // ── Gerir leitor ─────────────────────────────────────
@@ -1692,6 +1408,9 @@ function PanelPageInner() {
   });
   // Paquet 19 v3 (11/05/2026) : distinction emprunts (groupes) vs items pour le hero
   const activeLoanGroups = new Set(activeLoans.map(l => l.emprestimo_id)).size;
+  // E6 lot A : la construction vit dans dailyTasks.js ; l'onglet et le compteur
+  // du bandeau appellent cette enveloppe sans argument, comme avant.
+  const buildDailyTasks = () => construireTachesDuJour({ t, displayTz, activeRes, overdueLoans, activeLoans, consultations, internalTasks });
 
   // EA-01 niveau 2 (refonte Hero B.3, 29/05/2026) :
   // Compteur saillant dans le Hero pointant vers Trabalho do dia. Compte

@@ -81,7 +81,8 @@ describe('les écrans de tâches passent par le vocabulaire', () => {
   const section = src('pages/biblioteca/TasksSection.jsx');
   const jour = src('pages/painel/tabs/TabTrabalhoDoDia.jsx');
   const partage = src('pages/painel/_shared.jsx');
-  const painel = src('pages/painel/PanelPage.jsx');
+  // E6 lot A (12/10) : les tâches du jour vivent dans dailyTasks.js, plus dans la page.
+  const painel = src('pages/painel/dailyTasks.js');
   const page = src('pages/biblioteca/BibliotecaPage.jsx');
 
   it('aucun écran n’écrit l’ancien état', () => {
