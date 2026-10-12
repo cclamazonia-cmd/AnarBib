@@ -36,6 +36,13 @@ set -euo pipefail
 
 # ====================== CONFIG (adapter si besoin) ======================
 OPS_DIR="${OPS_DIR:-$HOME/anarbib-ops}"
+# I30 (12/10/2026) : les aides du restore-test (bg2-repose-droits.sh,
+# bg2-empreinte-droits.sql) vivent A COTE de ce script, dans deploy/ops/ du
+# depot — pas parmi les liens d'OPS_DIR. Le premier restore-test reel (12/10)
+# les cherchait dans OPS_DIR, ou personne ne les avait liees : « No such
+# file », droits jamais reposes, empreinte jamais comparee. On les resout
+# depuis le script lui-meme, lien ou pas.
+SELF_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 DENYLIST="$OPS_DIR/bg2-denylist.txt"           # 30 tables PII (flux court / exclues du long)
 EXCLUDELONG="$OPS_DIR/bg2-exclude-long.txt"      # tables transitoires : exclues du long ET du court (BG2-14)
 KNOWN="$OPS_DIR/bg2-known-tables.txt"           # TOUTES les tables classees (filet)
@@ -501,11 +508,32 @@ backup_storage() {
 
 # -------------------------- RESTORE-TEST -------------------------------
 # Test REEL de la sequence de sinistre : squelette auth + roles -> long -> court.
+# Nettoyage du restore-test : variables GLOBALES, pas les `local` de la
+# fonction — un trap EXIT s'execute apres son retour, quand elles n'existent
+# plus (12/10 : « ctn: unbound variable », conteneur et dumps PII laisses
+# sur place). Les dumps restaures sont dans des sous-repertoires : le filet
+# cleanup_work ($WORK/*.sql) ne les voit pas, on les passe au shred ici.
+# Un dump plain de pg_dump, sans ses blocs « COPY … FROM stdin; … \. » :
+# le schema seul, pour la deuxieme passe du restore-test.
+schema_seul() {
+  awk '/^COPY .* FROM stdin;$/ { skip = 1 } skip && /^\\\.$/ { skip = 0; next } !skip' "$1"
+}
+RT_CTN="" RT_DIR=""
+cleanup_restore_test() {
+  [ -z "${RT_CTN:-}" ] || docker rm -f "$RT_CTN" >/dev/null 2>&1 || true
+  if [ -n "${RT_DIR:-}" ] && [ -d "$RT_DIR" ]; then
+    find "$RT_DIR" -type f -name '*.sql' -exec shred -u {} + 2>/dev/null || true
+    rm -rf "$RT_DIR"
+  fi
+  cleanup_work
+}
 cmd_restore_test() {
   preflight; require docker
   local ctn="bg2-restore-test" dir="$WORK/restore-test"
+  [ -f "$SELF_DIR/bg2-repose-droits.sh" ] && [ -f "$SELF_DIR/bg2-empreinte-droits.sql" ] \
+    || die "aides I30 introuvables a cote du script ($SELF_DIR) : bg2-repose-droits.sh, bg2-empreinte-droits.sql"
   rm -rf "$dir"; mkdir -p "$dir"
-  trap 'docker rm -f "$ctn" >/dev/null 2>&1 || true; rm -rf "$dir"' EXIT
+  RT_CTN="$ctn"; RT_DIR="$dir"; trap cleanup_restore_test EXIT
 
   info "Recuperation des dumps long + court depuis Herbes Folles"
   RESTIC_REPOSITORY="$RESTIC_BASE/anarbib-long"  restic restore latest --tag flux-long  --target "$dir/long"
@@ -531,6 +559,11 @@ DO $$ BEGIN CREATE ROLE anon;          EXCEPTION WHEN duplicate_object THEN NULL
 DO $$ BEGIN CREATE ROLE authenticated; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE ROLE service_role;  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE ROLE authenticator; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+-- 12/10 : les dumps citent aussi ces deux roles de la plateforme (ALTER DEFAULT
+-- PRIVILEGES FOR ROLE supabase_admin, GRANT ... TO dashboard_user) : 15 erreurs
+-- au premier restore-test reel. Une instance neuve les a ; un Postgres nu, non.
+DO $$ BEGIN CREATE ROLE supabase_admin; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE ROLE dashboard_user; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 -- I30 : ce qu'une instance Supabase neuve porte deja et qu'aucun dump n'emporte —
 -- les extensions du projet (index trigramme, unaccent…) et les fonctions auth.*
 -- que les politiques et les vues appellent (definitions reelles de Supabase).
@@ -550,12 +583,33 @@ SQL
   info "Rejeu LONG puis COURT"
   docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 < "$long"  > "$dir/long.log"  2>&1 || true
   docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 < "$court" > "$dir/court.log" 2>&1 || true
+  # 12/10, premier restore-test reel : les deux dumps se citent l'un l'autre.
+  # Les vues, fonctions SQL, politiques et cles etrangeres du long lisent
+  # profiles, auth.users, user_library_memberships… que seul le court cree —
+  # apres ; les politiques du court lisent api.my_access, que le long cree.
+  # Une passe laissait 316 + 16 erreurs, 30 vues api perdues, et la repose des
+  # droits mourait sur la premiere fonction absente. Deuxieme passe, SCHEMA
+  # SEUL (les blocs COPY retires : pas de donnee rejouee deux fois), long puis
+  # court : ce qui existe deja echoue (« already exists », attendu et ignore),
+  # ce qui manquait nait.
+  info "Deuxieme passe, schema seul : LONG puis COURT"
+  schema_seul "$long"  | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 > "$dir/long2.log"  2>&1 || true
+  schema_seul "$court" | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 > "$dir/court2.log" 2>&1 || true
+  # Les journaux du rejeu meurent avec le bac a sable — le verdict doit dire ce
+  # qui n'a pas ete recree, sinon un ECART d'empreinte reste muet. Seule la
+  # ligne ERROR est montree, sa valeur citee tronquee : pas de donnee.
+  local f nerr
+  for f in long court long2 court2; do
+    nerr="$(grep '^ERROR' "$dir/$f.log" | grep -Evc 'already exists|multiple primary keys' || true)"
+    echo "    rejeu $f : $nerr erreur(s)$( [ "$f" = long2 ] || [ "$f" = court2 ] && echo " hors « already exists » et « multiple primary keys »")"
+    [ "$nerr" = 0 ] || grep '^ERROR' "$dir/$f.log" | grep -Ev 'already exists|multiple primary keys' | sed -E 's/: ".*$/: "…"/' | sort | uniq -c | sort -rn | head -12 | sed 's/^/        /'
+  done
 
   # I30 : les droits exacts de la production (runbook §3.2-quater).
   info "Repose des droits (bg2-repose-droits.sh)"
-  bash "$OPS_DIR/bg2-repose-droits.sh" "$long" "$court" \
+  bash "$SELF_DIR/bg2-repose-droits.sh" "$long" "$court" \
     | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=1 > "$dir/repose.log" 2>&1 \
-    || echo "    !!! repose des droits en echec (voir $dir/repose.log)" >&2
+    || { echo "    !!! repose des droits en echec :" >&2; tail -3 "$dir/repose.log" | sed 's/^/        /' >&2; }
 
   echo; info "VERDICT"
   docker exec "$ctn" psql -U postgres -d postgres -c \
@@ -588,15 +642,42 @@ SQL
   # cotes). Seuls ecarts admis : les privileges par defaut de supabase_admin,
   # role de la plateforme absent d'un Postgres nu, qu'une instance neuve pose
   # elle-meme.
+  # 12/10 : la production bouge entre le dump et le test. Une migration
+  # deployee depuis rend l'identite impossible par construction — le verdict
+  # le dit, pour qu'un ECART se lise pour ce qu'il est.
+  local depuis="" nmig=""
+  depuis="$(RESTIC_REPOSITORY="$RESTIC_BASE/anarbib-long" restic snapshots latest --tag flux-long --json 2>/dev/null | tr ',' '\n' | grep -m1 '"time":' | cut -d'"' -f4)"
+  if [ -n "$depuis" ]; then
+    nmig="$(psql "$PGCONN" -X -tAc "select count(*) || ' (' || coalesce(string_agg(version, ' ' order by version), '-') || ')' from supabase_migrations.schema_migrations where version > to_char(('$depuis'::timestamptz) at time zone 'UTC', 'YYYYMMDDHH24MISS')" 2>/dev/null || echo '?')"
+    echo "    migrations deployees en production depuis le dump long ($(date -d "$depuis" '+%d/%m %H:%M' 2>/dev/null)) : $nmig"
+    echo "    (l'empreinte ne peut etre identique qu'a zero ; au-dela, l'ecart porte aussi ces migrations)"
+  fi
+  # Les tables qu'aucun flux ne porte (bg2-exclude-long.txt : transitoires) ne
+  # reviennent pas par une restauration — elles et leurs sequences sortent de
+  # l'empreinte ; une vue qui les lit echoue au rejeu et se voit ci-dessus.
+  local excl=""
+  excl="$( { [ -f "$EXCLUDELONG" ] && cat "$EXCLUDELONG"; true; } | bg2_normaliser | while IFS= read -r t; do bg2_qualifier "$t"; done | paste -sd ',' )"
+  echo "    tables hors de tout flux (bg2-exclude-long.txt), hors empreinte : $(printf '%s' "$excl" | tr ',' '\n' | grep -c .)"
   local prod_e rest_e ecarts
-  prod_e="$(psql "$PGCONN" -X -q -A -F ' ' -t -f "$OPS_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
-  rest_e="$(docker exec -i "$ctn" psql -U postgres -d postgres -X -q -A -F ' ' -t < "$OPS_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
+  prod_e="$(psql "$PGCONN" -X -q -A -F ' ' -t -v exclues="$excl" -f "$SELF_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
+  rest_e="$(docker exec -i "$ctn" psql -U postgres -d postgres -X -q -A -F ' ' -t -v exclues="$excl" < "$SELF_DIR/bg2-empreinte-droits.sql" | grep -v '/defaut:supabase_admin ' | sort)"
   ecarts="$(diff <(printf '%s\n' "$prod_e") <(printf '%s\n' "$rest_e") | grep '^[<>]' || true)"
   if [ -n "$prod_e" ] && [ -z "$ecarts" ]; then
     echo "    droits et objets : $(printf '%s\n' "$prod_e" | wc -l) empreintes identiques a la production : OK"
   else
     { echo "    !!! droits et objets : ECART avec la production (< production, > restauration) :"
       printf '%s\n' "$ecarts" | sed 's/^/        /'; } >&2
+    # 12/10 : un md5 qui differe ne nomme rien. Les objets eux-memes, des deux
+    # cotes (noms et droits, jamais de donnee), pour les sortes en ecart.
+    local sortes sorte prod_d rest_d
+    sortes="$(printf '%s\n' "$ecarts" | awk '{print $2}' | sort -u)"
+    prod_d="$(psql "$PGCONN" -X -q -A -F ' ' -t -v exclues="$excl" -v detail=1 -f "$SELF_DIR/bg2-empreinte-droits.sql" | grep '^detail ' | sort)"
+    rest_d="$(docker exec -i "$ctn" psql -U postgres -d postgres -X -q -A -F ' ' -t -v exclues="$excl" -v detail=1 < "$SELF_DIR/bg2-empreinte-droits.sql" | grep '^detail ' | sort)"
+    echo "    objets qui different (< production seule, > restauration seule ; 20 par sorte au plus) :" >&2
+    for sorte in $sortes; do
+      diff <(printf '%s\n' "$prod_d" | grep "^detail $sorte ") <(printf '%s\n' "$rest_d" | grep "^detail $sorte ") \
+        | grep '^[<>]' | sed -e 's/^/        /' -e 's/ detail / /' | cut -c1-200 | awk 'NR <= 20' >&2 || true   # diff rend 1 : pipefail + set -e
+    done
   fi
   info "Nettoyage du bac a sable"
 }

@@ -297,12 +297,16 @@ Le script refuse un dump sans aucun `GRANT` (d'avant I30). Il ne rejoue ni les d
 **Contrôle.** `deploy/ops/bg2-empreinte-droits.sql` calcule, schéma par schéma, le nombre et l'empreinte des fonctions (`DEFINER` compris), des tables, des vues, des séquences, des droits de schéma et des privilèges par défaut. On le lance en production et sur la cible, puis on compare :
 
 ```bash
-psql "$PROD"  -X -q -A -F ' ' -t -f deploy/ops/bg2-empreinte-droits.sql | grep -v '/defaut:supabase_admin ' | sort > /tmp/e-prod.txt
-psql "$CIBLE" -X -q -A -F ' ' -t -f deploy/ops/bg2-empreinte-droits.sql | grep -v '/defaut:supabase_admin ' | sort > /tmp/e-cible.txt
+# EXCL : les tables qu'aucun flux ne porte (~/anarbib-ops/bg2-exclude-long.txt), qualifiées,
+# séparées par des virgules — elles et leurs séquences sortent de l'empreinte
+psql "$PROD"  -X -q -A -F ' ' -t -v exclues="$EXCL" -f deploy/ops/bg2-empreinte-droits.sql | grep -v '/defaut:supabase_admin ' | sort > /tmp/e-prod.txt
+psql "$CIBLE" -X -q -A -F ' ' -t -v exclues="$EXCL" -f deploy/ops/bg2-empreinte-droits.sql | grep -v '/defaut:supabase_admin ' | sort > /tmp/e-cible.txt
 diff /tmp/e-prod.txt /tmp/e-cible.txt && echo "droits et objets identiques"
 ```
 
 `anarbib-bg2.sh restore-test` fait la repose puis cette comparaison, et écrit `OK` ou `ECART`.
+
+**Lire un `ECART` (12/10/2026, premier restore-test réel).** Le bac à sable et ses journaux sont détruits à la sortie ; le verdict porte donc lui-même ce qu'il faut pour juger : le nombre d'erreurs du rejeu long et du rejeu court avec les messages les plus fréquents (valeurs citées tronquées — aucune donnée), la cause d'un échec de repose (trois dernières lignes), le nombre de **migrations déployées en production depuis le dump** — l'identité n'est possible qu'à zéro : au-delà, l'écart porte aussi ces migrations, et se relit après le tir long suivant —, et le nombre de tables hors de tout flux, hors empreinte. **La séquence est auth → long → court → long (schéma seul) → court (schéma seul) → repose** : les deux dumps se citent l'un l'autre (les vues, fonctions SQL, politiques et clés étrangères du long lisent `profiles`, `auth.users`, les appartenances, que seul le court crée ; les politiques du court lisent `api.my_access`, que le long crée) — une seule passe laissait 316 erreurs, 30 vues `api` perdues et une repose morte sur la première fonction absente. La deuxième passe retire les blocs `COPY` (aucune donnée rejouée deux fois) ; ses « already exists » sont attendus. Le squelette crée aussi les rôles `supabase_admin` et `dashboard_user`, cités par les dumps. Les deux aides (`bg2-repose-droits.sh`, `bg2-empreinte-droits.sql`) sont lues **à côté du script**, dans `deploy/ops/` du dépôt : elles n'ont pas de lien dans `~/anarbib-ops`, et n'en ont pas besoin.
 
 ### 3.3 — Restaurer le Storage
 

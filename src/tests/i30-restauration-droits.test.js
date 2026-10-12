@@ -58,9 +58,58 @@ describe('I30 — les flux portent leurs droits, private et api compris (source)
     expect(rt).toContain('FUNCTION auth.jwt()');
     expect(rt).toMatch(/bg2-repose-droits\.sh" "\$long" "\$court"/);
     // la repose vient APRÈS le rejeu du court, l'empreinte après la repose
-    expect(rt.indexOf('"$court" > "$dir/court.log"')).toBeLessThan(rt.indexOf('bg2-repose-droits.sh'));
-    expect(rt.indexOf('bg2-repose-droits.sh')).toBeLessThan(rt.indexOf('bg2-empreinte-droits.sql'));
-    expect(rt).toContain('psql "$PGCONN" -X -q -A -F \' \' -t -f "$OPS_DIR/bg2-empreinte-droits.sql"');
+    expect(rt.indexOf('"$court" > "$dir/court.log"')).toBeLessThan(rt.indexOf('bash "$SELF_DIR/bg2-repose-droits.sh"'));
+    expect(rt.indexOf('bash "$SELF_DIR/bg2-repose-droits.sh"')).toBeLessThan(rt.indexOf('-v exclues="$excl" -f "$SELF_DIR/bg2-empreinte-droits.sql"'));
+    expect(rt).toContain('psql "$PGCONN" -X -q -A -F \' \' -t -v exclues="$excl" -f "$SELF_DIR/bg2-empreinte-droits.sql"');
+    // 12/10, premier restore-test réel : le verdict dit ce qui n’a pas été recréé (les journaux
+    // meurent avec le bac à sable), la cause d’un échec de repose, les migrations déployées depuis
+    // le dump (l’identité n’est possible qu’à zéro) et sort de l’empreinte les tables d’aucun flux
+    expect(rt).toMatch(/grep '\^ERROR' "\$dir\/\$f\.log" \| grep -Evc 'already exists|multiple primary keys'/);
+    // les deux dumps se citent l’un l’autre : deuxième passe, schéma seul, long puis court, AVANT la repose
+    expect(rt).toContain('schema_seul "$long"  | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 > "$dir/long2.log"');
+    expect(rt).toContain('schema_seul "$court" | docker exec -i "$ctn" psql -U postgres -d postgres -v ON_ERROR_STOP=0 > "$dir/court2.log"');
+    expect(rt.indexOf('"$court" > "$dir/court.log"')).toBeLessThan(rt.indexOf('schema_seul "$long"'));
+    expect(rt.indexOf('schema_seul "$court"')).toBeLessThan(rt.indexOf('bash "$SELF_DIR/bg2-repose-droits.sh"'));
+    expect(rt).toMatch(/CREATE ROLE supabase_admin;/);
+    expect(rt).toMatch(/CREATE ROLE dashboard_user;/);
+    const sch = fonction(SCRIPT, 'schema_seul');
+    expect(sch).toContain(`awk '/^COPY .* FROM stdin;$/ { skip = 1 } skip && /^\\\\\\.$/ { skip = 0; next } !skip' "$1"`);
+    // le marqueur de fin d’un bloc COPY est « \\. » : antislash littéral, point littéral
+    expect(sch.replace(/`[^`]*`/g, '')).toContain(String.raw`/^\\\.$/`);
+    expect(rt).toMatch(/sed -E 's\/: "\.\*\$\/: "…"\/'/); // la valeur citée est tronquée : pas de donnée
+    expect(rt).toContain('tail -3 "$dir/repose.log"');
+    expect(rt).toContain("from supabase_migrations.schema_migrations where version > to_char(('$depuis'::timestamptz) at time zone 'UTC', 'YYYYMMDDHH24MISS')");
+    expect(rt).toMatch(/excl="\$\( \{ \[ -f "\$EXCLUDELONG" \] && cat "\$EXCLUDELONG"; true; \} \| bg2_normaliser \| while IFS= read -r t; do bg2_qualifier "\$t"; done \| paste -sd ',' \)"/);
+    expect(EMPREINTE).toContain("AND NOT (c.oid::regclass::text = ANY (string_to_array(:'exclues', ',')))");
+    expect(EMPREINTE).toMatch(/d\.deptype IN \('a', 'i'\) AND c\.relkind = 'S'/); // et leurs séquences, serial ou identité
+    expect(EMPREINTE).toContain("c.oid::regclass::text LIKE e || '\\_%\\_seq' ESCAPE '\\'"); // et l’orpheline d’une table non rejouée
+    // 12/10 : une politique RLS perdue au rejeu ouvre ou ferme une table — elles comptent aussi
+    expect(EMPREINTE).toMatch(/pol AS \(/);
+    expect(EMPREINTE).toContain("'politiques' k");
+    expect(EMPREINTE).toContain('FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid');
+    expect(EMPREINTE).toContain('SELECT * FROM pol');
+    // sur ECART, le verdict nomme les objets (noms et droits, jamais de donnée) des sortes en écart
+    expect(EMPREINTE).toContain('CREATE TEMP VIEW bg2_empreinte AS');
+    expect(EMPREINTE).toMatch(/^\\if :\{\?detail\}$/m);
+    expect(rt).toContain('-v exclues="$excl" -v detail=1 -f "$SELF_DIR/bg2-empreinte-droits.sql"');
+    expect(rt).toContain('for sorte in $sortes; do');
+    expect(rt).toContain(`grep "^detail $sorte "`);
+    expect(rt).toMatch(/awk 'NR <= 20' >&2/); // ni head ni SIGPIPE sous pipefail
+    // 12/10 : les listes de rôles et de droits sont triées par nom, jamais par OID
+    expect(EMPREINTE).not.toMatch(/ORDER BY 1\)/);
+    expect(EMPREINTE).toContain("string_agg(g, ',' ORDER BY g)");
+    // 12/10 : les aides vivent à côté du script (SELF_DIR), jamais parmi les liens d’OPS_DIR —
+    // le premier restore-test réel les y cherchait et ne les trouvait pas
+    expect(rt).not.toMatch(/\$OPS_DIR\/bg2-(repose|empreinte)-droits/);
+    expect(SCRIPT).toMatch(/^SELF_DIR="\$\(cd "\$\(dirname "\$\(readlink -f "\$\{BASH_SOURCE\[0\]\}"\)"\)" && pwd\)"$/m);
+    expect(rt).toMatch(/\[ -f "\$SELF_DIR\/bg2-repose-droits\.sh" \] && \[ -f "\$SELF_DIR\/bg2-empreinte-droits\.sql" \]/);
+    // le nettoyage passe par une fonction sur des globales : un trap EXIT ne voit plus les `local`
+    expect(rt).toContain('RT_CTN="$ctn"; RT_DIR="$dir"; trap cleanup_restore_test EXIT');
+    expect(rt).not.toMatch(/trap '/);
+    const nettoyage = fonction(SCRIPT, 'cleanup_restore_test');
+    expect(nettoyage).toContain('docker rm -f "$RT_CTN"');
+    expect(nettoyage).toMatch(/find "\$RT_DIR" -type f -name '\*\.sql' -exec shred -u/);
+    expect(nettoyage).toContain('cleanup_work');
     expect(rt).toContain("grep -v '/defaut:supabase_admin '");
   });
 
