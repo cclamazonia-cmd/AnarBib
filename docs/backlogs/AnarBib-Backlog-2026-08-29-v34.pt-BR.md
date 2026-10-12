@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 11 de outubro de 2026 ao meio-dia** (`24b37717`, medido às 12h40) — produção consultada só em leitura e repositório recontado; **todas as linhas foram remedidas** (anterior: 09/10 à noite, `47781985`). **A CI está em dia com a cabeça do branch**: 458 migrações aplicadas = 458 no repositório, runner em repouso, marcador das funções em `65d5355a` (10/10, 23h52). O que mudou e por quê: **o banco** — +17 funções por quatro migrações de 10/10 (H21 lote 7, C29 lote 3, C17 bis; E36 reescreve sem acrescentar), **0029 em 433, exatamente a contagem esperada pela auditoria** (cinco portas novas, cada uma com seu complemento), tabelas, policies, vistas e crons sem mudança; **o catálogo** — nenhuma ficha criada, fundida nem apagada, vinte retomadas de fichas publicadas fora de lote (a catalogação do dia), uma obra órfã surgida em 10/10 à noite com os testes de C17 (a 2503; retirada em 11/10 às 23h15 com acordo escrito de Xavier, depois de verificar que nenhuma tabela a referenciava, com sua expressão vazia; depois, com o mesmo acordo, as treze outras obras sem ficha — doze de 4 de agosto, uma de 20 de junho, uma de 29 de setembro, nenhuma referenciada — retiradas às 23h16 com suas expressões: 2 350 obras, nenhuma sem ficha), o lote BLMF 57 conta 6 rascunhos e não 9; **a rede** — sem mudança (um fio de correspondência, duas mensagens; dezesseis propostas do Ateliê em consentimento até 16/10); **o repositório** — +30 commits, +19 arquivos, +146 chaves, +97 testes JS, +3 suítes SQL; 22 marcadores de dívida pelo método fixo, dos quais 4 falsos (a palavra «TODOS» em português e em espanhol). **Entregue desde 09/10**: C29 lotes 1 a 3, E36, C17 bis, E6 lotes 1 a 4 do Catálogo (116 → 64 Ko, o Catálogo terminou; resta o Painel), H21 lote 7, E37, as dezesseis propostas de C4; **fechados por Xavier**: E32, I18, I33; **aberto**: B38. **O que falta fechar, e por quem** — *a verificar num fato por vir*: F19 (uma semana de logs, por volta de 15/10), I30 (o disparo longo desta noite, 11/10, depois `restore-test`), F25 (uma ação em massa real), H15, H16 e H28 (uma importação real da DIRA), H26, K10 (duas publicações); *na tela, por Xavier*: E36 (uma conta de leitor no Ateliê), E37 (a faixa fixa), E31 (E6 lotes 2, 4, 5, 8; E35; as telas de H21; a recusa traduzida de um número liberado, C17), e com eles C29 (lote 4 por vir); *as decisões*: A1 (uma terceira administração da rede), C4 («Aplicar» depois de 16/10); *sem código*: A1, A3 (a máquina do runner), H2 (um e-mail pronto desde 16/09, a enviar).
 
-**Frescor dos constatos em 2026-10-12.** **37 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-12.** **42 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, C28, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G9, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -502,7 +502,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** A spec das capas (§4.3) faz da atribuição — a fonte e a licença de cada capa — uma exigência ética e de conformidade. **Medido em 27/09 em produção: 0 capa atribuída entre os 250 registros publicados que têm uma, e 0 entre os 132 rascunhos no mesmo caso.** O formulário não punha o par no rascunho (`fd5d2f0e`), e nem a publicação nem a retomada o copiavam (`76c6ae3f`, migração `20260927130518`). Desde então, procedência e licença seguem a imagem em par (`CAPAS-4`) — só para as capas postas depois de 27/09: nenhuma migração retoma o estoque. E o Inventaire não diz a licença das suas imagens: fica nula, «a verificar» (`2a80d43b`).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Levantar quantas capas publicadas continuam sem procedência. Depois escrever uma regra para o estoque, decidida por Xavier: uma procedência recuperada onde um rastro a dá, senão «desconhecida», posta e assumida por escrito. Para as imagens do Inventaire, verificar a licença na fonte, ou assumir sua ausência por escrito.
 
@@ -541,7 +541,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 05/10, C24 vinculou os arquivos sem recurso do espaço público: 24 rascunhos pré-preenchidos formam o lote 66 « Acervo histórico CCLA — PDF a catalogar » da BLMF (25 arquivos, cessão do CCLA; migração `20261005123453`, `66cf8d9b`). A correspondência bibliográfica está por validar. **Medido em 05/10 à noite**: 22 em `draft`, 2 publicados (notícias 2747 e 2748), lote aberto.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Rascunho por rascunho, com o PDF aberto: validar descrição, contribuições e direitos, publicar ou descartar; fechar o lote quando vazio.
 
@@ -583,7 +583,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 28/09, o `DEDUP-14` (`8e0fe538`) fez propor quatro pares até então mascarados pela obra. **Medido em 05/10**: 504/727 fundido em 28/09; restam três, sem veredito: BTL-TL-000301 / BLMF 0000054 (291 e 2264), BTL-TL-001525 / BLMF 0000258 (1432 e 2446), BTL-TL-001808 / BLMF 0000060 (1699 e 2267).
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Para cada par, abrir a lista das edições e decidir: « Mesma edição: fundir » (`DEDUP-13`), ou manter as duas e dizer por quê.
 
@@ -808,7 +808,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** A base de campo está entregue: aplicativo instalável, leitura de códigos QR e ISBN, inventário, layout adaptativo. Três elementos restam, herdados do v32 e não reverificados desde então: o plantão móvel (P3), a notificação push (P5), e a prancha de códigos QR em formato A4.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Começar verificando qual dos três ainda é uma falta real. A notificação push levanta uma questão de fundo antes de uma questão de código: pressupõe um serviço de terceiro, o que a doutrina antirrastreamento examina de perto.
 
@@ -993,7 +993,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** O ciclo de vida do empréstimo entre bibliotecas está especificado e implementado no banco: máquina de estados travada, quatro triggers, cron `anarbib-peb-detect-overdue-daily` ativo. **Uma tela existe**: a aba EEB da página Biblioteca, presente desde o commit inicial do AnarBib v3 (`92e0064e`, 26/04), ligada às RPC de EEB em 20/05 (`e4a0b9d6`, EA-12 fase 1), transformada em `IllSection.jsx` em 28/09 (`3c33b9f6`). Um empréstimo aparece nela tanto para a emprestadora quanto para a solicitante. Em 29/08, o banco trazia 2 empréstimos para 20 inserções históricas.
 
-*Verificado : 31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08. **29/09** — a aba percorrida na tela por Xavier (revisão do E6): um empréstimo de ensaio criado com seu exemplar (a fila de notificação recebeu o evento) e depois apagado; os dois EEB de maio (nº 24 e 25) arquivados; um segundo ensaio (nº 35) criado, devolução registrada em duas vezes, arquivado. Um defeito no caminho: «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»); o botão só aparece nos dois status aceitos pela política DELETE, e a recusa é dita claramente nas dez línguas (`b3ac9d13`). No levantamento da noite, nenhum EEB está aberto. O critério 1 não está cumprido: foram ensaios de uma só pessoa, não um empréstimo real entre duas bibliotecas, cada uma do seu lado.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Uma tela de pedido do lado da biblioteca solicitante, uma tela de tratamento do lado da emprestadora, e a exibição do estado para as duas. As views `interlibrary_loans_painel_ui` e `interlibrary_loan_items_ui` já existem.
 
@@ -1035,7 +1035,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** As arbitragens estão decididas desde 18/06: tabela dedicada, i18n híbrida, mapa público como rota do aplicativo, motor Leaflet, OpenStreetMap e Nominatim auto-hospedados, entradas não membros exibidas com um filtro claro. `MAP-I` (estatuto do empréstimo entre bibliotecas no mapa interno) e `MAP-J` (autodeclaração «adicionar minha biblioteca» com moderação) continuam adiados.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Retomar a spec v1.0 quando a janela se abrir. Atenção: o REGISTRO traz **duas seções `MAP`** — a §2 é um esqueleto onde tudo está aberto, a §34 é a versão decidida. A §2 não tem carimbo de supersessão nem remissão à §34: **é a §34 que vale**.
 

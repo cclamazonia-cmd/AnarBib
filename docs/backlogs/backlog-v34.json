@@ -3663,6 +3663,12 @@
         "REGISTRE §43 CAPAS-4",
         "docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md",
         "commits fd5d2f0e, 76c6ae3f, 2a80d43b"
+      ],
+      "verif": [
+        {
+          "fr": "**12/10, mesuré en production** : 245 notices publiées sur 423 avec couverture sont sans provenance ; la règle pour le stock (retrouvée là où une trace la donne, sinon « inconnue » assumée) attend la décision de Xavier.",
+          "pt": "**12/10, medido**: 245 em 423 sem proveniência; a regra para o estoque espera a decisão de Xavier."
+        }
       ]
     },
     {
@@ -4139,6 +4145,12 @@
       },
       "r": [
         "AnarBib-Backlog-2026-06-17-v33 §2.1"
+      ],
+      "verif": [
+        {
+          "fr": "**12/10, revue** : la planche de codes au format A4 existe (`LabelSheetPrinter.jsx`, catalogage) ; aucun verdict écrit sur la notification poussée dans `docs/` — le critère 2 reste ouvert, et c'est une question de doctrine (un service tiers) avant d'être du code.",
+          "pt": "**12/10**: a folha A4 existe; nenhum veredicto escrito sobre a notificação push — critério 2 aberto."
+        }
       ]
     },
     {
@@ -4262,10 +4274,16 @@
         "PLAN_formation_coordination_BLMF §5",
         "REGISTRE §14 PEB"
       ],
-      "verif": {
-        "fr": "31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08. **29/09** — l'onglet emprunté à l'écran par Xavier (revue d'E6) : un prêt d'essai créé avec son exemplaire (la file de notification a reçu son événement), puis supprimé ; les deux PEB de mai (n° 24 et 25) archivés ; un second prêt d'essai (n° 35) créé, son retour pointé en deux fois, archivé. Un défaut trouvé en chemin : « Supprimer » s'offrait à un prêt déjà sorti, la base le refusait et l'écran affichait « refusé par RLS ». Le bouton ne s'offre plus qu'aux deux statuts que la politique DELETE accepte (préparation, attente de sortie), et un refus se dit en clair dans les dix langues (`b3ac9d13`). Au relevé du soir, aucun PEB n'est ouvert. Le critère 1 n'est pas tenu : c'étaient des essais d'une seule personne, pas un prêt réel entre deux bibliothèques, chacune tenant son côté.",
-        "pt": "31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08. **29/09** — a aba percorrida na tela por Xavier (revisão do E6): um empréstimo de ensaio criado com seu exemplar (a fila de notificação recebeu o evento) e depois apagado; os dois EEB de maio (nº 24 e 25) arquivados; um segundo ensaio (nº 35) criado, devolução registrada em duas vezes, arquivado. Um defeito no caminho: «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»); o botão só aparece nos dois status aceitos pela política DELETE, e a recusa é dita claramente nas dez línguas (`b3ac9d13`). No levantamento da noite, nenhum EEB está aberto. O critério 1 não está cumprido: foram ensaios de uma só pessoa, não um empréstimo real entre duas bibliotecas, cada uma do seu lado."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08. **29/09** — l'onglet emprunté à l'écran par Xavier (revue d'E6) : un prêt d'essai créé avec son exemplaire (la file de notification a reçu son événement), puis supprimé ; les deux PEB de mai (n° 24 et 25) archivés ; un second prêt d'essai (n° 35) créé, son retour pointé en deux fois, archivé. Un défaut trouvé en chemin : « Supprimer » s'offrait à un prêt déjà sorti, la base le refusait et l'écran affichait « refusé par RLS ». Le bouton ne s'offre plus qu'aux deux statuts que la politique DELETE accepte (préparation, attente de sortie), et un refus se dit en clair dans les dix langues (`b3ac9d13`). Au relevé du soir, aucun PEB n'est ouvert. Le critère 1 n'est pas tenu : c'étaient des essais d'une seule personne, pas un prêt réel entre deux bibliothèques, chacune tenant son côté.",
+          "pt": "31/08 — `interlibrary_loans_v2`: 2 empréstimos vivos para 20 inserções, como em 29/08. **29/09** — a aba percorrida na tela por Xavier (revisão do E6): um empréstimo de ensaio criado com seu exemplar (a fila de notificação recebeu o evento) e depois apagado; os dois EEB de maio (nº 24 e 25) arquivados; um segundo ensaio (nº 35) criado, devolução registrada em duas vezes, arquivado. Um defeito no caminho: «Excluir» era oferecido a um EEB já saído e a recusa aparecia em jargão («refusé par RLS»); o botão só aparece nos dois status aceitos pela política DELETE, e a recusa é dita claramente nas dez línguas (`b3ac9d13`). No levantamento da noite, nenhum EEB está aberto. O critério 1 não está cumprido: foram ensaios de uma só pessoa, não um empréstimo real entre duas bibliotecas, cada uma do seu lado."
+        },
+        {
+          "fr": "**12/10, mesuré en production** : aucun prêt entre deux bibliothèques distinctes créé depuis le 01/10 — le critère 1 (un prêt réel, chacune tenant son côté) n'est toujours pas tenu.",
+          "pt": "**12/10, medido**: nenhum empréstimo real entre duas bibliotecas desde 01/10."
+        }
+      ]
     },
     {
       "id": "G8",
@@ -4364,6 +4382,12 @@
       "r": [
         "spec-cartographie-reseau.md v1.0",
         "REGISTRE §34 MAP"
+      ],
+      "verif": [
+        {
+          "fr": "**12/10, revue des clôtures possibles — les deux critères sont tenus** : *(1)* la carte publique est une route de l'application (`/cartografia`), servie sans requête vers un tiers depuis E5 (07/09, PMTiles sur notre Storage) ; *(2)* le §2 `MAP` du REGISTRE porte son renvoi vers le §34 depuis J5 (29/08). La spec v1.0 elle-même (MAP-A..L) reste « post-Bologne, fin 2026 ou 2027 » : si l'item doit survivre à ses critères, il faut lui en écrire d'autres. **Clôture proposée, décision de Xavier.**",
+          "pt": "**12/10 — os dois critérios estão cumpridos** (rota `/cartografia` sem terceiros desde E5 ; remissão §2 → §34 desde J5). **Fecho proposto, decisão de Xavier.**"
+        }
       ]
     },
     {
@@ -5607,7 +5631,12 @@
         "migration 20261005123453 (66cf8d9b)",
         "lot 66 (catalog_batches)"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**12/10, mesuré en production** : inchangé depuis le 05/10 — 22 brouillons en `draft`, 2 publiés, lot 66 ouvert.",
+          "pt": "**12/10, medido**: inalterado — 22 rascunhos, 2 publicados, lote 66 aberto."
+        }
+      ]
     },
     {
       "id": "C27",
@@ -5696,7 +5725,12 @@
         "REGISTRE DEDUP-13, DEDUP-14",
         "merge_log"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**12/10, mesuré en production** : deux des trois paires sont fusionnées — BTL-TL-001525 / BLMF 0000258 le 06/10 (`merge_log` 187, 2446 → 1432) et BTL-TL-000301 / BLMF 0000054 le 08/10 (189, 291 → 2264). **Reste une paire** : BTL-TL-001808 / BLMF 0000060 (notices 1699 et 2267), toutes deux vivantes, sans verdict écrit.",
+          "pt": "**12/10, medido em produção**: dois dos três pares fundidos (06/10 e 08/10). **Resta um par**: 1699 / 2267."
+        }
+      ]
     },
     {
       "id": "E30",

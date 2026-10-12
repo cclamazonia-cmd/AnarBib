@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **37 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B41, C3, C4, C18, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **42 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B41, C3, C4, C16, C18, C26, C28, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G9, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -502,7 +502,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** La spec des capas (§4.3) fait de l'attribution — la source et la licence de chaque couverture — une exigence éthique et de conformité. **Mesuré le 27/09 en production : 0 couverture attribuée sur les 250 notices publiées qui en ont une, et 0 sur les 132 brouillons dans le même cas.** Le formulaire ne mettait pas la paire dans le brouillon (`fd5d2f0e`), et ni la publication ni la reprise ne la recopiaient (`76c6ae3f`, migration `20260927130518`). Depuis, provenance et licence suivent l'image par paire (`CAPAS-4`) — pour les couvertures posées après le 27/09 seulement : aucune migration ne reprend le stock. Et Inventaire ne dit pas la licence de ses images : elle est posée à null, « à vérifier » (`2a80d43b`).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Relever combien de couvertures publiées restent sans provenance. Puis écrire une règle pour le stock, décidée par Xavier : une provenance retrouvée là où une trace la donne, sinon « inconnue », posée et assumée par écrit. Pour les images d'Inventaire, vérifier la licence à la source, ou assumer son absence par écrit.
 
@@ -541,7 +541,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Le 05/10, C24 a rattaché à des notices les fichiers restés sans ressource dans l'espace public : 24 brouillons pré-remplis forment le lot 66 « Acervo histórico CCLA — PDF a catalogar » de la BLMF (25 fichiers, cessão du CCLA, le caderno de la CAB en licence libre ; migration `20261005123453`, `66cf8d9b`). La correspondance bibliographique est à valider, et chaque brouillon porte une note sur ce qui reste à vérifier. **Mesuré le 05/10 au soir** : 22 en `draft`, 2 publiés (notices 2747 et 2748, cotes `CCLA-2026-0001` et `-0002`), lot ouvert. Aucun item ne portait ce travail : la clôture C24 les dit seulement rattachés.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Brouillon par brouillon, le PDF ouvert : valider la description, les contributions et les droits, puis publier ou écarter ; fermer le lot quand il est vide.
 
@@ -583,7 +583,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Le 28/09, `DEDUP-14` (un même ISBN = une même édition, `8e0fe538`) a fait proposer comme doublons quatre paires jusque-là masquées par l'œuvre. **Mesuré le 05/10 au soir** : la paire BTL-TL-000504 / BTL-TL-000727 est fusionnée (28/09, `merge_log`) ; trois restent, sans trace de verdict : BTL-TL-000301 / BLMF 0000054 (notices 291 et 2264), BTL-TL-001525 / BLMF 0000258 (1432 et 2446), BTL-TL-001808 / BLMF 0000060 (1699 et 2267).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Pour chaque paire, ouvrir la liste des éditions et trancher : « Même édition : fusionner » (le chemin manuel de `DEDUP-13`), ou garder les deux notices et dire pourquoi.
 
@@ -808,7 +808,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Le socle terrain est livré : application installable, lecture de codes QR et ISBN, récolement, mise en page adaptative. Trois éléments restent, hérités du v32 et non revérifiés depuis : la permanence mobile (P3), la notification poussée (P5), et la planche de codes QR au format A4.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Commencer par vérifier lequel des trois est encore un manque réel. La notification poussée pose une question de fond avant une question de code : elle suppose un service tiers, ce que la doctrine anti-pistage regarde de près.
 
@@ -993,7 +993,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Le cycle de vie du prêt entre bibliothèques est spécifié et implémenté en base : machine à états verrouillée, quatre triggers, cron `anarbib-peb-detect-overdue-daily` actif. **Un écran existe** : l'onglet PEB de la page Bibliothèque, présent dès le commit initial d'AnarBib v3 (`92e0064e`, 26/04), passé aux RPC PEB le 20/05 (`e4a0b9d6`, EA-12 phase 1), devenu `IllSection.jsx` le 28/09 (`3c33b9f6`). Un prêt s'y affiche chez la prêteuse comme chez l'emprunteuse. Le 29/08, la base portait 2 prêts pour 20 insertions historiques.
 
-*Vérifié : 31/08 — `interlibrary_loans_v2` : 2 prêts vivants pour 20 insertions historiques, comme au 29/08. **29/09** — l'onglet emprunté à l'écran par Xavier (revue d'E6) : un prêt d'essai créé avec son exemplaire (la file de notification a reçu son événement), puis supprimé ; les deux PEB de mai (n° 24 et 25) archivés ; un second prêt d'essai (n° 35) créé, son retour pointé en deux fois, archivé. Un défaut trouvé en chemin : « Supprimer » s'offrait à un prêt déjà sorti, la base le refusait et l'écran affichait « refusé par RLS ». Le bouton ne s'offre plus qu'aux deux statuts que la politique DELETE accepte (préparation, attente de sortie), et un refus se dit en clair dans les dix langues (`b3ac9d13`). Au relevé du soir, aucun PEB n'est ouvert. Le critère 1 n'est pas tenu : c'étaient des essais d'une seule personne, pas un prêt réel entre deux bibliothèques, chacune tenant son côté.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Un écran de demande côté bibliothèque emprunteuse, un écran de traitement côté prêteuse, et l'affichage de l'état pour les deux. Les vues `interlibrary_loans_painel_ui` et `interlibrary_loan_items_ui` existent déjà.
 
@@ -1035,7 +1035,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Les arbitrages sont tranchés depuis le 18/06 : table dédiée, i18n hybride, carte publique comme route de l'application, moteur Leaflet, OpenStreetMap et Nominatim auto-hébergés, entrées non membres affichées avec un filtre clair. `MAP-I` (statut du prêt entre bibliothèques sur la carte interne) et `MAP-J` (auto-déclaration « ajouter ma bibliothèque » avec modération) restent différés. **L'implémentation est calendée post-Bologne, fin 2026 ou 2027.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Reprendre la spec v1.0 quand la fenêtre s'ouvre. Attention : le REGISTRE porte **deux sections `MAP`** — le §2 est un squelette où tout est ouvert, le §34 est la version tranchée. Le §2 n'a ni tampon de supersession ni renvoi vers le §34 : **c'est le §34 qui vaut**.
 
