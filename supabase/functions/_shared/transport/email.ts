@@ -25,7 +25,8 @@ import { masquerAdresse } from "../core/journal-masque.ts";
 //   - reponse : champ "reply_to" au format "Nom <email>"
 //   - corps : champs "html" et "text"
 // DECISION 1 (format de retour) : on retourne res.text() — la string brute,
-// exactement comme sendViaBrevo. safeSendEmail n'a donc rien a adapter.
+// comme le transport SMTP. safeSendEmail n'a donc rien a adapter. (Brevo a
+// disparu le 29/09/2026, 57a4aafc : F10 ne porte plus que le choix du relais.)
 // ─── Rejeu et cadence (F25, 09/10/2026) ───────────────────────────────────
 // Resend n'accepte que dix requêtes par seconde. Le 09/10, quatorze propositions
 // d'Atelier versées d'un coup ont fait 72 envois en deux secondes : 58 refusés

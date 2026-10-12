@@ -1,0 +1,14 @@
+[Unit]
+Description=AnarBib — sonde du thesaurus FICEDL (H2) : une fiche par jour, ecrit quand le site tombe et quand il revient
+Documentation=file:%h/anarbib/deploy/ops/README.md
+# PAS de OnFailure= : la sortie 1 (le site ne repond pas) et la sortie 3 (poste
+# sans reseau) sont le travail de la sonde, pas une panne de la sonde. La
+# sortie 2 (configuration absente) reste un echec visible.
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+TimeoutStartSec=120
+ExecStart=%h/anarbib-ops/anarbib-sonde-ficedl.sh
+SuccessExitStatus=1 3

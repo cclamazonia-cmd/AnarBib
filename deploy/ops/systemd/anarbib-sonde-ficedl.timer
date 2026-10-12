@@ -1,0 +1,15 @@
+[Unit]
+Description=AnarBib — declencheur de la sonde du thesaurus FICEDL (une fois par jour)
+
+[Timer]
+# Une requete par jour, en milieu de matinee, a un moment ou le poste est
+# souvent allume ; un passage manque (poste eteint) se rattrape au demarrage
+# (Persistent=) : la duree d'une absence se compte en jours, un passage de plus
+# ou de moins ne change pas le verdict.
+OnCalendar=*-*-* 10:30:00
+Persistent=true
+RandomizedDelaySec=15min
+OnStartupSec=5min
+
+[Install]
+WantedBy=timers.target

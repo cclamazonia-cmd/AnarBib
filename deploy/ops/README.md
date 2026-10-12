@@ -344,6 +344,39 @@ l'envoi, il prouve quand on envoie, à qui, et quand on se tait.
 Ce que le témoin ne voit pas : la cause (il ne lit rien dans la base — c'est
 l'item I32), et une panne plus courte que dix minutes.
 
+## La sonde du thésaurus FICEDL (H2)
+
+Le thésaurus de la FICEDL (`thesaurus.ficedl.info`) s'est dégradé sur un mois —
+deux fiches en 503 le 03/09/2026, tout le site le 09/09, encore le 27/09, plus
+de réponse le 05/10 — sans que personne le surveille : on s'en apercevait en
+essayant de racler. L'export (H3) et le courriel à la FICEDL (H2) attendaient
+un site qu'on croyait mort ; le 12/10, il répondait de nouveau.
+
+`anarbib-sonde-ficedl.sh` demande **une fiche de descripteur par jour** (pas la
+une : un SPIP peut servir sa une et refuser ses articles), depuis le poste,
+par `anarbib-sonde-ficedl.timer` (10 h 30, rattrapé au démarrage si le poste
+était éteint). Après **deux échecs de suite** — deux jours —, elle écrit par le
+transport du témoin de panne (même `~/anarbib-ops/temoin.env`, mêmes
+destinataires) que le site ne répond plus et que c'est le moment de l'écrire à
+la FICEDL ; puis une seconde fois le jour où il revient, avec la durée en jours
+— le raclage (H13) redevient possible. Un seul courriel par absence. Les mêmes
+quatre issues que le témoin : 0 le site répond, 1 il ne répond pas, 3 aveugle
+(le poste est sans réseau), 2 pas de configuration.
+
+Son état vit dans `~/anarbib-ops/sonde-ficedl/etat`, ses courriels dans
+`~/anarbib-ops/sonde-ficedl/courriels.log`. Les liens, comme pour le témoin :
+
+```sh
+ln -s ~/anarbib/deploy/ops/anarbib-sonde-ficedl.sh ~/anarbib-ops/anarbib-sonde-ficedl.sh
+ln -s ~/anarbib/deploy/ops/systemd/anarbib-sonde-ficedl.service ~/.config/systemd/user/
+ln -s ~/anarbib/deploy/ops/systemd/anarbib-sonde-ficedl.timer   ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now anarbib-sonde-ficedl.timer
+```
+
+Le banc du dépôt (`src/tests/sonde-ficedl.test.js`) rejoue la décision contre
+deux serveurs locaux et un transport fichier, comme pour le témoin. Ce que la
+sonde ne voit pas : la cause, et une absence plus courte qu'un jour.
+
 ## Les horaires
 
 `19:00`, `dimanche 20:00`, `dimanche 21:00` — **en `Europe/Paris`**, fuseau nommé
