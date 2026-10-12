@@ -17,13 +17,17 @@ const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
 
 describe('E38 — la liste plate filtre l’auteur·rice par ses autres noms', () => {
   it('la page résout le nom par la porte, exact puis approché, et passe les identifiants au bâtisseur', () => {
+    // 12/10/2026 : la résolution est sortie de la page dans src/lib/catalogAuthorFilter.js
+    // (plafond de 65 Ko) ; elle y garde le chemin E38 en repli de catalog_author_book_ids_v1.
     const page = lire('src/pages/public/CatalogPage.jsx');
-    expect(page.split("apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim() })")).toHaveLength(2);
-    expect(page).toContain("apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim(), p_approche: true })");
-    expect(page).toContain('if (!append) setApproxMatch(true); }');
+    const mod = lire('src/lib/catalogAuthorFilter.js');
+    expect(mod.split("apiRpc('catalog_author_ids_v1', { p_name: nom })")).toHaveLength(2);
+    expect(mod).toContain("apiRpc('catalog_author_ids_v1', { p_name: nom, p_approche: true })");
+    expect(mod).toContain('res.authorIds = proches; res.approx = true;');
+    expect(page).toContain('if (!append && auteurApproche) setApproxMatch(true);');
     expect(page).toContain('buildServerFilters({ authorIds,');
     // jamais quand un identifiant est déjà choisi, ni pendant le parcours A–Z
-    expect(page).toContain("if (dAuthor.trim() && !String(authorIdFilter || '').trim() && !String(alphaFilter || '').trim())");
+    expect(mod).toContain("if (!nom || String(authorIdFilter || '').trim() || String(alphaFilter || '').trim()) return res;");
   });
 
   it('la porte est INVOKER, figée, ouverte à anon ; la liste fermée T12 et la CI la connaissent', () => {

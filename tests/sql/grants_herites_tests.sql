@@ -357,6 +357,7 @@ BEGIN
       ('api.book_copies_by_library_v1'),
       ('api.book_other_editions'),
       ('api.book_serial_v1'),
+      ('api.catalog_author_book_ids_v1'),   -- 12/10/2026 : notices du filtre auteur·rice en liste plate (INVOKER)
       ('api.catalog_author_ids_v1'),   -- E38, 12/10/2026 : les identifiants d'autorité d'un nom, porte INVOKER sur fn_auteurs_par_nom
       ('api.catalog_facets_v1'),
       ('api.catalog_search_ids_v1'),

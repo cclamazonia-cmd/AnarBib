@@ -6,6 +6,7 @@ import { supabase, apiQuery, apiRpc, SUPABASE_URL } from '@/lib/supabase';
 import { bibliothequesDesReseaux, bibliothequesFiltrees } from '@/lib/reseaux';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
+import { resoudreFiltreAuteur, intersecterContraintes } from '@/lib/catalogAuthorFilter';
 import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
 import { catalogueDeSecours } from '@/lib/catalogueFallback';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
@@ -375,26 +376,15 @@ export default function CatalogPage() {
       }
       const useRpc = rankedIds !== null;
 
-      // E38 (12/10/2026) : en liste plate, le filtre auteur·rice lit aussi les
-      // autres noms de l'autorité (forme de tri, variantes, alias) comme le fait
-      // catalog_works_v1 en liste par œuvre — par la porte api.catalog_author_ids_v1.
-      // Rien d'exact : la même résolution à une ou deux lettres près, et l'écran
-      // le dit (pastille). L'ILIKE mot à mot reste, pour les notices sans lien.
-      let authorIds = null;
-      if (dAuthor.trim() && !String(authorIdFilter || '').trim() && !String(alphaFilter || '').trim()) {
-        try {
-          const { data: exact } = await apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim() });
-          authorIds = Array.isArray(exact) ? exact : [];
-          if (authorIds.length === 0) {
-            const { data: proches } = await apiRpc('catalog_author_ids_v1', { p_name: dAuthor.trim(), p_approche: true });
-            if (Array.isArray(proches) && proches.length > 0) { authorIds = proches; if (!append) setApproxMatch(true); }
-          }
-        } catch { authorIds = null; /* repli : l'ILIKE seul, jamais pire que l'existant */ }
-      }
+      // E38 et suite (12/10/2026) : le filtre auteur·rice de la liste plate lit
+      // les autres noms de l'autorité et, si rien d'exact, s'approche à une ou
+      // deux lettres — notices sans lien comprises (src/lib/catalogAuthorFilter.js).
+      const { authorBookIds, authorIds, approx: auteurApproche } = await resoudreFiltreAuteur({ author: dAuthor, authorIdFilter, alphaFilter });
+      if (!append && auteurApproche) setApproxMatch(true);
 
       // Avec le RPC, le terme de recherche est géré côté serveur → on ne l'ajoute
       // PAS au ilike (search:''), mais tous les autres filtres restent actifs.
-      const filters = buildServerFilters({ authorIds, search: useRpc ? '' : dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      const filters = buildServerFilters({ authorIds, search: useRpc ? '' : dSearch, authorFilter: authorBookIds !== null ? '' : dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
 
       // #OPAC8 — filtre par sujet : résout les book_id via book_subjects (table dédiée).
       let subjectIds = null;
@@ -407,16 +397,9 @@ export default function CatalogPage() {
         }
       }
 
-      // Contrainte book_id = recherche RPC ∩ sujet (selon ce qui est actif).
-      let idConstraint = null;
-      if (useRpc && subjectIds !== null) {
-        const set = new Set(subjectIds);
-        idConstraint = rankedIds.filter(id => set.has(id));
-      } else if (useRpc) {
-        idConstraint = rankedIds;
-      } else if (subjectIds !== null) {
-        idConstraint = subjectIds;
-      }
+      // Contrainte book_id = recherche RPC ∩ auteur·rice ∩ sujet ; la recherche
+      // en tête garde l'ordre du rang.
+      const idConstraint = intersecterContraintes([rankedIds, authorBookIds, subjectIds]);
       if (idConstraint !== null) {
         filters['book_id'] = idConstraint.length ? `in.(${idConstraint.join(',')})` : 'eq.-1';
       }

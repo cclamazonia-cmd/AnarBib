@@ -23,7 +23,10 @@
 --   T9 recherche libre : le nom de l'autorité liée (alias) satisfait le terme,
 --      exact (rang ≥ 0) ;
 --   T10 fn_mots_proches : 1 lettre de 5 à 7, 2 dès 8, rien en deçà de 5 ;
---   T11 les deux aides vivent dans private, ouvertes à anon, fermées à PUBLIC.
+--   T11 les deux aides vivent dans private, ouvertes à anon, fermées à PUBLIC ;
+--   T12 liste plate (api.catalog_author_book_ids_v1) : l'alias trouve la notice, exact ;
+--   T13 liste plate : une notice SANS autorité liée sort en approché ; rien d'inventé ;
+--   T14 liste plate en session : l'alias trouve la notice.
 --   Bilan OK : 'VARIANTES-APPROCHE OK : N/N'
 -- =====================================================================
 DO $$
@@ -189,6 +192,35 @@ BEGIN
     IF v_n = 2 AND v_n2 = 0 THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : private ' || v_n || ', ailleurs ' || v_n2); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T12 liste plate : l''alias « kropotkwqe » trouve la notice, en exact';
+  BEGIN
+    SELECT count(*) FILTER (WHERE book_id = v_livre AND approx IS FALSE), count(*) FILTER (WHERE book_id = v_voisine)
+      INTO v_n, v_n2 FROM api.catalog_author_book_ids_v1('kropotkwqe');
+    IF v_n = 1 AND v_n2 = 0 THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : notice ' || v_n || ', voisine ' || v_n2); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T13 liste plate : la notice sans autorité (« RECLUS, Élisée ») sort en approché pour « Reclos Elisee » ; rien d''inventé';
+  BEGIN
+    SELECT count(*) FILTER (WHERE book_id = v_voisine AND approx IS TRUE) INTO v_n FROM api.catalog_author_book_ids_v1('Reclos Elisee');
+    SELECT count(*) INTO v_n2 FROM api.catalog_author_book_ids_v1('zzzzqqqqxx');
+    IF v_n = 1 AND v_n2 = 0 THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : approché ' || v_n || ', invention ' || v_n2); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T14 liste plate en session : l''alias trouve la notice';
+  BEGIN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', c_membre, 'role', 'authenticated')::text, true);
+    SELECT count(*) INTO v_n FROM api.catalog_author_book_ids_v1('Kropotkwqe') WHERE book_id = v_livre;
+    PERFORM set_config('request.jwt.claims', '', true);
+    IF v_n = 1 THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_n); END IF;
+  EXCEPTION WHEN OTHERS THEN PERFORM set_config('request.jwt.claims', '', true);
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'VARIANTES-APPROCHE ECHEC : %/% — %', v_failed, v_passed + v_failed, array_to_string(v_failures, ' | ');
