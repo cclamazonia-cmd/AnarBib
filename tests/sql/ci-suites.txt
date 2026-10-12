@@ -778,3 +778,5 @@ tests/sql/b38_equipe_uniquement_ne_sort_pas_tests.sql
 tests/sql/recherche_variantes_approchee_tests.sql
 # E38, suite (12/10/2026) : la liste plate filtre l'auteur·rice par ses autres noms — api.catalog_author_ids_v1 (INVOKER) rend les identifiants que fn_auteurs_par_nom trouve ; le client les met dans son filtre.
 tests/sql/e38_liste_plate_auteur_par_ses_noms_tests.sql
+# B39 (12/10/2026) : les fixtures de formation sont étiquetées (libraries.is_training, déclencheur sur le slug) et private.fn_mesures_hors_fixtures() compte le réseau hors fixtures.
+tests/sql/b39_fixtures_etiquetees_tests.sql
