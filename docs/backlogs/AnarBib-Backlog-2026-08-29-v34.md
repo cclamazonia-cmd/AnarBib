@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 53 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 56 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 1
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 6
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,7 +62,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **38 items sur 53** portent une vérification datée qui leur est propre (A1, A3, B36, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, K2, K7, K10). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **42 items sur 56** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, J12, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -299,7 +299,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vérifié en base le 29/08 : le réseau compte **un seul administrateur**. Les tables `network_administrators`, `network_administrator_cooptation_proposals` et `network_administrator_cooptation_votes` sont vides après quelques insertions historiques.
 
-*Vérifié : 31/08 — `network_administrators` : 1 ligne. Rien n'a bougé. **05/10 — le camarade (`ASR2026`) est coopté** par Xavier : deux admins réseau actifs (vérifié en base). Le circuit de cooptation a servi pour la première fois — proposition, vote implicite du proposeur, ratification immédiate puisque Xavier était seul admin (pas de délai). En chemin, un défaut corrigé (G17 : la fenêtre ne trouvait pas un compte sans bibliothèque). Les deux courriels au camarade sont partis (acceptés par Resend à 14 h 03) ; il ne les avait pas reçus à 14 h 10, mais ils lui sont parvenus ensuite : ce sont leurs liens qui menaient à des 404 (signalé par Xavier le jour même, corrigé par `43f8481e`) — rien à regarder côté Resend. **Reste** : une troisième personne, et une décision fédérale prise à trois. **05/10, soir — la PR #32 du camarade** (`ad5fb042`, fusionnée par `300b1a69`), puis son suivi (`206b7b77`) : `AppIcon` et ses règles (REGISTRE `IDENT-5` à `IDENT-8`, `0b2b0e14`), un nom accessible au badge « restreint », `AppIcon` en `role="img"` quand il a un titre, `stripEmojiDeep` retiré. Les icônes encore en emoji : item E32.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Trouver et coopter deux personnes de plus, dans deux collectifs différents, disposées à porter les décisions fédérales : admission d'une bibliothèque, arbitrage entre bibliothèques, ouverture de la moisson.
 
@@ -347,6 +347,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
+| **B39** | Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note | `P2` | Ouvert |
+| **B40** | Neuf fonctions `api` fermées à tous les rôles : les supprimer, ou les garder comme surface dormante — le dire au REGISTRE | `P3` | Décision collective |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -368,6 +370,48 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Différé à dessein : un mois de compteurs de production après B32 (déployé le 28/09), pas avant le 28/10.
 
 *Renvois : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
+
+#### B39 — Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Constat de la v18** (chapitres 9.1, 10 — précision 3 — et 12) : la bibliothèque de formation `blmf-teste` compte onze membres dont neuf actifs, cinq exemplaires et aucune circulation, et « elle fausse tout tableau qui ne la nomme pas ». Le projet a choisi de garder ses fixtures sur la production (la formation se fait sur le vrai outil — soirée du 10/10) ; la v18 juge le choix défendable à une condition : « un étiquetage que toute mesure puisse lire », et « la v19 devra pouvoir le faire par une requête, pas par une note ». Vérifié le 12/10 : rien en base ne distingue `blmf-teste` ni les comptes `formacao-e1..e5` d'une bibliothèque et de lecteurs réels — le relevé « L'état réel » les compte dans « Bibliothèques = 6 » et « Comptes = 23 », et les nomme en note. Ligne rouge v18 : « aucune mesure d'usage qui compte une fixture ».
+
+*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18 (précision 3 et ligne rouge), à la demande de Xavier.*
+
+**Ce que c'est.** Une colonne `libraries.is_training` (défaut faux, posée à vrai sur `blmf-teste` par migration) et le même marqueur sur les comptes de formation (`profiles`, ou l'appartenance à une bibliothèque de formation) ; une aide `private.fn_hors_fixtures()` ou une vue de mesure que le relevé « L'état réel », la supervision et le prochain Livre blanc lisent ; les comptes du réseau (bibliothèques, membres, circulation) publiés *hors fixtures*, avec la ligne des fixtures à part. Inscrire au REGISTRE le choix « fixtures de formation en production » avec cette contrepartie (J12). Garde : un test qui rougit si une bibliothèque nommée `*-teste` n'est pas étiquetée.
+
+**Pourquoi ça compte.** Un chiffre d'usage qui compte des comptes de formation comme des lecteurs est exact et faux ; le double dénominateur de la v17 exige l'usage sur des bibliothèques réelles.
+
+**Ce qui compte comme fini.**
+
+- La bibliothèque de formation et ses comptes portent un marqueur en base, posé par migration et gardé par un test.
+- Le relevé « L'état réel » et la supervision publient les comptes du réseau hors fixtures par une requête, la ligne des fixtures à part.
+
+**Dépendances.** Aucune. J12 inscrit le choix au REGISTRE.
+
+*Renvois : `supabase/migrations` · `tests/sql` · `docs/backlogs/backlog-v34.json` · `docs/REGISTRE_decisions.md`*
+
+#### B40 — Neuf fonctions `api` fermées à tous les rôles : les supprimer, ou les garder comme surface dormante — le dire au REGISTRE
+
+`P3` Différé · État : **Décision collective** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** **Mesure de jonction de la v18** (chapitre 6.1, dépôt `c6d20a9e`) : sur 206 fonctions du schéma `api`, douze n'ont d'appelant nulle part — ni dans le dépôt frontal, ni dans une Edge Function, ni dans le corps d'une fonction, d'une vue ou d'un cron. Neuf d'entre elles ne sont plus exécutables par aucun des trois rôles de l'application depuis la migration du 02/09 « une aile jamais ouverte se ferme à clé » (B20) : `attach_exemplar`, `clear_loan_return_schedule`, `conv_controle_qualite`, `conv_controle_resumo`, `fn_cartography_create_entry`, `fn_cartography_toggle_public`, `mark_loan_return_missed`, `refuse_pickup_slot`, `schedule_loan_return` — la planification de retour et les créneaux de retrait, l'édition de cartographie, deux contrôles de conventions. Deux sont réservées au rôle de service (`get_due_date_for_loan`, `get_library_circulation_policy_rules_ui`), une est un instrument de console documenté (`fn_outbox_abandonnees`). « Elles existent, elles ne servent pas, et personne ne peut les appeler. » La v18 : « il reste à décider si les neuf doivent être supprimées ou gardées comme surface dormante ; la v18 penche pour la suppression, et pour le dire au REGISTRE » (chapitre 12, arbitrages devenus pressants).
+
+*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier ; la décision lui revient.*
+
+**Ce que c'est.** Décision de Xavier : supprimer, ou garder en dormance avec la raison. Si suppression : avant chaque DROP, chercher le nom dans `prosrc` de toutes les fonctions, dans les vues (`pg_views`) et dans les crons — `pg_depend` ne voit pas le PL/pgSQL (leçon du 02/09, « une vue appelle aussi ») —, une migration par famille, les suites qui les nommaient réalignées, la liste fermée T12 et l'audit `execute_anon` relus ; le code au REGISTRE, daté. Si dormance : la raison écrite au REGISTRE, et la liste nominative tenue par un test qui rougit si l'une d'elles rouvre.
+
+**Pourquoi ça compte.** Une surface fermée à clé n'est pas une dette de sécurité, mais c'est une dette de lecture : chaque Livre blanc la recompte, et la dormance sans raison écrite est exactement ce que DOC-GEL-1 interdit.
+
+**Ce qui compte comme fini.**
+
+- La décision est écrite au REGISTRE avec sa date.
+- Les neuf fonctions sont supprimées (migration, suites vertes, T12 et audit relus) ou leur dormance est gardée par un test nominatif.
+
+**Dépendances.** Aucune.
+
+*Renvois : `supabase/migrations` · `tests/sql/grants_herites_tests.sql` · `docs/audits` · `docs/REGISTRE_decisions.md`*
 
 ---
 
@@ -584,18 +628,18 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Ouvert |
+| **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P1` | Ouvert |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
 
 **État.** Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.
 
@@ -950,7 +994,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 Les six autres blocs sont inchangés au 31/08, vérifiés table par table : assemblées du réseau (3), propositions et objections d'autorité (3), référentiels `catalog_ref_*` (8), gouvernance des profils de bibliothèque (4, **et les deux crons tournent toujours dessus toutes les quinze minutes**), délibération des demandes d'adhésion (5). Tous à zéro insertion.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Choisir un bloc et l'emprunter pour de vrai, du premier geste au dernier : tenir une assemblée du réseau, déposer une note de lecture, proposer une autorité et laisser quelqu'un objecter, faire délibérer une demande d'adhésion. Consigner ce qui manque, ce qui surprend, ce qui bloque.
 
@@ -1350,7 +1394,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
 
@@ -1417,6 +1461,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
+| **J12** | Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1) | `P1` | Ouvert |
 
 #### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
 
@@ -1424,7 +1469,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Le relevé du GLB v17 (01/09) le dit sans action datée : périodiques, notes de lecture, moisson OAI entrante, OPDS, sondes, témoin de sauvegarde, file des conventions — « aucun n'a été arbitré contre son coût d'achèvement ». Depuis, H5 (OAI) et I4 (témoin) sont clos ; les cinq autres sont livrés en partie et non arbitrés.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : **12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.*
 
 **Ce que c'est.** Cinq lignes : ce qui est livré, ce qui manque pour que ce soit fini, ce que ça coûte, et si on le finit ou si on le gèle avec la raison écrite (`P3`).
 
@@ -1437,6 +1482,27 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après Bologne. Sans dépendance technique.
 
 *Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
+
+#### J12 — Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1)
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** **Le Grand Livre blanc v18 (11/10/2026, 27 pages) le demande lui-même**, chapitres 12 et 14 bis : « le présent v18 doit entrer au dépôt le jour où il sert de référence, et ses deux précisions de doctrine qui méritent un code (tiers, compteurs) doivent le recevoir dans la semaine, faute de quoi la v18 enfreindrait la règle que la v17 a fait écrire » (DOC-GLB-1, REGISTRE, 02/09). Vérifié le 12/10 : `docs/GLB/` ne porte que le v17 ; `docs/GLB/archive/` porte la refonte du 29/05 ; `docs/INDEX.md` désigne le v17 comme référence vivante et dit du v16 du 2 juillet qu'il « reste à retrouver » — or il existe, `.docx` + `.pdf` du 02/07 à 21 h 06, dans le dossier des rapports du mainteneur, comme la v18 (`.docx` + `.pdf` du 11/10 à 23 h 39). Les trois règles à coder : *précision 1*, une épreuve par un tiers vaut plus qu'une épreuve par l'auteur, et la clôture doit distinguer « exercé » de « exercé par un tiers » ; *précision 2*, une mesure d'usage se publie avec la date d'origine de ses compteurs, ou ne se publie pas (scans d'index, exécutions de cron, relevés de sonde, échecs de transport) ; *ligne rouge v18*, aucune mesure d'usage qui compte une fixture (voir B39 pour l'étiquetage). Échéance : le 18/10.
+
+*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.*
+
+**Ce que c'est.** (1) `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`), `docs/GLB/archive/Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`) ; `docs/INDEX.md` : v18 référence vivante, v17 en archive, le chaînon manquant retrouvé ; (2) REGISTRE : trois codes datés — l'épreuve par un tiers (DOC-TIERS-1), la mesure datée de ses compteurs (DOC-MESURE-1), la fixture hors mesure (DOC-MESURE-2) — chacun avec ce qu'il rend opposable ; (3) le backlog : la convention des clôtures dit « exercé par un tiers » quand c'est le cas, et le relevé « L'état réel » porte, pour chaque chiffre compté depuis un instant, la date d'origine de ses compteurs (B36 le fait déjà).
+
+**Pourquoi ça compte.** La série n'est lisible que si chaque version est au dépôt, et une ligne rouge sans code est un vœu — la v17 l'a prouvé et la v18 le rappelle.
+
+**Ce qui compte comme fini.**
+
+- La v18 et le v16 du 02/07 sont dans `docs/GLB/`, l'INDEX les nomme, le chaînon manquant n'est plus manquant.
+- Les trois codes existent au REGISTRE, datés d'avant le 18/10, et le backlog applique les deux conventions (tiers, date des compteurs).
+
+**Dépendances.** B39 (l'étiquetage des fixtures donne sa contrepartie à la ligne rouge).
+
+*Renvois : `docs/GLB` · `docs/INDEX.md` · `docs/REGISTRE_decisions.md` · `docs/backlogs/backlog-v34.json`*
 
 ---
 
@@ -1940,4 +2006,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 53 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 56 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

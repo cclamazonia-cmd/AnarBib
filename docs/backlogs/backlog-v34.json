@@ -3254,10 +3254,16 @@
         "REGISTRE §1 RES-D11",
         "CALENDRIER_bologne_2026-08-27"
       ],
-      "verif": {
-        "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé. **05/10 — le camarade (`ASR2026`) est coopté** par Xavier : deux admins réseau actifs (vérifié en base). Le circuit de cooptation a servi pour la première fois — proposition, vote implicite du proposeur, ratification immédiate puisque Xavier était seul admin (pas de délai). En chemin, un défaut corrigé (G17 : la fenêtre ne trouvait pas un compte sans bibliothèque). Les deux courriels au camarade sont partis (acceptés par Resend à 14 h 03) ; il ne les avait pas reçus à 14 h 10, mais ils lui sont parvenus ensuite : ce sont leurs liens qui menaient à des 404 (signalé par Xavier le jour même, corrigé par `43f8481e`) — rien à regarder côté Resend. **Reste** : une troisième personne, et une décision fédérale prise à trois. **05/10, soir — la PR #32 du camarade** (`ad5fb042`, fusionnée par `300b1a69`), puis son suivi (`206b7b77`) : `AppIcon` et ses règles (REGISTRE `IDENT-5` à `IDENT-8`, `0b2b0e14`), un nom accessible au badge « restreint », `AppIcon` en `role=\"img\"` quand il a un titre, `stripEmojiDeep` retiré. Les icônes encore en emoji : item E32.",
-        "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou. **05/10 — o camarada (`ASR2026`) foi cooptado**: dois administradores ativos. Primeiro uso do circuito de cooptação. **Falta**: uma terceira pessoa. **05/10, à noite — a PR #32 do camarada** (`ad5fb042`, merge `300b1a69`; seguimento `206b7b77`): `AppIcon` e suas regras (REGISTRE `IDENT-5` a `IDENT-8`). Ícones ainda em emoji: item E32."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — `network_administrators` : 1 ligne. Rien n'a bougé. **05/10 — le camarade (`ASR2026`) est coopté** par Xavier : deux admins réseau actifs (vérifié en base). Le circuit de cooptation a servi pour la première fois — proposition, vote implicite du proposeur, ratification immédiate puisque Xavier était seul admin (pas de délai). En chemin, un défaut corrigé (G17 : la fenêtre ne trouvait pas un compte sans bibliothèque). Les deux courriels au camarade sont partis (acceptés par Resend à 14 h 03) ; il ne les avait pas reçus à 14 h 10, mais ils lui sont parvenus ensuite : ce sont leurs liens qui menaient à des 404 (signalé par Xavier le jour même, corrigé par `43f8481e`) — rien à regarder côté Resend. **Reste** : une troisième personne, et une décision fédérale prise à trois. **05/10, soir — la PR #32 du camarade** (`ad5fb042`, fusionnée par `300b1a69`), puis son suivi (`206b7b77`) : `AppIcon` et ses règles (REGISTRE `IDENT-5` à `IDENT-8`, `0b2b0e14`), un nom accessible au badge « restreint », `AppIcon` en `role=\"img\"` quand il a un titre, `stripEmojiDeep` retiré. Les icônes encore en emoji : item E32.",
+          "pt": "31/08 — `network_administrators`: 1 linha. Nada mudou. **05/10 — o camarada (`ASR2026`) foi cooptado**: dois administradores ativos. Primeiro uso do circuito de cooptação. **Falta**: uma terceira pessoa. **05/10, à noite — a PR #32 do camarada** (`ad5fb042`, merge `300b1a69`; seguimento `206b7b77`): `AppIcon` e suas regras (REGISTRE `IDENT-5` a `IDENT-8`). Ícones ainda em emoji: item E32."
+        },
+        {
+          "fr": "**12/10 — lecture de la v18** (chapitres 2.1 et 11, ordre #1) : la condition v17 demandait deux personnes, une est venue (ASR2026, coopté le 05/10 par le circuit, six défauts corrigés en chemin) ; « l'écart entre un et deux administrateurs est d'une autre nature que l'écart entre deux et trois : le premier est la différence entre un dispositif et un usage, le second est une question de quorum ». Candidates naturelles nommées par la v18 : les coordinations de Solidaires et de la BTL, qui ont toutes deux un compte. Sortie attendue : une troisième administration d'un autre collectif, et une décision fédérale prise à trois.",
+          "pt": "**12/10 — leitura da v18**: a condição v17 pedia duas pessoas, uma veio (ASR2026, 05/10). Candidatas naturais nomeadas pela v18: as coordenações de Solidaires e da BTL. Saída esperada: uma terceira administração de outro coletivo, e uma decisão federal tomada a três."
+        }
+      ]
     },
     {
       "id": "A3",
@@ -3643,7 +3649,7 @@
     {
       "id": "D3",
       "d": "D",
-      "p": "P2",
+      "p": "P1",
       "s": "ouvert",
       "e": "M",
       "sk": [
@@ -3693,6 +3699,10 @@
         {
           "fr": "24/09 — **débloqué** : la fiche disait « bloqué par C2, donc G7 et A1 » ; C2 et G7 sont clos (Solidaires admise le 15/09, lot 63 attribué). Mesuré : 0 brouillon sur 1 673 porte un `serial_id`. Le rattachement des 91 fascicules et l examen des 87 candidates sont à faire dans le lot, avant sa promotion — bibliothéconomie, dans l application.",
           "pt": "24/09 — **desbloqueado**: C2 e G7 estão fechados (Solidaires admitida em 15/09). Medido: 0 rascunhos em 1 673 com `serial_id`. A ligar antes da promoção do lote."
+        },
+        {
+          "fr": "**12/10 — monté en P1 sur proposition de la v18** (ordre d'exécution #6, arbitrage « devenu pressant ») : « 1 673 brouillons importés le 28/08, admis le 15/09, non révisés le 11/10. L'arbitrage d'août — admission d'abord, import ensuite — a été rendu ; il reste à faire le travail qu'il conditionnait, et ce travail est du catalogage, pas du code. C'est la seule voie vers une cinquième bibliothèque dotée d'un fonds, et elle ne dépend que de bras. » La révision du lot 63 (Solidaires) est l'objet, D3 en est la part documentaire (fascicules et monographies suspectes) ; la publication du fonds passe par C-lot 63. Reclassement à confirmer ou à défaire par Xavier.",
+          "pt": "**12/10 — subido a P1 por proposta da v18** (ordem #6): 1 673 rascunhos importados em 28/08, admitidos em 15/09, não revisados em 11/10 — a única via para uma quinta biblioteca com acervo, e só depende de braços. Reclassificação a confirmar ou desfazer por Xavier."
         }
       ]
     },
@@ -4118,6 +4128,10 @@
         {
           "fr": "**05/10, inventaire** — la carte de la chaîne de courriel (F1, `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`, mesurée en production) compte, sur environ 96 chaînes métier, **31 jamais empruntées** : branchées, jamais servies. Elles relèvent de cet item au même titre que les tables à zéro ligne.",
           "pt": "**05/10, inventário** — o mapa da cadeia de e-mail (F1, `CARTE_chaine_courriel_2026-09-30.md`, medido em produção) conta, em cerca de 96 cadeias, **31 nunca percorridas**. Pertencem a este item como as tabelas vazias."
+        },
+        {
+          "fr": "**12/10 — les trois jalons nommés par la v18** (ordre d'exécution #2, chapitre 9.3) : (1) **une seconde bibliothèque qui prête un livre** — la Biblioteca Terra Livre a 2 225 exemplaires, cinq membres actifs et un réglage de circulation complet, « rien ne manque que le geste » ; c'est l'unique condition que la v18 pose à la v19 ; (2) **une note de lecture sur un emprunt réel** (zéro note ; l'invitation du 10/09 n'en a produit aucune) ; (3) **une assemblée réelle, à une date, avec un ordre du jour** (zéro assemblée). Le chapitre 9.3 ajoute ce qui manque pour éprouver chaque couche livrée : une réponse dans le fil de correspondance, une demande d'adhésion arbitrée par un cercle, un partage numérique de bout en bout, une entrée de cartographie soumise par un tiers, une revue réelle avec son état de collection, une source OAI réelle, une application de lecture qui s'abonne au flux. Exercés dans la période : cooptation, prêt entre bibliothèques, correspondance, entraide, effacement, signalement.",
+          "pt": "**12/10 — os três marcos nomeados pela v18**: (1) uma segunda biblioteca que empresta um livro — a BTL tem 2 225 exemplares, cinco membros ativos e circulação configurada; é a única condição que a v18 põe à v19; (2) uma nota de leitura sobre um empréstimo real; (3) uma assembleia real, com data e pauta. O capítulo 9.3 lista o que falta para provar cada camada entregue."
         }
       ]
     },
@@ -4893,6 +4907,10 @@
         {
           "fr": "27/09 — I3 est clos (`738283d5`) et confie un reste à cet item. Le routeur `main`, lancé seul dans un edge-runtime isolé, démarre et décide juste (`deploy/scripts/essai-routeur-main.sh`, 7/7, rejouable). Une fonction dispensée (`health-probe`) n'y est pas bloquée, mais, sans base ni secrets, elle répond 500. **À prouver ici, à la répétition complète** : qu'elle réponde 200 avec la base et les secrets de la pile.",
           "pt": "27/09 — o I3 foi fechado (`738283d5`) e deixa um resto para este item. O roteador `main`, sozinho num edge-runtime isolado, inicia e decide certo (`deploy/scripts/essai-routeur-main.sh`, 7/7, reproduzível). Uma função dispensada (`health-probe`) não é bloqueada, mas, sem banco nem segredos, responde 500. **A provar aqui, no ensaio completo**: que ela responda 200 com o banco e os segredos da pilha."
+        },
+        {
+          "fr": "**12/10 — une condition de plus, nommée par la v18** (ordre #8, chapitre 9.3) : « une reconstruction sur une troisième machine, par une personne qui ne connaît ni le projet ni l'installateur » — la reconstruction d'ASR2026 (06-15/09) a prouvé l'installateur par celui qui l'a écrit ; l'épreuve par un tiers (précision 1 de la v18) demande une main qui ne le connaît pas. L'ISO d'essai qu'ASR2026 prépare (VM) peut en être le support.",
+          "pt": "**12/10 — mais uma condição, nomeada pela v18** (ordem #8): uma reconstrução numa terceira máquina, por uma pessoa que não conhece nem o projeto nem o instalador. A ISO de teste que ASR2026 prepara pode ser o suporte."
         }
       ]
     },
@@ -5040,7 +5058,11 @@
       "r": [
         "claude/GLB_v17_releve_et_constats_2026-09-01",
         "REGISTRE §0 DOC-GEL-1"
-      ]
+      ],
+      "verif": {
+        "fr": "**12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.",
+        "pt": "**12/10 — o que a v18 diz** (capítulo 9.3): os sete domínios relidos um a um com «o que falta para prová-los». Dois estão exercidos (sondas, fila das convenções); os outros cinco esperam um fato. A arbitragem «terminar ou congelar» continua a escrever."
+      }
     },
     {
       "id": "E20",
@@ -5930,6 +5952,156 @@
           "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
         }
       ]
+    },
+    {
+      "id": "J12",
+      "d": "J",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Verser la v18 et le v16 du 2 juillet au dépôt, et donner leur code aux trois règles de la v18 — dans la semaine (DOC-GLB-1)",
+        "pt": "Versar a v18 e a v16 de 2 de julho no repositório, e dar seu código às três regras da v18 — na semana (DOC-GLB-1)"
+      },
+      "v": {
+        "fr": "**Le Grand Livre blanc v18 (11/10/2026, 27 pages) le demande lui-même**, chapitres 12 et 14 bis : « le présent v18 doit entrer au dépôt le jour où il sert de référence, et ses deux précisions de doctrine qui méritent un code (tiers, compteurs) doivent le recevoir dans la semaine, faute de quoi la v18 enfreindrait la règle que la v17 a fait écrire » (DOC-GLB-1, REGISTRE, 02/09). Vérifié le 12/10 : `docs/GLB/` ne porte que le v17 ; `docs/GLB/archive/` porte la refonte du 29/05 ; `docs/INDEX.md` désigne le v17 comme référence vivante et dit du v16 du 2 juillet qu'il « reste à retrouver » — or il existe, `.docx` + `.pdf` du 02/07 à 21 h 06, dans le dossier des rapports du mainteneur, comme la v18 (`.docx` + `.pdf` du 11/10 à 23 h 39). Les trois règles à coder : *précision 1*, une épreuve par un tiers vaut plus qu'une épreuve par l'auteur, et la clôture doit distinguer « exercé » de « exercé par un tiers » ; *précision 2*, une mesure d'usage se publie avec la date d'origine de ses compteurs, ou ne se publie pas (scans d'index, exécutions de cron, relevés de sonde, échecs de transport) ; *ligne rouge v18*, aucune mesure d'usage qui compte une fixture (voir B39 pour l'étiquetage). Échéance : le 18/10.",
+        "pt": "**O Grande Livro branco v18 (11/10/2026) o pede ele mesmo** (capítulos 12 e 14 bis): entrar no repositório no dia em que serve de referência, e suas duas precisões de doutrina (terceiro, contadores) receberem código na semana (DOC-GLB-1). Verificado em 12/10: `docs/GLB/` só tem a v17; o INDEX diz que a v16 de 2 de julho «resta a encontrar» — mas ela existe, `.docx` + `.pdf` de 02/07, na pasta de relatórios do mantenedor, como a v18. As três regras: a prova por um terceiro (e o fechamento distingue «exercido» de «exercido por um terceiro»); uma medida de uso se publica com a data de origem dos seus contadores; nenhuma medida de uso que conte uma fixture (B39). Prazo: 18/10."
+      },
+      "w": {
+        "fr": "(1) `docs/GLB/Grand_Livre_blanc_AnarBib_v18_2026-10-11.pdf` (+ `.docx`), `docs/GLB/archive/Grand_Livre_blanc_AnarBib_v16_2026-07-02.pdf` (+ `.docx`) ; `docs/INDEX.md` : v18 référence vivante, v17 en archive, le chaînon manquant retrouvé ; (2) REGISTRE : trois codes datés — l'épreuve par un tiers (DOC-TIERS-1), la mesure datée de ses compteurs (DOC-MESURE-1), la fixture hors mesure (DOC-MESURE-2) — chacun avec ce qu'il rend opposable ; (3) le backlog : la convention des clôtures dit « exercé par un tiers » quand c'est le cas, et le relevé « L'état réel » porte, pour chaque chiffre compté depuis un instant, la date d'origine de ses compteurs (B36 le fait déjà).",
+        "pt": "(1) v18 e v16 em `docs/GLB/`, INDEX atualizado; (2) REGISTRO: três códigos datados; (3) backlog: os fechamentos dizem «exercido por um terceiro» quando é o caso, e o levantamento traz a data de origem dos contadores."
+      },
+      "y": {
+        "fr": "La série n'est lisible que si chaque version est au dépôt, et une ligne rouge sans code est un vœu — la v17 l'a prouvé et la v18 le rappelle.",
+        "pt": "A série só é legível se cada versão está no repositório, e uma linha vermelha sem código é um desejo."
+      },
+      "f": {
+        "fr": [
+          "La v18 et le v16 du 02/07 sont dans `docs/GLB/`, l'INDEX les nomme, le chaînon manquant n'est plus manquant.",
+          "Les trois codes existent au REGISTRE, datés d'avant le 18/10, et le backlog applique les deux conventions (tiers, date des compteurs)."
+        ],
+        "pt": [
+          "A v18 e a v16 de 02/07 estão em `docs/GLB/`, o INDEX as nomeia.",
+          "Os três códigos existem no REGISTRO, datados antes de 18/10, e o backlog aplica as duas convenções."
+        ]
+      },
+      "dep": {
+        "fr": "B39 (l'étiquetage des fixtures donne sa contrepartie à la ligne rouge).",
+        "pt": "B39."
+      },
+      "r": [
+        "docs/GLB",
+        "docs/INDEX.md",
+        "docs/REGISTRE_decisions.md",
+        "docs/backlogs/backlog-v34.json"
+      ],
+      "verif": {
+        "fr": "12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier.",
+        "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
+      }
+    },
+    {
+      "id": "B39",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note",
+        "pt": "Etiquetar as fixtures de formação em produção, para que toda medida de uso as exclua por uma consulta e não por uma nota"
+      },
+      "v": {
+        "fr": "**Constat de la v18** (chapitres 9.1, 10 — précision 3 — et 12) : la bibliothèque de formation `blmf-teste` compte onze membres dont neuf actifs, cinq exemplaires et aucune circulation, et « elle fausse tout tableau qui ne la nomme pas ». Le projet a choisi de garder ses fixtures sur la production (la formation se fait sur le vrai outil — soirée du 10/10) ; la v18 juge le choix défendable à une condition : « un étiquetage que toute mesure puisse lire », et « la v19 devra pouvoir le faire par une requête, pas par une note ». Vérifié le 12/10 : rien en base ne distingue `blmf-teste` ni les comptes `formacao-e1..e5` d'une bibliothèque et de lecteurs réels — le relevé « L'état réel » les compte dans « Bibliothèques = 6 » et « Comptes = 23 », et les nomme en note. Ligne rouge v18 : « aucune mesure d'usage qui compte une fixture ».",
+        "pt": "**Constatação da v18** (capítulos 9.1, 10 e 12): a biblioteca de formação `blmf-teste` tem onze membros, cinco exemplares e nenhuma circulação, e «falseia todo quadro que não a nomeia». O projeto escolheu manter as fixtures em produção; a v18 aceita com uma condição: uma etiqueta que toda medida possa ler, por uma consulta. Verificado em 12/10: nada no banco distingue `blmf-teste` nem as contas `formacao-e1..e5`."
+      },
+      "w": {
+        "fr": "Une colonne `libraries.is_training` (défaut faux, posée à vrai sur `blmf-teste` par migration) et le même marqueur sur les comptes de formation (`profiles`, ou l'appartenance à une bibliothèque de formation) ; une aide `private.fn_hors_fixtures()` ou une vue de mesure que le relevé « L'état réel », la supervision et le prochain Livre blanc lisent ; les comptes du réseau (bibliothèques, membres, circulation) publiés *hors fixtures*, avec la ligne des fixtures à part. Inscrire au REGISTRE le choix « fixtures de formation en production » avec cette contrepartie (J12). Garde : un test qui rougit si une bibliothèque nommée `*-teste` n'est pas étiquetée.",
+        "pt": "Uma coluna `libraries.is_training` (verdadeira em `blmf-teste`) e o mesmo marcador nas contas de formação; uma ajuda ou vista de medida que o levantamento, a supervisão e o próximo Livro branco leem; as contagens da rede publicadas *fora das fixtures*. Inscrever no REGISTRO a escolha com sua contrapartida (J12). Guarda: um teste que fica vermelho se uma biblioteca `*-teste` não está etiquetada."
+      },
+      "y": {
+        "fr": "Un chiffre d'usage qui compte des comptes de formation comme des lecteurs est exact et faux ; le double dénominateur de la v17 exige l'usage sur des bibliothèques réelles.",
+        "pt": "Um número de uso que conta contas de formação como leitores é exato e falso."
+      },
+      "f": {
+        "fr": [
+          "La bibliothèque de formation et ses comptes portent un marqueur en base, posé par migration et gardé par un test.",
+          "Le relevé « L'état réel » et la supervision publient les comptes du réseau hors fixtures par une requête, la ligne des fixtures à part."
+        ],
+        "pt": [
+          "A biblioteca de formação e suas contas têm um marcador no banco, posto por migração e guardado por um teste.",
+          "O levantamento e a supervisão publicam as contagens da rede fora das fixtures por uma consulta."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. J12 inscrit le choix au REGISTRE.",
+        "pt": "Nenhuma. J12 inscreve a escolha no REGISTRO."
+      },
+      "r": [
+        "supabase/migrations",
+        "tests/sql",
+        "docs/backlogs/backlog-v34.json",
+        "docs/REGISTRE_decisions.md"
+      ],
+      "verif": {
+        "fr": "12/10 — ouvert à la lecture détaillée de la v18 (précision 3 et ligne rouge), à la demande de Xavier.",
+        "pt": "12/10 — aberto na leitura detalhada da v18, a pedido de Xavier."
+      }
+    },
+    {
+      "id": "B40",
+      "d": "B",
+      "p": "P3",
+      "s": "decision",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Neuf fonctions `api` fermées à tous les rôles : les supprimer, ou les garder comme surface dormante — le dire au REGISTRE",
+        "pt": "Nove funções `api` fechadas a todos os papéis: suprimi-las, ou mantê-las como superfície dormente — dizê-lo no REGISTRO"
+      },
+      "v": {
+        "fr": "**Mesure de jonction de la v18** (chapitre 6.1, dépôt `c6d20a9e`) : sur 206 fonctions du schéma `api`, douze n'ont d'appelant nulle part — ni dans le dépôt frontal, ni dans une Edge Function, ni dans le corps d'une fonction, d'une vue ou d'un cron. Neuf d'entre elles ne sont plus exécutables par aucun des trois rôles de l'application depuis la migration du 02/09 « une aile jamais ouverte se ferme à clé » (B20) : `attach_exemplar`, `clear_loan_return_schedule`, `conv_controle_qualite`, `conv_controle_resumo`, `fn_cartography_create_entry`, `fn_cartography_toggle_public`, `mark_loan_return_missed`, `refuse_pickup_slot`, `schedule_loan_return` — la planification de retour et les créneaux de retrait, l'édition de cartographie, deux contrôles de conventions. Deux sont réservées au rôle de service (`get_due_date_for_loan`, `get_library_circulation_policy_rules_ui`), une est un instrument de console documenté (`fn_outbox_abandonnees`). « Elles existent, elles ne servent pas, et personne ne peut les appeler. » La v18 : « il reste à décider si les neuf doivent être supprimées ou gardées comme surface dormante ; la v18 penche pour la suppression, et pour le dire au REGISTRE » (chapitre 12, arbitrages devenus pressants).",
+        "pt": "**Medida de junção da v18** (capítulo 6.1): nove funções `api` não têm chamador em lugar nenhum e não são executáveis por nenhum papel desde 02/09 (B20): planejamento de devolução e horários de retirada, edição de cartografia, dois controles de convenções. A v18 inclina-se pela supressão, e por dizê-lo no REGISTRO."
+      },
+      "w": {
+        "fr": "Décision de Xavier : supprimer, ou garder en dormance avec la raison. Si suppression : avant chaque DROP, chercher le nom dans `prosrc` de toutes les fonctions, dans les vues (`pg_views`) et dans les crons — `pg_depend` ne voit pas le PL/pgSQL (leçon du 02/09, « une vue appelle aussi ») —, une migration par famille, les suites qui les nommaient réalignées, la liste fermée T12 et l'audit `execute_anon` relus ; le code au REGISTRE, daté. Si dormance : la raison écrite au REGISTRE, et la liste nominative tenue par un test qui rougit si l'une d'elles rouvre.",
+        "pt": "Decisão de Xavier: suprimir, ou manter em dormência com a razão. Se supressão: antes de cada DROP, procurar o nome em `prosrc`, nas vistas e nos crons; uma migração por família; suítes realinhadas; código no REGISTRO. Se dormência: razão escrita e lista mantida por um teste."
+      },
+      "y": {
+        "fr": "Une surface fermée à clé n'est pas une dette de sécurité, mais c'est une dette de lecture : chaque Livre blanc la recompte, et la dormance sans raison écrite est exactement ce que DOC-GEL-1 interdit.",
+        "pt": "Uma superfície fechada à chave não é dívida de segurança, mas é dívida de leitura."
+      },
+      "f": {
+        "fr": [
+          "La décision est écrite au REGISTRE avec sa date.",
+          "Les neuf fonctions sont supprimées (migration, suites vertes, T12 et audit relus) ou leur dormance est gardée par un test nominatif."
+        ],
+        "pt": [
+          "A decisão está escrita no REGISTRO com sua data.",
+          "As nove funções são suprimidas ou sua dormência é guardada por um teste nominativo."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "supabase/migrations",
+        "tests/sql/grants_herites_tests.sql",
+        "docs/audits",
+        "docs/REGISTRE_decisions.md"
+      ],
+      "verif": {
+        "fr": "12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier ; la décision lui revient.",
+        "pt": "12/10 — aberto na leitura detalhada da v18; a decisão cabe a Xavier."
+      }
     }
   ]
 }
