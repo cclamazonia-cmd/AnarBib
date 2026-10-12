@@ -60,8 +60,11 @@ export function pagesParExemplaires(lignes, maxLignes = PLAFOND_LIGNES, maxExemp
 // error.import.update_page_too_many_items). Les réponses des pages d'un même
 // geste, réunies : les comptes s'additionnent, les comptes par verdict aussi ;
 // le reste (lot, run) est celui de la dernière page.
+// H34 lot 2 (IMP-36) : les comptes d'une page de publish_catalog_batch aussi
+// (le reste, done et remaining, est celui de la dernière page).
 const COMPTES_ADDITIFS = ['created_items', 'created_exemplar_drafts', 'items_skipped_code_taken', 'rows_already_held',
-  'rows_signalled', 'skipped_rows', 'requested_rows', 'created_drafts', 'items_created', 'selected_count', 'owner_stamped'];
+  'rows_signalled', 'skipped_rows', 'requested_rows', 'created_drafts', 'items_created', 'selected_count', 'owner_stamped',
+  'books_published', 'authors_published', 'exemplars_published'];
 export function cumulerReponses(reponses) {
   const total = {};
   for (const r of Array.isArray(reponses) ? reponses : []) {

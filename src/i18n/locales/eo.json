@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografio en la nederlanda",
   "catalogacao.bio.titleIn.el": "Biografio en la greka",
   "error.import.page_too_large": "Maksimume 200 linioj por alvoko: elektu malpli.",
-  "importacoes.fila.pagesAvantRefus": "Antaŭ ĉi tiu rifuzo, {created, plural, one {# malneto estis kreita} other {# malnetoj estis kreitaj}} de la jam senditaj paĝoj."
+  "importacoes.fila.pagesAvantRefus": "Antaŭ ĉi tiu rifuzo, {created, plural, one {# malneto estis kreita} other {# malnetoj estis kreitaj}} de la jam senditaj paĝoj.",
+  "catalogacao.batch.status.publishing": "Publikigo daŭras",
+  "catalogacao.batch.publication.resume": "Daŭrigi la publikigon",
+  "catalogacao.batch.publication.resumeConfirm": "Ĉu daŭrigi la publikigon de ĉi tiu loto? La jam publikigitaj paĝoj restas publikigitaj; ankaŭ la resto ne estas malfarebla.",
+  "catalogacao.batch.publication.progress": "Publikigo daŭras: paĝo {page}, {notices, plural, one {# katalogero publikigita} other {# katalogeroj publikigitaj}} el {total}…",
+  "catalogacao.batch.publication.donePages": "Loto publikigita en {pages} paĝoj: {notices, plural, one {# katalogero} other {# katalogeroj}} kaj {exemplaires, plural, one {# ekzemplero} other {# ekzempleroj}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Antaŭ ĉi tiu rifuzo, {pages, plural, one {# paĝo estis publikigita} other {# paĝoj estis publikigitaj}} ({notices, plural, one {# katalogero} other {# katalogeroj}}, {exemplaires, plural, one {# ekzemplero} other {# ekzempleroj}}): ili restas publikigitaj.",
+  "catalogacao.batch.publication.howToResume": "La loto restas „Publikigo daŭras“: „Daŭrigi la publikigon“ reprovas la rifuzitan paĝon. Por korekti malneton necesas nova revizia rondo (la reta administrado remalfermas la revizion).",
+  "error.batch.publishing_locked": "Ĉi tiu loto estas publikigata: nenio aldoniĝas nek retuŝiĝas sen nova revizia rondo.",
+  "error.batch.publication_busy": "Ĉi tiu loto jam estas publikigata de alia alvoko (alia langeto aŭ alia persono): atendu la finon, poste reŝargu la paĝon."
 }

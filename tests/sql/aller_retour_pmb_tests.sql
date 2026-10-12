@@ -184,7 +184,8 @@ BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     PERFORM public.fn_batch_review_verdict((v_res->>'review_id')::bigint, 'approved', NULL);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
-    v_res := public.publish_catalog_batch(v_lot);
+    -- H34 lot 2 (IMP-36) : plus de 60 notices, la publication va par pages
+    LOOP v_res := public.publish_catalog_batch(v_lot); EXIT WHEN coalesce((v_res->>'done')::boolean, true); END LOOP;
     IF (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot AND status = 'published') = 64
        AND (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot AND status = 'published') = 46
        AND (SELECT count(*) FROM public.exemplares e

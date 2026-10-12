@@ -61,6 +61,43 @@
 -- T11 pendant un lot, un exemplaire qui change de fonds fait noter le nouveau
 --     puis l'ancien, une suppression le sien ; rien n'est recompté avant la
 --     fin ; puis chacun l'est (même choix de fonds que le recompte immédiat).
+-- H34 lot 2 (12/10/2026, REGISTRE IMP-36, migration
+-- 20261012173204_h34_lot2_publier_par_pages) : un lot approuvé se publie par
+-- pages (au plus 60 notices et 400 exemplaires par appel ; une notice et ses
+-- exemplaires rattachés dans la même page). T01 publie désormais son lot en
+-- deux pages (chacune < 8 s) et T03 compte un recompte par page.
+-- T12 un gros lot (200 notices x 10 exemplaires, 30 lignes rapprochées x 2,
+--     3 mises à jour de notices du fond, 1 exemplaire fait à la main) en
+--     6 pages, chacune < 8 s sous le jeton de la coordination : « publishing »
+--     jusqu'à la dernière, aucune notice publiée sans tous ses exemplaires
+--     rattachés à la fin de sa page, chaque brouillon publié une fois, aucun
+--     sauté (NOTICE H34-MESURE ; au banc, 12/10 : ~2,4 à 2,8 s par page pleine).
+-- T13 le même lot publié d'un bloc (borne levée le temps d'un sous-bloc annulé)
+--     et par pages : base identique — fonds, notices, exemplaires (numéros
+--     compris), brouillons, lot — colonne par colonne, par clés naturelles.
+-- T14 une page coupée en route (sous-bloc annulé) puis une page refusée (un
+--     exemplaire posé entre-temps porte le code d'un rapproché :
+--     error.publish.source_item_code_taken) : ni l'une ni l'autre n'écrit,
+--     la page d'avant reste, le lot reste « publishing ».
+-- T15 pendant « publishing », sous la coordination puis l'administration :
+--     retoucher une notice ou un exemplaire, sortir un brouillon du lot, en
+--     ajouter un, en supprimer un, changer l'état du lot, poser les cotes,
+--     publier un brouillon seul — refusés (error.batch.publishing_locked ou le
+--     refus d'un lot non ouvert) ; « publishing » ne se pose ni ne se lève à la
+--     main, même hors API.
+-- T16 un nouveau tour de révision (administration) rouvre le lot : retouche
+--     permise, publication refusée (error.publish.review_required) jusqu'à
+--     l'approbation, pages publiées intactes.
+-- T17 la reprise, la cause du refus levée : la page refusée se publie, le lot
+--     est publié, chaque brouillon une fois, la retouche d'après réouverture
+--     publiée.
+-- T18 droits sur un lot « publishing » (sans rôle : error.catalog.staff_only),
+--     aides fermées.
+-- T19 un petit lot (une page) : publié d'un appel, jamais « publishing »,
+--     réponse aux trois comptes d'avant (plus done, remaining, page).
+-- Deux appels concurrents sur le même lot (verrou FOR UPDATE NOWAIT, second
+-- appel refusé : error.batch.publication_busy) ne se testent pas dans une
+-- session : banc de deux sessions, scratchpad h34/l2/concurrence2.sh.
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'H34-PUBLIER-UN-GROS-LOT OK : N/N'
 -- =====================================================================
@@ -168,27 +205,39 @@ BEGIN
   CREATE TEMP TABLE h34_b0 ON COMMIT DROP AS SELECT id, available_count, updated_at FROM public.books;
 
   -- ── T01 ─────────────────────────────────────────────────────────────
-  v_t := 'T01 mesure : publier un lot importé de 25 notices et 560 exemplaires < 8 s';
+  v_t := 'T01 mesure : publier un lot importé de 25 notices et 560 exemplaires, chaque page < 8 s';
+  DECLARE v_pages int := 0; v_max numeric := 0; v_b int := 0; v_x int := 0; v_d text := '';
   BEGIN
     -- (SET et non set_config : la plate-forme n'ouvre ce réglage qu'à la commande SET)
     EXECUTE 'SET LOCAL track_functions = ''all''';
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
     SELECT coalesce(jsonb_object_agg(schemaname || '.' || funcname, jsonb_build_array(calls, total_time)), '{}') INTO v_f0
       FROM pg_stat_xact_user_functions;
-    EXECUTE 'SET LOCAL ROLE authenticated';
+    -- H34 lot 2 : par pages (400 exemplaires au plus : 20 notices et leurs
+    -- 400 exemplaires, puis 5 notices, leurs 100 exemplaires et les 60 rapprochés)
     v_t0 := clock_timestamp();
-    v_res := public.publish_catalog_batch(v_lot);
+    LOOP
+      EXECUTE 'SET LOCAL ROLE authenticated';
+      v_ms := extract(epoch FROM clock_timestamp()) * 1000;
+      v_res := public.publish_catalog_batch(v_lot);
+      v_ms := extract(epoch FROM clock_timestamp()) * 1000 - v_ms;
+      EXECUTE 'RESET ROLE';
+      v_pages := v_pages + 1; v_max := greatest(v_max, v_ms);
+      v_b := v_b + (v_res->>'books_published')::int; v_x := v_x + (v_res->>'exemplars_published')::int;
+      v_d := v_d || ' ' || round(v_ms);
+      EXIT WHEN (v_res->>'done')::boolean OR v_pages >= 10;
+    END LOOP;
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
-    EXECUTE 'RESET ROLE';
     SELECT coalesce(jsonb_object_agg(schemaname || '.' || funcname, jsonb_build_array(calls, total_time)), '{}') INTO v_f1
       FROM pg_stat_xact_user_functions;
-    RAISE NOTICE 'H34-MESURE publier un lot de 25 notices / 560 exemplaires (fond de 2 700) : % ms ; %', round(v_ms), v_res;
-    IF (v_res->>'books_published')::int = 25 AND (v_res->>'exemplars_published')::int = 60
+    RAISE NOTICE 'H34-MESURE publier un lot de 25 notices / 560 exemplaires (fond de 2 700) : % ms en % page(s) (% ms) ; dernière %',
+      round(v_ms), v_pages, trim(v_d), v_res;
+    IF v_b = 25 AND v_x = 60 AND v_pages = 2
        AND (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot AND status = 'published') = 560
        AND (SELECT status FROM public.catalog_batches WHERE id = v_lot) = 'published'
-       AND v_ms < 8000
+       AND v_max < 8000
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms ; '||coalesce(v_res::text, 'NULL')); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_pages||' page(s), '||trim(v_d)||' ms ; '||coalesce(v_res::text, 'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T02 ─────────────────────────────────────────────────────────────
@@ -260,7 +309,7 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T03 ─────────────────────────────────────────────────────────────
-  v_t := 'T03 une fois par fonds touché : 560 déclenchements, un seul recompte, sur les 45 fonds touchés';
+  v_t := 'T03 une fois par fonds touché : 560 déclenchements, un recompte par page (2), sur les 45 fonds touchés';
   BEGIN
     v_e := '';
     IF coalesce((v_f1->'public.fn_recompute_holdings_on_exemplar_change'->>0)::bigint, 0)
@@ -270,7 +319,7 @@ BEGIN
     END IF;
     v_n := coalesce((v_f1->'public.fn_v2_recompute_holdings_availability'->>0)::bigint, 0)
          - coalesce((v_f0->'public.fn_v2_recompute_holdings_availability'->>0)::bigint, 0);
-    IF v_n <> 1 THEN v_e := v_e || ' recomptes(' || v_n || ')'; END IF;
+    IF v_n <> 2 THEN v_e := v_e || ' recomptes(' || v_n || ')'; END IF;   -- H34 lot 2 : un par page
     IF (SELECT count(DISTINCT e.holding_id) FROM public.exemplar_drafts x JOIN public.exemplares e ON e.id = x.published_exemplar_id
          WHERE x.batch_id = v_lot) <> 45 THEN v_e := v_e || ' fonds-touches'; END IF;
     IF coalesce(current_setting('anarbib.h34_disponibilite_differee', true), '') <> ''
@@ -512,6 +561,353 @@ BEGIN
     IF v_e = '' AND v_r = 3 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e||' rendu '||v_r); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ═════════════════════════════════════════════════════════════════════
+  -- H34 lot 2 (IMP-36) : un lot approuvé se publie par pages
+  -- ═════════════════════════════════════════════════════════════════════
+  PERFORM set_config('request.jwt.claims', '', true);
+  -- un lot importé : nr notices nouvelles x ne exemplaires, et des lignes
+  -- rapprochées (2 exemplaires) sur les notices du fond k_min..k_max ; promu,
+  -- rapproché, cotes posées — la revue reste à demander (pg_temp.h34_approuver)
+  CREATE FUNCTION pg_temp.h34_lot(p_src bigint, p_tag text, p_nr int, p_ne int, p_kmin int, p_kmax int)
+  RETURNS bigint LANGUAGE plpgsql AS $f$
+  DECLARE v_run bigint; v_ids bigint[]; v_idk bigint[]; v_res jsonb; v_lot bigint; v_pg int;
+  BEGIN
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
+    VALUES (p_src, '1234825f-a0f9-4fbd-a875-6551c30ea4ca', 'essai/' || p_tag || '.iso', p_tag || '.iso', 'marc_iso2709', 'ready_for_review')
+    RETURNING id INTO v_run;
+    WITH ins AS (
+      INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, authors, publisher, publication_year,
+                                                       normalized_payload, raw_payload, match_status, editorial_decision)
+      SELECT v_run, r, p_tag || '-N-' || r, p_tag || ' notice ' || r, jsonb_build_array('Autrice ' || p_tag || ' ' || r), 'Editions H34', '2002',
+             jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', p_tag || '-N-' || r || '-' || j,
+                                                                            'source_item_id', p_tag || 'n' || r || '-' || j))
+                                            FROM generate_series(1, p_ne) j)),
+             '{"item_tag":"995"}'::jsonb, 'new_record', 'pending'
+        FROM generate_series(1, p_nr) r RETURNING id)
+    SELECT array_agg(id ORDER BY id) INTO v_ids FROM ins;
+    WITH ins AS (
+      INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, normalized_payload, raw_payload,
+                                                       match_status, editorial_decision, proposed_book_id)
+      SELECT v_run, 10000 + b.k, p_tag || '-K-' || b.k, p_tag || ' rapprochée ' || b.k,
+             jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', p_tag || '-K-' || b.k || '-' || j,
+                                                                            'source_item_id', p_tag || 'k' || b.k || '-' || j))
+                                            FROM generate_series(1, 2) j)),
+             '{"item_tag":"995"}'::jsonb, 'known_record', 'pending', b.id
+        FROM h34_b b WHERE b.k BETWEEN p_kmin AND p_kmax RETURNING id)
+    SELECT array_agg(id ORDER BY id) INTO v_idk FROM ins;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', '11111111-1111-1111-1111-111111111111', 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    PERFORM public.fn_import_set_editorial(v_run, v_ids, 'accept_new', 'page import: validation individuelle');
+    FOR v_pg IN 0..((p_nr - 1) / 200) LOOP
+      v_res := public.fn_import_promote(v_run, p_row_ids := v_ids[v_pg * 200 + 1 : least(p_nr, v_pg * 200 + 200)]);
+      v_lot := coalesce(v_lot, (v_res->>'batch_id')::bigint);
+    END LOOP;
+    IF v_idk IS NOT NULL THEN PERFORM public.fn_import_reconcile_duplicates(v_run, v_idk); END IF;
+    PERFORM public.fn_batch_assign_bib_refs(v_lot, true);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+    RETURN v_lot;
+  END $f$;
+  CREATE FUNCTION pg_temp.h34_approuver(p_lot bigint) RETURNS void LANGUAGE plpgsql AS $f$
+  DECLARE v_rev jsonb;
+  BEGIN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', '11111111-1111-1111-1111-111111111111', 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_rev := public.fn_batch_review_request(p_lot, NULL);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', '22222222-2222-2222-2222-222222222222', 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    PERFORM public.fn_batch_review_verdict((v_rev->>'review_id')::bigint, 'approved', NULL);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+  END $f$;
+  -- une page, sous le jeton de la coordination ; rend la réponse et la durée
+  CREATE FUNCTION pg_temp.h34_page(p_lot bigint) RETURNS jsonb LANGUAGE plpgsql AS $f$
+  DECLARE v_t0 timestamptz := clock_timestamp(); v_r jsonb;
+  BEGIN
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', '11111111-1111-1111-1111-111111111111', 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_r := public.publish_catalog_batch(p_lot);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+    RETURN v_r || jsonb_build_object('ms', round(extract(epoch FROM clock_timestamp() - v_t0) * 1000));
+  EXCEPTION WHEN OTHERS THEN
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+    RAISE;
+  END $f$;
+  -- l'état de la base, par clés naturelles (les identifiants dépendent des séquences)
+  CREATE FUNCTION pg_temp.h34_etat(p_lot bigint) RETURNS jsonb LANGUAGE sql AS $f$
+    SELECT jsonb_build_object(
+      'fonds', (SELECT jsonb_agg(to_jsonb(h) - 'id' - 'book_id' || jsonb_build_object('notice', b.bib_ref) ORDER BY b.bib_ref, h.library_id)
+                  FROM public.book_holdings h JOIN public.books b ON b.id = h.book_id),
+      'notices', (SELECT jsonb_agg(to_jsonb(b) - 'id' - 'work_id' - 'expression_id' - 'search_vector' ORDER BY b.bib_ref) FROM public.books b),
+      'exemplaires', (SELECT jsonb_agg(to_jsonb(e) - 'id' - 'holding_id' || jsonb_build_object('notice', b.bib_ref) ORDER BY e.tombo)
+                        FROM public.exemplares e LEFT JOIN public.book_holdings h ON h.id = e.holding_id LEFT JOIN public.books b ON b.id = h.book_id),
+      'brouillons', (SELECT jsonb_agg(jsonb_build_object('bib_ref', d.bib_ref, 'status', d.status, 'publie', b.bib_ref) ORDER BY d.bib_ref, d.titulo)
+                       FROM public.book_drafts d LEFT JOIN public.books b ON b.id = d.published_book_id WHERE d.batch_id = p_lot),
+      'brouillons_ex', (SELECT jsonb_agg(jsonb_build_object('code', x.source_item_code, 'status', x.status, 'tombo', x.tombo, 'publie', e.tombo)
+                                         ORDER BY x.source_item_code)
+                          FROM public.exemplar_drafts x LEFT JOIN public.exemplares e ON e.id = x.published_exemplar_id WHERE x.batch_id = p_lot),
+      'lot', (SELECT jsonb_build_object('status', c.status, 'published_at', c.published_at, 'published_by', c.published_by)
+                FROM public.catalog_batches c WHERE c.id = p_lot))
+  $f$;
+
+  -- ── T12 / T13 ──────────────────────────────────────────────────────
+  v_t := 'T12 un gros lot en plusieurs pages : chacune < 8 s, une notice et ses exemplaires dans la même page, rien publié deux fois ni sauté';
+  DECLARE
+    v_lot2 bigint; v_bloc jsonb; v_par jsonb; v_r jsonb; v_pages int := 0; v_d text := ''; v_max numeric := 0;
+    v_books int := 0; v_ex int := 0; v_upd bigint[]; v_sep int := 0; v_etats text := '';
+  BEGIN
+    v_e := '';
+    v_lot2 := pg_temp.h34_lot(v_src, 'H34G', 200, 10, 101, 130);
+    -- trois mises à jour de notices du fond et un exemplaire fait à la main, dans le lot
+    WITH u AS (
+      INSERT INTO public.book_drafts (titulo, bib_ref, tipo_material, status, published_book_id, owner_library_id, batch_id)
+      SELECT 'H34 fond ' || b.k || ' (revu)', b.bib_ref, 'livro', 'ready', b.id, v_lib, v_lot2 FROM h34_b b WHERE b.k BETWEEN 201 AND 203
+      RETURNING id)
+    SELECT array_agg(id) INTO v_upd FROM u;
+    INSERT INTO public.exemplar_drafts (batch_id, action, status, label_status, target_library_id, target_bib_ref, source_item_code)
+    SELECT v_lot2, 'create', 'ready', 'pending', v_lib, b.bib_ref, 'H34G-MAIN-1' FROM h34_b b WHERE b.k = 204;
+    PERFORM pg_temp.h34_approuver(v_lot2);
+    ANALYZE public.book_drafts; ANALYZE public.exemplar_drafts;
+    -- T13 (référence) : le même lot publié d'un bloc, puis tout annulé
+    BEGIN
+      CREATE OR REPLACE FUNCTION private.fn_h34_page_de_publication() RETURNS jsonb LANGUAGE sql IMMUTABLE
+        SET search_path TO 'pg_catalog' AS $g$ SELECT '{"notices": 100000, "exemplaires": 1000000}'::jsonb $g$;
+      v_r := pg_temp.h34_page(v_lot2);
+      IF NOT (v_r->>'done')::boolean THEN v_e := v_e || ' bloc-pas-fini'; END IF;
+      v_bloc := pg_temp.h34_etat(v_lot2);
+      RAISE NOTICE 'H34-MESURE lot 2 : le même lot d''un bloc (référence) : % ms', v_r->>'ms';
+      RAISE EXCEPTION 'h34-sentinelle';
+    EXCEPTION WHEN raise_exception THEN
+      IF SQLERRM <> 'h34-sentinelle' THEN RAISE; END IF;
+    END;
+    IF (private.fn_h34_page_de_publication()->>'notices')::int <> 60 THEN v_e := v_e || ' borne-pas-restauree'; END IF;
+    -- par pages
+    LOOP
+      v_r := pg_temp.h34_page(v_lot2);
+      v_pages := v_pages + 1;
+      v_max := greatest(v_max, (v_r->>'ms')::numeric);
+      v_d := v_d || ' ' || (v_r->>'ms');
+      v_books := v_books + (v_r->>'books_published')::int;
+      v_ex := v_ex + (v_r->'page'->>'exemplaires')::int;
+      v_etats := v_etats || ' ' || (SELECT status FROM public.catalog_batches WHERE id = v_lot2);
+      -- une notice publiée n'a plus aucun exemplaire rattaché en brouillon : ils sont partis avec elle
+      SELECT count(*) INTO v_n FROM public.exemplar_drafts x JOIN public.book_drafts d ON d.id = x.book_draft_id
+       WHERE d.batch_id = v_lot2 AND d.status = 'published' AND x.status IN ('draft', 'ready');
+      v_sep := v_sep + v_n;
+      IF (v_r->'page'->>'notices')::int > 60 OR ((v_r->'page'->>'exemplaires')::int > 400 AND (v_r->'page'->>'notices')::int > 1) THEN
+        v_e := v_e || ' page-trop-grande(' || (v_r->'page')::text || ')';
+      END IF;
+      EXIT WHEN (v_r->>'done')::boolean OR v_pages >= 20;
+    END LOOP;
+    RAISE NOTICE 'H34-MESURE lot 2 : 203 notices / 2 061 exemplaires en % pages : % ms (la plus longue % ms) ; états :%',
+      v_pages, trim(v_d), v_max, v_etats;
+    IF v_pages <> 6 THEN v_e := v_e || ' pages(' || v_pages || ')'; END IF;
+    IF v_max >= 8000 THEN v_e := v_e || ' page-lente(' || v_max || ')'; END IF;
+    IF v_etats <> ' publishing publishing publishing publishing publishing published' THEN v_e := v_e || ' etats(' || v_etats || ')'; END IF;
+    IF v_sep <> 0 THEN v_e := v_e || ' notice-separee(' || v_sep || ')'; END IF;
+    IF v_books <> 203 OR v_ex <> 2061 THEN v_e := v_e || ' comptes(' || v_books || '/' || v_ex || ')'; END IF;
+    -- rien publié deux fois, rien sauté
+    IF (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot2 AND status <> 'published') <> 0
+       OR (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot2 AND status <> 'published') <> 0 THEN
+      v_e := v_e || ' saute';
+    END IF;
+    IF (SELECT count(DISTINCT published_exemplar_id) FROM public.exemplar_drafts WHERE batch_id = v_lot2) <> 2061
+       OR (SELECT count(*) FROM public.exemplares e WHERE e.id IN (SELECT published_exemplar_id FROM public.exemplar_drafts WHERE batch_id = v_lot2)) <> 2061
+       OR (SELECT count(*) FROM public.exemplares e WHERE e.source_item_code LIKE 'H34G-%') <> 2061
+       OR (SELECT count(DISTINCT published_book_id) FROM public.book_drafts WHERE batch_id = v_lot2) <> 203
+       OR (SELECT count(*) FROM public.books WHERE titulo LIKE 'H34G notice %') <> 200
+       OR (SELECT count(*) FROM public.books WHERE titulo LIKE 'H34 fond % (revu)') <> 3 THEN
+      v_e := v_e || ' deux-fois';
+    END IF;
+    IF v_e = '' THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e||' | pages'||v_d); END IF;
+
+    v_t := 'T13 publié par pages = publié d''un bloc (fonds, notices, exemplaires, brouillons, lot ; colonne par colonne)';
+    v_par := pg_temp.h34_etat(v_lot2);
+    IF v_par = v_bloc THEN v_passed := v_passed+1;
+    ELSE
+      v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : '||(SELECT string_agg(k || '(' || jsonb_array_length(coalesce(v_bloc->k, '[]')) || '/' || jsonb_array_length(coalesce(v_par->k, '[]')) || ')', ' ')
+                                                FROM unnest(ARRAY['fonds', 'notices', 'exemplaires', 'brouillons', 'brouillons_ex']) k
+                                               WHERE v_bloc->k IS DISTINCT FROM v_par->k)
+                                            || CASE WHEN v_bloc->'lot' IS DISTINCT FROM v_par->'lot' THEN ' lot' ELSE '' END);
+    END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T14 à T17 : un lot interrompu, refusé, figé, rouvert, repris ────
+  DECLARE
+    v_lot3 bigint; v_r jsonb; v_hint text; v_av jsonb; v_code text; v_ex bigint; v_bd bigint; v_xd bigint; v_out uuid := gen_random_uuid();
+  BEGIN
+    v_t := 'T14 une page interrompue, puis une page refusée : rien d''écrit par elles, les pages d''avant restent, l''état reste « publishing »';
+    v_e := '';
+    v_lot3 := pg_temp.h34_lot(v_src, 'H34R', 70, 4, 131, 135);   -- 70 notices x 4 + 5 x 2 rapprochés : 2 pages (60, puis 10 et les rapprochés)
+    PERFORM pg_temp.h34_approuver(v_lot3);
+    v_r := pg_temp.h34_page(v_lot3);
+    IF (v_r->>'done')::boolean OR (v_r->>'books_published')::int <> 60 THEN v_e := v_e || ' page1(' || v_r::text || ')'; END IF;
+    v_av := pg_temp.h34_etat(v_lot3);
+    -- (a) la page 2 coupée en route (un délai dépassé, une coupure) : annulée en entier
+    BEGIN
+      v_r := pg_temp.h34_page(v_lot3);
+      RAISE EXCEPTION 'h34-coupure';
+    EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'h34-coupure' THEN RAISE; END IF; END;
+    IF pg_temp.h34_etat(v_lot3) IS DISTINCT FROM v_av THEN v_e := v_e || ' coupure-a-ecrit'; END IF;
+    -- (b) la page 2 refusée : un exemplaire posé entre-temps porte le code d'un rapproché
+    SELECT x.source_item_code INTO v_code FROM public.exemplar_drafts x
+     WHERE x.batch_id = v_lot3 AND x.book_draft_id IS NULL ORDER BY x.id DESC LIMIT 1;
+    INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, source_item_code, circulation_policy)
+    SELECT b.bib_ref, 'H34T-CONFLIT', v_lib, h.id, v_code, 'ambos'
+      FROM h34_b b JOIN public.book_holdings h ON h.book_id = b.id AND h.library_id = v_lib WHERE b.k = 2500
+    RETURNING id INTO v_ex;
+    v_av := pg_temp.h34_etat(v_lot3);
+    BEGIN PERFORM pg_temp.h34_page(v_lot3); v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.publish.source_item_code_taken' THEN v_e := v_e || ' refus(' || coalesce(v_hint, '∅') || ')'; END IF;
+    IF pg_temp.h34_etat(v_lot3) IS DISTINCT FROM v_av THEN v_e := v_e || ' refus-a-ecrit'; END IF;
+    IF (SELECT status FROM public.catalog_batches WHERE id = v_lot3) <> 'publishing'
+       OR (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot3 AND status = 'published') <> 60 THEN
+      v_e := v_e || ' etat-apres-refus';
+    END IF;
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+
+    v_t := 'T15 « publishing » : rien ne s''ajoute, ne se retouche, ne sort ni ne se supprime ; l''état ne se change qu''à la publication';
+    v_e := '';
+    SELECT id INTO v_bd FROM public.book_drafts WHERE batch_id = v_lot3 AND status IN ('draft', 'ready') ORDER BY id LIMIT 1;
+    SELECT id INTO v_xd FROM public.exemplar_drafts WHERE batch_id = v_lot3 AND book_draft_id IS NULL AND status IN ('draft', 'ready') ORDER BY id LIMIT 1;
+    FOR v_x IN SELECT unnest(ARRAY['coord', 'admin']) LOOP
+      PERFORM set_config('request.jwt.claims', json_build_object('sub', CASE v_x WHEN 'coord' THEN v_coord ELSE v_admin END, 'role', 'authenticated')::text, true);
+      EXECUTE 'SET LOCAL ROLE authenticated';
+      BEGIN UPDATE public.book_drafts SET titulo = titulo || ' (retouche)' WHERE id = v_bd; v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' ' || v_x || '-retouche(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN UPDATE public.exemplar_drafts SET shelf_location = 'Z' WHERE id = v_xd; v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' ' || v_x || '-retouche-ex(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN UPDATE public.book_drafts SET batch_id = NULL WHERE id = v_bd; v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' ' || v_x || '-sortie(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN INSERT INTO public.book_drafts (titulo, owner_library_id, status, batch_id) VALUES ('H34 ajout', v_lib, 'draft', v_lot3); v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' ' || v_x || '-ajout(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN DELETE FROM public.exemplar_drafts WHERE id = v_xd; v_hint := CASE WHEN FOUND THEN 'accepte' ELSE 'rien' END;
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint NOT IN ('error.batch.publishing_locked', 'rien') THEN v_e := v_e || ' ' || v_x || '-suppression(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN UPDATE public.catalog_batches SET status = 'open' WHERE id = v_lot3; v_hint := CASE WHEN FOUND THEN 'accepte' ELSE 'rien' END;
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint NOT IN ('error.batch.publishing_locked', 'rien') THEN v_e := v_e || ' ' || v_x || '-etat(' || coalesce(v_hint, '∅') || ')'; END IF;
+      BEGIN PERFORM public.fn_batch_assign_bib_refs(v_lot3, true); v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint = 'accepte' THEN v_e := v_e || ' ' || v_x || '-cotes'; END IF;
+      BEGIN PERFORM public.publish_book_draft(v_bd); v_hint := 'accepte';
+      EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+      IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' ' || v_x || '-publier-seul(' || coalesce(v_hint, '∅') || ')'; END IF;
+      EXECUTE 'RESET ROLE';
+    END LOOP;
+    PERFORM set_config('request.jwt.claims', '', true);
+    -- le statut « publishing » ne se pose ni ne se lève à la main, même hors API
+    BEGIN UPDATE public.catalog_batches SET status = 'closed' WHERE id = v_lot3; v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' etat-postgres(' || coalesce(v_hint, '∅') || ')'; END IF;
+    BEGIN INSERT INTO public.catalog_batches (name, library_id, status) VALUES ('H34 faux', v_lib, 'publishing'); v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.batch.publishing_locked' THEN v_e := v_e || ' insert-publishing(' || coalesce(v_hint, '∅') || ')'; END IF;
+    IF (SELECT titulo FROM public.book_drafts WHERE id = v_bd) LIKE '%(retouche)%'
+       OR NOT EXISTS (SELECT 1 FROM public.exemplar_drafts WHERE id = v_xd AND shelf_location IS DISTINCT FROM 'Z')
+       OR (SELECT status FROM public.catalog_batches WHERE id = v_lot3) <> 'publishing' THEN
+      v_e := v_e || ' a-change';
+    END IF;
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+
+    v_t := 'T16 un nouveau tour rouvre le lot (« open ») : retouche permise, publication refusée jusqu''à l''approbation, pages publiées intactes';
+    v_e := '';
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    v_r := public.fn_batch_review_request(v_lot3, 'H34 : corriger avant la page suivante');
+    EXECUTE 'RESET ROLE';
+    IF (SELECT status FROM public.catalog_batches WHERE id = v_lot3) <> 'open' THEN v_e := v_e || ' pas-rouvert'; END IF;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    BEGIN UPDATE public.book_drafts SET notas = 'H34 retouchée après réouverture' WHERE id = v_bd; v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    EXECUTE 'RESET ROLE';
+    IF v_hint <> 'accepte' THEN v_e := v_e || ' retouche(' || coalesce(v_hint, '∅') || ')'; END IF;
+    BEGIN PERFORM pg_temp.h34_page(v_lot3); v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    IF v_hint IS DISTINCT FROM 'error.publish.review_required' THEN v_e := v_e || ' publier-sans-revue(' || coalesce(v_hint, '∅') || ')'; END IF;
+    IF (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot3 AND status = 'published') <> 60 THEN v_e := v_e || ' pages-touchees'; END IF;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    PERFORM public.fn_batch_review_verdict((v_r->>'review_id')::bigint, 'approved', NULL);
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+
+    v_t := 'T17 la reprise : la page refusée, une fois la cause levée, se publie ; tout publié une fois, rien sauté';
+    v_e := '';
+    DELETE FROM public.exemplares WHERE id = v_ex;             -- la cause du refus, levée (geste d'administration)
+    v_r := pg_temp.h34_page(v_lot3);
+    IF NOT (v_r->>'done')::boolean OR (v_r->>'books_published')::int <> 10 OR (v_r->>'exemplars_published')::int <> 10 THEN
+      v_e := v_e || ' reprise(' || v_r::text || ')';
+    END IF;
+    IF (SELECT status FROM public.catalog_batches WHERE id = v_lot3) <> 'published'
+       OR (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lot3 AND status <> 'published') <> 0
+       OR (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot3 AND status <> 'published') <> 0
+       OR (SELECT count(*) FROM public.exemplares WHERE source_item_code LIKE 'H34R-%') <> 290
+       OR (SELECT count(DISTINCT published_exemplar_id) FROM public.exemplar_drafts WHERE batch_id = v_lot3) <> 290
+       OR (SELECT count(*) FROM public.books WHERE titulo LIKE 'H34R notice %') <> 70
+       OR (SELECT b.notas FROM public.books b JOIN public.book_drafts d ON d.published_book_id = b.id WHERE d.id = v_bd) IS DISTINCT FROM 'H34 retouchée après réouverture' THEN
+      v_e := v_e || ' fin';
+    END IF;
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+
+    v_t := 'T18 droits sur un lot « publishing » ; aides fermées';
+    v_e := '';
+    -- un lot en cours de publication (on en refait un, deux pages)
+    v_lot3 := pg_temp.h34_lot(v_src, 'H34D', 61, 1, 0, -1);
+    PERFORM pg_temp.h34_approuver(v_lot3);
+    v_r := pg_temp.h34_page(v_lot3);
+    IF (SELECT status FROM public.catalog_batches WHERE id = v_lot3) <> 'publishing' THEN v_e := v_e || ' pas-publishing'; END IF;
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_out, 'role', 'authenticated')::text, true);
+    EXECUTE 'SET LOCAL ROLE authenticated';
+    BEGIN PERFORM public.publish_catalog_batch(v_lot3); v_hint := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
+    EXECUTE 'RESET ROLE';
+    IF v_hint IS DISTINCT FROM 'error.catalog.staff_only' THEN v_e := v_e || ' sans-role(' || coalesce(v_hint, '∅') || ')'; END IF;
+    PERFORM set_config('request.jwt.claims', '', true);
+    IF has_function_privilege('authenticated', 'private.fn_h34_page_de_publication()', 'EXECUTE')
+       OR has_function_privilege('authenticated', 'public.tg_h34_lot_en_publication()', 'EXECUTE')
+       OR has_function_privilege('authenticated', 'public.tg_h34_statut_publication()', 'EXECUTE')
+       OR NOT has_function_privilege('authenticated', 'public.publish_catalog_batch(bigint)', 'EXECUTE') THEN
+      v_e := v_e || ' droits';
+    END IF;
+    v_r := pg_temp.h34_page(v_lot3);
+    IF NOT (v_r->>'done')::boolean OR (v_r->>'books_published')::int <> 1 THEN v_e := v_e || ' fin(' || v_r::text || ')'; END IF;
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T19 ─────────────────────────────────────────────────────────────
+  v_t := 'T19 un petit lot (une page) : comme avant — publié d''un appel, jamais « publishing », mêmes comptes';
+  DECLARE v_lot4 bigint; v_r jsonb;
+  BEGIN
+    v_e := '';
+    v_lot4 := pg_temp.h34_lot(v_src, 'H34P', 3, 2, 140, 140);
+    PERFORM pg_temp.h34_approuver(v_lot4);
+    v_r := pg_temp.h34_page(v_lot4);
+    IF NOT (v_r->>'done')::boolean OR (v_r->>'books_published')::int <> 3 OR (v_r->>'authors_published')::int <> 0
+       OR (v_r->>'exemplars_published')::int <> 2
+       OR (v_r->'remaining') <> '{"books": 0, "authors": 0, "exemplars": 0}'::jsonb
+       OR (v_r->'page'->>'notices')::int <> 3 OR (v_r->'page'->>'exemplaires')::int <> 8 THEN
+      v_e := v_e || ' reponse(' || v_r::text || ')';
+    END IF;
+    IF (SELECT status FROM public.catalog_batches WHERE id = v_lot4) <> 'published'
+       OR (SELECT published_at FROM public.catalog_batches WHERE id = v_lot4) IS NULL THEN
+      v_e := v_e || ' etat';
+    END IF;
+    IF v_e = '' THEN v_passed := v_passed+1; ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_e); END IF;
+  EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'H34-PUBLIER-UN-GROS-LOT OK : %/% tests passés', v_passed, v_passed;

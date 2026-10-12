@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografia in olandese",
   "catalogacao.bio.titleIn.el": "Biografia in greco",
   "error.import.page_too_large": "Al massimo 200 righe per chiamata: selezionane meno.",
-  "importacoes.fila.pagesAvantRefus": "Prima di questo rifiuto, {created, plural, one {è stata creata # bozza} other {sono state create # bozze}} dalle pagine già inviate."
+  "importacoes.fila.pagesAvantRefus": "Prima di questo rifiuto, {created, plural, one {è stata creata # bozza} other {sono state create # bozze}} dalle pagine già inviate.",
+  "catalogacao.batch.status.publishing": "Pubblicazione in corso",
+  "catalogacao.batch.publication.resume": "Riprendi la pubblicazione",
+  "catalogacao.batch.publication.resumeConfirm": "Riprendere la pubblicazione di questo lotto? Le pagine già pubblicate restano tali; anche il resto è irreversibile.",
+  "catalogacao.batch.publication.progress": "Pubblicazione in corso: pagina {page}, {notices, plural, one {# scheda pubblicata} other {# schede pubblicate}} su {total}…",
+  "catalogacao.batch.publication.donePages": "Lotto pubblicato in {pages} pagine: {notices, plural, one {# scheda} other {# schede}} e {exemplaires, plural, one {# esemplare} other {# esemplari}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Prima di questo rifiuto, {pages, plural, one {è stata pubblicata # pagina} other {sono state pubblicate # pagine}} ({notices, plural, one {# scheda} other {# schede}}, {exemplaires, plural, one {# esemplare} other {# esemplari}}): restano pubblicate.",
+  "catalogacao.batch.publication.howToResume": "Il lotto resta in «Pubblicazione in corso»: «Riprendi la pubblicazione» ritenta la pagina rifiutata. Per correggere una bozza serve un nuovo giro di revisione (l’amministrazione della rete riapre la revisione).",
+  "error.batch.publishing_locked": "Questo lotto è in pubblicazione: non vi si aggiunge né vi si ritocca nulla senza un nuovo giro di revisione.",
+  "error.batch.publication_busy": "Questo lotto è già in pubblicazione da un’altra chiamata (un’altra scheda o un’altra persona): aspetta che finisca, poi ricarica la pagina."
 }

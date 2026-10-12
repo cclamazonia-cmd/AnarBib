@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografia en neerlandès",
   "catalogacao.bio.titleIn.el": "Biografia en grec",
   "error.import.page_too_large": "Com a màxim 200 línies per crida: selecciona’n menys.",
-  "importacoes.fila.pagesAvantRefus": "Abans d’aquest rebuig, {created, plural, one {s’ha creat # esborrany} other {s’han creat # esborranys}} amb les pàgines ja enviades."
+  "importacoes.fila.pagesAvantRefus": "Abans d’aquest rebuig, {created, plural, one {s’ha creat # esborrany} other {s’han creat # esborranys}} amb les pàgines ja enviades.",
+  "catalogacao.batch.status.publishing": "Publicació en curs",
+  "catalogacao.batch.publication.resume": "Reprendre la publicació",
+  "catalogacao.batch.publication.resumeConfirm": "Vols reprendre la publicació d’aquest lot? Les pàgines ja publicades continuen publicades; la resta tampoc no es pot desfer.",
+  "catalogacao.batch.publication.progress": "Publicació en curs: pàgina {page}, {notices, plural, one {# fitxa publicada} other {# fitxes publicades}} de {total}…",
+  "catalogacao.batch.publication.donePages": "Lot publicat en {pages} pàgines: {notices, plural, one {# fitxa} other {# fitxes}} i {exemplaires, plural, one {# exemplar} other {# exemplars}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Abans d’aquest rebuig, {pages, plural, one {s’ha publicat # pàgina} other {s’han publicat # pàgines}} ({notices, plural, one {# fitxa} other {# fitxes}}, {exemplaires, plural, one {# exemplar} other {# exemplars}}): continuen publicades.",
+  "catalogacao.batch.publication.howToResume": "El lot continua en «Publicació en curs»: «Reprendre la publicació» torna a intentar la pàgina rebutjada. Per corregir un esborrany cal una nova volta de revisió (l’administració de la xarxa reobre la revisió).",
+  "error.batch.publishing_locked": "Aquest lot s’està publicant: no s’hi afegeix ni s’hi retoca res sense una nova volta de revisió.",
+  "error.batch.publication_busy": "Aquest lot ja s’està publicant des d’una altra crida (una altra pestanya o una altra persona): espera que acabi i després torna a carregar la pàgina."
 }

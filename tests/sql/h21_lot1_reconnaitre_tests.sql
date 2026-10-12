@@ -421,7 +421,8 @@ BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     PERFORM public.fn_batch_review_verdict((v_res->>'review_id')::bigint, 'approved', NULL);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
-    PERFORM public.publish_catalog_batch(v_lotp);
+    -- H34 lot 2 (IMP-36) : 64 notices, deux pages
+    LOOP EXIT WHEN coalesce((public.publish_catalog_batch(v_lotp)->>'done')::boolean, true); END LOOP;
     IF (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lotp AND status = 'published') <> 64 THEN
       RAISE EXCEPTION 'decor : % notice(s) publiee(s) sur 64', (SELECT count(*) FROM public.book_drafts WHERE batch_id = v_lotp AND status = 'published');
     END IF;

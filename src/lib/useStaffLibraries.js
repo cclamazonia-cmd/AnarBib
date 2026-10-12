@@ -190,9 +190,12 @@ export function brouillonsDAutresBibliotheques(batch, lignes) {
 // B30 : rouvrir la révision d'un lot importé, approuvé et encore ouvert —
 // l'administration seule (un nouveau tour : la publication est de nouveau
 // bloquée ; c'est la sortie qu'annonce le refus de réattribution sous
-// approbation).
+// approbation). H34 lot 2 (IMP-36) : un lot en cours de publication par pages
+// (« publishing ») aussi — le nouveau tour le rouvre, ses pages publiées le
+// restent ; c'est la seule façon d'en retoucher un brouillon.
 export function peutRouvrirRevision(review, batch, isNetworkAdmin) {
-  return !!isNetworkAdmin && !!review?.imported && review.status === 'approved' && batch?.status === 'open';
+  return !!isNetworkAdmin && !!review?.imported && review.status === 'approved'
+    && (batch?.status === 'open' || batch?.status === 'publishing');
 }
 
 // Nom de la bibliothèque DU LOT : nom court, sinon nom ; un lot sans

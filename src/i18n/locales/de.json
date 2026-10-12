@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografie auf Niederländisch",
   "catalogacao.bio.titleIn.el": "Biografie auf Griechisch",
   "error.import.page_too_large": "Höchstens 200 Zeilen pro Aufruf: wähle weniger aus.",
-  "importacoes.fila.pagesAvantRefus": "Vor dieser Ablehnung {created, plural, one {wurde # Entwurf} other {wurden # Entwürfe}} durch die bereits gesendeten Seiten angelegt."
+  "importacoes.fila.pagesAvantRefus": "Vor dieser Ablehnung {created, plural, one {wurde # Entwurf} other {wurden # Entwürfe}} durch die bereits gesendeten Seiten angelegt.",
+  "catalogacao.batch.status.publishing": "Veröffentlichung läuft",
+  "catalogacao.batch.publication.resume": "Veröffentlichung fortsetzen",
+  "catalogacao.batch.publication.resumeConfirm": "Die Veröffentlichung dieses Stapels fortsetzen? Bereits veröffentlichte Seiten bleiben veröffentlicht; auch der Rest lässt sich nicht rückgängig machen.",
+  "catalogacao.batch.publication.progress": "Veröffentlichung läuft: Seite {page}, {notices, plural, one {# Datensatz veröffentlicht} other {# Datensätze veröffentlicht}} von {total}…",
+  "catalogacao.batch.publication.donePages": "Stapel in {pages} Seiten veröffentlicht: {notices, plural, one {# Datensatz} other {# Datensätze}} und {exemplaires, plural, one {# Exemplar} other {# Exemplare}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Vor dieser Ablehnung {pages, plural, one {wurde # Seite} other {wurden # Seiten}} veröffentlicht ({notices, plural, one {# Datensatz} other {# Datensätze}}, {exemplaires, plural, one {# Exemplar} other {# Exemplare}}): sie bleiben veröffentlicht.",
+  "catalogacao.batch.publication.howToResume": "Der Stapel bleibt „Veröffentlichung läuft“: „Veröffentlichung fortsetzen“ versucht die abgelehnte Seite erneut. Um einen Entwurf zu korrigieren, braucht es eine neue Prüfrunde (die Netzwerkverwaltung öffnet die Prüfung wieder).",
+  "error.batch.publishing_locked": "Dieser Stapel wird gerade veröffentlicht: Ohne neue Prüfrunde lässt sich nichts hinzufügen oder ändern.",
+  "error.batch.publication_busy": "Dieser Stapel wird bereits durch einen anderen Aufruf veröffentlicht (anderer Tab oder andere Person): Warte, bis er fertig ist, und lade dann die Seite neu."
 }

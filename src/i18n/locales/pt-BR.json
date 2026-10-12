@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografia em neerlandês",
   "catalogacao.bio.titleIn.el": "Biografia em grego",
   "error.import.page_too_large": "No máximo 200 linhas por chamada: selecione menos.",
-  "importacoes.fila.pagesAvantRefus": "Antes desta recusa, {created, plural, one {# rascunho foi criado} other {# rascunhos foram criados}} pelas páginas já enviadas."
+  "importacoes.fila.pagesAvantRefus": "Antes desta recusa, {created, plural, one {# rascunho foi criado} other {# rascunhos foram criados}} pelas páginas já enviadas.",
+  "catalogacao.batch.status.publishing": "Publicação em andamento",
+  "catalogacao.batch.publication.resume": "Retomar a publicação",
+  "catalogacao.batch.publication.resumeConfirm": "Retomar a publicação deste lote? As páginas já publicadas continuam publicadas; o restante também é irreversível.",
+  "catalogacao.batch.publication.progress": "Publicação em andamento: página {page}, {notices, plural, one {# ficha publicada} other {# fichas publicadas}} de {total}…",
+  "catalogacao.batch.publication.donePages": "Lote publicado em {pages} páginas: {notices, plural, one {# ficha} other {# fichas}} e {exemplaires, plural, one {# exemplar} other {# exemplares}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Antes desta recusa, {pages, plural, one {# página foi publicada} other {# páginas foram publicadas}} ({notices, plural, one {# ficha} other {# fichas}}, {exemplaires, plural, one {# exemplar} other {# exemplares}}): elas continuam publicadas.",
+  "catalogacao.batch.publication.howToResume": "O lote continua em “Publicação em andamento”: “Retomar a publicação” tenta de novo a página recusada. Para corrigir um rascunho, é preciso uma nova rodada de revisão (a administração da rede reabre a revisão).",
+  "error.batch.publishing_locked": "Este lote está em publicação: nada é acrescentado nem retocado sem uma nova rodada de revisão.",
+  "error.batch.publication_busy": "Este lote já está sendo publicado por outra chamada (outra aba ou outra pessoa): espere terminar e depois recarregue a página."
 }

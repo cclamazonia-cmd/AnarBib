@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biography in Dutch",
   "catalogacao.bio.titleIn.el": "Biography in Greek",
   "error.import.page_too_large": "At most 200 lines per call: select fewer.",
-  "importacoes.fila.pagesAvantRefus": "Before this refusal, {created, plural, one {# draft was created} other {# drafts were created}} by the pages already sent."
+  "importacoes.fila.pagesAvantRefus": "Before this refusal, {created, plural, one {# draft was created} other {# drafts were created}} by the pages already sent.",
+  "catalogacao.batch.status.publishing": "Publication in progress",
+  "catalogacao.batch.publication.resume": "Resume publication",
+  "catalogacao.batch.publication.resumeConfirm": "Resume publishing this batch? The pages already published stay published; the rest cannot be undone either.",
+  "catalogacao.batch.publication.progress": "Publishing: page {page}, {notices, plural, one {# record published} other {# records published}} out of {total}…",
+  "catalogacao.batch.publication.donePages": "Batch published in {pages} pages: {notices, plural, one {# record} other {# records}} and {exemplaires, plural, one {# copy} other {# copies}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Before this refusal, {pages, plural, one {# page was published} other {# pages were published}} ({notices, plural, one {# record} other {# records}}, {exemplaires, plural, one {# copy} other {# copies}}): they stay published.",
+  "catalogacao.batch.publication.howToResume": "The batch stays “Publication in progress”: “Resume publication” retries the refused page. To fix a draft, a new review round is needed (the network administration reopens the review).",
+  "error.batch.publishing_locked": "This batch is being published: nothing can be added to it or edited without a new review round.",
+  "error.batch.publication_busy": "This batch is already being published by another call (another tab or another person): wait for it to finish, then reload the page."
 }

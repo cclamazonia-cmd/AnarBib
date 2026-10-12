@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Βιογραφία στα ολλανδικά",
   "catalogacao.bio.titleIn.el": "Βιογραφία στα ελληνικά",
   "error.import.page_too_large": "Το πολύ 200 γραμμές ανά κλήση: επίλεξε λιγότερες.",
-  "importacoes.fila.pagesAvantRefus": "Πριν από αυτή την άρνηση, {created, plural, one {δημιουργήθηκε # πρόχειρο} other {δημιουργήθηκαν # πρόχειρα}} από τις σελίδες που έχουν ήδη σταλεί."
+  "importacoes.fila.pagesAvantRefus": "Πριν από αυτή την άρνηση, {created, plural, one {δημιουργήθηκε # πρόχειρο} other {δημιουργήθηκαν # πρόχειρα}} από τις σελίδες που έχουν ήδη σταλεί.",
+  "catalogacao.batch.status.publishing": "Δημοσίευση σε εξέλιξη",
+  "catalogacao.batch.publication.resume": "Συνέχιση της δημοσίευσης",
+  "catalogacao.batch.publication.resumeConfirm": "Συνέχιση της δημοσίευσης αυτής της παρτίδας; Οι σελίδες που έχουν ήδη δημοσιευτεί παραμένουν· ούτε το υπόλοιπο αναιρείται.",
+  "catalogacao.batch.publication.progress": "Δημοσίευση σε εξέλιξη: σελίδα {page}, {notices, plural, one {# εγγραφή δημοσιεύτηκε} other {# εγγραφές δημοσιεύτηκαν}} από {total}…",
+  "catalogacao.batch.publication.donePages": "Η παρτίδα δημοσιεύτηκε σε {pages} σελίδες: {notices, plural, one {# εγγραφή} other {# εγγραφές}} και {exemplaires, plural, one {# αντίτυπο} other {# αντίτυπα}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Πριν από αυτή την άρνηση, {pages, plural, one {δημοσιεύτηκε # σελίδα} other {δημοσιεύτηκαν # σελίδες}} ({notices, plural, one {# εγγραφή} other {# εγγραφές}}, {exemplaires, plural, one {# αντίτυπο} other {# αντίτυπα}}): παραμένουν δημοσιευμένες.",
+  "catalogacao.batch.publication.howToResume": "Η παρτίδα παραμένει «Δημοσίευση σε εξέλιξη»: η «Συνέχιση της δημοσίευσης» ξαναδοκιμάζει τη σελίδα που απορρίφθηκε. Για να διορθώσεις ένα πρόχειρο, χρειάζεται νέος γύρος αναθεώρησης (η διαχείριση του δικτύου ανοίγει ξανά την αναθεώρηση).",
+  "error.batch.publishing_locked": "Αυτή η παρτίδα δημοσιεύεται: τίποτα δεν προστίθεται ούτε διορθώνεται χωρίς νέο γύρο αναθεώρησης.",
+  "error.batch.publication_busy": "Αυτή η παρτίδα δημοσιεύεται ήδη από άλλη κλήση (άλλη καρτέλα ή άλλο άτομο): περίμενε να τελειώσει και μετά φόρτωσε ξανά τη σελίδα."
 }

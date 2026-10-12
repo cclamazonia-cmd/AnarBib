@@ -30,6 +30,7 @@ import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import { publierLotParPages } from '@/lib/publicationParPages';
 
 // ── Storage keys ────────────────────────────────────────────
 const MODE_KEY = 'catalogacaoMode';
@@ -611,7 +612,10 @@ export default function CatalogacaoPage() {
 // cancelled | archived (CHECK catalog_batches_status_check, elargie le
 // 29/08/2026) ; « open » et « archived » ont leur propre section, seuls les
 // autres passent par la pastille.
+// H34 lot 2 (IMP-36) : « publishing » = publication par pages en cours ; le lot
+// reste dans la section des lots ouverts, avec « Reprendre la publication ».
 const BATCH_STATUS_LABEL_IDS = {
+  publishing: 'catalogacao.batch.status.publishing',
   published: 'catalogacao.published',
   closed: 'catalogacao.batch.status.closed',
   cancelled: 'catalogacao.cancelled',
@@ -1003,15 +1007,43 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     }
   }
 
-  async function publishBatch(id) {
-    if (!(await confirmer({ message: t({id:'catalogacao.publishBatchConfirm'}), confirmLabel: t({ id: 'confirm.action.publishBatch' }), tone: 'danger' }))) return;
+  // H34 lot 2 (REGISTRE IMP-36) : la base publie au plus une page par appel
+  // (60 notices et 400 exemplaires ; une notice et ses exemplaires ne se
+  // séparent jamais) ; le geste enchaîne les appels jusqu'au bout et montre
+  // l'avancement. Une page refusée n'écrit rien : on dit ce qui a été publié,
+  // puis le refus, puis comment reprendre (le lot reste « publishing »).
+  const [publication, setPublication] = useState(null);   // batch_id en cours
+  async function publishBatch(id, reprise = false) {
+    const confirmId = reprise ? 'catalogacao.batch.publication.resumeConfirm' : 'catalogacao.publishBatchConfirm';
+    if (!(await confirmer({ message: t({ id: confirmId }), confirmLabel: t({ id: 'confirm.action.publishBatch' }), tone: 'danger' }))) return;
+    setPublication(id);
     try {
-      const { error } = await supabase.rpc('publish_catalog_batch', { p_batch_id: Number(id) });
-      if (error) throw error;
-      confirmSaved(t({ id: 'catalogacao.batch.publishedDone' }));
+      const res = await publierLotParPages(async () => {
+        const { data, error } = await supabase.rpc('publish_catalog_batch', { p_batch_id: Number(id) });
+        if (error) throw error;
+        return data;
+      }, {
+        surPage: ({ page, notices, total }) => {
+          setMsg({ text: t({ id: 'catalogacao.batch.publication.progress' }, { page, notices, total: Math.max(total, notices) }), kind: 'info' });
+        },
+      });
+      if (res.ok) {
+        confirmSaved(res.pages > 1
+          ? t({ id: 'catalogacao.batch.publication.donePages' }, { pages: res.pages, notices: res.notices, exemplaires: res.exemplaires })
+          : t({ id: 'catalogacao.batch.publishedDone' }));
+      } else {
+        const refus = t({ id: 'common.errorPrefix' }, { message: localizeError(res.erreur, t) });
+        const parts = [];
+        if (res.pages > 0) {
+          parts.push(t({ id: 'catalogacao.batch.publication.beforeRefusal' }, { pages: res.pages, notices: res.notices, exemplaires: res.exemplaires }));
+        }
+        parts.push(refus);
+        if (res.pages > 0 || reprise) parts.push(t({ id: 'catalogacao.batch.publication.howToResume' }));
+        setMsg({ text: parts.join(' '), kind: 'error' });
+      }
       onRefresh();
-    } catch (err) {
-      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
+    } finally {
+      setPublication(null);
     }
   }
 
@@ -1115,8 +1147,11 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
     }
   }
 
-  const openBatches = batches.filter(b => b.status === 'open');
-  const closedBatches = batches.filter(b => b.status !== 'open' && b.status !== 'archived');
+  // H34 lot 2 : un lot « publishing » (publication par pages en cours) reste
+  // parmi les ouverts — on y reprend la publication.
+  const enPublication = (b) => b.status === 'publishing';
+  const openBatches = batches.filter(b => b.status === 'open' || enPublication(b));
+  const closedBatches = batches.filter(b => b.status !== 'open' && !enPublication(b) && b.status !== 'archived');
   const archivedBatches = batches.filter(b => b.status === 'archived');
 
   function statusLabel(status) {
@@ -1385,8 +1420,13 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
             </thead>
             <tbody>
               {openBatches.map(b => (
-                <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,.06)' }}>
-                  <td style={{ padding: '8px' }}>{b.name}</td>
+                <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,.06)' }} data-batch-status={b.status}>
+                  <td style={{ padding: '8px' }}>
+                    {b.name}
+                    {enPublication(b) && (
+                      <span className="cat-pill warn" data-publishing="1" style={{ marginLeft: 6 }}>{statusLabel(b.status)}</span>
+                    )}
+                  </td>
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
@@ -1415,7 +1455,14 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                         )}
                       </>
                     )}
-                    {peutModifier(b, isCoord) && (
+                    {/* H34 lot 2 : pendant « publishing », rien ne se retouche (la base
+                        refuse) — seule la reprise de la publication reste. */}
+                    {enPublication(b) && peutModifier(b) && (
+                      <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                        disabled={publication != null}
+                        onClick={() => publishBatch(b.id, true)}>{t({ id: 'catalogacao.batch.publication.resume' })}</button>
+                    )}
+                    {!enPublication(b) && peutModifier(b, isCoord) && (
                       <>
                         <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                           onClick={() => openBibRefs(b)}>{t({id:'catalogacao.batch.bibrefs'})}</button>
@@ -1423,14 +1470,14 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                           onClick={() => openRubrics(b)}>{t({id:'catalogacao.batch.rubrics'})}</button>
                       </>
                     )}
-                    {isNetworkAdmin && (
+                    {isNetworkAdmin && !enPublication(b) && (
                       <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                         onClick={() => setReassign({ batch: b, libraryId: b.library_id || '' })}>{t({id:'catalogacao.batch.reassign'})}</button>
                     )}
-                    {peutModifier(b) && (
+                    {!enPublication(b) && peutModifier(b) && (
                       <>
                         <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
-                          disabled={reviewLocked(b)}
+                          disabled={reviewLocked(b) || publication != null}
                           title={!reviewLocked(b) ? undefined
                             : ajoutsApresRevision(reviews[b.id]) > 0
                               ? t({id:'catalogacao.batch.review.afterReview'}, { n: ajoutsApresRevision(reviews[b.id]) })
@@ -1440,7 +1487,7 @@ function BatchesPanel({ batches, onRefresh, isCoord, isNetworkAdmin }) {
                           onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>
                       </>
                     )}
-                    {coordonne(b) && estVide(b) && (
+                    {!enPublication(b) && coordonne(b) && estVide(b) && (
                       <button className="ab-button ab-button--ghost" style={{ marginLeft: 6, fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
                         onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
                     )}

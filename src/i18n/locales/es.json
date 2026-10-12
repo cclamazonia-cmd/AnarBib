@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografía en neerlandés",
   "catalogacao.bio.titleIn.el": "Biografía en griego",
   "error.import.page_too_large": "Como máximo 200 líneas por llamada: selecciona menos.",
-  "importacoes.fila.pagesAvantRefus": "Antes de este rechazo, {created, plural, one {se creó # borrador} other {se crearon # borradores}} con las páginas ya enviadas."
+  "importacoes.fila.pagesAvantRefus": "Antes de este rechazo, {created, plural, one {se creó # borrador} other {se crearon # borradores}} con las páginas ya enviadas.",
+  "catalogacao.batch.status.publishing": "Publicación en curso",
+  "catalogacao.batch.publication.resume": "Reanudar la publicación",
+  "catalogacao.batch.publication.resumeConfirm": "¿Reanudar la publicación de este lote? Las páginas ya publicadas siguen publicadas; lo que falta tampoco se puede deshacer.",
+  "catalogacao.batch.publication.progress": "Publicación en curso: página {page}, {notices, plural, one {# registro publicado} other {# registros publicados}} de {total}…",
+  "catalogacao.batch.publication.donePages": "Lote publicado en {pages} páginas: {notices, plural, one {# registro} other {# registros}} y {exemplaires, plural, one {# ejemplar} other {# ejemplares}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Antes de este rechazo, {pages, plural, one {se publicó # página} other {se publicaron # páginas}} ({notices, plural, one {# registro} other {# registros}}, {exemplaires, plural, one {# ejemplar} other {# ejemplares}}): siguen publicadas.",
+  "catalogacao.batch.publication.howToResume": "El lote sigue en «Publicación en curso»: «Reanudar la publicación» vuelve a intentar la página rechazada. Para corregir un borrador hace falta una nueva vuelta de revisión (la administración de la red reabre la revisión).",
+  "error.batch.publishing_locked": "Este lote se está publicando: no se le añade ni se retoca nada sin una nueva vuelta de revisión.",
+  "error.batch.publication_busy": "Este lote ya se está publicando desde otra llamada (otra pestaña u otra persona): espera a que termine y luego recarga la página."
 }

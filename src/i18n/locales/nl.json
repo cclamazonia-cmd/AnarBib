@@ -7544,5 +7544,14 @@
   "catalogacao.bio.titleIn.nl": "Biografie in het Nederlands",
   "catalogacao.bio.titleIn.el": "Biografie in het Grieks",
   "error.import.page_too_large": "Hoogstens 200 regels per aanroep: selecteer er minder.",
-  "importacoes.fila.pagesAvantRefus": "Vóór deze weigering {created, plural, one {is # concept} other {zijn # concepten}} aangemaakt door de al verzonden pagina’s."
+  "importacoes.fila.pagesAvantRefus": "Vóór deze weigering {created, plural, one {is # concept} other {zijn # concepten}} aangemaakt door de al verzonden pagina’s.",
+  "catalogacao.batch.status.publishing": "Publicatie bezig",
+  "catalogacao.batch.publication.resume": "Publicatie hervatten",
+  "catalogacao.batch.publication.resumeConfirm": "De publicatie van dit lot hervatten? Al gepubliceerde pagina’s blijven gepubliceerd; ook de rest kan niet ongedaan worden gemaakt.",
+  "catalogacao.batch.publication.progress": "Publicatie bezig: pagina {page}, {notices, plural, one {# fiche gepubliceerd} other {# fiches gepubliceerd}} van {total}…",
+  "catalogacao.batch.publication.donePages": "Lot gepubliceerd in {pages} pagina’s: {notices, plural, one {# fiche} other {# fiches}} en {exemplaires, plural, one {# exemplaar} other {# exemplaren}}.",
+  "catalogacao.batch.publication.beforeRefusal": "Vóór deze weigering {pages, plural, one {is # pagina} other {zijn # pagina’s}} gepubliceerd ({notices, plural, one {# fiche} other {# fiches}}, {exemplaires, plural, one {# exemplaar} other {# exemplaren}}): die blijven gepubliceerd.",
+  "catalogacao.batch.publication.howToResume": "Het lot blijft op „Publicatie bezig”: „Publicatie hervatten” probeert de geweigerde pagina opnieuw. Om een concept te verbeteren is een nieuwe beoordelingsronde nodig (het netwerkbeheer heropent de beoordeling).",
+  "error.batch.publishing_locked": "Dit lot wordt gepubliceerd: er wordt niets aan toegevoegd of aan veranderd zonder een nieuwe beoordelingsronde.",
+  "error.batch.publication_busy": "Dit lot wordt al gepubliceerd door een andere aanroep (ander tabblad of iemand anders): wacht tot die klaar is en laad dan de pagina opnieuw."
 }
