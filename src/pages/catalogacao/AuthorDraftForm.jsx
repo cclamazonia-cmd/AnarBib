@@ -130,6 +130,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     preferred_name: '', sort_name: '', biography: '', birth_year: '', death_year: '',
     country: '', writing_language: '', name_lang: '', source_kind: '', source_label: '', source_url: '',
     viaf_id: '', isni: '', wikidata_id: '', photo_object_path: '', notes: '',
+    variant_forms: null,
   };
 
   function f(k) { return form[k] || ''; }
@@ -294,6 +295,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       viaf_id: r.viaf_id || '',
       isni: r.isni || '',
       wikidata_id: r.wikidata_id || '',
+      // AUT-VAR : sans cette ligne, rouvrir une fiche puis l'enregistrer envoyait
+      // variant_forms = null, et la publication effaçait les graphies Wikidata.
+      variant_forms: r.variant_forms || null,
       photo_object_path: r.photo_object_path || '',
       notes: r.notes || '',
     });

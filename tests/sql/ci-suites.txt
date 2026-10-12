@@ -783,3 +783,6 @@ tests/sql/b39_fixtures_etiquetees_tests.sql
 # H33 (12/10/2026) : « Rapprocher » et « Promouvoir » un gros fichier sous 8 s — le constat et les écritures en une passe
 # (ingest.fn_h33_juger_exemplaires) ; mêmes verdicts que la boucle, ordre compris, puis mesures 200 x 25 (et la page suivante).
 tests/sql/h33_rapprocher_gros_fichier_tests.sql
+# AUT-VAR (12/10/2026) : « Rattacher aux œuvres » lit toutes les formes de l'autorité (Wikidata par langue, fusions, formes variantes et pseudonymes saisis) ;
+# les deux détections de doublons reconnaissent un Wikidata/VIAF/ISNI commun ; publier un brouillon sans graphies ne vide plus celles de l'autorité.
+tests/sql/aut_var_formes_variantes_tests.sql
