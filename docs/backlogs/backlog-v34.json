@@ -4087,6 +4087,10 @@
         {
           "fr": "**10/10 — `CatalogPage.jsx`, lots 3 et 4, déployés à 23 h 52** (`75532cc9`, déployés par `65d5355a`) : 105 469 → 64 282 octets (1 187 lignes), lignes déplacées par ancres, sans ressaisie. La page garde tout son état et ses gestes ; chaque composant les reçoit en un seul sac de props, dont la liste est engendrée par analyse des variables libres du bloc déplacé. *Lot 3* : `CatalogFiltersBar` (la section « Filtres » entière : en-tête repliable et son compte, bibliothèques et réseaux, recherche avancée, puces, sujets voisins, rangée d'actions ; 74 props). *Lot 4* : `CatalogResultsTable` (chargement, vide, en-têtes de tri, lignes par notice et par œuvre, exemplaires dépliés, gestes rapides, « charger la suite », avec ses cinq rendus de lignes ; 34 props) et `AuthorLinks` dans son fichier. Banc `catalog-lots-3-4` (11 : barre ouverte et repliée, puces et gestes ; table dans ses six états ; test de source : la page importe les deux, ne définit plus leurs rendus, tient sous 65 Ko, et les composants ne portent ni état ni appel réseau) ; les quatre tests de source qui lisaient la page (badges numériques, E17, G13, lots 1-2) lisent aussi le composant où la ligne vit. Build et vitest complet (190 fichiers, 2 409 tests) verts. **Le Catalogue est au bout de ses quatre lots** : 116 → 64 Ko ; ce qui reste est l'état (une centaine de variables), les requêtes et l'assemblage. **Reste** d'E6 : le Panneau (119 Ko) en crochets par domaine, lot par lot.",
           "pt": "**10/10 — `CatalogPage.jsx`, lotes 3 e 4** (`75532cc9`, déployés par `65d5355a`) : 105 → 64 Ko ; barra de filtros (`CatalogFiltersBar`, 74 props) e tabela de resultados (`CatalogResultsTable`, 34 props, com as linhas por obra e exemplares) em componentes ; `AuthorLinks` em ficheiro próprio ; bancada 11 casos. O Catálogo terminou os seus quatro lotes. Resta : o Painel em hooks por domínio."
+        },
+        {
+          "fr": "**12/10 — le Panneau est au bout : 118 → 48 Ko, 2 342 → 949 lignes, en trois lots** (`95996309`, `e923fd5f`, `09a66994`), en crochets par domaine, lignes déplacées telles quelles par script d'ancres : `usePanelHistorico`, `usePanelEmprestimos` et `dailyTasks.js` (lot A, 100 Ko) ; `usePanelReservas` (sept gestes, appelé après le calcul d'`activeRes`) et `usePanelAcoes` (sortie et retour au comptoir en deux phases) (lot B, 76 Ko) ; `usePanelConsultas` + `ConsultaModals`, `usePanelLeitor` + `PaymentModal` (lot C, 48 Ko). Les onze onglets reçoivent exactement les mêmes props ; ce qui reste dans la page est les libellés et la matrice de transitions, l'onglet, les quatre chargements, les listes dérivées, la barre d'onglets et le bandeau. Trois tests (`e6-painel-lot-a/b/c`) : la source (ce qui est parti n'y est plus, props inchangées, crochets sans JSX ni `setTab`) et les crochets **montés seuls** avec un supabase factice — 49 cas, dont les décisions (refus sans étape, aperçu puis confirmation, refus `ok:false` au toast, refus du serveur relevé dans la modale, première règle de cotisation). Lint 0 erreur, vitest 2 563 tests, build vert (PanelPage 77,7 Ko minifié). **Reste** d'E6 : `BibliotecaPage` (184 Ko), `AccountPage` (154), `ImportacoesPage` (109), et le regard à l'écran, connecté, sur le Panneau — la page est derrière la session.",
+          "pt": "**12/10 — o Painel chegou ao fim: 118 → 48 Ko, 2 342 → 949 linhas, em três lotes** (`95996309`, `e923fd5f`, `09a66994`), em hooks por domínio, linhas movidas tal qual: `usePanelHistorico`, `usePanelEmprestimos`, `dailyTasks.js` (lote A); `usePanelReservas`, `usePanelAcoes` (lote B); `usePanelConsultas` + `ConsultaModals`, `usePanelLeitor` + `PaymentModal` (lote C). As abas recebem exatamente as mesmas props. Três testes (49 casos), lint, vitest completo e build verdes. **Resta**: `BibliotecaPage` (184 Ko), `AccountPage` (154), `ImportacoesPage` (109), e o olhar na tela, conectado."
         }
       ]
     },
@@ -4303,10 +4307,16 @@
         "VEILLE_leftovers_maydayrooms_2026-08-19 §3.4",
         "REGISTRE §34 MAP-E"
       ],
-      "verif": {
-        "fr": "31/08 — 187 fiches en base, inchangé. Le fichier public a changé d'adresse et de contenu : `data/carte-publique.geojson` du dépôt vitrine, **109** entrées (l'item en citait 121 sous l'ancien nom). Les neuf archives NORLA restent à confronter.",
-        "pt": "31/08 — 187 fichas no banco. O arquivo público mudou de endereço: `data/carte-publique.geojson` no repositório vitrine, **109** entradas (o item citava 121). As nove NORLA seguem por confrontar."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — 187 fiches en base, inchangé. Le fichier public a changé d'adresse et de contenu : `data/carte-publique.geojson` du dépôt vitrine, **109** entrées (l'item en citait 121 sous l'ancien nom). Les neuf archives NORLA restent à confronter.",
+          "pt": "31/08 — 187 fichas no banco. O arquivo público mudou de endereço: `data/carte-publique.geojson` no repositório vitrine, **109** entradas (o item citava 121). As nove NORLA seguem por confrontar."
+        },
+        {
+          "fr": "**12/10 — bloqué sur la liste** : les « neuf archives repérées dans le réseau NORLA » ne sont écrites nulle part — ni dans le dépôt (seul le backlog les cite), ni dans la vitrine (`data/carte-publique.geojson`, 109 entrées, aucune propriété de réseau), ni dans les cadrages (NORLA y est un exemple d'archive d'éphémères). Sans les neuf noms, rien à confronter. **Reste** : Xavier dépose la liste (noms, villes, adresses des sites) ; la confrontation et les entrées manquantes suivent dans la soirée.",
+          "pt": "**12/10 — bloqueado na lista**: as « nove arquivos NORLA » não estão escritos em lado nenhum (nem no repositório, nem na montra, nem nos enquadramentos). **Resta**: Xavier deposita a lista; o confronto segue."
+        }
+      ]
     },
     {
       "id": "G9",
@@ -4458,6 +4468,10 @@
         {
           "fr": "**05/10 — le site du thésaurus ne répond plus du tout.** Le 27/09, la page SPIP rendait encore un 503 ; le 05/10, `thesaurus.ficedl.info` accepte la connexion puis la coupe dès `robots.txt` (`server closed abruptly`), pareil depuis un chemin réseau indépendant ; le DNS n'a pas bougé (84.234.23.121). La dégradation se suit sur un mois : deux fiches en 503 le 03/09, tout le site le 09/09, encore le 27/09, plus de réponse le 05/10. Aucun raclage possible ; l'instantané du 03/09 reste la référence (H13), le paquet sur E: n'a pas bougé. **Deux gestes proposés à Xavier le 05/10, sans réponse** : envoyer le courriel à la source — prêt depuis le 16/09, jamais parti ; son thésaurus est injoignable depuis un mois et il ne le sait peut-être pas, c'est devenu la raison la plus pressante de l'écrire — ; et poser une sonde légère, une requête par jour, qui prévient le jour où le site revient.",
           "pt": "**05/10 — o site do tesauro não responde mais.** Em 27/09 ainda devolvia um 503; em 05/10 aceita a conexão e a corta desde `robots.txt`, igual por um caminho de rede independente. Nenhuma raspagem possível; o instantâneo de 03/09 segue como referência (H13). **Dois gestos propostos a Xavier, sem resposta**: enviar o e-mail à fonte (pronto desde 16/09, nunca enviado) e pôr uma sonda leve, um pedido por dia."
+        },
+        {
+          "fr": "**12/10 — le site répond de nouveau** (`thesaurus.ficedl.info`, fiche `mot8` en 200, 2,5 s à 17 h 50) — personne ne l'aurait su : **la sonde légère est livrée** (`1f846c09`, `deploy/ops/anarbib-sonde-ficedl.sh`, modèle du témoin de panne I31) : une fiche de descripteur par jour depuis le poste, un courriel après deux jours sans réponse — « c'est le moment d'écrire à la FICEDL » —, un second le jour du retour avec la durée ; même configuration que le témoin, aveugle si le poste est sans réseau ; banc `sonde-ficedl` (8 cas), unités systemd posées sur le poste. **Le courriel à la FICEDL, lui, n'a toujours pas été envoyé** — prêt depuis le 16/09 ; le site étant revenu, les sept questions peuvent partir, et le raclage (H13) se rejouer pour comparer à l'instantané du 03/09. Décision de Xavier.",
+          "pt": "**12/10 — o site responde de novo** (`mot8` em 200). **A sonda leve está entregue** (`1f846c09`): uma ficha por dia a partir do posto, um e-mail após dois dias sem resposta, outro no regresso com a duração; mesma configuração do vigia de pane; banco `sonde-ficedl` (8 casos). **O e-mail à FICEDL continua por enviar** (pronto desde 16/09): decisão de Xavier."
         }
       ]
     },
@@ -5032,10 +5046,16 @@
         "claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)",
         "spec-migration-mail-resend"
       ],
-      "verif": {
-        "fr": "07/09 — deux transports dans `email.ts`, aucun SMTP.",
-        "pt": "07/09 — dois transportes em `email.ts`, nenhum SMTP."
-      }
+      "verif": [
+        {
+          "fr": "07/09 — deux transports dans `email.ts`, aucun SMTP.",
+          "pt": "07/09 — dois transportes em `email.ts`, nenhum SMTP."
+        },
+        {
+          "fr": "**12/10 — la part technique est déjà là, le constat du 07/09 est périmé** : `_shared/mail/smtp.ts` (transport SMTP générique, STARTTLS obligatoire, durci les 20-21/09, `eaaed599`) et l'aiguillage par variable dans `email.ts` (`MAIL_TRANSPORT=smtp|resend|mock`, ou `SMTP_HOST` présent) ; `sendViaBrevo` a disparu le 29/09 (`57a4aafc`), il n'en restait qu'un commentaire, retiré (`1f846c09`). Les variables sont dans `deploy/functions.env.example` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`). **Reste, et c'est tout** : demander un relais militant (ARN, Nodo50, bida.im…) — K5 —, poser ses cinq variables en secrets des fonctions et basculer `MAIL_TRANSPORT`. Rien à coder.",
+          "pt": "**12/10 — a parte técnica já existe**: `smtp.ts` (transporte SMTP genérico, STARTTLS obrigatório, 20-21/09) e o comutador `MAIL_TRANSPORT` em `email.ts`; `sendViaBrevo` desapareceu a 29/09, restava um comentário, retirado (`1f846c09`). **Resta**: pedir um relé militante (K5), pôr as cinco variáveis e comutar. Nada a codar."
+        }
+      ]
     },
     {
       "id": "F19",
@@ -5545,10 +5565,16 @@
         "claude/aller-retour-PMB_2026-09-26",
         "Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)"
       ],
-      "verif": {
-        "fr": "29/09 — ouvert sur décision de Xavier, à la clôture de H27.",
-        "pt": "29/09 — aberto por decisão de Xavier, no fechamento de H27."
-      }
+      "verif": [
+        {
+          "fr": "29/09 — ouvert sur décision de Xavier, à la clôture de H27.",
+          "pt": "29/09 — aberto por decisão de Xavier, no fechamento de H27."
+        },
+        {
+          "fr": "**12/10 — en attente de DIRA, comme la fiche le dit** : la question du banc (« ce que `docs_type::import` fait d'un code inconnu ») a déjà sa réponse dans le relevé du 29/09 — PMB retrouve un type et une section par leur code d'import, ou les crée, le type avec une durée de prêt de 0 jour. Ce qui manque n'est pas une mesure : c'est de savoir si les codes d'import des types et sections de DIRA sont réglés dans leur PMB, et à quoi leur servent ces trois informations. Rien à coder avant.",
+          "pt": "**12/10 — à espera de DIRA**: a pergunta do banco já tem resposta (29/09): o PMB reencontra tipo e secção pelo código de importação, ou cria-os. Falta saber se os códigos de DIRA estão configurados no seu PMB. Nada a codar antes."
+        }
+      ]
     },
     {
       "id": "D8",
@@ -5973,6 +5999,10 @@
         {
           "fr": "**07/10 — effet de bord du redémarrage** : les statistiques d'usage (`pg_stat_*`) sont reparties de zéro à 20:19 ; l'avis de performance passe de 257 à 466 (440 « index inutilisé ») sans que rien ait changé dans la base. B36 en tient compte.",
           "pt": "**07/10 — efeito colateral do reinício**: as estatísticas de uso (`pg_stat_*`) recomeçaram do zero às 20h19; o aviso de desempenho passa de 257 a 466 (440 « índice não usado ») sem que nada tenha mudado no banco. B36 leva isso em conta."
+        },
+        {
+          "fr": "**12/10 — ce qui reste tient au tableau de bord** : la lecture Reports → Database (mémoire, swap, CPU, E/S) entre 19 h 45 et 20 h 00 le 07/10 demande la session Supabase de Xavier (GitHub OAuth) ; aucune API du MCP ne la donne, et les compteurs `pg_stat_*` sont repartis de zéro au redémarrage. Les journaux lisibles d'ici ont tout dit le 07/10 (Postgres se tait après un point de contrôle normal, PostgREST « Thread killed by timeout manager » dès 17 h 50 UTC) : le suspect reste la mémoire de l'instance MICRO. **Reste** : la capture du rapport par Xavier, puis la décision MICRO → SMALL.",
+          "pt": "**12/10 — o que resta depende do painel**: a leitura Reports → Database entre 19h45 e 20h00 de 07/10 pede a sessão Supabase de Xavier; nenhuma API do MCP a dá. O suspeito continua a memória da instância MICRO. **Resta**: a captura por Xavier, depois a decisão MICRO → SMALL."
         }
       ]
     },
