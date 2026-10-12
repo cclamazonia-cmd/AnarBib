@@ -4091,6 +4091,10 @@
         {
           "fr": "**12/10, 20 h 23 — Bibliothèque, lot 5** (`75783583`) : 62 → 43 Ko, 651 lignes (184 Ko et 2 000 lignes le 29/08). `CommsSection` (identité d'envoi, canal entier par `upsert_library_mail_channel`, types de notification, politique de négociation ; `saveComms` suit) et `RegulationSection` (règlements : téléversement, un seul actif, retrait réversible ; jeux de règles ; cotisation et dépôt du lot 3 ; `seedT` suit). Les états restent au parent ; `onChanged` remplace `loadAll`. Test `biblioteca-lot5-sections` (5) ; vitest 2 607, build vert. **La page Bibliothèque est au bout** : ce qui reste est l'ossature (onglets, quatre chargements, bandeau, identité et documents). **Reste** d'E6 : `AccountPage` (154 Ko) et `ImportacoesPage` (109) ; le regard de Xavier à l'écran sur le Panneau et la Bibliothèque.",
           "pt": "**12/10, 20h23 — Biblioteca, lote 5** (`75783583`): 62 → 43 Ko. `CommsSection` e `RegulationSection`; estados no pai, `onChanged` no lugar de `loadAll`. Teste (5), vitest 2 607, build verde. **A página Biblioteca chegou ao fim.** **Resta**: `AccountPage` (154 Ko) e `ImportacoesPage` (109); o olhar de Xavier."
+        },
+        {
+          "fr": "**12/10, 21 h 15 — vu à l'écran par Xavier, connecté : « Tout fonctionne. »** Le Panneau (six crochets, deux modales, onze onglets) et la Bibliothèque (six sections, lots 4 et 5) sont conformes, geste par geste. Trois des cinq écrans sont donc faits : Catalogage (huit lots), Catalogue (quatre), Panneau (trois), Bibliothèque (cinq). `AccountPage` est descendu de lui-même à 74 Ko. **Reste** : `ImportacoesPage`, monté à 164 Ko avec H21 — à découper quand H34 sera posé (le voisin y travaille).",
+          "pt": "**12/10, 21h15 — visto na tela por Xavier, conectado: « Tudo funciona. »** Painel e Biblioteca conformes. **Resta**: `ImportacoesPage` (164 Ko), a cortar quando H34 estiver pousado."
         }
       ]
     },
