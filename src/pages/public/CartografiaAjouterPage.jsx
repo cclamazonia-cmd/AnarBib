@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { callEdgeFunction } from '@/lib/supabase';
 import { addBasemap } from '@/lib/mapTiles';
+import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import AltchaWidget from '@/components/ui/AltchaWidget';
 
@@ -20,17 +21,6 @@ const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el']
 function mapLang(locale) {
   const b = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
   return MAP_LOCALES.includes(b) ? b : 'fr';
-}
-function loadCss(href) {
-  if ([...document.querySelectorAll('link[rel="stylesheet"]')].some((l) => l.href.includes(href))) return;
-  const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l);
-}
-function loadScript(src) {
-  return new Promise((res, rej) => {
-    if ([...document.scripts].some((s) => s.src.includes(src))) return res();
-    const s = document.createElement('script'); s.src = src; s.async = true;
-    s.onload = () => res(); s.onerror = () => rej(new Error('load ' + src)); document.head.appendChild(s);
-  });
 }
 
 export default function CartografiaAjouterPage() {
@@ -59,13 +49,13 @@ export default function CartografiaAjouterPage() {
     let cancel = false;
     (async () => {
       try {
-        loadCss('/vendor/leaflet/leaflet.css');
-        await loadScript('/vendor/leaflet/leaflet.js');
+        loadVendorCss('/vendor/leaflet/leaflet.css');
+        const L = await loadVendorScript('/vendor/leaflet/leaflet.js', 'L');
         if (cancel || !pickerRef.current || mapRef.current) return;
-        const L = window.L;
         const map = L.map(pickerRef.current, { worldCopyJump: true, attributionControl: false }).setView([20, 5], 2);
         // Fond de carte auto-hébergé (PMTiles, E5) : plus aucun appel vers un tiers.
-        await addBasemap(map, { locale });
+        // Sans fond, le pointeur reste posable (coordonnées affichées) : on n'abandonne pas.
+        try { await addBasemap(map, { locale }); } catch (e) { console.error('[CartografiaAjouter] fond de carte', e); }
         let marker = null;
         map.on('click', (e) => {
           if (!marker) marker = L.marker(e.latlng, { draggable: true }).addTo(map);

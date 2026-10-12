@@ -26,7 +26,9 @@
 // Déménagement (I2, VM Herbes Folles) : poser VITE_MAPTILES_URL au build, rien d'autre.
 // =============================================================================
 
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
+import { loadVendorScript } from '@/lib/loadVendorScript';
+
+const SUPABASE_URL =(import.meta.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
 
 /** Adresse du fichier PMTiles. Par défaut : bucket public `map-tiles` du projet. */
 export const MAPTILES_URL = import.meta.env.VITE_MAPTILES_URL
@@ -49,13 +51,37 @@ export function basemapLang(locale) {
   return BASEMAP_LANGS.has(base) ? base : undefined;
 }
 
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    if ([...document.scripts].some((s) => s.src.includes(src))) return resolve();
-    const s = document.createElement('script'); s.src = src; s.async = true;
-    s.onload = () => resolve(); s.onerror = () => reject(new Error('load ' + src));
-    document.head.appendChild(s);
-  });
+/**
+ * Les lectures du fichier PMTiles ne passent PAS par le cache HTTP du navigateur.
+ *
+ * Vécu le 12/10/2026 sur le Brave de Xavier : à chaque première visite, le cache
+ * rendait une réponse 200 (fichier entier annoncé) à une demande de plage au lieu
+ * du 206 que le serveur envoie toujours. Le greffon lève alors « Server returned no
+ * content-length header or content-length exceeding request » et abandonne la tuile
+ * sans réessayer : points sans fond de carte, revenu après deux rechargements. Avec
+ * le cache désactivé dans les outils du navigateur, la carte s'affichait du premier
+ * coup, 206 partout. Le serveur, lui, répond 206 depuis ce poste comme depuis un
+ * profil vierge (Brave et Edge).
+ *
+ * Le greffon ne permet pas de régler son `fetch` : on enrobe donc `window.fetch`,
+ * une seule fois, et SEULEMENT pour l'adresse du fichier de carte. Coût : l'en-tête
+ * et les répertoires (≈ 50 Ko) sont relus à chaque visite ; le greffon garde les
+ * tuiles en mémoire pendant la visite.
+ */
+export function lireCarteSansCache(win = window, urlCarte = MAPTILES_URL) {
+  if (!win.fetch || win.fetch.__carteSansCache) return;
+  const base = String(urlCarte).split('?')[0];
+  const original = win.fetch.bind(win);
+  const enrobe = (input, init) => {
+    const url = typeof input === 'string' ? input : (input && input.url) || '';
+    if (url.split('?')[0] === base) {
+      const cache = init && init.cache;
+      if (!cache || cache === 'default') return original(input, { ...(init || {}), cache: 'no-store' });
+    }
+    return original(input, init);
+  };
+  enrobe.__carteSansCache = true;
+  win.fetch = enrobe;
 }
 
 /**
@@ -65,7 +91,8 @@ function loadScript(src) {
  * @returns {Promise<object>} la couche ajoutée
  */
 export async function addBasemap(map, { locale, attribution } = {}) {
-  await loadScript('/vendor/leaflet/protomaps-leaflet.js');
+  await loadVendorScript('/vendor/leaflet/protomaps-leaflet.js', 'protomapsL');
+  lireCarteSansCache();
   // ⚠️ La dist 4.0.1 vendorisée lit `theme` (le README en ligne, plus récent, dit
   // `flavor`). Sans thème reconnu : zéro règle de peinture, tuiles transparentes —
   // vécu en production le 08/09/2026 à 01 h 30, sans la moindre erreur console.

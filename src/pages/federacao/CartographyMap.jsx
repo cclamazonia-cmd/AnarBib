@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiQuery } from '@/lib/supabase';
 import { addBasemap } from '@/lib/mapTiles';
+import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import CartographyEditModal from './CartographyEditModal';
 import './NetworkMap.css';
 
@@ -35,25 +36,16 @@ function resolveMapLang(locale) {
   return MAP_LOCALES.includes(base) ? base : 'fr';
 }
 
-function loadCss(href) {
-  if ([...document.querySelectorAll('link[rel="stylesheet"]')].some((l) => l.href.includes(href))) return;
-  const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l);
-}
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    if ([...document.scripts].some((s) => s.src.includes(src))) return resolve();
-    const s = document.createElement('script'); s.src = src; s.async = true;
-    s.onload = () => resolve(); s.onerror = () => reject(new Error('load ' + src));
-    document.head.appendChild(s);
-  });
-}
+// Chargeur partagé (src/lib/loadVendorScript.js) : retente, et ne laisse plus de
+// balise morte qui ferait croire Leaflet présent après un échec (12/10/2026).
 async function loadLeaflet() {
-  loadCss('/vendor/leaflet/leaflet.css');
-  loadCss('/vendor/leaflet/MarkerCluster.css');
-  loadCss('/vendor/leaflet/MarkerCluster.Default.css');
-  await loadScript('/vendor/leaflet/leaflet.js');
-  await loadScript('/vendor/leaflet/leaflet.markercluster.js');
-  return window.L;
+  loadVendorCss('/vendor/leaflet/leaflet.css');
+  loadVendorCss('/vendor/leaflet/MarkerCluster.css');
+  loadVendorCss('/vendor/leaflet/MarkerCluster.Default.css');
+  const L = await loadVendorScript('/vendor/leaflet/leaflet.js', 'L');
+  if (!L.MarkerClusterGroup) await loadVendorScript('/vendor/leaflet/leaflet.markercluster.js');
+  if (!L.MarkerClusterGroup) throw new Error('leaflet.markercluster chargé sans L.MarkerClusterGroup');
+  return L;
 }
 
 function esc(s) {
@@ -181,7 +173,9 @@ export default function CartographyMap({ viewName }) {
         if (cancelled || !containerRef.current) return;
         const map = L.map(containerRef.current, { worldCopyJump: true }).setView([25, 5], 2);
         // Fond de carte auto-hébergé (PMTiles, E5) : plus aucun appel vers un tiers.
-        await addBasemap(map, { locale });
+        // S'il échoue malgré les essais, la carte reste utile avec ses points : on ne
+        // bascule plus toute la page en erreur pour un fond manquant (12/10/2026).
+        try { await addBasemap(map, { locale }); } catch (e) { console.error('[CartographyMap] fond de carte', e); }
         const cluster = L.markerClusterGroup({ maxClusterRadius: 45, chunkedLoading: true });
         map.addLayer(cluster);
         const memberLayer = L.layerGroup().addTo(map);
