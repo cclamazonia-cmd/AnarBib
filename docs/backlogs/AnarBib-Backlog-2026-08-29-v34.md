@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-12** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 9
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 11 octobre 2026 à midi** (`24b37717`, mesuré à 12 h 40) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 09/10 au soir, `47781985`). **La CI est à jour de la tête de branche** : 458 migrations appliquées = 458 au dépôt, runner au repos, marqueur des fonctions sur `65d5355a` (10/10, 23 h 52). Ce qui a bougé et pourquoi : **la base** — +17 fonctions par quatre migrations du 10/10 (H21 lot 7, C29 lot 3, C17 bis ; E36 réécrit sans ajouter), **0029 à 433, exactement le compte attendu par l'audit** (cinq portes nouvelles, chacune avec son complément), tables, policies, vues et crons inchangés ; **le catalogue** — aucune notice créée, fusionnée ni supprimée, vingt reprises de notices publiées hors lot (le catalogage du jour), une œuvre orpheline apparue le 10/10 au soir avec les essais de C17 (la 2503 ; retirée le 11/10 à 23 h 15 sur accord écrit de Xavier, après vérification qu'aucune table ne la référençait, avec son expression vide ; puis, sur le même accord, les treize autres œuvres sans notice — douze du 4 août, une du 20 juin, une du 29 septembre, aucune référencée nulle part — retirées à 23 h 16 avec leurs expressions : 2 350 œuvres, aucune sans notice), le lot BLMF 57 compte 6 brouillons et non 9 ; **le réseau** — inchangé (un fil de correspondance, deux messages ; seize propositions de l'Atelier en consentement jusqu'au 16/10) ; **le dépôt** — +30 commits, +19 fichiers, +146 clés, +97 tests JS, +3 suites SQL ; 22 marqueurs de dette par la méthode fixe, dont 4 faux (le mot « TODOS » en portugais et en espagnol). **Livré depuis le 09/10** : C29 lots 1 à 3, E36, C17 bis, E6 lots 1 à 4 du Catalogue (116 → 64 Ko, le Catalogue est fini ; reste le Panneau), H21 lot 7, E37, les seize propositions de C4 ; **clos par Xavier** : E32, I18, I33 ; **ouvert** : B38. **Ce qui reste à clore, et par qui** — *à vérifier sur un fait à venir* : F19 (une semaine de journaux, vers le 15/10), I30 (le tir long de ce soir, 11/10, puis `restore-test`), F25 (une action en masse réelle — le transport est vérifié au banc, pas encore à la production), H15, H16 et H28 (un import réel de DIRA), H26, K10 (deux parutions) ; *à l'écran, par Xavier* : E36 (un compte lecteur sur l'Atelier), E37 (le bandeau collant), E31 (E6 lots 2, 4, 5, 8 ; E35 ; les écrans de H21 ; le refus traduit d'un numéro libéré, C17), et avec eux C29 (lot 4 à venir) ; *les décisions* : A1 (une troisième administration réseau), C4 (« Aplicar » après le 16/10) ; *sans code* : A1, A3 (la machine du runner), H2 (un courriel prêt depuis le 16/09, à envoyer).
 
-**Fraîcheur des constats au 2026-10-12.** **41 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, B39, B40, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-12.** **40 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, B39, C3, C4, C18, C29, D3, D8, E1, E2, E4, E6, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H26, H28, H29, H33, I2, I21, I30, I32, J10, K2, K7, K10). Les **14** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -350,7 +350,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
 | **B39** | Étiqueter les fixtures de formation en production, pour que toute mesure d'usage les exclue par une requête et non par une note | `P2` | Ouvert |
-| **B40** | Neuf fonctions `api` fermées à tous les rôles : les supprimer, ou les garder comme surface dormante — le dire au REGISTRE | `P3` | Décision collective |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -393,27 +392,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune. J12 inscrit le choix au REGISTRE.
 
 *Renvois : `supabase/migrations` · `tests/sql` · `docs/backlogs/backlog-v34.json` · `docs/REGISTRE_decisions.md`*
-
-#### B40 — Neuf fonctions `api` fermées à tous les rôles : les supprimer, ou les garder comme surface dormante — le dire au REGISTRE
-
-`P3` Différé · État : **Décision collective** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** **Mesure de jonction de la v18** (chapitre 6.1, dépôt `c6d20a9e`) : sur 206 fonctions du schéma `api`, douze n'ont d'appelant nulle part — ni dans le dépôt frontal, ni dans une Edge Function, ni dans le corps d'une fonction, d'une vue ou d'un cron. Neuf d'entre elles ne sont plus exécutables par aucun des trois rôles de l'application depuis la migration du 02/09 « une aile jamais ouverte se ferme à clé » (B20) : `attach_exemplar`, `clear_loan_return_schedule`, `conv_controle_qualite`, `conv_controle_resumo`, `fn_cartography_create_entry`, `fn_cartography_toggle_public`, `mark_loan_return_missed`, `refuse_pickup_slot`, `schedule_loan_return` — la planification de retour et les créneaux de retrait, l'édition de cartographie, deux contrôles de conventions. Deux sont réservées au rôle de service (`get_due_date_for_loan`, `get_library_circulation_policy_rules_ui`), une est un instrument de console documenté (`fn_outbox_abandonnees`). « Elles existent, elles ne servent pas, et personne ne peut les appeler. » La v18 : « il reste à décider si les neuf doivent être supprimées ou gardées comme surface dormante ; la v18 penche pour la suppression, et pour le dire au REGISTRE » (chapitre 12, arbitrages devenus pressants).
-
-*Vérifié : 12/10 — ouvert à la lecture détaillée de la v18, à la demande de Xavier ; la décision lui revient.*
-
-**Ce que c'est.** Décision de Xavier : supprimer, ou garder en dormance avec la raison. Si suppression : avant chaque DROP, chercher le nom dans `prosrc` de toutes les fonctions, dans les vues (`pg_views`) et dans les crons — `pg_depend` ne voit pas le PL/pgSQL (leçon du 02/09, « une vue appelle aussi ») —, une migration par famille, les suites qui les nommaient réalignées, la liste fermée T12 et l'audit `execute_anon` relus ; le code au REGISTRE, daté. Si dormance : la raison écrite au REGISTRE, et la liste nominative tenue par un test qui rougit si l'une d'elles rouvre.
-
-**Pourquoi ça compte.** Une surface fermée à clé n'est pas une dette de sécurité, mais c'est une dette de lecture : chaque Livre blanc la recompte, et la dormance sans raison écrite est exactement ce que DOC-GEL-1 interdit.
-
-**Ce qui compte comme fini.**
-
-- La décision est écrite au REGISTRE avec sa date.
-- Les neuf fonctions sont supprimées (migration, suites vertes, T12 et audit relus) ou leur dormance est gardée par un test nominatif.
-
-**Dépendances.** Aucune.
-
-*Renvois : `supabase/migrations` · `tests/sql/grants_herites_tests.sql` · `docs/audits` · `docs/REGISTRE_decisions.md`*
 
 ---
 
@@ -1956,6 +1934,7 @@ CI verte : lint et suite unitaire. |
 | E31 | 2026-10-11 | Ce qui attendait un regard à l'écran, connecté, a été vu — **quinze questions posées une à une le 11/10 au soir, quinze réponses de Xavier**. *Conformes* : la barre d'état collante et la fenêtre de confirmation du catalogage (C21) ; le numéro d'inventaire après « un autre exemplaire du même document » (C22) ; le dépôt numérique en cinq étapes (C24) ; le refus traduit d'un numéro libéré saisi à la main (C17) ; les lots 2, 4, 5 et 8 d'`AccountPage` (E6) ; la ligne BTL « Indisponible pour toi » pour un compte BLMF (E35) ; la lecture réservée pour une personne membre de la BTL (C20) ; une invitation réelle à une tâche, envoyée et reçue (F16) ; les quatre lots du Catalogue (E6) — avec un défaut trouvé en chemin, qui n'est pas des lots : **la recherche libre « Kropotkine » ne rend qu'une œuvre ou deux au lieu des 36 de l'autorité** (ouvert en E38). Les 8/10 avaient déjà clos C14, C23 et G16. *Retirés de la liste* : E33 (Mon compte quand la base ne répond pas : ne se simule pas en production) et les écrans de H21 (ils attendent un réimport réel de DIRA, pas un regard). Le critère est tenu : chaque point vu, conforme ou ouvert en item. Clos. Les regards à venir se portent désormais sur l'item qu'ils concernent, pas sur une liste à part. |
 | E38 | 2026-10-12 | La recherche du catalogue lit les autres noms des autorités — forme retenue, forme de tri, variantes Wikidata, alias actifs — et pardonne une ou deux lettres quand rien d'exact ne répond, en le disant par une pastille. Signalé par Xavier le 11/10 (« Kropotkine » ne rendait qu'une œuvre ou deux, l'autorité en a 36). **Deux livraisons** : le 11/10 à 23 h 28, par la session voisine (`f38fffa8`, migration `20261011211012`) — `private.fn_auteurs_par_nom`, `fn_mots_proches`, `catalog_works_v1` et `catalog_search_ids_v1` lisent les formes et replient en approché (« kropotkine » 1 → 38 œuvres) ; le 12/10 à 9 h 52 (`60ffe977`, migration `20261012074224`), sur le constat « en liste plate, non » — la porte INVOKER `api.catalog_author_ids_v1` et le filtre client de la liste plate, qui accepte le lien d'autorité, n'importe quel contributeur ou le texte mot à mot (« Kropotkine » 1 → 59 notices). Suites `recherche_variantes_approchee` (11) et `e38_liste_plate_auteur_par_ses_noms` (5), tests d'écran et de filtre. **Vu par Xavier le 12/10, conforme en liste plate comme par œuvre.** Clos. |
 | J12 | 2026-10-12 | **Clos le 12/10 sur pièces, les deux critères tenus — six jours avant l'échéance de `DOC-GLB-1`.** *(1)* La v18 et le v16 du 02/07 sont dans `docs/GLB/` depuis `8fdbc0d0` (13 h 09), l'INDEX les nomme, le chaînon n'est plus manquant ; l'addendum du 27/05 porte désormais sa date dans son nom (`Grand_Livre_blanc_AnarBib_v16-addendum_2026-05-27.docx`, décision Xavier). *(2)* Les trois codes sont au REGISTRE v0.84 : `DOC-TIERS-1` (une épreuve par un tiers compte double, la clôture dit « exercé par un tiers »), `DOC-MESURE-1` (un chiffre compté depuis un instant porte la date de son dernier reset), `DOC-MESURE-2` (une fixture en production n'est pas de l'usage ; l'étiquetage mécanique est `B39`) ; les deux conventions sont écrites dans « Comment lire ce document », et `B36` applique déjà la seconde. Décisions Xavier du 12/10, sur quatre questions posées à la lecture de la v18. |
+| B40 | 2026-10-12 | **Clos le 12/10 sur décision de Xavier (option mixte), les deux critères tenus.** *(1)* `DOC-SURFACE-1` au REGISTRE (v0.85) : une fonction `api` sans appelant et fermée à tous les rôles se supprime ; une surface dormante ne se garde que si une spec datée la réclame. *(2)* **Sept supprimées** par la migration `20261012111851` (`107d9ccc`, appliquée par la CI) : `attach_exemplar`, `clear_loan_return_schedule`, `schedule_loan_return`, `mark_loan_return_missed`, `refuse_pickup_slot`, `conv_controle_qualite`, `conv_controle_resumo` ; **deux gardées fermées à clé** pour `G9` (`fn_cartography_create_entry`, `fn_cartography_toggle_public`). Avant le DROP : `prosrc` des quatre schémas, vues, policies, triggers, crons et dépôt relus — 0 appelant ; la liste fermée T12 (ouvertures à `anon`) n'en contenait aucune ; les audits `execute_anon` et `execute_authenticated` de fin août restent justes comme traces datées. Un fichier `_rollback_` recrée les sept telles qu'elles étaient. Suites réalignées et vertes : `surface_morte_anon_fermee` et `conventions_console_fermee` gardent désormais l'absence, `circulation_couche_supplantee` compte cinq fermées, six murs et cinq absentes (T5), `paquet19` perd ses sections 7 et 8. Le compte du GLB v19 : 199 fonctions `api`, 12 → 5 sans appelant. |
 
 ---
 
@@ -1987,4 +1966,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-11 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `24b37717` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
