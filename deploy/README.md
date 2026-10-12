@@ -17,12 +17,19 @@
 >
 > S'y ajoutent, hors base, **les fichiers des buckets Storage** : le dump ne
 > porte que les *lignes* de `storage.buckets` et `storage.objects`, jamais les
-> fichiers eux-mêmes. Ils viennent du flux de sauvegarde `storage`, et aucune
-> migration ne crée les buckets — une reconstruction depuis le dépôt seul
-> donne une instance à zéro bucket.
+> fichiers eux-mêmes. Ils viennent du flux de sauvegarde `storage`. Les
+> buckets eux-mêmes, en revanche, **sont créés par les migrations depuis le
+> 28/08/2026** (`20260828000000_storage_buckets_reconstructibles`, puis
+> `20260907234500_bucket_map_tiles` pour le dix-septième) : une reconstruction
+> depuis le dépôt seul donne une instance avec ses dix-sept buckets, vides.
+> Ce paragraphe a dit le contraire jusqu'au 12/10/2026 ; `bootstrap.sh`
+> (étape 8) rougit désormais si le rejeu en laisse moins de dix-sept.
 >
 > Toute personne qui héberge ou administre une instance lit ce paragraphe
 > d'abord. Le reste de cette page suppose qu'il est acquis.
+
+**Sur une machine neuve** (VM, ISO, premier démarrage) : [`deploy/VM.md`](VM.md) dit ce qui
+s'installe seul, ce qui se saisit à la main et ce qui se télécharge ; cette page-ci décrit la pile.
 
 Trois fichiers de configuration : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
 **Six conteneurs** : cinq briques reprises du compose officiel Supabase et Caddy substitué à Kong. Justification service par service :
