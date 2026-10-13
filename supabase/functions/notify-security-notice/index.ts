@@ -39,6 +39,7 @@
 // « a…@domaine », de quoi compter les envois partis, pas de quoi les nommer.
 
 import { supabaseAdmin } from '../_shared/core/env.ts';
+import { adminsReseauActifs } from '../_shared/context/network-admins.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 
@@ -178,15 +179,12 @@ Deno.serve(async (req: Request) => {
   }
   const ids = (mems ?? []).map((m: any) => m.user_id);
   if (networkAdmins) {
-    const { data: admins, error: admErr } = await supabaseAdmin
-      .from('network_administrators')
-      .select('user_id')
-      .eq('status', 'active');
-    if (admErr) {
-      console.error('[notify-security-notice] administration du reseau:', admErr.message);
-      return jsonResponse(500, { ok: false, error: admErr.message });
+    // Par le module partagé, jamais la table en direct (garde
+    // src/tests/admins-reseau-destinataires.test.js) : mêmes admins actif·ves
+    // que les autres fonctions institutionnelles.
+    for (const a of await adminsReseauActifs(supabaseAdmin)) {
+      if (a.user_id) ids.push(a.user_id);
     }
-    for (const a of admins ?? []) ids.push((a as any).user_id);
   }
   const userIds = [...new Set(ids.filter(Boolean))];
   if (!userIds.length) {

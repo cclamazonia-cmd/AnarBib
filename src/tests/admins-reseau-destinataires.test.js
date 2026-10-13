@@ -158,6 +158,7 @@ const LISENT_LA_TABLE_EN_DIRECT = [
 // INSTITUTIONNEL et SUPERVISION : passent par le module (admins + boîte).
 const PASSENT_PAR_LE_MODULE = [
   '_shared/domain/membership-restriction.ts',
+  'notify-security-notice/index.ts',        // B42 (13/10/2026) : annonce aux équipes, network_admins: true
   'health-probe/index.ts',
   'notify-cross-library-digest/index.ts',
   'notify-document-permission-request/index.ts',
@@ -184,7 +185,7 @@ describe('network-admins — les deux listes fermées', () => {
 
   it('la liste des lecteurs directs ne s\'allonge que par une entrée nommée ici', () => {
     expect(LISENT_LA_TABLE_EN_DIRECT).toHaveLength(7);
-    expect(PASSENT_PAR_LE_MODULE).toHaveLength(6);
+    expect(PASSENT_PAR_LE_MODULE).toHaveLength(7); // 13/10 : + notify-security-notice (B42)
   });
 
   it('la boîte n\'est jamais écrite en dur : le module lit une variable, et health-probe garde la sienne', () => {

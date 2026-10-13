@@ -30,10 +30,10 @@ const bloc = script.slice(
 
 describe('install.sh --creds-file — le mot de passe va dans un fichier, pas à l’écran', () => {
   it("l'option existe, avec sa variable d'environnement et son erreur de chemin manquant", () => {
-    expect(script).toMatch(/^    --creds-file\)$/m);
+    expect(script).toMatch(/^ {4}--creds-file\)$/m);
     expect(script).toContain('CREDS_FILE="${ANARBIB_ADMIN_CREDS_FILE:-}"');
     expect(script).toMatch(/echo "✗ \$\(t err_no_creds_file\)" >&2/);
-    expect(script).toMatch(/^#   \.\/install\.sh --creds-file PATH/m);
+    expect(script).toMatch(/^# {3}\.\/install\.sh --creds-file PATH/m);
   });
 
   it('écrit le fichier en 0600 dans un dossier 0700, et une erreur arrête le script', () => {

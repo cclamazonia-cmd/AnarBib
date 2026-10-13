@@ -31,7 +31,9 @@ describe('notify-security-notice — viser les équipes', () => {
 
   it("l'administration du réseau active s'ajoute sur demande, sans doublon", () => {
     expect(src).toContain('const networkAdmins = payload.network_admins === true;');
-    expect(src).toMatch(/\.from\('network_administrators'\)\s*\.select\('user_id'\)\s*\.eq\('status', 'active'\)/);
+    expect(src).toContain("import { adminsReseauActifs } from '../_shared/context/network-admins.ts';");
+    expect(src).toContain('for (const a of await adminsReseauActifs(supabaseAdmin))');
+    expect(src).not.toMatch(/from\(\s*['"]network_administrators['"]\s*\)/);
     expect(src).toContain('const userIds = [...new Set(ids.filter(Boolean))];');
   });
 
