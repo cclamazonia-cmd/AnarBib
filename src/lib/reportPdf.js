@@ -19,6 +19,8 @@
 // ============================================================================
 
 // Mise en page A4 paysage (mm).
+import { poserPolicePdf, policePdf } from '@/lib/pdfPolice';
+
 const LAYOUT = {
   margin: { l: 12, r: 12, t: 16, b: 14 },
   headerH: 7,
@@ -48,15 +50,15 @@ function drawSection(doc, section, ctx) {
 
   let y = M.t;
   if (networkName) {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120);
+    doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(8); doc.setTextColor(120);
     doc.text(networkName, M.l, y);
   }
   y += 6;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(LAYOUT.fontTitle); doc.setTextColor(20);
+  doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(LAYOUT.fontTitle); doc.setTextColor(20);
   doc.text(title, M.l, y);
   y += 6;
   if (subtitle) {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(LAYOUT.fontSub); doc.setTextColor(90);
+    doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(LAYOUT.fontSub); doc.setTextColor(90);
     const lines = doc.splitTextToSize(subtitle, usableW);
     doc.text(lines, M.l, y);
     y += lines.length * 4 + 2;
@@ -70,7 +72,7 @@ function drawSection(doc, section, ctx) {
   const drawColumnHeader = () => {
     doc.setFillColor(30, 41, 59);
     doc.rect(M.l, y, usableW, LAYOUT.headerH, 'F');
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(LAYOUT.fontHeader); doc.setTextColor(255);
+    doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(LAYOUT.fontHeader); doc.setTextColor(255);
     let x = M.l;
     columns.forEach((c, i) => {
       const right = c.align === 'right';
@@ -83,16 +85,16 @@ function drawSection(doc, section, ctx) {
 
   drawColumnHeader();
 
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(LAYOUT.fontBody);
+  doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(LAYOUT.fontBody);
   rows.forEach((row, ri) => {
     if (y + LAYOUT.rowH > pageH - M.b) {
       doc.addPage();
       y = M.t;
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(LAYOUT.fontTitle); doc.setTextColor(20);
+      doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(LAYOUT.fontTitle); doc.setTextColor(20);
       doc.text(title, M.l, y);
       y += 4;
       drawColumnHeader();
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(LAYOUT.fontBody);
+      doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(LAYOUT.fontBody);
     }
     if (ri % 2 === 0) {
       doc.setFillColor(241, 245, 249);
@@ -113,7 +115,7 @@ function drawSection(doc, section, ctx) {
   if (totalLabel) {
     y += 2;
     if (y > pageH - M.b) { doc.addPage(); y = M.t; }
-    doc.setFont('helvetica', 'italic'); doc.setFontSize(LAYOUT.fontBody); doc.setTextColor(90);
+    doc.setFont(policePdf(doc), 'italic'); doc.setFontSize(LAYOUT.fontBody); doc.setTextColor(90);
     doc.text(totalLabel, M.l, y);
   }
 }
@@ -125,7 +127,7 @@ function stampFooters(doc, { pageW, pageH }, labels) {
   const total = doc.getNumberOfPages();
   for (let p = 1; p <= total; p++) {
     doc.setPage(p);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(130);
+    doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(7); doc.setTextColor(130);
     const pageTxt = labels.page ? labels.page(p, total) : `${p} / ${total}`;
     doc.text(pageTxt, pageW - M.r, pageH - 6, { align: 'right' });
     if (labels.generatedAt) doc.text(labels.generatedAt, M.l, pageH - 6, { align: 'left' });
@@ -138,7 +140,8 @@ function stampFooters(doc, { pageW, pageH }, labels) {
  */
 export async function generateMultiReportPdf({ filename, networkName, sections, labels = {} }) {
   const { jsPDF } = await import('jspdf');
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
+  await poserPolicePdf(doc);
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const usableW = pageW - LAYOUT.margin.l - LAYOUT.margin.r;

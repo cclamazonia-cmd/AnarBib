@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { poserPolicePdf, policePdf } from '@/lib/pdfPolice';
 
 /**
  * LeitoresPanel — liste des lectrices et lecteurs d'une bibliothèque.
@@ -315,12 +316,13 @@ function downloadBlob(content, filename, mime) {
 // largeurs de colonnes fixes, retour à la ligne via splitTextToSize, saut de page.
 async function buildRosterPdf(rows, { title, subtitle, locale, t, statusLabel, originLabel }) {
   const { jsPDF } = await import('jspdf');
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
+  await poserPolicePdf(doc);
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 10;
   let y = margin;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text(title, margin, y); y += 6;
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(120);
+  doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(14); doc.text(title, margin, y); y += 6;
+  doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(9); doc.setTextColor(120);
   doc.text(subtitle, margin, y); doc.setTextColor(0); y += 7;
 
   const cols = [
@@ -335,11 +337,11 @@ async function buildRosterPdf(rows, { title, subtitle, locale, t, statusLabel, o
   const totalW = cols.reduce((s, c) => s + c.w, 0);
 
   function drawHeader() {
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+    doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(8);
     let x = margin;
     for (const c of cols) { doc.text(String(c.label), x, y); x += c.w; }
     y += 1.5; doc.setLineWidth(0.2); doc.line(margin, y, margin + totalW, y); y += 3.5;
-    doc.setFont('helvetica', 'normal');
+    doc.setFont(policePdf(doc), 'normal');
   }
   drawHeader();
   doc.setFontSize(8);

@@ -9,6 +9,8 @@
 // jspdf en import dynamique (≈200 ko hors chunk principal), comme reportPdf.js.
 // ═══════════════════════════════════════════════════════════════════════════
 
+import { poserPolicePdf, policePdf } from '@/lib/pdfPolice';
+
 const AXIS_KEYS = {
   catalog_mode: 'atelier.axis.catalog',
   circulation_mode: 'atelier.axis.circulation',
@@ -22,7 +24,8 @@ const AXIS_KEYS = {
 // [À DISCUTER]. Si absent, sections génériques (rétrocompat).
 export async function buildRegimentoPdf({ progress, axes, applicable, t, config }) {
   const { jsPDF } = await import('jspdf');
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+  await poserPolicePdf(doc);
   const W = 210;
   const M = 20;            // marge
   const CW = W - 2 * M;    // largeur de contenu
@@ -33,29 +36,29 @@ export async function buildRegimentoPdf({ progress, axes, applicable, t, config 
   const ensureSpace = (h) => { if (y + h > 285) { doc.addPage(); y = M; } };
   const heading = (txt, size = 13) => {
     ensureSpace(12);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(size); doc.setTextColor(20, 20, 20);
+    doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(size); doc.setTextColor(20, 20, 20);
     doc.text(txt, M, y); y += size * 0.5;
   };
   const para = (txt, size = 10) => {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(size); doc.setTextColor(40, 40, 40);
+    doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(size); doc.setTextColor(40, 40, 40);
     const lines = doc.splitTextToSize(txt, CW);
     lines.forEach(l => { ensureSpace(6); doc.text(l, M, y); y += size * 0.52; });
     y += 2;
   };
   const tag = (txt) => {
-    doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(150, 60, 55);
+    doc.setFont(policePdf(doc), 'italic'); doc.setFontSize(8); doc.setTextColor(150, 60, 55);
     ensureSpace(5); doc.text(txt, M, y); y += 5;
   };
 
   // ── Page de garde ──
   y = 70;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(22); doc.setTextColor(20, 20, 20);
+  doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(22); doc.setTextColor(20, 20, 20);
   doc.splitTextToSize(t({ id: 'atelier.pdf.title' }, { name: libName }), CW).forEach(l => { doc.text(l, M, y); y += 10; });
   y += 4;
-  doc.setFont('helvetica', 'italic'); doc.setFontSize(12); doc.setTextColor(150, 60, 55);
+  doc.setFont(policePdf(doc), 'italic'); doc.setFontSize(12); doc.setTextColor(150, 60, 55);
   doc.splitTextToSize(t({ id: 'atelier.pdf.subtitle' }), CW).forEach(l => { doc.text(l, M, y); y += 7; });
   y += 10;
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(40, 40, 40);
+  doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(10); doc.setTextColor(40, 40, 40);
   doc.splitTextToSize(t({ id: 'atelier.pdf.preamble' }), CW).forEach(l => { doc.text(l, M, y); y += 5.4; });
 
   // ── Profil d'adoption (volet 0) ──
@@ -66,9 +69,9 @@ export async function buildRegimentoPdf({ progress, axes, applicable, t, config 
     const val = axes?.[k];
     if (!val) return;
     ensureSpace(7);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(20, 20, 20);
+    doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(10); doc.setTextColor(20, 20, 20);
     doc.text(`${t({ id: labelKey })} : `, M, y);
-    doc.setFont('helvetica', 'normal'); doc.setTextColor(40, 40, 40);
+    doc.setFont(policePdf(doc), 'normal'); doc.setTextColor(40, 40, 40);
     doc.text(t({ id: `atelier.axisValue.${val}` }), M + 55, y);
     y += 6;
   });
@@ -83,7 +86,7 @@ export async function buildRegimentoPdf({ progress, axes, applicable, t, config 
     // imprimées en puces sous la section. Elles restent [À DISCUTER].
     const entries = config?.[v.n] || [];
     entries.forEach(line => {
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(55, 55, 55);
+      doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(9.5); doc.setTextColor(55, 55, 55);
       doc.splitTextToSize(`•  ${line}`, CW - 4).forEach(l => { ensureSpace(5.4); doc.text(l, M + 4, y); y += 5; });
     });
     if (entries.length) y += 1;
@@ -103,7 +106,7 @@ export async function buildRegimentoPdf({ progress, axes, applicable, t, config 
   const pages = doc.getNumberOfPages();
   for (let p = 1; p <= pages; p++) {
     doc.setPage(p);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(130, 130, 130);
+    doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(8); doc.setTextColor(130, 130, 130);
     doc.text(t({ id: 'atelier.pdf.footer' }), M, 292);
     doc.text(`${p} / ${pages}`, W - M, 292, { align: 'right' });
   }

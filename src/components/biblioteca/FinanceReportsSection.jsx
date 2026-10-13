@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { poserPolicePdf, policePdf } from '@/lib/pdfPolice';
 
 // ════════════════════════════════════════════════════════════════════
 // FinanceReportsSection — onglet « Rapports » de la page bibliothèque.
@@ -51,11 +52,11 @@ function drawTable(doc, headers, rows) {
   const header = () => {
     doc.setFillColor(45, 45, 45);
     doc.rect(marginX, y, usableW, rowH, 'F');
-    doc.setTextColor(255); doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5);
+    doc.setTextColor(255); doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(8.5);
     let x = marginX;
     headers.forEach((h, i) => { doc.text(fit(h, colW[i]), x + 1.6, y + 4.8); x += colW[i]; });
     y += rowH;
-    doc.setFont('helvetica', 'normal'); doc.setTextColor(35); doc.setFontSize(8);
+    doc.setFont(policePdf(doc), 'normal'); doc.setTextColor(35); doc.setFontSize(8);
   };
 
   header();
@@ -72,10 +73,11 @@ function drawTable(doc, headers, rows) {
 
 async function downloadPDF(filename, title, headers, rows) {
   const { jsPDF } = await import('jspdf');
-  const doc = new jsPDF();
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(20);
+  const doc = new jsPDF({ compress: true });
+  await poserPolicePdf(doc);
+  doc.setFont(policePdf(doc), 'bold'); doc.setFontSize(14); doc.setTextColor(20);
   doc.text(title, 14, 16);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(120);
+  doc.setFont(policePdf(doc), 'normal'); doc.setFontSize(9); doc.setTextColor(120);
   doc.text(new Date().toLocaleDateString(), 14, 22);
   drawTable(doc, headers, rows);
   doc.save(filename);
