@@ -57,6 +57,10 @@
 
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
+// B45 : toute adresse venue du navigateur ou d'une page tierce (pdf, store,
+// apercus d'une og:image) passe par fetchSortant — chaque saut, chaque adresse
+// resolue verifiee ; jamais vers un reseau interne.
+import { AdresseRefusee, fetchSortant, lireOctetsBornes } from '../_shared/core/adresse-sortante.ts';
 import type { Candidate } from '../_shared/capas/sources.ts';
 import { envGet, fetchWithTimeout, normalizeIsbn } from '../_shared/capas/sources.ts';
 import { candidatesUniques, chercherCapas, runSource } from '../_shared/capas/recherche.ts';
@@ -117,12 +121,14 @@ async function rapatrierApercus(candidates: Candidate[]): Promise<void> {
   let budget = APERCU_BUDGET_TOTAL;
   await Promise.all(candidates.map(async (c) => {
     try {
-      const res = await fetchWithTimeout(c.thumbnailUrl, { headers: { Accept: 'image/*' } });
-      if (!res.ok) return;
+      // L'adresse d'une og:image vient d'une page quelconque : meme garde que
+      // pour une adresse donnee par le navigateur (B45).
+      const res = await fetchSortant(c.thumbnailUrl, { headers: { Accept: 'image/*' } }, { fetchFn: fetchWithTimeout });
+      if (!res.ok) { await res.body?.cancel().catch(() => {}); return; }
       const type = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
-      if (!type.startsWith('image/')) return;
-      const octets = new Uint8Array(await res.arrayBuffer());
-      if (!octets.byteLength || octets.byteLength > APERCU_MAX_OCTETS) return;
+      if (!type.startsWith('image/')) { await res.body?.cancel().catch(() => {}); return; }
+      const octets = await lireOctetsBornes(res, APERCU_MAX_OCTETS);
+      if (!octets || !octets.byteLength) return;
       if (octets.byteLength > budget) return;
       budget -= octets.byteLength;
       c.thumbnailData = `data:${type};base64,${enBase64(octets)}`;
@@ -165,6 +171,9 @@ const IMAGE_EXT: Record<string, string> = {
   'image/webp': 'webp',
   'image/gif': 'gif',
 };
+// Une capa pleine page tient en quelques centaines de ko ; 15 Mo laisse de la
+// marge a un scan haute definition sans laisser lire n'importe quel volume.
+const IMAGE_MAX_OCTETS = 15 * 1024 * 1024;
 
 function sanitizeKey(key: string): string {
   // bib_ref (ex. BAK-0042) ou id numerique -> caracteres surs uniquement.
@@ -191,23 +200,21 @@ async function handleStore(body: Record<string, unknown>, authHeader: string) {
   const license = String(body.license || '').trim() || null;
   if (!imageUrl) throw new Error('Provide imageUrl.');
   if (!key) throw new Error('Provide key (bib_ref or draft id).');
-  // Le serveur va chercher une adresse DONNEE PAR LE NAVIGATEUR : ni hote local
-  // ni adresse privee (meme garde que le PDF), http(s) seulement.
-  let adresse: URL;
-  try { adresse = new URL(imageUrl); } catch { throw new Error('Invalid image URL.'); }
-  if (adresse.protocol !== 'https:' && adresse.protocol !== 'http:') throw new Error('Image URL must use http(s).');
-  if (hoteInterdit(adresse.hostname)) throw new Error('Image host not allowed.');
 
   const base = envGet('SUPABASE_URL');
   if (!base) throw new Error('SUPABASE_URL unavailable.');
 
-  // Telechargement serveur de l'image choisie.
-  const imgRes = await fetchWithTimeout(imageUrl, { headers: { Accept: 'image/*' } });
-  if (!imgRes.ok) throw new Error(`Image fetch HTTP ${imgRes.status}`);
+  // Telechargement serveur de l'image choisie. Le serveur va chercher une
+  // adresse DONNEE PAR LE NAVIGATEUR : http(s) seulement, et ni nom local, ni
+  // adresse privee, ni redirection vers l'un d'eux (B45 ; jusque-la, seul le
+  // nom ecrit dans l'adresse etait verifie).
+  const imgRes = await fetchSortant(imageUrl, { headers: { Accept: 'image/*' } }, { fetchFn: fetchWithTimeout });
+  if (!imgRes.ok) { await imgRes.body?.cancel().catch(() => {}); throw new Error(`Image fetch HTTP ${imgRes.status}`); }
   const contentType = (imgRes.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
   const ext = IMAGE_EXT[contentType];
-  if (!ext) throw new Error(`Unsupported image type: ${contentType || 'unknown'}`);
-  const bytes = new Uint8Array(await imgRes.arrayBuffer());
+  if (!ext) { await imgRes.body?.cancel().catch(() => {}); throw new Error(`Unsupported image type: ${contentType || 'unknown'}`); }
+  const bytes = await lireOctetsBornes(imgRes, IMAGE_MAX_OCTETS);
+  if (!bytes) throw new Error('Image too large.');
   if (bytes.byteLength === 0) throw new Error('Empty image.');
 
   const storagePath = `books/${key}/${nom}.${ext}`;
@@ -310,31 +317,19 @@ async function handle(body: Record<string, unknown>, authHeader: string) {
 // ressource tierce chargée dans le navigateur »). Relevé le 27/09/2026 ; le
 // serveur le récupère désormais et le rend tel quel.
 //
-// Garde-fous : https seulement ; pas d'hôte local ni d'adresse privée (la
-// fonction ne doit pas servir de relais vers un réseau interne) ; 30 Mo au
-// plus ; signature « %PDF » exigée, quel que soit le type annoncé.
+// Garde-fous : https seulement, à chaque saut ; pas de nom local ni d'adresse
+// privée, résolution comprise (la fonction ne doit pas servir de relais vers
+// un réseau interne — _shared/core/adresse-sortante.ts, B45) ; 30 Mo au plus,
+// lecture coupée au-delà ; signature « %PDF » exigée, quel que soit le type
+// annoncé.
 const PDF_MAX_OCTETS = 30 * 1024 * 1024;
 
-function hoteInterdit(hote: string): boolean {
-  const h = hote.toLowerCase().replace(/^\[|\]$/g, '');
-  if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return true;
-  if (/^(127\.|10\.|0\.|169\.254\.|192\.168\.)/.test(h)) return true;
-  if (/^172\.(1[6-9]|2\d|3[01])\./.test(h)) return true;
-  if (h === '::1' || h.startsWith('fc') || h.startsWith('fd') || h.startsWith('fe80')) return true;
-  return false;
-}
-
 async function recupererPdf(adresse: string): Promise<Uint8Array> {
-  let url: URL;
-  try { url = new URL(adresse); } catch { throw new Error('Invalid PDF URL.'); }
-  if (url.protocol !== 'https:') throw new Error('PDF URL must use https.');
-  if (hoteInterdit(url.hostname)) throw new Error('PDF host not allowed.');
-  const res = await fetchWithTimeout(url.toString(), { headers: { Accept: 'application/pdf' } });
-  if (!res.ok) throw new Error(`PDF fetch HTTP ${res.status}`);
-  const annonce = Number(res.headers.get('content-length'));
-  if (Number.isFinite(annonce) && annonce > PDF_MAX_OCTETS) throw new Error('PDF too large.');
-  const octets = new Uint8Array(await res.arrayBuffer());
-  if (octets.byteLength > PDF_MAX_OCTETS) throw new Error('PDF too large.');
+  const res = await fetchSortant(adresse, { headers: { Accept: 'application/pdf' } },
+    { protocoles: ['https:'], fetchFn: fetchWithTimeout });
+  if (!res.ok) { await res.body?.cancel().catch(() => {}); throw new Error(`PDF fetch HTTP ${res.status}`); }
+  const octets = await lireOctetsBornes(res, PDF_MAX_OCTETS);
+  if (!octets) throw new Error('PDF too large.');
   const signature = String.fromCharCode(...octets.subarray(0, 5));
   if (signature !== '%PDF-') throw new Error('Not a PDF.');
   return octets;
@@ -360,7 +355,9 @@ if (runtime?.serve) {
       const payload = await handle(body, authHeader);
       return json(payload, 200);
     } catch (error) {
-      return json({ ok: false, error: error instanceof Error ? error.message : 'Unexpected failure.' }, 500);
+      // Une adresse refusee est une demande irrecevable, pas une panne.
+      const statut = error instanceof AdresseRefusee ? 422 : 500;
+      return json({ ok: false, error: error instanceof Error ? error.message : 'Unexpected failure.' }, statut);
     }
   });
 }

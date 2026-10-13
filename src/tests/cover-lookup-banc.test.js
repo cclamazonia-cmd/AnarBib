@@ -19,11 +19,19 @@
 // `fetch` ne laisse passer que Resend, et cover_lookup lit `globalThis.Deno`
 // (absent ici : variables d'environnement par défaut, pas de `serve`).
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformSync } from 'esbuild';
+
+// B45 (13/10/2026) : toute adresse venue du navigateur ou d'une page tierce
+// passe par _shared/core/adresse-sortante.ts, qui RÉSOUT le nom
+// (Deno.resolveDns) et refuse sans résolveur. Le faux DNS du banc : tout nom
+// est public, sauf piege.exemple.org, qui se résout en adresse privée.
+const fauxDns = async (nom, type) => (type !== 'A' ? [] : nom === 'piege.exemple.org' ? ['10.0.0.5'] : ['93.184.215.14']);
+beforeEach(() => { globalThis.Deno = { resolveDns: fauxDns }; });
+afterEach(() => { delete globalThis.Deno; });
 
 const FONCTIONS = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'supabase', 'functions');
 
@@ -133,6 +141,9 @@ function reseau({ olLivres = 200, olRecherche = 200, inventaire = 200, inventair
     if (u === 'https://exemple.org/page.html') {
       return new Response('<html><body>pas un pdf</body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
     }
+    // Une page publique qui redirige vers le réseau interne (B45).
+    if (u === 'https://exemple.org/redirige.pdf') return new Response(null, { status: 302, headers: { location: 'http://10.0.0.5/interne.pdf' } });
+    if (u === 'https://exemple.org/vers-piege.pdf') return new Response(null, { status: 301, headers: { location: 'https://piege.exemple.org/x.pdf' } });
     if (u === 'https://exemple.org/gros.pdf') {
       return new Response('%PDF-1.4', { status: 200, headers: { 'content-type': 'application/pdf', 'content-length': String(40 * 1024 * 1024) } });
     }
@@ -305,11 +316,21 @@ describe('cover_lookup — le PDF d’une ressource externe passe par le serveur
 
   it('http, hôte local ou adresse privée : refusés, sans une seule requête', async () => {
     const { net, recupererPdf } = pdf();
-    await expect(recupererPdf('http://exemple.org/livre.pdf')).rejects.toThrow('https');
-    for (const u of ['https://localhost/x.pdf', 'https://192.168.1.10/x.pdf', 'https://10.0.0.5/x.pdf', 'https://172.20.0.1/x.pdf', 'https://[::1]/x.pdf']) {
+    await expect(recupererPdf('http://exemple.org/livre.pdf')).rejects.toThrow('Protocol not allowed: http:');
+    for (const u of ['https://localhost/x.pdf', 'https://192.168.1.10/x.pdf', 'https://10.0.0.5/x.pdf', 'https://172.20.0.1/x.pdf', 'https://[::1]/x.pdf',
+      'https://kong/x.pdf', 'https://[::ffff:7f00:1]/x.pdf', 'https://169.254.169.254/x.pdf']) {
       await expect(recupererPdf(u), u).rejects.toThrow('not allowed');
     }
+    // B45 : un nom public qui se résout en adresse privée.
+    await expect(recupererPdf('https://piege.exemple.org/x.pdf')).rejects.toThrow('non-public');
     expect(net.demandes).toEqual([]);
+  });
+
+  it('B45 — une redirection vers le réseau interne est refusée avant d’y aller', async () => {
+    const { net, recupererPdf } = pdf();
+    await expect(recupererPdf('https://exemple.org/redirige.pdf')).rejects.toThrow('Protocol not allowed: http:');
+    await expect(recupererPdf('https://exemple.org/vers-piege.pdf')).rejects.toThrow('non-public');
+    expect(net.demandes).toEqual(['https://exemple.org/redirige.pdf', 'https://exemple.org/vers-piege.pdf']);
   });
 
   it('ce qui n’est pas un PDF, ou un PDF de plus de 30 Mo : refusé', async () => {
@@ -361,7 +382,7 @@ describe('cover_lookup — ranger la capa choisie (action store)', () => {
   // que pour le PDF (27/09/2026).
   const avecProjet = async (fn) => {
     const avant = globalThis.Deno;
-    globalThis.Deno = { env: { get: (k) => ({ SUPABASE_URL: 'https://projet.example' })[k] } };
+    globalThis.Deno = { ...avant, env: { get: (k) => ({ SUPABASE_URL: 'https://projet.example' })[k] } };
     try { return await fn(); } finally { if (avant === undefined) delete globalThis.Deno; else globalThis.Deno = avant; }
   };
   const reseauStockage = () => {
@@ -378,10 +399,15 @@ describe('cover_lookup — ranger la capa choisie (action store)', () => {
   it('hôte local, adresse privée ou schéma exotique : refusés avant toute requête', async () => {
     const net = reseauStockage();
     const { handle } = charger('cover_lookup/index.ts', net);
-    for (const u of ['http://127.0.0.1/x.jpg', 'https://192.168.0.2/x.jpg', 'http://localhost:54321/x.jpg', 'https://[::1]/x.jpg']) {
-      await expect(handle({ action: 'store', imageUrl: u, key: 'BTL-TL-000447' }, ''), u).rejects.toThrow('not allowed');
-    }
-    await expect(handle({ action: 'store', imageUrl: 'file:///etc/passwd', key: 'K' }, '')).rejects.toThrow('http(s)');
+    await avecProjet(async () => {
+      for (const u of ['http://127.0.0.1/x.jpg', 'https://192.168.0.2/x.jpg', 'http://localhost:54321/x.jpg', 'https://[::1]/x.jpg',
+        'http://kong:8000/storage/v1/object/x.jpg', 'http://db/x.jpg']) {
+        await expect(handle({ action: 'store', imageUrl: u, key: 'BTL-TL-000447' }, ''), u).rejects.toThrow('not allowed');
+      }
+      await expect(handle({ action: 'store', imageUrl: 'file:///etc/passwd', key: 'K' }, '')).rejects.toThrow('Protocol not allowed');
+      // B45 : jusque-là seul le nom écrit était vérifié ; il est désormais résolu.
+      await expect(handle({ action: 'store', imageUrl: 'https://piege.exemple.org/x.jpg', key: 'K' }, '')).rejects.toThrow('non-public');
+    });
     expect(net.demandes).toEqual([]);
   });
 

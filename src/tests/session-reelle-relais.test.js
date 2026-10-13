@@ -99,7 +99,7 @@ describe.each(Object.entries(RELAIS))('relais %s', (fonction, debut) => {
   const gestionnaire = src.slice(src.indexOf(debut));
 
   it('importe la garde partagée', () => {
-    expect(src).toMatch(/import \{ sessionManquante, statutDuRefus \} from ['"]\.\.\/_shared\/core\/session-reelle\.ts['"];/);
+    expect(src).toMatch(/import \{ sessionManquante, statutDuRefus(, \w+)* \} from ['"]\.\.\/_shared\/core\/session-reelle\.ts['"];/);
     expect(src.indexOf(debut)).toBeGreaterThan(-1);
   });
 

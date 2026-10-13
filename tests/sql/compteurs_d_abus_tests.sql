@@ -12,7 +12,8 @@ DECLARE
   k text;
   n int;
   -- 24/09/2026 (E14) : + 'bug_ip', le compteur de submit-bug-report.
-  kinds text[] := ARRAY['ip', 'email', 'geocode_ip', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill', 'bug_ip'];
+  -- 13/10/2026 (B45) : 'geocode_ip' devient 'geocode_user' (geocode compte par compte).
+  kinds text[] := ARRAY['ip', 'email', 'geocode_user', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill', 'bug_ip'];
 BEGIN
   -- T1
   FOREACH k IN ARRAY kinds LOOP

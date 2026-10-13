@@ -8,21 +8,21 @@
 //
 // Auth : verify_jwt par défaut (true), qui n'exige PAS de session (la clé publiable
 // seule passe la passerelle, B44) — d'où la garde sessionManquante, en tête. Rate-limité
-// par IP (réutilise public.auth_rate_limits) contre l'abus du géocodeur.
+// par compte (kind geocode_user de public.auth_rate_limits, B45) contre l'abus du géocodeur.
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
-import { sessionManquante, statutDuRefus } from "../_shared/core/session-reelle.ts";
+import { sessionManquante, statutDuRefus, sujetDuJeton } from "../_shared/core/session-reelle.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "https://app.anarbib.org",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
-const IP_LIMIT = 40, WINDOW_MIN = 60; // 40 géocodages / heure / IP
+const USER_LIMIT = 40, WINDOW_MIN = 60; // 40 géocodages / heure / compte
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
@@ -55,12 +55,15 @@ async function traiter(req: Request): Promise<Response> {
     { auth: { persistSession: false } },
   );
 
-  // Rate-limit par IP (compteur partagé, clé hachée, échoue fermé — B26 : de
-  // juin à septembre ce compteur n'a jamais compté, la table refusait son kind
-  // et personne ne lisait l'erreur).
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const ipHash = await sha256Hex(ip);
-  const stop = await freiner(sb, "geocode_ip", ipHash, IP_LIMIT, WINDOW_MIN, json);
+  // Compteur PAR COMPTE (B45, 13/10/2026 ; compteur partagé, clé hachée, échoue
+  // fermé — B26). Il comptait par adresse IP : tant que la fonction était
+  // ouverte à tous (B44), c'était la seule prise. Depuis que la session est
+  // exigée, l'IP gênait deux fois : tout le local d'une bibliothèque derrière
+  // une même box partageait 40 géocodages, et un `x-forwarded-for` se choisit.
+  // Le `sub` du jeton ne se lit qu'après la garde (sujetDuJeton).
+  const sujet = sujetDuJeton(req.headers.get("Authorization"));
+  if (!sujet) return json({ error: "auth_required" }, 401);
+  const stop = await freiner(sb, "geocode_user", await sha256Hex(sujet), USER_LIMIT, WINDOW_MIN, json);
   if (stop) return stop;
 
   // Proxy vers Nominatim self-hosted (côté serveur uniquement)

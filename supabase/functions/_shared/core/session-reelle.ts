@@ -31,6 +31,28 @@ export type RefusSession = 'auth_required' | 'aal2_required';
 /** Le statut HTTP d'un refus : 401 sans session, 403 sans second facteur. */
 export const statutDuRefus = (refus: RefusSession): number => (refus === 'aal2_required' ? 403 : 401);
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * L'identifiant du compte (`sub`) porté par le jeton de l'appelant, ou null.
+ * B45 : le compteur de geocode compte par compte, plus par adresse IP.
+ * À n'appeler qu'APRÈS sessionManquante → null : ce jeton-là vient alors
+ * d'être accepté par PostgREST (signature et expiration vérifiées), lire son
+ * `sub` sans revérifier la signature est sûr. Avant, n'importe qui pourrait y
+ * écrire n'importe quoi.
+ */
+export function sujetDuJeton(authHeader: string | null | undefined): string | null {
+  const m = String(authHeader || '').match(/^bearer\s+([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]+)$/i);
+  if (!m) return null;
+  try {
+    const b64 = m[2].replace(/-/g, '+').replace(/_/g, '/');
+    const charge = JSON.parse(atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4)));
+    return typeof charge?.sub === 'string' && UUID.test(charge.sub) ? charge.sub.toLowerCase() : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * null quand l'appelant a une session d'usager réelle (et le second facteur si
  * son compte le doit) ; sinon le code du refus.

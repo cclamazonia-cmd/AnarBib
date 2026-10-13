@@ -69,9 +69,9 @@ describe('rate-limit partagé — sha256Hex et EMPREINTE', () => {
 describe('rate-limit partagé — frapper', () => {
   it('première frappe : ok, ligne créée à 1', async () => {
     const { sb, ecrits } = fauxClient();
-    expect(await frapper(sb, 'geocode_ip', HEX, 3, 60)).toBe('ok');
+    expect(await frapper(sb, 'geocode_user', HEX, 3, 60)).toBe('ok');
     expect(ecrits).toHaveLength(1);
-    expect(ecrits[0]).toMatchObject({ kind: 'geocode_ip', key: HEX, failure_count: 1, blocked_until: null });
+    expect(ecrits[0]).toMatchObject({ kind: 'geocode_user', key: HEX, failure_count: 1, blocked_until: null });
   });
   it('dans la fenêtre, le compte monte ; la frappe de trop refuse et bloque une fenêtre', async () => {
     const debut = new Date(Date.now() - 60e3).toISOString();

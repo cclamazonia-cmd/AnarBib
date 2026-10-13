@@ -19,7 +19,7 @@
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens } from './helpers/monter-ef.js';
 
-const KINDS = ['ip', 'email', 'geocode_ip', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill'];
+const KINDS = ['ip', 'email', 'geocode_user', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill', 'bug_ip']; // = auth_rate_limits_kind_check (B45)
 const LIEN = 'http://stub/auth/v1/verify?token=abc&type=recovery';
 
 function monter({ env = {}, profils = [{ preferred_language: 'de' }], lien = { data: { properties: { action_link: LIEN } }, error: null }, tablePanne = false, resend } = {}) {

@@ -1,5 +1,7 @@
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
+import { AdresseRefusee, fetchSortant, lireOctetsBornes } from '../_shared/core/adresse-sortante.ts';
+const PAGE_MAX_OCTETS = 2 * 1024 * 1024;
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -145,25 +147,38 @@ Deno.serve(async (req)=>{
         error: 'URL inválida.'
       }, 400);
     }
-    // Fetch the URL
+    // B45 (13/10/2026) : l'adresse vient de l'appelant. fetchSortant vérifie
+    // chaque saut (http(s), ni nom local ni adresse privée, résolution DNS
+    // comprise) et suit les redirections à la main ; jusque-là `redirect:
+    // 'follow'` sans aucune garde menait n'importe où, réseau interne compris.
+    // Le corps est lu borné (2 Mo), le délai couvre aussi sa lecture.
     const controller = new AbortController();
     const timer = setTimeout(()=>controller.abort(), 15000);
     let response;
+    let octets;
     try {
-      response = await fetch(url, {
-        method: 'GET',
-        redirect: 'follow',
+      response = await fetchSortant(url, {
         signal: controller.signal,
         headers: {
           'User-Agent': 'AnarBib fetch-url-metadata/1.0',
           'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, text/html, */*'
         }
       });
+      octets = await lireOctetsBornes(response, PAGE_MAX_OCTETS);
+    } catch (err) {
+      if (err instanceof AdresseRefusee) return json({
+        error: 'address_not_allowed',
+        detail: err.message
+      }, 422);
+      throw err;
     } finally{
       clearTimeout(timer);
     }
+    if (!octets) return json({
+      error: 'page_too_large'
+    }, 413);
     const contentType = (response.headers.get('content-type') || '').toLowerCase();
-    const text = await response.text();
+    const text = new TextDecoder().decode(octets);
     if (!response.ok) {
       return json({
         ok: false,
