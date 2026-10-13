@@ -402,7 +402,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Verificado : 13/10 — lotes 1 e 2 implantados e verificados; auditoria das Edge Functions implantada (`069b76ea`). Política do Storage aplicada pela CI (`20261013182456`).*
 
-**O que é.** Lote 3: política restritiva em `storage.objects` FEITA em 13/10 (`e0a9b0b5`); auditoria das Edge Functions FEITA em 13/10 (`069b76ea`); aviso às 15 contas de equipe; migração de ativação (modo `facteurs`, depois `equipes` na data fixada por Xavier); denylist do backup.
+**O que é.** Lote 3: política restritiva em `storage.objects` FEITA em 13/10 (`e0a9b0b5`); auditoria das Edge Functions FEITA em 13/10 (`069b76ea`); `attach-received-asset` decide a permissão antes da chave de serviço (`470e79e8`); aviso às 15 contas de equipe; migração de ativação (modo `facteurs`, depois `equipes` na data fixada por Xavier); denylist do backup.
 
 **Por que importa.** Uma senha reutilizada e vazada abre hoje os dados de leitura de uma biblioteca inteira, ou da rede. Só a tela não protege nada; daí o controle único antes do PostgREST.
 
