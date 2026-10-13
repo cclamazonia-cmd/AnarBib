@@ -213,3 +213,7 @@ ingest.partner_catalog_received_assets
 ingest.partner_catalog_row_to_draft
 ingest.partner_catalog_sources
 ingest.partner_catalog_staging_rows
+# B42 (13/10/2026) : la double authentification. Le réglage (une ligne, mode off/facteurs/equipes)
+# et le journal des retraits de facteurs par l'administration du réseau (uuid des comptes + motif).
+private.double_facteur_journal
+private.double_facteur_reglage

@@ -12,8 +12,9 @@ import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
 import { clearAuthHash } from '@/lib/clearAuthHash';
 import { hashHintsRecovery, decideHashRecovery } from '@/lib/recoveryView';
-import { codeDeuxiemeFacteurRequis } from '@/lib/doubleFacteur';
+import { etapeDoubleFacteur, niveauDuJeton } from '@/lib/doubleFacteur';
 import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
+import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
 import { readSessionEndNotice, acknowledgeWhenSeen } from '@/lib/sessionEndNotice';
 
 
@@ -76,7 +77,7 @@ export default function LoginPage() {
   // (session zombie en localStorage, refresh accidentel, etc.), le useEffect
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
-  const { session, user, profile, loading: authLoading, recovery, exitRecovery, signOut } = useAuth();
+  const { session, user, profile, loading: authLoading, recovery, exitRecovery, signOut, doubleFacteur } = useAuth();
   // L'avis ne s'annonce qu'une fois. Dès qu'il est réellement affiché — mêmes
   // conditions que le bandeau plus bas, et onglet visible — on le consomme et on
   // retire `reason` de l'adresse. Il reste à l'écran pour cette visite (il a été
@@ -255,11 +256,16 @@ export default function LoginPage() {
     // de l'EF login n'est qu'en aal1. On demande le code AVANT toute autre
     // bascule (y compris force-change). Une session zombie en aal1 passe ici
     // aussi : ProtectedRoute renvoie vers /login tant que le code manque.
-    if (codeDeuxiemeFacteurRequis(session)) {
-      setView('mfa');
+    // Lot 2 : un compte d'équipe sans appareil, quand le serveur l'exige,
+    // inscrit d'abord un appareil ('mfa-inscription'). En aal1, on attend
+    // l'état serveur (doubleFacteur, une RPC) avant de décider.
+    const etape = etapeDoubleFacteur(session, doubleFacteur);
+    if (etape) {
+      setView(etape === 'code' ? 'mfa' : 'mfa-inscription');
       setLoginLoading(false);
       return;
     }
+    if (doubleFacteur === undefined && niveauDuJeton(session?.access_token) !== 'aal2') return;
     // Premier login avec mdp provisoire : bascule vers le formulaire dedie.
     if (profile?.must_change_password === true) {
       setView('force-change');
@@ -289,16 +295,22 @@ export default function LoginPage() {
     // prennent le relais. On ne revient JAMAIS au formulaire une fois authentifie.
     const fwd = setTimeout(() => navigate(nextUrl), 4000);
     return () => clearTimeout(fwd);
-  }, [authLoading, session, user, profile, view, navigate, nextUrl, libraryLoading, themeReady, recovery]);
+  }, [authLoading, session, doubleFacteur, user, profile, view, navigate, nextUrl, libraryLoading, themeReady, recovery]);
 
-  // B42 — code accepté : auth-js a émis MFA_CHALLENGE_VERIFIED, AuthContext
-  // porte la session aal2. On rend la main à la vue 'login', dont l'effet
-  // ci-dessus fait la redirection habituelle. Déconnexion pendant le code :
-  // plus de session, on revient au formulaire.
+  // B42 — code accepté (ou premier appareil inscrit) : auth-js a émis
+  // MFA_CHALLENGE_VERIFIED, AuthContext porte la session aal2. On rend la main
+  // à la vue 'login', dont l'effet ci-dessus fait la redirection habituelle.
+  // Déconnexion pendant le code : plus de session, retour au formulaire.
   useEffect(() => {
-    if (view !== 'mfa' || authLoading) return;
-    if (!session || !codeDeuxiemeFacteurRequis(session)) setView('login');
-  }, [view, session, authLoading]);
+    if ((view !== 'mfa' && view !== 'mfa-inscription') || authLoading) return;
+    if (!session) { setView('login'); return; }
+    // État serveur en cours de relecture (nouveau jeton) : on ne bouge pas.
+    if (doubleFacteur === undefined && niveauDuJeton(session.access_token) !== 'aal2') return;
+    const etape = etapeDoubleFacteur(session, doubleFacteur);
+    if (!etape) { setView('login'); return; }
+    const voulue = etape === 'code' ? 'mfa' : 'mfa-inscription';
+    if (view !== voulue) setView(voulue);
+  }, [view, session, doubleFacteur, authLoading]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -602,14 +614,18 @@ export default function LoginPage() {
                   ? t({ id: 'auth.forceChange.pageTitle' })
                   : view === 'mfa'
                     ? t({ id: 'twoFactor.challenge.title' })
-                    : t({ id: 'auth.login.title' })}
+                    : view === 'mfa-inscription'
+                      ? t({ id: 'twoFactor.required.title' })
+                      : t({ id: 'auth.login.title' })}
               </h1>
               <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
                 {view === 'force-change'
                   ? t({ id: 'auth.forceChange.pageSubtitle' })
                   : view === 'mfa'
                     ? t({ id: 'twoFactor.challenge.subtitle' })
-                    : t({ id: 'auth.login.subtitle' })}
+                    : view === 'mfa-inscription'
+                      ? t({ id: 'twoFactor.required.body' })
+                      : t({ id: 'auth.login.subtitle' })}
               </p>
             </>
           )}
@@ -635,7 +651,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {view !== 'force-change' && view !== 'mfa' && !showTransition && (
+          {view !== 'force-change' && view !== 'mfa' && view !== 'mfa-inscription' && !showTransition && (
             <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
               <Button variant="secondary" onClick={() => navigate('/')}>
                 {t({ id: 'auth.backToCatalog' })}
@@ -784,6 +800,17 @@ export default function LoginPage() {
 
           {view === 'mfa' && (
             <DoubleFacteurDefi session={session} onDeconnexion={signOut} />
+          )}
+
+          {view === 'mfa-inscription' && (
+            <div>
+              <ContaDoubleFacteur obligatoire />
+              <div style={{ marginTop: 16 }}>
+                <Button variant="secondary" type="button" onClick={signOut}>
+                  {t({ id: 'twoFactor.challenge.signOut' })}
+                </Button>
+              </div>
+            </div>
           )}
 
           {view === 'force-change' && (

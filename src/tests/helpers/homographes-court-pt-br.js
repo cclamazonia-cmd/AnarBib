@@ -368,6 +368,7 @@ export const HOMOGRAPHE_COURT = {
     "Dígitos",
     "Dispo",
     "Dispositivo",
+    "Dispositivos",
     "Distribuidora",
     "Distrito",
     "Documento",

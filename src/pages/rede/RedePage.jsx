@@ -10,6 +10,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
+import DoubleFacteurPanel from '@/components/rede/DoubleFacteurPanel'; /* B42 : double authentification (13/10/2026) */
 import ReportsPanel from '@/components/rede/ReportsPanel';
 import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
 import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
@@ -62,6 +63,7 @@ export default function RedePage() {
     { id: 'libraries', icon: 'landmark', label: t({ id: 'rede.tab.libraries' }) },
     { id: 'members', icon: 'users', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', icon: 'key', label: t({ id: 'rede.tab.admins' }) },
+    { id: 'twofactor', icon: 'shield', label: t({ id: 'rede.tab.twoFactor' }) }, /* B42 */
     { id: 'reports', icon: 'gauge', label: t({ id: 'rede.tab.reports' }) },
     { id: 'gazeta', icon: 'newspaper', label: t({ id: 'rede.tab.gazeta' }) },
     { id: 'lettre', icon: 'mail', label: t({ id: 'rede.tab.lettre' }) },
@@ -748,6 +750,13 @@ export default function RedePage() {
             Cooptation et retrait collectif suivent en E.4.b/c. */}
         {tab === 'admins' && (
           <AdminsPanel />
+        )}
+
+        {/* ═══ B42 — DOUBLE AUTHENTIFICATION (13/10/2026) ═════ */}
+        {/* Comptes d'équipe et leurs appareils, retrait d'appareils après
+            vérification d'identité hors bande (motif journalisé, aal2). */}
+        {tab === 'twofactor' && (
+          <DoubleFacteurPanel />
         )}
 
         {/* ═══ 6. RAPPORTS DIAGNOSTIQUES (PDF) ════════════════ */}

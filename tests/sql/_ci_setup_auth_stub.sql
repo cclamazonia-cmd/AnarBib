@@ -95,3 +95,51 @@ $$;
 -- ---------------------------------------------------------------------------
 GRANT USAGE ON SCHEMA auth TO authenticated, anon, service_role;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA auth TO authenticated, anon, service_role;
+
+-- ---------------------------------------------------------------------------
+-- Double authentification (B42, 13/10/2026) : les facteurs et les sessions de
+-- GoTrue, colonnes et types relevés en production le 13/10 (sous-ensemble lu
+-- et écrit par les migrations). auth.mfa_factors porte les facteurs TOTP
+-- inscrits (status 'verified' une fois le premier code accepté) ;
+-- api.fn_admin_retirer_double_facteur supprime ses lignes et celles de
+-- auth.sessions. Sans eux, la suite B42 ne pourrait ni inscrire de facteur ni
+-- prouver un retrait.
+-- ---------------------------------------------------------------------------
+DO $types$
+BEGIN
+  CREATE TYPE auth.factor_type AS ENUM ('totp', 'webauthn', 'phone');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $types$;
+DO $types$
+BEGIN
+  CREATE TYPE auth.factor_status AS ENUM ('unverified', 'verified');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $types$;
+DO $types$
+BEGIN
+  CREATE TYPE auth.aal_level AS ENUM ('aal1', 'aal2', 'aal3');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $types$;
+
+CREATE TABLE IF NOT EXISTS auth.mfa_factors (
+  id             uuid NOT NULL PRIMARY KEY,
+  user_id        uuid NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
+  friendly_name  text,
+  factor_type    auth.factor_type NOT NULL,
+  status         auth.factor_status NOT NULL,
+  created_at     timestamptz NOT NULL,
+  updated_at     timestamptz NOT NULL,
+  secret         text
+);
+CREATE INDEX IF NOT EXISTS mfa_factors_user_id_idx ON auth.mfa_factors (user_id);
+
+CREATE TABLE IF NOT EXISTS auth.sessions (
+  id          uuid NOT NULL PRIMARY KEY,
+  user_id     uuid NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
+  created_at  timestamptz,
+  updated_at  timestamptz,
+  factor_id   uuid,
+  aal         auth.aal_level,
+  not_after   timestamptz
+);
+CREATE INDEX IF NOT EXISTS sessions_user_id_idx ON auth.sessions (user_id);

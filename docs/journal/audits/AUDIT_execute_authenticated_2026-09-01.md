@@ -2060,3 +2060,19 @@ Les aides `ingest.fn_h21_*` du lot et les fonctions de déclencheur sont fermée
 | `public.fn_import_proposer_retraits(bigint)` | 10/10 (H21 lot 7) | verrou du run et verrou d'avis par bibliothèque ; 1 000 brouillons au plus par appel ; seul le fichier actuel de la source | **Saine.** Crée des brouillons de retrait ou de levée dans le lot du run ; le marqueur ne se pose qu'à leur publication, après révision, sous la garde de `publish_exemplar_draft`. |
 
 Compte attendu au prochain relevé : 0029 = **433** (428 + 4 de ce lot + 1 de C29, `fn_exemplaire_modifier_et_publier` ; compté en production le 10/10 par l’équivalent SQL public + api) ; 0028 inchangé.
+
+### Complément du 13/10 — B42 lot 2, la double authentification s'exige côté serveur (migration `20261013171710_b42_la_double_authentification_s_exige_cote_serveur`)
+
+Trois portes nouvelles pour `authenticated`, aucune pour `anon`, toutes dans `api`, SECURITY DEFINER, `search_path` vide, fermées à
+`PUBLIC` et `anon`. Une aide DEFINER dans `private` (hors PostgREST) et une fonction INVOKER ouverte à `anon` (liste T12 de
+`grants_herites_tests`, une ligne). Migration livrée **éteinte** : mode `off`, fonction d'avant-requête non branchée.
+
+| Fonction | Garde | Verdict |
+|---|---|---|
+| `api.fn_mon_etat_double_facteur()` | `auth.uid()` nul → 42501 | **Saine.** Ne parle que du compte de la session (mode, aal du jeton, facteur vérifié, compte d'équipe, aal2 exigé) ; seule RPC de la liste blanche de la fonction d'avant-requête. |
+| `api.fn_admin_double_facteur_comptes()` | `fn_assert_network_admin()` | **Saine.** Lecture seule : comptes d'équipe actifs et comptes à facteur vérifié, nom, courriel, bibliothèques, nombre de facteurs. Rien que l'administration du réseau ne voie déjà ailleurs, sauf le nombre de facteurs. |
+| `api.fn_admin_retirer_double_facteur(uuid, text)` | `fn_assert_network_admin()` **et** jeton en `aal2` ; motif ≥ 10 caractères | **Saine.** Supprime les facteurs et les sessions du compte visé (`auth.mfa_factors`, `auth.sessions`), journalise (qui, pour qui, combien, pourquoi) dans `private.double_facteur_journal`. |
+| `private.fn_aal2_exige_pour_moi()` | sans paramètre (`auth.uid()`) | **Saine.** DEFINER pour lire `auth.mfa_factors` et le réglage ; ouverte à `authenticated` seulement parce que la fonction d'avant-requête s'exécute sous ce rôle ; hors PostgREST ; ne dit rien d'un autre compte. |
+| `private.fn_avant_requete()` | INVOKER | **Saine.** Ouverte à `anon`, `authenticated`, `service_role` parce que PostgREST l'appellera sous le rôle de chaque requête ; rend la main aussitôt hors `authenticated` et en `aal2` ; échec ouvert sur toute erreur imprévue. |
+
+Comptes attendus, `public` + `api` : **0029 = 436** (433 relevé en production le 13/10 + 3), **0028 = 29** (inchangé).

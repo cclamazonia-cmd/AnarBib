@@ -24,15 +24,18 @@ const mfa = {
   challengeAndVerify: vi.fn(),
   unenroll: vi.fn(async () => ({ data: {}, error: null })),
 };
+const apiRpc = vi.fn();
 vi.mock('@/lib/supabase', () => ({
   supabase: { auth: { mfa: new Proxy({}, { get: (_, k) => (...a) => mfa[k](...a) }) } },
+  apiRpc: (...a) => apiRpc(...a),
   SUPABASE_URL: 'https://exemple.invalid',
 }));
 
 import {
-  niveauDuJeton, facteursVerifies, codeDeuxiemeFacteurRequis, nettoyerCode, codeBienForme,
+  niveauDuJeton, facteursVerifies, codeDeuxiemeFacteurRequis, etapeDoubleFacteur, nettoyerCode, codeBienForme,
   secretParGroupes, cleErreurDoubleFacteur,
 } from '@/lib/doubleFacteur';
+import DoubleFacteurPanel from '@/components/rede/DoubleFacteurPanel';
 import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
 import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
 
@@ -46,7 +49,7 @@ const VERIFIE = { id: 'f-1', factor_type: 'totp', status: 'verified', friendly_n
 const INACHEVE = { id: 'f-0', factor_type: 'totp', status: 'unverified', friendly_name: 'Appareil 1', created_at: '2026-10-13T09:00:00Z' };
 const session = (aal, factors) => ({ access_token: jeton({ sub: 'u', aal, user_metadata: { nom: 'Élise' } }), user: { id: 'u', factors } });
 
-afterEach(() => { cleanup(); Object.values(mfa).forEach((f) => f.mockReset()); mfa.unenroll.mockImplementation(async () => ({ data: {}, error: null })); });
+afterEach(() => { cleanup(); apiRpc.mockReset(); Object.values(mfa).forEach((f) => f.mockReset()); mfa.unenroll.mockImplementation(async () => ({ data: {}, error: null })); });
 
 describe('doubleFacteur.js — quand un code est dû', () => {
   it('lit le niveau du jeton, accents compris ; un jeton illisible ne vaut rien', () => {
@@ -85,6 +88,27 @@ describe('doubleFacteur.js — quand un code est dû', () => {
       const msgs = JSON.parse(lire(`src/i18n/locales/${loc}.json`));
       for (const c of cles) expect(msgs[c], `${loc} ${c}`).toBeTruthy();
     }
+  });
+});
+
+describe('etapeDoubleFacteur — lot 2 : code ou inscription', () => {
+  const coord = { mode: 'equipes', exige: true, a_facteur: false, equipe: true };
+  it('facteur vérifié en aal1 : le code, quel que soit l’état serveur', () => {
+    expect(etapeDoubleFacteur(session('aal1', [VERIFIE]), undefined)).toBe('code');
+    expect(etapeDoubleFacteur(session('aal1', [VERIFIE]), null)).toBe('code');
+  });
+  it('compte d’équipe sans appareil, exigé par le serveur : l’inscription', () => {
+    expect(etapeDoubleFacteur(session('aal1', []), coord)).toBe('inscription');
+  });
+  it('facteur connu du serveur mais pas encore de la session : le code', () => {
+    expect(etapeDoubleFacteur(session('aal1', []), { ...coord, a_facteur: true })).toBe('code');
+  });
+  it('rien à faire : aal2, état inconnu ou illisible, rien d’exigé, pas de session', () => {
+    expect(etapeDoubleFacteur(session('aal2', [VERIFIE]), coord)).toBeNull();
+    expect(etapeDoubleFacteur(session('aal1', []), undefined)).toBeNull();
+    expect(etapeDoubleFacteur(session('aal1', []), null)).toBeNull();
+    expect(etapeDoubleFacteur(session('aal1', []), { ...coord, exige: false })).toBeNull();
+    expect(etapeDoubleFacteur(null, coord)).toBeNull();
   });
 });
 
@@ -162,17 +186,73 @@ describe('DoubleFacteurDefi — le code à la connexion', () => {
   });
 });
 
+describe('DoubleFacteurPanel — page Réseau', () => {
+  const COORD = { user_id: 'u-1', nom: 'Camille', email: 'c@x.org', administration: false, equipes: 'BLMF (coordenador)', facteurs: 0, dernier_facteur: null };
+  const LECT = { user_id: 'u-2', nom: 'Lou', email: 'l@x.org', administration: false, equipes: null, facteurs: 1, dernier_facteur: '2026-10-13T10:00:00Z' };
+  it('le mode, les comptes sans appareil, le retrait exige un motif puis se fait', async () => {
+    apiRpc.mockImplementation(async (fn) => {
+      if (fn === 'fn_admin_double_facteur_comptes') return { data: [COORD, LECT], error: null };
+      if (fn === 'fn_mon_etat_double_facteur') return { data: { mode: 'off' }, error: null };
+      if (fn === 'fn_admin_retirer_double_facteur') return { data: { facteurs_retires: 1, sessions_fermees: 2 }, error: null };
+      return { data: null, error: { message: '{}' } };
+    });
+    avecIntl(<DoubleFacteurPanel />);
+    await screen.findByText('Camille');
+    expect(screen.getByText(fr['twoFactor.admin.mode'].replace('{mode}', fr['twoFactor.admin.mode.off']))).toBeTruthy();
+    expect(screen.getByText(fr['twoFactor.admin.none'])).toBeTruthy();
+    // un seul bouton de retrait : le compte sans appareil n'en a pas
+    const boutons = screen.getAllByText(fr['twoFactor.admin.remove']);
+    expect(boutons).toHaveLength(1);
+    fireEvent.click(boutons[0]);
+    const motif = document.querySelector('form input[type="text"]');
+    fireEvent.change(motif, { target: { value: 'court' } });
+    fireEvent.submit(motif.closest('form'));
+    await screen.findByText(fr['twoFactor.admin.motifRequired']);
+    expect(apiRpc).not.toHaveBeenCalledWith('fn_admin_retirer_double_facteur', expect.anything());
+    fireEvent.change(motif, { target: { value: 'Identité vérifiée de vive voix en assemblée' } });
+    fireEvent.submit(motif.closest('form'));
+    await waitFor(() => expect(apiRpc).toHaveBeenCalledWith('fn_admin_retirer_double_facteur', { p_user: 'u-2', p_motif: 'Identité vérifiée de vive voix en assemblée' }));
+  });
+  it('administration en aal1 : le refus aal2_required se traduit', async () => {
+    apiRpc.mockImplementation(async (fn) => {
+      if (fn === 'fn_admin_double_facteur_comptes') return { data: [LECT], error: null };
+      if (fn === 'fn_mon_etat_double_facteur') return { data: { mode: 'equipes' }, error: null };
+      return { data: null, error: { status: 403, message: JSON.stringify({ code: '42501', message: 'aal2_required' }) } };
+    });
+    avecIntl(<DoubleFacteurPanel />);
+    fireEvent.click(await screen.findByText(fr['twoFactor.admin.remove']));
+    const motif = document.querySelector('form input[type="text"]');
+    fireEvent.change(motif, { target: { value: 'Identité vérifiée sur Matrix' } });
+    fireEvent.submit(motif.closest('form'));
+    await screen.findByText(fr['twoFactor.error.needCode']);
+  });
+});
+
 describe('le code passe avant tout', () => {
   it('LoginPage : vue mfa demandée avant le changement de mot de passe forcé et la redirection', () => {
     const src = lire('src/pages/public/LoginPage.jsx');
     const effet = src.slice(src.indexOf('if (view !== \'login\') return;'));
-    expect(effet.indexOf('codeDeuxiemeFacteurRequis(session)')).toBeGreaterThan(-1);
-    expect(effet.indexOf('codeDeuxiemeFacteurRequis(session)')).toBeLessThan(effet.indexOf('must_change_password === true'));
+    expect(effet.indexOf('etapeDoubleFacteur(session, doubleFacteur)')).toBeGreaterThan(-1);
+    expect(effet.indexOf('etapeDoubleFacteur(session, doubleFacteur)')).toBeLessThan(effet.indexOf('must_change_password === true'));
     expect(src).toMatch(/view === 'mfa' && \(\s*<DoubleFacteurDefi/);
   });
 
-  it('ProtectedRoute : session aal1 d’un compte à facteur renvoyée vers /login avec next', () => {
+  it('ProtectedRoute : session aal1 qui doit un code ou une inscription renvoyée vers /login avec next', () => {
     const src = lire('src/components/layout/ProtectedRoute.jsx');
-    expect(src).toMatch(/if \(codeDeuxiemeFacteurRequis\(session\)\) \{\s*return <Navigate to=\{`\/login\$\{next\}`\} replace \/>;/);
+    expect(src).toMatch(/if \(etapeDoubleFacteur\(session, doubleFacteur\)\) \{\s*return <Navigate to=\{`\/login\$\{next\}`\} replace \/>;/);
+  });
+
+  it('LoginPage : vue d’inscription obligatoire, et attente de l’état serveur en aal1', () => {
+    const src = lire('src/pages/public/LoginPage.jsx');
+    expect(src).toMatch(/setView\(etape === 'code' \? 'mfa' : 'mfa-inscription'\)/);
+    expect(src).toMatch(/view === 'mfa-inscription' && \(\s*<div>\s*<ContaDoubleFacteur obligatoire \/>/);
+    expect(src).toContain("if (doubleFacteur === undefined && niveauDuJeton(session?.access_token) !== 'aal2') return;");
+  });
+
+  it('AuthContext : l’état serveur relu à chaque nouveau jeton, exposé', () => {
+    const src = lire('src/contexts/AuthContext.jsx');
+    expect(src).toContain("apiRpc('fn_mon_etat_double_facteur')");
+    expect(src).toMatch(/\}, \[jeton\]\);/);
+    expect(src).toMatch(/exitRecovery,\s*doubleFacteur,/);
   });
 });

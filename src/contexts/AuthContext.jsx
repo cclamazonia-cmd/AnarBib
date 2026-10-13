@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, apiRpc } from '@/lib/supabase';
 import { syncLocaleFromProfile } from '@/i18n';
 import { clearStaffSession } from '@/lib/staffStorage';
 import { clearSessionAlive, clearSessionEndNotice } from '@/lib/sessionEndNotice';
@@ -241,6 +241,26 @@ export function AuthProvider({ children }) {
      
   }, [loadProfile]);
 
+  // B42, lot 2 (13/10/2026) — l'état de la double authentification pour la
+  // session (api.fn_mon_etat_double_facteur, seule RPC que la fonction
+  // d'avant-requête laisse passer à une session aal1 bloquée). Relu à chaque
+  // NOUVEAU jeton : connexion, démarrage, code accepté (TOKEN_REFRESHED est
+  // ignoré plus haut, le jeton rafraîchi garde son niveau). undefined = pas
+  // encore lu ; null = illisible (RPC absente, réseau) : on laisse passer, le
+  // serveur tranche. Effet hors du rappel onAuthStateChange : pas de verrou.
+  const [doubleFacteur, setDoubleFacteur] = useState(undefined);
+  const jeton = session?.access_token;
+  useEffect(() => {
+    setDoubleFacteur(undefined);
+    if (!jeton) return undefined;
+    let vivant = true;
+    apiRpc('fn_mon_etat_double_facteur').then(
+      ({ data, error }) => { if (vivant) setDoubleFacteur(error ? null : (data ?? null)); },
+      () => { if (vivant) setDoubleFacteur(null); },
+    );
+    return () => { vivant = false; };
+  }, [jeton]);
+
   const signOut = async () => {
     await supabase.auth.signOut();
     clearStaffSession();
@@ -263,6 +283,7 @@ export function AuthProvider({ children }) {
         loading,
         recovery,
         exitRecovery,
+        doubleFacteur,
         signOut,
         refreshProfile,
       }}

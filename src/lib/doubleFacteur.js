@@ -11,9 +11,11 @@
 // supabase.auth.mfa.getAuthenticatorAssuranceLevel(), sans son aller-retour
 // réseau : il doit pouvoir tourner dans le rendu (ProtectedRoute, LoginPage).
 //
-// Ce n'est PAS une protection : un jeton aal1 appelle l'API directement.
-// L'exigence côté serveur vient au lot 2 (fonction d'avant-requête de
-// PostgREST). Ici, on ne fait que conduire la personne jusqu'au code.
+// Ce n'est PAS la protection : un jeton aal1 appelle l'API directement.
+// L'exigence est côté serveur (lot 2 : private.fn_avant_requete, fonction
+// d'avant-requête de PostgREST). Ici, on ne fait que conduire la personne
+// jusqu'au code, ou jusqu'à l'inscription d'un appareil quand le serveur
+// l'exige d'un compte d'équipe (etapeDoubleFacteur).
 // ═══════════════════════════════════════════════════════════
 
 /** Charge utile d'un JWT, ou null s'il est illisible. */
@@ -44,6 +46,23 @@ export function codeDeuxiemeFacteurRequis(session) {
   if (!session?.access_token) return false;
   if (facteursVerifies(session.user).length === 0) return false;
   return niveauDuJeton(session.access_token) !== 'aal2';
+}
+
+/**
+ * B42, lot 2 — l'étape due par une session, d'après le jeton et l'état que
+ * rend api.fn_mon_etat_double_facteur (undefined : pas encore lu ; null :
+ * illisible — on laisse passer, le serveur tranche) :
+ *   'code'        un facteur vérifié existe, la session est en aal1 ;
+ *   'inscription' le serveur exige aal2 (compte d'équipe en mode 'equipes')
+ *                 et aucun facteur n'est inscrit ;
+ *   null          rien à faire.
+ */
+export function etapeDoubleFacteur(session, etat) {
+  if (!session?.access_token) return null;
+  if (codeDeuxiemeFacteurRequis(session)) return 'code';
+  if (niveauDuJeton(session.access_token) === 'aal2') return null;
+  if (!etat?.exige) return null;
+  return etat.a_facteur ? 'code' : 'inscription';
 }
 
 /** Un code TOTP saisi : six chiffres, espaces et tirets tolérés. */

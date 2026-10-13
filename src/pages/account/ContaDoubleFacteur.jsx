@@ -3,6 +3,8 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui';
 import { codeBienForme, nettoyerCode, secretParGroupes, cleErreurDoubleFacteur } from '@/lib/doubleFacteur';
+// Les classes ab-conta-* : la section sert aussi d'écran d'inscription obligatoire dans LoginPage.
+import './AccountPage.css';
 
 // ═══════════════════════════════════════════════════════════
 // AnarBib — la double authentification dans Mon compte (B42, lot 1,
@@ -22,16 +24,18 @@ import { codeBienForme, nettoyerCode, secretParGroupes, cleErreurDoubleFacteur }
 // secours » que Supabase connaisse. Retirer un facteur vérifié exige une
 // session aal2 (refus insufficient_aal sinon).
 //
-// Facultatif à ce lot pour tout le monde. L'obligation des comptes d'équipe
-// (bibliothécaires, coordinations, administration du réseau) et l'exigence
-// côté serveur viennent au lot 2.
+// Facultatif pour un lecteur. Pour un compte d'équipe (bibliothécaires,
+// coordinations, administration du réseau), quand le serveur l'exige (lot 2,
+// mode 'equipes'), LoginPage monte cette même section en « obligatoire »
+// (sans cadre ni titre : la carte de connexion les porte) tant qu'aucun
+// appareil n'est inscrit.
 // ═══════════════════════════════════════════════════════════
 
 const CADRE = { marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' };
 const TITRE = { margin: '0 0 4px', fontSize: '1.05rem', fontFamily: 'var(--brand-font-body)', textTransform: 'none' };
 const AIDE = { fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 14 };
 
-export default function ContaDoubleFacteur() {
+export default function ContaDoubleFacteur({ obligatoire = false }) {
   const { formatMessage: t, formatDate } = useIntl();
   const [facteurs, setFacteurs] = useState([]);
   const [chargement, setChargement] = useState(true);
@@ -129,8 +133,8 @@ export default function ContaDoubleFacteur() {
   }
 
   return (
-    <div style={CADRE} data-testid="conta-double-facteur">
-      <h3 style={TITRE}>{t({ id: 'twoFactor.title' })}</h3>
+    <div style={obligatoire ? undefined : CADRE} data-testid="conta-double-facteur">
+      {!obligatoire && <h3 style={TITRE}>{t({ id: 'twoFactor.title' })}</h3>}
       <div style={AIDE}>{t({ id: 'twoFactor.intro' })}</div>
 
       {!chargement && (

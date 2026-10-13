@@ -99,10 +99,13 @@ describe('BG2-13 — ingest au flux long (source)', () => {
   });
 
   it('le classement contient les 13 tables d’ingest, qualifiées, et public reste en noms nus', () => {
-    const lignes = CLASSEMENT.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    // Commentaires retirés comme le fait bg2_normaliser. Depuis B42 (13/10/2026),
+    // private a ses premières tables : qualifiées elles aussi (le filet lit
+    // public, ingest, private et api depuis I30).
+    const lignes = CLASSEMENT.split(/\r?\n/).map((l) => l.replace(/#.*$/, '').trim()).filter(Boolean);
     const ingest = lignes.filter((l) => l.startsWith('ingest.')).sort();
     expect(ingest).toEqual(INGEST_ATTENDUES);
-    expect(lignes.filter((l) => l.includes('.') && !l.startsWith('ingest.'))).toEqual([]);
+    expect(lignes.filter((l) => l.includes('.') && !/^(ingest|private)\./.test(l))).toEqual([]);
     expect(lignes).not.toContain('book_import_baselines');
     expect(lignes).toContain('books');
   });

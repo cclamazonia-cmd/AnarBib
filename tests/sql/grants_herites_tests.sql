@@ -375,6 +375,7 @@ BEGIN
       ('api.thesaurus_export_v1'),
       ('api.work_public_detail'),
       ('private.fn_auteurs_par_nom'),   -- 11/10/2026 : recherche par les autres noms de l'autorité (DEFINER, hors PostgREST)
+      ('private.fn_avant_requete'),     -- B42, 13/10/2026 : fonction d'avant-requête de PostgREST (INVOKER), appelée sous le rôle de CHAQUE requête, anon compris ; rend la main aussitôt hors authenticated
       ('private.fn_cartography_public_rows'),
       ('private.fn_mots_proches'),      -- 11/10/2026 : un mot à une ou deux lettres près (INVOKER, IMMUTABLE)
       ('public._anarbib_safe_date'),

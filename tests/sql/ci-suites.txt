@@ -794,3 +794,6 @@ tests/sql/h34_publier_un_gros_lot_tests.sql
 # Catalogage (13/10/2026) : l'onglet « Catalogue(s) publié(s) › Documents » cherche comme l'OPAC — api.catalogacao_book_ids_v1 lit public.books
 # en direct (notice tout juste publiée comprise), variantes de l'autorité liée, ISBN avec ou sans tirets, ISBN-10 ↔ 13, une ou deux lettres près si rien d'exact.
 tests/sql/catalogacao_recherche_documents_tests.sql
+# B42 lot 2 (13/10/2026) : la double authentification s'exige côté serveur, livrée éteinte — private.fn_avant_requete (refus 403 AAL2_REQUIRED
+# d'une session aal1 selon le mode off/facteurs/equipes, liste blanche, échec ouvert), état de mon compte, liste et retrait par l'administration du réseau.
+tests/sql/b42_double_authentification_tests.sql
