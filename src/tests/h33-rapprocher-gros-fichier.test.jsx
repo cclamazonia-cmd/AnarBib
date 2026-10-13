@@ -135,7 +135,7 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
   async function ouvrir(lignesDuRun) {
     render(h(IntlProvider, { locale: 'fr', messages: fr }, h(Page)));
     fireEvent.click(await screen.findByRole('button', { name: `#${E.run.id} — ${E.run.source_name}` }, { timeout: 5000 }));
-    await screen.findByText(lignesDuRun[0].title, undefined, { timeout: 10000 });
+    await screen.findByText(lignesDuRun[0].title, undefined, { timeout: 60000 });
     fireEvent.click(screen.getByRole('checkbox', { name: dire('importacoes.fila.selectAll') }));
   }
   const bouton = (texte) => screen.getAllByRole('button').find((b) => b.textContent === texte);
@@ -150,13 +150,13 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
       rows_signalled: 0, verdicts: { nouveau: a.p_row_ids.length * 30 } }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.reconcile', { n: 420 })));
-    await waitFor(() => expect(pagesAppelees('fn_import_reconcile_duplicates').length).toBe(3), { timeout: 10000 });
+    await waitFor(() => expect(pagesAppelees('fn_import_reconcile_duplicates').length).toBe(3), { timeout: 60000 });
     verifierPages(pagesAppelees('fn_import_reconcile_duplicates'), L);
     expect(pagesParExemplaires(L).map((p) => p.length)).toEqual([166, 166, 88]);
     const attendu = resumeVerdicts((d, v) => intl.formatMessage(d, v), { nouveau: 12600 }, 0);
     await waitFor(() => expect(document.body.textContent).toContain(attendu));
     expect(document.body.textContent).toContain(dire('importacoes.fila.reconciled'));
-  }, 30000);
+  }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 
   it('« Rapprocher » : une page refusée après une autre dit ce qui a été fait (comptes, verdicts, lignes signalées), puis le refus traduit', async () => {
     const L = lignes('known_record');
@@ -168,7 +168,7 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
           rows_signalled: 2, verdicts: { nouveau: a.p_row_ids.length * 30 - 5, deja_la: 3, sans_code: 2 } }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.reconcile', { n: 420 })));
-    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.page_too_large')), { timeout: 10000 });
+    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.page_too_large')), { timeout: 60000 });
     const texte = document.body.textContent;
     const comptes = dire('importacoes.fila.reconciledCounts', { created: 4975, skipped: 3, held: 1 });
     const verdicts = resumeVerdicts((d, v) => intl.formatMessage(d, v), { nouveau: 4975, deja_la: 3, sans_code: 2 }, 2);
@@ -176,7 +176,7 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
     // dans cet ordre : ce qui a été fait, puis le refus
     expect(texte).toContain(`${comptes} ${verdicts} ${dire('error.import.page_too_large')}`);
     expect(pagesAppelees('fn_import_reconcile_duplicates').length).toBe(2);
-  }, 30000);
+  }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 
   it('« Créer » : une page refusée après une autre dit ce que les pages faites ont créé, puis le refus traduit', async () => {
     const L = lignes('new_record');
@@ -188,10 +188,10 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
       : { data: { created_drafts: a.p_row_ids.length, items_created: a.p_row_ids.length * 30 }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.createSelected', { n: 420 })));
-    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.update_page_too_many_items')), { timeout: 10000 });
+    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.update_page_too_many_items')), { timeout: 60000 });
     expect(document.body.textContent).toContain(
       `${dire('importacoes.fila.pagesAvantRefus', { created: 332 })} ${dire('error.import.update_page_too_many_items')}`);
-  }, 30000);
+  }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 
   it('« Créer » 420 lignes nouvelles : la décision une fois, trois promotions sous le plafond, toutes créées', async () => {
     const L = lignes('new_record');
@@ -201,11 +201,11 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
       items_created: a.p_row_ids.length * 30 }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.createSelected', { n: 420 })));
-    await waitFor(() => expect(pagesAppelees('fn_import_promote').length).toBe(3), { timeout: 10000 });
+    await waitFor(() => expect(pagesAppelees('fn_import_promote').length).toBe(3), { timeout: 60000 });
     verifierPages(pagesAppelees('fn_import_promote'), L);
     expect(banc.appels.filter(([nom]) => nom === 'fn_import_set_editorial').map(([, a]) => a.p_row_ids.length)).toEqual([420]);
     await waitFor(() => expect(document.body.textContent).toContain(dire('importacoes.draftsCreated')));
-  }, 30000);
+  }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 });
 
 describe('l’assistant d’import et la base', () => {
