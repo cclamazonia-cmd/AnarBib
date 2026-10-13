@@ -14,6 +14,8 @@ import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import BadgeRetire from '@/components/catalog/BadgeRetire';
+import { Pill } from '@/components/ui';
+import { chercherDocumentsPublies, ordonnerSelonIds } from '@/lib/catalogacaoBookSearch';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -52,6 +54,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   const [dSearch, setDSearch] = useState('');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [approx, setApprox] = useState(false); // résultats « à une ou deux lettres près » (vue Documents)
   const [total, setTotal] = useState({ books: 0, authors: 0, exemplars: 0 });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [page, setPage] = useState(0);
@@ -99,13 +102,31 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       const from = page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
       let data;
+      let approche = false;
 
       if (view === 'book') {
-        let q = supabase.from('books')
-          .select('id, titulo, subtitulo, autor, ano, editora, cdd, isbn, bib_ref, tipo_material, updated_at')
-          .order('updated_at', { ascending: false }).range(from, to);
-        if (dSearch.trim()) q = q.or(`titulo.ilike.%${dSearch.trim()}%,autor.ilike.%${dSearch.trim()}%,isbn.ilike.%${dSearch.trim()}%,bib_ref.ilike.%${dSearch.trim()}%`);
-        ({ data } = await q);
+        const cols = 'id, titulo, subtitulo, autor, ano, editora, cdd, isbn, bib_ref, tipo_material, updated_at';
+        // 13/10/2026 : la recherche des documents suit les règles de l'OPAC
+        // (src/lib/catalogacaoBookSearch.js) — notices classées par pertinence,
+        // la page se découpe dans la liste des identifiants. Porte muette :
+        // l'ILIKE d'avant.
+        const recherche = dSearch.trim() ? await chercherDocumentsPublies(dSearch) : null;
+        if (recherche) {
+          approche = recherche.approx;
+          const pageIds = recherche.ids.slice(from, to + 1);
+          if (pageIds.length) {
+            ({ data } = await supabase.from('books').select(cols).in('id', pageIds));
+            data = ordonnerSelonIds(data, pageIds);
+          } else {
+            data = [];
+          }
+        } else {
+          let q = supabase.from('books')
+            .select(cols)
+            .order('updated_at', { ascending: false }).range(from, to);
+          if (dSearch.trim()) q = q.or(`titulo.ilike.%${dSearch.trim()}%,autor.ilike.%${dSearch.trim()}%,isbn.ilike.%${dSearch.trim()}%,bib_ref.ilike.%${dSearch.trim()}%`);
+          ({ data } = await q);
+        }
       } else if (view === 'author') {
         let q = supabase.from('authors')
           .select('id, preferred_name, sort_name, birth_year, death_year, country, viaf_id, updated_at')
@@ -127,6 +148,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       if (nonce !== fetchNonce.current) return;
       const type = view === 'book' ? 'book' : view === 'author' ? 'author' : 'exemplar';
       setItems((data || []).map(d => ({ ...d, _type: type })));
+      setApprox(approche);
     } catch (err) {
       if (nonce !== fetchNonce.current) return;
       setMsg({ text: localizeError(err, t), kind: 'error' });
@@ -369,6 +391,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         <input type="text" value={search} onChange={e => setSearch(e.target.value)}
           placeholder={view === 'book' ? t({ id: 'catalogacao.catalog.searchBook' }) : view === 'author' ? t({ id: 'catalogacao.catalog.searchAuthor' }) : t({ id: 'catalogacao.catalog.searchExemplar' })}
           style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.92rem' }} />
+        {view === 'book' && approx && !loading && (
+          <div style={{ marginTop: 8 }}>
+            <Pill variant="warn"><span role="status">{t({ id: 'catalog.results.approx' })}</span></Pill>
+          </div>
+        )}
       </div>
 
       {/* ── Signalements d'autorites (coordination) ───── */}

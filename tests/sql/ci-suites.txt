@@ -791,3 +791,6 @@ tests/sql/aut_var_formes_variantes_tests.sql
 # H34 (12/10/2026) : publier un gros lot importé — la disponibilité recomptée une fois par fonds touché (déclencheur qui note pendant
 # publish_catalog_batch), fn_next_tombo par index ; comptes identiques à la définition d'avant, numéros jamais redonnés, mesures.
 tests/sql/h34_publier_un_gros_lot_tests.sql
+# Catalogage (13/10/2026) : l'onglet « Catalogue(s) publié(s) › Documents » cherche comme l'OPAC — api.catalogacao_book_ids_v1 lit public.books
+# en direct (notice tout juste publiée comprise), variantes de l'autorité liée, ISBN avec ou sans tirets, ISBN-10 ↔ 13, une ou deux lettres près si rien d'exact.
+tests/sql/catalogacao_recherche_documents_tests.sql
