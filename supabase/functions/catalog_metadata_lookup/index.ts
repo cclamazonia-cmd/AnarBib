@@ -1,5 +1,9 @@
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { corsHeaders } from './_shared/cors.ts';
+// B44 (13/10/2026) : verify_jwt = true n'exige PAS de session — la clé publiable
+// seule passe la passerelle. Sans cette garde, n'importe qui interrogeait par le
+// projet les huit sources (SRU, Open Library, Wikidata, DBNL…).
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 const DEFAULT_TIMEOUT_MS = clampInt(envGet('CATALOG_METADATA_TIMEOUT_MS'), 1000, 30000, 9000);
 const DEFAULT_MAX_RECORDS = clampInt(envGet('CATALOG_METADATA_MAX_RECORDS'), 1, 12, 8);
 const USER_AGENT = envGet('CATALOG_METADATA_USER_AGENT') || 'AnarBib catalog lookup/3.0';
@@ -14,6 +18,13 @@ export const createLookupHttpHandler = ()=>async (req)=>{
         ok: false,
         error: 'Method not allowed'
       }, 405);
+    }
+    const refus = await sessionManquante(envGet('SUPABASE_URL'), envGet('SUPABASE_ANON_KEY'), req.headers.get('Authorization'));
+    if (refus) {
+      return jsonResponse({
+        ok: false,
+        error: refus
+      }, statutDuRefus(refus));
     }
     try {
       const body = await req.json().catch(()=>({}));

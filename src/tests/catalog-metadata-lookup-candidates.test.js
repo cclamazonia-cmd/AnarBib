@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
+import * as SESSION_REELLE from '../../supabase/functions/_shared/core/session-reelle.ts';
 
 const SRC = new URL('../../supabase/functions/catalog_metadata_lookup/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), {
@@ -65,6 +66,7 @@ function monterEF(parSource) {
   const requireStub = (spec) => {
     if (spec.endsWith('cors.ts')) return { corsHeaders: {} };
     if (spec.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
+    if (spec.endsWith('core/session-reelle.ts')) return SESSION_REELLE; // B44 : le banc appelle handleLookupPayload
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };

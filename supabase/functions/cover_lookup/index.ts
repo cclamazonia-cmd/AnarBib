@@ -48,9 +48,15 @@
 //
 //  verify_jwt : true (appel frontend authentifie ; posture alignee sur
 //  catalog_metadata_lookup) -> AUCUNE declaration dans config.toml.
+//  verify_jwt n'exige PAS de session : la cle publiable seule passe la
+//  passerelle (B44, 13/10/2026). Jusque-la, n'importe qui relayait par le
+//  projet un PDF de 30 Mo pris a n'importe quelle adresse https (`pdf`), une
+//  image (`store`) ou les sources de capas. La garde sessionManquante passe
+//  desormais AVANT la lecture du corps, pour toutes les actions.
 // =============================================================================
 
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 import type { Candidate } from '../_shared/capas/sources.ts';
 import { envGet, fetchWithTimeout, normalizeIsbn } from '../_shared/capas/sources.ts';
 import { candidatesUniques, chercherCapas, runSource } from '../_shared/capas/recherche.ts';
@@ -340,9 +346,12 @@ if (runtime?.serve) {
   runtime.serve(async (req: Request) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
     if (req.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405);
+    const authHeader = req.headers.get('Authorization') || '';
+    // B44 : une vraie session d'usager avant tout (verify_jwt ne l'exige pas).
+    const refus = await sessionManquante(envGet('SUPABASE_URL'), envGet('SUPABASE_ANON_KEY'), authHeader);
+    if (refus) return json({ ok: false, error: refus }, statutDuRefus(refus));
     try {
       const body = await req.json().catch(() => ({}));
-      const authHeader = req.headers.get('Authorization') || '';
       if (String(body.action || '').trim() === 'pdf') {
         // octet-stream : supabase-js rend alors un Blob au formulaire.
         const octets = await recupererPdf(String(body.url || '').trim());

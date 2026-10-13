@@ -1,4 +1,8 @@
+// authority_lookup — candidats d'autorité (Wikidata : VIAF, ISNI, formes variantes).
+// verify_jwt = true n'exige PAS de session (la clé publiable seule passe, B44) :
+// la garde sessionManquante le fait, avant toute requête à Wikidata.
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 const TIMEOUT_MS = 8000;
 const USER_AGENT = 'AnarBib authority-lookup/1.0 (contact: anarbib@riseup.net)';
 const WD_LANGUAGES = 'en|fr|pt|es|de|it|ca|eo|nl|el|ru|ja|zh|ar';
@@ -159,6 +163,12 @@ Deno.serve(async (req) => {
   if (req.method !== 'POST') {
     return jsonResponse({ ok: false, error: 'Method not allowed' }, 405);
   }
+
+  // B44 : une vraie session d'usager avant tout (verify_jwt ne l'exige pas).
+  const refus = await sessionManquante(
+    Deno.env.get('SUPABASE_URL'), Deno.env.get('SUPABASE_ANON_KEY'), req.headers.get('Authorization'),
+  );
+  if (refus) return jsonResponse({ ok: false, error: refus }, statutDuRefus(refus));
 
   try {
     const body = await req.json().catch(() => ({}));

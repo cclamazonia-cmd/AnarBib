@@ -9,12 +9,15 @@
 // continue sans MBID.
 //
 // verify_jwt = true (par défaut, non déclaré dans config.toml) : appel frontend
-// authentifié, comme catalog_metadata_lookup / cover_lookup.
+// authentifié, comme catalog_metadata_lookup / cover_lookup. verify_jwt n'exige
+// PAS de session (la clé publiable seule passe, B44) : la garde sessionManquante
+// le fait, avant la clé AcoustID.
 //
 // Secret requis : ACOUSTID_API_KEY (clé d'application AcoustID, https://acoustid.org/api-key).
 // Session : Fonds sonores
 
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 const TIMEOUT_MS = 8000;
 const USER_AGENT = 'AnarBib audio-fingerprint-lookup/1.0 (contact: anarbib@riseup.net)';
 const ACOUSTID_ENDPOINT = 'https://api.acoustid.org/v2/lookup';
@@ -114,6 +117,12 @@ async function lookupAcoustId(
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
   if (req.method !== 'POST') return jsonResponse({ ok: false, error: 'Method not allowed' }, 405);
+
+  // B44 : une vraie session d'usager avant tout (verify_jwt ne l'exige pas).
+  const refus = await sessionManquante(
+    Deno.env.get('SUPABASE_URL'), Deno.env.get('SUPABASE_ANON_KEY'), req.headers.get('Authorization'),
+  );
+  if (refus) return jsonResponse({ ok: false, error: refus }, statutDuRefus(refus));
 
   const apiKey = Deno.env.get('ACOUSTID_API_KEY') || '';
   if (!apiKey) {

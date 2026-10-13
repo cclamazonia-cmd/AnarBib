@@ -1,4 +1,5 @@
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -121,6 +122,14 @@ Deno.serve(async (req)=>{
   if (req.method !== 'POST') return json({
     error: 'Use POST'
   }, 405);
+  // B44 (13/10/2026) : une vraie session d'usager avant tout. Déclarée
+  // verify_jwt = false dans config.toml, cette fonction allait chercher pour
+  // n'importe qui n'importe quelle adresse et en rendait le contenu. Son seul
+  // appelant, cover_lookup (source og:image), relaie le jeton de l'usager.
+  const refus = await sessionManquante(Deno.env.get('SUPABASE_URL'), Deno.env.get('SUPABASE_ANON_KEY'), req.headers.get('Authorization'));
+  if (refus) return json({
+    error: refus
+  }, statutDuRefus(refus));
   try {
     const body = await req.json().catch(()=>({}));
     const url = String(body?.url || '').trim();

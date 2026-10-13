@@ -6,14 +6,16 @@
 // tant qu'il n'est pas défini (ou Nominatim injoignable), renvoie une erreur → le front
 // retombe sur le pin manuel (dégradation propre).
 //
-// Auth : verify_jwt par défaut (true) — requiert un JWT projet valide. Rate-limité par IP
-// (réutilise public.auth_rate_limits) contre l'abus du géocodeur.
+// Auth : verify_jwt par défaut (true), qui n'exige PAS de session (la clé publiable
+// seule passe la passerelle, B44) — d'où la garde sessionManquante, en tête. Rate-limité
+// par IP (réutilise public.auth_rate_limits) contre l'abus du géocodeur.
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
+import { sessionManquante, statutDuRefus } from "../_shared/core/session-reelle.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "https://app.anarbib.org",
@@ -33,6 +35,12 @@ function json(body: unknown, status = 200) {
 async function traiter(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+
+  // B44 : une vraie session d'usager avant tout (verify_jwt ne l'exige pas).
+  const refus = await sessionManquante(
+    Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_ANON_KEY"), req.headers.get("Authorization"),
+  );
+  if (refus) return json({ error: refus }, statutDuRefus(refus));
 
   const base = Deno.env.get("NOMINATIM_URL");
   if (!base) return json({ error: "geocoder_unconfigured" }, 503);
