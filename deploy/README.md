@@ -106,6 +106,15 @@ remplace `private.fn_images_pins_attendus()`, `.env.example` et les seuils de
 `bootstrap.sh` dans le même commit (une garde de CI refuse la moitié) → la
 sonde repasse au vert et le dit.
 
+**13/10/2026 : la boucle a tourné.** À 13 h 31 Storage montait encore (→ 1.80.2,
+73 → 74 migrations, `revoke-grants-to-unused-operations`), courriel à 13 h 35.
+Remesuré : `STORAGE_TAG=v1.78.0`. Cette montée ne touchait aucune colonne mais
+retirait des **droits** — sous v1.77.0, `anon` et `authenticated` gardaient
+`TRUNCATE` (qui ne passe pas par la RLS) sur `storage.objects` et `buckets`.
+Une remesure compare donc désormais les colonnes **et** les privilèges de
+`storage` (93, identiques à la production sous v1.78.0). Détail dans
+`.env.example`.
+
 ---
 
 ## 1. Démarrage rapide (Installation en une commande)
@@ -175,7 +184,7 @@ Les deux modes coexistent sans interférence : le frontend détecte automatiquem
 | `db` | `supabase/postgres:17.6.1.136` | Base PostgreSQL 17 + Vault + pg_net + extensions |
 | `rest` | `postgrest/postgrest:v14.12` | API REST & RPC `api.*` |
 | `auth` | `supabase/gotrue:v2.197.0` | Serveur d'authentification GoTrue (82 migrations, relevé du 21/09/2026) |
-| `storage` | `supabase/storage-api:v1.77.0` | Stockage d'objets et gestion des buckets (73 migrations, relevé du 21/09/2026 au soir) |
+| `storage` | `supabase/storage-api:v1.78.0` | Stockage d'objets et gestion des buckets (74 migrations, relevé du 13/10/2026) |
 | `functions` | `supabase/edge-runtime:v1.74.0` | Routeur `main` et exécution des 48 Edge Functions |
 | `caddy` | `caddy:2` | Passerelle API, sécurité HTTP et terminaison TLS automatique |
 
