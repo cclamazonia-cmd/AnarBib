@@ -58,6 +58,24 @@ Der Reiter **Verlauf** listet deine früheren Vormerkungen und Ausleihungen auf.
 Du kannst auf den Titel klicken, um die Karteikarte des Dokuments zu sehen, und
 Einträge **Ausblenden**, die du nicht mehr sehen möchtest.
 
+### Dein Konto schützen: die Zwei-Faktor-Authentifizierung
+Nach dem Passwort kann AnarBib einen sechsstelligen Code abfragen, der sich alle 30 Sekunden ändert. Der Code kommt aus einer freien Authentifizierungs-App, die offline funktioniert: Aegis oder FreeOTP+ unter Android, FreeOTP oder 2FAS auf dem iPhone, KeePassXC auf dem Computer. Keine SMS, kein externer Dienst.
+
+**Ab dem 1. Januar 2027 Pflicht für die Teams** (Netzwerkverwaltung, Koordinationen, Bibliotheksteams); für Lesekonten freiwillig.
+
+So aktivierst du sie:
+1. Öffne **Mein Konto → Persönliche Daten**. Klicke unter der Passwortänderung auf **Zwei-Faktor-Authentifizierung aktivieren**.
+2. Gib dem Gerät einen Namen (zum Beispiel „Telefon“) und scanne den QR-Code mit der App. Ohne Kamera gibst du den angezeigten Schlüssel von Hand ein.
+3. Gib den **sechsstelligen Code** aus der App ein und klicke auf **Bestätigen**.
+
+Danach fragt AnarBib bei jeder Anmeldung nach dem Passwort den Code ab. Hast du mehrere Geräte eingerichtet, wähle das, das du gerade zur Hand hast.
+
+- **Richte ein zweites Gerät ein** (zum Beispiel KeePassXC zusätzlich zum Telefon): Nur so sperrst du dich nicht aus, wenn du eines verlierst.
+- **Gerät verloren?** Wende dich an die Netzwerkverwaltung (Matrix oder anarbib@proton.me). Nachdem sie deine Identität auf anderem Weg geprüft hat, entfernt sie deine Geräte; bei der nächsten Anmeldung richtest du ein neues ein.
+- Um ein Gerät zu entfernen, klicke neben seinem Namen auf **Entfernen**.
+- Ein Teamkonto ohne Gerät muss nach dem 1. Januar 2027 bei der Anmeldung zuerst eines einrichten.
+- Niemand von AnarBib wird dich je nach deinem Code oder deinem QR-Code fragen.
+
 ---
 
 ## 3. Bibliothekar*in — Dashboard
@@ -154,6 +172,11 @@ Die Seite **Netzwerk** (zugänglich für Koordinator*innen und Administrator*inn
 - Bibliotheksanträge zu verwalten
 - Netzwerkmitglieder zu verwalten
 - Administrator*innen zu ernennen
+
+### Zwei-Faktor-Authentifizierung der Teams
+Der Reiter **Zwei-Faktor-Authentifizierung** auf der Seite **Netzwerk**, nur für die Netzwerkverwaltung, listet die aktiven Teamkonten und die Konten, die die Zwei-Faktor-Authentifizierung gewählt haben, mit ihren Rollen und der Zahl ihrer Geräte; Konten ohne Gerät stehen oben. Er zeigt auch die geltende Anforderung.
+
+Um einer Person zu helfen, die ihr Gerät verloren hat: Prüfe zuerst ihre Identität auf anderem Weg (persönlich, Matrix), klicke dann auf **Geräte entfernen**, gib den Grund an (wie die Identität geprüft wurde) und klicke auf **Entfernen und abmelden**. Das Konto wird überall abgemeldet, und das Entfernen wird protokolliert. Dafür muss deine eigene Sitzung den Code durchlaufen haben.
 
 ---
 

@@ -50,6 +50,24 @@ No topo da página **Minha conta**, uma faixa colorida indica o estado de sua co
 ### Histórico
 A aba **Histórico** lista suas antigas reservas e empréstimos. Você pode clicar no título para ver a ficha do documento, e **Ocultar** as entradas que não deseja mais ver.
 
+### Proteger sua conta: a autenticação em dois fatores
+Depois da senha, o AnarBib pode pedir um código de seis dígitos que muda a cada 30 segundos. Esse código vem de um aplicativo de autenticação livre, que funciona offline: Aegis ou FreeOTP+ no Android, FreeOTP ou 2FAS no iPhone, KeePassXC no computador. Sem SMS e sem serviço externo.
+
+**Obrigatória para as equipes a partir de 1º de janeiro de 2027** (administração da rede, coordenações, equipes de biblioteca); opcional para as contas de leitura.
+
+Para ativar:
+1. Abra **Minha conta → Dados pessoais**. Abaixo da troca de senha, clique em **Ativar a autenticação em dois fatores**.
+2. Dê um nome ao dispositivo (por exemplo « Celular ») e escaneie o código QR com o aplicativo. Sem câmera, digite manualmente a chave mostrada.
+3. Digite o **código de seis dígitos** mostrado pelo aplicativo e clique em **Confirmar**.
+
+Depois disso, a cada acesso o AnarBib pede o código depois da senha. Se você cadastrou vários dispositivos, escolha o que estiver à mão.
+
+- **Cadastre um segundo dispositivo** (o KeePassXC além do celular, por exemplo): é a única forma de não ficar sem acesso se você perder um deles.
+- **Perdeu o dispositivo?** Entre em contato com a administração da rede (Matrix ou anarbib@proton.me). Depois de verificar a sua identidade por outro meio, ela remove os seus dispositivos; você cadastra um novo no próximo acesso.
+- Para remover um dispositivo, clique em **Remover** ao lado do nome dele.
+- Uma conta de equipe sem dispositivo depois de 1º de janeiro de 2027 precisará cadastrar um ao entrar, antes de continuar.
+- Ninguém do AnarBib vai pedir o seu código nem o seu código QR, nunca.
+
 ---
 
 ## 3. Bibliotecári(o/a/e) — Painel de controle
@@ -145,6 +163,11 @@ A página **Rede** (acessível às coordenadoras e aos administradores(as/es)) p
 - Gerenciar as solicitações de bibliotecas
 - Administrar os membros da rede
 - Promover administradores(as/es)
+
+### Autenticação em dois fatores das equipes
+A aba **Autenticação em dois fatores** da página **Rede**, reservada à administração da rede, lista as contas de equipe ativas e as que escolheram a autenticação em dois fatores, com os papéis e o número de dispositivos; as que não têm dispositivo aparecem primeiro. Ela também mostra a exigência em vigor.
+
+Para ajudar uma pessoa que perdeu o dispositivo: verifique primeiro a identidade dela por outro meio (pessoalmente, Matrix), clique em **Remover os dispositivos**, informe o motivo (como a identidade foi verificada) e clique em **Remover e desconectar**. A conta é desconectada em todos os lugares e a remoção fica registrada. Essa ação exige que a sua própria sessão tenha passado pelo código.
 
 ---
 

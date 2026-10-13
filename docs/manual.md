@@ -50,6 +50,24 @@ En haut de la page **Mon compte**, un bandeau coloré indique l'état de votre c
 ### Historique
 L'onglet **Historique** liste vos anciennes réservations et emprunts. Vous pouvez cliquer sur le titre pour voir la fiche du document, et **Masquer** les entrées que vous ne souhaitez plus voir.
 
+### Protéger votre compte : la double authentification
+Après le mot de passe, AnarBib peut demander un code à six chiffres qui change toutes les 30 secondes. Ce code vient d'une application d'authentification libre, qui fonctionne hors ligne : Aegis ou FreeOTP+ sur Android, FreeOTP ou 2FAS sur iPhone, KeePassXC sur ordinateur. Ni SMS ni service extérieur.
+
+**Obligatoire pour les équipes à partir du 1er janvier 2027** (administration du réseau, coordinations, bibliothécaires) ; facultative pour les comptes de lecture.
+
+Pour l'activer :
+1. Ouvrez **Mon compte → Données personnelles**. Sous le changement de mot de passe, cliquez sur **Activer la double authentification**.
+2. Donnez un nom à l'appareil (par exemple « Téléphone »), puis scannez le code QR avec l'application. Sans caméra, saisissez à la main la clé affichée.
+3. Saisissez le **code à six chiffres** affiché par l'application et cliquez sur **Confirmer**.
+
+Ensuite, à chaque connexion, AnarBib vous demande le code après le mot de passe. Si plusieurs appareils sont inscrits, choisissez celui que vous avez sous la main.
+
+- **Inscrivez un deuxième appareil** (KeePassXC en plus du téléphone, par exemple) : c'est la seule façon de ne pas rester bloqué·e si vous en perdez un.
+- **Appareil perdu ?** Contactez l'administration du réseau (Matrix ou anarbib@proton.me). Après avoir vérifié votre identité par un autre moyen, elle retire vos appareils ; vous en inscrivez un nouveau à la connexion suivante.
+- Pour retirer un appareil, cliquez sur **Retirer** à côté de son nom.
+- Un compte d'équipe sans appareil après le 1er janvier 2027 devra en inscrire un à la connexion avant de continuer.
+- Personne chez AnarBib ne vous demandera jamais votre code ni votre code QR.
+
 ---
 
 ## 3. Bibliothécaire — Tableau de bord
@@ -145,6 +163,11 @@ La page **Réseau** (accessible aux coordinateurs et administrateurs) permet de 
 - Gérer les demandes de bibliothèques
 - Administrer les membres du réseau
 - Promouvoir des administrateurs
+
+### Double authentification des équipes
+L'onglet **Double authentification** de la page **Réseau**, réservé à l'administration du réseau, liste les comptes d'équipe actifs et ceux qui ont choisi la double authentification, avec leurs rôles et leur nombre d'appareils ; ceux qui n'en ont pas apparaissent en premier. Il indique aussi l'exigence en vigueur.
+
+Pour dépanner une personne qui a perdu son appareil : vérifiez d'abord son identité par un autre moyen (de vive voix, Matrix), puis cliquez sur **Retirer ses appareils**, indiquez le motif (comment l'identité a été vérifiée) et cliquez sur **Retirer et déconnecter**. Le compte est déconnecté partout et le retrait est journalisé. Ce geste exige que votre propre session soit passée par le code.
 
 ---
 

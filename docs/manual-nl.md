@@ -50,6 +50,24 @@ Bovenaan de pagina **Mijn account** geeft een gekleurde banner de status van uw 
 ### Geschiedenis
 Het tabblad **Geschiedenis** geeft een lijst van uw vroegere reserveringen en leningen. U kunt op de titel klikken om de fiche van het document te zien en vermeldingen die u niet meer wilt zien **Verbergen**.
 
+### Uw account beschermen: tweestapsverificatie
+Na uw wachtwoord kan AnarBib om een code van zes cijfers vragen die elke 30 seconden verandert. Die code komt uit een vrije authenticatie-app die offline werkt: Aegis of FreeOTP+ op Android, FreeOTP of 2FAS op iPhone, KeePassXC op de computer. Geen sms en geen externe dienst.
+
+**Verplicht voor teams vanaf 1 januari 2027** (netwerkbeheer, coördinaties, bibliotheekteams); vrijwillig voor leesaccounts.
+
+Zo schakelt u ze in:
+1. Open **Mijn account → Persoonsgegevens**. Klik onder het wijzigen van het wachtwoord op **Tweestapsverificatie inschakelen**.
+2. Geef het apparaat een naam (bijvoorbeeld „Telefoon”) en scan de QR-code met de app. Geen camera? Typ de getoonde sleutel met de hand in.
+3. Typ de **code van zes cijfers** uit de app en klik op **Bevestigen**.
+
+Daarna vraagt AnarBib bij elke aanmelding na het wachtwoord om de code. Hebt u meerdere apparaten ingesteld, kies dan het apparaat dat u bij de hand hebt.
+
+- **Stel een tweede apparaat in** (bijvoorbeeld KeePassXC naast uw telefoon): alleen zo raakt u de toegang niet kwijt als u er een verliest.
+- **Apparaat kwijt?** Neem contact op met het netwerkbeheer (Matrix of anarbib@proton.me). Nadat het uw identiteit op een andere manier heeft gecontroleerd, verwijdert het uw apparaten; bij de volgende aanmelding stelt u een nieuw in.
+- Om een apparaat te verwijderen, klikt u naast de naam op **Verwijderen**.
+- Een teamaccount zonder apparaat moet na 1 januari 2027 bij het aanmelden eerst een apparaat instellen.
+- Niemand van AnarBib zal u ooit om uw code of uw QR-code vragen.
+
 ---
 
 ## 3. Bibliothecaris — Dashboard
@@ -145,6 +163,11 @@ De pagina **Netwerk** (toegankelijk voor coördinatoren en beheerders) laat toe 
 - Bibliotheekaanvragen te beheren
 - Netwerkleden te administreren
 - Beheerders te promoten
+
+### Tweestapsverificatie van de teams
+Het tabblad **Tweestapsverificatie** van de pagina **Netwerk**, alleen voor het netwerkbeheer, toont de actieve teamaccounts en de accounts die voor tweestapsverificatie hebben gekozen, met hun rollen en het aantal apparaten; accounts zonder apparaat staan bovenaan. Het toont ook de geldende eis.
+
+Om iemand te helpen die een apparaat kwijt is: controleer eerst de identiteit van de persoon op een andere manier (persoonlijk, Matrix), klik dan op **Apparaten verwijderen**, geef de reden op (hoe de identiteit is gecontroleerd) en klik op **Verwijderen en afmelden**. Het account wordt overal afgemeld en de verwijdering wordt vastgelegd. Hiervoor moet uw eigen sessie de code hebben doorlopen.
 
 ---
 

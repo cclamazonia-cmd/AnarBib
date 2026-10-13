@@ -50,6 +50,24 @@ In cima alla pagina **Il mio account**, un'intestazione colorata indica lo stato
 ### Cronologia
 La scheda **Cronologia** elenca le tue vecchie prenotazioni e i tuoi vecchi prestiti. Puoi cliccare sul titolo per vedere la scheda del documento, e **Nascondere** le voci che non vuoi più visualizzare.
 
+### Proteggere il tuo account: l'autenticazione a due fattori
+Dopo la password, AnarBib può chiedere un codice di sei cifre che cambia ogni 30 secondi. Il codice viene da un'app di autenticazione libera, che funziona offline: Aegis o FreeOTP+ su Android, FreeOTP o 2FAS su iPhone, KeePassXC sul computer. Niente SMS né servizi esterni.
+
+**Obbligatoria per i gruppi di lavoro dal 1° gennaio 2027** (amministrazione della rete, coordinamenti, gruppi delle biblioteche); facoltativa per gli account di lettura.
+
+Per attivarla:
+1. Apri **Il mio account → Dati personali**. Sotto il cambio della password, clicca su **Attiva l'autenticazione a due fattori**.
+2. Dai un nome al dispositivo (per esempio «Telefono») e scansiona il codice QR con l'app. Senza fotocamera, inserisci a mano la chiave mostrata.
+3. Inserisci il **codice di sei cifre** mostrato dall'app e clicca su **Conferma**.
+
+Da quel momento, a ogni accesso AnarBib ti chiede il codice dopo la password. Se hai registrato più dispositivi, scegli quello che hai a portata di mano.
+
+- **Registra un secondo dispositivo** (KeePassXC oltre al telefono, per esempio): è l'unico modo per non restare senza accesso se ne perdi uno.
+- **Hai perso il dispositivo?** Contatta l'amministrazione della rete (Matrix o anarbib@proton.me). Dopo aver verificato la tua identità con un altro mezzo, rimuove i tuoi dispositivi; ne registri uno nuovo all'accesso successivo.
+- Per rimuovere un dispositivo, clicca su **Rimuovi** accanto al suo nome.
+- Un account di un gruppo di lavoro senza dispositivo dopo il 1° gennaio 2027 dovrà registrarne uno all'accesso, prima di continuare.
+- Nessuno di AnarBib ti chiederà mai il tuo codice né il tuo codice QR.
+
 ---
 
 ## 3. Bibliotecari* — Pannello di controllo
@@ -145,6 +163,11 @@ La pagina **Rete** (accessibile ai coordinatori/trici e agli amministratori/tric
 - Gestire le richieste delle biblioteche
 - Amministrare i membri della rete
 - Promuovere amministratori/trici
+
+### Autenticazione a due fattori dei gruppi di lavoro
+La scheda **Autenticazione a due fattori** della pagina **Rete**, riservata all'amministrazione della rete, elenca gli account attivi dei gruppi di lavoro e quelli che hanno scelto l'autenticazione a due fattori, con i loro ruoli e il numero di dispositivi; quelli senza dispositivo compaiono per primi. Mostra anche il requisito in vigore.
+
+Per aiutare una persona che ha perso il dispositivo: verifica prima la sua identità con un altro mezzo (di persona, Matrix), poi clicca su **Rimuovi i dispositivi**, indica il motivo (come è stata verificata l'identità) e clicca su **Rimuovi e disconnetti**. L'account viene disconnesso ovunque e la rimozione viene registrata. Questa operazione richiede che la tua sessione sia passata per il codice.
 
 ---
 

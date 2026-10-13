@@ -50,6 +50,24 @@ A la part superior de la pàgina **El meu compte**, una banda de color indica l'
 ### Historial
 La pestanya **Historial** llista les vostres antigues reserves i préstecs. Podeu fer clic al títol per veure la fitxa del document, i **Amagar** les entrades que ja no voleu veure.
 
+### Protegir el vostre compte: l'autenticació en dos passos
+Després de la contrasenya, AnarBib pot demanar un codi de sis xifres que canvia cada 30 segons. Aquest codi ve d'una aplicació d'autenticació lliure, que funciona sense connexió: Aegis o FreeOTP+ a Android, FreeOTP o 2FAS a iPhone, KeePassXC a l'ordinador. Ni SMS ni cap servei extern.
+
+**Obligatòria per als equips a partir de l'1 de gener de 2027** (administració de la xarxa, coordinacions, equips de biblioteca); opcional per als comptes de lectura.
+
+Per activar-la:
+1. Obriu **El meu compte → Dades personals**. Sota el canvi de contrasenya, feu clic a **Activa l'autenticació en dos passos**.
+2. Doneu un nom a l'aparell (per exemple «Mòbil») i escanegeu el codi QR amb l'aplicació. Sense càmera, escriviu a mà la clau que es mostra.
+3. Escriviu el **codi de sis xifres** que mostra l'aplicació i feu clic a **Confirma**.
+
+A partir d'aleshores, AnarBib us demana el codi després de la contrasenya a cada connexió. Si hi ha diversos aparells registrats, trieu el que tingueu a mà.
+
+- **Registreu un segon aparell** (KeePassXC a més del mòbil, per exemple): és l'única manera de no quedar sense accés si en perdeu un.
+- **Heu perdut l'aparell?** Contacteu amb l'administració de la xarxa (Matrix o anarbib@proton.me). Després de verificar la vostra identitat per un altre mitjà, treu els vostres aparells; en registreu un de nou a la connexió següent.
+- Per treure un aparell, feu clic a **Treure** al costat del seu nom.
+- Un compte d'equip sense aparell després de l'1 de gener de 2027 haurà de registrar-ne un en connectar-se, abans de continuar.
+- Ningú d'AnarBib no us demanarà mai el codi ni el codi QR.
+
 ---
 
 ## 3. Bibliotecari-ària-e — Tauler de control
@@ -145,6 +163,11 @@ La pàgina **Xarxa** (accessible a les persones coordinador-a-es i administrador
 - Gestionar les sol·licituds de biblioteques
 - Administrar els membres de la xarxa
 - Promoure administrador-a-es
+
+### Autenticació en dos passos dels equips
+La pestanya **Autenticació en dos passos** de la pàgina **Xarxa**, reservada a l'administració de la xarxa, llista els comptes d'equip actius i els que han triat l'autenticació en dos passos, amb els seus papers i el nombre d'aparells; els que no en tenen surten primer. També mostra l'exigència vigent.
+
+Per ajudar una persona que ha perdut l'aparell: verifiqueu primer la seva identitat per un altre mitjà (en persona, Matrix), feu clic a **Treure els aparells**, indiqueu la raó (com s'ha verificat la identitat) i feu clic a **Treure i tancar la sessió**. La sessió del compte es tanca a tot arreu i l'operació queda registrada. Aquest gest exigeix que la vostra pròpia sessió hagi passat pel codi.
 
 ---
 

@@ -50,6 +50,24 @@ En la parte superior de la página **Mi cuenta**, una banda de color indica el e
 ### Historial
 La pestaña **Historial** lista tus antiguas reservas y préstamos. Puedes hacer clic en el título para ver la ficha del documento, y **Ocultar** las entradas que no quieras ver.
 
+### Proteger tu cuenta: la autenticación en dos pasos
+Después de la contraseña, AnarBib puede pedir un código de seis cifras que cambia cada 30 segundos. Ese código viene de una aplicación de autenticación libre, que funciona sin conexión: Aegis o FreeOTP+ en Android, FreeOTP o 2FAS en iPhone, KeePassXC en el ordenador. Ni SMS ni servicio externo.
+
+**Obligatoria para los equipos a partir del 1 de enero de 2027** (administración de la red, coordinaciones, equipos de biblioteca); opcional para las cuentas de lectura.
+
+Para activarla:
+1. Abre **Mi cuenta → Datos personales**. Debajo del cambio de contraseña, haz clic en **Activar la autenticación en dos pasos**.
+2. Da un nombre al dispositivo (por ejemplo «Móvil») y escanea el código QR con la aplicación. Sin cámara, escribe a mano la clave que aparece.
+3. Escribe el **código de seis cifras** que muestra la aplicación y haz clic en **Confirmar**.
+
+A partir de ahí, AnarBib te pide el código después de la contraseña en cada inicio de sesión. Si registraste varios dispositivos, elige el que tengas a mano.
+
+- **Registra un segundo dispositivo** (KeePassXC además del móvil, por ejemplo): es la única forma de no quedarte sin acceso si pierdes uno.
+- **¿Perdiste el dispositivo?** Contacta con la administración de la red (Matrix o anarbib@proton.me). Tras verificar tu identidad por otro medio, quita tus dispositivos; registras uno nuevo en el siguiente inicio de sesión.
+- Para quitar un dispositivo, haz clic en **Quitar** junto a su nombre.
+- Una cuenta de equipo sin dispositivo después del 1 de enero de 2027 tendrá que registrar uno al iniciar sesión antes de seguir.
+- Nadie de AnarBib te pedirá nunca tu código ni tu código QR.
+
 ---
 
 ## 3. Bibliotecarie — Panel de control
@@ -145,6 +163,11 @@ La página **Red** (accesible a les coordinadores y administradores) permite:
 - Gestionar las solicitudes de bibliotecas
 - Administrar les miembros de la red
 - Promover administradores
+
+### Autenticación en dos pasos de los equipos
+La pestaña **Autenticación en dos pasos** de la página **Red**, reservada a la administración de la red, lista las cuentas de equipo activas y las que eligieron la autenticación en dos pasos, con sus papeles y su número de dispositivos; las que no tienen dispositivo aparecen primero. También muestra la exigencia vigente.
+
+Para ayudar a una persona que perdió su dispositivo: verifica primero su identidad por otro medio (en persona, Matrix), luego haz clic en **Quitar sus dispositivos**, indica el motivo (cómo se verificó la identidad) y haz clic en **Quitar y cerrar sesión**. La sesión de la cuenta se cierra en todas partes y la operación queda registrada. Este gesto exige que tu propia sesión haya pasado por el código.
 
 ---
 

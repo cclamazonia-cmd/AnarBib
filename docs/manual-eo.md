@@ -50,6 +50,24 @@ Supre de la paĝo **Mia konto**, kolora strio indikas la staton de via konto :
 ### Historio
 La langeto **Historio** listigas viajn malnovajn rezervaĵojn kaj pruntojn. Vi povas alklaki la titolon por vidi la dokumentkarton, kaj **Kaŝi** la enscribaĵojn kiujn vi ne plu volas vidi.
 
+### Protekti vian konton: dufaktora aŭtentigo
+Post la pasvorto, AnarBib povas peti sesciferan kodon, kiu ŝanĝiĝas ĉiujn 30 sekundojn. La kodo venas el libera aŭtentiga aplikaĵo, kiu funkcias senkonekte: Aegis aŭ FreeOTP+ ĉe Android, FreeOTP aŭ 2FAS ĉe iPhone, KeePassXC ĉe komputilo. Neniu SMS, neniu ekstera servo.
+
+**Deviga por la teamoj ekde la 1-a de januaro 2027** (administrado de la reto, kunordigoj, bibliotekaj teamoj); libervola por legantaj kontoj.
+
+Por ŝalti ĝin:
+1. Malfermu **Mia konto → Personaj datumoj**. Sub la ŝanĝo de pasvorto, alklaku **Ŝalti dufaktoran aŭtentigon**.
+2. Donu nomon al la aparato (ekzemple «Telefono») kaj skanu la QR-kodon per la aplikaĵo. Sen fotilo, tajpu permane la montritan ŝlosilon.
+3. Tajpu la **sesciferan kodon** montratan de la aplikaĵo kaj alklaku **Konfirmi**.
+
+Poste, ĉe ĉiu ensaluto, AnarBib petas la kodon post la pasvorto. Se vi registris plurajn aparatojn, elektu tiun, kiun vi havas ĉe mano.
+
+- **Registru duan aparaton** (ekzemple KeePassXC krom la telefono): nur tiel vi ne restos sen aliro, se vi perdos unu.
+- **Ĉu vi perdis la aparaton?** Kontaktu la administradon de la reto (Matrix aŭ anarbib@proton.me). Kontrolinte vian identecon alimaniere, ĝi forigas viajn aparatojn; vi registras novan ĉe la sekva ensaluto.
+- Por forigi aparaton, alklaku **Forigi** apud ĝia nomo.
+- Teama konto sen aparato post la 1-a de januaro 2027 devos registri unu ĉe ensaluto antaŭ ol daŭrigi.
+- Neniu de AnarBib iam petos de vi vian kodon aŭ vian QR-kodon.
+
 ---
 
 ## 3. Bibliotekist-in-o — Panelo
@@ -145,6 +163,11 @@ La paĝo **Reto** (alirebla al kunordigant-in-oj kaj administrant-in-oj) permesa
 - Administri bibliotekan petojn
 - Administri retmembrojn
 - Promovigi administrant-in-ojn
+
+### Dufaktora aŭtentigo de la teamoj
+La langeto **Dufaktora aŭtentigo** de la paĝo **Reto**, nur por la administrado de la reto, listigas la aktivajn teamajn kontojn kaj la kontojn, kiuj elektis dufaktoran aŭtentigon, kun iliaj roloj kaj nombro de aparatoj; tiuj sen aparato aperas unue. Ĝi montras ankaŭ la validan postulon.
+
+Por helpi personon, kiu perdis sian aparaton: unue kontrolu la identecon de la persono alimaniere (persone, Matrix), poste alklaku **Forigi la aparatojn**, indiku la kialon (kiel la identeco estis kontrolita) kaj alklaku **Forigi kaj elsalutigi**. La konto estas elsalutita ĉie kaj la forigo estas registrita. Tiu ago postulas, ke via propra seanco jam pasis tra la kodo.
 
 ---
 

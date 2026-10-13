@@ -50,6 +50,24 @@ At the top of the **My account** page, a coloured banner shows your account stat
 ### History
 The **History** tab lists your past reservations and loans. You can click on a title to view the document record, and **Hide** entries you no longer wish to see.
 
+### Protecting your account: two-factor authentication
+After your password, AnarBib can ask for a six-digit code that changes every 30 seconds. The code comes from a free-software authenticator app that works offline: Aegis or FreeOTP+ on Android, FreeOTP or 2FAS on iPhone, KeePassXC on a computer. No SMS, no outside service.
+
+**Required for teams from 1 January 2027** (network administration, coordinators, library teams); optional for reader accounts.
+
+To turn it on:
+1. Open **My account → Personal data**. Below the password change, click **Turn on two-factor authentication**.
+2. Give the device a name (for example "Phone"), then scan the QR code with the app. No camera? Type in the key shown by hand.
+3. Enter the **six-digit code** shown by the app and click **Confirm**.
+
+From then on, AnarBib asks for the code after your password each time you sign in. If several devices are enrolled, pick the one at hand.
+
+- **Enroll a second device** (KeePassXC as well as your phone, for example): it is the only way not to be locked out if you lose one.
+- **Lost your device?** Contact the network administration (Matrix or anarbib@proton.me). Once they have checked your identity another way, they remove your devices; you enroll a new one at your next sign-in.
+- To remove a device, click **Remove** next to its name.
+- A team account with no device after 1 January 2027 will have to enroll one at sign-in before going any further.
+- No one at AnarBib will ever ask you for your code or your QR code.
+
 ---
 
 ## 3. Librarian — Dashboard
@@ -145,6 +163,11 @@ The **Network** page (accessible to coordinators and administrators) lets you:
 - Manage library requests
 - Administer network members
 - Promote administrators
+
+### Two-factor authentication for teams
+The **Two-factor authentication** tab of the **Network** page, for the network administration only, lists active team accounts and accounts that chose two-factor authentication, with their roles and number of devices; those without a device come first. It also shows the requirement in force.
+
+To help someone who lost their device: first check the person's identity another way (in person, Matrix), then click **Remove their devices**, give the reason (how the identity was checked) and click **Remove and sign out**. The account is signed out everywhere and the removal is logged. This action requires your own session to have passed the code.
 
 ---
 
