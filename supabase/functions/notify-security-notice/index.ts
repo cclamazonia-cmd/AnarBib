@@ -119,6 +119,18 @@ Deno.serve(async (req: Request) => {
   const dryRun = payload.dry_run !== false; // sûr par défaut : il faut dire explicitement false
   const regenerate = payload.regenerate_public_id === true;
   const librarySlugs: string[] = Array.isArray(payload.library_slugs) ? payload.library_slugs : [];
+  // B42 (13/10/2026) : viser les ÉQUIPES et non tout le lectorat. `roles`
+  // restreint les adhésions aux rôles donnés (reader / librarian / coordenador) ;
+  // `library_slugs: ["*"]` vise toutes les bibliothèques ; `network_admins: true`
+  // ajoute l'administration du réseau active (qui n'a pas toujours d'adhésion).
+  // Sans ces champs, la fonction se comporte comme avant.
+  const ROLES_PERMIS = ['reader', 'librarian', 'coordenador'];
+  const roles: string[] | null = Array.isArray(payload.roles) ? payload.roles : null;
+  if (roles && (!roles.length || roles.some((r) => !ROLES_PERMIS.includes(r)))) {
+    return jsonResponse(400, { ok: false, error: `roles : sous-ensemble de ${ROLES_PERMIS.join(', ')}` });
+  }
+  const toutes = librarySlugs.length === 1 && librarySlugs[0] === '*';
+  const networkAdmins = payload.network_admins === true;
   const fallbackLocale = String(payload.fallback_locale || 'pt-BR');
   const messages = payload.messages || {};
 
@@ -137,29 +149,46 @@ Deno.serve(async (req: Request) => {
   // physically_validated_by_user_id, pending_removal_requested_by) — l'embed
   // est ambigu. Désambiguïser par le nom de contrainte marcherait mais casserait
   // au moindre renommage.
-  const { data: libs, error: libErr } = await supabaseAdmin
-    .from('libraries')
-    .select('id')
-    .in('slug', librarySlugs);
-  if (libErr) {
-    console.error('[notify-security-notice] bibliotheques:', libErr.message);
-    return jsonResponse(500, { ok: false, error: libErr.message });
-  }
-  const libIds = (libs ?? []).map((l: any) => l.id);
-  if (!libIds.length) {
-    return jsonResponse(400, { ok: false, error: 'aucune bibliotheque pour ces slugs' });
+  let libIds: string[] = [];
+  if (!toutes) {
+    const { data: libs, error: libErr } = await supabaseAdmin
+      .from('libraries')
+      .select('id')
+      .in('slug', librarySlugs);
+    if (libErr) {
+      console.error('[notify-security-notice] bibliotheques:', libErr.message);
+      return jsonResponse(500, { ok: false, error: libErr.message });
+    }
+    libIds = (libs ?? []).map((l: any) => l.id);
+    if (!libIds.length) {
+      return jsonResponse(400, { ok: false, error: 'aucune bibliotheque pour ces slugs' });
+    }
   }
 
-  const { data: mems, error: memErr } = await supabaseAdmin
+  let memQuery = supabaseAdmin
     .from('user_library_memberships')
     .select('user_id')
-    .eq('status', 'active')
-    .in('library_id', libIds);
+    .eq('status', 'active');
+  if (!toutes) memQuery = memQuery.in('library_id', libIds);
+  if (roles) memQuery = memQuery.in('role', roles);
+  const { data: mems, error: memErr } = await memQuery;
   if (memErr) {
     console.error('[notify-security-notice] adhesions:', memErr.message);
     return jsonResponse(500, { ok: false, error: memErr.message });
   }
-  const userIds = [...new Set((mems ?? []).map((m: any) => m.user_id).filter(Boolean))];
+  const ids = (mems ?? []).map((m: any) => m.user_id);
+  if (networkAdmins) {
+    const { data: admins, error: admErr } = await supabaseAdmin
+      .from('network_administrators')
+      .select('user_id')
+      .eq('status', 'active');
+    if (admErr) {
+      console.error('[notify-security-notice] administration du reseau:', admErr.message);
+      return jsonResponse(500, { ok: false, error: admErr.message });
+    }
+    for (const a of admins ?? []) ids.push((a as any).user_id);
+  }
+  const userIds = [...new Set(ids.filter(Boolean))];
   if (!userIds.length) {
     return jsonResponse(200, { ok: true, dry_run: dryRun, destinataires: 0, details: [] });
   }
