@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-13** · 49 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-13** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 2
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 12 de outubro de 2026 à noite** (`91b7e803`, medido às 22h15) — produção consultada só em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 11/10 ao meio-dia, `24b37717`). **A fila da CI leva um commit**: 472 migrações aplicadas, 473 no repositório (H33 bis, vizinha). **Primeira foto em duas colunas**: desde B39, bibliotecas, contas e circulação leem-se real / formação por consulta. O que mudou: **o banco** — +14 migrações num dia e meio, +7 funções líquidas, **avisos de segurança no mesmo total de 11/10 (493)**, índices «não usados» em 363; **o catálogo** — −3 fichas, −9 autoridades, −21 obras, todas por fusão ou retirada com acordo, nenhuma obra sem ficha; **a rede** — 5 + 1 bibliotecas, 19 + 4 contas, 9 / 21 / 22 / 0; **o repositório** — +66 commits, +35 ficheiros, +20 chaves, +174 testes JS, +8 suítes SQL. **Fechados desde 11/10**: B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 neste levantamento** — quinze fechos, **49 itens, o ponto mais baixo desde a v34**. **O que falta fechar, e por quem** — *num facto por vir*: F19, F25, H15, H16, H21, H28 (DIRA), H34; *na tela*: nada; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-13.** **39 itens de 49** trazem uma verificação datada própria (A1, A3, B36, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-13.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -350,6 +350,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
 | **B41** | Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno | `P3` | Aberto |
+| **B42** | Autenticação em dois fatores (TOTP) obrigatória para a administração da rede, as coordenações e as equipes de biblioteca | `P1` | Em curso |
 
 #### B36 — Reler, com os contadores de produção, os índices mantidos com ressalva
 
@@ -392,6 +393,26 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **H34**.
 
 *Remissões : `supabase/migrations` · `tests/sql`*
+
+#### B42 — Autenticação em dois fatores (TOTP) obrigatória para a administração da rede, as coordenações e as equipes de biblioteca
+
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+
+**Estado.** Decisão de Xavier (12/10/2026): obrigatória para as contas de equipe, opcional para leitores; TOTP nativo do Supabase Auth, sem SMS nem fornecedor. Lote 1 entregue em 13/10 (`39cb6328`): Minha conta e código no login. Lote 2 entregue em 13/10 (`11bbbaa0`), DESLIGADO: função de pré-requisição do PostgREST, modo `off`, inscrição obrigatória no login, aba Rede. A função NÃO está conectada.
+
+*Verificado : 13/10 — lotes 1 e 2 implantados e verificados (modo `off`, função não conectada).*
+
+**O que é.** Lote 3: política restritiva em `storage.objects` pelo painel; auditoria das 9 Edge Functions em `service_role`; aviso às 15 contas de equipe; migração de ativação (modo `facteurs`, depois `equipes` na data fixada por Xavier); denylist do backup.
+
+**Por que importa.** Uma senha reutilizada e vazada abre hoje os dados de leitura de uma biblioteca inteira, ou da rede. Só a tela não protege nada; daí o controle único antes do PostgREST.
+
+**O que conta como terminado.**
+
+- Modo `equipes` ativo em produção, também no Storage e nas Edge Functions.
+- As contas de equipe têm ao menos um dispositivo.
+- Uma remoção real pela administração, registrada.
+
+*Remissões : `supabase/migrations/20261013171710_b42_la_double_authentification_s_exige_cote_serveur.sql` · `tests/sql/b42_double_authentification_tests.sql` · `src/lib/doubleFacteur.js` · `src/pages/account/ContaDoubleFacteur.jsx` · `src/components/rede/DoubleFacteurPanel.jsx`*
 
 ---
 
@@ -1845,4 +1866,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-13. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 49 itens em 11 domínios. O estado numérico foi levantado em 2026-10-12 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `91b7e803`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-13. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-12 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `91b7e803`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

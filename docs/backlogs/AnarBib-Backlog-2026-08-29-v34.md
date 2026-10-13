@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-13** · 49 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-13** · 50 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 2
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 12 octobre 2026 au soir** (`91b7e803`, mesuré à 22 h 15) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 11/10 à midi, `24b37717`). **La file de CI porte un commit** à l'heure du relevé : 472 migrations appliquées, 473 au dépôt (H33 bis, voisine, poussée à 22 h 01). **Première photo en deux colonnes** : depuis B39, bibliothèques, comptes et circulation se lisent réel / formation par requête, plus par une note. Ce qui a bougé et pourquoi : **la base** — +14 migrations en un jour et demi (le jour le plus chargé du mois : B38, E38, B40, B39, H33, H34 lots 1 et 2, AUT-VAR, la recherche par variantes), +7 fonctions net dont −7 dans `api`, **les avis de sécurité au même total qu'au 11/10 (493, 0029 à 433)** — chaque porte neuve fermée à la pose —, les index « inutilisés » à 363 (390) ; **le catalogue** — −3 notices, −9 autorités, −21 œuvres, toutes par fusion ou retrait sur accord, plus aucune œuvre sans notice ; 22 reprises de notices publiées ; **le réseau** — 5 + 1 bibliothèques, 19 + 4 comptes, 9 / 21 / 22 / 0 ; deux emprunts du jour à la BLMF, le regard de Xavier ; **le dépôt** — +66 commits, +35 fichiers, +20 clés, +174 tests JS, +8 suites SQL. **Clos depuis le 11/10 à midi** : B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 à ce relevé** — quinze clôtures, **49 items, le point le plus bas depuis la v34**. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, provoquée de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), H34 (voisine) ; *à l'écran* : rien — le Panneau et la Bibliothèque sont vus ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16 (la règle du stock), I32 (le rapport du tableau de bord) ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-13.** **39 items sur 49** portent une vérification datée qui leur est propre (A1, A3, B36, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-13.** **40 items sur 50** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -350,6 +350,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
 | **B41** | Recompter un seul fonds donne à une notice partagée la disponibilité de ce seul fonds jusqu’au recompte de nuit | `P3` | Ouvert |
+| **B42** | Double authentification (TOTP) obligatoire pour l’administration du réseau, les coordinations et les bibliothécaires | `P1` | En cours |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -392,6 +393,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après **H34**.
 
 *Renvois : `supabase/migrations` · `tests/sql`*
+
+#### B42 — Double authentification (TOTP) obligatoire pour l’administration du réseau, les coordinations et les bibliothécaires
+
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** Décision de Xavier (12/10/2026) : obligatoire pour les comptes d’équipe, facultative pour les lecteurs ; TOTP natif de Supabase Auth, aucun SMS ni prestataire (Aegis, FreeOTP+, KeePassXC). **Lot 1 livré le 13/10 (`39cb6328`)** : Mon compte (inscrire, plusieurs appareils, retirer) et code à la connexion. **Lot 2 livré le 13/10 (`11bbbaa0`, migration `20261013171710`), ÉTEINT** : `private.fn_avant_requete` (fonction d’avant-requête de PostgREST, refus 403 AAL2_REQUIRED d’une session aal1, liste blanche, échec ouvert), réglage `off/facteurs/equipes` à `off`, inscription obligatoire à la connexion, onglet Réseau « Double authentification » (comptes sans appareil, retrait journalisé en aal2). La fonction n’est PAS branchée.
+
+*Vérifié : 13/10 — lots 1 et 2 déployés et vérifiés (front servi, migration appliquée par la CI, mode `off`, `authenticator` sans `db_pre_request`, 0029 = 436, 0028 = 29).*
+
+**Ce que c'est.** Lot 3 : (1) politique restrictive sur `storage.objects` (aal2 exigé), posée depuis le tableau de bord avec Xavier — `postgres` n’est pas propriétaire de la table ; (2) audit des 9 Edge Functions en `service_role` qui identifient l’appelant par son jeton (contrôle du claim `aal`) ; (3) annonce aux 15 comptes d’équipe (2 admins, 10 coordinations, 3 bibliothécaires au 12/10), suivie dans l’onglet Réseau ; (4) migration d’activation : `ALTER ROLE authenticator SET pgrst.db_pre_request = 'private.fn_avant_requete'`, `NOTIFY pgrst, 'reload config'`, mode `facteurs` d’abord, puis `equipes` à la date fixée par Xavier ; (5) `bg2-denylist.txt` (hors dépôt) : y mettre ou non `private.double_facteur_journal` (identifiants de comptes + motif libre), décision de Xavier.
+
+**Pourquoi ça compte.** Un mot de passe réutilisé puis divulgué ouvre aujourd’hui les données de lecture (qui lit quoi, lectures réservées) de toute une bibliothèque, voire du réseau. Un écran seul ne protège rien : un jeton aal1 appelle l’API directement ; d’où le contrôle unique en amont de PostgREST, plutôt que les ~20 aides et 531 lectures directes des adhésions.
+
+**Ce qui compte comme fini.**
+
+- Mode `equipes` actif en production : une session aal1 d’un compte d’équipe est refusée par PostgREST, Storage et les Edge Functions.
+- Les 15 comptes d’équipe ont au moins un appareil (onglet Réseau, colonne « Appareils »).
+- Un retrait d’appareil réel par l’administration, journalisé.
+
+*Renvois : `supabase/migrations/20261013171710_b42_la_double_authentification_s_exige_cote_serveur.sql` · `tests/sql/b42_double_authentification_tests.sql` · `src/lib/doubleFacteur.js` · `src/pages/account/ContaDoubleFacteur.jsx` · `src/components/rede/DoubleFacteurPanel.jsx`*
 
 ---
 
@@ -1855,4 +1876,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-13. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 49 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-13. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 50 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
