@@ -3,7 +3,7 @@
 // table « page → documents » — pas les numéros de page, qui suivent les PDF.
 import { describe, it, expect } from 'vitest';
 import {
-  COMPLETE_BLOCKS, READER_START, READER_SECTIONS, GOVERNANCE_START,
+  COMPLETE_BLOCKS, READER_START, READER_SECTIONS, READER_SECTION_EXCEPTIONS, GOVERNANCE_START,
   completeManualUrl, readerManualUrl, governanceGuideUrl, docsForLocation, currentTab,
 } from '../lib/docLinks.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
@@ -29,12 +29,22 @@ describe('tables des recueils', () => {
     const sorted = [...starts].sort((a, b) => a - b);
     for (let i = 1; i < sorted.length; i++) expect(sorted[i] - sorted[i - 1]).toBeGreaterThanOrEqual(60);
   });
-  it('le manuel lecteur·rice : dix-huit pages par langue, sections dans l’ordre', () => {
+  it('le manuel lecteur·rice : dix-neuf pages par langue (B42), sections dans l’ordre', () => {
     const s = LOCALES.map(l => READER_START[l]).sort((a, b) => a - b);
-    for (let i = 1; i < s.length; i++) expect(s[i] - s[i - 1]).toBe(18);
+    for (let i = 1; i < s.length; i++) expect(s[i] - s[i - 1]).toBe(19);
     expect(READER_SECTIONS.catalogue).toBeLessThan(READER_SECTIONS.account);
     expect(READER_SECTIONS.reserve).toBeLessThan(READER_SECTIONS.loans);
-    expect(Math.max(...Object.values(READER_SECTIONS))).toBeLessThan(18);
+    expect(READER_SECTIONS.twoFactor).toBe(18);
+    expect(Math.max(...Object.values(READER_SECTIONS))).toBeLessThan(19);
+  });
+  it('les exceptions par langue ne visent que des sections connues, dans la langue', () => {
+    for (const [l, ex] of Object.entries(READER_SECTION_EXCEPTIONS)) {
+      expect(READER_START[l], l).toBeDefined();
+      for (const [sec, off] of Object.entries(ex)) {
+        expect(READER_SECTIONS[sec], sec).toBeDefined();
+        expect(Math.abs(off - READER_SECTIONS[sec])).toBeLessThanOrEqual(1);
+      }
+    }
   });
 });
 
@@ -42,7 +52,9 @@ describe('URL', () => {
   it('ouvre le bloc dans la langue, et retombe sur pt-BR pour une langue inconnue', () => {
     expect(completeManualUrl('fr', 5)).toMatch(/Manual_do_AnarBib\.pdf#page=133$/);
     expect(completeManualUrl('xx', 0)).toMatch(/#page=6$/);
-    expect(readerManualUrl('el', 'reserve')).toMatch(/#page=178$/);
+    expect(readerManualUrl('el', 'reserve')).toMatch(/#page=169$/);
+    expect(readerManualUrl('fr', 'twoFactor')).toMatch(/Manual%20Leitor-a-e\.pdf#page=40$/);
+    expect(readerManualUrl('eo', 'notes')).toMatch(/#page=189$/);
     expect(governanceGuideUrl('nl')).toMatch(/Guia_de_governanca_AnarBib\.pdf#page=470$/);
   });
 });

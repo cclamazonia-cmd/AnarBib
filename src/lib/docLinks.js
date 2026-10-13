@@ -9,7 +9,9 @@
 // ce que la page permet, par l'ancre `#page=N` que tout navigateur comprend.
 //
 // Les numéros sont ceux des PDF publiés le 01-03/09/2026 dans
-// library-ui-assets/manuals/network/published/. Republier un recueil avec
+// library-ui-assets/manuals/network/published/ — sauf le manuel de la·du
+// lecteur·rice, republié le 13/10/2026 (B42, chapitre 24 « double
+// authentification », pages remesurées dans le PDF publié). Republier un recueil avec
 // une pagination différente impose de relever à nouveau cette table :
 // src/tests/doc-links.test.js garde au moins la forme (dix langues, blocs
 // croissants), pas les valeurs.
@@ -41,10 +43,13 @@ export const COMPLETE_BLOCKS = {
   eo:      [812, 817, 826, 838, 841, 850, 867, 875, 886, 892],
 };
 
-// Manuel de la·du lecteur·rice — page de titre de chaque langue (18 pages
-// par langue, même maquette) et décalage de chaque section.
+// Manuel de la·du lecteur·rice — page de titre de chaque langue et décalage
+// de chaque section. Depuis le 13/10/2026 (B42) : 19 pages par langue (le
+// chapitre 24, « double authentification », a sa propre page en fin de
+// langue, sans rien déplacer avant lui), dans l'ordre du docx v5 :
+// …, ca, nl, el, eo (l'ancien PDF avait eo avant nl et el).
 export const READER_START = {
-  'pt-BR': 3, fr: 21, de: 39, en: 57, es: 75, it: 93, ca: 111, eo: 129, nl: 147, el: 165,
+  'pt-BR': 3, fr: 22, de: 41, en: 60, es: 79, it: 98, ca: 117, nl: 136, el: 155, eo: 174,
 };
 export const READER_SECTIONS = {
   start: 0,        // « Le manuel complet existe pour… » — la porte d'entrée
@@ -57,6 +62,15 @@ export const READER_SECTIONS = {
   reserve: 13,     // réserver un livre, convenir du retrait
   loans: 15,       // emprunts : délais, renouvellement, retour
   notes: 16,       // notes de lecture et événements
+  twoFactor: 18,   // protéger son compte : la double authentification (B42)
+};
+// La maquette n'est pas tout à fait la même partout : mesuré le 13/10/2026 dans
+// le PDF publié, le grec et l'espéranto ont quelques chapitres une page plus
+// loin (ou plus tôt). Ces écarts existaient déjà dans le PDF du 03/09 ; les
+// liens tombaient alors une page à côté.
+export const READER_SECTION_EXCEPTIONS = {
+  el: { myLibraries: 11, card: 12, reserve: 14 },
+  eo: { notes: 15 },
 };
 
 // Guide de gouvernance — page de titre de chaque langue.
@@ -81,7 +95,8 @@ export function completeManualUrl(locale, block) {
 
 export function readerManualUrl(locale, section = 'start') {
   const start = pick(READER_START, locale);
-  const offset = READER_SECTIONS[section] ?? 0;
+  const exceptions = pick(READER_SECTION_EXCEPTIONS, locale) ?? {};
+  const offset = exceptions[section] ?? READER_SECTIONS[section] ?? 0;
   return `${DOC_BASE}${DOC_FILES.reader}#page=${start + offset}`;
 }
 
