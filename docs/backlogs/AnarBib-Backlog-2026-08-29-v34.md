@@ -852,11 +852,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 `P3` Différé · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : langue maternelle
 
-**État.** Inventaire du 13/10/2026 (« AnarBib — passer de 10 à 11 locales : inventaire et plan pour le roumain », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). Le lot 1 — source unique des locales, `DOC-I18N-4` — est livré sans roumain (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde) : ajouter une langue tient désormais en une ligne par couche, et aucune liste oubliée ne peut plus la refuser en silence.
+**État.** Inventaire du 13/10/2026 (« AnarBib — passer de 10 à 11 locales : inventaire et plan pour le roumain », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). Le lot 1 — source unique des locales, `DOC-I18N-4` — est livré sans roumain (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde) : ajouter une langue tient désormais en une ligne par couche, et aucune liste oubliée ne peut plus la refuser en silence. Décisions D1 à D7 prises le 13/10 (`DOC-I18N-5`) : `ro` « Română » en onzième position, épicène puis doublet, tutoiement, virgule souscrite gardée en CI, livraison complète hors sélecteur jusqu'à la relecture, « dix langues » sans nombre dans les titres, roumain en fin des recueils PDF. Relecture à proposer à Anarhiva (Cluj-Napoca).
 
-*Vérifié : 13/10 — lot 1 commité, non poussé : banc local complet (202 suites SQL vertes, dont locales_source_unique 12/12), vitest 225 fichiers verts, lint et build verts ; vitrine : générateurs identiques à l’octet avant/après, pose-selecteur 160 pages identiques.*
+*Vérifié : 13/10 — lot 1 déployé et vérifié en prod (37e02906 ; migration 20261013194812 appliquée par la CI, created_by vide ; 8 contraintes et 8 fonctions sur fn_supported_locales, anon fermé) ; police des PDF déployée (85b4835f) ; décisions D1 à D7 inscrites (DOC-I18N-5).*
 
-**Ce que c'est.** Lot 2, prérequis techniques (langue encore inactive) : police TTF dans jspdf (latin étendu et grec), glyphes ș ț ă des polices web, rum/ron → ro dans fn_locale_from_idioma et ingest.fn_idioma_bcp47, ro → rum dans marc/ecriture.ts, ro dans la casse de phrase (front et regex SQL de 20260904130100) et dans WD_LANGUAGES, test d’écriture roumain. Lot 3, traduction en une passe puis activation : ro.json (≈ 7 600 clés), courriels (≈ 800 entrées), install.sh (83 clés), données en base (thésaurus, carte, sujets, tâches, fn_notify_fonds_deposit_received), puis ro dans les trois sources avec listed: false. Lot 4, documentation du dépôt (familles -ro.md, phrases « dix »). Lot 5, vitrine (17 pages /ro/, sélecteur régénéré par tools/pose-selecteur.cjs, phrases « dix langues » selon D6, hreflang facultatif). Lot 6, recueils PDF (bloc roumain en fin, D7) et sous-titres des tutoriels. Lot 7, relecture roumanophone, listed: true, annonce, clôture au REGISTRE.
+**Ce que c'est.** Lot 2, prérequis techniques (langue encore inactive) : ~~police TTF dans jspdf~~ (fait le 13/10, DejaVu Sans, `85b4835f` : le grec et le « œ » étaient déjà illisibles), glyphes ș ț ă des polices web, rum/ron → ro dans fn_locale_from_idioma et ingest.fn_idioma_bcp47, ro → rum dans marc/ecriture.ts, ro dans la casse de phrase (front et regex SQL de 20260904130100) et dans WD_LANGUAGES, test d’écriture roumain. Lot 3, traduction en une passe puis activation : ro.json (≈ 7 600 clés), courriels (≈ 800 entrées), install.sh (83 clés), données en base (thésaurus, carte, sujets, tâches, fn_notify_fonds_deposit_received), puis ro dans les trois sources avec listed: false. Lot 4, documentation du dépôt (familles -ro.md, phrases « dix »). Lot 5, vitrine (17 pages /ro/, sélecteur régénéré par tools/pose-selecteur.cjs, phrases « dix langues » selon D6, hreflang facultatif). Lot 6, recueils PDF (bloc roumain en fin, D7) et sous-titres des tutoriels. Lot 7, relecture roumanophone, listed: true, annonce, clôture au REGISTRE.
 
 **Pourquoi ça compte.** Xavier veut ouvrir l’app et la vitrine au roumain. L’inventaire a montré que la difficulté n’était pas la traduction mais la soixantaine de copies de la liste des langues : c’est réglé par le lot 1 ; ce qui reste est la langue elle-même, et sa relecture avant toute annonce (le grec attend encore la sienne).
 
@@ -866,9 +866,9 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 - Une personne roumanophone a relu, ses corrections sont portées, et la langue est dans les sélecteurs (listed: true).
 - DOC-I18N-1 est amendé (11 locales) et les décisions D1 à D7 sont inscrites au REGISTRE.
 
-**Dépendances.** Les décisions D1 à D7 de Xavier (code et place, écriture inclusive, adresse, diacritiques, traduction et relecture, phrases « dix langues », recueils PDF) ; une personne roumanophone pour D2, D3, D5 et la relecture.
+**Dépendances.** Une personne roumanophone pour valider D2 et relire (Anarhiva, Cluj-Napoca, à solliciter).
 
-*Renvois : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde`*
+*Renvois : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde` · `DOC-I18N-5`*
 
 ---
 
