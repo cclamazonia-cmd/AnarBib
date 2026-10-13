@@ -59,6 +59,7 @@ function passage(env = {}) {
         SONDE_FICEDL_URL: `http://127.0.0.1:${portFiche}/spip.php?mot8`,
         SONDE_FICEDL_URL_CONTROLE: `http://127.0.0.1:${portControle}/`,
         SONDE_FICEDL_DELAI_S: '5',
+        SONDE_FICEDL_INTERVALLE_S: '0', // le banc enchaîne les passages ; la règle « un par jour » a son propre cas
         ...env,
       },
     });
@@ -121,6 +122,16 @@ describe.skipIf(!BASH)('la sonde du thésaurus FICEDL (H2)', () => {
     expect(c.subject).toMatch(/répond de nouveau \(absent \d+ jour/);
     expect(c.text).toContain('le raclage (H13)');
     expect(c.text).toContain('le courriel à la FICEDL (H2)');
+  });
+
+  it('un second passage le même jour ne compte pas : le 13/10, deux démarrages du poste avaient fait trois passages', async () => {
+    modeFiche = 503;
+    const avant = etat();
+    const r = await passage({ SONDE_FICEDL_INTERVALLE_S: '86400' });
+    expect(r.rc, r.sortie).toBe(0);
+    expect(r.sortie).toContain('deja passee');
+    expect(etat()).toEqual(avant); // ni échec compté, ni passage noté
+    expect(courriels()).toHaveLength(2);
   });
 
   it('fiche muette et contrôle muet : aveugle — rien compté, rien écrit, sortie 3', async () => {

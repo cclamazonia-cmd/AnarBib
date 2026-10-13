@@ -359,7 +359,10 @@ par `anarbib-sonde-ficedl.timer` (10 h 30, rattrapé au démarrage si le poste
 transport du témoin de panne (même `~/anarbib-ops/temoin.env`, mêmes
 destinataires) que le site ne répond plus et que c'est le moment de l'écrire à
 la FICEDL ; puis une seconde fois le jour où il revient, avec la durée en jours
-— le raclage (H13) redevient possible. Un seul courriel par absence. Les mêmes
+— le raclage (H13) redevient possible. Un seul courriel par absence. **Un
+passage par jour, par construction** : un passage à moins de douze heures du
+précédent ne compte pas (le 13/10, deux démarrages du poste avaient fait trois
+passages et déclaré une absence en huit heures). Les mêmes
 quatre issues que le témoin : 0 le site répond, 1 il ne répond pas, 3 aveugle
 (le poste est sans réseau), 2 pas de configuration.
 

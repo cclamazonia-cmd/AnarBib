@@ -76,19 +76,32 @@ esac
 mkdir -p "$ETAT_DIR"
 
 # --- Etat entre deux passages -------------------------------------------------
-echecs=0; etat=ok; depuis=0
+echecs=0; etat=ok; depuis=0; dernier_epoch=0
 if [ -f "$ETAT" ]; then
   while IFS='=' read -r k v; do
-    case "$k" in echecs) echecs="$v" ;; etat) etat="$v" ;; depuis) depuis="$v" ;; esac
+    case "$k" in echecs) echecs="$v" ;; etat) etat="$v" ;; depuis) depuis="$v" ;; dernier_epoch) dernier_epoch="$v" ;; esac
   done < "$ETAT"
 fi
 case "$echecs" in ''|*[!0-9]*) echecs=0 ;; esac
 case "$depuis" in ''|*[!0-9]*) depuis=0 ;; esac
+case "$dernier_epoch" in ''|*[!0-9]*) dernier_epoch=0 ;; esac
 case "$etat" in ok|absent) ;; *) etat=ok ;; esac
 ecrire_etat() {   # $1 echecs, $2 etat, $3 depuis, $4 detail
-  printf 'echecs=%s\netat=%s\ndepuis=%s\ndernier_passage=%s\ndetail=%s\n' \
-    "$1" "$2" "$3" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$4" > "$ETAT"
+  printf 'echecs=%s\netat=%s\ndepuis=%s\ndernier_passage=%s\ndernier_epoch=%s\ndetail=%s\n' \
+    "$1" "$2" "$3" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(date +%s)" "$4" > "$ETAT"
 }
+
+# --- Un passage par jour, par construction (13/10/2026) ---------------------------
+# Le minuteur passe a 10 h 30, ET au demarrage du poste (OnStartupSec, pour le
+# jour ou il etait eteint a 10 h 30). Le 13/10, deux demarrages dans la journee
+# ont fait trois passages : 200 a 8 h 29, 503 a 10 h 32, 503 a 18 h 45 — et la
+# sonde a ecrit « deux passages de suite sans reponse (un par jour) » apres huit
+# heures. Un echec par jour au plus : un passage a moins d'une demi-periode du
+# precedent ne compte pas et n'ecrit rien.
+if [ "$dernier_epoch" -gt 0 ] && [ $(( $(date +%s) - dernier_epoch )) -lt $(( INTERVALLE_S / 2 )) ]; then
+  echo ">>> Sonde FICEDL — deja passee il y a $(( ($(date +%s) - dernier_epoch) / 60 )) min (un passage par jour) : rien compte."
+  exit 0
+fi
 
 # --- La sonde -------------------------------------------------------------------
 # stdout = « <code HTTP> » (000 si la connexion a echoue) ; retour = 0 si 2xx.
