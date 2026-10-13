@@ -24,7 +24,8 @@
 --
 -- Pose par migration vérifiée le 13/10 en production : `postgres` crée une
 -- politique sur storage.objects (essai dans une transaction annulée), bien
--- qu'il n'en soit pas propriétaire.
+-- qu'il n'en soit pas propriétaire. Il ne peut pas, en revanche, la commenter
+-- sur une image auto-hébergée (voir plus bas) : ce fichier ne le fait plus.
 -- Suite : tests/sql/b42_double_authentification_tests.sql (T11).
 -- ═══════════════════════════════════════════════════════════════════════════
 
@@ -60,6 +61,10 @@ BEGIN
     TO authenticated
     USING ((SELECT private.fn_session_double_facteur_ok()))
     WITH CHECK ((SELECT private.fn_session_double_facteur_ok()));
-  COMMENT ON POLICY b42_double_authentification ON storage.objects IS
-    'B42 — RESTRICTIVE : une session aal1 dont le compte doit être en aal2 ne lit ni n''écrit rien dans Storage. Sans effet en mode off.';
+  -- Pas de COMMENT ON POLICY : sur une image Supabase auto-hébergée, postgres
+  -- CRÉE une politique sur storage.objects mais ne la COMMENTE pas (« must be
+  -- owner of relation objects », rejeu-image #1728 du 13/10). La production,
+  -- où la première version de ce fichier est passée, porte ce commentaire :
+  -- « B42 — RESTRICTIVE : une session aal1 dont le compte doit être en aal2 ne
+  -- lit ni n'écrit rien dans Storage. Sans effet en mode off. »
 END $storage$;
