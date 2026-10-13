@@ -34,7 +34,7 @@ import { renderMaterialSection, renderRegistryField } from './CatalogFieldRender
 import Modal from '@/components/ui/Modal';
 
 // Constantes et fonctions pures du formulaire : src/lib/catalogacao/bookDraft.js (E6, lot 1)
-import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, EMPTY_FORM, construireZonesIsbd } from '@/lib/catalogacao/bookDraft';
+import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, provenanceFromCandidate, EMPTY_FORM, construireZonesIsbd } from '@/lib/catalogacao/bookDraft';
 
 // ═══════════════════════════════════════════════════════════
 // BookDraftForm
@@ -498,38 +498,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const volumeCapas = ecartCapas ? null : (accordsCapas.find((a, i) => parIsbn(coverCandidates[i]) && a?.statut === 'volume') || null);
   const etiquettesCapas = coverCandidates.map((c, i) => etiquetteCandidate(c, accordsCapas[i]));
 
-  function applyBnResult(item) {
-    if (!item) return;
-    const updates = {};
-    // Parse title
-    if (item.title && !f('titulo')) {
-      const parts = item.title.split(/\s*:\s*/);
-      updates.titulo = parts[0] || '';
-      if (parts[1] && !f('subtitulo')) updates.subtitulo = parts[1];
-    }
-    // Parse author
-    if (item.author && !f('autor')) updates.autor = item.author;
-    // Parse publication (format: "Local : Editora, Ano")
-    if (item.publication) {
-      const pubMatch = item.publication.match(/^([^:]+?)(?:\s*:\s*(.+?))?(?:,\s*(\d{4}))?\s*$/);
-      if (pubMatch) {
-        if (pubMatch[1] && !f('local_publicacao')) updates.local_publicacao = pubMatch[1].trim();
-        if (pubMatch[2] && !f('editora')) updates.editora = pubMatch[2].trim();
-        if (pubMatch[3] && !f('ano')) updates.ano = pubMatch[3];
-      }
-    }
-    // Subjects
-    if (item.subject && !f('subjects')) updates.subjects = item.subject;
-    // Provenance note
-    if (!f('provenance_note')) {
-      updates.provenance_note = `BN Brasil — ${item.detail_url || 'acervo.bn.gov.br'}`;
-    }
-
-    setMany(updates);
-    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-    setMsg({ text: t({ id: 'catalogacao.msg.bnApplied' }, { title: item.title }), kind: 'ok' });
-  }
-
   async function applyCandidate(candidate) {
     if (!candidate) return;
     const updates = {};
@@ -579,6 +547,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     // Notes
     if (candidate.notes?.length && !f('notas')) {
       updates.notas = candidate.notes.join('\n');
+    }
+    // D'où vient la notice (« DBNL — https://… », « BnF 12345 ») : c'était le
+    // seul apport du bouton BN Brasil retiré le 13/10, étendu à toutes les sources.
+    if (!f('provenance_note')) {
+      const provenance = provenanceFromCandidate(candidate);
+      if (provenance) updates.provenance_note = provenance;
     }
 
     setMany(updates);
@@ -2085,7 +2059,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {/* ── Recherche catalographique (E6 lot 3 : LookupPanel) ── */}
             <LookupPanel f={f} draftId={f('id')} setMsg={setMsg}
               onIsbnScanned={(isbn) => setForm(prev => ({ ...prev, isbn }))}
-              onApplyCandidate={applyCandidate} onApplyBnResult={applyBnResult} />
+              onApplyCandidate={applyCandidate} />
           </div>
         </div>
 

@@ -2,11 +2,13 @@
 // Le panneau de recherche catalographique du formulaire de notice, sorti de
 // BookDraftForm.jsx sans en changer une ligne de logique : recherche par
 // ISBN/ISSN/titre+auteur dans les sources (BNE, BnF, DNB, ICCU, LoC, Open
-// Library, Wikidata, BN Brasil), lecture du code-barres, liens manuels (BN,
-// WorldCat, portail ISSN), liste des candidates et résultats BN Brasil.
-// Le panneau ne touche jamais au formulaire lui-même : l'ISBN lu, la candidate
-// ou la notice BN retenue remontent au parent par trois rappels, qui reste
-// seul à écrire les champs, les contributeurs et l'état du brouillon.
+// Library, Wikidata, DBNL, BN Brasil), lecture du code-barres, liens manuels (BN,
+// WorldCat, portail ISSN) et liste des candidates — BN Brasil comprise : son
+// ancien bouton « Chercher à la Bibliothèque Nationale (ISBN) » refaisait la
+// requête que la recherche lance déjà avec un ISBN, il est retiré le 13/10/2026.
+// Le panneau ne touche jamais au formulaire lui-même : l'ISBN lu et la
+// candidate retenue remontent au parent par deux rappels, qui reste seul à
+// écrire les champs, les contributeurs et l'état du brouillon.
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -14,24 +16,21 @@ import { localizeError } from '@/lib/localizeError';
 import { normalizeBnToCandidate } from '@/lib/catalogacao/bookDraft';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
 
-export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApplyCandidate, onApplyBnResult }) {
+export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApplyCandidate }) {
   const { formatMessage: t } = useIntl();
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
   const [isbnScanning, setIsbnScanning] = useState(false);
   const [lookupResult, setLookupResult] = useState(null); // { candidates, sources, summary }
   const [selectedCandidate, setSelectedCandidate] = useState(0);
-  // ── BN Brasil state ────────────────────────────────────
-  const [bnLoading, setBnLoading] = useState(false);
-  const [bnResult, setBnResult] = useState(null);
   // Le brouillon change (fiche vierge, autre brouillon chargé) : les résultats
   // affichés concernaient l'autre notice, ils se referment. Avant l'extraction,
   // seule la fiche vierge le faisait (resetForm) ; un brouillon chargé par-dessus
   // gardait les candidates de la notice précédente.
-  useEffect(() => { setLookupResult(null); setSelectedCandidate(0); setBnResult(null); }, [draftId]);
+  useEffect(() => { setLookupResult(null); setSelectedCandidate(0); }, [draftId]);
 
   // ═══════════════════════════════════════════════════════
-  // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)
+  // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata, DBNL + BN Brasil)
   // ═══════════════════════════════════════════════════════
 
 
@@ -59,7 +58,6 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
     setLookupLoading(true);
     setLookupResult(null);
     setSelectedCandidate(0);
-    setBnResult(null);
     setMsg({ text: t({id:'catalogacao.msg.searchingSources'}), kind: 'info' });
 
     try {
@@ -147,48 +145,6 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
     setMsg({ text: t({ id: 'catalogacao.msg.issnPortalOpened' }), kind: 'info' });
   }
 
-  // ═══════════════════════════════════════════════════════
-  // BN Brasil ISBN lookup (via bn_isbn_lookup edge function)
-  // ═══════════════════════════════════════════════════════
-
-  async function runBnIsbnLookup() {
-    const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
-    if (!isbn) {
-      setMsg({ text: t({ id: 'catalogacao.msg.needIsbnForBn' }), kind: 'error' });
-      return;
-    }
-
-    setBnLoading(true);
-    setBnResult(null);
-    setMsg({ text: t({ id: 'catalogacao.msg.bnSearching' }), kind: 'info' });
-
-    try {
-      const { data, error } = await supabase.functions.invoke('bn_isbn_lookup', {
-        body: { isbn },
-      });
-
-      if (error && !data) throw error;
-      if (!data?.ok) throw new Error(data?.error || t({ id: 'catalogacao.bn.searchFailed' }));
-
-      setBnResult(data);
-      const total = data.total || 0;
-      setMsg({
-        text: total > 0
-          ? t({ id: 'catalogacao.bn.resultsFound' }, { total })
-          : t({ id: 'catalogacao.bn.noResults' }),
-        kind: total > 0 ? 'ok' : 'info',
-      });
-    } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.msg.bnError' }, { message: localizeError(err, t, 'catalogacao.msg.connectionFailed') }), kind: 'error' });
-    } finally {
-      setBnLoading(false);
-    }
-  }
-
-  function clearBnResult() {
-    setBnResult(null);
-  }
-
   async function applySelectedCandidate() {
     if (!lookupResult?.candidates?.length) return;
     await onApplyCandidate(lookupResult.candidates[selectedCandidate] || lookupResult.candidates[0]);
@@ -212,10 +168,6 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
       </button>
       <button type="button" className="ab-button ab-button--secondary ab-button--sm"
         onClick={openBnManual}>{t({id:'catalogacao.ui.bnManual'})}</button>
-      <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-        onClick={runBnIsbnLookup} disabled={bnLoading}>
-        {bnLoading ? t({id:'catalogacao.ui.bnLoading'}) : t({id:'catalogacao.ui.bnIsbn'})}
-      </button>
       <button type="button" className="ab-button ab-button--secondary ab-button--sm"
         onClick={openWorldCat}>{t({id:'catalogacao.ui.worldcat'})}</button>
       {f('issn') && (
@@ -291,46 +243,6 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
       </div>
     )}
 
-    {/* BN Brasil results */}
-    {bnResult?.results?.length > 0 && (
-      <div style={{ marginTop: 10 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
-          <span style={{ fontSize: '.78rem', fontWeight: 600 }}>{t({ id: 'catalogacao.ui.bnResultsTitle' }, { total: bnResult.total })}</span>
-          <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-            onClick={clearBnResult}>{t({ id: 'catalogacao.ui.clearBn' })}</button>
-        </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, overflow: 'hidden', maxHeight: 200, overflowY: 'auto' }}>
-          {bnResult.results.map((item, i) => (
-            <div key={i} style={{
-              padding: '8px 10px', cursor: 'pointer',
-              background: i % 2 === 0 ? 'rgba(0,0,0,.15)' : 'transparent',
-              borderBottom: '1px solid rgba(255,255,255,.06)',
-            }}
-              onClick={() => onApplyBnResult(item)}
-            >
-              <div style={{ fontSize: '.82rem', fontWeight: 600 }}>{item.title}</div>
-              <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>
-                {[item.author, item.publication, item.material].filter(Boolean).join(' · ')}
-              </div>
-              {item.subject && (
-                <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.4)', marginTop: 2 }}>
-                  {t({ id: 'catalogacao.ui.subjectsLabel' })} {item.subject}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #666)', marginTop: 4 }}>
-          {t({ id: 'catalogacao.ui.bnApplyHint' })}
-        </div>
-      </div>
-    )}
-
-    {bnResult && bnResult.results?.length === 0 && (
-      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', padding: '8px 0', marginTop: 6 }}>
-        {t({ id: 'catalogacao.ui.bnNoResult' })}
-      </div>
-    )}
     </>
   );
 }

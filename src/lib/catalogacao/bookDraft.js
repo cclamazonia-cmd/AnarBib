@@ -228,6 +228,23 @@ export const EMPTY_FORM = {
   // geres au niveau authors (authors.viaf_id / isni / wikidata_id).
 };
 
+// ── Note de provenance d'une candidate appliquée (13/10/2026) ──
+// Le nom de la source, puis le lien de la notice chez elle. Les sources SRU
+// (BNE, BnF, DNB, LoC) n'ont pas de lien de notice : leur source_url est la
+// requête elle-même — on garde alors l'identifiant de la notice (001).
+export const LOOKUP_SOURCE_LABELS = {
+  bne: 'BNE', bnf: 'BnF', dnb: 'DNB', iccu: 'ICCU/SBN', loc: 'LoC',
+  openlibrary: 'Open Library', wikidata: 'Wikidata', dbnl: 'DBNL', bn_brasil: 'BN Brasil',
+};
+export function provenanceFromCandidate(candidate) {
+  const label = LOOKUP_SOURCE_LABELS[candidate?.source] || candidate?.source || '';
+  if (!label) return '';
+  const raw = candidate.source_url || '';
+  const url = /\/sru\b|[?&](query|any|isbn)=/i.test(raw) ? '' : raw;
+  const id = url ? '' : (candidate.source_record_id || '');
+  return [id ? `${label} ${id}` : label, url].filter(Boolean).join(' — ');
+}
+
 // ── Candidat de recherche BN Brasil (fiche de catalogage) ──
 export function normalizeBnToCandidate(item, queryIsbn) {
   const parts = (item.title || '').split(/\s*:\s*/);

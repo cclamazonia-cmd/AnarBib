@@ -50,6 +50,7 @@ function monterEF(parSource) {
     CATALOG_METADATA_ENABLE_ICCU: 'false',
     CATALOG_METADATA_ENABLE_OPENLIBRARY: 'false',
     CATALOG_METADATA_ENABLE_WIKIDATA: 'false',
+    CATALOG_METADATA_ENABLE_DBNL: 'false',
   };
   // envGet lit globalThis.Deno, absent sous Node, puis process.env : c'est là
   // que les drapeaux doivent vivre (un Deno passé en paramètre ne serait pas lu).

@@ -8,12 +8,13 @@
 // formulaire entier serait fragile ; on lit la SOURCE et on garde le contrat
 // qui peut casser sans que lint, build ni suite ne le voient :
 //   1. le panneau est MONTÉ dans la colonne « Lookup panel (next to cover) »,
-//      et ses trois rappels sont câblés sur les écrivains du parent ;
+//      et ses deux rappels sont câblés sur les écrivains du parent (le
+//      troisième, onApplyBnResult, est parti avec le bouton BN le 13/10/2026) ;
 //   2. le parent ne porte plus l'état ni la logique de recherche ;
 //   3. le panneau n'écrit jamais le formulaire lui-même (pas de setForm, pas de
 //      setMany) : tout passe par les rappels ;
-//   4. le panneau se remet à zéro quand le brouillon change (résultats BN
-//      compris) — avant l'extraction, seule la fiche vierge le faisait.
+//   4. le panneau se remet à zéro quand le brouillon change — avant
+//      l'extraction, seule la fiche vierge le faisait.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -37,21 +38,21 @@ describe('panneau de recherche catalographique (E6 lot 3) — réellement monté
     expect(form.indexOf("import LookupPanel from './LookupPanel';")).toBeGreaterThan(-1);
   });
 
-  it('câble ses trois rappels sur les écrivains du parent', () => {
+  it('câble ses deux rappels sur les écrivains du parent', () => {
     const mount = form.indexOf('<LookupPanel');
     const props = form.slice(mount, form.indexOf('/>', mount));
     expect(props).toMatch(/draftId=\{f\('id'\)\}/);
     expect(props).toMatch(/onIsbnScanned=\{\(isbn\) => setForm\(prev => \(\{ \.\.\.prev, isbn \}\)\)\}/);
     expect(props).toMatch(/onApplyCandidate=\{applyCandidate\}/);
-    expect(props).toMatch(/onApplyBnResult=\{applyBnResult\}/);
+    expect(props.includes('onApplyBnResult')).toBe(false);
     // les écrivains restent dans le parent : ce sont eux qui touchent le
     // formulaire, les contributeurs et l'état du brouillon
     expect(form).toMatch(/async function applyCandidate\(candidate\)/);
-    expect(form).toMatch(/function applyBnResult\(item\)/);
+    expect(form.includes('applyBnResult')).toBe(false);
   });
 
   it('a emporté l’état et la logique de recherche hors du parent', () => {
-    for (const gone of ['lookupResult', 'runCatalogLookup', 'runBnIsbnLookup', 'openWorldCat', 'openIssnPortal', 'isbnScanning', 'setBnResult']) {
+    for (const gone of ['lookupResult', 'runCatalogLookup', 'openWorldCat', 'openIssnPortal', 'isbnScanning']) {
       expect(form.includes(gone), `${gone} encore dans BookDraftForm`).toBe(false);
       expect(panel.includes(gone), `${gone} absent de LookupPanel`).toBe(true);
     }
@@ -68,11 +69,14 @@ describe('panneau de recherche catalographique (E6 lot 3) — réellement monté
     expect(panel.includes('setContributors(')).toBe(false);
     expect(panel).toMatch(/onIsbnScanned\(clean\);/);
     expect(panel).toMatch(/await onApplyCandidate\(/);
-    expect(panel).toMatch(/onClick=\{\(\) => onApplyBnResult\(item\)\}/);
+    // le bouton BN Brasil (ISBN) est retiré : la recherche l'interroge déjà
+    expect(panel.includes('runBnIsbnLookup')).toBe(false);
+    expect(panel.includes('onApplyBnResult')).toBe(false);
+    expect(panel).toMatch(/supabase\.functions\.invoke\('bn_isbn_lookup'/);
   });
 
-  it('se remet à zéro quand le brouillon change, résultats BN compris', () => {
-    expect(panel).toMatch(/useEffect\(\(\) => \{ setLookupResult\(null\); setSelectedCandidate\(0\); setBnResult\(null\); \}, \[draftId\]\);/);
+  it('se remet à zéro quand le brouillon change', () => {
+    expect(panel).toMatch(/useEffect\(\(\) => \{ setLookupResult\(null\); setSelectedCandidate\(0\); \}, \[draftId\]\);/);
     // et le parent ne le fait plus à sa place
     const reset = form.slice(form.indexOf('function resetForm()'), form.indexOf('function resetForm()') + 800);
     expect(reset.includes('setLookupResult')).toBe(false);

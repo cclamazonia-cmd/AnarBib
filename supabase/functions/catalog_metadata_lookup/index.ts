@@ -114,6 +114,12 @@ function getEnabledSources() {
       label: 'Wikidata',
       enabled: envBool('CATALOG_METADATA_ENABLE_WIKIDATA', true),
       query: runWikidataQuery
+    },
+    {
+      id: 'dbnl',
+      label: 'DBNL',
+      enabled: envBool('CATALOG_METADATA_ENABLE_DBNL', true),
+      query: runDbnlQuery
     }
   ];
   return sources.filter((source)=>source.enabled);
@@ -471,6 +477,172 @@ function parseWikidataEntity(qid, entity) {
     confidence: 0,
     match_reasons: []
   };
+}
+// ── DBNL (Digitale Bibliotheek voor de Nederlandse Letteren) — 13/10/2026 ──
+// Le site dbnl.org interdit les robots (robots.txt « Disallow: / », /zoeken/
+// compris) : on ne lit pas ses pages de recherche. La KB (bibliothèque
+// nationale néerlandaise) publie le jeu « DBNL titels » sous CC0 sur son point
+// SPARQL (data.bibliotheken.nl, Triply) : ~17 000 titres en schema.org — nom,
+// auteur·rices / éditeur·rices scientifiques / traducteur·rices / illustrateur·rices,
+// édition (bookEdition), éditeur et année (publication → organizer, startDate),
+// genres. L'ISBN n'est pas sur le titre DBNL : il est sur la notice de la
+// Nederlandse Bibliografie (nbt) vers laquelle pointe schema:isBasedOn, un ou
+// deux sauts plus loin (~1 550 titres), en ISBN-10 OU ISBN-13 compacts — d'où
+// les deux formes dans VALUES.
+// Deux temps, et le détail en petites requêtes parallèles : mesuré le 13/10,
+// chaque morceau répond en 0,12 s, mais le même détail écrit en UNE requête
+// (OPTIONAL enchaînés, même bornés par VALUES) prend 58 s — le moteur ne
+// borne pas d'abord par les sujets. Six requêtes de 0,1 s valent mieux qu'une
+// qui dépasse le délai de la fonction.
+const DBNL_DATASET = 'http://data.bibliotheken.nl/id/dataset/dbnlt';
+const DBNL_LANG_MARC = { nl: 'dut', dum: 'dum', fy: 'fry', fr: 'fre', de: 'ger', en: 'eng', la: 'lat', it: 'ita', es: 'spa', pt: 'por' };
+const DBNL_ROLES = { author: 'author', editor: 'editor', translator: 'translator', illustrator: 'illustrator' };
+async function runDbnlQuery(query, maxRecords) {
+  if (query.mode === 'issn_lookup') return [];
+  const selector = buildDbnlSelector(query);
+  if (!selector) return [];
+  const endpoint = envGet('CATALOG_METADATA_DBNL_SPARQL_URL') || 'https://data.bibliotheken.nl/sparql';
+  const ask = async (body)=>JSON.parse(await fetchSparql(endpoint, `PREFIX schema: <http://schema.org/>\n${body}`, DEFAULT_TIMEOUT_MS))?.results?.bindings || [];
+  const picked = await ask(`SELECT DISTINCT ?s WHERE { ?s schema:mainEntityOfPage/schema:isPartOf <${DBNL_DATASET}> . ${selector} } LIMIT ${Math.min(maxRecords, 8)}`);
+  const uris = picked.map((b)=>b.s?.value).filter((u)=>/^https?:\/\/data\.bibliotheken\.nl\/id\/dbnlt\/[\w.-]+$/.test(u || ''));
+  if (!uris.length) return [];
+  const values = `VALUES ?s { ${uris.map((u)=>`<${u}>`).join(' ')} }`;
+  const roleValues = Object.keys(DBNL_ROLES).map((r)=>`schema:${r}`).join(' ');
+  const [core, people, pub, nbt, nbt2] = await Promise.all([
+    ask(`SELECT ?s ?name ?ed WHERE { ${values} ?s schema:name ?name . OPTIONAL { ?s schema:bookEdition ?ed } }`),
+    ask(`SELECT ?s ?role ?p ?f ?g ?n WHERE { ${values} VALUES ?role { ${roleValues} } ?s ?role ?p . OPTIONAL { ?p schema:familyName ?f } OPTIONAL { ?p schema:givenName ?g } OPTIONAL { ?p schema:name ?n } }`),
+    ask(`SELECT ?s ?date ?org WHERE { ${values} ?s schema:publication ?pub . OPTIONAL { ?pub schema:startDate ?date } OPTIONAL { ?pub schema:organizer/schema:name ?org } }`),
+    ask(`SELECT ?s ?isbn ?pages ?lang WHERE { ${values} ?s schema:isBasedOn ?b . OPTIONAL { ?b schema:isbn ?isbn } OPTIONAL { ?b schema:numberOfPages ?pages } OPTIONAL { ?b schema:inLanguage ?lang } }`),
+    ask(`SELECT ?s ?isbn WHERE { ${values} ?s schema:isBasedOn ?b . ?b schema:isBasedOn ?c . ?c schema:isbn ?isbn }`)
+  ]);
+  const records = new Map(uris.map((u)=>[u, { uri: u, title: '', edition: '', people: [], publisher: '', year: '', isbn: [], pages: '', languages: [] }]));
+  const val = (b, k)=>normalizeWhitespace(b[k]?.value || '');
+  const each = (rows, fn)=>rows.forEach((b)=>{ const r = records.get(b.s?.value); if (r) fn(r, b); });
+  each(core, (r, b)=>{ r.title ||= val(b, 'name'); r.edition ||= val(b, 'ed'); });
+  each(people, (r, b)=>{
+    const role = DBNL_ROLES[val(b, 'role').split('/').pop()] || 'author';
+    const family = val(b, 'f'), given = val(b, 'g');
+    // Les titres anonymes portent un pseudo-auteur « Anoniem <titre> » : ce
+    // n'est pas une personne, on ne le propose pas comme contributeur·rice.
+    if (/^anoniem$/i.test(given) || /^anoniem\b/i.test(val(b, 'n'))) return;
+    // « Nom, Prénoms » comme dans les notices MARC des autres sources quand la
+    // KB donne les deux ; sinon le nom tel quel (pseudonymes : « Multatuli »).
+    const label = family && given ? `${family}, ${given}` : val(b, 'n') || family;
+    if (label) r.people.push({ label, normalized_label: normalizeText(label), role, authority_ids: {} });
+  });
+  each(pub, (r, b)=>{ r.year ||= extractYear(val(b, 'date')); r.publisher ||= val(b, 'org'); });
+  each(nbt, (r, b)=>{
+    if (val(b, 'isbn')) r.isbn.push(normalizeIsbn(val(b, 'isbn')));
+    if (!r.pages && /^\d+$/.test(val(b, 'pages'))) r.pages = val(b, 'pages');
+    if (val(b, 'lang')) r.languages.push(val(b, 'lang'));
+  });
+  each(nbt2, (r, b)=>{ if (val(b, 'isbn')) r.isbn.push(normalizeIsbn(val(b, 'isbn'))); });
+  return uris.map((u)=>dbnlCandidate(records.get(u))).filter((c)=>c.title);
+}
+// Le critère de sélection. Par ISBN : les deux formes (10 et 13), sur la notice
+// nbt à un ou deux sauts. Par titre : chaque mot significatif (3 lettres et
+// plus, six au plus) doit figurer dans le titre — une phrase entière manquait
+// les titres DBNL qui enchaînent titre et sous-titre sans ponctuation (« De
+// structuur van Max Havelaar Bijdrage tot… »). L'auteur·rice, s'il est donné,
+// filtre par son mot le plus long, toutes fonctions confondues.
+function buildDbnlSelector(query) {
+  if (query.mode === 'isbn_lookup') {
+    const forms = isbnForms(query.isbn);
+    if (!forms.length) return '';
+    return `VALUES ?i { ${forms.map((v)=>`"${v}"`).join(' ')} } ?b schema:isbn ?i . ?s schema:isBasedOn/schema:isBasedOn? ?b .`;
+  }
+  if (!query.title) return '';
+  const words = significantWords(query.title).slice(0, 6);
+  const titleFilters = (words.length ? words : [query.title.toLowerCase()]).map((w)=>`FILTER(CONTAINS(LCASE(STR(?n)), "${escapeSparql(w)}"))`).join(' ');
+  const authorWord = significantWords(query.author || '').sort((a, b)=>b.length - a.length)[0];
+  const authorPart = authorWord ? ` ?s schema:author|schema:editor|schema:translator ?p . ?p schema:name ?pn . FILTER(CONTAINS(LCASE(STR(?pn)), "${escapeSparql(authorWord)}"))` : '';
+  return `?s schema:name ?n . ${titleFilters}${authorPart}`;
+}
+function dbnlCandidate(r) {
+  const id = r.uri.split('/').pop() || '';
+  // Les auteur·rices d'abord : le formulaire fait du premier le contributeur
+  // principal, et la KB rend les fonctions dans un ordre quelconque.
+  const order = Object.keys(DBNL_ROLES);
+  const contributors = dedupeContributors([...r.people].sort((a, b)=>order.indexOf(a.role) - order.indexOf(b.role)));
+  // Langue en code MARC, comme les autres sources : la KB donne des codes à
+  // deux lettres (« nl », et « dum » pour le moyen néerlandais) ; le
+  // néerlandais moderne passe devant.
+  const lang = r.languages.includes('nl') ? 'nl' : r.languages[0] || '';
+  // Chaque ISBN sous ses deux formes, la 13 d'abord : le score « isbn_exact »
+  // compare à l'ISBN saisi, qui peut être l'une ou l'autre, et c'est la
+  // première qui remplit le champ du formulaire.
+  const isbns = distinct(r.isbn.filter(Boolean).flatMap((i)=>isbnForms(i).sort((a, b)=>b.length - a.length)));
+  return {
+    source: 'dbnl',
+    source_record_id: id,
+    source_url: `https://www.dbnl.org/titels/titel.php?id=${encodeURIComponent(id)}`,
+    record_type: 'bibliographic',
+    raw_format: 'dbnl_sparql_json',
+    title: r.title,
+    subtitle: '',
+    responsibility_statement: contributors.filter((c)=>c.role === 'author').map((c)=>c.label).join('; '),
+    contributors,
+    edition: r.edition === '?' ? '' : r.edition,
+    place: '',
+    publisher: r.publisher,
+    year: r.year,
+    extent: r.pages ? `${r.pages} p.` : '',
+    series: '',
+    language: DBNL_LANG_MARC[lang] || lang,
+    isbn: isbns.slice(0, 6),
+    issn: [],
+    subjects: [],
+    notes: [],
+    classification: [],
+    identifiers: { dbnl: id },
+    confidence: 0,
+    match_reasons: []
+  };
+}
+async function fetchSparql(endpoint, sparql, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Accept': 'application/sparql-results+json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': USER_AGENT
+      },
+      body: new URLSearchParams({ query: sparql }).toString()
+    });
+    const text = await response.text();
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return text;
+  } finally{
+    clearTimeout(timer);
+  }
+}
+// ISBN saisi → ses formes 10 et 13 compactes ; un 13 en 979 n'a pas de 10.
+function isbnForms(isbn) {
+  const raw = normalizeIsbn(isbn);
+  const forms = new Set([raw]);
+  if (raw.length === 10) {
+    const core = '978' + raw.slice(0, 9);
+    let sum = 0;
+    for (let i = 0; i < 12; i++) sum += Number(core[i]) * (i % 2 ? 3 : 1);
+    forms.add(core + String((10 - sum % 10) % 10));
+  } else if (raw.length === 13 && raw.startsWith('978')) {
+    const core = raw.slice(3, 12);
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += Number(core[i]) * (10 - i);
+    const check = (11 - sum % 11) % 11;
+    forms.add(core + (check === 10 ? 'X' : String(check)));
+  }
+  return [...forms].filter((f)=>f.length === 10 || f.length === 13);
+}
+function significantWords(value) {
+  return normalizeWhitespace(value).toLowerCase().split(/[^\p{L}\p{N}']+/u).filter((w)=>w.length >= 3);
+}
+function escapeSparql(value) {
+  return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/[\r\n]/g, ' ');
 }
 function appendQuery(baseUrl, params) {
   const sep = baseUrl.includes('?') ? '&' : '?';
@@ -1081,6 +1253,7 @@ function scoreCandidate(candidate, query) {
   if (candidate.source === 'loc') confidence += 1;
   if (candidate.source === 'openlibrary') confidence += 1;
   if (candidate.source === 'wikidata') confidence += 1;
+  if (candidate.source === 'dbnl') confidence += 1;
   return {
     ...candidate,
     confidence,
