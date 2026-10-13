@@ -797,3 +797,6 @@ tests/sql/catalogacao_recherche_documents_tests.sql
 # B42 lot 2 (13/10/2026) : la double authentification s'exige côté serveur, livrée éteinte — private.fn_avant_requete (refus 403 AAL2_REQUIRED
 # d'une session aal1 selon le mode off/facteurs/equipes, liste blanche, échec ouvert), état de mon compte, liste et retrait par l'administration du réseau.
 tests/sql/b42_double_authentification_tests.sql
+# Attache d'un fichier reçu (13/10/2026, audit B42) : la permission se décide AVANT la clé de service — public.fn_attach_received_asset_garde
+# (mêmes règles que fn_attach_received_asset_record, refus unique « introuvable »), et le retour « déjà attaché » de la RPC passe après ses gardes.
+tests/sql/attach_recu_garde_tests.sql

@@ -8,6 +8,10 @@
 //
 // Déclenché depuis le panneau « Attacher les fichiers reçus » (face Export) par un·e
 // coordenador. verify_jwt par défaut (true) : JWT usager requis et relayé à la RPC (gate).
+//
+// Ordre (13/10/2026) : double authentification, puis permission
+// (fn_attach_received_asset_garde, sous le jeton), et seulement ensuite la clé
+// de service. Gardé par src/tests/attach-received-asset-garde.test.js.
 
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
@@ -74,7 +78,26 @@ Deno.serve(async (req) => {
     return refus('aal2_required', 'Double authentification requise.', 403);
   }
 
-  // Lecture du fichier parqué (service_role).
+  // Permission AVANT tout geste à la clé de service (13/10/2026, migration
+  // 20261013182842). Jusque-là, la seule décision était la RPC d'écriture plus
+  // bas : tout porteur d'un jeton valide — un lecteur — faisait lire le fichier
+  // reçu (404/409/422 : un oracle sur un identifiant séquentiel), télécharger
+  // le dépôt et écraser une copie dans le bucket restreint avant d'être refusé.
+  // La garde, sous le jeton de l'appelant, a les mêmes règles que la RPC
+  // (coordination de la bibliothèque du run ET d'une bibliothèque détentrice
+  // du livre, ou administration du réseau) et un seul refus, « introuvable ».
+  // Échec fermé : toute autre erreur (réseau, jeton, droit) refuse aussi.
+  const { data: autorise, error: gardeErr } = await userClient.rpc('fn_attach_received_asset_garde', {
+    p_received_asset_id: receivedAssetId, p_book_id: bookId,
+  });
+  if (gardeErr || autorise !== true) {
+    if (gardeErr?.hint === 'error.edge.received_asset_not_found') {
+      return refus('received_asset_not_found', `Fichier reçu ${receivedAssetId} introuvable.`, 404);
+    }
+    return refus('forbidden', gardeErr?.message || 'Accès refusé.', 403, { hint: gardeErr?.hint ?? null });
+  }
+
+  // Lecture du fichier parqué (service_role) — l'appelant y a droit.
   const { data: ra, error: raErr } = await service.schema('ingest')
     .from('partner_catalog_received_assets').select('*').eq('id', receivedAssetId).maybeSingle();
   if (raErr) return refus('server_error', raErr.message, 500);
@@ -107,6 +130,11 @@ Deno.serve(async (req) => {
   if (recErr) {
     // Nettoyage best-effort du fichier déplacé si la création a échoué.
     try { await service.storage.from(finalBucket).remove([finalPath]); } catch (_) { /* no-op */ }
+    // « introuvable » est le refus unique des gardes de la RPC (B14) : jusqu'au
+    // 13/10 il tombait en 500 server_error.
+    if (/introuvável/i.test(recErr.message || '')) {
+      return refus('received_asset_not_found', `Fichier reçu ${receivedAssetId} introuvable.`, 404);
+    }
     const restricted = /coordenador|restrito|pertence|inválid|obrigatori/i.test(recErr.message || '');
     return refus(restricted ? 'forbidden' : 'server_error', recErr.message, restricted ? 403 : 500, { hint: recErr.hint ?? null });
   }
