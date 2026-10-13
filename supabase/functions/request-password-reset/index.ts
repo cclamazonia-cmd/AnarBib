@@ -19,6 +19,7 @@ import { createClient } from '../_shared/deps.ts';
 import { APP_BASE_URL } from "../_shared/core/app-url.ts";
 import { frapper, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = secretKey() ?? "";
@@ -33,7 +34,7 @@ const corsHeaders = {
 };
 
 // ── i18n du mail de récupération (10 langues, fallback pt-BR) ────────────────
-const SUPPORTED = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
+const SUPPORTED: readonly string[] = LOCALE_CODES;
 const T: Record<string, { subject: string; heading: string; intro: string; cta: string; expiry: string; ignore: string; footer: string }> = {
   "pt-BR": { subject: "Redefinir sua senha", heading: "Redefinição de senha", intro: "Recebemos um pedido para redefinir a senha da sua conta. Clique no botão abaixo para escolher uma nova senha.", cta: "Redefinir a senha", expiry: "Este link expira em 1 hora e só pode ser usado uma vez.", ignore: "Se você não pediu isto, ignore este e-mail — sua senha permanece inalterada.", footer: "AnarBib — Rede de bibliotecas libertárias" },
   fr: { subject: "Réinitialiser votre mot de passe", heading: "Réinitialisation du mot de passe", intro: "Nous avons reçu une demande de réinitialisation du mot de passe de ton compte. Clique sur le bouton ci-dessous pour choisir un nouveau mot de passe.", cta: "Réinitialiser le mot de passe", expiry: "Ce lien expire dans 1 heure et ne peut servir qu'une seule fois.", ignore: "Si tu n'es pas à l'origine de cette demande, ignore cet e-mail — ton mot de passe reste inchangé.", footer: "AnarBib — Réseau de bibliothèques libertaires" },

@@ -34,6 +34,7 @@ import { SUPABASE_URL, APP_BASE_URL } from "../_shared/core/env.ts";
 import { tMail, formatDateLocale } from "../_shared/i18n/mail-strings.ts";
 import { renderEmail, footerPadrao } from "../_shared/mail/layout.ts";
 import { safeSendEmail } from "../_shared/transport/email.ts";
+import { isSupportedLocale } from "../_shared/i18n/locales.ts";
 
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const CONTACT_EMAIL = (Deno.env.get("ANARBIB_CONTACT_EMAIL") || "anarbib@proton.me").trim();
@@ -91,9 +92,8 @@ serve(async (req) => {
     // Locale du destinataire. Les dix de l'app : c'est la liste de
     // SupportedMailLocale, et la garder alignée est la leçon du 27/08 (nl et el
     // manquaient à celle de `register`, d'où des mails en portugais).
-    const LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
     const asked = String(body?.locale || "").trim();
-    const locale = LOCALES.includes(asked) ? asked : "pt-BR";
+    const locale = isSupportedLocale(asked) ? asked : "pt-BR";
 
     if (!email || !libraryName) return json({ error: "MISSING_REQUIRED_FIELDS" }, 400);
 

@@ -18,8 +18,9 @@
 
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "../_shared/deps.ts";
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
-const LOCALES = ["pt-BR", "fr", "es", "it", "en", "de", "ca", "eo", "nl", "el"];
+const LOCALES: readonly string[] = LOCALE_CODES;
 const LOCALE_NAMES: Record<string, string> = {
   "pt-BR": "português do Brasil", fr: "français", es: "español", it: "italiano", en: "English",
   de: "Deutsch", ca: "català", eo: "Esperanto", nl: "Nederlands", el: "ελληνικά",

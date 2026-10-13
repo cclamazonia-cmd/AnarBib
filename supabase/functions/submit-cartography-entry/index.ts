@@ -16,9 +16,10 @@ import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
+import { SITE_CODES } from "../_shared/i18n/locales.ts";
 
 // Locales de la donnée carto (clé i18n par collectif) : `pt` (pas `pt-BR`).
-const LOCALES = ["fr", "pt", "it", "es", "en", "de", "ca", "eo", "nl", "el"];
+const LOCALES: readonly string[] = SITE_CODES;
 const CATS = ["biblioteca", "arquivo", "centro_doc", "ateneu", "livraria", "misto"];
 
 const CORS = {

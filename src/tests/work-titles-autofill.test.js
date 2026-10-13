@@ -14,6 +14,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const SRC = new URL('../../supabase/functions/work-titles-autofill/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
@@ -59,14 +60,14 @@ function monterEF({ pending, reponse, statut = 200, stop_reason = 'end_turn' }) 
   const requireStub = (spec) => {
     if (spec.endsWith('secret-key.ts')) {
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (!spec.endsWith('deps.ts')) throw new Error(`import inattendu : ${spec}`);
     return { createClient: () => sb };
   };
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', 'Deno', 'fetch', CODE)(requireStub, mod, mod.exports, DenoStub, fetchStub);
+  new Function('require', 'module', 'exports', 'Deno', 'fetch', CODE)(avecLocales(requireStub), mod, mod.exports, DenoStub, fetchStub);
   if (!handler) throw new Error("Deno.serve n'a pas été appelé");
 
   return async function appeler(corps = {}, { secret = SECRET } = {}) {

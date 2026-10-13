@@ -22,9 +22,12 @@
 //               en clés brutes dans les mails — clés manquantes du dictionnaire)
 // ============================================================================
 
-export type SupportedMailLocale = "pt-BR" | "fr" | "es" | "en" | "it" | "de" | "ca" | "eo" | "nl" | "el";
+// La liste des locales vient de ./locales.ts (DOC-I18N-4) : le type en dérive.
+import { LOCALE_CODES, type SupportedLocale } from "./locales.ts";
 
-const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"]);
+export type SupportedMailLocale = SupportedLocale;
+
+const V = new Set<string>(LOCALE_CODES);
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
@@ -8240,7 +8243,7 @@ export function _allKeys(): string[] {
 
 /** Retourne l'ensemble des locales supportées (utile pour les tests). */
 export function _supportedLocales(): SupportedMailLocale[] {
-  return ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
+  return [...LOCALE_CODES];
 }
 
 /** Vérifie qu'une clé donnée a une traduction non vide pour toutes les locales. */

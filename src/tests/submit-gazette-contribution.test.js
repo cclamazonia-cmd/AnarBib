@@ -21,6 +21,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { transformSync } from 'esbuild';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const SRC = new URL('../../supabase/functions/submit-gazette-contribution/index.ts', import.meta.url);
 const CLE = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
@@ -84,19 +85,19 @@ function monterEF(breves) {
       // client ci-dessus, qui répond « pas de ligne, pas d'erreur » — chaque
       // frappe passe.
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', spec.endsWith('secret-key.ts') ? CLE_CODE : RL_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', spec.endsWith('secret-key.ts') ? CLE_CODE : RL_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('core/cors.ts')) {
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', CORS_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', CORS_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', 'Deno', CODE)(requireStub, mod, mod.exports, DenoStub);
+  new Function('require', 'module', 'exports', 'Deno', CODE)(avecLocales(requireStub), mod, mod.exports, DenoStub);
   if (!handler) throw new Error("Deno.serve n'a pas été appelé : l'EF n'a pas démarré");
 
   return async function appeler(corps) {

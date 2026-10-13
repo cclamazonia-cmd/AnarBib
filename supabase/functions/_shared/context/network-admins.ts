@@ -44,6 +44,8 @@
 // fonction a le sien), l'environnement n'est lu qu'à l'appel.
 // ============================================================================
 
+import { LOCALE_CODES } from "../i18n/locales.ts";
+
 export const LOCALE_BOITE_COLLECTIVE = "pt-BR";
 
 // Variable lue par les fonctions institutionnelles. Repli sur HEALTH_ALERT_CC
@@ -63,7 +65,7 @@ export type DestinataireReseau = {
   user_id?: string;
 };
 
-const LOCALES = new Set(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"]);
+const LOCALES: ReadonlySet<string> = new Set(LOCALE_CODES);
 
 /** Locale de courriel d'un profil : l'une des dix, sinon pt-BR. */
 export function localeDeProfil(raw: unknown): string {

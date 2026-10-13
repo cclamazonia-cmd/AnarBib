@@ -56,6 +56,7 @@ import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
 import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
 import { FRANCES_EM_PT } from './helpers/ptbr-frances.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const FONCTIONS = new URL('../../supabase/functions/', import.meta.url);
 const LOCALES = LOCALE_CODES;
@@ -65,7 +66,7 @@ function charger(rel, suffixe = '') {
     loader: 'ts', format: 'cjs', target: 'es2022',
   }).code;
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', code)(() => ({}), mod, mod.exports);
+  new Function('require', 'module', 'exports', code)(avecLocales(() => ({})), mod, mod.exports);
   return mod.exports;
 }
 

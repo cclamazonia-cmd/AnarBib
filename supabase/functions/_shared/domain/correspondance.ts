@@ -33,8 +33,9 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult } from "../transport/email.ts";
 import { esc } from "../shared/format.ts";
 import { tMail } from "../i18n/mail-strings.ts";
+import { LOCALE_CODES } from "../i18n/locales.ts";
 
-const LOCALES = new Set(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"]);
+const LOCALES: ReadonlySet<string> = new Set(LOCALE_CODES);
 const normaliser = (l: unknown) => (typeof l === "string" && LOCALES.has(l.trim()) ? l.trim() : "pt-BR");
 
 // Le nom d'une langue dans la langue du lecteur (Intl), repli sur le code.

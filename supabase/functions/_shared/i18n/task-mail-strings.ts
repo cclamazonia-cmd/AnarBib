@@ -4,6 +4,8 @@
 // Ecriture inclusive selon la convention de chaque langue.
 // Patron : table par locale + helpers (tMail-like). Aucune dependance externe.
 
+import { LOCALE_CODES } from "./locales.ts";
+
 const TASK_STRINGS = {
   "pt-BR": {
     status: {
@@ -519,7 +521,7 @@ const TASK_STRINGS = {
 };
 
 const FALLBACK_LOCALE = "pt-BR";
-export const SUPPORTED_TASK_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
+export const SUPPORTED_TASK_LOCALES: string[] = [...LOCALE_CODES];
 
 // Resout une locale arbitraire (ex. "pt", "fr-FR", "PT-br") vers une locale supportee.
 // Repli pt-BR si rien ne correspond.

@@ -21,6 +21,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const R = new URL('../../supabase/functions/_shared/', import.meta.url);
 
@@ -29,7 +30,7 @@ function charger(rel, stubs) {
     loader: 'ts', format: 'cjs', target: 'es2022',
   }).code;
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', code)(stubs, mod, mod.exports);
+  new Function('require', 'module', 'exports', code)(avecLocales(stubs), mod, mod.exports);
   return mod.exports;
 }
 
@@ -52,7 +53,7 @@ const brandingStub = {
 };
 
 function charherLayout() {
-  const i18n = charger('i18n/mail-strings.ts', () => ({}));
+  const i18n = charger('i18n/mail-strings.ts', avecLocales(() => ({})));
   const routing = charger('context/library-mail-routing.ts', (spec) => {
     if (spec.includes('core/env')) return envStub;
     if (spec.includes('shared/branding')) return brandingStub;

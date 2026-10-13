@@ -12,6 +12,7 @@ import { sendEmail as sendEmailPartage, transportConfigure } from "../_shared/tr
 import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/context/library-mail-routing.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
+import { isSupportedLocale } from "../_shared/i18n/locales.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -583,11 +584,10 @@ serve(async (req)=>{
     // parce que le repli est ici et non dans les traductions. C'est la langue
     // d'Anarchief.org, dont la demande d'adhésion est arrivée le 22/08.
     //
-    // La liste doit rester alignée sur SUPPORTED_LOCALES de src/i18n/index.js
-    // et sur le type SupportedMailLocale de _shared/i18n/mail-strings.ts.
-    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
+    // La liste vient de _shared/i18n/locales.ts (DOC-I18N-4), la même que celle
+    // de l'app et que le type SupportedMailLocale : plus de copie à aligner.
     const requestedLocale = String(body?.locale || "").trim();
-    const userLocale = SUPPORTED_LOCALES.includes(requestedLocale) ? requestedLocale : "pt-BR";
+    const userLocale = isSupportedLocale(requestedLocale) ? requestedLocale : "pt-BR";
     if (!email || !firstName || !lastName || !phone) {
       return json({
         error: "MISSING_REQUIRED_FIELDS"

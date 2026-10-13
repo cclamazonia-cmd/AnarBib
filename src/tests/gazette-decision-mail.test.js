@@ -18,6 +18,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const SRC = new URL('../../supabase/functions/_shared/domain/gazette.ts', import.meta.url);
 const STRINGS = new URL('../../supabase/functions/_shared/i18n/mail-strings.ts', import.meta.url);
@@ -89,7 +90,7 @@ function monter(outbox, env = {}, transport = () => ({ ok: true })) {
   };
   function evaluer(code) {
     const mod = { exports: {} };
-    new Function('require', 'module', 'exports', 'Deno', code)(requireStub, mod, mod.exports, DenoStub);
+    new Function('require', 'module', 'exports', 'Deno', code)(avecLocales(requireStub), mod, mod.exports, DenoStub);
     return mod.exports;
   }
   const { handleGazetteEvent } = evaluer(CODE);
@@ -218,7 +219,7 @@ describe('mail-strings — les nouvelles clés existent dans les 10 locales', ()
   it('chaque clé GAZ-7 est complète', () => {
     const strings = (() => {
       const mod = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', STRINGS_CODE)(() => ({}), mod, mod.exports, {});
+      new Function('require', 'module', 'exports', 'Deno', STRINGS_CODE)(avecLocales(() => ({})), mod, mod.exports, {});
       return mod.exports;
     })();
     const cles = [

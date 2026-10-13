@@ -30,6 +30,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { LOCALE_CODES } from '../i18n/locales.js';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const SRC = new URL(
   '../../supabase/functions/_shared/context/library-mail-routing.ts',
@@ -65,7 +66,7 @@ function charger() {
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', CODE)(requireStub, mod, mod.exports);
+  new Function('require', 'module', 'exports', CODE)(avecLocales(requireStub), mod, mod.exports);
   return mod.exports;
 }
 
@@ -133,7 +134,7 @@ describe('le vocabulaire des statuts couvre ce que la base écrit', () => {
       loader: 'ts', format: 'cjs', target: 'es2022',
     }).code;
     const mod = { exports: {} };
-    new Function('require', 'module', 'exports', code)(() => ({}), mod, mod.exports);
+    new Function('require', 'module', 'exports', code)(avecLocales(() => ({})), mod, mod.exports);
     return mod.exports;
   }
 

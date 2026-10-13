@@ -32,8 +32,9 @@
 
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
-const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
+const LOCALES: readonly string[] = LOCALE_CODES;
 const TRANSLATE_TARGETS = LOCALES.filter((l) => l !== "fr"); // fr = original curé
 // Repli si la table gazette_sources est vide / inaccessible.
 const FALLBACK_SOURCES = [

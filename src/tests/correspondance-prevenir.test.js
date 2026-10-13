@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { LOCALE_CODES } from '../i18n/locales.js';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const racine = (p) => new URL(`../../supabase/functions/_shared/${p}`, import.meta.url);
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
@@ -25,7 +26,7 @@ const DenoStub = { env: { get: () => undefined }, inspect: (v) => JSON.stringify
 // Le vrai dictionnaire des courriels : les clés corr.* doivent y exister.
 const mailStrings = (() => {
   const m = { exports: {} };
-  new Function('require', 'module', 'exports', 'Deno', cjs(racine('i18n/mail-strings.ts')))(() => ({}), m, m.exports, DenoStub);
+  new Function('require', 'module', 'exports', 'Deno', cjs(racine('i18n/mail-strings.ts')))(avecLocales(() => ({})), m, m.exports, DenoStub);
   return m.exports;
 })();
 
@@ -72,7 +73,7 @@ function monter(etat) {
   };
   const mod = { exports: {} };
   new Function('require', 'module', 'exports', 'Deno', cjs(racine('domain/correspondance.ts')))(
-    (spec) => { if (!stubs[spec]) throw new Error(`import inattendu : ${spec}`); return stubs[spec]; }, mod, mod.exports, DenoStub,
+    avecLocales((spec) => { if (!stubs[spec]) throw new Error(`import inattendu : ${spec}`); return stubs[spec]; }), mod, mod.exports, DenoStub,
   );
   return { handler: mod.exports.handleCorrespondanceMessage, ecrits, envois };
 }

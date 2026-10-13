@@ -35,6 +35,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const SRC = new URL('../../supabase/functions/notify-oai-opening/index.ts', import.meta.url);
 const WEBHOOK = new URL('../../supabase/functions/_shared/core/webhook.ts', import.meta.url);
@@ -110,7 +111,7 @@ function monterEF(monde) {
   function evaluer(code) {
     const mod = { exports: {} };
     new Function('require', 'module', 'exports', 'Deno', 'fetch', code)(
-      requireStub, mod, mod.exports, DenoStub, async () => new Response('{}'),
+      avecLocales(requireStub), mod, mod.exports, DenoStub, async () => new Response('{}'),
     );
     return mod.exports;
   }

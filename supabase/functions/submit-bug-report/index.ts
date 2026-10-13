@@ -17,6 +17,7 @@ import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "https://app.anarbib.org",
@@ -24,7 +25,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 const IP_LIMIT = 5, WINDOW_MIN = 60; // 5 signalements / heure / IP
-const LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
+const LOCALES: readonly string[] = LOCALE_CODES;
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });

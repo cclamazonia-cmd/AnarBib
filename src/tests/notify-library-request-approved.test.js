@@ -22,6 +22,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
+import { avecLocales } from './helpers/locales-ts.js';
 
 const tsToCjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/index.ts', import.meta.url));
@@ -48,7 +49,7 @@ const ENV = {
 // recopier de prose ici.
 const strings = (() => {
   const m = { exports: {} };
-  new Function('require', 'module', 'exports', STRINGS_CODE)(() => ({}), m, m.exports);
+  new Function('require', 'module', 'exports', STRINGS_CODE)(avecLocales(() => ({})), m, m.exports);
   return m.exports;
 })();
 const tr = strings.tr;
@@ -103,12 +104,12 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.includes('deno.land/std')) return { serve: (h) => { handler = h; } };
     if (spec.endsWith('secret-key.ts')) {
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('site-url.ts')) {
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', SITE_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', SITE_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
@@ -116,7 +117,7 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.endsWith('./strings.ts')) return strings;
     if (spec.endsWith('network-admins.ts')) {
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', ADMINS_CODE)(requireStub, m, m.exports, DenoStub);
+      new Function('require', 'module', 'exports', 'Deno', ADMINS_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
       return m.exports;
     }
     if (spec.endsWith('transport/email.ts')) {
@@ -136,13 +137,13 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
         throw new Error(`import inattendu (transport) : ${sp}`);
       };
       const m = { exports: {} };
-      new Function('require', 'module', 'exports', 'Deno', 'fetch', TRANSPORT_CODE)(requireTransport, m, m.exports, DenoStub, fetchStub);
+      new Function('require', 'module', 'exports', 'Deno', 'fetch', TRANSPORT_CODE)(avecLocales(requireTransport), m, m.exports, DenoStub, fetchStub);
       return m.exports;
     }
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };
-  new Function('require', 'module', 'exports', 'Deno', 'fetch', CODE)(requireStub, mod, mod.exports, DenoStub, fetchStub);
+  new Function('require', 'module', 'exports', 'Deno', 'fetch', CODE)(avecLocales(requireStub), mod, mod.exports, DenoStub, fetchStub);
   if (!handler) throw new Error("serve n'a pas été appelé : l'EF n'a pas démarré");
 
   return async function appeler(event_type) {

@@ -24,8 +24,9 @@ import { secretKey } from "../_shared/core/secret-key.ts";
 import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
-const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
+const LOCALES: readonly string[] = LOCALE_CODES;
 const RUBRICS = ["une","reseau","luttes","international","cultures","agenda","autre"];
 
 const CORS = {

@@ -20,6 +20,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { avecLocales } from './helpers/locales-ts.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const SRC = new URL('../../supabase/functions/gazette-monthly-build/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), {
@@ -126,7 +128,7 @@ function monterEF(etat) {
     if (spec.endsWith('secret-key.ts')) {
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(
-        requireStub, m, m.exports, DenoStub,
+        avecLocales(requireStub), m, m.exports, DenoStub,
       );
       return m.exports;
     }
@@ -136,7 +138,7 @@ function monterEF(etat) {
 
   const mod = { exports: {} };
   new Function('require', 'module', 'exports', 'Deno', 'fetch', CODE)(
-    requireStub, mod, mod.exports, DenoStub, fetchStub,
+    avecLocales(requireStub), mod, mod.exports, DenoStub, fetchStub,
   );
   if (!handler) throw new Error("Deno.serve n'a pas été appelé : l'EF n'a pas démarré");
 
@@ -438,15 +440,17 @@ describe('revue de presse : le pivot multilingue est rendu en français avant le
     const etat = {
       ...etatNeuf(),
       numero: { status: 'draft', build_mode: 'assisted' },
-      job: { issue_number: 3, status: 'translating', cursor_locale: 'nl' },
+      // La dernière langue de l'ordre canonique (src/i18n/locales.js) : el depuis
+      // le 13/10/2026, nl avant (la gazette mettait el avant ca).
+      job: { issue_number: 3, status: 'translating', cursor_locale: LOCALE_CODES.at(-1) },
       locales: [{ locale: 'fr', content: corpsType() }],
-      flux: modele(rendu('Klimaatcynisme', 'Het is angstaanjagend heet.'), demandes),
+      flux: modele(rendu('Κλιματικός κυνισμός', 'Κάνει τρομακτική ζέστη.'), demandes),
     };
     const r = await monterEF(etat)({ step: 'translate', issue_number: 3 });
     expect(r.statut).toBe(200);
     expect(r.corps.next).toBeNull();
-    const nl = r.ecrits.find((e) => e.table === 'gazette_issue_locales' && e.op === 'upsert');
-    expect(nl.donnees).toMatchObject({ locale: 'nl', source_locale: 'fr' });
+    const derniere = r.ecrits.find((e) => e.table === 'gazette_issue_locales' && e.op === 'upsert');
+    expect(derniere.donnees).toMatchObject({ locale: LOCALE_CODES.at(-1), source_locale: 'fr' });
     expect(r.ecrits.find((e) => e.table === 'gazette_build_jobs').donnees.status).toBe('assembling');
   });
 

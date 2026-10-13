@@ -12,8 +12,9 @@
 
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
+import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
-const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
+const LOCALES: readonly string[] = LOCALE_CODES;
 const ANTHROPIC_MODEL = "claude-opus-4-8";
 const BATCH = 3; // brèves traduites par tick
 
