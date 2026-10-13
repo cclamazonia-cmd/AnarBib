@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-13** · 50 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-13** · 51 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -19,7 +19,7 @@
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 7
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 5
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 12 octobre 2026 au soir** (`91b7e803`, mesuré à 22 h 15) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 11/10 à midi, `24b37717`). **La file de CI porte un commit** à l'heure du relevé : 472 migrations appliquées, 473 au dépôt (H33 bis, voisine, poussée à 22 h 01). **Première photo en deux colonnes** : depuis B39, bibliothèques, comptes et circulation se lisent réel / formation par requête, plus par une note. Ce qui a bougé et pourquoi : **la base** — +14 migrations en un jour et demi (le jour le plus chargé du mois : B38, E38, B40, B39, H33, H34 lots 1 et 2, AUT-VAR, la recherche par variantes), +7 fonctions net dont −7 dans `api`, **les avis de sécurité au même total qu'au 11/10 (493, 0029 à 433)** — chaque porte neuve fermée à la pose —, les index « inutilisés » à 363 (390) ; **le catalogue** — −3 notices, −9 autorités, −21 œuvres, toutes par fusion ou retrait sur accord, plus aucune œuvre sans notice ; 22 reprises de notices publiées ; **le réseau** — 5 + 1 bibliothèques, 19 + 4 comptes, 9 / 21 / 22 / 0 ; deux emprunts du jour à la BLMF, le regard de Xavier ; **le dépôt** — +66 commits, +35 fichiers, +20 clés, +174 tests JS, +8 suites SQL. **Clos depuis le 11/10 à midi** : B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 à ce relevé** — quinze clôtures, **49 items, le point le plus bas depuis la v34**. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, provoquée de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), H34 (voisine) ; *à l'écran* : rien — le Panneau et la Bibliothèque sont vus ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16 (la règle du stock), I32 (le rapport du tableau de bord) ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-13.** **40 items sur 50** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-13.** **41 items sur 51** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -691,6 +691,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E10** | Le reste du socle terrain : permanence mobile, notification poussée, planche de codes | `P3` | Ouvert |
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
+| **E39** | Ajouter le roumain (ro), onzième langue — lots 2 à 7 | `P3` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -846,6 +847,28 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Une personne hispanophone.
 
 *Renvois : `clôture E25` · `commit 0cc2b6d3`*
+
+#### E39 — Ajouter le roumain (ro), onzième langue — lots 2 à 7
+
+`P3` Différé · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : langue maternelle
+
+**État.** Inventaire du 13/10/2026 (« AnarBib — passer de 10 à 11 locales : inventaire et plan pour le roumain », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). Le lot 1 — source unique des locales, `DOC-I18N-4` — est livré sans roumain (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde) : ajouter une langue tient désormais en une ligne par couche, et aucune liste oubliée ne peut plus la refuser en silence.
+
+*Vérifié : 13/10 — lot 1 commité, non poussé : banc local complet (202 suites SQL vertes, dont locales_source_unique 12/12), vitest 225 fichiers verts, lint et build verts ; vitrine : générateurs identiques à l’octet avant/après, pose-selecteur 160 pages identiques.*
+
+**Ce que c'est.** Lot 2, prérequis techniques (langue encore inactive) : police TTF dans jspdf (latin étendu et grec), glyphes ș ț ă des polices web, rum/ron → ro dans fn_locale_from_idioma et ingest.fn_idioma_bcp47, ro → rum dans marc/ecriture.ts, ro dans la casse de phrase (front et regex SQL de 20260904130100) et dans WD_LANGUAGES, test d’écriture roumain. Lot 3, traduction en une passe puis activation : ro.json (≈ 7 600 clés), courriels (≈ 800 entrées), install.sh (83 clés), données en base (thésaurus, carte, sujets, tâches, fn_notify_fonds_deposit_received), puis ro dans les trois sources avec listed: false. Lot 4, documentation du dépôt (familles -ro.md, phrases « dix »). Lot 5, vitrine (17 pages /ro/, sélecteur régénéré par tools/pose-selecteur.cjs, phrases « dix langues » selon D6, hreflang facultatif). Lot 6, recueils PDF (bloc roumain en fin, D7) et sous-titres des tutoriels. Lot 7, relecture roumanophone, listed: true, annonce, clôture au REGISTRE.
+
+**Pourquoi ça compte.** Xavier veut ouvrir l’app et la vitrine au roumain. L’inventaire a montré que la difficulté n’était pas la traduction mais la soixantaine de copies de la liste des langues : c’est réglé par le lot 1 ; ce qui reste est la langue elle-même, et sa relecture avant toute annonce (le grec attend encore la sienne).
+
+**Ce qui compte comme fini.**
+
+- Le roumain est servi par l’app, les courriels, install.sh et la vitrine, depuis les sources de DOC-I18N-4, sans aucune liste recopiée (la garde locales-source-unique reste verte).
+- Une personne roumanophone a relu, ses corrections sont portées, et la langue est dans les sélecteurs (listed: true).
+- DOC-I18N-1 est amendé (11 locales) et les décisions D1 à D7 sont inscrites au REGISTRE.
+
+**Dépendances.** Les décisions D1 à D7 de Xavier (code et place, écriture inclusive, adresse, diacritiques, traduction et relecture, phrases « dix langues », recueils PDF) ; une personne roumanophone pour D2, D3, D5 et la relecture.
+
+*Renvois : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde`*
 
 ---
 
@@ -1878,4 +1901,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-13. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 50 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-13. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 51 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

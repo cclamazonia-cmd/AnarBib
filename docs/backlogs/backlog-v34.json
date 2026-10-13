@@ -5723,6 +5723,58 @@
       "verif": null
     },
     {
+      "id": "E39",
+      "d": "E",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "langue"
+      ],
+      "t": {
+        "fr": "Ajouter le roumain (ro), onzième langue — lots 2 à 7",
+        "pt": "Adicionar o romeno (ro), décima primeira língua — lotes 2 a 7"
+      },
+      "v": {
+        "fr": "Inventaire du 13/10/2026 (« AnarBib — passer de 10 à 11 locales : inventaire et plan pour le roumain », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). Le lot 1 — source unique des locales, `DOC-I18N-4` — est livré sans roumain (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde) : ajouter une langue tient désormais en une ligne par couche, et aucune liste oubliée ne peut plus la refuser en silence.",
+        "pt": "Inventário de 13/10/2026 (« AnarBib — passer de 10 à 11 locales », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). O lote 1 — fonte única das locales, `DOC-I18N-4` — foi entregue sem romeno (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde): adicionar uma língua agora cabe em uma linha por camada."
+      },
+      "w": {
+        "fr": "Lot 2, prérequis techniques (langue encore inactive) : police TTF dans jspdf (latin étendu et grec), glyphes ș ț ă des polices web, rum/ron → ro dans fn_locale_from_idioma et ingest.fn_idioma_bcp47, ro → rum dans marc/ecriture.ts, ro dans la casse de phrase (front et regex SQL de 20260904130100) et dans WD_LANGUAGES, test d’écriture roumain. Lot 3, traduction en une passe puis activation : ro.json (≈ 7 600 clés), courriels (≈ 800 entrées), install.sh (83 clés), données en base (thésaurus, carte, sujets, tâches, fn_notify_fonds_deposit_received), puis ro dans les trois sources avec listed: false. Lot 4, documentation du dépôt (familles -ro.md, phrases « dix »). Lot 5, vitrine (17 pages /ro/, sélecteur régénéré par tools/pose-selecteur.cjs, phrases « dix langues » selon D6, hreflang facultatif). Lot 6, recueils PDF (bloc roumain en fin, D7) et sous-titres des tutoriels. Lot 7, relecture roumanophone, listed: true, annonce, clôture au REGISTRE.",
+        "pt": "Lote 2, pré-requisitos técnicos: fonte TTF no jspdf, glifos ș ț ă, rum/ron → ro na catalogação, ro na caixa de frase e em WD_LANGUAGES. Lote 3, tradução em uma passada e ativação (ro.json, e-mails, install.sh, dados em base) com listed: false. Lote 4, documentação. Lote 5, vitrine (17 páginas /ro/). Lote 6, coletâneas PDF e legendas. Lote 7, revisão por pessoa romenófona, listed: true, anúncio."
+      },
+      "y": {
+        "fr": "Xavier veut ouvrir l’app et la vitrine au roumain. L’inventaire a montré que la difficulté n’était pas la traduction mais la soixantaine de copies de la liste des langues : c’est réglé par le lot 1 ; ce qui reste est la langue elle-même, et sa relecture avant toute annonce (le grec attend encore la sienne).",
+        "pt": "Xavier quer abrir o app e a vitrine ao romeno. O inventário mostrou que a dificuldade não era a tradução, mas as cerca de sessenta cópias da lista de línguas: isso o lote 1 resolveu; resta a língua em si, e a revisão antes de qualquer anúncio."
+      },
+      "f": {
+        "fr": [
+          "Le roumain est servi par l’app, les courriels, install.sh et la vitrine, depuis les sources de DOC-I18N-4, sans aucune liste recopiée (la garde locales-source-unique reste verte).",
+          "Une personne roumanophone a relu, ses corrections sont portées, et la langue est dans les sélecteurs (listed: true).",
+          "DOC-I18N-1 est amendé (11 locales) et les décisions D1 à D7 sont inscrites au REGISTRE."
+        ],
+        "pt": [
+          "O romeno é servido pelo app, e-mails, install.sh e vitrine, a partir das fontes de DOC-I18N-4, sem lista recopiada.",
+          "Uma pessoa romenófona revisou, as correções foram aplicadas e a língua está nos seletores (listed: true).",
+          "DOC-I18N-1 emendado (11 locales) e as decisões D1 a D7 inscritas no REGISTRE."
+        ]
+      },
+      "dep": {
+        "fr": "Les décisions D1 à D7 de Xavier (code et place, écriture inclusive, adresse, diacritiques, traduction et relecture, phrases « dix langues », recueils PDF) ; une personne roumanophone pour D2, D3, D5 et la relecture.",
+        "pt": "As decisões D1 a D7 de Xavier; uma pessoa romenófona para D2, D3, D5 e a revisão."
+      },
+      "r": [
+        "DOC-I18N-4",
+        "DOC-I18N-1",
+        "document du 13/10/2026",
+        "lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde"
+      ],
+      "verif": {
+        "fr": "13/10 — lot 1 commité, non poussé : banc local complet (202 suites SQL vertes, dont locales_source_unique 12/12), vitest 225 fichiers verts, lint et build verts ; vitrine : générateurs identiques à l’octet avant/après, pose-selecteur 160 pages identiques.",
+        "pt": "13/10 — lote 1 commitado, não enviado: bancada local completa verde (202 suítes SQL, vitest, lint, build)."
+      }
+    },
+    {
       "id": "I32",
       "d": "I",
       "p": "P1",

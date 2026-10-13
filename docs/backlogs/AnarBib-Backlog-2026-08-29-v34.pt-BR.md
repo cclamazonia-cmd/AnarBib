@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-13** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-13** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 5
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 12 de outubro de 2026 à noite** (`91b7e803`, medido às 22h15) — produção consultada só em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 11/10 ao meio-dia, `24b37717`). **A fila da CI leva um commit**: 472 migrações aplicadas, 473 no repositório (H33 bis, vizinha). **Primeira foto em duas colunas**: desde B39, bibliotecas, contas e circulação leem-se real / formação por consulta. O que mudou: **o banco** — +14 migrações num dia e meio, +7 funções líquidas, **avisos de segurança no mesmo total de 11/10 (493)**, índices «não usados» em 363; **o catálogo** — −3 fichas, −9 autoridades, −21 obras, todas por fusão ou retirada com acordo, nenhuma obra sem ficha; **a rede** — 5 + 1 bibliotecas, 19 + 4 contas, 9 / 21 / 22 / 0; **o repositório** — +66 commits, +35 ficheiros, +20 chaves, +174 testes JS, +8 suítes SQL. **Fechados desde 11/10**: B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 neste levantamento** — quinze fechos, **49 itens, o ponto mais baixo desde a v34**. **O que falta fechar, e por quem** — *num facto por vir*: F19, F25, H15, H16, H21, H28 (DIRA), H34; *na tela*: nada; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-13.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-13.** **41 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -691,6 +691,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
+| **E39** | Adicionar o romeno (ro), décima primeira língua — lotes 2 a 7 | `P3` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -846,6 +847,28 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Uma pessoa hispanofalante.
 
 *Remissões : `clôture E25` · `commit 0cc2b6d3`*
+
+#### E39 — Adicionar o romeno (ro), décima primeira língua — lotes 2 a 7
+
+`P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : língua materna
+
+**Estado.** Inventário de 13/10/2026 (« AnarBib — passer de 10 à 11 locales », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). O lote 1 — fonte única das locales, `DOC-I18N-4` — foi entregue sem romeno (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde): adicionar uma língua agora cabe em uma linha por camada.
+
+*Verificado : 13/10 — lote 1 commitado, não enviado: bancada local completa verde (202 suítes SQL, vitest, lint, build).*
+
+**O que é.** Lote 2, pré-requisitos técnicos: fonte TTF no jspdf, glifos ș ț ă, rum/ron → ro na catalogação, ro na caixa de frase e em WD_LANGUAGES. Lote 3, tradução em uma passada e ativação (ro.json, e-mails, install.sh, dados em base) com listed: false. Lote 4, documentação. Lote 5, vitrine (17 páginas /ro/). Lote 6, coletâneas PDF e legendas. Lote 7, revisão por pessoa romenófona, listed: true, anúncio.
+
+**Por que importa.** Xavier quer abrir o app e a vitrine ao romeno. O inventário mostrou que a dificuldade não era a tradução, mas as cerca de sessenta cópias da lista de línguas: isso o lote 1 resolveu; resta a língua em si, e a revisão antes de qualquer anúncio.
+
+**O que conta como terminado.**
+
+- O romeno é servido pelo app, e-mails, install.sh e vitrine, a partir das fontes de DOC-I18N-4, sem lista recopiada.
+- Uma pessoa romenófona revisou, as correções foram aplicadas e a língua está nos seletores (listed: true).
+- DOC-I18N-1 emendado (11 locales) e as decisões D1 a D7 inscritas no REGISTRE.
+
+**Dependências.** As decisões D1 a D7 de Xavier; uma pessoa romenófona para D2, D3, D5 e a revisão.
+
+*Remissões : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde`*
 
 ---
 
@@ -1868,4 +1891,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-13. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-12 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `91b7e803`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-13. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-12 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `91b7e803`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
