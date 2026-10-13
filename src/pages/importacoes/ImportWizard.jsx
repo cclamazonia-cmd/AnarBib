@@ -9,7 +9,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './ImportacoesPage.css';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
 import { detectFileKind } from '../../lib/importFileKind.js';
-import { pagesParExemplaires, cumulerReponses } from '../../lib/importItemUpdates.js';
+import { pagesDePromotion, cumulerReponses } from '../../lib/importItemUpdates.js';
 
 // =============================================================================
 // ImportWizard — assistant « Novo import » (IMP-8).
@@ -259,11 +259,12 @@ export default function ImportWizard() {
       // H21 lot 0 (29/09/2026) : ces lignes-là, et elles seules (p_row_ids) —
       // pas ce qu'un autre onglet, ou une collègue dans le run lookup du jour,
       // aurait accepté entre-temps.
-      // H33 (12/10/2026) : par pages de 200 lignes et 5 000 exemplaires du
-      // fichier au plus (la base refuse au-delà : le plafond de 8 s des appels) ;
-      // chaque page rejoint le lot ouvert du run.
+      // H33 (12/10/2026) : par pages (la base refuse au-delà : le plafond de
+      // 8 s des appels) ; chaque page rejoint le lot ouvert du run. Depuis le
+      // 14/10 : 100 lignes et 2 500 exemplaires du fichier au plus
+      // (pagesDePromotion), comme l'écran Importations.
       const parId = new Map(lignesDeLAssistant.map((r) => [r.id, r]));
-      for (const page of pagesParExemplaires(newRowIds.map((id) => parId.get(id) || { id }))) {
+      for (const page of pagesDePromotion(newRowIds.map((id) => parId.get(id) || { id }))) {
         const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId), p_row_ids: page });
         if (error) throw error;
         reponses.push(data || {});

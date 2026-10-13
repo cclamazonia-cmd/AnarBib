@@ -136,7 +136,7 @@ import { localizeError } from '@/lib/localizeError';
 // H21 lot 6a : « Rapprocher » compose aussi les comptes par verdict des exemplaires.
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
-import { pagesParExemplaires, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
+import { pagesParExemplaires, pagesDePromotion, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
 
 // ── Décor de la page MONTÉE (dernier describe) ─────────────────
 // Un faux Supabase qui répond par nom de RPC et garde les appels, une
@@ -217,7 +217,7 @@ async function jouerGeste(nom, { lignes, selection, reponse, runRowsLoading = fa
     t: (d, v) => dit(d.id, v),
     localizeError: (err) => `localisé : ${err.message}`,
     resumeVerdicts,   // H21 lot 6a ('' sans verdicts : les messages d'avant)
-    pagesParExemplaires, cumulerReponses,   // H33 (12/10/2026) : par pages de 200 lignes / 5 000 exemplaires
+    pagesParExemplaires, pagesDePromotion, cumulerReponses,   // H33 (12/10/2026) : par pages de 200 lignes / 5 000 exemplaires
     supabase: { rpc: async (n, args) => { journal.push(`rpc:${n}`); appels.push([n, args]); return reponse; } },
     setPromotingSel: (v) => journal.push(`occupé:${v}`),
     setMsg: (m) => { journal.push('message'); messages.push(m); },
@@ -273,7 +273,8 @@ describe('Importations — « Créer N brouillons » ne promeut que la sélectio
     const f = promouvoir();
     // H33 (12/10/2026) : la sélection, découpée en pages (200 lignes, 5 000
     // exemplaires du fichier) — chaque page est une part des lignes choisies.
-    expect(f).toMatch(/for \(const page of pagesParExemplaires\(ids\.map\(id => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data: reponse, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(selectedRunId\), p_row_ids: page \}\)/);
+    // 14/10 : les pages de la promotion sont plus petites (pagesDePromotion).
+    expect(f).toMatch(/for \(const page of pagesDePromotion\(ids\.map\(id => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data: reponse, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(selectedRunId\), p_row_ids: page \}\)/);
     // le paramètre existe sous ce nom dans la signature de la migration
     expect(MIGRATION).toContain('p_batch_notes text DEFAULT NULL::text, p_row_ids bigint[] DEFAULT NULL::bigint[])');
   });
@@ -934,7 +935,7 @@ describe('Assistant d\'import — la promotion porte sur ses lignes', () => {
     expect(f).toMatch(/const \{ error: editorialError \} = await supabase\.rpc\('fn_import_set_editorial'/);
     expect(f.indexOf('if (editorialError) throw editorialError;')).toBeLessThan(f.indexOf("supabase.rpc('fn_import_promote'"));
     // H33 (12/10/2026) : ces lignes-là, découpées en pages
-    expect(f).toMatch(/for \(const page of pagesParExemplaires\(newRowIds\.map\(\(id\) => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: page \}\)/);
+    expect(f).toMatch(/for \(const page of pagesDePromotion\(newRowIds\.map\(\(id\) => parId\.get\(id\) \|\| \{ id \}\)\)\) \{\s*const \{ data, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: page \}\)/);
     expect(f).toContain('const newRowIds = lignesDeLAssistant.filter(aPromouvoir).map((r) => r.id);');
     expect(f).toContain('if (!newRowIds.length) return;');
   });

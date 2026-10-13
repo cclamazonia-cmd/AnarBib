@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografía en neerlandés",
   "catalogacao.bio.titleIn.el": "Biografía en griego",
   "error.import.page_too_large": "Como máximo 200 líneas por llamada: selecciona menos.",
+  "error.import.promotion_page_too_large": "Como máximo 100 líneas por creación de borradores: selecciona menos.",
+  "error.import.promotion_page_too_many_items": "Demasiados ejemplares del archivo para una sola creación de borradores (2 500 como máximo): selecciona menos líneas a la vez.",
   "importacoes.fila.pagesAvantRefus": "Antes de este rechazo, {created, plural, one {se creó # borrador} other {se crearon # borradores}} con las páginas ya enviadas.",
   "catalogacao.batch.status.publishing": "Publicación en curso",
   "catalogacao.batch.publication.resume": "Reanudar la publicación",

@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografio en la nederlanda",
   "catalogacao.bio.titleIn.el": "Biografio en la greka",
   "error.import.page_too_large": "Maksimume 200 linioj por alvoko: elektu malpli.",
+  "error.import.promotion_page_too_large": "Maksimume 100 linioj por kreo de malnetoj: elektu malpli.",
+  "error.import.promotion_page_too_many_items": "Tro da ekzempleroj de la dosiero por unu sola kreo de malnetoj (maksimume 2 500): elektu malpli da linioj samtempe.",
   "importacoes.fila.pagesAvantRefus": "Antaŭ ĉi tiu rifuzo, {created, plural, one {# malneto estis kreita} other {# malnetoj estis kreitaj}} de la jam senditaj paĝoj.",
   "catalogacao.batch.status.publishing": "Publikigo daŭras",
   "catalogacao.batch.publication.resume": "Daŭrigi la publikigon",

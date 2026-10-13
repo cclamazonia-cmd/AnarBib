@@ -599,8 +599,10 @@ BEGIN
     PERFORM set_config('request.jwt.claims', json_build_object('sub', '11111111-1111-1111-1111-111111111111', 'role', 'authenticated')::text, true);
     EXECUTE 'SET LOCAL ROLE authenticated';
     PERFORM public.fn_import_set_editorial(v_run, v_ids, 'accept_new', 'page import: validation individuelle');
-    FOR v_pg IN 0..((p_nr - 1) / 200) LOOP
-      v_res := public.fn_import_promote(v_run, p_row_ids := v_ids[v_pg * 200 + 1 : least(p_nr, v_pg * 200 + 200)]);
+    -- la promotion va par pages de 100 lignes, comme l'écran (pagesDePromotion,
+    -- H33 suite, 14/10 ; 200 avant) : la base refuse au-delà
+    FOR v_pg IN 0..((p_nr - 1) / 100) LOOP
+      v_res := public.fn_import_promote(v_run, p_row_ids := v_ids[v_pg * 100 + 1 : least(p_nr, v_pg * 100 + 100)]);
       v_lot := coalesce(v_lot, (v_res->>'batch_id')::bigint);
     END LOOP;
     IF v_idk IS NOT NULL THEN PERFORM public.fn_import_reconcile_duplicates(v_run, v_idk); END IF;

@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografia em neerlandês",
   "catalogacao.bio.titleIn.el": "Biografia em grego",
   "error.import.page_too_large": "No máximo 200 linhas por chamada: selecione menos.",
+  "error.import.promotion_page_too_large": "No máximo 100 linhas por criação de rascunhos: selecione menos.",
+  "error.import.promotion_page_too_many_items": "Exemplares do arquivo demais para uma única criação de rascunhos (no máximo 2 500): selecione menos linhas de cada vez.",
   "importacoes.fila.pagesAvantRefus": "Antes desta recusa, {created, plural, one {# rascunho foi criado} other {# rascunhos foram criados}} pelas páginas já enviadas.",
   "catalogacao.batch.status.publishing": "Publicação em andamento",
   "catalogacao.batch.publication.resume": "Retomar a publicação",

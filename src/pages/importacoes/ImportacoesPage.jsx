@@ -19,7 +19,7 @@ import RunCoveragePanel from './RunCoveragePanel.jsx';
 import RunRetraitsPanel from './RunRetraitsPanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
-import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
+import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, pagesDePromotion, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -892,11 +892,12 @@ export default function ImportacoesPage() {
       if (editorialError) throw editorialError;
       // H21 lot 0 (29/09/2026) : la sélection, et elle seule (p_row_ids) ;
       // sans elle, la promotion emportait toutes les lignes acceptées du run.
-      // H33 (12/10/2026) : par pages de 200 lignes et 5 000 exemplaires du
-      // fichier au plus (la base refuse au-delà : le plafond de 8 s des appels) ;
-      // chaque page rejoint le lot ouvert du run.
+      // H33 (12/10/2026) : par pages (la base refuse au-delà : le plafond de
+      // 8 s des appels) ; chaque page rejoint le lot ouvert du run. Depuis le
+      // 14/10, les pages de la promotion : 100 lignes et 2 500 exemplaires du
+      // fichier au plus (pagesDePromotion).
       const parId = new Map(filteredRunRows.map(r => [r.id, r]));
-      for (const page of pagesParExemplaires(ids.map(id => parId.get(id) || { id }))) {
+      for (const page of pagesDePromotion(ids.map(id => parId.get(id) || { id }))) {
         const { data: reponse, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId), p_row_ids: page });
         if (error) throw error;
         reponses.push(reponse || {});

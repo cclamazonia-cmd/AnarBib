@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografie auf Niederländisch",
   "catalogacao.bio.titleIn.el": "Biografie auf Griechisch",
   "error.import.page_too_large": "Höchstens 200 Zeilen pro Aufruf: wähle weniger aus.",
+  "error.import.promotion_page_too_large": "Höchstens 100 Zeilen pro Entwurfserstellung: wähle weniger aus.",
+  "error.import.promotion_page_too_many_items": "Zu viele Exemplare der Datei für eine einzige Entwurfserstellung (höchstens 2 500): wähle weniger Zeilen auf einmal.",
   "importacoes.fila.pagesAvantRefus": "Vor dieser Ablehnung {created, plural, one {wurde # Entwurf} other {wurden # Entwürfe}} durch die bereits gesendeten Seiten angelegt.",
   "catalogacao.batch.status.publishing": "Veröffentlichung läuft",
   "catalogacao.batch.publication.resume": "Veröffentlichung fortsetzen",

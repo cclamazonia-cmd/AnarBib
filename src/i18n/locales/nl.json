@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografie in het Nederlands",
   "catalogacao.bio.titleIn.el": "Biografie in het Grieks",
   "error.import.page_too_large": "Hoogstens 200 regels per aanroep: selecteer er minder.",
+  "error.import.promotion_page_too_large": "Hoogstens 100 regels per aanmaak van concepten: selecteer er minder.",
+  "error.import.promotion_page_too_many_items": "Te veel exemplaren uit het bestand voor één aanmaak van concepten (hoogstens 2 500): selecteer minder regels tegelijk.",
   "importacoes.fila.pagesAvantRefus": "Vóór deze weigering {created, plural, one {is # concept} other {zijn # concepten}} aangemaakt door de al verzonden pagina’s.",
   "catalogacao.batch.status.publishing": "Publicatie bezig",
   "catalogacao.batch.publication.resume": "Publicatie hervatten",

@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biografia en neerlandès",
   "catalogacao.bio.titleIn.el": "Biografia en grec",
   "error.import.page_too_large": "Com a màxim 200 línies per crida: selecciona’n menys.",
+  "error.import.promotion_page_too_large": "Com a màxim 100 línies per creació d’esborranys: selecciona’n menys.",
+  "error.import.promotion_page_too_many_items": "Massa exemplars del fitxer per a una sola creació d’esborranys (2 500 com a màxim): selecciona menys línies alhora.",
   "importacoes.fila.pagesAvantRefus": "Abans d’aquest rebuig, {created, plural, one {s’ha creat # esborrany} other {s’han creat # esborranys}} amb les pàgines ja enviades.",
   "catalogacao.batch.status.publishing": "Publicació en curs",
   "catalogacao.batch.publication.resume": "Reprendre la publicació",

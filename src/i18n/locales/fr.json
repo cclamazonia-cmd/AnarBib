@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biographie en néerlandais",
   "catalogacao.bio.titleIn.el": "Biographie en grec",
   "error.import.page_too_large": "Au plus 200 lignes par appel : sélectionne-en moins.",
+  "error.import.promotion_page_too_large": "Au plus 100 lignes par création de brouillons : sélectionne-en moins.",
+  "error.import.promotion_page_too_many_items": "Trop d’exemplaires du fichier pour une seule création de brouillons (2 500 au plus) : sélectionne moins de lignes à la fois.",
   "importacoes.fila.pagesAvantRefus": "Avant ce refus, {created, plural, one {# brouillon a été créé} other {# brouillons ont été créés}} par les pages déjà envoyées.",
   "catalogacao.batch.status.publishing": "Publication en cours",
   "catalogacao.batch.publication.resume": "Reprendre la publication",

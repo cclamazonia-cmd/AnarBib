@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Βιογραφία στα ολλανδικά",
   "catalogacao.bio.titleIn.el": "Βιογραφία στα ελληνικά",
   "error.import.page_too_large": "Το πολύ 200 γραμμές ανά κλήση: επίλεξε λιγότερες.",
+  "error.import.promotion_page_too_large": "Το πολύ 100 γραμμές ανά δημιουργία προσχεδίων: επίλεξε λιγότερες.",
+  "error.import.promotion_page_too_many_items": "Πάρα πολλά αντίτυπα του αρχείου για μία μόνο δημιουργία προσχεδίων (έως 2 500): επίλεξε λιγότερες γραμμές κάθε φορά.",
   "importacoes.fila.pagesAvantRefus": "Πριν από αυτή την άρνηση, {created, plural, one {δημιουργήθηκε # πρόχειρο} other {δημιουργήθηκαν # πρόχειρα}} από τις σελίδες που έχουν ήδη σταλεί.",
   "catalogacao.batch.status.publishing": "Δημοσίευση σε εξέλιξη",
   "catalogacao.batch.publication.resume": "Συνέχιση της δημοσίευσης",

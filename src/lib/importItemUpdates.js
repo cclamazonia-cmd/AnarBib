@@ -55,8 +55,22 @@ export function pagesParExemplaires(lignes, maxLignes = PLAFOND_LIGNES, maxExemp
   return pages;
 }
 
+// H33, suite (14/10/2026) : la PROMOTION va par pages plus petites que les
+// autres gestes — 100 lignes et 2 500 exemplaires du fichier. Une page pleine
+// (200 x 25) prenait 3,0 s au calme et a dépassé les 8 s des appels de l'API
+// sous la charge d'un second job (8 099 ms, sql-tests du 13/10) ; la note de
+// H33 le prévoyait : réduire la page, jamais le seuil. La base refuse au-delà
+// (error.import.promotion_page_too_large, error.import.promotion_page_too_many_items,
+// migration 20261014*_h33_la_promotion_par_pages_plus_petites). « Rapprocher »,
+// « Préparer » et le recalcul gardent PLAFOND_LIGNES / PLAFOND_EXEMPLAIRES.
+export const PLAFOND_PROMOTION_LIGNES = 100;
+export const PLAFOND_PROMOTION_EXEMPLAIRES = 2500;
+export function pagesDePromotion(lignes) {
+  return pagesParExemplaires(lignes, PLAFOND_PROMOTION_LIGNES, PLAFOND_PROMOTION_EXEMPLAIRES);
+}
+
 // H33 (12/10/2026) : « Rapprocher » et « Promouvoir » vont aussi par pages
-// (même plafond : la base refuse au-delà, error.import.page_too_large et
+// (la base refuse au-delà, error.import.page_too_large et
 // error.import.update_page_too_many_items). Les réponses des pages d'un même
 // geste, réunies : les comptes s'additionnent, les comptes par verdict aussi ;
 // le reste (lot, run) est celui de la dernière page.

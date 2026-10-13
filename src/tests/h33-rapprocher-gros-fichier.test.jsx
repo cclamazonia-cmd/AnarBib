@@ -29,7 +29,10 @@ import { IntlProvider, createIntl } from 'react-intl';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
-import { cumulerReponses, pagesParExemplaires, PLAFOND_LIGNES, PLAFOND_EXEMPLAIRES } from '@/lib/importItemUpdates.js';
+import {
+  cumulerReponses, pagesParExemplaires, pagesDePromotion, PLAFOND_LIGNES, PLAFOND_EXEMPLAIRES,
+  PLAFOND_PROMOTION_LIGNES, PLAFOND_PROMOTION_EXEMPLAIRES,
+} from '@/lib/importItemUpdates.js';
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
 
@@ -90,6 +93,8 @@ describe('cumulerReponses : les réponses des pages d’un geste, réunies', () 
 });
 
 // 420 lignes de 30 exemplaires : 166 lignes (4 980 exemplaires) par page au plus
+// pour « Rapprocher » ; 83 lignes (2 490 exemplaires) pour la promotion, dont
+// la page est plus petite depuis le 14/10 (100 lignes, 2 500 exemplaires).
 function lignes(statut) {
   const modele = ECRAN.avant.lignes.find((l) => l.match_status === statut);
   return Array.from({ length: 420 }, (_, i) => ({
@@ -119,11 +124,11 @@ function decor(etat, lignesDuRun) {
   };
 }
 const pagesAppelees = (nom) => banc.appels.filter(([n]) => n === nom).map(([, a]) => a.p_row_ids);
-function verifierPages(pages, toutes) {
-  expect(pages.length).toBe(3);
+function verifierPages(pages, toutes, { nombre = 3, lignesMax = PLAFOND_LIGNES, exemplairesMax = PLAFOND_EXEMPLAIRES } = {}) {
+  expect(pages.length).toBe(nombre);
   for (const p of pages) {
-    expect(p.length).toBeLessThanOrEqual(PLAFOND_LIGNES);
-    expect(p.length * 30).toBeLessThanOrEqual(PLAFOND_EXEMPLAIRES);
+    expect(p.length).toBeLessThanOrEqual(lignesMax);
+    expect(p.length * 30).toBeLessThanOrEqual(exemplairesMax);
   }
   expect(pages.flat().sort()).toEqual(toutes.map((l) => l.id).sort());
 }
@@ -185,16 +190,17 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
     banc.reponses.fn_import_set_editorial = { data: { updated_rows: 420 }, error: null };
     let n = 0;
     banc.reponses.fn_import_promote = (a) => (++n === 3
-      ? { data: null, error: { message: 'No maximo 5000 exemplares do arquivo por chamada (5001).', hint: 'error.import.update_page_too_many_items' } }
+      ? { data: null, error: { message: 'No maximo 2500 exemplares do arquivo por chamada de promocao (2501).', hint: 'error.import.promotion_page_too_many_items' } }
       : { data: { created_drafts: a.p_row_ids.length, items_created: a.p_row_ids.length * 30 }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.createSelected', { n: 420 })));
-    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.update_page_too_many_items')), { timeout: 60000 });
+    await waitFor(() => expect(document.body.textContent).toContain(dire('error.import.promotion_page_too_many_items')), { timeout: 60000 });
+    // deux pages de promotion faites (83 + 83), puis le refus
     expect(document.body.textContent).toContain(
-      `${dire('importacoes.fila.pagesAvantRefus', { created: 332 })} ${dire('error.import.update_page_too_many_items')}`);
+      `${dire('importacoes.fila.pagesAvantRefus', { created: 166 })} ${dire('error.import.promotion_page_too_many_items')}`);
   }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 
-  it('« Créer » 420 lignes nouvelles : la décision une fois, trois promotions sous le plafond, toutes créées', async () => {
+  it('« Créer » 420 lignes nouvelles : la décision une fois, six promotions sous le plafond de la promotion, toutes créées', async () => {
     const L = lignes('new_record');
     decor(E, L);
     banc.reponses.fn_import_set_editorial = { data: { updated_rows: 420 }, error: null };
@@ -202,18 +208,20 @@ describe('Importations MONTÉE : « Rapprocher » et « Créer » vont par pages
       items_created: a.p_row_ids.length * 30 }, error: null });
     await ouvrir(L);
     fireEvent.click(bouton(dire('importacoes.fila.createSelected', { n: 420 })));
-    await waitFor(() => expect(pagesAppelees('fn_import_promote').length).toBe(3), { timeout: 60000 });
-    verifierPages(pagesAppelees('fn_import_promote'), L);
+    await waitFor(() => expect(pagesAppelees('fn_import_promote').length).toBe(6), { timeout: 60000 });
+    verifierPages(pagesAppelees('fn_import_promote'), L,
+      { nombre: 6, lignesMax: PLAFOND_PROMOTION_LIGNES, exemplairesMax: PLAFOND_PROMOTION_EXEMPLAIRES });
+    expect(pagesAppelees('fn_import_promote').map((p) => p.length)).toEqual([83, 83, 83, 83, 83, 5]);
     expect(banc.appels.filter(([nom]) => nom === 'fn_import_set_editorial').map(([, a]) => a.p_row_ids.length)).toEqual([420]);
     await waitFor(() => expect(document.body.textContent).toContain(dire('importacoes.draftsCreated')));
   }, 120000); // 13/10 : 30 s dépassées sous la charge de la CI (run 1736) — le temps du banc, pas du produit
 });
 
 describe('l’assistant d’import et la base', () => {
-  it('l’assistant découpe sa promotion (pagesParExemplaires, réponses réunies)', () => {
+  it('l’assistant découpe sa promotion (pagesDePromotion, réponses réunies)', () => {
     const s = source('src/pages/importacoes/ImportWizard.jsx');
-    expect(s).toContain("import { pagesParExemplaires, cumulerReponses } from '../../lib/importItemUpdates.js';");
-    expect(s).toMatch(/for \(const page of pagesParExemplaires\(newRowIds\.map[\s\S]{0,120}?\)\)\) \{\s*const \{ data, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: page \}\);/);
+    expect(s).toContain("import { pagesDePromotion, cumulerReponses } from '../../lib/importItemUpdates.js';");
+    expect(s).toMatch(/for \(const page of pagesDePromotion\(newRowIds\.map[\s\S]{0,120}?\)\)\) \{\s*const \{ data, error \} = await supabase\.rpc\('fn_import_promote', \{ p_run_id: Number\(runId\), p_row_ids: page \}\);/);
     expect(s).toContain('setPromoteResult(cumulerReponses(reponses));');
     expect(s).not.toContain("supabase.rpc('fn_import_promote', { p_run_id: Number(runId), p_row_ids: newRowIds })");
   });
@@ -236,13 +244,13 @@ describe('l’assistant d’import et la base', () => {
       runId: 7, lignesDeLAssistant: lignesA, aPromouvoir: (r) => r.match_status === 'new_record' && !r.created_book_draft_id,
       setBusy: () => {}, setMsg: (m) => messages.push(m), setPromoteResult: (r) => { resultat = r; },
       t: (d, v) => intl.formatMessage(d, v), localizeError: (e) => (e.hint ? dire(e.hint) : e.message),
-      pagesParExemplaires, cumulerReponses,
+      pagesDePromotion, cumulerReponses,
       supabase: { rpc: async (n, args) => {
         appels.push([n, args]);
         if (n !== 'fn_import_promote') return { data: {}, error: null };
         page += 1;
         return page === refuserPage
-          ? { data: null, error: { message: 'No maximo 200 linhas por chamada (201).', hint: 'error.import.page_too_large' } }
+          ? { data: null, error: { message: 'No maximo 100 linhas por chamada de promocao (101).', hint: 'error.import.promotion_page_too_large' } }
           : { data: { created_drafts: args.p_row_ids.length, items_created: args.p_row_ids.length * 30 }, error: null };
       } },
     };
@@ -251,10 +259,12 @@ describe('l’assistant d’import et la base', () => {
     return { appels, messages, resultat };
   }
 
-  it('l’assistant exécuté : trois pages sous le plafond, le résultat réuni', async () => {
+  it('l’assistant exécuté : six pages sous le plafond de la promotion, le résultat réuni', async () => {
     const r = await promouvoirAssistant(420, 0);
     const pages = r.appels.filter(([n]) => n === 'fn_import_promote').map(([, x]) => x.p_row_ids);
-    expect(pages.map((p) => p.length)).toEqual([166, 166, 88]);
+    expect(pages.map((p) => p.length)).toEqual([83, 83, 83, 83, 83, 5]);
+    expect(pagesDePromotion(Array.from({ length: 420 }, (_, i) => ({ id: i, exemplaires: Array(30) }))).map((p) => p.length))
+      .toEqual([83, 83, 83, 83, 83, 5]);
     expect(r.resultat).toEqual({ created_drafts: 420, items_created: 12600 });
   });
 
@@ -262,16 +272,19 @@ describe('l’assistant d’import et la base', () => {
     const r = await promouvoirAssistant(420, 2);
     expect(r.resultat).toBeNull();
     expect(r.messages.at(-1)).toEqual({ kind: 'error',
-      text: `${dire('importacoes.fila.pagesAvantRefus', { created: 166 })} ${dire('error.import.page_too_large')}` });
+      text: `${dire('importacoes.fila.pagesAvantRefus', { created: 83 })} ${dire('error.import.promotion_page_too_large')}` });
     // refusée dès la première page : le refus seul
     const r1 = await promouvoirAssistant(420, 1);
-    expect(r1.messages.at(-1)).toEqual({ kind: 'error', text: dire('error.import.page_too_large') });
+    expect(r1.messages.at(-1)).toEqual({ kind: 'error', text: dire('error.import.promotion_page_too_large') });
   });
 
   it('le refus des 200 lignes est traduit dans les 10 locales ; la migration pose les deux HINT et la passe unique', () => {
     for (const loc of LOCALES) {
       expect(dico(loc)['error.import.page_too_large'], loc).toBeTruthy();
       expect(dico(loc)['error.import.update_page_too_many_items'], loc).toBeTruthy();
+      // 14/10 : les refus propres à la promotion (100 lignes, 2 500 exemplaires)
+      expect(dico(loc)['error.import.promotion_page_too_large'], loc).toMatch(/100/);
+      expect(dico(loc)['error.import.promotion_page_too_many_items'], loc).toMatch(/2\D?500/);
       // le message des pages faites avant un refus : son pluriel, dans chaque langue
       const m = createIntl({ locale: loc, messages: dico(loc) });
       expect(m.formatMessage({ id: 'importacoes.fila.pagesAvantRefus' }, { created: 166 }), loc).toContain('166');

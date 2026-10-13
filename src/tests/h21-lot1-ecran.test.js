@@ -46,7 +46,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
 import { LOCALE_CODES } from '../i18n/locales.js';
-import { pagesParExemplaires, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
+import { pagesParExemplaires, pagesDePromotion, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';   // H33 : le message partiel de « Rapprocher » le reprend
 
 const banc = vi.hoisted(() => ({ appels: [], reponses: {} }));
@@ -113,7 +113,7 @@ async function jouerGeste(nom, { lignes, selection, reponse = { data: {}, error:
     runRowsLoading: false,
     t: (d, v) => dit(d.id, v),
     localizeError: (err) => `localisé : ${err.message}`,
-    pagesParExemplaires, cumulerReponses, resumeVerdicts,   // H33 (12/10/2026)
+    pagesParExemplaires, pagesDePromotion, cumulerReponses, resumeVerdicts,   // H33 (12/10/2026)
     supabase: { rpc: async (n, args) => { journal.push(`rpc:${n}`); appels.push([n, args]); return reponse; } },
     setPromotingSel: (v) => journal.push(`occupé:${v}`),
     setMsg: () => journal.push('message'),
@@ -229,7 +229,7 @@ describe('Assistant d\'import — une ligne « Déjà importée » n\'est jamais
         runId: 7, lignesDeLAssistant: lignes, aPromouvoir: aPromouvoir(),
         setBusy: () => {}, setMsg: () => {}, setPromoteResult: () => {},
         t: (d) => d.id, localizeError: (e) => e.message,
-        pagesParExemplaires, cumulerReponses,   // H33 (12/10/2026)
+        pagesParExemplaires, pagesDePromotion, cumulerReponses,   // H33 (12/10/2026)
         supabase: { rpc: async (n, args) => { appels.push([n, args]); return { data: { created_drafts: 1 }, error: null }; } },
       };
       const noms = Object.keys(valeurs);

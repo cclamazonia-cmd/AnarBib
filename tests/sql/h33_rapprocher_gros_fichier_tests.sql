@@ -41,13 +41,17 @@
 --     session bâtis sur la table d'avant) : chacun < 8 s (NOTICE H33-MESURE ;
 --     au banc, 12/10 : avant H33 19 à 26 s, puis 48 s pour la page suivante ;
 --     après, 1,4 s et 1,4 s).
--- T08 mesure : « Promouvoir » 200 lignes nouvelles x 25 exemplaires < 8 s
---     (avant H33 : 10 à 21 s seule, 49 s après les deux pages de T07 ;
---     après, 2,6 s).
--- T09 la borne d'une page d'appel (200 lignes, 5 000 exemplaires du fichier,
---     comme « Préparer la mise à jour ») : « Rapprocher » 201 lignes, ou une
---     ligne de 5 001 exemplaires, et « Promouvoir » 201 lignes sont refusés
---     avec leur HINT, sans rien écrire ; 200 lignes passent.
+-- T08 mesure : « Promouvoir » une page pleine < 8 s — 100 lignes nouvelles
+--     x 25 exemplaires depuis le 14/10 (200 x 25 avant : 10 à 21 s avant H33,
+--     49 s après les deux pages de T07 ; après H33, 2,6 à 3,0 s au calme, mais
+--     8,1 s le 13/10 sous la charge d'un second job : la page a été réduite,
+--     le seuil jamais — c'est la coupure des appels de l'API).
+-- T09 la borne d'une page d'appel : « Rapprocher » (200 lignes, 5 000
+--     exemplaires du fichier, comme « Préparer la mise à jour ») refuse 201
+--     lignes ou une ligne de 5 001 exemplaires ; « Promouvoir » (100 lignes,
+--     2 500 exemplaires depuis le 14/10) refuse 101 lignes ou une ligne de
+--     2 501 exemplaires — chacun avec son HINT, sans rien écrire ; 100 lignes
+--     passent.
 -- T10 garde de l'accord entre les deux textes de l'étape « brouillons
 --     vivants » (le constat scalaire, l'EXECUTE de la liste) : tirage
 --     déterministe (graine fixe, 80 tirages de 4 à 17 exemplaires — bibliothèque
@@ -537,7 +541,7 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T08 ─────────────────────────────────────────────────────────────
-  v_t := 'T08 mesure : Promouvoir 200 lignes nouvelles x 25 exemplaires < 8 s';
+  v_t := 'T08 mesure : Promouvoir une page pleine (100 lignes nouvelles x 25 exemplaires) < 8 s';
   DECLARE v_runm bigint; v_rows bigint[]; v_res jsonb;
   BEGIN
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
@@ -550,7 +554,7 @@ BEGIN
                                                                             'source_item_id', 'mp' || r || '-' || j,
                                                                             'call_number', 'C ' || j)) FROM generate_series(1, 25) j)),
              '{"item_tag":"995"}'::jsonb, 'new_record', 'pending'
-        FROM generate_series(1, 200) r RETURNING id)
+        FROM generate_series(1, 100) r RETURNING id)
     SELECT array_agg(id ORDER BY id) INTO v_rows FROM ins;
     EXECUTE 'SET LOCAL ROLE authenticated';
     PERFORM public.fn_import_set_editorial(v_runm, v_rows, 'accept_new', 'page import: validation individuelle');
@@ -558,8 +562,8 @@ BEGIN
     v_res := public.fn_import_promote(v_runm, p_row_ids := v_rows);
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
-    RAISE NOTICE 'H33-MESURE Promouvoir 200 lignes nouvelles x 25 exemplaires : % ms', round(v_ms);
-    IF (v_res->>'items_created')::int = 5000 AND v_ms < 8000
+    RAISE NOTICE 'H33-MESURE Promouvoir 100 lignes nouvelles x 25 exemplaires (une page pleine) : % ms', round(v_ms);
+    IF (v_res->>'items_created')::int = 2500 AND v_ms < 8000
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms ; items='||coalesce(v_res->>'items_created', '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -626,8 +630,8 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T09 ─────────────────────────────────────────────────────────────
-  v_t := 'T09 la borne d''une page d''appel : 201 lignes ou 5 001 exemplaires refuses (HINT), rien d''ecrit';
-  DECLARE v_runm bigint; v_runq bigint; v_rows bigint[]; v_one bigint[]; v_rowsq bigint[]; v_av bigint; v_hints text := '';
+  v_t := 'T09 la borne d''une page d''appel : Rapprocher 201 lignes ou 5 001 exemplaires, Promouvoir 101 lignes ou 2 501 exemplaires refuses (HINT), rien d''ecrit';
+  DECLARE v_runm bigint; v_runq bigint; v_runx bigint; v_rows bigint[]; v_one bigint[]; v_rowsq bigint[]; v_rowx bigint[]; v_av bigint; v_hints text := '';
   BEGIN
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
     VALUES (v_src, v_lib, 'essai/h33b.iso', 'h33b.iso', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_runm;
@@ -647,8 +651,18 @@ BEGIN
       SELECT v_runq, r, 'H33BP-' || r, 'H33 borne promo ' || r, jsonb_build_array('Autrice ' || r),
              jsonb_build_object('items', jsonb_build_array(jsonb_build_object('source_item_code', 'H33BP-' || r))),
              '{"item_tag":"995"}'::jsonb, 'new_record', 'pending'
-        FROM generate_series(1, 201) r RETURNING id)
-    SELECT array_agg(id) INTO v_rowsq FROM ins;
+        FROM generate_series(1, 101) r RETURNING id)
+    SELECT array_agg(id ORDER BY id) INTO v_rowsq FROM ins;
+    -- 14/10 : une ligne nouvelle de 2 501 exemplaires, au-delà de la page de promotion
+    INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
+    VALUES (v_src, v_lib, 'essai/h33bx.iso', 'h33bx.iso', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_runx;
+    WITH ins AS (
+      INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, authors, normalized_payload, raw_payload, match_status, editorial_decision)
+      VALUES (v_runx, 1, 'H33BX-1', 'H33 borne promo exemplaires', jsonb_build_array('Autrice X'),
+              jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', 'H33BX-' || j)) FROM generate_series(1, 2501) j)),
+              '{"item_tag":"995"}'::jsonb, 'new_record', 'pending')
+      RETURNING id)
+    SELECT array_agg(id) INTO v_rowx FROM ins;
     v_av := (SELECT count(*) FROM public.exemplar_drafts) + (SELECT count(*) FROM public.book_drafts);
     EXECUTE 'SET LOCAL ROLE authenticated';
     BEGIN
@@ -666,15 +680,23 @@ BEGIN
     PERFORM public.fn_import_set_editorial(v_runq, v_rowsq, 'accept_new', 'page import: validation individuelle');
     BEGIN
       PERFORM public.fn_import_promote(v_runq, p_row_ids := v_rowsq);
-      v_hints := v_hints || ' promo-201-acceptee';
+      v_hints := v_hints || ' promo-101-acceptee';
     EXCEPTION WHEN OTHERS THEN
       DECLARE h text; BEGIN GET STACKED DIAGNOSTICS h = PG_EXCEPTION_HINT; v_hints := v_hints || ' ' || coalesce(h, '∅'); END;
     END;
-    -- 200 lignes passent
-    PERFORM public.fn_import_promote(v_runq, p_row_ids := v_rowsq[1:200]);
+    PERFORM public.fn_import_set_editorial(v_runx, v_rowx, 'accept_new', 'page import: validation individuelle');
+    BEGIN
+      PERFORM public.fn_import_promote(v_runx, p_row_ids := v_rowx);
+      v_hints := v_hints || ' promo-2501-acceptee';
+    EXCEPTION WHEN OTHERS THEN
+      DECLARE h text; BEGIN GET STACKED DIAGNOSTICS h = PG_EXCEPTION_HINT; v_hints := v_hints || ' ' || coalesce(h, '∅'); END;
+    END;
+    -- 100 lignes passent (une notice et un exemplaire chacune)
+    PERFORM public.fn_import_promote(v_runq, p_row_ids := v_rowsq[1:100]);
     EXECUTE 'RESET ROLE';
-    IF v_hints = ' error.import.page_too_large error.import.update_page_too_many_items error.import.page_too_large'
-       AND (SELECT count(*) FROM public.book_drafts) + (SELECT count(*) FROM public.exemplar_drafts) = v_av + 400
+    IF v_hints = ' error.import.page_too_large error.import.update_page_too_many_items'
+                 ' error.import.promotion_page_too_large error.import.promotion_page_too_many_items'
+       AND (SELECT count(*) FROM public.book_drafts) + (SELECT count(*) FROM public.exemplar_drafts) = v_av + 200
        AND NOT EXISTS (SELECT 1 FROM public.exemplar_drafts WHERE import_run_id = v_runm)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' :'||v_hints); END IF;

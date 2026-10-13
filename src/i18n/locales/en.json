@@ -7533,6 +7533,8 @@
   "catalogacao.bio.titleIn.nl": "Biography in Dutch",
   "catalogacao.bio.titleIn.el": "Biography in Greek",
   "error.import.page_too_large": "At most 200 lines per call: select fewer.",
+  "error.import.promotion_page_too_large": "At most 100 lines per draft creation: select fewer.",
+  "error.import.promotion_page_too_many_items": "Too many copies in the file for a single draft creation (2,500 at most): select fewer rows at a time.",
   "importacoes.fila.pagesAvantRefus": "Before this refusal, {created, plural, one {# draft was created} other {# drafts were created}} by the pages already sent.",
   "catalogacao.batch.status.publishing": "Publication in progress",
   "catalogacao.batch.publication.resume": "Resume publication",
