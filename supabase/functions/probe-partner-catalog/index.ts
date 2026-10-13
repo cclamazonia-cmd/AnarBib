@@ -1,11 +1,39 @@
+// Edge Function : probe-partner-catalog — audit des capacités (OAI, SRU,
+// REST…) d'un catalogue partenaire : interroge chaque endpoint_url de
+// catalog_partner_capabilities, note le résultat, journalise dans
+// catalog_partner_probe_runs.
+//
+// AUTORISATION (B43, 13/10/2026). verify_jwt = true (défaut, pas de bloc dans
+// config.toml) ne suffisait pas : tout porteur d'un JWT valide — un lecteur
+// connecté, la clé anon elle-même — pouvait lire catalog_partners, écrire les
+// capacités et faire partir des requêtes sortantes. Aucun appelant dans le
+// dépôt ni en base (ni cron, ni prosrc) au 13/10 ; dernier passage le
+// 31/03/2026. C'est un outil d'administration du réseau : la garde demande à
+// la base, SOUS LE JETON DE L'APPELANT, s'il administre le réseau
+// (fn_caller_is_network_admin), AVANT tout geste à la clé de service. La
+// double authentification (B42) est couverte par la même requête.
+//
+// La réponse ne rend plus la ligne catalog_partners entière : id, slug,
+// display_name seulement.
+
 import { secretKey } from "../_shared/core/secret-key.ts";
+import { appelantAdministreLeReseau } from "../_shared/core/admin-reseau.ts";
 import { createClient } from '../_shared/deps.ts';
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const SUPABASE_SERVICE_ROLE_KEY = secretKey() || "";
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
 }
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+// Créé à la demande, une fois la garde passée.
+let supabase;
+function partenairePublic(partner) {
+  return {
+    id: partner.id,
+    slug: partner.slug,
+    display_name: partner.display_name
+  };
+}
 function json(data, init = {}) {
   return new Response(JSON.stringify(data, null, 2), {
     ...init,
@@ -104,6 +132,17 @@ Deno.serve(async (req)=>{
         status: 405
       });
     }
+    // ── Garde : administration du réseau, demandée sous le jeton de l'appelant
+    const authHeader = req.headers.get("Authorization") || "";
+    if (!await appelantAdministreLeReseau(SUPABASE_URL, ANON_KEY, authHeader)) {
+      return json({
+        ok: false,
+        error: "FORBIDDEN"
+      }, {
+        status: 403
+      });
+    }
+    supabase ??= createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const body = await req.json();
     const onlyCapabilityKey = String(body?.capability_key || "").trim() || null;
     const partner = await resolvePartner(body);
@@ -112,7 +151,7 @@ Deno.serve(async (req)=>{
       return json({
         ok: false,
         error: "No capabilities found for partner",
-        partner
+        partner: partenairePublic(partner)
       }, {
         status: 404
       });
@@ -178,11 +217,7 @@ Deno.serve(async (req)=>{
     }
     return json({
       ok: true,
-      partner: {
-        id: partner.id,
-        slug: partner.slug,
-        display_name: partner.display_name
-      },
+      partner: partenairePublic(partner),
       count: results.length,
       results
     });
