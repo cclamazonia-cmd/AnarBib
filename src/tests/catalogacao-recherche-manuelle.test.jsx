@@ -54,6 +54,10 @@ describe('recherche manuelle — liste des catalogues', () => {
     expect(adresseRechercheManuelle('bne', champs({ isbn: '9789065500175' })))
       .toBe('https://catalogo.bne.es/discovery/search?query=any,contains,9789065500175&vid=34BNE_INST:CATALOGO');
     expect(adresseRechercheManuelle('dbnl', champs({}))).toBe('https://www.dbnl.org/');
+    // DNB : /opac/ répond 404, la page du catalogue est opac.htm (13/10/2026)
+    expect(adresseRechercheManuelle('dnb', champs({}))).toBe('https://portal.dnb.de/opac.htm');
+    expect(adresseRechercheManuelle('dnb', champs({ titulo: 'Max Havelaar' })))
+      .toBe('https://portal.dnb.de/opac.htm?method=simpleSearch&query=Max%20Havelaar');
     expect(adresseRechercheManuelle('inconnu', champs({ titulo: 'x' }))).toBe('https://acervo.bn.gov.br/sophia_web/busca/acervo/?q=x');
     expect(adresseRechercheManuelle('inconnu', champs({ titulo: 'x' }), 'fr')).toBe('https://catalogue.bnf.fr/rechercher.do?motRecherche=x');
   });

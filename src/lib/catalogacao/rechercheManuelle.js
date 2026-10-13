@@ -9,6 +9,8 @@
 // (« Max Havelaar ») et un ISBN : toutes rendent des résultats. BNE, DNB et LoC
 // sont des applications JavaScript (un curl n'en voit que la coquille) ; l'ICCU
 // passe par le champ unique `monocampo` de sa recherche avancée.
+// Pages d'accueil (fiche vide) vérifiées aussi : celle de la DNB est opac.htm —
+// /opac/ répond 404 (signalé par Xavier le 13/10, corrigé le même soir).
 // La BN Brasil filtre ses visiteurs par pays (Cloudflare) : mesuré le 13/10/2026,
 // sa page de recherche répond 200 depuis São Paulo et 403 depuis la France,
 // l'Allemagne, le Portugal et les États-Unis — tout bn.gov.br, accueil compris.
@@ -26,7 +28,7 @@ export const CATALOGUES_MANUELS = [
   { id: 'bn_brasil', depuisLeBresil: true, accueil: 'https://acervo.bn.gov.br/sophia_web/busca/acervo/', url: (q) => `https://acervo.bn.gov.br/sophia_web/busca/acervo/?q=${e(q)}` },
   { id: 'bne', accueil: 'https://catalogo.bne.es/discovery/search?vid=34BNE_INST:CATALOGO', url: (q) => `https://catalogo.bne.es/discovery/search?query=any,contains,${e(q)}&vid=34BNE_INST:CATALOGO` },
   { id: 'bnf', accueil: 'https://catalogue.bnf.fr/', url: (q) => `https://catalogue.bnf.fr/rechercher.do?motRecherche=${e(q)}` },
-  { id: 'dnb', accueil: 'https://portal.dnb.de/opac/', url: (q) => `https://portal.dnb.de/opac/simpleSearch?query=${e(q)}` },
+  { id: 'dnb', accueil: 'https://portal.dnb.de/opac.htm', url: (q) => `https://portal.dnb.de/opac.htm?method=simpleSearch&query=${e(q)}` },
   { id: 'iccu', accueil: 'https://opac.sbn.it/', url: (q) => `https://opac.sbn.it/web/opacsbn/risultati-ricerca-avanzata?monocampo=${e(q)}` },
   { id: 'loc', accueil: 'https://search.catalog.loc.gov/', url: (q) => `https://search.catalog.loc.gov/search?query=${e(q)}` },
   { id: 'dbnl', accueil: 'https://www.dbnl.org/', url: (q) => `https://www.dbnl.org/zoeken/zoekeninteksten/index.php?zoek=${e(q)}` },
