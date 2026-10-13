@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-12** · 49 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-13** · 49 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 12 octobre 2026 au soir** (`91b7e803`, mesuré à 22 h 15) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 11/10 à midi, `24b37717`). **La file de CI porte un commit** à l'heure du relevé : 472 migrations appliquées, 473 au dépôt (H33 bis, voisine, poussée à 22 h 01). **Première photo en deux colonnes** : depuis B39, bibliothèques, comptes et circulation se lisent réel / formation par requête, plus par une note. Ce qui a bougé et pourquoi : **la base** — +14 migrations en un jour et demi (le jour le plus chargé du mois : B38, E38, B40, B39, H33, H34 lots 1 et 2, AUT-VAR, la recherche par variantes), +7 fonctions net dont −7 dans `api`, **les avis de sécurité au même total qu'au 11/10 (493, 0029 à 433)** — chaque porte neuve fermée à la pose —, les index « inutilisés » à 363 (390) ; **le catalogue** — −3 notices, −9 autorités, −21 œuvres, toutes par fusion ou retrait sur accord, plus aucune œuvre sans notice ; 22 reprises de notices publiées ; **le réseau** — 5 + 1 bibliothèques, 19 + 4 comptes, 9 / 21 / 22 / 0 ; deux emprunts du jour à la BLMF, le regard de Xavier ; **le dépôt** — +66 commits, +35 fichiers, +20 clés, +174 tests JS, +8 suites SQL. **Clos depuis le 11/10 à midi** : B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 à ce relevé** — quinze clôtures, **49 items, le point le plus bas depuis la v34**. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, provoquée de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), H34 (voisine) ; *à l'écran* : rien — le Panneau et la Bibliothèque sont vus ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16 (la règle du stock), I32 (le rapport du tableau de bord) ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-12.** **39 items sur 49** portent une vérification datée qui leur est propre (A1, A3, B36, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-13.** **39 items sur 49** portent une vérification datée qui leur est propre (A1, A3, B36, B41, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1076,7 +1076,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** L'export complet des 620 descripteurs dans les deux formats est **à une soirée de travail** — dès que les sept questions ont une réponse. Elles sont écrites et personne ne les a encore posées.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Les sept : la forme des identifiants ; **la hiérarchie, qui est la vraie question** ; le statut de la facette « dates » ; le sort des 2 842 liens vers six catalogues ; le grec romanisé ; la licence ; et la manière dont le fichier se régénère.
 
@@ -1855,4 +1855,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-12. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 49 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-13. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 49 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-12 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `91b7e803` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

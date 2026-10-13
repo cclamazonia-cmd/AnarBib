@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-12",
+    "maj": "2026-10-13",
     "releve": {
       "date": "2026-10-12",
       "commit": "91b7e803"
@@ -4474,6 +4474,10 @@
         {
           "fr": "**12/10 — le site répond de nouveau** (`thesaurus.ficedl.info`, fiche `mot8` en 200, 2,5 s à 17 h 50) — personne ne l'aurait su : **la sonde légère est livrée** (`1f846c09`, `deploy/ops/anarbib-sonde-ficedl.sh`, modèle du témoin de panne I31) : une fiche de descripteur par jour depuis le poste, un courriel après deux jours sans réponse — « c'est le moment d'écrire à la FICEDL » —, un second le jour du retour avec la durée ; même configuration que le témoin, aveugle si le poste est sans réseau ; banc `sonde-ficedl` (8 cas), unités systemd posées sur le poste. **Le courriel à la FICEDL, lui, n'a toujours pas été envoyé** — prêt depuis le 16/09 ; le site étant revenu, les sept questions peuvent partir, et le raclage (H13) se rejouer pour comparer à l'instantané du 03/09. Décision de Xavier.",
           "pt": "**12/10 — o site responde de novo** (`mot8` em 200). **A sonda leve está entregue** (`1f846c09`): uma ficha por dia a partir do posto, um e-mail após dois dias sem resposta, outro no regresso com a duração; mesma configuração do vigia de pane; banco `sonde-ficedl` (8 casos). **O e-mail à FICEDL continua por enviar** (pronto desde 16/09): decisão de Xavier."
+        },
+        {
+          "fr": "**13/10 — premier courriel réel de la sonde, et un défaut trouvé par lui.** Le site a répondu 200 à 8 h 29, **503 à 10 h 32, 503 à 18 h 45**, puis 200 à 18 h 50 depuis le même poste : **le thésaurus flotte** (des 503 intermittents, comme en septembre), ce qui est une raison de plus d'écrire à la FICEDL. Le courriel, lui, disait « deux passages de suite sans réponse (un par jour) » après huit heures : le minuteur passe aussi à chaque démarrage du poste, et le poste a démarré deux fois. Corrigé (`89346575`, posé sur le poste) : **un passage par jour par construction** — à moins de douze heures du précédent, la sonde ne compte rien et n'écrit rien ; banc à neuf cas. L'état reste « absent » : le prochain passage (14/10, 10 h 30) écrira le retour s'il voit 200, avec la durée réelle.",
+          "pt": "**13/10 — primeiro e-mail real da sonda, e um defeito encontrado por ele.** O site respondeu 200 às 8h29, **503 às 10h32, 503 às 18h45**, depois 200 às 18h50: **o tesauro oscila**, mais uma razão para escrever à FICEDL. O e-mail dizia «dois passagens seguidas (uma por dia)» após oito horas: o temporizador passa também a cada arranque do posto. Corrigido (`89346575`): **uma passagem por dia por construção**."
         }
       ]
     },
