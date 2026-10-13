@@ -42,6 +42,11 @@ pose l'adresse des fonctions de cette instance, et crée le compte admin réseau
 passe s'affiche une seule fois. Rien de tout cela ne demande de saisie, sauf l'adresse de
 courriel de l'admin (question interactive, ou `admin@DOMAINE` par défaut).
 
+Sur une machine sans personne devant l'écran, ajouter **`--creds-file /var/lib/anarbib/admin_credentials`** :
+le mot de passe est écrit dans ce fichier (0600, root) et **n'est pas imprimé**, donc absent du
+journal de l'appelant. Le bandeau de connexion et le motd ne doivent dire que « `sudo cat` ce
+fichier, puis le supprimer après la première connexion » — jamais le mot de passe lui-même.
+
 `--sel-jetable` : le sel de pseudonymisation du Vault est **fabriqué**. C'est juste pour une
 instance neuve. Il ne l'est plus dès qu'on restaure une sauvegarde (§ 6).
 

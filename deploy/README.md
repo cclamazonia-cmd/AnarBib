@@ -126,6 +126,7 @@ Une remesure compare donc désormais les colonnes **et** les privilèges de
 ./install.sh --rebuild                 # Réinitialisation complète et remise à neuf des volumes
 ./install.sh --stop                    # Arrête l'application web et les conteneurs
 ./install.sh --prod api.domaine.org    # Installation en mode production
+./install.sh --prod essai.exemple.org --creds-file /var/lib/anarbib/admin_credentials   # VM sans personne devant l'écran
 ```
 
 Le script centralisé `./install.sh` effectue de manière 100 % autonome et sans intervention manuelle :
@@ -142,12 +143,13 @@ Options disponibles :
 - `./install.sh --stop` : arrête l'ensemble des conteneurs et services.
 - `./install.sh --sans-start` : prépare les secrets et l'environnement sans démarrer de conteneur.
 - `./install.sh --prod DOMAINE` : configure pour un domaine public (ex: `api.anarbib.org`).
+- `./install.sh --creds-file CHEMIN` (ou `ANARBIB_ADMIN_CREDS_FILE=CHEMIN`) : écrit le courriel et le mot de passe du premier compte admin dans ce fichier (droits 0600, dossier 0700) **au lieu de les afficher** — rien à l'écran ni dans le journal de l'appelant. Pour un premier démarrage sans personne devant la console (VM, ISO Debian). À lire avec `sudo cat`, et à supprimer après la première connexion ; ne jamais recopier son contenu dans `/etc/issue`, `/etc/motd` ou un journal.
 
 ### Compte administrateur initial
 
 Lors d'une nouvelle installation avec une base vierge, `./install.sh` provisionne automatiquement un compte administrateur réseau :
 - **Email admin** : demandé interactivement lors de l'installation (par défaut `admin@DOMAINE` en production, `admin@anarbib.local` en local).
-- **Mot de passe** : généré aléatoirement (16 caractères), affiché une seule fois à l'écran à la fin de l'installation, puis supprimé.
+- **Mot de passe** : généré aléatoirement (16 caractères), affiché une seule fois à l'écran à la fin de l'installation, puis supprimé — ou, avec `--creds-file`, écrit une seule fois dans le fichier indiqué (0600) et jamais affiché.
 
 Ce compte dispose des rôles de gestionnaire de réseau (`network_administrators`), de coordinateur et de bibliothécaire sur la bibliothèque de démonstration, donnant un accès immédiat aux panneaux de gestion (`/painel`, `/biblioteca`, `/rede`, `/catalogacao`).
 

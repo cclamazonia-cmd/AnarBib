@@ -9,6 +9,7 @@
 #   ./install.sh --lang CODE           # force display language (see the list below)
 #   ./install.sh --local               # force localhost configuration
 #   ./install.sh --prod DOMAIN         # configure for a public domain
+#   ./install.sh --creds-file PATH     # write the first admin's credentials to PATH (0600) instead of printing them
 #   ./install.sh --rebuild             # wipe volumes and reinstall from scratch
 #   ./install.sh --sans-front          # start backend only (no Vite)
 #   ./install.sh --sans-start          # prepare config without starting
@@ -71,6 +72,17 @@ t() {
     eo:err_no_domain)  echo "Mankas domajno por --prod. Ekzemplo: ./install.sh --prod api.anarbib.org" ;;
     nl:err_no_domain)  echo "Domein ontbreekt voor --prod. Voorbeeld: ./install.sh --prod api.anarbib.org" ;;
     el:err_no_domain)  echo "Λείπει ο τομέας για το --prod. Παράδειγμα: ./install.sh --prod api.anarbib.org" ;;
+
+    fr:err_no_creds_file)  echo "Chemin manquant pour --creds-file. Exemple : ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    en:err_no_creds_file)  echo "Missing path for --creds-file. Example: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    pt:err_no_creds_file)  echo "Caminho ausente para --creds-file. Exemplo: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    es:err_no_creds_file)  echo "Falta la ruta para --creds-file. Ejemplo: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    it:err_no_creds_file)  echo "Percorso mancante per --creds-file. Esempio: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    de:err_no_creds_file)  echo "Pfad fehlt für --creds-file. Beispiel: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    ca:err_no_creds_file)  echo "Falta el camí per a --creds-file. Exemple: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    eo:err_no_creds_file)  echo "Mankas vojo por --creds-file. Ekzemplo: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    nl:err_no_creds_file)  echo "Pad ontbreekt voor --creds-file. Voorbeeld: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    el:err_no_creds_file)  echo "Λείπει η διαδρομή για το --creds-file. Παράδειγμα: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
 
     fr:err_unknown)    echo "Option inconnue : $2" ;;
     en:err_unknown)    echo "Unknown option: $2" ;;
@@ -862,6 +874,17 @@ t() {
     nl:admin_pass)     echo "  • Wachtwoord   : $2" ;;
     el:admin_pass)     echo "  • Κωδικός      : $2" ;;
 
+    fr:admin_pass_file)  echo "  • Mot de passe : écrit dans $2 (droits 0600, root) — non affiché ici. Supprimez ce fichier après la première connexion." ;;
+    en:admin_pass_file)  echo "  • Password     : written to $2 (mode 0600, root) — not shown here. Delete that file after the first login." ;;
+    pt:admin_pass_file)  echo "  • Senha        : gravada em $2 (modo 0600, root) — não exibida aqui. Apague esse arquivo após o primeiro login." ;;
+    es:admin_pass_file)  echo "  • Contraseña   : escrita en $2 (modo 0600, root) — no se muestra aquí. Borrá ese archivo después del primer inicio de sesión." ;;
+    it:admin_pass_file)  echo "  • Password     : scritta in $2 (modo 0600, root) — non mostrata qui. Cancella quel file dopo il primo accesso." ;;
+    de:admin_pass_file)  echo "  • Passwort     : in $2 geschrieben (Modus 0600, root) — hier nicht angezeigt. Lösche diese Datei nach der ersten Anmeldung." ;;
+    ca:admin_pass_file)  echo "  • Contrasenya  : escrita a $2 (mode 0600, root) — no es mostra aquí. Esborra aquest fitxer després de la primera connexió." ;;
+    eo:admin_pass_file)  echo "  • Pasvorto     : skribita en $2 (reĝimo 0600, root) — ne montrata ĉi tie. Forigu tiun dosieron post la unua ensaluto." ;;
+    nl:admin_pass_file)  echo "  • Wachtwoord   : geschreven naar $2 (modus 0600, root) — hier niet getoond. Verwijder dat bestand na de eerste aanmelding." ;;
+    el:admin_pass_file)  echo "  • Κωδικός      : γράφτηκε στο $2 (δικαιώματα 0600, root) — δεν εμφανίζεται εδώ. Διάγραψε αυτό το αρχείο μετά την πρώτη σύνδεση." ;;
+
     fr:admin_warn)     echo "  ⚠️  Notez bien ce mot de passe aléatoire : il ne sera plus réaffiché !" ;;
     en:admin_warn)     echo "  ⚠️  Save this random password: it will not be displayed again!" ;;
     pt:admin_warn)     echo "  ⚠️  Guarde esta senha aleatória: ela não será exibida novamente!" ;;
@@ -1001,6 +1024,7 @@ cd "$RACINE"
 # ─────────────────────────────────────────────────────────────────────────────
 MODE="local"
 DOMAINE_PROD=""
+CREDS_FILE="${ANARBIB_ADMIN_CREDS_FILE:-}"
 REBUILD=0
 ASSUME_YES=0
 START=1
@@ -1027,6 +1051,14 @@ while [ $# -gt 0 ]; do
       DOMAINE_PROD="${2:-}"
       if [ -z "$DOMAINE_PROD" ] || [ "${DOMAINE_PROD#--}" != "$DOMAINE_PROD" ]; then
         echo "✗ $(t err_no_domain)" >&2
+        exit 1
+      fi
+      shift
+      ;;
+    --creds-file)
+      CREDS_FILE="${2:-}"
+      if [ -z "$CREDS_FILE" ] || [ "${CREDS_FILE#--}" != "$CREDS_FILE" ]; then
+        echo "✗ $(t err_no_creds_file)" >&2
         exit 1
       fi
       shift
@@ -1388,8 +1420,22 @@ if [ -f deploy/.initial_admin_creds ]; then
   t admin_title
   [ -n "$CREDS_LIB_NAME" ] && t admin_lib "$CREDS_LIB_NAME"
   t admin_email "$ADMIN_EMAIL"
-  t admin_pass  "$ADMIN_PASSWORD"
-  t admin_warn
+  if [ -n "$CREDS_FILE" ]; then
+    # --creds-file (13/10/2026) : le mot de passe va dans un fichier 0600 et
+    # n'est PAS imprimé — ni à l'écran, ni dans le journal de qui nous lance
+    # (premier démarrage d'une VM, ISO Debian). Le dossier est créé en 0700.
+    # Une erreur d'écriture arrête le script : un mot de passe perdu en
+    # silence serait pire qu'un mot de passe affiché.
+    install -d -m 0700 "$(dirname "$CREDS_FILE")"
+    ( umask 077 && printf 'ADMIN_EMAIL=%s\nADMIN_PASSWORD=%s\nLIB_NAME=%s\n' \
+        "$ADMIN_EMAIL" "$ADMIN_PASSWORD" "$CREDS_LIB_NAME" > "$CREDS_FILE" )
+    chmod 0600 "$CREDS_FILE"
+    t admin_pass_file "$CREDS_FILE"
+  else
+    t admin_pass  "$ADMIN_PASSWORD"
+    t admin_warn
+  fi
+  unset ADMIN_PASSWORD
   echo ""
 fi
 
