@@ -25,7 +25,12 @@
 --       ni facteur inachevé seul, ni adhésion inactive ;
 --   T10 api.fn_admin_retirer_double_facteur : refus hors administration ;
 --       administration en aal1 → aal2_required ; motif trop court ; retrait
---       réel : facteurs et sessions supprimés, une ligne de journal.
+--       réel : facteurs et sessions supprimés, une ligne de journal ;
+--   T11 Storage (migration 20261013182456) : la politique RESTRICTIVE
+--       b42_double_authentification de storage.objects, pour authenticated,
+--       toutes commandes, lit private.fn_session_double_facteur_ok ; l'aide
+--       rend faux pour une coordination aal1 en 'equipes', vrai en aal2, en
+--       'off', pour un lecteur sans facteur, et sur un jeton illisible.
 -- Fixtures : une bibliothèque et cinq comptes créés ici. Tout se fait sous
 -- postgres avec un JWT simulé (stub auth), sauf T7. La suite lève toujours
 -- (OK ou ECHEC) : rien ne reste, le mode revient à 'off'.
@@ -252,6 +257,34 @@ BEGIN
     IF v_n <> 1 THEN RAISE EXCEPTION 'journal : % ligne(s)', v_n; END IF;
     -- les facteurs des autres comptes sont intacts
     IF NOT EXISTS (SELECT 1 FROM auth.mfa_factors WHERE user_id = v_admin) THEN RAISE EXCEPTION 'facteur de l''administration emporté'; END IF;
+    PERFORM set_config('request.jwt.claims', '', true);
+    v_passed := v_passed + 1;
+  EXCEPTION WHEN OTHERS THEN PERFORM set_config('request.jwt.claims', '', true); v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ───────────────────────────────────────────────────────
+  v_t := 'T11 Storage : politique restrictive et son aide';
+  BEGIN
+    SELECT count(*) INTO v_n FROM pg_policies p
+     WHERE p.schemaname = 'storage' AND p.tablename = 'objects' AND p.policyname = 'b42_double_authentification'
+       AND p.permissive = 'RESTRICTIVE' AND p.cmd = 'ALL' AND p.roles = '{authenticated}'
+       AND p.qual LIKE '%fn_session_double_facteur_ok%' AND p.with_check LIKE '%fn_session_double_facteur_ok%';
+    IF v_n <> 1 THEN RAISE EXCEPTION 'politique absente ou mal formée (% trouvée)', v_n; END IF;
+    IF has_function_privilege('anon', 'private.fn_session_double_facteur_ok()', 'EXECUTE')
+       OR NOT has_function_privilege('authenticated', 'private.fn_session_double_facteur_ok()', 'EXECUTE') THEN
+      RAISE EXCEPTION 'fn_session_double_facteur_ok : fermée à anon, ouverte à authenticated';
+    END IF;
+    UPDATE private.double_facteur_reglage SET mode = 'equipes' WHERE id;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_coord, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    IF private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'coordination aal1 en equipes admise'; END IF;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_coord, 'role', 'authenticated', 'aal', 'aal2')::text, true);
+    IF NOT private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'coordination aal2 refusée'; END IF;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_lect2, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    IF NOT private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'lecteur sans facteur refusé'; END IF;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', 'pas-un-uuid', 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    IF NOT private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'échec ouvert non tenu'; END IF;
+    UPDATE private.double_facteur_reglage SET mode = 'off' WHERE id;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_coord, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    IF NOT private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'mode off : coordination aal1 refusée'; END IF;
     PERFORM set_config('request.jwt.claims', '', true);
     v_passed := v_passed + 1;
   EXCEPTION WHEN OTHERS THEN PERFORM set_config('request.jwt.claims', '', true); v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
