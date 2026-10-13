@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Motivo (como a identidade foi verificada)",
   "twoFactor.admin.motifRequired": "O motivo deve ter pelo menos dez caracteres.",
   "twoFactor.admin.confirm": "Remover e desconectar",
-  "twoFactor.admin.done": "{n, plural, one {# dispositivo removido} other {# dispositivos removidos}}, conta desconectada em todos os lugares."
+  "twoFactor.admin.done": "{n, plural, one {# dispositivo removido} other {# dispositivos removidos}}, conta desconectada em todos os lugares.",
+  "error.edge.aal2_required": "Autenticação em dois fatores obrigatória: entre de novo com o seu código para fazer esta operação."
 }

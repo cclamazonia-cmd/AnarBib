@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Motivo (come è stata verificata l'identità)",
   "twoFactor.admin.motifRequired": "Il motivo deve avere almeno dieci caratteri.",
   "twoFactor.admin.confirm": "Rimuovi e disconnetti",
-  "twoFactor.admin.done": "{n, plural, one {# dispositivo rimosso} other {# dispositivi rimossi}}, account disconnesso ovunque."
+  "twoFactor.admin.done": "{n, plural, one {# dispositivo rimosso} other {# dispositivi rimossi}}, account disconnesso ovunque.",
+  "error.edge.aal2_required": "Autenticazione a due fattori obbligatoria: accedi di nuovo con il tuo codice per fare questa operazione."
 }

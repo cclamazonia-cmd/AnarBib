@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Grund (wie die Identität geprüft wurde)",
   "twoFactor.admin.motifRequired": "Der Grund braucht mindestens zehn Zeichen.",
   "twoFactor.admin.confirm": "Entfernen und abmelden",
-  "twoFactor.admin.done": "{n, plural, one {# Gerät entfernt} other {# Geräte entfernt}}, Konto überall abgemeldet."
+  "twoFactor.admin.done": "{n, plural, one {# Gerät entfernt} other {# Geräte entfernt}}, Konto überall abgemeldet.",
+  "error.edge.aal2_required": "Zwei-Faktor-Authentifizierung erforderlich: Melde dich mit deinem Code erneut an, um das zu tun."
 }

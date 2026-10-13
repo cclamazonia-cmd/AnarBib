@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Motivo (cómo se verificó la identidad)",
   "twoFactor.admin.motifRequired": "El motivo necesita al menos diez caracteres.",
   "twoFactor.admin.confirm": "Quitar y cerrar sesión",
-  "twoFactor.admin.done": "{n, plural, one {# dispositivo quitado} other {# dispositivos quitados}}, sesión cerrada en todas partes."
+  "twoFactor.admin.done": "{n, plural, one {# dispositivo quitado} other {# dispositivos quitados}}, sesión cerrada en todas partes.",
+  "error.edge.aal2_required": "Autenticación en dos pasos obligatoria: vuelve a iniciar sesión con tu código para hacer esta operación."
 }

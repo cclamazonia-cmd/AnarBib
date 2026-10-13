@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Reason (how the identity was checked)",
   "twoFactor.admin.motifRequired": "The reason needs at least ten characters.",
   "twoFactor.admin.confirm": "Remove and sign out",
-  "twoFactor.admin.done": "{n, plural, one {# device removed} other {# devices removed}}, account signed out everywhere."
+  "twoFactor.admin.done": "{n, plural, one {# device removed} other {# devices removed}}, account signed out everywhere.",
+  "error.edge.aal2_required": "Two-factor authentication required: sign in again with your code to do this."
 }

@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Raó (com s'ha verificat la identitat)",
   "twoFactor.admin.motifRequired": "La raó ha de tenir almenys 10 caràcters.",
   "twoFactor.admin.confirm": "Treure i tancar la sessió",
-  "twoFactor.admin.done": "{n, plural, one {# aparell tret} other {# aparells trets}}, sessió tancada a tot arreu."
+  "twoFactor.admin.done": "{n, plural, one {# aparell tret} other {# aparells trets}}, sessió tancada a tot arreu.",
+  "error.edge.aal2_required": "Autenticació en dos passos obligatòria: torna a iniciar la sessió amb el codi per fer aquesta operació."
 }

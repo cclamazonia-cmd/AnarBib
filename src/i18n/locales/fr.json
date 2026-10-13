@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Motif (comment l'identité a été vérifiée)",
   "twoFactor.admin.motifRequired": "Le motif compte au moins dix caractères.",
   "twoFactor.admin.confirm": "Retirer et déconnecter",
-  "twoFactor.admin.done": "{n, plural, one {# appareil retiré} other {# appareils retirés}}, compte déconnecté partout."
+  "twoFactor.admin.done": "{n, plural, one {# appareil retiré} other {# appareils retirés}}, compte déconnecté partout.",
+  "error.edge.aal2_required": "Double authentification requise : reconnecte-toi avec ton code pour faire cette opération."
 }

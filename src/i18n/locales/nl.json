@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Reden (hoe de identiteit is gecontroleerd)",
   "twoFactor.admin.motifRequired": "De reden moet minstens tien tekens hebben.",
   "twoFactor.admin.confirm": "Verwijderen en afmelden",
-  "twoFactor.admin.done": "{n, plural, one {# apparaat verwijderd} other {# apparaten verwijderd}}, account overal afgemeld."
+  "twoFactor.admin.done": "{n, plural, one {# apparaat verwijderd} other {# apparaten verwijderd}}, account overal afgemeld.",
+  "error.edge.aal2_required": "Tweestapsverificatie verplicht: log opnieuw in met je code om dit te doen."
 }

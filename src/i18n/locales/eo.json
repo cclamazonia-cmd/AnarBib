@@ -7613,5 +7613,6 @@
   "twoFactor.admin.motifLabel": "Kialo (kiel la identeco estis kontrolita)",
   "twoFactor.admin.motifRequired": "La kialo bezonas almenaŭ dek signojn.",
   "twoFactor.admin.confirm": "Forigi kaj elsalutigi",
-  "twoFactor.admin.done": "{n, plural, one {# aparato forigita} other {# aparatoj forigitaj}}, konto elsalutita ĉie."
+  "twoFactor.admin.done": "{n, plural, one {# aparato forigita} other {# aparatoj forigitaj}}, konto elsalutita ĉie.",
+  "error.edge.aal2_required": "Dufaktora aŭtentigo deviga: ensalutu denove per via kodo por fari tion."
 }

@@ -11,6 +11,7 @@
 
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
+import { doubleFacteurManquant } from '../_shared/core/double-facteur.ts';
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
 
@@ -63,6 +64,15 @@ Deno.serve(async (req) => {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const service = createClient(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });
+
+  // B42 lot 3 (13/10/2026) : tout ce qui suit jusqu'à fn_attach_received_asset_record
+  // se fait à la clé de service, et cette RPC est la seule requête faite sous le
+  // jeton de l'appelant : la fonction d'avant-requête de PostgREST ne verrait la
+  // session qu'APRÈS la copie dans le bucket restreint. On demande donc d'abord
+  // l'état de la double authentification (échec fermé, _shared/core/double-facteur.ts).
+  if (await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)) {
+    return refus('aal2_required', 'Double authentification requise.', 403);
+  }
 
   // Lecture du fichier parqué (service_role).
   const { data: ra, error: raErr } = await service.schema('ingest')
