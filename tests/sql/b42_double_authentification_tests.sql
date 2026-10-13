@@ -2,13 +2,16 @@
 -- AnarBib — B42, lot 2 (13/10/2026) : la double authentification s'exige côté
 -- serveur (migration 20261013171710, livrée ÉTEINTE : mode 'off', fonction
 -- d'avant-requête non branchée).
---   T1  objets et droits : mode 'off' à la livraison ; fn_avant_requete
+--   T1  objets et droits : mode 'facteurs' et fonction branchée sur
+--       authenticator depuis l'activation (20261013234826) ; fn_avant_requete
 --       INVOKER, exécutable par anon/authenticated ; fn_aal2_exige_pour_moi
 --       DEFINER, fermée à anon ; les trois RPC api fermées à anon ; les deux
 --       tables fermées à authenticated ;
 --   T2  mode 'off' : une coordination aal1 AVEC facteur passe ;
 --   T3  mode 'facteurs' : lecteur à facteur vérifié en aal1 → 403
---       AAL2_REQUIRED ; le même en aal2 passe ; facteur inachevé seul : passe ;
+--       AAL2_REQUIRED, DETAIL au format exigé par PostgREST (status ET
+--       headers : sans headers, 500 PGRST121 — vu à la pile locale le 14/10,
+--       tout refus du tableau le vérifie) ; le même en aal2 passe ; facteur inachevé seul : passe ;
 --       coordination sans facteur : passe ;
 --   T4  mode 'equipes' : coordination, bibliothécaire, administration du
 --       réseau sans facteur en aal1 → refus ; adhésion non active, lecteur
@@ -33,7 +36,7 @@
 --       'off', pour un lecteur sans facteur, et sur un jeton illisible.
 -- Fixtures : une bibliothèque et cinq comptes créés ici. Tout se fait sous
 -- postgres avec un JWT simulé (stub auth), sauf T7. La suite lève toujours
--- (OK ou ECHEC) : rien ne reste, le mode revient à 'off'.
+-- (OK ou ECHEC) : rien ne reste, le mode revient à celui des migrations.
 -- Mutants éprouvés le 13/10 : refus jamais levé (« IF false AND v_bloque »)
 -- → 16/22, T3, T4, T5, T7 rougissent ; sans l'échec ouvert (RAISE à la place
 -- du WARNING) → 21/22, T6 rougit.
@@ -50,7 +53,7 @@ DECLARE
   v_lect uuid := gen_random_uuid();    -- lecteur, facteur vérifié
   v_lect2 uuid := gen_random_uuid();   -- lecteur, facteur inachevé seul
   v_ancien uuid := gen_random_uuid();  -- ancienne coordination (adhésion inactive)
-  v_u uuid; v_txt text; v_state text; v_json jsonb; v_n int; v_b boolean;
+  v_u uuid; v_txt text; v_det text; v_state text; v_json jsonb; v_n int; v_b boolean;
   v_rec record;
 BEGIN
   INSERT INTO public.libraries (slug, name, network_mode, circulation_mode, is_active, visibility_level, membership_enabled)
@@ -80,7 +83,12 @@ BEGIN
   v_t := 'T1 objets et droits';
   BEGIN
     SELECT mode INTO v_txt FROM private.double_facteur_reglage WHERE id;
-    IF v_txt IS DISTINCT FROM 'off' THEN RAISE EXCEPTION 'mode livré %', v_txt; END IF;
+    IF v_txt IS DISTINCT FROM 'facteurs' THEN RAISE EXCEPTION 'mode après activation %', v_txt; END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_db_role_setting s JOIN pg_roles r ON r.oid = s.setrole
+                    WHERE r.rolname = 'authenticator' AND s.setdatabase = 0
+                      AND 'pgrst.db_pre_request=private.fn_avant_requete' = ANY (s.setconfig)) THEN
+      RAISE EXCEPTION 'fonction d''avant-requête non branchée sur authenticator';
+    END IF;
     SELECT prosecdef INTO v_b FROM pg_proc WHERE oid = 'private.fn_avant_requete()'::regprocedure;
     IF v_b THEN RAISE EXCEPTION 'fn_avant_requete devrait être INVOKER'; END IF;
     IF NOT has_function_privilege('anon', 'private.fn_avant_requete()', 'EXECUTE')
@@ -141,15 +149,19 @@ BEGIN
         jsonb_strip_nulls(jsonb_build_object('sub', v_rec.sub, 'role', v_rec.role, 'aal', v_rec.aal))::text, true);
       PERFORM set_config('request.path', v_rec.chemin, true);
       BEGIN
-        PERFORM private.fn_avant_requete(); v_state := 'passe'; v_txt := NULL;
-      EXCEPTION WHEN OTHERS THEN v_state := SQLSTATE; v_txt := SQLERRM; END;
+        PERFORM private.fn_avant_requete(); v_state := 'passe'; v_txt := NULL; v_det := NULL;
+      EXCEPTION WHEN OTHERS THEN
+        v_state := SQLSTATE; v_txt := SQLERRM;
+        GET STACKED DIAGNOSTICS v_det = PG_EXCEPTION_DETAIL;
+      END;
       PERFORM set_config('request.jwt.claims', '', true);
       PERFORM set_config('request.path', '', true);
       IF (v_rec.attendu = 'passe' AND v_state = 'passe')
-         OR (v_rec.attendu = 'refus' AND v_state = 'PGRST' AND (v_txt::jsonb ->> 'code') = 'AAL2_REQUIRED') THEN
+         OR (v_rec.attendu = 'refus' AND v_state = 'PGRST' AND (v_txt::jsonb ->> 'code') = 'AAL2_REQUIRED'
+             AND (v_det::jsonb ->> 'status') = '403' AND jsonb_typeof(v_det::jsonb -> 'headers') = 'object') THEN
         v_passed := v_passed + 1;
       ELSE
-        v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : attendu %s, obtenu %s %s', v_rec.attendu, v_state, v_txt));
+        v_failed := v_failed + 1; v_failures := v_failures || (v_t || format(' : attendu %s, obtenu %s %s %s', v_rec.attendu, v_state, v_txt, v_det));
       END IF;
     EXCEPTION WHEN OTHERS THEN
       PERFORM set_config('request.jwt.claims', '', true); PERFORM set_config('request.path', '', true);
