@@ -9,49 +9,48 @@ project_id = "anarbib"
 #
 # Référence : https://supabase.com/docs/guides/cli/config#functions.function_name.verify_jwt
 #
-# Convention :
-#   - verify_jwt = false         pour les fonctions appelées par des webhooks
-#                                internes (DB → Edge via x-webhook-secret) ou
-#                                des intégrations qui n'utilisent pas de JWT
-#                                Supabase Auth.
-#   - verify_jwt non déclaré      pour les fonctions appelées par le frontend
-#     (default = true)           authentifié (utilisent le JWT Supabase Auth).
+# ⚠️ verify_jwt = true NE PROTÈGE RIEN (mesuré en production le 13/10/2026,
+# B43/B44). La passerelle laisse passer une requête SANS aucun en-tête
+# Authorization dès que l'apikey est la clé publiable — qui est publique, elle
+# est dans le bundle du site. Elle ne refuse qu'un JWT mal formé. Une fonction
+# au défaut est donc joignable par n'importe qui sur Internet, sans compte.
+# L'ancien commentaire (« verify_jwt non déclaré = frontend authentifié, JWT
+# Supabase Auth obligatoire ») était faux.
 #
-# RÉCONCILIÉ LE 2026-08-30 (item B6). Le fichier était JUSTE ; ce sont les
-# chiffres de ce commentaire qui avaient vieilli, et le backlog en avait conclu
-# à tort que « 18 des 48 fonctions déployées ne sont pas déclarées du tout ».
-# Ne pas déclarer une fonction n'est pas un oubli : c'est la façon de lui laisser
-# le défaut de la plateforme, qui est le réglage le PLUS fermé. Déclarer les 48
-# ajouterait du bruit et une seconde source de vérité à tenir à jour.
+# Règle : la protection est DANS la fonction, jamais dans ce fichier. Toute
+# fonction, déclarée ici ou non, a l'une de ces gardes, AVANT de lire le corps
+# et avant tout geste à la clé de service ou tout appel sortant :
+#   - secret de tâche (x-webhook-secret, x-import-secret…) : notifieurs et
+#     tâches appelés par la base ou par cron — voir _shared/core/webhook.ts ;
+#   - session réelle : _shared/core/session-reelle.ts (sessionManquante,
+#     échec fermé, couvre aussi la double authentification) — relais vers des
+#     services tiers (métadonnées, capas, autorités, portraits, géocodage,
+#     empreintes audio, fetch-url-metadata) ;
+#   - administration du réseau : _shared/core/admin-reseau.ts
+#     (appelantAdministreLeReseau) — probe-partner-catalog ;
+#   - première requête sous le jeton de l'appelant, à une RPC qu'anon ne peut
+#     pas exécuter (export-catalog-lote, export-fonds-bundle,
+#     deposit-fonds-direct, attach-received-asset, revoke-digital-asset,
+#     notify-library-invitation) ;
+#   - fonctions publiques par nature (login, register, OAI-PMH, OPDS, RSS,
+#     formulaires publics) : leur propre garde (auth_rate_limits, Altcha,
+#     fn_oai_harvestable_*…).
+# La liste des fonctions laissées au défaut est FERMÉE et tenue par
+# src/tests/session-reelle-relais.test.js : une fonction nouvelle sans section
+# ci-dessous fait échouer la CI tant qu'elle n'est pas rangée dans une famille.
 #
-# Relevé du 2026-08-30 (48 fonctions déployées, `supabase functions list`) :
-#   * 31 déclarées ici, toutes à false, et toutes à false en production ;
-#   * 17 non déclarées, toutes à true en production (le défaut) ;
-#   * AUCUN désaccord entre ce fichier et la production, dans un sens ou dans
-#     l'autre — aucune déclaration orpheline, aucune valeur divergente.
-# Les listes nominatives ci-dessous datent du 07/05 et n'ont pas été refaites :
-# elles illustrent la règle, elles ne l'inventorient plus. La source de vérité
-# est la liste des sections [functions.*] de ce fichier, pas ce commentaire.
+# À quoi sert alors ce fichier : verify_jwt = false est OBLIGATOIRE pour toute
+# fonction appelée sans JWT (base via pg_net, cron, moissonneurs, liens dans
+# les courriels, formulaires publics) — sinon la passerelle répond 401. Le
+# laisser au défaut ne ferme rien de plus.
 #
-# Inventaire illustratif au 2026-05-07 :
+# Relevé du 13/10/2026 : 52 dossiers sous supabase/functions/ ; 38 déclarés
+# ci-dessous, tous à false ; 13 au défaut (true) + `main`, le routeur de
+# l'auto-hébergement (non déployé sur la plateforme). La source de vérité est
+# la liste des sections [functions.*] de ce fichier, pas ce commentaire.
 #
-#   verify_jwt: false  (déclarées ci-dessous — 36 au 01/09/2026)
-#     - notify-event, notify-internal-task, notify-library-request,
-#       notify-weekly-report, notify-network-weekly-report,
-#       notify-document-permission-request,
-#       notify-interlibrary-loan, notify-oai-opening  (8 mailers via webhook secret)
-#     - bn_isbn_lookup, process-partner-catalog-import,
-#       read-digital-asset, fetch-url-metadata, oai-pmh-provider
-#       (5 utilitaires publics ou avec auth interne custom ; oai-pmh-provider
-#        = endpoint OAI-PMH moissonnable par des harvesters externes sans JWT,
-#        gate applicatif via fn_oai_harvestable_* — paquet OAI-O2, 12/06/2026)
-#
-#   verify_jwt: true   (AUCUNE déclaration nécessaire — 15 au 01/09/2026)
-#     - register (création de compte, JWT Supabase obligatoire)
-#     - probe-partner-catalog
-#     - catalog_metadata_lookup
-#     - cover_lookup (recherche de capas multi-sources, appel frontend authentifié)
-#     - login (Edge wrapper d'auth)
+# ⚠️ Modifier ce fichier fait redéployer TOUTES les fonctions par la CI
+# (deployer-backend.sh : config.toml modifié = redéploiement complet).
 #
 # =============================================================================
 # Mailers (déclenchés par webhook secret depuis pg_net via fn_dispatch_*)
