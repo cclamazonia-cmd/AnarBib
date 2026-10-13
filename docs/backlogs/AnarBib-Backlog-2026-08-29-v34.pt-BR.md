@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-14** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-14** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -22,7 +22,7 @@
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 5
-    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 5
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-14.** **41 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H2, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-14.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1083,7 +1083,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **H34** | Publicar um lote importado grande leva minutos: cada exemplar publicado recalcula a disponibilidade da rede e relê todos os números de tombo | `P2` | A verificar |
-| **H2** | Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro | `P1` | Bloqueado |
 | **H6** | Alinhar os vocabulários militantes que não se conhecem | `P2` | Aberto |
 | **H12** | As listas fora do tesauro da FICEDL — municípios do Bettini, lugares de edição do Bianco: pedir a exportação como está, nunca a integração | `P3` | Aberto |
 | **H28** | Um arquivo MARC ISO 2709 é importado: o formato detectado é aceito pela base | `P1` | A verificar |
@@ -1113,28 +1112,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Depois de **H33**. Antes da importação completa da DIRA.
 
 *Remissões : `supabase/migrations` · `tests/sql`*
-
-#### H2 — Colocar à FICEDL as sete questões que bloqueiam a exportação do tesauro
-
-`P1` Prioritário · Estado : **Bloqueado** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** A exportação completa dos 620 descritores nos dois formatos está a **uma noite de trabalho** — assim que as sete questões tiverem resposta. Estão escritas e ninguém ainda as colocou.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** As sete: a forma dos identificadores; **a hierarquia, que é a verdadeira questão**; o estatuto da faceta «datas»; o destino dos 2 842 vínculos para seis catálogos; o grego romanizado; a licença; e a maneira como o arquivo se regenera.
-
-**Por que importa.** De 148 descritores com rótulo arborescente, **93 pais são encontrados e 55 são inencontráveis**: «arte», «economia», «guerras», «literatura», «imprensa», «sindicalismo» não são descritores, ou têm outro nome. Visto de fora, **a hierarquia não é um dado, é uma convenção de exibição numa cadeia de caracteres** — e não se pode escrever `skos:broader` honestamente sobre isso. Só a FICEDL pode dizer se o site mantém uma verdadeira relação pai-filho.
-
-**O que conta como terminado.**
-
-- As sete questões estão colocadas, com a auditoria de qualidade produzida na primeira coleta em anexo — **as correções pertencem à fonte, não às cópias**.
-- Quatro anomalias vistas de passagem são reportadas: dois sites diferentes sob o mesmo rótulo «catálogo do CCL»; os arquivos do *Monde libertaire* aparecendo duas vezes por termo sob duas formas de endereço; `mot228` («populações autóctones») presente em duas facetas; 29 rótulos portugueses com asterisco, ponto de interrogação ou espaço final.
-- A questão 7 é a mais rentável: um esqueleto SPIP que imprime os termos em CSV resolve também a carga de robôs — **uma requisição em vez de 620, por consumidor e por atualização**, para meia jornada de trabalho do lado da FICEDL.
-
-**Dependências.** Bloqueia **H3**. A colocar em Bolonha ou antes.
-
-*Remissões : `NOTE_export_thesaurus_questions_ouvertes_2026-08-28`*
 
 #### H6 — Alinhar os vocabulários militantes que não se conhecem
 
@@ -1861,6 +1838,7 @@ CI verde. |
 | B43 | 2026-10-13 | **Fechado em 13/10, medido em produção.** `probe-partner-catalog` não controlava quem chamava: sem nenhum cabeçalho Authorization, só a chave publicável, qualquer pessoa lia `catalog_partners`, reescrevia as capacidades e disparava requisições externas. Commit `38c8bf2c`: verificação « administração da rede » perguntada à base com o token de quem chama, antes de qualquer gesto com a chave de serviço; a resposta não devolve mais a linha inteira; teste (7). Verificado às 21h37: sem Authorization → 403, chave publicável → 403. **Decisão de Xavier (13/10): mantida**, reservada à administração da rede. |
 | B44 | 2026-10-13 | **Fechado em 13/10, medido em produção.** `verify_jwt = true` não exige sessão: só a chave publicável basta. Seis funções eram retransmissores abertos a toda a Internet para serviços externos, mais `fetch-url-metadata`. Commit `dbe8dc28`: verificação de sessão real antes de qualquer chamada externa, com falha fechada; teste com lista fechada. Nenhuma tela pública afetada. Verificado às 23h00: as sete respondem 401 `auth_required` sem sessão. |
 | B45 | 2026-10-13 | **Fechado em 13/10, medido em produção.** Continuação de B44. *(1)* Endereços de saída: `cover_lookup` (`pdf`, `store`, miniaturas de og:image) e `fetch-url-metadata` passam por `_shared/core/adresse-sortante.ts` — faixas não públicas IPv4/IPv6, nomes locais e de um só rótulo recusados, nome resolvido (todas as respostas públicas), cada redirecionamento verificado de novo, leitura limitada; falha fechada. Testado no edge-runtime v1.77.1 com DNS real. Fica fora de alcance o rebinding DNS entre verificação e conexão. *(2)* `geocode` conta por conta (`geocode_user`, SHA-256 do `sub`), não mais por IP; migração `20261013211232`. Commit `090e0350`, verificado às 23h55. Caminho com sessão confirmado por Xavier em 14/10 (capa e metadados respondem). |
+| H2 | 2026-10-14 | **Fechado em 14/10: o e-mail partiu.** Xavier enviou à fonte o ponto longo prometido em 19/09: cronologia do site (de 3 de setembro a 13 de outubro, oscila), a sonda diária, a cópia de 3 de setembro oferecida, as respostas de 7 de setembro, a releitura de Ludwig, **as sete questões na forma revista**, cada uma com uma resposta por omissão, e quatro anomalias verificadas no instantâneo. Enquadramento de Xavier: as respostas pedem-se à pessoa que mantém o site, não à «federação». **A continuação é H3**: a exportação completa segue a resposta à questão dos grupos SPIP, e será entregue à fonte para ficar ao lado das páginas de onde sai. |
 
 ---
 
@@ -1892,4 +1870,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-14. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-14. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
