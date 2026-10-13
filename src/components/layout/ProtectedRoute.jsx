@@ -2,6 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { readSessionEndNotice } from '@/lib/sessionEndNotice';
 import { Spinner } from '@/components/ui';
+import { codeDeuxiemeFacteurRequis } from '@/lib/doubleFacteur';
 
 // ONBO — pages accessibles pendant la constitution. Tant que le compte est
 // 'coordenador_em_constituicao', son unique chantier est l'atelier : on le/la
@@ -10,7 +11,7 @@ import { Spinner } from '@/components/ui';
 const CONSTITUTION_ALLOWED = ['/atelier', '/conta'];
 
 export function ProtectedRoute({ children }) {
-  const { user, profile, loading, recovery } = useAuth();
+  const { session, user, profile, loading, recovery } = useAuth();
   const { pathname, search, hash } = useLocation();
   // 05/10/2026 : le lien d'un courriel ouvert sans session menait à la
   // connexion, puis à /conta : la page demandée (et son #tab) était perdue.
@@ -46,6 +47,14 @@ export function ProtectedRoute({ children }) {
       return <Navigate to={`/login${next}`} replace />;
     }
     return <Navigate to={`/cadastro${next}`} replace />;
+  }
+
+  // B42 (13/10/2026) — compte à double authentification dont la session n'est
+  // qu'en aal1 (onglet fermé à l'étape du code, rechargement) : /login demande
+  // le code puis revient ici grâce à next. Garde d'écran seulement : l'exigence
+  // côté serveur est au lot 2.
+  if (codeDeuxiemeFacteurRequis(session)) {
+    return <Navigate to={`/login${next}`} replace />;
   }
 
   // Redirection constitution : appliquée seulement une fois le profil chargé

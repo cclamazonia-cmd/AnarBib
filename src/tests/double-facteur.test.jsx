@@ -1,0 +1,178 @@
+// ═══════════════════════════════════════════════════════════
+// AnarBib — B42, lot 1 (13/10/2026) : la double authentification (TOTP).
+//   * src/lib/doubleFacteur.js : quand un code est dû (facteur vérifié ET
+//     jeton aal1), la forme du code, le secret par groupes, la traduction des
+//     refus de Supabase Auth ;
+//   * ContaDoubleFacteur (Mon compte) : inscription = enroll puis premier
+//     code ; une inscription abandonnée est retirée avant d'en commencer une
+//     autre ; retrait d'un appareil ;
+//   * DoubleFacteurDefi (connexion) : code mal formé refusé sans appel, refus
+//     de GoTrue traduit ;
+//   * LoginPage demande le code AVANT toute autre bascule ; ProtectedRoute
+//     renvoie une session aal1 vers /login.
+// ═══════════════════════════════════════════════════════════
+
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+
+const mfa = {
+  listFactors: vi.fn(),
+  enroll: vi.fn(),
+  challengeAndVerify: vi.fn(),
+  unenroll: vi.fn(async () => ({ data: {}, error: null })),
+};
+vi.mock('@/lib/supabase', () => ({
+  supabase: { auth: { mfa: new Proxy({}, { get: (_, k) => (...a) => mfa[k](...a) }) } },
+  SUPABASE_URL: 'https://exemple.invalid',
+}));
+
+import {
+  niveauDuJeton, facteursVerifies, codeDeuxiemeFacteurRequis, nettoyerCode, codeBienForme,
+  secretParGroupes, cleErreurDoubleFacteur,
+} from '@/lib/doubleFacteur';
+import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
+import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
+
+const RACINE = path.resolve(__dirname, '../..');
+const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
+const fr = JSON.parse(lire('src/i18n/locales/fr.json'));
+const avecIntl = (el) => render(<IntlProvider locale="fr" messages={fr}>{el}</IntlProvider>);
+
+const jeton = (charge) => `e30.${Buffer.from(JSON.stringify(charge)).toString('base64url')}.signature`;
+const VERIFIE = { id: 'f-1', factor_type: 'totp', status: 'verified', friendly_name: 'Téléphone', created_at: '2026-10-13T10:00:00Z' };
+const INACHEVE = { id: 'f-0', factor_type: 'totp', status: 'unverified', friendly_name: 'Appareil 1', created_at: '2026-10-13T09:00:00Z' };
+const session = (aal, factors) => ({ access_token: jeton({ sub: 'u', aal, user_metadata: { nom: 'Élise' } }), user: { id: 'u', factors } });
+
+afterEach(() => { cleanup(); Object.values(mfa).forEach((f) => f.mockReset()); mfa.unenroll.mockImplementation(async () => ({ data: {}, error: null })); });
+
+describe('doubleFacteur.js — quand un code est dû', () => {
+  it('lit le niveau du jeton, accents compris ; un jeton illisible ne vaut rien', () => {
+    expect(niveauDuJeton(jeton({ aal: 'aal2', nom: 'Ñandú' }))).toBe('aal2');
+    expect(niveauDuJeton('pas-un-jeton')).toBeNull();
+    expect(niveauDuJeton(undefined)).toBeNull();
+  });
+
+  it('seuls les facteurs vérifiés comptent', () => {
+    expect(facteursVerifies({ factors: [VERIFIE, INACHEVE] })).toEqual([VERIFIE]);
+    expect(facteursVerifies(null)).toEqual([]);
+  });
+
+  it('code dû = facteur vérifié ET jeton aal1', () => {
+    expect(codeDeuxiemeFacteurRequis(null)).toBe(false);
+    expect(codeDeuxiemeFacteurRequis(session('aal1', []))).toBe(false);
+    expect(codeDeuxiemeFacteurRequis(session('aal1', [INACHEVE]))).toBe(false);
+    expect(codeDeuxiemeFacteurRequis(session('aal1', [VERIFIE]))).toBe(true);
+    expect(codeDeuxiemeFacteurRequis(session('aal2', [VERIFIE]))).toBe(false);
+  });
+
+  it('la forme du code et du secret', () => {
+    expect(nettoyerCode(' 123 456 ')).toBe('123456');
+    expect(codeBienForme('123-456')).toBe(true);
+    expect(codeBienForme('12345')).toBe(false);
+    expect(codeBienForme('12345a')).toBe(false);
+    expect(secretParGroupes('ABCDEFGHIJ')).toBe('ABCD EFGH IJ');
+  });
+
+  it('chaque refus a sa clé, et toutes les clés existent dans les dix locales', () => {
+    const codes = ['mfa_verification_failed', 'mfa_challenge_expired', 'mfa_factor_name_conflict', 'too_many_enrolled_mfa_factors',
+      'insufficient_aal', 'mfa_totp_enroll_not_enabled', 'over_request_rate_limit', 'inconnu'];
+    const cles = new Set([...codes.map((code) => cleErreurDoubleFacteur({ code })), cleErreurDoubleFacteur(null)]);
+    expect(cles.size).toBe(8);
+    for (const loc of ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR']) {
+      const msgs = JSON.parse(lire(`src/i18n/locales/${loc}.json`));
+      for (const c of cles) expect(msgs[c], `${loc} ${c}`).toBeTruthy();
+    }
+  });
+});
+
+describe('ContaDoubleFacteur — Mon compte', () => {
+  it('inactive : on inscrit (inscription abandonnée retirée d’abord), on scanne, le premier code vérifie', async () => {
+    mfa.listFactors.mockResolvedValue({ data: { all: [INACHEVE] }, error: null });
+    mfa.enroll.mockResolvedValue({ data: { id: 'f-2', totp: { qr_code: 'data:image/svg+xml;utf-8,<svg/>', secret: 'JBSWY3DPEHPK3PXP' } }, error: null });
+    mfa.challengeAndVerify.mockResolvedValue({ data: {}, error: null });
+    avecIntl(<ContaDoubleFacteur />);
+
+    await screen.findByText(fr['twoFactor.status.off']);
+    fireEvent.click(screen.getByText(fr['twoFactor.enroll.start']));
+    await screen.findByAltText(fr['twoFactor.enroll.qrAlt']);
+    expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'f-0' });
+    expect(mfa.enroll).toHaveBeenCalledWith({ factorType: 'totp', friendlyName: 'Appareil 1', issuer: 'AnarBib' });
+    expect(screen.getByText('JBSW Y3DP EHPK 3PXP')).toBeTruthy();
+
+    const champ = document.querySelector('input[autocomplete="one-time-code"]');
+    fireEvent.change(champ, { target: { value: '123 456' } });
+    mfa.listFactors.mockResolvedValue({ data: { all: [{ ...VERIFIE, id: 'f-2' }] }, error: null });
+    fireEvent.submit(champ.closest('form'));
+    await screen.findByText(fr['twoFactor.enroll.done']);
+    expect(mfa.challengeAndVerify).toHaveBeenCalledWith({ factorId: 'f-2', code: '123456' });
+  });
+
+  it('active : un appareil listé, un second conseillé, le retrait se confirme', async () => {
+    mfa.listFactors.mockResolvedValue({ data: { all: [VERIFIE] }, error: null });
+    avecIntl(<ContaDoubleFacteur />);
+    await screen.findByText('Téléphone');
+    expect(screen.getByText(fr['twoFactor.backupAdvice'])).toBeTruthy();
+    expect(screen.getByText(fr['twoFactor.enroll.addAnother'])).toBeTruthy();
+    fireEvent.click(screen.getByText(fr['twoFactor.remove.button']));
+    expect(mfa.unenroll).not.toHaveBeenCalled();
+    mfa.listFactors.mockResolvedValue({ data: { all: [] }, error: null });
+    fireEvent.click(screen.getByText(fr['twoFactor.remove.yes']));
+    await screen.findByText(fr['twoFactor.remove.done']);
+    expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'f-1' });
+  });
+
+  it('retrait refusé en aal1 : le refus se dit', async () => {
+    mfa.listFactors.mockResolvedValue({ data: { all: [VERIFIE] }, error: null });
+    mfa.unenroll.mockResolvedValue({ data: null, error: { code: 'insufficient_aal' } });
+    avecIntl(<ContaDoubleFacteur />);
+    fireEvent.click(await screen.findByText(fr['twoFactor.remove.button']));
+    fireEvent.click(screen.getByText(fr['twoFactor.remove.yes']));
+    await screen.findByText(fr['twoFactor.error.needCode']);
+  });
+});
+
+describe('DoubleFacteurDefi — le code à la connexion', () => {
+  it('code mal formé : refusé sans appel ; mauvais code : refus traduit', async () => {
+    avecIntl(<DoubleFacteurDefi session={session('aal1', [VERIFIE])} />);
+    const champ = document.querySelector('input[autocomplete="one-time-code"]');
+    fireEvent.change(champ, { target: { value: '12' } });
+    fireEvent.submit(champ.closest('form'));
+    await screen.findByText(fr['twoFactor.error.malformed']);
+    expect(mfa.challengeAndVerify).not.toHaveBeenCalled();
+
+    mfa.challengeAndVerify.mockResolvedValue({ data: null, error: { code: 'mfa_verification_failed' } });
+    fireEvent.change(champ, { target: { value: '654321' } });
+    fireEvent.submit(champ.closest('form'));
+    await screen.findByText(fr['twoFactor.error.badCode']);
+    expect(mfa.challengeAndVerify).toHaveBeenCalledWith({ factorId: 'f-1', code: '654321' });
+  });
+
+  it('plusieurs appareils : on choisit lequel', async () => {
+    const autre = { ...VERIFIE, id: 'f-3', friendly_name: 'KeePassXC' };
+    mfa.challengeAndVerify.mockResolvedValue({ data: {}, error: null });
+    avecIntl(<DoubleFacteurDefi session={session('aal1', [VERIFIE, autre])} />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'f-3' } });
+    const champ = document.querySelector('input[autocomplete="one-time-code"]');
+    fireEvent.change(champ, { target: { value: '111111' } });
+    fireEvent.submit(champ.closest('form'));
+    await waitFor(() => expect(mfa.challengeAndVerify).toHaveBeenCalledWith({ factorId: 'f-3', code: '111111' }));
+  });
+});
+
+describe('le code passe avant tout', () => {
+  it('LoginPage : vue mfa demandée avant le changement de mot de passe forcé et la redirection', () => {
+    const src = lire('src/pages/public/LoginPage.jsx');
+    const effet = src.slice(src.indexOf('if (view !== \'login\') return;'));
+    expect(effet.indexOf('codeDeuxiemeFacteurRequis(session)')).toBeGreaterThan(-1);
+    expect(effet.indexOf('codeDeuxiemeFacteurRequis(session)')).toBeLessThan(effet.indexOf('must_change_password === true'));
+    expect(src).toMatch(/view === 'mfa' && \(\s*<DoubleFacteurDefi/);
+  });
+
+  it('ProtectedRoute : session aal1 d’un compte à facteur renvoyée vers /login avec next', () => {
+    const src = lire('src/components/layout/ProtectedRoute.jsx');
+    expect(src).toMatch(/if \(codeDeuxiemeFacteurRequis\(session\)\) \{\s*return <Navigate to=\{`\/login\$\{next\}`\} replace \/>;/);
+  });
+});

@@ -12,6 +12,8 @@ import { Card, Input, Button, Spinner } from '@/components/ui';
 import { normalizePublicId } from '@/lib/publicId';
 import { clearAuthHash } from '@/lib/clearAuthHash';
 import { hashHintsRecovery, decideHashRecovery } from '@/lib/recoveryView';
+import { codeDeuxiemeFacteurRequis } from '@/lib/doubleFacteur';
+import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
 import { readSessionEndNotice, acknowledgeWhenSeen } from '@/lib/sessionEndNotice';
 
 
@@ -74,7 +76,7 @@ export default function LoginPage() {
   // (session zombie en localStorage, refresh accidentel, etc.), le useEffect
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
-  const { user, profile, loading: authLoading, recovery, exitRecovery } = useAuth();
+  const { session, user, profile, loading: authLoading, recovery, exitRecovery, signOut } = useAuth();
   // L'avis ne s'annonce qu'une fois. Dès qu'il est réellement affiché — mêmes
   // conditions que le bandeau plus bas, et onglet visible — on le consomme et on
   // retire `reason` de l'adresse. Il reste à l'écran pour cette visite (il a été
@@ -249,6 +251,15 @@ export default function LoginPage() {
     if (recovery) return;
     if (!user) return;
     if (view !== 'login') return;
+    // B42 (13/10/2026) — compte à double authentification : la session sortie
+    // de l'EF login n'est qu'en aal1. On demande le code AVANT toute autre
+    // bascule (y compris force-change). Une session zombie en aal1 passe ici
+    // aussi : ProtectedRoute renvoie vers /login tant que le code manque.
+    if (codeDeuxiemeFacteurRequis(session)) {
+      setView('mfa');
+      setLoginLoading(false);
+      return;
+    }
     // Premier login avec mdp provisoire : bascule vers le formulaire dedie.
     if (profile?.must_change_password === true) {
       setView('force-change');
@@ -278,7 +289,16 @@ export default function LoginPage() {
     // prennent le relais. On ne revient JAMAIS au formulaire une fois authentifie.
     const fwd = setTimeout(() => navigate(nextUrl), 4000);
     return () => clearTimeout(fwd);
-  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady, recovery]);
+  }, [authLoading, session, user, profile, view, navigate, nextUrl, libraryLoading, themeReady, recovery]);
+
+  // B42 — code accepté : auth-js a émis MFA_CHALLENGE_VERIFIED, AuthContext
+  // porte la session aal2. On rend la main à la vue 'login', dont l'effet
+  // ci-dessus fait la redirection habituelle. Déconnexion pendant le code :
+  // plus de session, on revient au formulaire.
+  useEffect(() => {
+    if (view !== 'mfa' || authLoading) return;
+    if (!session || !codeDeuxiemeFacteurRequis(session)) setView('login');
+  }, [view, session, authLoading]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -580,12 +600,16 @@ export default function LoginPage() {
               >
                 {view === 'force-change'
                   ? t({ id: 'auth.forceChange.pageTitle' })
-                  : t({ id: 'auth.login.title' })}
+                  : view === 'mfa'
+                    ? t({ id: 'twoFactor.challenge.title' })
+                    : t({ id: 'auth.login.title' })}
               </h1>
               <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
                 {view === 'force-change'
                   ? t({ id: 'auth.forceChange.pageSubtitle' })
-                  : t({ id: 'auth.login.subtitle' })}
+                  : view === 'mfa'
+                    ? t({ id: 'twoFactor.challenge.subtitle' })
+                    : t({ id: 'auth.login.subtitle' })}
               </p>
             </>
           )}
@@ -611,7 +635,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {view !== 'force-change' && !showTransition && (
+          {view !== 'force-change' && view !== 'mfa' && !showTransition && (
             <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
               <Button variant="secondary" onClick={() => navigate('/')}>
                 {t({ id: 'auth.backToCatalog' })}
@@ -756,6 +780,10 @@ export default function LoginPage() {
                 {resetMsg.text && <div style={ms(resetMsg.kind)}>{resetMsg.text}</div>}
               </form>
             </div>
+          )}
+
+          {view === 'mfa' && (
+            <DoubleFacteurDefi session={session} onDeconnexion={signOut} />
           )}
 
           {view === 'force-change' && (

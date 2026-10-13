@@ -41,6 +41,7 @@ import TabCurso from '@/pages/account/TabCurso';
 import TabReservar from '@/pages/account/TabReservar';
 import ContaDecisions from '@/pages/account/ContaDecisions';
 import ContaMotDePasse from '@/pages/account/ContaMotDePasse';
+import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
 import ContaCotisation from '@/pages/account/ContaCotisation';
 import ContaDepot from '@/pages/account/ContaDepot';
 import ContaSuppression from '@/pages/account/ContaSuppression';
@@ -1071,6 +1072,9 @@ export default function AccountPage() {
 
               {/* ── Lot 26.1a — Changement de mot de passe ────────── */}
               <ContaMotDePasse pwdNew={pwdNew} setPwdNew={setPwdNew} pwdConfirm={pwdConfirm} setPwdConfirm={setPwdConfirm} pwdSaving={pwdSaving} pwdMsg={pwdMsg} pwdMsgIsError={pwdMsgIsError} handleChangePassword={handleChangePassword} />
+
+              {/* ── B42 — Double authentification (TOTP), juste sous le mot de passe ── */}
+              <ContaDoubleFacteur />
 
               {/* ── Cotisation associative ─────────────── */}
               {/* Paquet E.4.5 : ajoute le check availability.cotisacoes (depend de
