@@ -400,9 +400,9 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Decisão de Xavier (12/10/2026): obrigatória para as contas de equipe, opcional para leitores; TOTP nativo do Supabase Auth, sem SMS nem fornecedor. Lote 1 entregue em 13/10 (`39cb6328`): Minha conta e código no login. Lote 2 entregue em 13/10 (`11bbbaa0`), DESLIGADO: função de pré-requisição do PostgREST, modo `off`, inscrição obrigatória no login, aba Rede. A função NÃO está conectada.
 
-*Verificado : 13/10 — lotes 1 e 2 implantados e verificados; auditoria das Edge Functions implantada (`069b76ea`).*
+*Verificado : 13/10 — lotes 1 e 2 implantados e verificados; auditoria das Edge Functions implantada (`069b76ea`). Política do Storage aplicada pela CI (`20261013182456`).*
 
-**O que é.** Lote 3: política restritiva em `storage.objects` pelo painel; auditoria das Edge Functions FEITA em 13/10 (`069b76ea`); aviso às 15 contas de equipe; migração de ativação (modo `facteurs`, depois `equipes` na data fixada por Xavier); denylist do backup.
+**O que é.** Lote 3: política restritiva em `storage.objects` FEITA em 13/10 (`e0a9b0b5`); auditoria das Edge Functions FEITA em 13/10 (`069b76ea`); aviso às 15 contas de equipe; migração de ativação (modo `facteurs`, depois `equipes` na data fixada por Xavier); denylist do backup.
 
 **Por que importa.** Uma senha reutilizada e vazada abre hoje os dados de leitura de uma biblioteca inteira, ou da rede. Só a tela não protege nada; daí o controle único antes do PostgREST.
 
