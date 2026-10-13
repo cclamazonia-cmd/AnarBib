@@ -91,6 +91,10 @@ export default function CatalogPage() {
   });
   const [libMenuOpen, setLibMenuOpen] = useState(false);
   const libMenuRef = useRef(null);
+  // 13/10/2026 : la réponse d'une requête dépassée n'écrit plus l'écran (course),
+  // et un filtre de bibliothèque mémorisé attend la liste des bibliothèques.
+  const fetchSeq = useRef(0);
+  const [libraryOptionsSettled, setLibraryOptionsSettled] = useState(false);
   // G13 (05/10/2026) : les réseaux constitués (FICEDL, RebAL, NORLA…) — slugs de
   // public.networks, mémorisés avec les autres filtres.
   const [networkFilter, setNetworkFilter] = useState(() => (Array.isArray(filterState.networkFilter) ? filterState.networkFilter : []));
@@ -243,6 +247,7 @@ export default function CatalogPage() {
         select: 'slug,name,short_name,city',
         order: 'name.asc',
       });
+      setLibraryOptionsSettled(true);
       if (data?.length) {
         setLibraryOptions([
           { value: '__all__', label: t({ id: 'catalog.avail.all' }) },
@@ -322,6 +327,13 @@ export default function CatalogPage() {
 
   // Fetch
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
+    // Au retour sur la page, le filtre mémorisé est là avant la liste des
+    // bibliothèques : sans attendre, une requête SANS filtre partait, puis la
+    // bonne — et la première, plus lourde, répondait en dernier et écrasait
+    // l'écran (MLEG choisie, BTL et BLMF affichées, 13/10).
+    if (libraryFilter.length > 0 && !libraryOptionsSettled) return;
+    const seq = ++fetchSeq.current;
+    const perime = () => seq !== fetchSeq.current;
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     // Remis à zéro ici plutôt que sur chaque chemin de succès : si l'API répond,
     // le mode dégradé n'est simplement jamais réactivé plus bas.
@@ -340,6 +352,7 @@ export default function CatalogPage() {
             p_filters, p_sort: worksSortParam(sortValue), p_offset: offset, p_limit: WORKS_PAGE_SIZE, p_lang: locale,
           });
           if (error) throw error;
+          if (perime()) return;
           const page = Array.isArray(data?.works) ? data.works : [];
           const flat = page.flatMap(w => (Array.isArray(w.editions) ? w.editions : []));
           if (append) { setWorks(prev => [...prev, ...page]); setBooks(prev => [...prev, ...flat]); }
@@ -409,6 +422,7 @@ export default function CatalogPage() {
         // pertinence (ordre du RPC) si le tri est « Pertinence » ; sinon on
         // respecte le tri choisi. Pas de pagination serveur dans ce mode.
         if (idConstraint.length === 0) {
+          if (perime()) return;
           if (!append) setBooks([]);
           setTotalFetched(0); setHasMore(false); setTotalCount(0);
         } else {
@@ -420,6 +434,7 @@ export default function CatalogPage() {
             const pos = new Map(rankedIds.map((id, i) => [id, i]));
             rows = [...rows].sort((a, b) => (pos.get(a.book_id) ?? 1e9) - (pos.get(b.book_id) ?? 1e9));
           }
+          if (perime()) return;
           setBooks(rows); setTotalFetched(rows.length); setHasMore(false); setTotalCount(rows.length);
         }
       } else {
@@ -427,6 +442,7 @@ export default function CatalogPage() {
         const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
         if (error) throw error;
         const result = data || [];
+        if (perime()) return;
         if (append) setBooks(prev => [...prev, ...result]);
         else setBooks(result);
         setTotalFetched(offset + result.length);
@@ -435,6 +451,7 @@ export default function CatalogPage() {
         if (serverTotal != null) setTotalCount(serverTotal);
       }
     } catch (err) {
+      if (perime()) return;
       console.error('Catalog fetch error:', err);
       // Mode dégradé : l'API n'a pas répondu. Le front est statique (Codeberg
       // Pages) et embarque un instantané du catalogue produit au build, donc on
@@ -458,12 +475,12 @@ export default function CatalogPage() {
         if (!servi) setBooks([]);
       }
     }
-    finally { setLoading(false); setLoadingMore(false); }
+    finally { if (!perime()) { setLoading(false); setLoadingMore(false); } }
     // libraryShortNames (et pas seulement libraryFilter) DOIT être une dep : sur un
     // lien profond /catalogo/:slug, libraryFilter est posé au montage AVANT le chargement
     // async des options ; libraryShortNames se résout après → sans cette dep, le fetch
     // ne se rejoue pas et le filtre biblio reste inappliqué (course + closure périmée).
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace, collapseEditions, locale]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, libraryOptionsSettled, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace, collapseEditions, locale]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
