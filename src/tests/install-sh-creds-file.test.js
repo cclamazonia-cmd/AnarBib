@@ -14,11 +14,12 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { SITE_CODES } from '../i18n/locales.js';
 
 const racine = new URL('../../', import.meta.url);
 const lire = (p) => readFileSync(new URL(p, racine), 'utf8');
 const script = lire('install.sh');
-const LANGUES = ['fr', 'en', 'pt', 'es', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LANGUES = SITE_CODES;   // les langues d'install.sh = codes du site (install-sh-locales.test.js)
 const chaine = (langue, cle) =>
   (script.match(new RegExp(`^\\s+${langue}:${cle}\\)\\s+(?:echo|printf) "([^"]*)"`, 'm')) || [])[1];
 

@@ -16,11 +16,12 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { SITE_CODES } from '../i18n/locales.js';
 
 const racine = new URL('../../', import.meta.url);
 const lire = (p) => readFileSync(new URL(p, racine), 'utf8');
 const script = lire('install.sh');
-const LANGUES = ['fr', 'en', 'pt', 'es', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LANGUES = SITE_CODES;   // les langues d'install.sh = codes du site (install-sh-locales.test.js)
 
 // Le bloc du menu : de son commentaire d'en-tête à l'initialisation de la bibliothèque.
 const bloc = script.slice(
