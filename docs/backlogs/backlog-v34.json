@@ -13,8 +13,8 @@
     },
     "maj": "2026-10-13",
     "releve": {
-      "date": "2026-10-12",
-      "commit": "91b7e803"
+      "date": "2026-10-13",
+      "commit": "88a962ee"
     }
   },
   "domains": [
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 12 octobre 2026 au soir** (`91b7e803`, mesuré à 22 h 15) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 11/10 à midi, `24b37717`). **La file de CI porte un commit** à l'heure du relevé : 472 migrations appliquées, 473 au dépôt (H33 bis, voisine, poussée à 22 h 01). **Première photo en deux colonnes** : depuis B39, bibliothèques, comptes et circulation se lisent réel / formation par requête, plus par une note. Ce qui a bougé et pourquoi : **la base** — +14 migrations en un jour et demi (le jour le plus chargé du mois : B38, E38, B40, B39, H33, H34 lots 1 et 2, AUT-VAR, la recherche par variantes), +7 fonctions net dont −7 dans `api`, **les avis de sécurité au même total qu'au 11/10 (493, 0029 à 433)** — chaque porte neuve fermée à la pose —, les index « inutilisés » à 363 (390) ; **le catalogue** — −3 notices, −9 autorités, −21 œuvres, toutes par fusion ou retrait sur accord, plus aucune œuvre sans notice ; 22 reprises de notices publiées ; **le réseau** — 5 + 1 bibliothèques, 19 + 4 comptes, 9 / 21 / 22 / 0 ; deux emprunts du jour à la BLMF, le regard de Xavier ; **le dépôt** — +66 commits, +35 fichiers, +20 clés, +174 tests JS, +8 suites SQL. **Clos depuis le 11/10 à midi** : B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 à ce relevé** — quinze clôtures, **49 items, le point le plus bas depuis la v34**. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, provoquée de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), H34 (voisine) ; *à l'écran* : rien — le Panneau et la Bibliothèque sont vus ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16 (la règle du stock), I32 (le rapport du tableau de bord) ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL), K1, K2, K3.",
-      "pt": "**Levantamento de 12 de outubro de 2026 à noite** (`91b7e803`, medido às 22h15) — produção consultada só em leitura e repositório recontado; **todas as linhas remedidas** (anterior: 11/10 ao meio-dia, `24b37717`). **A fila da CI leva um commit**: 472 migrações aplicadas, 473 no repositório (H33 bis, vizinha). **Primeira foto em duas colunas**: desde B39, bibliotecas, contas e circulação leem-se real / formação por consulta. O que mudou: **o banco** — +14 migrações num dia e meio, +7 funções líquidas, **avisos de segurança no mesmo total de 11/10 (493)**, índices «não usados» em 363; **o catálogo** — −3 fichas, −9 autoridades, −21 obras, todas por fusão ou retirada com acordo, nenhuma obra sem ficha; **a rede** — 5 + 1 bibliotecas, 19 + 4 contas, 9 / 21 / 22 / 0; **o repositório** — +66 commits, +35 ficheiros, +20 chaves, +174 testes JS, +8 suítes SQL. **Fechados desde 11/10**: B38, E36, E37, E31, E38, J12, B40, I30, H33, H26, C29, K10, G9, C28, **B39 neste levantamento** — quinze fechos, **49 itens, o ponto mais baixo desde a v34**. **O que falta fechar, e por quem** — *num facto por vir*: F19, F25, H15, H16, H21, H28 (DIRA), H34; *na tela*: nada; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3."
+      "fr": "**Relevé du 13 octobre 2026 au soir** (`88a962ee`, mesuré à 22 h 56) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 12/10 au soir, `91b7e803`). **478 appliquées en production, 479 numérotées au dépôt** : la dernière (`20261013194812`, les locales ont une source en base, session voisine) est dans la file de CI à l'heure du relevé. Ce qui a bougé et pourquoi : **la base** — +6 migrations et +9 fonctions, toutes de la session voisine, pour **B42** (la double authentification exigée côté serveur et sur Storage, 48 politiques Storage, deux tables `private`), la recherche du catalogage et les locales en base ; les avis de sécurité à 499 (+4 portes B42 à l'audit, +2 tables fermées), les index « inutilisés » à 362 ; **le catalogue** — inchangé à l'unité près : aucune notice, autorité, œuvre ni exemplaire créé, fusionné ou retiré, quatre notices modifiées par le catalogage de Xavier, trois reprises publiées ; **le réseau** — identique à la veille, 5 + 1, 19 + 4, 9 / 21 / 22 / 0, et un premier enrôlement TOTP commencé à 23 h, pas encore vérifié ; **le dépôt** — +41 commits, +25 fichiers, +50 clés, +136 tests JS, +4 suites SQL. **La journée** : B42 en trois lots et annoncé aux équipes, **B43 et B44 clos** (le second à 23 h, les sept relais vers des services tiers exigent une vraie session), Storage remonté après sa panne de montage, la recherche manuelle du catalogage enrichie (DBNL, DNB, BN Brasil), les locales à source unique ; de mon côté, la sonde FICEDL a écrit son premier courriel réel — le site flotte — et a été corrigée (un passage par jour), **la course du filtre de bibliothèque au catalogue** vue par Xavier a été corrigée le soir même, et le test « par pages » de H34 ne rougit plus la file. **Le compte** : 51 items (B42 et E39 — la locale roumaine à reprendre — entrés, B43 sorti ; B44, né et clos le même jour, n'y entre que par sa clôture) et 249 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : H34 (voisine, à vérifier), F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), B42 (l'échéance annoncée) ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16, I32 ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL, plus pressant qu'hier), K1, K2, K3.",
+      "pt": "**Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3."
     },
     "photo": [
       {
@@ -377,8 +377,8 @@
             },
             "202",
             {
-              "fr": "toutes avec RLS, 314 policies ; inchangé depuis le 11/10 (B39 a ajouté une colonne, `libraries.is_training`, pas une table).",
-              "pt": "todas com RLS, 314 policies; sem mudança desde 11/10 (B39 acrescentou uma coluna, `libraries.is_training`, não uma tabela)."
+              "fr": "toutes avec RLS, 314 policies ; inchangé depuis le 12/10. **48 politiques sur `storage.objects`** (47 la veille) : B42 lot 3 en a posé une par migration (`20261013182456`), Storage exige désormais la double authentification pour les rôles qui y sont tenus.",
+              "pt": "todas com RLS, 314 policies; sem mudança desde 12/10. **48 políticas em `storage.objects`** (47 na véspera): B42 lote 3 pôs uma por migração."
             }
           ],
           [
@@ -388,8 +388,8 @@
             },
             "13",
             {
-              "fr": "toutes avec RLS ; une seule a une policy (`book_import_baselines_select_staff`), les 12 autres n'en ont pas (avis 0008). Inchangé depuis le 09/10. Le schéma reste fermé à `anon` et à `authenticated`. Le premier tir long de sauvegarde avec `ingest` a eu lieu le 11/10 à 20 h 14 (172 tables dont 13 d'`ingest`, I30) et le premier `restore-test` réel les a rendues toutes (12/10).",
-              "pt": "todas com RLS; só uma tem policy, as outras 12 não (aviso 0008). Sem mudança desde 09/10. O primeiro disparo longo com `ingest` foi em 11/10 às 20h14 (172 tabelas, 13 de `ingest`, I30) e o primeiro `restore-test` real as devolveu todas (12/10)."
+              "fr": "toutes avec RLS ; une seule a une policy, les 12 autres n'en ont pas (avis 0008). Inchangé depuis le 09/10.",
+              "pt": "todas com RLS; só uma tem policy, as outras 12 não (aviso 0008). Sem mudança desde 09/10."
             }
           ],
           [
@@ -399,8 +399,8 @@
             },
             "68",
             {
-              "fr": "inchangé ; 67 en `security_invoker`, une seule sans l'option (`library_email_identity`, qui lit les canaux de courriel pour le personnel). Le `restore-test` du 12/10 les a rendues 68/68 après la deuxième passe (une seule passe en perdait 30).",
-              "pt": "sem mudança; 67 em `security_invoker`, só uma sem a opção (`library_email_identity`). O `restore-test` de 12/10 devolveu-as 68/68 após a segunda passagem (uma só passagem perdia 30)."
+              "fr": "inchangé ; 67 en `security_invoker`, une sans l'option (`library_email_identity`).",
+              "pt": "sem mudança; 67 em `security_invoker`, uma sem a opção (`library_email_identity`)."
             }
           ],
           [
@@ -408,10 +408,10 @@
               "fr": "Fonctions applicatives",
               "pt": "Funções aplicativas"
             },
-            "1 127",
+            "1 136",
             {
-              "fr": "`public` 780 · `api` 202 · `ingest` 112 · `private` 33. Dont **841 SECURITY DEFINER** (842 le 11/10). +7 net depuis le 11/10 à midi, par treize migrations : **−7** dans `api` (B40, sept portes sans appelant supprimées), **+3 dans `private`** (`fn_auteurs_par_nom` et `fn_mots_proches` de la recherche par variantes, `fn_mesures_hors_fixtures` de B39), **+2 dans `ingest`** (H33, H34), **+3 dans `public`** (`tg_libraries_is_training_normaliser`, les formes variantes AUT-VAR, `catalog_author_ids_v1` d'E38 en `api` compris dans le solde). B38 et E38 ont réécrit sans ajouter.",
-              "pt": "`public` 780 · `api` 202 · `ingest` 112 · `private` 33. Das quais **841 SECURITY DEFINER** (842 em 11/10). +7 líquido desde 11/10 ao meio-dia, por treze migrações: **−7** em `api` (B40, sete portas sem chamador apagadas), **+3 em `private`** (busca por variantes, B39), **+2 em `ingest`** (H33, H34), **+3 em `public`**. B38 e E38 reescreveram sem acrescentar."
+              "fr": "`public` 781 · `api` 206 · `ingest` 113 · `private` 36. Dont **846 SECURITY DEFINER** (841 la veille). **+9 depuis le 12/10 au soir**, par six migrations, toutes de la session voisine : B42 lots 2 et 3 (la double authentification s'exige côté serveur, dans `private` et `api`), la recherche des documents du catalogage selon les règles de l'OPAC (`catalogacao_book_ids_v1`), la garde d'`attach-received-asset` (la permission avant la clé de service), les droits de Storage repris après son redémarrage, `fn_supported_locales()` (les locales ont une source en base).",
+              "pt": "`public` 781 · `api` 206 · `ingest` 113 · `private` 36. Das quais **846 SECURITY DEFINER** (841 na véspera). **+9 desde 12/10 à noite**, por seis migrações da sessão vizinha: B42 lotes 2 e 3, a busca de documentos da catalogação, a guarda de `attach-received-asset`, os direitos do Storage, `fn_supported_locales()`."
             }
           ],
           [
@@ -419,10 +419,10 @@
               "fr": "Migrations appliquées",
               "pt": "Migrações aplicadas"
             },
-            "472",
+            "478",
             {
-              "fr": "**472 appliquées en production, 473 numérotées au dépôt** : la dernière (`20261012200132`, H33 bis, session voisine, poussée à 22 h 01) est dans la file de CI à l'heure du relevé. Toutes par la CI (`created_by` vide ; les 57 qui portent un auteur sont antérieures au 24/09). **+14 depuis le 11/10 à midi**, le jour le plus chargé du mois : B38 (11/10), la recherche par variantes et fautes (11/10, voisine), E38 suite et troisième livraison, B40 (sept portes supprimées), le fond de carte dans son seau, **B39**, H33, les formes variantes et Netchaïev (AUT-VAR, voisine), H34 lots 1 et 2, les huit paires au même Wikidata. Dernière appliquée : `20261012173204`.",
-              "pt": "**472 aplicadas em produção, 473 numeradas no repositório**: a última (`20261012200132`, H33 bis, sessão vizinha, 22h01) está na fila da CI na hora do levantamento. Todas pela CI. **+14 desde 11/10 ao meio-dia**, o dia mais carregado do mês: B38, a busca por variantes, E38, B40, o fundo de mapa, **B39**, H33, AUT-VAR, H34 lotes 1 e 2, os oito pares no mesmo Wikidata. Última aplicada: `20261012173204`."
+              "fr": "**478 appliquées en production, 479 numérotées au dépôt** : la dernière (`20261013194812`, les locales ont une source en base, session voisine) est dans la file de CI à l'heure du relevé. Toutes par la CI (`created_by` vide ; les 57 qui portent un auteur sont antérieures au 24/09). **+6 depuis le 12/10 au soir**, toutes du 13/10 et de la session voisine : la recherche des documents du catalogage comme l'OPAC, les droits de Storage repris (Storage a monté le 13/10, épinglé en v1.78.0), B42 côté serveur, B42 Storage, la garde d'`attach-received-asset`, les locales en base. Dernière appliquée au relevé : `20261013182842`.",
+              "pt": "**478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. Todas pela CI. **+6 desde 12/10**, todas de 13/10 e da sessão vizinha: busca da catalogação, direitos do Storage, B42 ×2, guarda de `attach-received-asset`, locales na base."
             }
           ],
           [
@@ -432,8 +432,8 @@
             },
             "43",
             {
-              "fr": "actifs, aucun inactif ; inchangé depuis le 09/10 — aucune migration du 11 ou du 12/10 ne planifie de job.",
-              "pt": "ativos, nenhum inativo; sem mudança desde 09/10 — nenhuma migração de 11 ou 12/10 agenda um job."
+              "fr": "actifs, aucun inactif ; inchangé depuis le 09/10.",
+              "pt": "ativos, nenhum inativo; sem mudança desde 09/10."
             }
           ],
           [
@@ -441,10 +441,10 @@
               "fr": "Avis de sécurité",
               "pt": "Avisos de segurança"
             },
-            "493",
+            "499",
             {
-              "fr": "0 ERROR · **433** WARN sur les DEFINER exposées à `authenticated` (0029 ; = le 11/10 : les sept fonctions `api` supprimées par B40 n'y comptaient pas, et les quatre migrations qui ajoutent des fonctions les ferment à `anon` et `authenticated`, ou les gardent INVOKER — `fn_mesures_hors_fixtures` est INVOKER, rôle de service seul), **29** sur celles exposées à `anon` (0028 ; = la liste T10, inchangé), **1** `search_path` non figé (0011, `fn_locale_from_idioma`, voulu, B32), **30** INFO « RLS sans policy » (0008 ; 12 tables `ingest` et 18 tables `public`, fermées exprès ; inchangé). Le total est le même qu'au 11/10 à midi, après quatorze migrations : chaque porte neuve a été fermée à la pose.",
-              "pt": "0 ERROR · **433** WARN sobre as DEFINER expostas a `authenticated` (0029; = 11/10), **29** sobre as expostas a `anon` (0028; sem mudança), **1** `search_path` não fixado (0011, intencional, B32), **30** INFO «RLS sem policy» (0008; sem mudança). O total é o mesmo de 11/10, após catorze migrações: cada porta nova foi fechada ao ser posta."
+              "fr": "0 ERROR · **437** WARN sur les DEFINER exposées à `authenticated` (0029 ; 433 la veille : **+4**, les portes de B42 — exiger le second facteur côté serveur —, chacune à écrire à l'audit avec son « Complément »), **29** sur celles exposées à `anon` (0028 ; = la liste T10, inchangé), **1** `search_path` non figé (0011, `fn_locale_from_idioma`, voulu, B32), **32** INFO « RLS sans policy » (0008 ; 30 la veille : **+2 tables `private`** de B42, fermées exprès, avec les 12 d'`ingest` et les 18 de `public`).",
+              "pt": "0 ERROR · **437** WARN sobre as DEFINER expostas a `authenticated` (0029; 433 na véspera: **+4**, as portas de B42), **29** sobre as expostas a `anon` (sem mudança), **1** `search_path` (0011, intencional), **32** INFO «RLS sem policy» (0008; **+2 tabelas `private`** de B42, fechadas de propósito)."
             }
           ],
           [
@@ -452,10 +452,10 @@
               "fr": "Avis de performance",
               "pt": "Avisos de desempenho"
             },
-            "389",
+            "388",
             {
-              "fr": "**363** « index inutilisé » (390 le 11/10 à midi, 440 le 07/10 : les compteurs remis à zéro à la panne du 07/10 continuent de se remplir, vingt-sept index de plus ont servi en un jour et demi — la journée de catalogage et le réimport de H33/H34 y sont pour beaucoup), **17** clés étrangères sans index (inchangé, sous la garde CI à liste fermée), **8** tables sans clé primaire (`conv_backup` ×6, `import_blmf_*` ×2 : rebut connu), **1** sur les connexions du serveur Auth (plafond de 10, voulu sur une instance MICRO). B36 relit les index le 28/10, périmètre B10 et B32, en comptant depuis le 07/10.",
-              "pt": "**363** «índice não usado» (390 em 11/10, 440 em 07/10: os contadores zerados em 07/10 continuam a encher-se), **17** chaves estrangeiras sem índice (sem mudança), **8** tabelas sem chave primária (refugo conhecido), **1** sobre as conexões do Auth (teto de 10, intencional). B36 relê os índices em 28/10."
+              "fr": "**362** « index inutilisé » (363 la veille, 440 le 07/10 : les compteurs remis à zéro à la panne du 07/10 continuent de se remplir), **17** clés étrangères sans index (inchangé, sous la garde CI à liste fermée), **8** tables sans clé primaire (`conv_backup` ×6, `import_blmf_*` ×2 : rebut connu), **1** sur les connexions du serveur Auth (plafond de 10, voulu sur une instance MICRO). B36 relit les index le 28/10, périmètre B10 et B32, en comptant depuis le 07/10.",
+              "pt": "**362** «índice não usado» (363 na véspera), **17** chaves estrangeiras sem índice, **8** tabelas sem chave primária (refugo conhecido), **1** sobre as conexões do Auth. B36 relê os índices em 28/10."
             }
           ],
           [
@@ -465,8 +465,8 @@
             },
             "1",
             {
-              "fr": "`conv_backup`, sept tables ; inchangé. Les neuf tables transitoires qu'aucun flux de sauvegarde ne porte (`bg2-exclude-long.txt`) sont désormais sorties de l'empreinte du `restore-test`, avec leurs séquences.",
-              "pt": "`conv_backup`, sete tabelas; sem mudança. As nove tabelas transitórias fora de todo fluxo de backup saíram da impressão do `restore-test`."
+              "fr": "`conv_backup`, sept tables ; inchangé.",
+              "pt": "`conv_backup`, sete tabelas; sem mudança."
             }
           ]
         ]
@@ -484,8 +484,8 @@
             },
             "52",
             {
-              "fr": "+ `_shared` ; inchangé depuis le 05/10 ; aucune fonction ajoutée ni retirée. Dont le routeur `main`, jamais déployé (I3). Les autres déployées par la CI : marqueur `deployed-functions` sur `aba26160` (12/10, 22 h 00 — le dernier commentaire mentionnant Brevo retiré de `email.ts`, F10 ; le transport SMTP générique y est depuis le 20/09). **La file de CI porte un commit** à l'heure du relevé (H33 bis), runner occupé.",
-              "pt": "+ `_shared`; sem mudança desde 05/10. Inclui o roteador `main`, nunca implantado (I3). As outras implantadas pela CI: marcador em `aba26160` (12/10, 22h00). **A fila da CI leva um commit** na hora do levantamento (H33 bis), runner ocupado."
+              "fr": "+ `_shared` ; inchangé depuis le 05/10 ; aucune fonction ajoutée ni retirée, mais **vingt dossiers touchés dans la journée** par l'audit B42 (une seule garde à la clé de service par fonction, `attach-received-asset` décide la permission avant la clé, les relais vers des services tiers exigent une vraie session — B44, clos à 23 h —, `probe-partner-catalog` réservée à l'administration du réseau — B43 clos) et par les locales lues dans `_shared/i18n`. Dont le routeur `main`, jamais déployé (I3). Les autres déployées par la CI : marqueur `deployed-functions` sur `dbe8dc28` (13/10, 23 h 00, B44).",
+              "pt": "+ `_shared`; sem mudança desde 05/10; nenhuma função acrescentada nem retirada, mas **vinte pastas tocadas no dia** pela auditoria B42 e pelas locales em `_shared/i18n`. Marcador `deployed-functions` em `dbe8dc28` (13/10, 23h00, B44)."
             }
           ],
           [
@@ -514,8 +514,8 @@
             },
             "2 566",
             {
-              "fr": "2 762 exemplaires, **2 348 œuvres**, **1 497 autorités**, **2 659 fonds, aucun vide**. Depuis le 11/10 à midi : **−3 notices, toutes par fusion** (`merge_log` : 352 dans 2513 et 1264 dans 2178 le 11/10 par Xavier ; 2267 dans 1699 le 12/10 au soir, C28 clos — *Os Anarquistas e as Eleições*, le même ISBN à dix et treize chiffres, la BLMF garde son exemplaire sous la notice de la BTL) ; **−9 autorités, toutes par fusion** (une le 11/10, huit le 12/10 : les paires au même identifiant Wikidata, AUT-VAR, session voisine) ; **−21 œuvres** : quinze retirées sur accord écrit de Xavier (treize sans notice le 11/10, la 2503, la 171), six par différence aux migrations des formes variantes et de Netchaïev (voisine) — **plus aucune œuvre sans notice** ; −1 fonds, fondu dans son jumeau à une fusion. Aucun exemplaire créé, modifié ni retiré (`retire_at` vide). Aucune notice créée depuis la 2749 du 07/10.",
-              "pt": "2 762 exemplares, **2 348 obras**, **1 497 autoridades**, **2 659 fundos, nenhum vazio**. Desde 11/10: **−3 fichas, todas por fusão** (duas em 11/10 por Xavier; 2267 em 1699 em 12/10 à noite, C28 fechado); **−9 autoridades por fusão** (AUT-VAR, sessão vizinha); **−21 obras**: quinze retiradas com acordo escrito de Xavier, seis por diferença às migrações AUT-VAR — **nenhuma obra sem ficha**; −1 fundo. Nenhum exemplar criado, modificado nem retirado. Nenhuma ficha criada desde a 2749 de 07/10."
+              "fr": "2 762 exemplaires, **2 348 œuvres**, **1 497 autorités**, **2 659 fonds, aucun vide**. **Aucune notice créée, fusionnée ni supprimée depuis le 12/10 au soir** (`merge_log` vide), aucun exemplaire créé, modifié ni retiré ; **plus aucune œuvre sans notice**. Quatre notices modifiées dans la journée — le catalogage de Xavier (un auteur ajouté), ce qui a fait voir la course du filtre de bibliothèque au catalogue, corrigée le soir même. Aucune notice créée depuis la 2749 du 07/10.",
+              "pt": "2 762 exemplares, **2 348 obras**, **1 497 autoridades**, **2 659 fundos, nenhum vazio**. **Nenhuma ficha criada, fundida nem apagada desde 12/10** ; nenhum exemplar tocado; **nenhuma obra sem ficha**. Quatro fichas modificadas no dia (a catalogação de Xavier)."
             }
           ],
           [
@@ -523,10 +523,10 @@
               "fr": "Brouillons de catalogage",
               "pt": "Rascunhos de catalogação"
             },
-            "2 460",
+            "2 463",
             {
-              "fr": "`draft` 1 842, `published` 617, `cancelled` 1 (2 438 le 11/10 à midi : **+22, toutes des reprises de notices publiées hors lot**, `action = update` (316 → 338), publiées entre le 11/10 midi et le 12/10 — le catalogage des deux jours ; le seul annulé reste 6393, C18). **Quatre lots**, chacun avec sa bibliothèque (B30) : MLEG 8 (411 : 147 en cours, 264 publiés, ouvert), BLMF 57 (6, tous publiés, fermé) et 66 « Acervo histórico CCLA » (24 : 22 en cours, 2 publiés, ouvert, C26 — inchangé), Solidaires 63 (1 673, ouvert — D3, un début de révision attendu avant le 26/10) ; 346 hors lot. Aucun brouillon de mise à jour par réimport (H21) n'existe encore : DIRA n'a pas réimporté.",
-              "pt": "`draft` 1 842, `published` 617, `cancelled` 1 (2 438 em 11/10: **+22, todas retomadas de fichas publicadas fora de lote**, `action = update` 316 → 338). **Quatro lotes**: MLEG 8 (411: 147 em curso, 264 publicados), BLMF 57 (6, fechado) e 66 (24: 22 em curso, 2 publicados, C26), Solidaires 63 (1 673, aberto — D3, início de revisão esperado antes de 26/10); 346 fora de lote. Nenhum rascunho de reimportação ainda."
+              "fr": "`draft` 1 842, `published` 620, `cancelled` 1 (2 460 la veille : **+3, des reprises de notices publiées hors lot**, `action = update` 338 → 341 ; le seul annulé reste 6393, C18). **Quatre lots**, inchangés : MLEG 8 (411 : 147 en cours, 264 publiés, ouvert), BLMF 57 (6, fermé) et 66 « Acervo histórico CCLA » (24 : 22 en cours, 2 publiés, C26), Solidaires 63 (1 673, ouvert — D3, un début de révision attendu avant le 26/10) ; 349 hors lot. Aucun brouillon de mise à jour par réimport (H21) : DIRA n'a pas réimporté.",
+              "pt": "`draft` 1 842, `published` 620, `cancelled` 1 (2 460 na véspera: **+3 retomadas fora de lote**). **Quatro lotes**, sem mudança; 349 fora de lote. Nenhum rascunho de reimportação: a DIRA não reimportou."
             }
           ],
           [
@@ -536,8 +536,8 @@
             },
             "2 102 / 2 566",
             {
-              "fr": "notices avec au moins un sujet — **464 sans aucun** (464 le 11/10 : les fusions n'ont retiré de sujet à personne, et les vingt-deux reprises n'en ont ajouté à aucune notice qui n'en avait pas). Ce que le vocabulaire actuel ne couvre pas : item C27.",
-              "pt": "fichas com pelo menos um assunto — **464 sem nenhum** (464 em 11/10). O que o vocabulário não cobre: item C27."
+              "fr": "notices avec au moins un sujet — **464 sans aucun** ; inchangé. Ce que le vocabulaire actuel ne couvre pas : item C27.",
+              "pt": "fichas com pelo menos um assunto — **464 sem nenhum**; sem mudança. Item C27."
             }
           ],
           [
@@ -547,8 +547,8 @@
             },
             "621",
             {
-              "fr": "descripteurs de l'instantané du 03/09 (H13), 110 liens vers les sujets ; inchangé. **Le site de la FICEDL répond de nouveau** depuis au moins le 12/10 à 17 h 50 (muet le 05/10) : la sonde quotidienne est posée sur le poste (H2), le courriel des sept questions peut partir.",
-              "pt": "descritores do instantâneo de 03/09 (H13), 110 ligações; sem mudança. **O site da FICEDL responde de novo** desde 12/10 às 17h50: a sonda diária está posta (H2), o e-mail das sete perguntas pode partir."
+              "fr": "descripteurs de l'instantané du 03/09 (H13), 110 liens ; inchangé. **Le site de la FICEDL flotte** : depuis le poste, 200 à 8 h 29, **503 à 10 h 32 et à 18 h 45**, 200 à 18 h 50 — la sonde (H2) a écrit son premier courriel réel, et le courriel disait faux « un passage par jour » (deux démarrages du poste) ; corrigé le soir même, un passage par jour par construction. Les sept questions à la FICEDL ont une raison de plus de partir.",
+              "pt": "descritores de 03/09 (H13), 110 ligações; sem mudança. **O site da FICEDL oscila** (200, 503, 503, 200 no mesmo dia): a sonda escreveu o seu primeiro e-mail real; corrigida à noite, uma passagem por dia por construção."
             }
           ],
           [
@@ -577,8 +577,8 @@
             },
             "5 + 1",
             {
-              "fr": "**par requête, depuis B39** (`private.fn_mesures_hors_fixtures()`, mesuré à 22 h 18) : **5 réelles, toutes actives** — BTL, BLMF, MLEG, Solidaires, anarchief.org — **et 1 de formation**, `blmf-teste`, étiquetée en base (`libraries.is_training`, posé par la migration et gardé par le déclencheur sur le slug). La correspondance : un fil, deux messages (BLMF vers BTL), inchangé ; les seize propositions de l'Atelier (C4) sont toujours `open`, consentement jusqu'au 16/10.",
-              "pt": "**por consulta, desde B39** (`private.fn_mesures_hors_fixtures()`, 22h18): **5 reais, todas ativas** — BTL, BLMF, MLEG, Solidaires, anarchief.org — **e 1 de formação**, `blmf-teste`, etiquetada na base. A correspondência: um fio, duas mensagens; as dezasseis propostas do Ateliê (C4) continuam `open`, até 16/10."
+              "fr": "**par requête** (`private.fn_mesures_hors_fixtures()`, mesuré à 22 h 56) : **5 réelles, toutes actives** — BTL, BLMF, MLEG, Solidaires, anarchief.org — **et 1 de formation**, `blmf-teste`. Inchangé depuis le 12/10. La correspondance : un fil, deux messages ; les seize propositions de l'Atelier (C4) toujours `open`, consentement jusqu'au 16/10. **B42** : la double authentification est livrée, facultative dans Mon compte, exigée côté serveur et sur Storage pour l'administration du réseau et les coordinations à l'échéance annoncée aux équipes le 13/10 (14 courriels sur 14).",
+              "pt": "**por consulta** (22h56): **5 reais, todas ativas, e 1 de formação**, `blmf-teste`. Sem mudança desde 12/10. Correspondência: um fio, duas mensagens; as dezasseis propostas do Ateliê continuam `open`. **B42**: a dupla autenticação está entregue, facultativa em Minha conta, exigida no servidor e no Storage no prazo anunciado às equipas em 13/10 (14/14)."
             }
           ],
           [
@@ -588,8 +588,8 @@
             },
             "19 + 4",
             {
-              "fr": "**19 comptes réels, dont 17 confirmés, et 4 de formation** (les comptes dont toutes les appartenances sont dans des bibliothèques de formation — la personne qui forme, membre d'une vraie bibliothèque, compte parmi les réels) ; 23 lignes dans `auth.users`, 21 confirmées. Appartenances actives : **17 réelles + 9 de formation**. Exemplaires : **2 757 réels + 5 de formation**. Inchangé depuis la première lecture de B39 (12/10, 13 h 57).",
-              "pt": "**19 contas reais, 17 confirmadas, e 4 de formação**; 23 linhas em `auth.users`, 21 confirmadas. Filiações ativas: **17 reais + 9 de formação**. Exemplares: **2 757 reais + 5 de formação**. Sem mudança desde a primeira leitura de B39."
+              "fr": "**19 comptes réels, dont 17 confirmés, et 4 de formation** ; 23 lignes dans `auth.users`, 21 confirmées. Appartenances actives : **17 réelles + 9 de formation**. Exemplaires : **2 757 réels + 5 de formation**. Inchangé depuis le 12/10. **Aucun second facteur vérifié encore** : un seul facteur TOTP dans `auth.mfa_factors`, `unverified`, créé à 23 h 00 — un enrôlement commencé à l'heure même du relevé, B42 venant d'être livré.",
+              "pt": "**19 contas reais, 17 confirmadas, e 4 de formação**; 23 em `auth.users`, 21 confirmadas. Filiações **17 + 9**. Exemplares **2 757 + 5**. Sem mudança. **Nenhum segundo fator verificado ainda**: um só fator TOTP, `unverified`, criado às 23h00 — um registo começado à hora do levantamento."
             }
           ],
           [
@@ -599,8 +599,8 @@
             },
             "2",
             {
-              "fr": "actives (Xavier et le camarade ASR2026, coopté le 05/10) ; A1 attend une troisième administration d'un autre collectif.",
-              "pt": "ativas (Xavier e o camarada ASR2026, cooptado em 05/10); A1 espera uma terceira administração."
+              "fr": "actives (Xavier et le camarade ASR2026) ; A1 attend une troisième administration d'un autre collectif.",
+              "pt": "ativas (Xavier e o camarada ASR2026); A1 espera uma terceira."
             }
           ],
           [
@@ -610,8 +610,8 @@
             },
             "9 / 21 / 22 / 0",
             {
-              "fr": "emprunts / réservations / consultations / PEB **non archivés** (`archived_at IS NULL`), **tous dans les bibliothèques réelles, 0 en formation** (B39). Tous « encerrado » : rien n'est ouvert. **+2 emprunts depuis le 11/10** (7 → 9) : les n° 71 et 72, créés et clos le 12/10 à la BLMF — le regard de Xavier sur l'onglet Actions du Panneau (sortie, aperçu, retour), qui a aussi tout validé pour E6. Aucun échec de transport mail depuis le 11/10 (`mail_transport_failures`, 0).",
-              "pt": "empréstimos / reservas / consultas / PEB **não arquivados**, **todos em bibliotecas reais, 0 em formação** (B39). Todos «encerrado». **+2 empréstimos desde 11/10** (7 → 9): os n.º 71 e 72, criados e encerrados em 12/10 na BLMF — o olhar de Xavier sobre a aba Ações do Painel. Nenhuma falha de transporte de e-mail desde 11/10."
+              "fr": "emprunts / réservations / consultations / PEB **non archivés**, **tous dans les bibliothèques réelles, 0 en formation** (B39). Tous « encerrado » : rien n'est ouvert ; aucun emprunt créé depuis le 12/10 au soir. Aucun échec de transport mail depuis le 11/10.",
+              "pt": "empréstimos / reservas / consultas / PEB **não arquivados**, **todos em bibliotecas reais, 0 em formação**. Todos «encerrado»; nenhum empréstimo criado desde 12/10. Nenhuma falha de transporte."
             }
           ]
         ]
@@ -627,10 +627,10 @@
               "fr": "Commits",
               "pt": "Commits"
             },
-            "3 352",
+            "3 393",
             {
-              "fr": "+66 depuis le relevé du 11/10 à midi (`24b37717`), compte fait sur le miroir nu complet. Un jour et demi à deux sessions : **B38** (11/10, clos), les quinze regards d'E36, E37, E31 (clos), **E38** en trois livraisons (clos), la recherche par variantes et fautes (voisine), les treize œuvres sans notice retirées, le Grand Livre blanc v18 au dépôt et lu (**J12** et **B40** clos par la voisine, **B39** livré), les lots VM d'ASR2026, **I30** : premier `restore-test` réel, quatre défauts corrigés (clos), **H33** (clos) et **H34** lots 1 et 2 (voisine), AUT-VAR (voisine), **E6** : le Panneau en trois lots et la Bibliothèque en deux (118 → 48 Ko, 85 → 43 Ko, vus par Xavier), la sonde FICEDL (**H2**), le sélecteur nu rendu sombre, cinq clôtures sur cases cochées (H26, H33, I30, C29, K10), **G9** et **C28** clos, l'œuvre 171 retirée.",
-              "pt": "+66 desde o levantamento de 11/10 (`24b37717`), contado no espelho nu. Um dia e meio a duas sessões: **B38** (fechado), os quinze olhares (E36, E37, E31 fechados), **E38** (fechado), a busca por variantes (vizinha), o Livro Branco v18 (**J12**, **B40** fechados, **B39** entregue), os lotes VM, **I30** (primeiro `restore-test` real, fechado), **H33** (fechado) e **H34** lotes 1 e 2, AUT-VAR, **E6**: Painel e Biblioteca (vistos por Xavier), a sonda FICEDL (**H2**), cinco fechos por caixas marcadas, **G9** e **C28** fechados."
+              "fr": "+41 depuis le relevé du 12/10 au soir (`91b7e803`), compte fait sur le miroir nu complet. Une journée à deux sessions : la voisine — **B42** en trois lots (TOTP facultatif dans Mon compte, exigé côté serveur, puis sur Storage ; audit des vingt fonctions à la clé de service ; annonce aux équipes), **B43** (clos), **B44** (clos à 23 h : les sept relais vers des services tiers exigent une vraie session), Storage remonté et épinglé, la recherche manuelle du catalogage (DBNL, DNB, BN Brasil, les catalogues d'AnarBib en liste), la recherche des documents du catalogage selon les règles de l'OPAC, les locales à source unique (DOC-I18N-4), les manuels ; moi — la sonde FICEDL corrigée après son premier courriel, **la course du filtre de bibliothèque au catalogue** (vue par Xavier, corrigée le soir), les délais du test « par pages » de H34 (un faux rouge sous charge qui rougissait toute la file), le relevé.",
+              "pt": "+41 desde 12/10 (`91b7e803`), no espelho nu. Um dia a duas sessões: a vizinha — **B42** em três lotes, **B43** (fechado), **B44** (fechado), Storage reposto, a busca manual da catalogação, a busca de documentos como o OPAC, as locales com fonte única; eu — a sonda FICEDL corrigida, **a corrida do filtro de biblioteca no catálogo** (vista por Xavier, corrigida à noite), os prazos do teste de H34, o levantamento."
             }
           ],
           [
@@ -638,10 +638,10 @@
               "fr": "Fichiers `src/`",
               "pt": "Arquivos `src/`"
             },
-            "601",
+            "626",
             {
-              "fr": "+35 depuis le 11/10 à midi : dix-sept écrans, crochets et aides (les six crochets et deux modales du Panneau, `dailyTasks.js` ; les six sections de la Bibliothèque ; `catalogAuthorFilter.js` d'E38, `publicationParPages.js` de H34) et dix-huit fichiers de test ; 212 fichiers de test dans `src/tests`. **Au-dessus de 60 Ko, hors locales** : `ImportacoesPage` 164 Ko (monté avec H21 et H34 ; E6 l'attend quand H34 sera posé), `BookDraftForm` 134, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 65, `QueuePanel` 62 ; le Panneau est à 48, la Bibliothèque à 43.",
-              "pt": "+35 desde 11/10: dezassete telas, hooks e ajudas e dezoito ficheiros de teste; 212 ficheiros de teste. **Acima de 60 Ko, fora das locales**: `ImportacoesPage` 164 Ko (E6 espera por H34), `BookDraftForm` 134, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 65, `QueuePanel` 62; o Painel está em 48, a Biblioteca em 43."
+              "fr": "+25 depuis le 12/10 au soir : huit écrans et aides (le défi et le panneau du double facteur, `ContaDoubleFacteur`, `doubleFacteur.js`, `locales.js`, `rechercheManuelle.js`, `catalogacaoBookSearch.js`, `loadVendorScript.js`) et dix-sept fichiers de test ; 228 fichiers de test dans `src/tests`. **Au-dessus de 60 Ko, hors locales** : `ImportacoesPage` 164 Ko (E6 l'attend quand H34 sera posé), `BookDraftForm` 133, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, `QueuePanel` 62.",
+              "pt": "+25 desde 12/10: oito telas e ajudas (duplo fator, locales, busca manual) e dezassete ficheiros de teste; 228 ficheiros de teste. **Acima de 60 Ko, fora das locales**: `ImportacoesPage` 164 Ko, `BookDraftForm` 133, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, `QueuePanel` 62."
             }
           ],
           [
@@ -649,10 +649,10 @@
               "fr": "Clés i18n",
               "pt": "Chaves i18n"
             },
-            "7 555",
+            "7 605",
             {
-              "fr": "parité stricte sur les dix locales (7 555 chacune, gardée en CI). +20 depuis le 11/10 à midi (7 535) : B38 (deux refus de circulation), H34 (la publication par pages), le menu de courriel de l'installateur à trois transports (voisine). La garde `DOC-I18N-3` tient.",
-              "pt": "paridade estrita nas dez locales (7 555 cada). +20 desde 11/10: B38, H34, o menu de e-mail do instalador. A guarda `DOC-I18N-3` mantém-se."
+              "fr": "parité stricte sur les dix locales (7 605 chacune, gardée en CI). +50 depuis le 12/10 au soir (7 555) : B42 (le défi, le panneau, l'annonce), la recherche manuelle du catalogage, les sources de métadonnées. **Les dix locales ont désormais une source unique** (`src/i18n/locales.js`, `public.fn_supported_locales()`, `_shared/i18n`, `install.sh`), gardée par `DOC-I18N-4`.",
+              "pt": "paridade estrita nas dez locales (7 605 cada). +50 desde 12/10: B42, a busca manual. **As dez locales têm agora uma fonte única**, guardada por `DOC-I18N-4`."
             }
           ],
           [
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "2 618 + 196",
+            "2 754 + 200",
             {
-              "fr": "**2 618 tests JS** (vitest, gate bloquant, 210 fichiers passés et 3 sautés, 5 tests sautés ; relancés en entier le 12/10 à 22 h 17 sur `91b7e803` : tout vert ; 2 444 le 11/10 : **+174** — E6 Panneau et Bibliothèque, I30, la sonde FICEDL, E38, H33, H34, AUT-VAR, le sélecteur) et **196 suites SQL** en CI (188 le 11/10 : **+8** — H21 lot 8, B38, la recherche par variantes, E38, B39, H33, AUT-VAR, H34). Trois rouges de CI dans la journée, tous sur les suites SQL du voisin pendant H34, corrigés par lui ; un run zombie après la panne de Codeberg (18 h 05 – 18 h 45), annulé.",
-              "pt": "**2 618 testes JS** (210 ficheiros passados, 3 pulados; rodados inteiros em 12/10 às 22h17 sobre `91b7e803`: tudo verde; 2 444 em 11/10: **+174**) e **196 suítes SQL** na CI (188 em 11/10: **+8**). Três vermelhos de CI no dia, todos nas suítes SQL do vizinho durante H34, corrigidos por ele; um run zumbi após a pane do Codeberg, cancelado."
+              "fr": "**2 754 tests JS** (vitest, gate bloquant, 226 fichiers passés et 3 sautés, 5 tests sautés ; relancés en entier le 13/10 à 22 h 59 sur `88a962ee` : tout vert ; 2 618 la veille : **+136** — B42, la recherche manuelle, les locales, la course du filtre, la sonde) et **200 suites SQL** en CI (196 la veille : **+4** — la recherche des documents du catalogage, B42, la garde d'`attach-received-asset`, les locales). Un faux rouge dans la journée : « Rapprocher 420 lignes » (H34) dépassait ses 30 s sous la charge d'une file de sept runs ; ses quatre cas « par pages » ont deux minutes depuis `a263ce85`.",
+              "pt": "**2 754 testes JS** (226 ficheiros, 3 pulados; rodados inteiros em 13/10 às 22h59 sobre `88a962ee`: tudo verde; **+136**) e **200 suítes SQL** (**+4**). Um falso vermelho: «Aproximar 420 linhas» (H34) ultrapassava os 30 s sob carga; os quatro casos «por páginas» têm dois minutos desde `a263ce85`."
             }
           ],
           [
@@ -673,8 +673,8 @@
             },
             "22",
             {
-              "fr": "par la méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) — **dont 4 faux** (le mot « TODOS » des aides pt-BR et es de H21 lot 7, comme au 11/10). **18 réels, dont 6 dans `src/`** (4 au 11/10 : deux de plus avec la publication par pages de H34). Aucun n'est une tâche ouverte ; ils nomment des choix assumés.",
-              "pt": "pelo método fixo — **dos quais 4 falsos** («TODOS», como em 11/10). **18 reais, 6 em `src/`** (4 em 11/10: dois a mais com H34). Nenhum é tarefa aberta."
+              "fr": "par la méthode fixe (`git grep -E 'TODO|FIXME'` hors `docs/`) — **dont 4 faux** (le mot « TODOS »). **18 réels, dont 6 dans `src/`** ; inchangé depuis le 12/10. Aucun n'est une tâche ouverte.",
+              "pt": "pelo método fixo — **4 falsos** («TODOS»). **18 reais, 6 em `src/`**; sem mudança. Nenhum é tarefa aberta."
             }
           ]
         ]
