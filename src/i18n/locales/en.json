@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Documentary architecture of this record",
   "catalogacao.ui.manualSearch": "Open manual search",
   "catalogacao.ui.manualSearchCatalog": "Catalog for the manual search",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (from Brazil only)",
   "catalogacao.ui.chooseCover": "Choose image",
   "catalogacao.ui.circulation": "Default local circulation",
   "catalogacao.ui.circulationBoth": "Loan + on-site consultation",

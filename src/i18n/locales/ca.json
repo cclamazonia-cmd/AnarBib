@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Arquitectura documental d'aquesta fitxa",
   "catalogacao.ui.manualSearch": "Obrir la cerca manual",
   "catalogacao.ui.manualSearchCatalog": "Catàleg de la cerca manual",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (només des del Brasil)",
   "catalogacao.ui.chooseCover": "Triar una imatge",
   "catalogacao.ui.circulation": "Circulació local per defecte",
   "catalogacao.ui.circulationBoth": "Préstec + consulta",

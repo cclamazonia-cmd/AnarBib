@@ -2713,6 +2713,7 @@
   "catalogacao.ui.archTitle": "Architecture documentaire de cette fiche",
   "catalogacao.ui.manualSearch": "Ouvrir la recherche manuelle",
   "catalogacao.ui.manualSearchCatalog": "Catalogue de la recherche manuelle",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (depuis le Brésil seulement)",
   "catalogacao.ui.chooseCover": "Choisir une image",
   "catalogacao.ui.circulation": "Circulation locale par défaut",
   "catalogacao.ui.circulationBoth": "Prêt + consultation",

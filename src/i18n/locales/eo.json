@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Dokumenta arkitekturo de ĉi tiu slipo",
   "catalogacao.ui.manualSearch": "Malfermi la manan serĉon",
   "catalogacao.ui.manualSearchCatalog": "Katalogo por la mana serĉo",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (nur el Brazilo)",
   "catalogacao.ui.chooseCover": "Triar bildon",
   "catalogacao.ui.circulation": "Defaŭlta loka cirkulado",
   "catalogacao.ui.circulationBoth": "Prunto + surloka konsulto",

@@ -16,18 +16,18 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { normalizeBnToCandidate } from '@/lib/catalogacao/bookDraft';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
-import { CATALOGUES_MANUELS, CATALOGUE_MANUEL_DEFAUT, CLE_CATALOGUE_MANUEL, catalogueManuel, adresseRechercheManuelle } from '@/lib/catalogacao/rechercheManuelle';
+import { CATALOGUES_MANUELS, CLE_CATALOGUE_MANUEL, catalogueManuel, catalogueParDefaut, adresseRechercheManuelle } from '@/lib/catalogacao/rechercheManuelle';
 
 export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApplyCandidate }) {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
   const [isbnScanning, setIsbnScanning] = useState(false);
   const [lookupResult, setLookupResult] = useState(null); // { candidates, sources, summary }
   const [selectedCandidate, setSelectedCandidate] = useState(0);
-  // ── Recherche manuelle : le catalogue choisi, retenu par navigateur ──
+  // ── Recherche manuelle : le catalogue choisi, retenu par navigateur ; à défaut, celui de la langue ──
   const [catalogueManuelId, setCatalogueManuelId] = useState(() => {
-    try { return catalogueManuel(localStorage.getItem(CLE_CATALOGUE_MANUEL)).id; } catch { return CATALOGUE_MANUEL_DEFAUT; }
+    try { return catalogueManuel(localStorage.getItem(CLE_CATALOGUE_MANUEL), locale).id; } catch { return catalogueParDefaut(locale); }
   });
   function choisirCatalogueManuel(id) {
     setCatalogueManuelId(id);
@@ -127,8 +127,8 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
   }
 
   function openManualSearch() {
-    window.open(adresseRechercheManuelle(catalogueManuelId, f), '_blank', 'noopener');
-    setMsg({ text: t({ id: 'catalogacao.msg.manualSearchOpened' }, { catalogue: catalogueManuel(catalogueManuelId).label }), kind: 'info' });
+    window.open(adresseRechercheManuelle(catalogueManuelId, f, locale), '_blank', 'noopener');
+    setMsg({ text: t({ id: 'catalogacao.msg.manualSearchOpened' }, { catalogue: catalogueManuel(catalogueManuelId, locale).label }), kind: 'info' });
   }
 
   function openWorldCat() {
@@ -176,7 +176,11 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
           onChange={(e) => choisirCatalogueManuel(e.target.value)}
           aria-label={t({ id: 'catalogacao.ui.manualSearchCatalog' })} title={t({ id: 'catalogacao.ui.manualSearchCatalog' })}
           style={{ width: 'auto', minWidth: 0, maxWidth: '100%', padding: '4px 30px 4px 10px', fontSize: '.82rem', backgroundPosition: 'right 10px center' }}>
-          {CATALOGUES_MANUELS.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+          {CATALOGUES_MANUELS.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.depuisLeBresil ? t({ id: 'catalogacao.ui.manualSearchBrazilOnly' }, { catalogue: c.label }) : c.label}
+            </option>
+          ))}
         </select>
         <button type="button" className="ab-button ab-button--secondary ab-button--sm"
           onClick={openManualSearch}>{t({ id: 'catalogacao.ui.manualSearch' })}</button>

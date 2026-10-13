@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Τεκμηριωτική αρχιτεκτονική αυτής της εγγραφής",
   "catalogacao.ui.manualSearch": "Άνοιγμα χειροκίνητης αναζήτησης",
   "catalogacao.ui.manualSearchCatalog": "Κατάλογος της χειροκίνητης αναζήτησης",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (μόνο από τη Βραζιλία)",
   "catalogacao.ui.chooseCover": "Επίλεξε εικόνα",
   "catalogacao.ui.circulation": "Προεπιλεγμένη τοπική κυκλοφορία",
   "catalogacao.ui.circulationBoth": "Δανεισμός + επιτόπια χρήση",

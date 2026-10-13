@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Documentaire architectuur van dit record",
   "catalogacao.ui.manualSearch": "Handmatig zoeken openen",
   "catalogacao.ui.manualSearchCatalog": "Catalogus voor handmatig zoeken",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (alleen vanuit Brazilië)",
   "catalogacao.ui.chooseCover": "Afbeelding kiezen",
   "catalogacao.ui.circulation": "Standaard lokale circulatie",
   "catalogacao.ui.circulationBoth": "Uitlening + raadpleging",

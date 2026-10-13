@@ -6,7 +6,9 @@
 // choisi, retenu par navigateur.
 //   * la liste couvre exactement les sources de la recherche automatique ;
 //   * chaque adresse cherche l'ISBN, sinon l'ISSN, sinon titre + auteur·rice ;
-//   * le panneau rendu ouvre le bon catalogue et retient le choix ;
+//   * le panneau rendu ouvre le bon catalogue et retient le choix ; sans choix
+//     retenu, il part du catalogue de la langue ; la BN Brasil, qui n'accepte
+//     que les connexions depuis le Brésil (Cloudflare, mesuré le 13/10), le dit ;
 //   * les clés existent dans les dix locales, les anciennes ont disparu.
 // ═════════════════════════════════════════════════
 
@@ -21,7 +23,7 @@ vi.mock('@/pages/painel/tabs/CardScanner', () => ({ default: () => null }));
 
 import LookupPanel from '@/pages/catalogacao/LookupPanel';
 import { LOOKUP_SOURCE_LABELS } from '@/lib/catalogacao/bookDraft';
-import { CATALOGUES_MANUELS, CLE_CATALOGUE_MANUEL, adresseRechercheManuelle, requeteManuelle } from '@/lib/catalogacao/rechercheManuelle';
+import { CATALOGUES_MANUELS, CLE_CATALOGUE_MANUEL, adresseRechercheManuelle, requeteManuelle, catalogueParDefaut } from '@/lib/catalogacao/rechercheManuelle';
 
 const RACINE = path.resolve(__dirname, '../..');
 const fr = JSON.parse(readFileSync(path.join(RACINE, 'src/i18n/locales/fr.json'), 'utf8'));
@@ -51,6 +53,21 @@ describe('recherche manuelle — liste des catalogues', () => {
       .toBe('https://catalogo.bne.es/discovery/search?query=any,contains,9789065500175&vid=34BNE_INST:CATALOGO');
     expect(adresseRechercheManuelle('dbnl', champs({}))).toBe('https://www.dbnl.org/');
     expect(adresseRechercheManuelle('inconnu', champs({ titulo: 'x' }))).toBe('https://acervo.bn.gov.br/sophia_web/busca/acervo/?q=x');
+    expect(adresseRechercheManuelle('inconnu', champs({ titulo: 'x' }), 'fr')).toBe('https://catalogue.bnf.fr/rechercher.do?motRecherche=x');
+  });
+
+  it('sans choix retenu, le catalogue de la langue de l interface', () => {
+    expect(catalogueParDefaut('pt-BR')).toBe('bn_brasil');
+    expect(catalogueParDefaut('fr')).toBe('bnf');
+    expect(catalogueParDefaut('es')).toBe('bne');
+    expect(catalogueParDefaut('ca')).toBe('bne');
+    expect(catalogueParDefaut('de')).toBe('dnb');
+    expect(catalogueParDefaut('it')).toBe('iccu');
+    expect(catalogueParDefaut('nl')).toBe('dbnl');
+    expect(catalogueParDefaut('en')).toBe('loc');
+    expect(catalogueParDefaut('eo')).toBe('openlibrary');
+    expect(catalogueParDefaut('el')).toBe('openlibrary');
+    expect(catalogueParDefaut(undefined)).toBe('bn_brasil');
   });
 });
 
@@ -65,12 +82,14 @@ describe('recherche manuelle — le panneau rendu', () => {
     return setMsg;
   };
 
-  it('la liste propose les neuf catalogues, BN Brasil par défaut ; le bouton ouvre le catalogue choisi', () => {
+  it('la liste propose les neuf catalogues, la BnF d emblée en français, BN Brasil signalée ; le bouton ouvre le catalogue choisi', () => {
     const ouvrir = vi.spyOn(window, 'open').mockImplementation(() => null);
     const setMsg = monter({ titulo: 'Max Havelaar', autor: 'Multatuli' });
     const liste = screen.getByLabelText('Catalogue de la recherche manuelle');
-    expect([...liste.options].map((o) => o.textContent)).toEqual(CATALOGUES_MANUELS.map((c) => c.label));
-    expect(liste.value).toBe('bn_brasil');
+    expect([...liste.options].map((o) => o.textContent)).toEqual(
+      CATALOGUES_MANUELS.map((c) => (c.id === 'bn_brasil' ? 'BN Brasil (depuis le Brésil seulement)' : c.label)),
+    );
+    expect(liste.value).toBe('bnf');
     fireEvent.change(liste, { target: { value: 'dbnl' } });
     fireEvent.click(screen.getByText('Ouvrir la recherche manuelle'));
     expect(ouvrir).toHaveBeenCalledWith('https://www.dbnl.org/zoeken/zoekeninteksten/index.php?zoek=Max%20Havelaar%20Multatuli', '_blank', 'noopener');
@@ -78,28 +97,29 @@ describe('recherche manuelle — le panneau rendu', () => {
     expect(localStorage.getItem(CLE_CATALOGUE_MANUEL)).toBe('dbnl');
   });
 
-  it('retient le dernier catalogue choisi ; une valeur retenue inconnue retombe sur BN Brasil', () => {
+  it('retient le dernier catalogue choisi ; une valeur retenue inconnue retombe sur le catalogue de la langue', () => {
     localStorage.setItem(CLE_CATALOGUE_MANUEL, 'loc');
     monter({});
     expect(screen.getByLabelText('Catalogue de la recherche manuelle').value).toBe('loc');
     cleanup();
     localStorage.setItem(CLE_CATALOGUE_MANUEL, 'disparu');
     monter({});
-    expect(screen.getByLabelText('Catalogue de la recherche manuelle').value).toBe('bn_brasil');
+    expect(screen.getByLabelText('Catalogue de la recherche manuelle').value).toBe('bnf');
   });
 });
 
 describe('recherche manuelle — locales', () => {
-  it('les trois clés existent dans les dix locales, les deux anciennes ont disparu', () => {
+  it('les quatre clés existent dans les dix locales, les deux anciennes ont disparu', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
     expect(fichiers).toHaveLength(10);
     for (const f of fichiers) {
       const j = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
-      for (const k of ['catalogacao.ui.manualSearch', 'catalogacao.ui.manualSearchCatalog', 'catalogacao.msg.manualSearchOpened']) {
+      for (const k of ['catalogacao.ui.manualSearch', 'catalogacao.ui.manualSearchCatalog', 'catalogacao.msg.manualSearchOpened', 'catalogacao.ui.manualSearchBrazilOnly']) {
         expect(typeof j[k], `${f} ${k}`).toBe('string');
       }
       expect(j['catalogacao.msg.manualSearchOpened'], f).toContain('{catalogue}');
+      expect(j['catalogacao.ui.manualSearchBrazilOnly'], f).toContain('{catalogue}');
       expect(j['catalogacao.ui.bnManual'], f).toBeUndefined();
       expect(j['catalogacao.msg.bnOpened'], f).toBeUndefined();
     }

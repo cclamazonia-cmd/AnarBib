@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Dokumentarische Architektur dieses Datensatzes",
   "catalogacao.ui.manualSearch": "Manuelle Suche öffnen",
   "catalogacao.ui.manualSearchCatalog": "Katalog für die manuelle Suche",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (nur aus Brasilien)",
   "catalogacao.ui.chooseCover": "Bild auswählen",
   "catalogacao.ui.circulation": "Standardmäßige lokale Ausleihbedingungen",
   "catalogacao.ui.circulationBoth": "Ausleihe + Vor-Ort-Einsicht",

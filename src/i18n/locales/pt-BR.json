@@ -2707,6 +2707,7 @@
   "catalogacao.ui.archTitle": "Arquitetura documental desta ficha",
   "catalogacao.ui.manualSearch": "Abrir busca manual",
   "catalogacao.ui.manualSearchCatalog": "Catálogo da busca manual",
+  "catalogacao.ui.manualSearchBrazilOnly": "{catalogue} (acesso só a partir do Brasil)",
   "catalogacao.ui.chooseCover": "Escolher imagem",
   "catalogacao.ui.circulation": "Circulação local padrão",
   "catalogacao.ui.circulationBoth": "Empréstimo + consulta",
