@@ -10,11 +10,15 @@
 //     de GoTrue traduit ;
 //   * LoginPage demande le code AVANT toute autre bascule ; ProtectedRoute
 //     renvoie une session aal1 vers /login.
+//   * REGISTRE 2FA-2 (14/10/2026) : volet « J'utilise… » fermé par défaut et
+//     choix d'application, lien otpauth:// quand l'inscription le rend, refus
+//     de code propre à l'inscription, retour visible de « Copier la clé ».
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import { IntlMessageFormat } from 'intl-messageformat';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -33,7 +37,7 @@ vi.mock('@/lib/supabase', () => ({
 
 import {
   niveauDuJeton, facteursVerifies, codeDeuxiemeFacteurRequis, etapeDoubleFacteur, nettoyerCode, codeBienForme,
-  secretParGroupes, cleErreurDoubleFacteur,
+  secretParGroupes, cleErreurDoubleFacteur, cleErreurInscription, lienOtpauth, APPLIS_TOTP,
 } from '@/lib/doubleFacteur';
 import DoubleFacteurPanel from '@/components/rede/DoubleFacteurPanel';
 import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
@@ -156,6 +160,118 @@ describe('ContaDoubleFacteur — Mon compte', () => {
     fireEvent.click(await screen.findByText(fr['twoFactor.remove.button']));
     fireEvent.click(screen.getByText(fr['twoFactor.remove.yes']));
     await screen.findByText(fr['twoFactor.error.needCode']);
+  });
+});
+
+// ── REGISTRE 2FA-2 (14/10/2026) : l'inscription conduit jusque dans l'application ──
+describe('2FA-2 — inscription guidée', () => {
+  const URI = 'otpauth://totp/AnarBib:elise%40exemple.invalid?secret=JBSWY3DPEHPK3PXP&issuer=AnarBib';
+  const presse = (writeText) => Object.defineProperty(navigator, 'clipboard', { value: writeText ? { writeText } : undefined, configurable: true });
+  async function inscrire(totp) {
+    mfa.listFactors.mockResolvedValue({ data: { all: [] }, error: null });
+    mfa.enroll.mockResolvedValue({ data: { id: 'f-2', totp: { qr_code: 'data:image/svg+xml;utf-8,<svg/>', secret: 'JBSWY3DPEHPK3PXP', ...totp } }, error: null });
+    avecIntl(<ContaDoubleFacteur />);
+    fireEvent.click(await screen.findByText(fr['twoFactor.enroll.start']));
+    await screen.findByAltText(fr['twoFactor.enroll.qrAlt']);
+  }
+
+  it('aides : refus propre à l’inscription, lien otpauth bien formé seulement', () => {
+    expect(cleErreurInscription({ code: 'mfa_verification_failed' })).toBe('twoFactor.error.badCodeEnroll');
+    expect(cleErreurInscription({ code: 'mfa_verification_rejected' })).toBe('twoFactor.error.badCodeEnroll');
+    expect(cleErreurInscription({ code: 'mfa_challenge_expired' })).toBe('twoFactor.error.expired');
+    expect(cleErreurInscription(null)).toBe('twoFactor.error.generic');
+    expect(cleErreurDoubleFacteur({ code: 'mfa_verification_failed' })).toBe('twoFactor.error.badCode');
+    expect(lienOtpauth(URI)).toBe(URI);
+    for (const x of [undefined, null, '', 'https://exemple.invalid', 'javascript:alert(1)', 'otpauth://hotp/x?secret=A', 'otpauth://totp/a b']) {
+      expect(lienOtpauth(x), String(x)).toBeNull();
+    }
+  });
+
+  it('les étapes de chaque application existent dans les dix locales et se formatent (le lien cité par son nom)', () => {
+    const cles = ['twoFactor.enroll.openLink', 'twoFactor.enroll.openLinkHint', 'twoFactor.enroll.copied', 'twoFactor.enroll.copyFailed',
+      'twoFactor.error.badCodeEnroll', 'twoFactor.guide.summary', 'twoFactor.guide.legend', 'twoFactor.guide.otherApp', 'twoFactor.guide.pick'];
+    for (const a of APPLIS_TOTP) for (let i = 1; i <= a.etapes; i++) cles.push(`twoFactor.guide.${a.id}.${i}`);
+    expect(APPLIS_TOTP.map((a) => a.id)).toEqual(['aegis', 'freeotp', 'keepassxc', 'other']);
+    for (const loc of LOCALE_CODES) {
+      const msgs = JSON.parse(lire(`src/i18n/locales/${loc}.json`));
+      expect(msgs[`twoFactor.guide.${APPLIS_TOTP.at(-1).id}.${APPLIS_TOTP.at(-1).etapes + 1}`], `${loc} étape de trop`).toBeUndefined();
+      for (const c of cles) {
+        expect(msgs[c], `${loc} ${c}`).toBeTruthy();
+        const texte = new IntlMessageFormat(msgs[c], loc).format({ lien: '§LIEN§' });
+        if (msgs[c].includes('{lien}')) expect(texte, `${loc} ${c}`).toContain('§LIEN§');
+        expect(texte, `${loc} ${c}`).not.toMatch(/[{}]/);
+      }
+    }
+  });
+
+  it('le volet « J’utilise… » est fermé par défaut ; choisir KeePassXC montre ses étapes, avec les vrais menus', async () => {
+    await inscrire({ uri: URI });
+    const volet = document.querySelector('details.ab-conta-guide');
+    expect(volet).toBeTruthy();
+    expect(volet.open).toBe(false);
+    expect(volet.querySelector('summary').textContent).toBe(fr['twoFactor.guide.summary']);
+    expect(screen.getByText(fr['twoFactor.guide.pick'])).toBeTruthy();
+    const radios = screen.getAllByRole('radio');
+    expect(radios.map((r) => r.closest('label').textContent)).toEqual(['Aegis', 'FreeOTP+', 'KeePassXC', fr['twoFactor.guide.otherApp']]);
+    expect(radios.every((r) => !r.checked)).toBe(true);
+
+    fireEvent.click(screen.getByLabelText('KeePassXC'));
+    const etapes = volet.querySelectorAll('ol li');
+    expect(etapes).toHaveLength(4);
+    expect(etapes[1].textContent).toBe(fr['twoFactor.guide.keepassxc.2']);
+    expect(etapes[1].textContent).toContain('« Configurer le TOTP… »');
+    expect(screen.queryByText(fr['twoFactor.guide.pick'])).toBeNull();
+
+    fireEvent.click(screen.getByLabelText('Aegis'));
+    const aegis = volet.querySelectorAll('ol li');
+    expect(aegis).toHaveLength(4);
+    expect(aegis[1].textContent).toContain(`« ${fr['twoFactor.enroll.openLink']} »`);
+  });
+
+  it('le lien otpauth est à côté du QR quand l’inscription le rend, et seulement alors', async () => {
+    await inscrire({ uri: URI });
+    const lien = screen.getByRole('link', { name: fr['twoFactor.enroll.openLink'] });
+    expect(lien.getAttribute('href')).toBe(URI);
+    expect(window.location.href).not.toContain('JBSWY3DPEHPK3PXP');
+    cleanup();
+    await inscrire({});
+    expect(screen.queryByRole('link', { name: fr['twoFactor.enroll.openLink'] })).toBeNull();
+  });
+
+  it('un code refusé à l’inscription nomme les trois causes ; à la connexion, le message reste le sien', async () => {
+    await inscrire({ uri: URI });
+    mfa.challengeAndVerify.mockResolvedValue({ data: null, error: { code: 'mfa_verification_failed' } });
+    const champ = document.querySelector('input[autocomplete="one-time-code"]');
+    fireEvent.change(champ, { target: { value: '123456' } });
+    fireEvent.submit(champ.closest('form'));
+    await screen.findByText(fr['twoFactor.error.badCodeEnroll']);
+    expect(screen.queryByText(fr['twoFactor.error.badCode'])).toBeNull();
+    expect(fr['twoFactor.error.badCodeEnroll']).not.toBe(fr['twoFactor.error.badCode']);
+  });
+
+  it('« Copier la clé » dit que c’est copié ; sans presse-papiers, la clé brute est sélectionnée et on le dit', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    presse(writeText);
+    await inscrire({ uri: URI });
+    fireEvent.click(screen.getByText(fr['twoFactor.enroll.copy']));
+    await screen.findByText(fr['twoFactor.enroll.copied']);
+    expect(writeText).toHaveBeenCalledWith('JBSWY3DPEHPK3PXP');
+    cleanup();
+
+    presse(vi.fn().mockRejectedValue(new Error('NotAllowedError')));
+    await inscrire({ uri: URI });
+    fireEvent.click(screen.getByText(fr['twoFactor.enroll.copy']));
+    await screen.findByText(fr['twoFactor.enroll.copyFailed']);
+    const cle = screen.getByLabelText(fr['twoFactor.enroll.copy']);
+    expect(cle.value).toBe('JBSWY3DPEHPK3PXP');
+    await waitFor(() => expect(document.activeElement).toBe(cle));
+    expect(screen.queryByText(fr['twoFactor.enroll.copied'])).toBeNull();
+    cleanup();
+
+    presse(null);
+    await inscrire({});
+    fireEvent.click(screen.getByText(fr['twoFactor.enroll.copy']));
+    await screen.findByText(fr['twoFactor.enroll.copyFailed']);
   });
 });
 

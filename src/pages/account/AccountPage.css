@@ -60,6 +60,22 @@
 .ab-conta-msg { font-size: .88rem; font-weight: 600; color: var(--color-ok); }
 .ab-conta-msg--error { color: var(--color-bad); }
 
+/* B42, REGISTRE 2FA-2 : le volet « J'utilise… » de l'inscription TOTP
+   (ContaDoubleFacteur). <details> natif, fermé par défaut ; les boutons radio
+   échappent à la colonne de .ab-conta-form label et passent à la ligne sur
+   téléphone. */
+.ab-conta-form .ab-conta-guide { border: 1px solid var(--brand-panel-border); border-radius: var(--brand-radius-sm); padding: 10px 12px; min-width: 0; }
+.ab-conta-form .ab-conta-guide summary { cursor: pointer; font-size: .9rem; font-weight: 600; }
+.ab-conta-form .ab-conta-guide fieldset { border: 0; padding: 0; margin: 10px 0 0; min-width: 0; }
+.ab-conta-form .ab-conta-guide legend { padding: 0; margin-bottom: 6px; font-size: .85rem; }
+.ab-conta-form .ab-conta-guide-choix { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.ab-conta-form .ab-conta-guide-choix label { flex-direction: row; align-items: center; gap: 6px; font-weight: 400; font-size: .9rem; }
+.ab-conta-form .ab-conta-guide-choix input { padding: 0; accent-color: var(--brand-color-primary); }
+.ab-conta-form .ab-conta-guide ol { margin: 10px 0 0; padding-left: 22px; font-size: .88rem; line-height: 1.5; overflow-wrap: anywhere; }
+.ab-conta-form .ab-conta-guide li + li { margin-top: 4px; }
+.ab-conta-form .ab-conta-guide-copie { display: flex; flex-direction: column; gap: 6px; }
+.ab-conta-form .ab-conta-guide-copie input { font-family: monospace; width: 100%; box-sizing: border-box; }
+
 /* E19 — Les trois décisions de l'onglet « Données personnelles » (export,
    notifications, lettre), côte à côte sous le profil. Pistes en minmax(0, 1fr),
    jamais `1fr` nu (doctrine mobile, src/styles/mobile.css). */

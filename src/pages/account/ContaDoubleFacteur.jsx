@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui';
-import { codeBienForme, nettoyerCode, secretParGroupes, cleErreurDoubleFacteur } from '@/lib/doubleFacteur';
+import {
+  codeBienForme, nettoyerCode, secretParGroupes, cleErreurDoubleFacteur, cleErreurInscription, lienOtpauth, APPLIS_TOTP,
+} from '@/lib/doubleFacteur';
 // Les classes ab-conta-* : la section sert aussi d'écran d'inscription obligatoire dans LoginPage.
 import './AccountPage.css';
 
@@ -29,6 +31,14 @@ import './AccountPage.css';
 // mode 'equipes'), LoginPage monte cette même section en « obligatoire »
 // (sans cadre ni titre : la carte de connexion les porte) tant qu'aucun
 // appareil n'est inscrit.
+//
+// REGISTRE 2FA-2 (14/10/2026) : l'inscription conduit jusque dans
+// l'application de la personne — un volet « J'utilise… » fermé par défaut
+// (étapes par application, avec les vrais noms des menus), le lien otpauth://
+// à côté du QR (sur téléphone, il ouvre l'application sans scan ; il porte le
+// secret : jamais journalisé), un refus de code qui nomme ses trois causes
+// (twoFactor.error.badCodeEnroll, distinct de celui de la connexion), et une
+// copie de la clé qui dit si elle a marché.
 // ═══════════════════════════════════════════════════════════
 
 const CADRE = { marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' };
@@ -45,6 +55,9 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
   const [enCours, setEnCours] = useState(false);
   const [aRetirer, setARetirer] = useState(null);
   const [msg, setMsg] = useState({ text: '', err: false });
+  const [copie, setCopie] = useState('');
+  const [appli, setAppli] = useState('');
+  const cleRef = useRef(null);
 
   const verifies = facteurs.filter((f) => f.status === 'verified');
 
@@ -71,8 +84,9 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
       const friendlyName = nom.trim() || `${t({ id: 'twoFactor.enroll.defaultName' })} ${verifies.length + 1}`;
       const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName, issuer: 'AnarBib' });
       if (error) { refus(error); return; }
-      setInscription({ id: data.id, qr: data.totp?.qr_code, secret: data.totp?.secret });
+      setInscription({ id: data.id, qr: data.totp?.qr_code, secret: data.totp?.secret, uri: lienOtpauth(data.totp?.uri) });
       setCode('');
+      setCopie('');
     } catch {
       refus(null);
     } finally {
@@ -90,7 +104,7 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
     setMsg({ text: '', err: false });
     try {
       const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId: inscription.id, code: nettoyerCode(code) });
-      if (error) { refus(error); setCode(''); return; }
+      if (error) { setMsg({ text: t({ id: cleErreurInscription(error) }), err: true }); setCode(''); return; }
       setInscription(null);
       setNom('');
       setCode('');
@@ -107,6 +121,7 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
     const id = inscription?.id;
     setInscription(null);
     setCode('');
+    setCopie('');
     setMsg({ text: '', err: false });
     if (id) await supabase.auth.mfa.unenroll({ factorId: id });
     await charger();
@@ -129,8 +144,19 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
   }
 
   async function copierSecret() {
-    try { await navigator.clipboard.writeText(inscription?.secret ?? ''); } catch { /* presse-papiers indisponible */ }
+    try {
+      await navigator.clipboard.writeText(inscription?.secret ?? '');
+      setCopie('ok');
+    } catch {
+      // Presse-papiers absent (page hors https, permission refusée) : la clé
+      // brute apparaît dans un champ sélectionné, prête pour un Ctrl+C.
+      setCopie('manuel');
+    }
   }
+
+  useEffect(() => {
+    if (copie === 'manuel') { cleRef.current?.focus(); cleRef.current?.select(); }
+  }, [copie]);
 
   return (
     <div style={obligatoire ? undefined : CADRE} data-testid="conta-double-facteur">
@@ -202,11 +228,48 @@ export default function ContaDoubleFacteur({ obligatoire = false }) {
               <img src={inscription.qr} alt={t({ id: 'twoFactor.enroll.qrAlt' })} width={180} height={180} style={{ display: 'block', maxWidth: '100%', height: 'auto' }} />
             </div>
           )}
+          {inscription.uri && (
+            <div style={{ marginTop: 10 }}>
+              <a href={inscription.uri} rel="noreferrer">{t({ id: 'twoFactor.enroll.openLink' })}</a>
+              <div style={{ ...AIDE, marginTop: 2, marginBottom: 0 }}>{t({ id: 'twoFactor.enroll.openLinkHint' })}</div>
+            </div>
+          )}
           <div style={{ ...AIDE, marginTop: 12, marginBottom: 6 }}>{t({ id: 'twoFactor.enroll.manual' })}</div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 14 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             <code style={{ fontSize: '.95rem', letterSpacing: '.05em', wordBreak: 'break-all' }}>{secretParGroupes(inscription.secret)}</code>
             <Button variant="secondary" type="button" onClick={copierSecret}>{t({ id: 'twoFactor.enroll.copy' })}</Button>
+            {copie === 'ok' && <span role="status" className="ab-conta-msg">{t({ id: 'twoFactor.enroll.copied' })}</span>}
           </div>
+          {copie === 'manuel' && (
+            <div role="status" className="ab-conta-guide-copie">
+              <span className="ab-conta-msg ab-conta-msg--error">{t({ id: 'twoFactor.enroll.copyFailed' })}</span>
+              <input ref={cleRef} type="text" readOnly value={inscription.secret ?? ''} aria-label={t({ id: 'twoFactor.enroll.copy' })} onFocus={(e) => e.target.select()} />
+            </div>
+          )}
+
+          <details className="ab-conta-guide">
+            <summary>{t({ id: 'twoFactor.guide.summary' })}</summary>
+            <fieldset>
+              <legend>{t({ id: 'twoFactor.guide.legend' })}</legend>
+              <div className="ab-conta-guide-choix">
+                {APPLIS_TOTP.map((a) => (
+                  <label key={a.id}>
+                    <input type="radio" name="double-facteur-appli" value={a.id} checked={appli === a.id} onChange={() => setAppli(a.id)} />
+                    {a.nom ?? t({ id: 'twoFactor.guide.otherApp' })}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            {appli ? (
+              <ol>
+                {Array.from({ length: APPLIS_TOTP.find((a) => a.id === appli).etapes }, (_, i) => (
+                  <li key={i}>{t({ id: `twoFactor.guide.${appli}.${i + 1}` }, { lien: t({ id: 'twoFactor.enroll.openLink' }) })}</li>
+                ))}
+              </ol>
+            ) : (
+              <div style={{ ...AIDE, marginTop: 8, marginBottom: 0 }}>{t({ id: 'twoFactor.guide.pick' })}</div>
+            )}
+          </details>
           <label>
             {t({ id: 'twoFactor.code.label' })}
             <input

@@ -106,3 +106,35 @@ export function cleErreurDoubleFacteur(erreur) {
       return 'twoFactor.error.generic';
   }
 }
+
+/**
+ * Un refus de Supabase Auth pendant l'INSCRIPTION (2FA-2). Un mauvais code n'y
+ * a pas les mêmes causes qu'à la connexion : code périmé, heure décalée, ou
+ * clé mal recopiée dans l'application. Le reste comme cleErreurDoubleFacteur.
+ */
+export function cleErreurInscription(erreur) {
+  const cle = cleErreurDoubleFacteur(erreur);
+  return cle === 'twoFactor.error.badCode' ? 'twoFactor.error.badCodeEnroll' : cle;
+}
+
+/**
+ * Le lien otpauth:// rendu par l'inscription (totp.uri d'auth-js), ou null.
+ * Il porte le secret comme le code QR : jamais journalisé, jamais dans
+ * l'adresse de la page ; on ne garde qu'un lien TOTP bien formé.
+ */
+export function lienOtpauth(uri) {
+  return typeof uri === 'string' && /^otpauth:\/\/totp\/[^\s]+$/.test(uri) ? uri : null;
+}
+
+/**
+ * Le volet « J'utilise… » (2FA-2) : une application, ses étapes
+ * (twoFactor.guide.<id>.1..n). Les libellés de menus cités dans les étapes
+ * sont relevés dans les fichiers de traduction des applications
+ * (scripts/i18n-add-b42-2fa2-inscription-guidee.cjs), jamais traduits de tête.
+ */
+export const APPLIS_TOTP = [
+  { id: 'aegis', nom: 'Aegis', etapes: 4 },
+  { id: 'freeotp', nom: 'FreeOTP+', etapes: 3 },
+  { id: 'keepassxc', nom: 'KeePassXC', etapes: 4 },
+  { id: 'other', nom: null, etapes: 3 },
+];
