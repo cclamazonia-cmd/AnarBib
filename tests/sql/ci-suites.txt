@@ -800,3 +800,6 @@ tests/sql/b42_double_authentification_tests.sql
 # Attache d'un fichier reçu (13/10/2026, audit B42) : la permission se décide AVANT la clé de service — public.fn_attach_received_asset_garde
 # (mêmes règles que fn_attach_received_asset_record, refus unique « introuvable »), et le retour « déjà attaché » de la RPC passe après ses gardes.
 tests/sql/attach_recu_garde_tests.sql
+# Les locales ont une source en base (13/10/2026, DOC-I18N-4) : public.fn_supported_locales(), lue par huit contraintes CHECK et huit fonctions ;
+# 'xx' refusé sur chaque table sous authenticated, anon fermé, les huit fonctions sans copie de la liste.
+tests/sql/locales_source_unique_tests.sql

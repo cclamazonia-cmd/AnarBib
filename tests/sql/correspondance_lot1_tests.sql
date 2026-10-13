@@ -254,7 +254,8 @@ BEGIN
       'library_conversations_created_by_idx', 'library_conversation_participants_library_idx', 'library_messages_conversation_idx',
       'library_messages_library_idx', 'library_messages_author_idx', 'library_conversation_reads_user_idx');
     v_b := v_n = 4 AND v_n2 = 4 AND v_n3 = 6
-       AND EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'library_messages_lang_check' AND pg_get_constraintdef(oid) LIKE '%''eo''%')
+       AND EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'library_messages_lang_check' AND pg_get_constraintdef(oid) LIKE '%fn_supported_locales()%')
+       AND 'eo' = ANY (public.fn_supported_locales())   -- 13/10/2026 : la contrainte lit la source (DOC-I18N-4)
        AND NOT has_table_privilege('authenticated', 'public.library_messages', 'INSERT')
        AND NOT has_table_privilege('authenticated', 'public.library_messages', 'UPDATE')
        AND NOT has_table_privilege('authenticated', 'public.library_messages', 'DELETE')
