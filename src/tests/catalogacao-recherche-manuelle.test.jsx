@@ -9,6 +9,8 @@
 //   * le panneau rendu ouvre le bon catalogue et retient le choix ; sans choix
 //     retenu, il part du catalogue de la langue ; la BN Brasil, qui n'accepte
 //     que les connexions depuis le Brésil (Cloudflare, mesuré le 13/10), le dit ;
+//   * intitulé, liste et bouton forment un seul groupe nommé (le lien entre la
+//     liste et le bouton doit se voir et s'entendre) ;
 //   * les clés existent dans les dix locales, les anciennes ont disparu.
 // ═════════════════════════════════════════════════
 
@@ -85,26 +87,36 @@ describe('recherche manuelle — le panneau rendu', () => {
   it('la liste propose les neuf catalogues, la BnF d emblée en français, BN Brasil signalée ; le bouton ouvre le catalogue choisi', () => {
     const ouvrir = vi.spyOn(window, 'open').mockImplementation(() => null);
     const setMsg = monter({ titulo: 'Max Havelaar', autor: 'Multatuli' });
-    const liste = screen.getByLabelText('Catalogue de la recherche manuelle');
+    const liste = screen.getByRole('combobox', { name: 'Recherche manuelle dans' });
     expect([...liste.options].map((o) => o.textContent)).toEqual(
       CATALOGUES_MANUELS.map((c) => (c.id === 'bn_brasil' ? 'BN Brasil (depuis le Brésil seulement)' : c.label)),
     );
     expect(liste.value).toBe('bnf');
     fireEvent.change(liste, { target: { value: 'dbnl' } });
-    fireEvent.click(screen.getByText('Ouvrir la recherche manuelle'));
+    fireEvent.click(screen.getByRole('button', { name: 'Ouvrir' }));
     expect(ouvrir).toHaveBeenCalledWith('https://www.dbnl.org/zoeken/zoekeninteksten/index.php?zoek=Max%20Havelaar%20Multatuli', '_blank', 'noopener');
     expect(setMsg).toHaveBeenLastCalledWith({ text: 'DBNL : recherche ouverte dans un nouvel onglet.', kind: 'info' });
     expect(localStorage.getItem(CLE_CATALOGUE_MANUEL)).toBe('dbnl');
   });
 
+  it('intitulé, liste et bouton forment un seul groupe nommé « Recherche manuelle dans »', () => {
+    monter({});
+    const groupe = screen.getByRole('group', { name: 'Recherche manuelle dans' });
+    expect(groupe.classList.contains('cat-recherche-manuelle')).toBe(true);
+    expect(groupe.querySelector('select')).toBe(screen.getByRole('combobox', { name: 'Recherche manuelle dans' }));
+    const bouton = screen.getByRole('button', { name: 'Ouvrir' });
+    expect(groupe.contains(bouton)).toBe(true);
+    expect(bouton.parentElement).toBe(groupe.querySelector('select').parentElement); // soudés dans le même champ
+  });
+
   it('retient le dernier catalogue choisi ; une valeur retenue inconnue retombe sur le catalogue de la langue', () => {
     localStorage.setItem(CLE_CATALOGUE_MANUEL, 'loc');
     monter({});
-    expect(screen.getByLabelText('Catalogue de la recherche manuelle').value).toBe('loc');
+    expect(screen.getByRole('combobox', { name: 'Recherche manuelle dans' }).value).toBe('loc');
     cleanup();
     localStorage.setItem(CLE_CATALOGUE_MANUEL, 'disparu');
     monter({});
-    expect(screen.getByLabelText('Catalogue de la recherche manuelle').value).toBe('bnf');
+    expect(screen.getByRole('combobox', { name: 'Recherche manuelle dans' }).value).toBe('bnf');
   });
 });
 

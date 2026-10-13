@@ -10,12 +10,13 @@
 // Le panneau ne touche jamais au formulaire lui-même : l'ISBN lu et la
 // candidate retenue remontent au parent par deux rappels, qui reste seul à
 // écrire les champs, les contributeurs et l'état du brouillon.
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { normalizeBnToCandidate } from '@/lib/catalogacao/bookDraft';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
+import AppIcon from '@/components/ui/AppIcon';
 import { CATALOGUES_MANUELS, CLE_CATALOGUE_MANUEL, catalogueManuel, catalogueParDefaut, adresseRechercheManuelle } from '@/lib/catalogacao/rechercheManuelle';
 
 export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApplyCandidate }) {
@@ -29,6 +30,7 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
   const [catalogueManuelId, setCatalogueManuelId] = useState(() => {
     try { return catalogueManuel(localStorage.getItem(CLE_CATALOGUE_MANUEL), locale).id; } catch { return catalogueParDefaut(locale); }
   });
+  const idRechercheManuelle = useId();
   function choisirCatalogueManuel(id) {
     setCatalogueManuelId(id);
     try { localStorage.setItem(CLE_CATALOGUE_MANUEL, id); } catch { /* stockage indisponible : le choix vaut pour la session */ }
@@ -171,11 +173,15 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
         onClick={() => setIsbnScanning(s => !s)} disabled={lookupLoading}>
         {isbnScanning ? t({id:'card.resolve.scan.close'}) : t({id:'catalogacao.isbn.scan.action'})}
       </button>
-      <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 4, alignItems: 'stretch', maxWidth: '100%', minWidth: 0 }}>
-        <select className="ab-select" value={catalogueManuelId}
-          onChange={(e) => choisirCatalogueManuel(e.target.value)}
-          aria-label={t({ id: 'catalogacao.ui.manualSearchCatalog' })} title={t({ id: 'catalogacao.ui.manualSearchCatalog' })}
-          style={{ width: 'auto', minWidth: 0, maxWidth: '100%', padding: '4px 30px 4px 10px', fontSize: '.82rem', backgroundPosition: 'right 10px center' }}>
+      {/* Un seul contrôle : intitulé + liste + bouton soudés dans un cadre (le lien
+          entre la liste et le bouton n'était pas lisible quand ils se suivaient). */}
+      <div className="cat-recherche-manuelle" role="group" aria-labelledby={`${idRechercheManuelle}-titre`}>
+        <label className="cat-recherche-manuelle__titre" id={`${idRechercheManuelle}-titre`} htmlFor={`${idRechercheManuelle}-liste`}>
+          <AppIcon name="search" size="1em" />{t({ id: 'catalogacao.ui.manualSearchCatalog' })}
+        </label>
+        <span className="cat-recherche-manuelle__champ">
+        <select id={`${idRechercheManuelle}-liste`} className="ab-select" value={catalogueManuelId}
+          onChange={(e) => choisirCatalogueManuel(e.target.value)}>
           {CATALOGUES_MANUELS.map((c) => (
             <option key={c.id} value={c.id}>
               {c.depuisLeBresil ? t({ id: 'catalogacao.ui.manualSearchBrazilOnly' }, { catalogue: c.label }) : c.label}
@@ -183,8 +189,11 @@ export default function LookupPanel({ f, draftId, setMsg, onIsbnScanned, onApply
           ))}
         </select>
         <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-          onClick={openManualSearch}>{t({ id: 'catalogacao.ui.manualSearch' })}</button>
-      </span>
+          onClick={openManualSearch} aria-describedby={`${idRechercheManuelle}-titre`}>
+          <AppIcon name="externalLink" size="1em" />{t({ id: 'catalogacao.ui.manualSearch' })}
+        </button>
+        </span>
+      </div>
       <button type="button" className="ab-button ab-button--secondary ab-button--sm"
         onClick={openWorldCat}>{t({id:'catalogacao.ui.worldcat'})}</button>
       {f('issn') && (

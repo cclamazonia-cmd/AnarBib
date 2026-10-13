@@ -1,7 +1,7 @@
 import {
   Accessibility, Archive, ArchiveRestore, ArrowDownToLine, ArrowLeftRight, ArrowUpFromLine,
   Ban, Bell, BookMarked, BookOpen, Boxes, Building2, CalendarDays, Check,
-  ClipboardList, FileText, Filter, FolderKanban, Gauge, Globe2, History, Image,
+  ClipboardList, ExternalLink, FileText, Filter, FolderKanban, Gauge, Globe2, History, Image,
   Inbox, KeyRound, Landmark, LayoutDashboard, Library, Lightbulb, Link2, ListChecks,
   Mail, Map, Megaphone, Menu, MessageSquare, Network, NotebookPen, Package, Palette,
   Pencil, PenLine, Newspaper, Pin, Puzzle, Search, ScrollText, Send, Settings2, Shield, Star, Tags,
@@ -15,7 +15,7 @@ const ICONS = {
   arrowLeftRight: ArrowLeftRight, arrowUp: ArrowUpFromLine, bell: Bell,
   book: BookOpen, bookmark: BookMarked, boxes: Boxes, building: Building2,
   calendar: CalendarDays, check: Check, clipboard: ClipboardList,
-  document: FileText, filter: Filter, folder: FolderKanban, gauge: Gauge,
+  document: FileText, externalLink: ExternalLink, filter: Filter, folder: FolderKanban, gauge: Gauge,
   globe: Globe2, history: History, image: Image, inbox: Inbox, key: KeyRound, landmark: Landmark,
   lightbulb: Lightbulb,
   dashboard: LayoutDashboard, library: Library, link: Link2, list: ListChecks,

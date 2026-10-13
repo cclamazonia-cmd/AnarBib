@@ -274,6 +274,34 @@
 .cat-field { display: flex; flex-direction: column; gap: 3px; }
 .cat-field label { font-size: .85rem; color: var(--brand-muted, #d4cec3); font-weight: 600; }
 
+/* ── Recherche manuelle du panneau de recherche (13/10/2026) ──
+   Intitulé, liste des catalogues et bouton « Ouvrir » dans un même cadre ; la
+   liste et le bouton sont soudés (pas d'espace, coins intérieurs droits) pour
+   se lire comme un seul champ. Sur téléphone, l'intitulé passe au-dessus. */
+.cat-recherche-manuelle {
+  display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px 8px;
+  max-width: 100%; min-width: 0;
+  padding: 3px 3px 3px 10px;
+  border: 1px solid var(--brand-panel-border-strong, rgba(255,255,255,.18));
+  border-radius: var(--brand-radius-sm, 14px);
+  background: rgba(0,0,0,.22);
+}
+.cat-recherche-manuelle__titre {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .78rem; font-weight: 600; white-space: nowrap;
+  color: var(--brand-muted, #d4cec3);
+}
+.cat-recherche-manuelle__champ { display: inline-flex; align-items: stretch; min-width: 0; max-width: 100%; }
+.cat-recherche-manuelle__champ .ab-select {
+  width: auto; min-width: 0; max-width: 100%;
+  padding: 4px 30px 4px 10px; font-size: .82rem; background-position: right 10px center;
+  border-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;
+}
+.cat-recherche-manuelle__champ .ab-button {
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  border-top-left-radius: 0; border-bottom-left-radius: 0;
+}
+
 /* ── .ab-* design tokens (Track A Lot 4, from maquette v3) ── */
 
 .ab-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
