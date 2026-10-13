@@ -398,7 +398,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 `P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
-**Estado.** Decisão de Xavier (12/10/2026): obrigatória para as contas de equipe, opcional para leitores; TOTP nativo do Supabase Auth, sem SMS nem fornecedor. Lote 1 entregue em 13/10 (`39cb6328`): Minha conta e código no login. Lote 2 entregue em 13/10 (`11bbbaa0`), DESLIGADO: função de pré-requisição do PostgREST, modo `off`, inscrição obrigatória no login, aba Rede. A função NÃO está conectada.
+**Estado.** Decisão de Xavier (12/10/2026): obrigatória para as contas de equipe, opcional para leitores; TOTP nativo do Supabase Auth, sem SMS nem fornecedor. Lote 1 entregue em 13/10 (`39cb6328`): Minha conta e código no login. Lote 2 entregue em 13/10 (`11bbbaa0`), DESLIGADO: função de pré-requisição do PostgREST, modo `off`, inscrição obrigatória no login, aba Rede. A função NÃO está conectada. REGISTRE 2FA-2 entregue em 14/10 (`75d86975`): a tela de inscrição guia até dentro do aplicativo (Aegis, FreeOTP+, KeePassXC), link `otpauth://`, mensagem própria para código recusado na inscrição, cópia da chave confirmada. Manuais do bucket: leitor·a v4 (13/10) e completo v5-1 (14/10) publicados.
 
 *Verificado : 13/10 — lotes 1 e 2 implantados e verificados; auditoria das Edge Functions implantada (`069b76ea`). Política do Storage aplicada pela CI (`20261013182456`). Aviso enviado em 13/10 (14/14).*
 
@@ -412,7 +412,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 - As contas de equipe têm ao menos um dispositivo.
 - Uma remoção real pela administração, registrada.
 
-*Remissões : `supabase/migrations/20261013171710_b42_la_double_authentification_s_exige_cote_serveur.sql` · `tests/sql/b42_double_authentification_tests.sql` · `src/lib/doubleFacteur.js` · `src/pages/account/ContaDoubleFacteur.jsx` · `src/components/rede/DoubleFacteurPanel.jsx`*
+*Remissões : `supabase/migrations/20261013171710_b42_la_double_authentification_s_exige_cote_serveur.sql` · `tests/sql/b42_double_authentification_tests.sql` · `src/lib/doubleFacteur.js` · `src/pages/account/ContaDoubleFacteur.jsx` · `src/components/rede/DoubleFacteurPanel.jsx` · `scripts/i18n-add-b42-2fa2-inscription-guidee.cjs`*
 
 ---
 
