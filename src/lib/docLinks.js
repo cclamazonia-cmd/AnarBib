@@ -30,17 +30,19 @@ export const DOC_FILES = {
 // Manuel complet — page PDF où commence chaque bloc (0 à 9), par langue.
 // 0 Commencer · 1 Catalogue public · 2 Compte · 3 Qui peut quoi · 4 Panneau
 // 5 Catalogage et importations · 6 Bibliothèque · 7 Fédération · 8 Réseau · 9 Règles d'or
+// Remesuré le 14/10/2026 (B42 : double authentification aux chapitres 25 et 113) dans le PDF publié,
+// couverture multilingue comprise (page PDF = numéro de pied + 1).
 export const COMPLETE_BLOCKS = {
   'pt-BR': [6, 11, 20, 32, 35, 45, 62, 70, 81, 87],
-  fr:      [93, 98, 107, 119, 123, 133, 151, 159, 170, 177],
-  de:      [183, 188, 198, 210, 214, 224, 244, 252, 263, 270],
-  en:      [276, 281, 290, 302, 305, 314, 332, 340, 351, 357],
-  es:      [363, 368, 377, 389, 392, 402, 420, 428, 439, 445],
-  it:      [451, 456, 465, 477, 480, 490, 508, 516, 527, 533],
-  ca:      [539, 544, 553, 565, 568, 577, 594, 602, 613, 619],
-  nl:      [625, 630, 640, 652, 656, 666, 685, 693, 704, 711],
-  el:      [717, 722, 733, 746, 750, 760, 780, 788, 799, 806],
-  eo:      [812, 817, 826, 838, 841, 850, 867, 875, 886, 892],
+  fr:      [93, 98, 107, 120, 124, 134, 152, 160, 171, 178],
+  de:      [184, 189, 199, 212, 216, 226, 246, 254, 265, 273],
+  en:      [279, 284, 293, 305, 308, 317, 335, 343, 354, 360],
+  es:      [366, 371, 380, 393, 396, 406, 424, 432, 443, 449],
+  it:      [455, 460, 469, 482, 485, 495, 513, 521, 532, 538],
+  ca:      [544, 549, 558, 571, 574, 583, 600, 608, 619, 625],
+  nl:      [631, 636, 646, 659, 663, 673, 692, 700, 711, 718],
+  el:      [724, 729, 740, 753, 757, 767, 787, 795, 806, 814],
+  eo:      [820, 825, 834, 846, 849, 858, 875, 883, 894, 900],
 };
 
 // Manuel de la·du lecteur·rice — page de titre de chaque langue et décalage

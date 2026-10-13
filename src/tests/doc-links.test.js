@@ -50,7 +50,7 @@ describe('tables des recueils', () => {
 
 describe('URL', () => {
   it('ouvre le bloc dans la langue, et retombe sur pt-BR pour une langue inconnue', () => {
-    expect(completeManualUrl('fr', 5)).toMatch(/Manual_do_AnarBib\.pdf#page=133$/);
+    expect(completeManualUrl('fr', 5)).toMatch(/Manual_do_AnarBib\.pdf#page=134$/);
     expect(completeManualUrl('xx', 0)).toMatch(/#page=6$/);
     expect(readerManualUrl('el', 'reserve')).toMatch(/#page=169$/);
     expect(readerManualUrl('fr', 'twoFactor')).toMatch(/Manual%20Leitor-a-e\.pdf#page=40$/);
