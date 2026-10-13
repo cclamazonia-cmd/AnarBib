@@ -10,6 +10,7 @@ import { Button } from '@/components/ui';
 import AppIcon from '@/components/ui/AppIcon';
 import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
 import WorksWorkshopPanel from '@/components/atelier/WorksWorkshopPanel';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // Atelier autorités — paquet 2, lot A : la file de propositions (vue 1re page).
 // Lecture via api.fn_authority_list ; actions via fn_authority_propose / apply /
@@ -388,7 +389,7 @@ export default function AtelierAutoridadesPage() {
               <div>
                 <label style={ls}>{t({ id: 'atelier.form.lang', defaultMessage: 'Idioma' })}</label>
                 <select value={form.lang} onChange={e => setForm(f => ({ ...f, lang: e.target.value }))} style={fs}>
-                  {['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'].map(L => <option key={L} value={L}>{L}</option>)}
+                  {LOCALE_CODES.map(L => <option key={L} value={L}>{L}</option>)}
                 </select>
               </div>
             </div>

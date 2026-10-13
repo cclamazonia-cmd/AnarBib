@@ -12,6 +12,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 vi.mock('@/lib/supabase', () => ({ supabase: { rpc: vi.fn() } }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null }) }));
@@ -57,7 +58,7 @@ describe('B29 — un refus RLS sur un brouillon se dit, pas en « erreur systèm
 describe('B29 — les HINT de la migration existent dans les 10 locales', () => {
   const migration = readFileSync(path.resolve(__dirname, '../../supabase/migrations/20260927160000_b29_brouillons_par_bibliotheque.sql'), 'utf8');
   const hints = [...new Set([...migration.matchAll(/hint\s*=\s*'(error\.[A-Za-z0-9_.]+)'/gi)].map((m) => m[1]))];
-  const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+  const LOCALES = LOCALE_CODES;
 
   it('les trois refus neufs sont bien dans la migration', () => {
     expect(hints).toEqual(expect.arrayContaining([

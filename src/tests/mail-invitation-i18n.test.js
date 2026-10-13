@@ -15,6 +15,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = readFileSync(
@@ -22,7 +23,7 @@ const SRC = readFileSync(
   'utf8',
 );
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 // Les 12 clés produites par le chantier invitation.
 const CLES = [

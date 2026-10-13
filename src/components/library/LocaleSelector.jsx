@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { LOCALES, DEFAULT_LOCALE } from '@/i18n/locales';
 
 // ─────────────────────────────────────────────────────────────
 // LocaleSelector — composant de sélection de la locale d'une biblio
@@ -10,15 +11,15 @@ import { useIntl } from 'react-intl';
 // - Pas de codes d'État (« ES », « GB », « FR »)
 // - Chaque langue s'affiche dans son propre nom, dans sa propre langue
 //
-// La liste des locales supportées est définie ici (LOCALE_OPTIONS), à
-// enrichir au fur et à mesure que de nouvelles biblios pilotes en
-// demandent (basque, catalan, occitan, kurde, etc.). Pas de validation
-// CHECK constraint côté DB pour permettre cet ajout sans migration.
+// Les options viennent de src/i18n/locales.js (DOC-I18N-4). Jusqu'au
+// 13/10/2026 le composant gardait sa propre liste, restée à six langues
+// (pt-BR, de, en, es, fr, it) : une bibliothèque ne pouvait pas choisir ca,
+// eo, nl ni el comme langue par défaut, alors que l'app les sert depuis juin.
+// libraries.default_locale n'a pas de contrainte CHECK en base.
 //
 // Le composant est volontairement minimal : juste un <select> natif HTML
 // avec les options. Pas d'autocomplete, pas de search, pas de drapeaux.
-// Si une biblio veut une langue qui n'est pas encore dans la liste, elle
-// nous demande et on enrichit le composant.
+// Une langue nouvelle s'ajoute dans src/i18n/locales.js, pas ici.
 //
 // Props :
 //   - value      : code locale actuel (ex: 'pt-BR'), peut être null/undefined
@@ -41,19 +42,10 @@ import { useIntl } from 'react-intl';
 //
 // L'option `name` est le nom de la langue dans sa propre langue.
 // Pas de drapeau, pas de code pays/État dans le label visible.
-//
-// Pour ajouter une locale (ex: euskera) :
-//   1. Créer src/i18n/locales/eu.json
-//   2. Ajouter la locale à mail-strings.ts (les 6 colonnes existantes)
-//   3. Ajouter ici : { code: 'eu', name: 'Euskara' }
 export const LOCALE_OPTIONS = [
-  { code: 'pt-BR', name: 'Português' },
-  { code: 'de',    name: 'Deutsch' },
-  { code: 'en',    name: 'English' },
-  { code: 'es',    name: 'Castellano' },
-  { code: 'fr',    name: 'Français' },
-  { code: 'it',    name: 'Italiano' },
-];
+  ...LOCALES.filter((l) => l.code === DEFAULT_LOCALE),
+  ...LOCALES.filter((l) => l.code !== DEFAULT_LOCALE).sort((a, b) => a.code.localeCompare(b.code)),
+].map(({ code, label }) => ({ code, name: label }));
 
 export default function LocaleSelector({ value, onChange, disabled = false, className, style }) {
   const { formatMessage: t } = useIntl();

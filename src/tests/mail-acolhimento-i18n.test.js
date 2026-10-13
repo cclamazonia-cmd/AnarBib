@@ -21,12 +21,13 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
 const SRC = readFileSync(join(ROOT, 'supabase', 'functions', 'notify-library-request', 'strings.ts'), 'utf8');
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 const CLES = ['approved.notYet', 'approved.path', 'approved.human', 'approved.ctaLabel', 'approved.guidePath'];
 
 /** Découpe STRINGS en blocs par locale : `  "pt-BR": {` ou `  fr: {` … `  },`. */

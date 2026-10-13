@@ -15,6 +15,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { decouperReseau, lireReseau, ecrireReseau, bibliothequesDesReseaux, bibliothequesFiltrees } from '@/lib/reseaux';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -87,7 +88,7 @@ describe('le filtre de réseaux du catalogue', () => {
     const cles = ['catalog.filters.networkLabel', 'catalog.filters.networkAll', 'catalog.filters.networkNSelected', 'catalog.filters.networkOutside',
       'catalog.chip.network', 'federacao.carte.edit.networks', 'federacao.carte.edit.networksHint', 'federacao.carte.edit.networksOutside',
       'federacao.carte.networkKind.organisation_politique', 'federacao.carte.networkKind.autre', 'federacao.carte.networkKind.unclassified'];
-    for (const l of ['fr', 'pt-BR', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el']) {
+    for (const l of LOCALE_CODES) {
       const j = JSON.parse(lire(`src/i18n/locales/${l}.json`));
       for (const c of cles) expect(j[c], `${l} ${c}`).toBeTruthy();
     }

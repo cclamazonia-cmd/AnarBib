@@ -9,10 +9,11 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const racine = path.resolve(__dirname, '../..');
 const lire = (f) => readFileSync(path.join(racine, f), 'utf8');
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const locale = (l) => JSON.parse(lire(`src/i18n/locales/${l}.json`));
 
 describe('le catalogue dit quand ses résultats sont approchés', () => {
@@ -51,7 +52,7 @@ describe('le formulaire d\'autorité', () => {
   it('titre chaque champ de biographie par sa langue, dans les dix langues', () => {
     expect(src).toContain('{t({ id: BIO_TITLE_KEYS[lang] })}');
     expect(src).not.toContain("<span style={{ fontWeight: 700, fontSize: '.82rem' }}>{lang}</span>");
-    const codes = ['ptBR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+    const codes = LOCALE_CODES.map((c) => c.replace('-', ''));
     for (const l of LOCALES) for (const c of codes) expect(locale(l)[`catalogacao.bio.titleIn.${c}`], `${l}/${c}`).toBeTruthy();
     expect(locale('fr')['catalogacao.bio.titleIn.fr']).toBe('Biographie en français');
     expect(locale('fr')['catalogacao.bio.titleIn.nl']).toBe('Biographie en néerlandais');

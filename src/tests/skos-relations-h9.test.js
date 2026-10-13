@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { toTurtle, toJsonLd, SKOS_MATCH } from '../lib/skosExport.js';
 import { MATCH_TYPES, MATCH_LABEL_KEY } from '../lib/ficedlMatch.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -86,7 +87,7 @@ describe('H9 — la page-sujet et l éditeur', () => {
 });
 
 describe('H9 — cinq libellés distincts dans chacune des dix langues', () => {
-  for (const loc of ['pt-BR', 'fr', 'es', 'it', 'de', 'en', 'ca', 'eo', 'nl', 'el']) {
+  for (const loc of LOCALE_CODES) {
     it(loc, () => {
       const j = JSON.parse(lire(`src/i18n/locales/${loc}.json`));
       const libelles = MATCH_TYPES.map((m) => j[MATCH_LABEL_KEY[m]]);

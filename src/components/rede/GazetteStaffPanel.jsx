@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GazetteStaffPanel — onglet « Gazette » de RedePage (réservé network_staff).
@@ -19,7 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 // La diffusion à tout le staff (bouton « Diffuser ») viendra à l'Étape C.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const GZ_LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+const GZ_LOCALES = LOCALE_CODES;
 const SUB_STATUSES = ['new', 'accepted', 'rejected', 'published'];
 // Rubriques où un flux peut déverser ses reprises. L'agenda n'y est pas : il ne
 // vient jamais de la presse, seulement de contributions datées.

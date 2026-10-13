@@ -29,6 +29,7 @@ import { IntlProvider } from 'react-intl';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 vi.mock('@/lib/supabase', () => ({ supabase: { rpc: vi.fn() } }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null }) }));
@@ -221,7 +222,7 @@ describe('B30 — le rapport de révision nomme la bibliothèque du lot', () => 
 });
 
 describe('B30 — les clés de l’écran et les HINT de la migration existent dans les 10 locales', () => {
-  const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+  const LOCALES = LOCALE_CODES;
   const ECRAN = [
     'error.batch.library_mismatch', 'error.batch.library_not_yours',
     'catalogacao.batch.library.network', 'catalogacao.batch.libraryLabel', 'catalogacao.batch.libraryRequired',

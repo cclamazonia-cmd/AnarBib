@@ -16,6 +16,7 @@ import CountrySelect from '@/components/forms/CountrySelect';
 import NameEntryAssist from '@/components/catalog/NameEntryAssist';
 import { proposerPointAcces } from '@/lib/nameEntry';
 import { languageOptions } from '@/lib/languages';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // ── Authority types ───────────────────────────────────────
 const AUTHORITY_TYPE_KEYS = {
@@ -28,11 +29,11 @@ const AUTHORITY_TYPE_KEYS = {
 const AUTHORITY_TYPE_VALUES = ['person', 'collective', 'publisher_series', 'place_campaign_theme', 'other'];
 
 // Locales du widget bio multilingue (= CHECK author_translations.lang).
-const ALLOWED_BIO_LANGS = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const ALLOWED_BIO_LANGS = LOCALE_CODES;
 // Titre de chaque champ (11/10/2026) : « Biographie en français », etc. —
 // les dix champs par langue SONT la biographie ; plus de champ général au-dessus
 // une fois l'autorité publiée.
-const BIO_TITLE_KEYS = {
+export const BIO_TITLE_KEYS = {
   'pt-BR': 'catalogacao.bio.titleIn.ptBR', fr: 'catalogacao.bio.titleIn.fr', es: 'catalogacao.bio.titleIn.es',
   en: 'catalogacao.bio.titleIn.en', it: 'catalogacao.bio.titleIn.it', de: 'catalogacao.bio.titleIn.de',
   ca: 'catalogacao.bio.titleIn.ca', eo: 'catalogacao.bio.titleIn.eo', nl: 'catalogacao.bio.titleIn.nl',

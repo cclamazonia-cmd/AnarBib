@@ -45,6 +45,7 @@ import { IntlProvider, createIntl } from 'react-intl';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
+import { LOCALE_CODES } from '../i18n/locales.js';
 import { pagesParExemplaires, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';   // H33 : le message partiel de « Rapprocher » le reprend
 
@@ -74,7 +75,7 @@ vi.mock('@/components/layout', () => ({
 vi.mock('@/components/UserHeroBadge', () => ({ default: () => null }));
 vi.mock('@/components/HeroDocumentationActions', () => ({ default: () => null }));
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, '..', rel), 'utf8');
 const IMPORTACOES = lire('pages/importacoes/ImportacoesPage.jsx');

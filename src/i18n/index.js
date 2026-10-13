@@ -4,14 +4,16 @@
 // Le portugais du Brésil est la locale par défaut.
 //
 // Chargement : pt-BR est embarqué statiquement (défaut + fallback,
-// toujours disponible immédiatement). Les 7 autres langues sont chargées
+// toujours disponible immédiatement). Les neuf autres langues sont chargées
 // à la demande via import() dynamique — Vite produit un chunk par langue,
-// et chaque visiteur ne télécharge que la sienne.
+// et chaque visiteur ne télécharge que la sienne. La liste des langues vit
+// dans ./locales.js (DOC-I18N-4) : ce fichier n'en recopie aucune.
 // ═══════════════════════════════════════════════════════════
 
 import ptBR from './locales/pt-BR.json';
+import { LOCALES, DEFAULT_LOCALE } from './locales.js';
 
-export const DEFAULT_LOCALE = 'pt-BR';
+export { DEFAULT_LOCALE };
 
 // Liste des locales supportées.
 // Décision politique acta-anarchiste (paquet 21, 2026-05-11) :
@@ -20,17 +22,7 @@ export const DEFAULT_LOCALE = 'pt-BR';
 // - Chaque langue s'affiche dans son propre nom, dans sa propre langue
 // Le code BCP 47 (`code`) reste inchangé : c'est l'identifiant technique
 // stocké en DB (profile.preferred_language, library.default_locale).
-export const SUPPORTED_LOCALES = [
-  { code: 'pt-BR', label: 'Português' },
-  { code: 'fr', label: 'Français' },
-  { code: 'es', label: 'Castellano' },
-  { code: 'en', label: 'English' },
-  { code: 'it', label: 'Italiano' },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'ca', label: 'Català' },
-  { code: 'eo', label: 'Esperanto' },
-  { code: 'nl', label: 'Nederlands' }, { code: 'el', label: 'Ελληνικά' },
-];
+export const SUPPORTED_LOCALES = LOCALES.map(({ code, label }) => ({ code, label }));
 
 // Source de vérité des codes supportés (remplace l'ancien map MESSAGES,
 // qui importait toutes les langues statiquement).
@@ -38,17 +30,13 @@ const SUPPORTED_CODES = new Set(SUPPORTED_LOCALES.map((l) => l.code));
 
 // Chargeurs dynamiques des langues non-défaut. pt-BR n'y figure pas :
 // il est embarqué statiquement ci-dessus (fallback immédiat, sans réseau).
-const LOADERS = {
-  fr: () => import('./locales/fr.json'),
-  es: () => import('./locales/es.json'),
-  en: () => import('./locales/en.json'),
-  it: () => import('./locales/it.json'),
-  de: () => import('./locales/de.json'),
-  ca: () => import('./locales/ca.json'),
-  eo: () => import('./locales/eo.json'),
-  nl: () => import('./locales/nl.json'),
-  el: () => import('./locales/el.json'),
-};
+// import.meta.glob produit le même découpage qu'un import() par langue (un
+// chunk chacune) ; seules les langues de LOCALES ont un chargeur, et un test
+// (locales-source-unique) exige un fichier JSON par code, ni plus ni moins.
+const CHUNKS = import.meta.glob(['./locales/*.json', '!./locales/pt-BR.json']);
+const LOADERS = Object.fromEntries(
+  LOCALES.filter((l) => l.code !== DEFAULT_LOCALE).map((l) => [l.code, CHUNKS[`./locales/${l.code}.json`]]),
+);
 
 const STORAGE_KEY = 'anarbib.locale';
 const SCROLL_RESTORE_KEY = 'anarbib.scrollRestore';

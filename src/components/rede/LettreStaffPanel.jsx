@@ -11,8 +11,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { LOCALE_CODES } from '@/i18n/locales';
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+const LOCALES = LOCALE_CODES;
 
 export default function LettreStaffPanel() {
   const { formatMessage: t, locale } = useIntl();

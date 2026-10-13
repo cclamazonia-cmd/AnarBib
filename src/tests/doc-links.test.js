@@ -6,8 +6,9 @@ import {
   COMPLETE_BLOCKS, READER_START, READER_SECTIONS, GOVERNANCE_START,
   completeManualUrl, readerManualUrl, governanceGuideUrl, docsForLocation, currentTab,
 } from '../lib/docLinks.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 describe('tables des recueils', () => {
   it('couvrent les dix langues servies', () => {

@@ -69,11 +69,12 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HOMOGRAPHE_COURT } from './helpers/homographes-court-pt-br.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const ici = dirname(fileURLToPath(import.meta.url));
 const DOSSIER = resolve(ici, '../i18n/locales');
 
-const LOCALES = ['pt-BR', 'fr', 'en', 'de', 'it', 'es', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 const TOUT = Object.fromEntries(
   LOCALES.map((l) => [l, JSON.parse(readFileSync(resolve(DOSSIER, `${l}.json`), 'utf8'))]),
 );

@@ -135,6 +135,7 @@ import fr from '@/i18n/locales/fr.json';
 import { localizeError } from '@/lib/localizeError';
 // H21 lot 6a : « Rapprocher » compose aussi les comptes par verdict des exemplaires.
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 import { pagesParExemplaires, cumulerReponses } from '@/lib/importItemUpdates.js';   // H33 : les gestes vont par pages
 
 // ── Décor de la page MONTÉE (dernier describe) ─────────────────
@@ -168,7 +169,7 @@ vi.mock('@/components/layout', () => ({
 vi.mock('@/components/UserHeroBadge', () => ({ default: () => null }));
 vi.mock('@/components/HeroDocumentationActions', () => ({ default: () => null }));
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, '..', rel), 'utf8');
 const IMPORTACOES = lire('pages/importacoes/ImportacoesPage.jsx');

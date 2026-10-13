@@ -55,9 +55,10 @@ import { transformSync } from 'esbuild';
 import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
 import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
 import { FRANCES_EM_PT } from './helpers/ptbr-frances.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const FONCTIONS = new URL('../../supabase/functions/', import.meta.url);
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 function charger(rel, suffixe = '') {
   const code = transformSync(readFileSync(new URL(rel, FONCTIONS), 'utf8') + suffixe, {

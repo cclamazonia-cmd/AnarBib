@@ -39,6 +39,7 @@ import { render, cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -455,7 +456,7 @@ describe('ExemplaresPanel — un seul endroit (lot 4)', () => {
 });
 
 describe('les clés du panneau existent dans les 10 locales', () => {
-  const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+  const LOCALES = LOCALE_CODES;
   const CLES = [
     ...['title', 'count', 'new', 'unpublished', 'empty', 'otherLibrary', 'resumeUpdate', 'updatePending', 'loadError', 'libraryUnknown'].map((k) => `catalogacao.copies.${k}`),
     ...['title', 'where', 'whereOne', 'noLibrary', 'shelf', 'tomboHint', 'tomboManual', 'circulation', 'circulationInherited', 'details',

@@ -31,6 +31,7 @@ import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
 import { cumulerReponses, pagesParExemplaires, PLAFOND_LIGNES, PLAFOND_EXEMPLAIRES } from '@/lib/importItemUpdates.js';
 import { resumeVerdicts } from '@/lib/importItemVerdicts.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const banc = vi.hoisted(() => ({ appels: [], reponses: {} }));
 vi.mock('@/lib/supabase', () => ({
@@ -61,7 +62,7 @@ vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
 const RACINE = path.resolve(__dirname, '..', '..');
 const ECRAN = JSON.parse(readFileSync(path.join(RACINE, 'tests', 'pmb', 'h21-bout-en-bout-ecran.json'), 'utf8'));
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const intl = createIntl({ locale: 'fr', messages: fr });
 const dire = (id, valeurs) => intl.formatMessage({ id }, valeurs);

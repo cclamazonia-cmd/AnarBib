@@ -5,8 +5,9 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { INTENTIONS, GROUPS, visibleGroups, matchIntentions, normalize } from '../pages/inicio/intentions.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 const locales = Object.fromEntries(LOCALES.map(l => [l, JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'i18n', 'locales', `${l}.json`), 'utf8'))]));
 
 describe('registre des intentions', () => {

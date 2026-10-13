@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { Button } from '@/components/ui';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // WorksWorkshopPanel — la file des ŒUVRES de l'Atelier (05/09/2026).
 //
@@ -15,7 +16,7 @@ import { Button } from '@/components/ui';
 // un·e contributeur·rice le propose (kind « titre »), et la bibliothèque qui
 // détient une édition a sept jours pour objecter.
 
-const LANGS = ['pt-BR', 'fr', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const LANGS = LOCALE_CODES;
 const KINDS = ['titre', 'fusion', 'rattachement', 'scission', 'tomes'];
 const PART_VIDE = { uniform_title: '', book_ids: '' };
 const FORM_VIDE = {

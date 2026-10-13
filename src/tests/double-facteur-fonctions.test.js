@@ -15,6 +15,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { doubleFacteurManquant, CODE_AAL2 } from '../../supabase/functions/_shared/core/double-facteur.ts';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const source = (f) => readFileSync(path.join(RACINE, 'supabase/functions', f, 'index.ts'), 'utf8');
@@ -49,7 +50,7 @@ describe('doubleFacteurManquant', () => {
 
   it('le code de refus a son libellé dans les dix locales', () => {
     expect(CODE_AAL2).toBe('aal2_required');
-    for (const loc of ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR']) {
+    for (const loc of LOCALE_CODES) {
       const j = JSON.parse(readFileSync(path.join(RACINE, 'src/i18n/locales', `${loc}.json`), 'utf8'));
       expect(j['error.edge.aal2_required'], loc).toBeTruthy();
     }

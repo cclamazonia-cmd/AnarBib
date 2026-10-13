@@ -24,11 +24,12 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const ici = dirname(fileURLToPath(import.meta.url));
 const CHEMIN = join(ici, '..', '..', 'supabase', 'functions', '_shared', 'i18n', 'mail-strings.ts');
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 const PLANCHER = 600; // 648 clés au 01/09/2026 — sous 600, c'est le parseur qui a lâché.
 
 function decouperCles(source) {

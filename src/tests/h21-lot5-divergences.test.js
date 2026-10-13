@@ -50,6 +50,7 @@ import path from 'node:path';
 import fr from '@/i18n/locales/fr.json';
 import DivergencesNotice, { RAISONS_ECARTER, RAISONS_APPLIQUER } from '@/components/catalog/DivergencesNotice.jsx';
 import DivergencesPanel from '@/pages/catalogacao/DivergencesPanel.jsx';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const banc = vi.hoisted(() => ({ appels: [], reponses: {}, confirme: true }));
 vi.mock('@/lib/supabase', () => ({
@@ -69,7 +70,7 @@ vi.mock('@/contexts/ConfirmContext', () => ({
 }));
 vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, rel), 'utf8');
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');

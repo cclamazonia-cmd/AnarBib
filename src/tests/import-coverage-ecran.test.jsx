@@ -18,6 +18,7 @@ import el from '@/i18n/locales/el.json';
 import RunCoveragePanel from '@/pages/importacoes/RunCoveragePanel.jsx';
 import BatchReviewReport from '@/components/catalog/BatchReviewReport.jsx';
 import { coverageToCsv, coverageItemLabel } from '@/lib/importCoverage.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RUN = {
   id: 42, original_filename: 'export-pmb.marc', run_status: 'ready_for_review', created_drafts: 0,
@@ -114,7 +115,7 @@ describe('H17 — le laissé exprès, avec son motif', () => {
 
   it('les six motifs existent dans les 10 langues', async () => {
     const motifs = ['interne', 'sans_champ', 'redondant', 'materiel', 'liens', 'codees'];
-    for (const loc of ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR']) {
+    for (const loc of LOCALE_CODES) {
       const dico = (await import(`@/i18n/locales/${loc}.json`)).default;
       for (const m of motifs) expect(dico[`importacoes.coverage.motif.${m}`], `${loc} ${m}`).toBeTruthy();
       expect(dico['importacoes.coverage.status.laisse'], loc).toBeTruthy();

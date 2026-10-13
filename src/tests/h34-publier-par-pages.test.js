@@ -13,6 +13,7 @@ import { createIntl } from 'react-intl';
 import { publierLotParPages, noticesAPublier, exemplairesPublies, PAGES_PUBLICATION_MAX } from '@/lib/publicationParPages';
 import { cumulerReponses } from '@/lib/importItemUpdates';
 import { peutRouvrirRevision } from '@/lib/useStaffLibraries';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '..', '..');
 const lire = (f) => readFileSync(path.join(RACINE, f), 'utf8');
@@ -134,7 +135,7 @@ describe('le catalogage : « Publier le lot » par pages, « Reprendre la public
 });
 
 describe('les clés du lot 2 dans les dix locales, valeurs ICU valides', () => {
-  const LOCALES = ['pt-BR', 'fr', 'es', 'it', 'de', 'en', 'ca', 'eo', 'nl', 'el'];
+  const LOCALES = LOCALE_CODES;
   const CLES = {
     'catalogacao.batch.status.publishing': {},
     'catalogacao.batch.publication.resume': {},

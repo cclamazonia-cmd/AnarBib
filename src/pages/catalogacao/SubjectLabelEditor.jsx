@@ -5,6 +5,7 @@ import { localizeError } from '@/lib/localizeError';
 import { pickLabel } from '@/lib/i18nLabel';
 import { MATCH_TYPES, MATCH_LABEL_KEY } from '@/lib/ficedlMatch';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectLabelEditor — thésaurus v2 étape H-1 : éditeur de libellés multilingue.
@@ -16,7 +17,7 @@ import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 // multilingue : remplir les ⚐ manquants, enrichir la findabilité.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 function lbl(labelI18n, locale) {
   if (!labelI18n || typeof labelI18n !== 'object') return '';

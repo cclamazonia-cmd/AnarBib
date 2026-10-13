@@ -29,6 +29,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const SRC = new URL(
   '../../supabase/functions/_shared/context/library-mail-routing.ts',
@@ -136,7 +137,7 @@ describe('le vocabulaire des statuts couvre ce que la base écrit', () => {
     return mod.exports;
   }
 
-  const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+  const LOCALES = LOCALE_CODES;
 
   it("traduit le statut par défaut de la base dans les dix locales", () => {
     const { taskStatusLabel } = chargerStrings();

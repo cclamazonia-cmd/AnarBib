@@ -92,11 +92,12 @@ import { dirname, resolve } from 'node:path';
 import { TU_EUROPEU } from './helpers/ptbr-tu-europeu.js';
 import { PT_EUROPEU } from './helpers/ptbr-pt-europeu.js';
 import { FRANCES_EM_PT } from './helpers/ptbr-frances.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const ici = dirname(fileURLToPath(import.meta.url));
 const DOSSIER = resolve(ici, '../i18n/locales');
 
-const LOCALES = ['pt-BR', 'fr', 'en', 'de', 'it', 'es', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 const brut = (l) => readFileSync(resolve(DOSSIER, `${l}.json`), 'utf8');
 const charge = (l) => JSON.parse(brut(l));

@@ -55,6 +55,7 @@ import {
   CHAMPS_EXEMPLAIRE, RAISONS_EXEMPLAIRES, exemplairesPreparables, exemplairesAComparer, majDeLItem,
   champsQuiBougent, partiesExemplaires, pagesParExemplaires, PLAFOND_EXEMPLAIRES, PLAFOND_LIGNES,
 } from '@/lib/importItemUpdates.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const banc = vi.hoisted(() => ({ appels: [], reponses: {}, role: 'coordenador', admin: false }));
 vi.mock('@/lib/supabase', () => ({
@@ -83,7 +84,7 @@ vi.mock('@/components/UserHeroBadge', () => ({ default: () => null }));
 vi.mock('@/components/HeroDocumentationActions', () => ({ default: () => null }));
 vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const IMPORTACOES = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');

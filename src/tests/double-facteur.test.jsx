@@ -38,6 +38,7 @@ import {
 import DoubleFacteurPanel from '@/components/rede/DoubleFacteurPanel';
 import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
 import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -84,7 +85,7 @@ describe('doubleFacteur.js — quand un code est dû', () => {
       'insufficient_aal', 'mfa_totp_enroll_not_enabled', 'over_request_rate_limit', 'inconnu'];
     const cles = new Set([...codes.map((code) => cleErreurDoubleFacteur({ code })), cleErreurDoubleFacteur(null)]);
     expect(cles.size).toBe(8);
-    for (const loc of ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR']) {
+    for (const loc of LOCALE_CODES) {
       const msgs = JSON.parse(lire(`src/i18n/locales/${loc}.json`));
       for (const c of cles) expect(msgs[c], `${loc} ${c}`).toBeTruthy();
     }

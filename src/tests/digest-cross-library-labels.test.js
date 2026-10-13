@@ -25,6 +25,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const SRC = new URL(
   '../../supabase/functions/_shared/i18n/cross-library-strings.ts',
@@ -40,7 +41,7 @@ function charger() {
   return mod.exports;
 }
 
-const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 // Relevé le 31/08/2026 sur les corps des fonctions qui appellent
 // fn_log_cross_library_action, et sur fn_is_critical_action_type.

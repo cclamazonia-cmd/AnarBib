@@ -9,6 +9,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { localizeError } from '../lib/localizeError';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const ROOT = join(__dirname, '..', '..');
 const t = ({ id }) => `<${id}>`;
@@ -38,7 +39,7 @@ describe('les formulaires ne lisent plus les mots du message', () => {
     expect(src).not.toMatch(/includes\('different'\)|includes\('same'\)/);
   });
   it('les deux clés existent dans les dix locales', () => {
-    for (const loc of ['fr', 'pt-BR', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el']) {
+    for (const loc of LOCALE_CODES) {
       const j = JSON.parse(readFileSync(join(ROOT, `src/i18n/locales/${loc}.json`), 'utf8'));
       expect(j['auth.passwordPwned'], loc).toBeTruthy();
       expect(j['auth.passwordPolicy'], loc).toMatch(/6/);

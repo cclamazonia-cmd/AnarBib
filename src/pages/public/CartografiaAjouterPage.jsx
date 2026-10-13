@@ -15,9 +15,10 @@ import { addBasemap } from '@/lib/mapTiles';
 import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import AltchaWidget from '@/components/ui/AltchaWidget';
+import { SITE_CODES } from '@/i18n/locales';
 
 const CATS = ['biblioteca', 'arquivo', 'centro_doc', 'ateneu', 'livraria', 'misto'];
-const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const MAP_LOCALES = SITE_CODES;
 function mapLang(locale) {
   const b = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
   return MAP_LOCALES.includes(b) ? b : 'fr';

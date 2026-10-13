@@ -20,8 +20,9 @@ import fr from '@/i18n/locales/fr.json';
 import el from '@/i18n/locales/el.json';
 import BatchReviewReport from '@/components/catalog/BatchReviewReport.jsx';
 import { DEFAULT_ITEM_MAPPINGS } from '../../supabase/functions/process-partner-catalog-import/marc.ts';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 
 const REPORT = {

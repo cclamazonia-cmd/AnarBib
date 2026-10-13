@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { languageLabel } from '@/lib/languages';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 /**
  * Œuvre d'une notice publiée — deux gestes du 04/09/2026 (OPAC par œuvre) :
@@ -18,7 +19,7 @@ import { languageLabel } from '@/lib/languages';
  * Composant monté dans le formulaire de catalogage, sous la ligne « Œuvre ».
  * Aucune modale (les panneaux restent montés, masqués en CSS).
  */
-const LOCALES = ['pt-BR', 'fr', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const LOCALES = LOCALE_CODES;
 
 export default function WorkToolsBlock({ bookId, workId, onChanged, onMsg }) {
   const { formatMessage: t } = useIntl();

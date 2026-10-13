@@ -11,6 +11,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { monterEF } from './helpers/monter-ef.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const charger = (env = {}) => {
   const ef = monterEF({ env });
@@ -34,7 +35,7 @@ describe('nom d\'expéditeur par défaut — « AnarBib », pas de portugais', (
 
   it('une bibliothèque sans nom d\'expéditeur ni nom court expédie au nom « AnarBib », en toute langue', () => {
     const { routage } = charger();
-    for (const loc of ['fr', 'es', 'it', 'de', 'en', 'pt-BR']) {
+    for (const loc of LOCALE_CODES) {
       const r = routage.resolveMailRouting({ use_library_name_as_sender: false }, loc);
       expect(r.senderName).toBe('AnarBib');
       expect(r.senderName).not.toMatch(/Biblioteca da rede/);

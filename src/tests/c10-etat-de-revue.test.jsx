@@ -17,6 +17,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 vi.mock('@/lib/supabase', () => ({
   supabase: {
@@ -92,7 +93,7 @@ describe('le piège access_scope est rappelé dans le formulaire', () => {
   });
 
   it('le rappel existe dans les dix langues', () => {
-    for (const l of ['fr', 'pt-BR', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el']) {
+    for (const l of LOCALE_CODES) {
       expect(JSON.parse(lire(`src/i18n/locales/${l}.json`))['catalogacao.dep.access.freeButReserved'], l).toBeTruthy();
     }
   });

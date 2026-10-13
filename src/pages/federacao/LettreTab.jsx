@@ -4,6 +4,7 @@ import Markdown from 'react-markdown';
 import { supabase, apiRpc, apiQuery } from '@/lib/supabase';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // LettreTab — onglet « Lettre » de la face fédération (carta).
@@ -13,11 +14,11 @@ import { localizeError } from '@/lib/localizeError';
 // Ouvert à tout membre rattaché ; lecture publique (anon) des numéros envoyés.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const LOCALE_NAMES = {
+export const LOCALE_NAMES = {
   'pt-BR': 'Português (BR)', fr: 'Français', es: 'Castellano', en: 'English',
   it: 'Italiano', de: 'Deutsch', el: 'Ελληνικά', ca: 'Català', eo: 'Esperanto', nl: 'Nederlands',
 };
-const LOC_ORDER = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+const LOC_ORDER = LOCALE_CODES;
 
 export default function LettreTab() {
   const { formatMessage: t, locale: appLocale } = useIntl();

@@ -25,6 +25,7 @@
 // clique, et jamais rien d'automatique à la frappe.
 
 import { NOMS_PROPRES_MOTS, NOMS_PROPRES_PHRASES } from './nomsPropres.js';
+import { PHRASE_CASE_CODES } from '../i18n/locales.js';
 
 const MOTS_OUTILS = [
   ['pt', ['a', 'o', 'as', 'os', 'um', 'uma', 'uns', 'umas', 'de', 'da', 'do', 'das', 'dos',
@@ -59,7 +60,8 @@ export function stopwordsFor(lang) {
 // et le grec ; title case pour l'anglais ; l'allemand garde la majuscule de ses
 // substantifs, qu'une machine ne sait pas reconnaître — pour lui, seuls les
 // mots-outils bougent.
-const PHRASE = ['pt', 'es', 'fr', 'it', 'ca', 'eo', 'nl', 'el'];
+// Les langues en casse de phrase sont un attribut de src/i18n/locales.js.
+const PHRASE = PHRASE_CASE_CODES;
 const regleDe = (lang) => {
   const l = String(lang || '');
   if (PHRASE.some((p) => l.startsWith(p))) return 'phrase';

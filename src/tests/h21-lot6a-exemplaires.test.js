@@ -43,10 +43,11 @@ import fr from '@/i18n/locales/fr.json';
 import ExemplairesDuFichier from '@/pages/importacoes/ExemplairesDuFichier.jsx';
 import BatchReviewReport from '@/components/catalog/BatchReviewReport.jsx';
 import { VERDICTS, SIGNAUX, resumeVerdicts, libelleVerdict } from '@/lib/importItemVerdicts.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
-const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, rel), 'utf8');
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');

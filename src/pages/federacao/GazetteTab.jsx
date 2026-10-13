@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { apiQuery } from '@/lib/supabase';
 import GazetteContributeForm from './GazetteContributeForm';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GazetteTab — onglet « Gazette » de la page Fédération.
@@ -21,9 +22,9 @@ import GazetteContributeForm from './GazetteContributeForm';
 // La sanitisation whitelist (S) reste appliquée en défense en profondeur.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const GZ_LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+const GZ_LOCALES = LOCALE_CODES;
 
-const LOCALE_NAMES = {
+export const LOCALE_NAMES = {
   'pt-BR': 'Português (BR)', fr: 'Français', es: 'Castellano', en: 'English',
   it: 'Italiano', de: 'Deutsch', el: 'Ελληνικά', ca: 'Català', eo: 'Esperanto', nl: 'Nederlands',
 };
@@ -35,7 +36,7 @@ const LOCALE_NAMES = {
 // dont la valeur peut être restée en français si l'automatisation a raté la
 // traduction (cf. N°03). Le nom « Fractale » reste codé en dur (nom propre ;
 // « Rizoma » du 16/06 au 16/09/2026, GAZ-10).
-const UI = {
+export const UI = {
   'pt-BR': { lang: 'Idioma', pdf: 'Baixar PDF', page: 'Página', sources: 'Fontes', tagline: 'A gazeta da rede',
     pending: 'Tradução da comunidade em andamento — exibindo o conteúdo em francês.' },
   fr: { lang: 'Langue', pdf: 'Télécharger le PDF', page: 'Page', sources: 'Sources', tagline: 'La gazette du réseau',

@@ -5,6 +5,7 @@ import { addBasemap } from '@/lib/mapTiles';
 import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import CartographyEditModal from './CartographyEditModal';
 import './NetworkMap.css';
+import { SITE_CODES } from '@/i18n/locales';
 
 // Composant carte partagé de l'annuaire géographique du réseau. Leaflet +
 // markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée). Fond de
@@ -30,7 +31,7 @@ const COLOR = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.color]));
 const SCOPES = ['reseau', 'paysage'];
 
 // Locales servies par la donnée (i18n par collectif). `pt-BR` → `pt`. Repli `fr`.
-const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+const MAP_LOCALES = SITE_CODES;
 function resolveMapLang(locale) {
   const base = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
   return MAP_LOCALES.includes(base) ? base : 'fr';

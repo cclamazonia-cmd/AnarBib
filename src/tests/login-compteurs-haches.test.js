@@ -26,6 +26,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { transformSync } from 'esbuild';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const SRC = new URL('../../supabase/functions/login/index.ts', import.meta.url);
 const CLE = new URL('../../supabase/functions/_shared/core/secret-key.ts', import.meta.url);
@@ -215,7 +216,7 @@ describe('login — chaque refus porte un code que l’écran traduit', () => {
     const traduits = [...ecran.matchAll(/case '(LOGIN_[A-Z_]+)':\s*return t\(\{ id: '([\w.]+)' \}\)/g)];
     expect(emis).toEqual(['LOGIN_INVALID', 'LOGIN_RATE_LIMITED', 'LOGIN_SERVER_ERROR']);
     expect(traduits.map((m) => m[1]).sort()).toEqual(emis);
-    for (const l of ['pt-BR', 'fr', 'en', 'de', 'it', 'es', 'ca', 'eo', 'nl', 'el']) {
+    for (const l of LOCALE_CODES) {
       const loc = JSON.parse(readFileSync(new URL(`../i18n/locales/${l}.json`, import.meta.url), 'utf8'));
       for (const [, , cle] of traduits) expect(loc[cle], `${l} : ${cle}`).toBeTruthy();
     }

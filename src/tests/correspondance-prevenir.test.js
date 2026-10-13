@@ -16,6 +16,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const racine = (p) => new URL(`../../supabase/functions/_shared/${p}`, import.meta.url);
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
@@ -93,7 +94,7 @@ const etatType = () => ({
 describe('G19 lot 3 — un message de correspondance prévient les autres bibliothèques du fil', () => {
   it('les huit clés corr.* existent dans les dix locales du dictionnaire des courriels', () => {
     for (const k of ['corr.bell.title', 'corr.bell.body', 'corr.mail.title', 'corr.mail.subject', 'corr.mail.intro', 'corr.mail.lang', 'corr.mail.ctaTitle', 'corr.mail.cta']) {
-      for (const loc of ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el']) {
+      for (const loc of LOCALE_CODES) {
         const v = mailStrings.tMail(loc, k, { library: 'X', subject: 'S', excerpt: 'E', lang: 'L', recipient: 'R' });
         expect(v, `${k} ${loc}`).not.toBe(k);
         expect(v).not.toMatch(/\{[a-z]+\}/);
