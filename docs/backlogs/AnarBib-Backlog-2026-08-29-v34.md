@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-14** · 50 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-15** · 58 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,10 +18,10 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 4
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 11
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 5
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 8
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 13 octobre 2026 au soir** (`88a962ee`, mesuré à 22 h 56) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 12/10 au soir, `91b7e803`). **478 appliquées en production, 479 numérotées au dépôt** : la dernière (`20261013194812`, les locales ont une source en base, session voisine) est dans la file de CI à l'heure du relevé. Ce qui a bougé et pourquoi : **la base** — +6 migrations et +9 fonctions, toutes de la session voisine, pour **B42** (la double authentification exigée côté serveur et sur Storage, 48 politiques Storage, deux tables `private`), la recherche du catalogage et les locales en base ; les avis de sécurité à 499 (+4 portes B42 à l'audit, +2 tables fermées), les index « inutilisés » à 362 ; **le catalogue** — inchangé à l'unité près : aucune notice, autorité, œuvre ni exemplaire créé, fusionné ou retiré, quatre notices modifiées par le catalogage de Xavier, trois reprises publiées ; **le réseau** — identique à la veille, 5 + 1, 19 + 4, 9 / 21 / 22 / 0, et un premier enrôlement TOTP commencé à 23 h, pas encore vérifié ; **le dépôt** — +41 commits, +25 fichiers, +50 clés, +136 tests JS, +4 suites SQL. **La journée** : B42 en trois lots et annoncé aux équipes, **B43 et B44 clos** (le second à 23 h, les sept relais vers des services tiers exigent une vraie session), Storage remonté après sa panne de montage, la recherche manuelle du catalogage enrichie (DBNL, DNB, BN Brasil), les locales à source unique ; de mon côté, la sonde FICEDL a écrit son premier courriel réel — le site flotte — et a été corrigée (un passage par jour), **la course du filtre de bibliothèque au catalogue** vue par Xavier a été corrigée le soir même, et le test « par pages » de H34 ne rougit plus la file. **Le compte** : 51 items (B42 et E39 — la locale roumaine à reprendre — entrés, B43 sorti ; B44, né et clos le même jour, n'y entre que par sa clôture) et 249 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : H34 (voisine, à vérifier), F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), B42 (l'échéance annoncée) ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16, I32 ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL, plus pressant qu'hier), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-14.** **40 items sur 50** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **10** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-15.** **43 items sur 58** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -587,6 +587,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
+| **D13** | Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice | `P2` | Ouvert |
+| **D14** | Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre | `P2` | Ouvert |
+| **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | Ouvert |
+| **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | Ouvert |
+| **D17** | Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier | `P2` | Ouvert |
+| **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | Ouvert |
+| **D19** | Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice | `P2` | Ouvert |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
@@ -675,6 +682,153 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Bloqué par l'avis de DIRA, du CIRA et du FICEDL sur la décision (`ARCH-4`). Un inventaire réel de DIRA (**G15**) pour éprouver l'import.
 
 *Renvois : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
+
+#### D13 — Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Décision `NUMDIF-5` (15/10). Aujourd'hui, rien ne garde la trace d'un PDF trouvé ailleurs : la recherche du 14/10 (Guérin, Grave, Reclus) a vécu dans une session, ses rejets avec elle. `book_draft_digital_resources` ne convient pas : il exige que le fichier existe déjà dans le stockage (`private.fn_objet_stocke_existe`) et vit attaché à un brouillon de notice, alors qu'un candidat existe avant tout fichier et sans brouillon.
+
+*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+
+**Ce que c'est.** Une table `ingest.digital_candidates` fermée par RLS (lecture et écriture : coordination de la bibliothèque détentrice, administration du réseau), au gabarit `_TEMPLATE.sql`. Champs : notice, URL du fichier, URL de la page (`NUMDIF-3`), édition constatée (éditeur, lieu, année, traduction, ISBN), verdict (même édition, autre édition, texte ressaisi — `NUMDIF-1`), cas de source (`NUMDIF-2`), empreinte SHA-256, taille, motif de rejet, qui a validé et quand. Écritures par RPC (`DOC-RPC-3`).
+
+**Pourquoi ça compte.** Sans file, chaque recherche se refait de zéro et chaque rejet se perd. Avec elle, un PDF d'une autre édition devient une information (elle existe, elle circule) au lieu d'un fichier mal rangé.
+
+**Ce qui compte comme fini.**
+
+- La table existe, fermée à `anon` et aux autres bibliothèques (suite SQL).
+- Un candidat rejeté garde son motif et l'édition trouvée.
+
+**Dépendances.** Aucune.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D14 — Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, administration système
+
+**État.** La méthode du 14/10, faite à la main : Archive.org (API `advancedsearch` et `metadata`), téléchargement, `pdftotext` sur les premières pages, comparaison avec la notice. Elle a montré que les métadonnées des sources se trompent (année, langue) et que seule la page de titre fait foi. Gallica, HathiTrust et la Biblioteca Digital Hispánica refusent les automates (Cloudflare) ; Google Books refuse les requêtes anonymes.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Un script dans `scripts/`, lancé à la main, qui écrit dans la file `D13` : recherche par notice, exclusion du prêt contrôlé (fichiers `private`), téléchargement, extraction de la page de titre et du copyright, proposition de verdict (`NUMDIF-1`) et de cas (`NUMDIF-2`). Aucun contournement de protection (`NUMDIF-5`).
+
+**Pourquoi ça compte.** C'est ce qui rend la recherche répétable sur 2 564 notices au lieu de 17.
+
+**Ce qui compte comme fini.**
+
+- Rejoué sur les 17 notices Guérin : 0 « même édition », les trois PDF connus classés « autre édition » avec l'édition trouvée.
+- Rejoué sur les notices 86 et 96 : les deux scans Harper classés « même édition ».
+
+**Dépendances.** `D13`.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D15 — Un écran pour valider ou rejeter les candidats, PDF ouvert
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : React / JavaScript, langue maternelle
+
+**État.** `NUMDIF-5` : la coordination de la bibliothèque détentrice dispose ; l'outil propose. La responsabilité reste la sienne (doctrine du 20/08).
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Dans la page Importations ou le catalogage : la notice à côté de la page de titre du candidat, le verdict et le cas proposés, la justification à écrire (pour `licenca_livre`, la mention citée avec sa page), « valider » ou « rejeter » avec motif. Toutes les locales servies (`DOC-I18N-1`).
+
+**Pourquoi ça compte.** La validation humaine, PDF ouvert, est ce qui tient `NUMDIF-1` : la concordance d'édition ne se délègue pas à un script.
+
+**Ce qui compte comme fini.**
+
+- Une coordination valide un candidat et le voit passer à « à verser ».
+- Une coordination d'une autre bibliothèque ne voit pas le candidat.
+
+**Dépendances.** `D13`, `D14`.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D16 — Verser un candidat validé côté serveur, sans clé manipulée par une personne
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
+
+**État.** Décision `NUMDIF-4` (15/10). Le 14/10, les deux Reclus ont été versés par une commande lancée à la main dans WSL avec la clé de service ; la clé legacy `service_role` a d'abord été refusée (« signature verification failed ») : seule `sb_secret_…` dans l'en-tête `apikey` passe. Le garde-fou de Claude Code refuse, à juste titre, qu'un agent lise la clé.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Une fonction Edge appelée avec le jeton de la coordination de la bibliothèque détentrice : elle relit le candidat validé, télécharge l'URL du fichier côté serveur, refuse si l'empreinte SHA-256 diffère de celle enregistrée à la validation, verse dans le seau que fixe `NUMDIF-2` (`books/<book_id>/<horodatage>_<nom>.pdf`), crée la ressource avec les mêmes champs que les ressources 77 et 78 (source, attribution, justification, `bibliographic_match_validated`), et rend un statut lu (`DOC-RPC-4`).
+
+**Pourquoi ça compte.** Plus de clé dans un terminal, plus d'erreur de shell, et un fichier versé qui est exactement celui qu'on a regardé.
+
+**Ce qui compte comme fini.**
+
+- Un candidat validé est versé et lisible (sous `anon` s'il est public, sous un compte membre s'il est restreint).
+- Une empreinte qui ne correspond plus fait échouer le versement, et l'échec se dit.
+- Contrôles T1/T2 de `documents_numeriques_tests.sql` verts.
+
+**Dépendances.** `D13`, `D15`.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts`*
+
+#### D17 — Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, langue maternelle
+
+**État.** Décision `NUMDIF-3` (15/10), option *(b)* du cadrage. `read-digital-asset` masque aujourd'hui `source_url` pour toute ressource restreinte servie depuis le stockage (incident de la ressource 61, 20/08). Son commentaire dit que le PDF servi est filigrané ; c'est inexact : le filigrane est une couche CSS du lecteur (`ReaderPage.jsx`, `.ab-reader-watermark`), l'URL signée livre le fichier brut.
+
+*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+
+**Ce que c'est.** Une colonne pour l'URL de la **page** de la source (`source_page_url`, sur `book_digital_resources` et sa jumelle brouillon), déduite pour Archive.org (`…/details/<identifiant>`), saisie sinon. `read-digital-asset` la renvoie quand l'accès est accordé et ne renvoie jamais l'URL du fichier d'une ressource restreinte ; la fiche et le lecteur affichent « aussi en ligne : *source* ». Corriger le commentaire sur le filigrane : ce que protège le masquage est la révocabilité et l'attribution. Toutes les locales servies.
+
+**Pourquoi ça compte.** Le lien crédite qui a numérisé et survit à notre copie ; la page plutôt que le fichier évite de distribuer des liens de téléchargement permanents, non révocables et non attribués.
+
+**Ce qui compte comme fini.**
+
+- Sous un compte membre, la ressource restreinte renvoie la page et pas le fichier ; sous `anon` et sous un compte d'une autre bibliothèque, rien.
+- La réponse de l'API ne contient l'URL du fichier pour aucune ressource restreinte (suite SQL ou test de la fonction).
+
+**Dépendances.** `D18` pour classer les sept liens existants.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts` · `src/pages/public/ReaderPage.jsx`*
+
+#### D18 — Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
+
+**État.** Mesuré le 15/10 : la ressource 62 (Ferrua, Le Maquis) porte `bibliographic_match_validated = false` et aucun `rights_status` — non conforme à `NUMDIF-1`. Les six autres sont `sob_direitos` ; cinq URL sources sur sept désignent un fichier (we.riseup.net `/assets/`, pdfcoffee `/qdownload/`, deux `/wp-content/uploads/`, un fichier `dn….archive.org`).
+
+*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+
+**Ce que c'est.** Pour chacune : vérifier l'édition sur la page de titre ; trancher le cas de source (`NUMDIF-2`) ; trouver l'URL de la page qui présente le fichier (pour `D17`). La ressource 62 est mise en conformité ou retirée, par décision de la bibliothèque détentrice.
+
+**Pourquoi ça compte.** Les règles neuves ne valent que si l'existant les respecte.
+
+**Ce qui compte comme fini.**
+
+- Aucune ressource active à `bibliographic_match_validated = false`.
+- Chaque ressource restreinte a un `rights_status` et, si elle en a une, l'URL de sa page source.
+
+**Dépendances.** Aucune ; précède `D17`.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D19 — Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Point ouvert de la décision du 20/08 (« Poser le garde-fou restreint sans détenteur ») : retirer le dernier exemplaire rend un PDF restreint illisible pour tout le monde, sans erreur ni alerte — la ressource reste `active`. La file de candidats (`D13` à `D16`) en multipliera les cas.
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Le rendre visible plutôt que l'interdire (une bibliothèque peut retirer un exemplaire abîmé sans vouloir fermer l'accès numérique) : une vue ou un contrôle qui liste les ressources restreintes sans détenteur, et un signal à la coordination concernée (`DOC-SILENCE-1`).
+
+**Pourquoi ça compte.** Une panne muette de plus, que la nouvelle file rendrait fréquente.
+
+**Ce qui compte comme fini.**
+
+- Un PDF restreint dont on retire le dernier exemplaire apparaît dans le contrôle et la coordination en est avisée (suite SQL).
+
+**Dépendances.** À livrer avant le premier lot versé par `D16`.
+
+*Renvois : `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
 
 ---
 
@@ -958,6 +1112,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G10** | Solder les trois questions d'onboarding marquées « au plus vite » | `P2` | Ouvert |
 | **G15** | DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence | `P1` | Ouvert |
+| **G20** | Porter en assemblée générale la « troisième voie » et son extension aux PDF déjà diffusés en ligne | `P1` | Décision collective |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1073,6 +1228,26 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Avant le compte rendu : **H28** (livré le 26/09 — sans lui aucun ISO 2709 ne s'importait), **H14** (clos le 26/09), **H15** et **H16** (livrés le 26/09), **H19** (livré le 27/09) ; **H28**, **H15**, **H16** et **H19** restent à vérifier sur un import réel. Avant toute bascule : **H23** et **H24** (livrés le 28/09), **H27** (clos le 29/09) et **H21** (en cours : décisions `IMP-26` et `IMP-27` du 29/09, lot 0 livré le 01/10, puis **H30** et **H31**). Les archives : **D7** (clos le 27/09 ; réalisation : **D8**).
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### G20 — Porter en assemblée générale la « troisième voie » et son extension aux PDF déjà diffusés en ligne
+
+`P1` Prioritaire · État : **Décision collective** · Charge : non chiffré · Ce que ça demande : délibération collective
+
+**État.** La « troisième voie » (le numérique suit le physique, décision du 20/08) est appliquée mais non ratifiée. Le 15/10, la coordination l'étend : rechercher activement les PDF sous droits des livres détenus et afficher un lien vers leur page d'origine (`NUMDIF-1` à `NUMDIF-5`).
+
+*Constat du 29/08, non revérifié depuis.*
+
+**Ce que c'est.** Trois questions à l'AG : *(1)* le réseau assume-t-il de rechercher activement les PDF sous droits des livres qu'il détient, pour les verser en restreint ? *(2)* assume-t-il d'afficher un lien vers la page d'une copie hébergée ailleurs sans autorisation connue ? *(3)* qui valide : chaque bibliothèque pour son fonds, ou un groupe du réseau pour les sources récurrentes ?
+
+**Pourquoi ça compte.** C'est la question des samizdats : ce que le réseau assume de faire circuler, et sous quelle responsabilité. Elle ne se règle pas dans le code.
+
+**Ce qui compte comme fini.**
+
+- Les trois questions posées en AG, la réponse inscrite au REGISTRE §47.
+
+**Dépendances.** La prochaine assemblée.
+
+*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md`*
 
 ---
 
@@ -1881,4 +2056,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-14. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 50 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 58 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

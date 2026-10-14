@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-14",
+    "maj": "2026-10-15",
     "releve": {
       "date": "2026-10-13",
       "commit": "88a962ee"
@@ -5207,6 +5207,49 @@
       }
     },
     {
+      "id": "G20",
+      "d": "G",
+      "p": "P1",
+      "s": "decision",
+      "e": "?",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Porter en assemblée générale la « troisième voie » et son extension aux PDF déjà diffusés en ligne",
+        "pt": "Levar à assembleia geral a «terceira via» e sua extensão aos PDF já difundidos online"
+      },
+      "v": {
+        "fr": "La « troisième voie » (le numérique suit le physique, décision du 20/08) est appliquée mais non ratifiée. Le 15/10, la coordination l'étend : rechercher activement les PDF sous droits des livres détenus et afficher un lien vers leur page d'origine (`NUMDIF-1` à `NUMDIF-5`).",
+        "pt": "A «terceira via» está aplicada mas não ratificada; em 15/10 a coordenação a estende aos PDF já difundidos."
+      },
+      "w": {
+        "fr": "Trois questions à l'AG : *(1)* le réseau assume-t-il de rechercher activement les PDF sous droits des livres qu'il détient, pour les verser en restreint ? *(2)* assume-t-il d'afficher un lien vers la page d'une copie hébergée ailleurs sans autorisation connue ? *(3)* qui valide : chaque bibliothèque pour son fonds, ou un groupe du réseau pour les sources récurrentes ?",
+        "pt": "Três perguntas à AG: buscar ativamente os PDF sob direitos; mostrar link para a página de uma cópia hospedada sem autorização conhecida; quem valida."
+      },
+      "y": {
+        "fr": "C'est la question des samizdats : ce que le réseau assume de faire circuler, et sous quelle responsabilité. Elle ne se règle pas dans le code.",
+        "pt": "É a questão dos samizdats: o que a rede assume fazer circular. Não se resolve no código."
+      },
+      "f": {
+        "fr": [
+          "Les trois questions posées en AG, la réponse inscrite au REGISTRE §47."
+        ],
+        "pt": [
+          "As três perguntas levadas à AG, a resposta inscrita no REGISTRO §47."
+        ]
+      },
+      "dep": {
+        "fr": "La prochaine assemblée.",
+        "pt": "A próxima assembleia."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md",
+        "docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md"
+      ]
+    },
+    {
       "id": "H28",
       "d": "H",
       "p": "P1",
@@ -5540,6 +5583,335 @@
         "fr": "27/09 — colonnes `dossier_*` présentes sur `books` et `book_drafts` en production, aucune hiérarchie, 0 ligne renseignée.",
         "pt": "27/09 — colunas `dossier_*` presentes, sem hierarquia, 0 linha preenchida."
       }
+    },
+    {
+      "id": "D13",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice",
+        "pt": "Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora"
+      },
+      "v": {
+        "fr": "Décision `NUMDIF-5` (15/10). Aujourd'hui, rien ne garde la trace d'un PDF trouvé ailleurs : la recherche du 14/10 (Guérin, Grave, Reclus) a vécu dans une session, ses rejets avec elle. `book_draft_digital_resources` ne convient pas : il exige que le fichier existe déjà dans le stockage (`private.fn_objet_stocke_existe`) et vit attaché à un brouillon de notice, alors qu'un candidat existe avant tout fichier et sans brouillon.",
+        "pt": "Decisão `NUMDIF-5`. Hoje nada guarda o rastro de um PDF achado fora; `book_draft_digital_resources` exige o arquivo já armazenado e um rascunho de ficha."
+      },
+      "w": {
+        "fr": "Une table `ingest.digital_candidates` fermée par RLS (lecture et écriture : coordination de la bibliothèque détentrice, administration du réseau), au gabarit `_TEMPLATE.sql`. Champs : notice, URL du fichier, URL de la page (`NUMDIF-3`), édition constatée (éditeur, lieu, année, traduction, ISBN), verdict (même édition, autre édition, texte ressaisi — `NUMDIF-1`), cas de source (`NUMDIF-2`), empreinte SHA-256, taille, motif de rejet, qui a validé et quand. Écritures par RPC (`DOC-RPC-3`).",
+        "pt": "Tabela `ingest.digital_candidates` com RLS; campos: ficha, URL do arquivo, URL da página, edição constatada, veredito, caso de origem, SHA-256, motivo de rejeição, quem validou."
+      },
+      "y": {
+        "fr": "Sans file, chaque recherche se refait de zéro et chaque rejet se perd. Avec elle, un PDF d'une autre édition devient une information (elle existe, elle circule) au lieu d'un fichier mal rangé.",
+        "pt": "Sem fila, cada busca recomeça do zero e cada rejeição se perde."
+      },
+      "f": {
+        "fr": [
+          "La table existe, fermée à `anon` et aux autres bibliothèques (suite SQL).",
+          "Un candidat rejeté garde son motif et l'édition trouvée."
+        ],
+        "pt": [
+          "A tabela existe, fechada a `anon` e às outras bibliotecas (suíte SQL).",
+          "Um candidato rejeitado guarda o motivo e a edição achada."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune.",
+        "pt": "Nenhuma."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
+      ],
+      "verif": {
+        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+      }
+    },
+    {
+      "id": "D14",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "biblio",
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre",
+        "pt": "Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto"
+      },
+      "v": {
+        "fr": "La méthode du 14/10, faite à la main : Archive.org (API `advancedsearch` et `metadata`), téléchargement, `pdftotext` sur les premières pages, comparaison avec la notice. Elle a montré que les métadonnées des sources se trompent (année, langue) et que seule la page de titre fait foi. Gallica, HathiTrust et la Biblioteca Digital Hispánica refusent les automates (Cloudflare) ; Google Books refuse les requêtes anonymes.",
+        "pt": "O método de 14/10, feito à mão: Archive.org, download, `pdftotext` nas primeiras páginas. Gallica, HathiTrust e BDH recusam automatos."
+      },
+      "w": {
+        "fr": "Un script dans `scripts/`, lancé à la main, qui écrit dans la file `D13` : recherche par notice, exclusion du prêt contrôlé (fichiers `private`), téléchargement, extraction de la page de titre et du copyright, proposition de verdict (`NUMDIF-1`) et de cas (`NUMDIF-2`). Aucun contournement de protection (`NUMDIF-5`).",
+        "pt": "Script em `scripts/` que escreve na fila `D13`: busca, exclusão do empréstimo controlado, extração da folha de rosto, proposta de veredito e de caso. Sem contornar proteções."
+      },
+      "y": {
+        "fr": "C'est ce qui rend la recherche répétable sur 2 564 notices au lieu de 17.",
+        "pt": "É o que torna a busca repetível em 2 564 fichas em vez de 17."
+      },
+      "f": {
+        "fr": [
+          "Rejoué sur les 17 notices Guérin : 0 « même édition », les trois PDF connus classés « autre édition » avec l'édition trouvée.",
+          "Rejoué sur les notices 86 et 96 : les deux scans Harper classés « même édition »."
+        ],
+        "pt": [
+          "Repetido nas 17 fichas Guérin: 0 «mesma edição».",
+          "Repetido nas fichas 86 e 96: os dois scans Harper como «mesma edição»."
+        ]
+      },
+      "dep": {
+        "fr": "`D13`.",
+        "pt": "`D13`."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
+      ]
+    },
+    {
+      "id": "D15",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "Un écran pour valider ou rejeter les candidats, PDF ouvert",
+        "pt": "Uma tela para validar ou rejeitar os candidatos, com o PDF aberto"
+      },
+      "v": {
+        "fr": "`NUMDIF-5` : la coordination de la bibliothèque détentrice dispose ; l'outil propose. La responsabilité reste la sienne (doctrine du 20/08).",
+        "pt": "`NUMDIF-5`: a coordenação da biblioteca detentora decide; a ferramenta propõe."
+      },
+      "w": {
+        "fr": "Dans la page Importations ou le catalogage : la notice à côté de la page de titre du candidat, le verdict et le cas proposés, la justification à écrire (pour `licenca_livre`, la mention citée avec sa page), « valider » ou « rejeter » avec motif. Toutes les locales servies (`DOC-I18N-1`).",
+        "pt": "Ficha ao lado da folha de rosto do candidato, veredito e caso propostos, justificativa, validar ou rejeitar com motivo. Todas as locales."
+      },
+      "y": {
+        "fr": "La validation humaine, PDF ouvert, est ce qui tient `NUMDIF-1` : la concordance d'édition ne se délègue pas à un script.",
+        "pt": "A validação humana é o que sustenta `NUMDIF-1`."
+      },
+      "f": {
+        "fr": [
+          "Une coordination valide un candidat et le voit passer à « à verser ».",
+          "Une coordination d'une autre bibliothèque ne voit pas le candidat."
+        ],
+        "pt": [
+          "Uma coordenação valida um candidato.",
+          "Outra biblioteca não vê o candidato."
+        ]
+      },
+      "dep": {
+        "fr": "`D13`, `D14`.",
+        "pt": "`D13`, `D14`."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
+      ]
+    },
+    {
+      "id": "D16",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno",
+        "sql"
+      ],
+      "t": {
+        "fr": "Verser un candidat validé côté serveur, sans clé manipulée par une personne",
+        "pt": "Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa"
+      },
+      "v": {
+        "fr": "Décision `NUMDIF-4` (15/10). Le 14/10, les deux Reclus ont été versés par une commande lancée à la main dans WSL avec la clé de service ; la clé legacy `service_role` a d'abord été refusée (« signature verification failed ») : seule `sb_secret_…` dans l'en-tête `apikey` passe. Le garde-fou de Claude Code refuse, à juste titre, qu'un agent lise la clé.",
+        "pt": "Decisão `NUMDIF-4`. Em 14/10 os dois Reclus foram enviados por um comando manual com a chave de serviço; a chave legacy foi recusada."
+      },
+      "w": {
+        "fr": "Une fonction Edge appelée avec le jeton de la coordination de la bibliothèque détentrice : elle relit le candidat validé, télécharge l'URL du fichier côté serveur, refuse si l'empreinte SHA-256 diffère de celle enregistrée à la validation, verse dans le seau que fixe `NUMDIF-2` (`books/<book_id>/<horodatage>_<nom>.pdf`), crée la ressource avec les mêmes champs que les ressources 77 et 78 (source, attribution, justification, `bibliographic_match_validated`), et rend un statut lu (`DOC-RPC-4`).",
+        "pt": "Função Edge chamada com o token da coordenação: baixa o arquivo pelo servidor, confere o SHA-256, envia ao balde certo, cria o recurso."
+      },
+      "y": {
+        "fr": "Plus de clé dans un terminal, plus d'erreur de shell, et un fichier versé qui est exactement celui qu'on a regardé.",
+        "pt": "Nenhuma chave num terminal, e o arquivo enviado é exatamente o que foi examinado."
+      },
+      "f": {
+        "fr": [
+          "Un candidat validé est versé et lisible (sous `anon` s'il est public, sous un compte membre s'il est restreint).",
+          "Une empreinte qui ne correspond plus fait échouer le versement, et l'échec se dit.",
+          "Contrôles T1/T2 de `documents_numeriques_tests.sql` verts."
+        ],
+        "pt": [
+          "Um candidato validado é enviado e legível.",
+          "Um hash que não corresponde faz falhar o envio, e a falha se diz.",
+          "Controles T1/T2 verdes."
+        ]
+      },
+      "dep": {
+        "fr": "`D13`, `D15`.",
+        "pt": "`D13`, `D15`."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md",
+        "supabase/functions/read-digital-asset/index.ts"
+      ]
+    },
+    {
+      "id": "D17",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql",
+        "deno",
+        "front",
+        "langue"
+      ],
+      "t": {
+        "fr": "Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier",
+        "pt": "Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo"
+      },
+      "v": {
+        "fr": "Décision `NUMDIF-3` (15/10), option *(b)* du cadrage. `read-digital-asset` masque aujourd'hui `source_url` pour toute ressource restreinte servie depuis le stockage (incident de la ressource 61, 20/08). Son commentaire dit que le PDF servi est filigrané ; c'est inexact : le filigrane est une couche CSS du lecteur (`ReaderPage.jsx`, `.ab-reader-watermark`), l'URL signée livre le fichier brut.",
+        "pt": "Decisão `NUMDIF-3`, opção (b). `read-digital-asset` esconde hoje `source_url` de todo recurso restrito; o comentário sobre marca d'água é inexato."
+      },
+      "w": {
+        "fr": "Une colonne pour l'URL de la **page** de la source (`source_page_url`, sur `book_digital_resources` et sa jumelle brouillon), déduite pour Archive.org (`…/details/<identifiant>`), saisie sinon. `read-digital-asset` la renvoie quand l'accès est accordé et ne renvoie jamais l'URL du fichier d'une ressource restreinte ; la fiche et le lecteur affichent « aussi en ligne : *source* ». Corriger le commentaire sur le filigrane : ce que protège le masquage est la révocabilité et l'attribution. Toutes les locales servies.",
+        "pt": "Coluna `source_page_url`; `read-digital-asset` a devolve quando o acesso é concedido, nunca a URL do arquivo de um recurso restrito; ficha e leitor mostram «também online». Corrigir o comentário."
+      },
+      "y": {
+        "fr": "Le lien crédite qui a numérisé et survit à notre copie ; la page plutôt que le fichier évite de distribuer des liens de téléchargement permanents, non révocables et non attribués.",
+        "pt": "O link credita quem digitalizou; a página em vez do arquivo evita distribuir links de download permanentes."
+      },
+      "f": {
+        "fr": [
+          "Sous un compte membre, la ressource restreinte renvoie la page et pas le fichier ; sous `anon` et sous un compte d'une autre bibliothèque, rien.",
+          "La réponse de l'API ne contient l'URL du fichier pour aucune ressource restreinte (suite SQL ou test de la fonction)."
+        ],
+        "pt": [
+          "Conta membro: a página, não o arquivo; `anon` e outra biblioteca: nada.",
+          "A resposta da API não contém a URL do arquivo de nenhum recurso restrito."
+        ]
+      },
+      "dep": {
+        "fr": "`D18` pour classer les sept liens existants.",
+        "pt": "`D18` para classificar os sete links existentes."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md",
+        "supabase/functions/read-digital-asset/index.ts",
+        "src/pages/public/ReaderPage.jsx"
+      ],
+      "verif": {
+        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+      }
+    },
+    {
+      "id": "D18",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "biblio"
+      ],
+      "t": {
+        "fr": "Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source",
+        "pt": "Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem"
+      },
+      "v": {
+        "fr": "Mesuré le 15/10 : la ressource 62 (Ferrua, Le Maquis) porte `bibliographic_match_validated = false` et aucun `rights_status` — non conforme à `NUMDIF-1`. Les six autres sont `sob_direitos` ; cinq URL sources sur sept désignent un fichier (we.riseup.net `/assets/`, pdfcoffee `/qdownload/`, deux `/wp-content/uploads/`, un fichier `dn….archive.org`).",
+        "pt": "Medido em 15/10: o recurso 62 tem `bibliographic_match_validated = false` e nenhum `rights_status`; cinco URL de sete apontam para arquivo."
+      },
+      "w": {
+        "fr": "Pour chacune : vérifier l'édition sur la page de titre ; trancher le cas de source (`NUMDIF-2`) ; trouver l'URL de la page qui présente le fichier (pour `D17`). La ressource 62 est mise en conformité ou retirée, par décision de la bibliothèque détentrice.",
+        "pt": "Para cada um: verificar a edição, decidir o caso de origem, achar a página. O recurso 62 é regularizado ou retirado."
+      },
+      "y": {
+        "fr": "Les règles neuves ne valent que si l'existant les respecte.",
+        "pt": "As regras novas só valem se o existente as respeitar."
+      },
+      "f": {
+        "fr": [
+          "Aucune ressource active à `bibliographic_match_validated = false`.",
+          "Chaque ressource restreinte a un `rights_status` et, si elle en a une, l'URL de sa page source."
+        ],
+        "pt": [
+          "Nenhum recurso ativo com `bibliographic_match_validated = false`.",
+          "Cada recurso restrito tem `rights_status` e, se houver, a URL da página de origem."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune ; précède `D17`.",
+        "pt": "Nenhuma; antecede `D17`."
+      },
+      "r": [
+        "docs/specs/REGISTRE_decisions.md §47",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
+      ],
+      "verif": {
+        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+      }
+    },
+    {
+      "id": "D19",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice",
+        "pt": "Tornar observável um PDF restrito cujo livro não tem mais biblioteca detentora"
+      },
+      "v": {
+        "fr": "Point ouvert de la décision du 20/08 (« Poser le garde-fou restreint sans détenteur ») : retirer le dernier exemplaire rend un PDF restreint illisible pour tout le monde, sans erreur ni alerte — la ressource reste `active`. La file de candidats (`D13` à `D16`) en multipliera les cas.",
+        "pt": "Ponto aberto da decisão de 20/08: retirar o último exemplar torna um PDF restrito ilegível para todos, sem alerta."
+      },
+      "w": {
+        "fr": "Le rendre visible plutôt que l'interdire (une bibliothèque peut retirer un exemplaire abîmé sans vouloir fermer l'accès numérique) : une vue ou un contrôle qui liste les ressources restreintes sans détenteur, et un signal à la coordination concernée (`DOC-SILENCE-1`).",
+        "pt": "Torná-lo visível em vez de proibir: lista dos recursos restritos sem detentor e sinal à coordenação."
+      },
+      "y": {
+        "fr": "Une panne muette de plus, que la nouvelle file rendrait fréquente.",
+        "pt": "Mais uma pane muda, que a nova fila tornaria frequente."
+      },
+      "f": {
+        "fr": [
+          "Un PDF restreint dont on retire le dernier exemplaire apparaît dans le contrôle et la coordination en est avisée (suite SQL)."
+        ],
+        "pt": [
+          "Um PDF restrito sem último exemplar aparece no controle e a coordenação é avisada."
+        ]
+      },
+      "dep": {
+        "fr": "À livrer avant le premier lot versé par `D16`.",
+        "pt": "Antes do primeiro lote enviado por `D16`."
+      },
+      "r": [
+        "docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md",
+        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
+      ]
     },
     {
       "id": "C26",

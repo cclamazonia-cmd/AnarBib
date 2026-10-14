@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-14** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-15** · 58 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -18,10 +18,10 @@
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 4
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 11
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 5
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-14.** **40 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **10** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-15.** **43 itens de 58** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -587,6 +587,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
+| **D13** | Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora | `P2` | Aberto |
+| **D14** | Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto | `P2` | Aberto |
+| **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | Aberto |
+| **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | Aberto |
+| **D17** | Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo | `P2` | Aberto |
+| **D18** | Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem | `P2` | Aberto |
+| **D19** | Tornar observável um PDF restrito cujo livro não tem mais biblioteca detentora | `P2` | Aberto |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
 
@@ -675,6 +682,153 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Bloqueado pelo parecer de DIRA, CIRA e FICEDL (`ARCH-4`). Um inventário real de DIRA (**G15**).
 
 *Remissões : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
+
+#### D13 — Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Decisão `NUMDIF-5`. Hoje nada guarda o rastro de um PDF achado fora; `book_draft_digital_resources` exige o arquivo já armazenado e um rascunho de ficha.
+
+*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+
+**O que é.** Tabela `ingest.digital_candidates` com RLS; campos: ficha, URL do arquivo, URL da página, edição constatada, veredito, caso de origem, SHA-256, motivo de rejeição, quem validou.
+
+**Por que importa.** Sem fila, cada busca recomeça do zero e cada rejeição se perde.
+
+**O que conta como terminado.**
+
+- A tabela existe, fechada a `anon` e às outras bibliotecas (suíte SQL).
+- Um candidato rejeitado guarda o motivo e a edição achada.
+
+**Dependências.** Nenhuma.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D14 — Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia, administração de sistemas
+
+**Estado.** O método de 14/10, feito à mão: Archive.org, download, `pdftotext` nas primeiras páginas. Gallica, HathiTrust e BDH recusam automatos.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Script em `scripts/` que escreve na fila `D13`: busca, exclusão do empréstimo controlado, extração da folha de rosto, proposta de veredito e de caso. Sem contornar proteções.
+
+**Por que importa.** É o que torna a busca repetível em 2 564 fichas em vez de 17.
+
+**O que conta como terminado.**
+
+- Repetido nas 17 fichas Guérin: 0 «mesma edição».
+- Repetido nas fichas 86 e 96: os dois scans Harper como «mesma edição».
+
+**Dependências.** `D13`.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D15 — Uma tela para validar ou rejeitar os candidatos, com o PDF aberto
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : React / JavaScript, língua materna
+
+**Estado.** `NUMDIF-5`: a coordenação da biblioteca detentora decide; a ferramenta propõe.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Ficha ao lado da folha de rosto do candidato, veredito e caso propostos, justificativa, validar ou rejeitar com motivo. Todas as locales.
+
+**Por que importa.** A validação humana é o que sustenta `NUMDIF-1`.
+
+**O que conta como terminado.**
+
+- Uma coordenação valida um candidato.
+- Outra biblioteca não vê o candidato.
+
+**Dependências.** `D13`, `D14`.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D16 — Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, SQL / PostgreSQL
+
+**Estado.** Decisão `NUMDIF-4`. Em 14/10 os dois Reclus foram enviados por um comando manual com a chave de serviço; a chave legacy foi recusada.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Função Edge chamada com o token da coordenação: baixa o arquivo pelo servidor, confere o SHA-256, envia ao balde certo, cria o recurso.
+
+**Por que importa.** Nenhuma chave num terminal, e o arquivo enviado é exatamente o que foi examinado.
+
+**O que conta como terminado.**
+
+- Um candidato validado é enviado e legível.
+- Um hash que não corresponde faz falhar o envio, e a falha se diz.
+- Controles T1/T2 verdes.
+
+**Dependências.** `D13`, `D15`.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts`*
+
+#### D17 — Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, língua materna
+
+**Estado.** Decisão `NUMDIF-3`, opção (b). `read-digital-asset` esconde hoje `source_url` de todo recurso restrito; o comentário sobre marca d'água é inexato.
+
+*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+
+**O que é.** Coluna `source_page_url`; `read-digital-asset` a devolve quando o acesso é concedido, nunca a URL do arquivo de um recurso restrito; ficha e leitor mostram «também online». Corrigir o comentário.
+
+**Por que importa.** O link credita quem digitalizou; a página em vez do arquivo evita distribuir links de download permanentes.
+
+**O que conta como terminado.**
+
+- Conta membro: a página, não o arquivo; `anon` e outra biblioteca: nada.
+- A resposta da API não contém a URL do arquivo de nenhum recurso restrito.
+
+**Dependências.** `D18` para classificar os sete links existentes.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts` · `src/pages/public/ReaderPage.jsx`*
+
+#### D18 — Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem
+
+`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia
+
+**Estado.** Medido em 15/10: o recurso 62 tem `bibliographic_match_validated = false` e nenhum `rights_status`; cinco URL de sete apontam para arquivo.
+
+*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+
+**O que é.** Para cada um: verificar a edição, decidir o caso de origem, achar a página. O recurso 62 é regularizado ou retirado.
+
+**Por que importa.** As regras novas só valem se o existente as respeitar.
+
+**O que conta como terminado.**
+
+- Nenhum recurso ativo com `bibliographic_match_validated = false`.
+- Cada recurso restrito tem `rights_status` e, se houver, a URL da página de origem.
+
+**Dependências.** Nenhuma; antecede `D17`.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D19 — Tornar observável um PDF restrito cujo livro não tem mais biblioteca detentora
+
+`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+
+**Estado.** Ponto aberto da decisão de 20/08: retirar o último exemplar torna um PDF restrito ilegível para todos, sem alerta.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Torná-lo visível em vez de proibir: lista dos recursos restritos sem detentor e sinal à coordenação.
+
+**Por que importa.** Mais uma pane muda, que a nova fila tornaria frequente.
+
+**O que conta como terminado.**
+
+- Um PDF restrito sem último exemplar aparece no controle e a coordenação é avisada.
+
+**Dependências.** Antes do primeiro lote enviado por `D16`.
+
+*Remissões : `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
 
 ---
 
@@ -958,6 +1112,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
 | **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
+| **G20** | Levar à assembleia geral a «terceira via» e sua extensão aos PDF já difundidos online | `P1` | Decisão coletiva |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1073,6 +1228,26 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Antes do relatório: **H28** (entregue em 26/09), **H14** (fechado em 26/09), **H15** e **H16** (entregues em 26/09), **H19** (entregue em 27/09); **H28**, **H15**, **H16** e **H19** ainda a verificar numa importação real. Antes de qualquer migração: **H23** e **H24** (entregues em 28/09), **H27** (fechado em 29/09) e **H21** (em curso: `IMP-26` e `IMP-27` de 29/09, lote 0 entregue em 01/10, depois **H30** e **H31**). Arquivos: **D7** (fechado em 27/09; realização: **D8**).
 
 *Remissões : `claude/aller-retour-PMB_2026-09-26` · `Réponse à DIRA du 26/09/2026`*
+
+#### G20 — Levar à assembleia geral a «terceira via» e sua extensão aos PDF já difundidos online
+
+`P1` Prioritário · Estado : **Decisão coletiva** · Carga : não estimado · O que exige : deliberação coletiva
+
+**Estado.** A «terceira via» está aplicada mas não ratificada; em 15/10 a coordenação a estende aos PDF já difundidos.
+
+*Constato de 29/08, não reverificado desde então.*
+
+**O que é.** Três perguntas à AG: buscar ativamente os PDF sob direitos; mostrar link para a página de uma cópia hospedada sem autorização conhecida; quem valida.
+
+**Por que importa.** É a questão dos samizdats: o que a rede assume fazer circular. Não se resolve no código.
+
+**O que conta como terminado.**
+
+- As três perguntas levadas à AG, a resposta inscrita no REGISTRO §47.
+
+**Dependências.** A próxima assembleia.
+
+*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md`*
 
 ---
 
@@ -1871,4 +2046,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-14. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 58 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

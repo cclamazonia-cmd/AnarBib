@@ -3,9 +3,10 @@
 > **Date** : 2026-10-15
 > **Auteur** : Claude (assistant·e), pour la coordination
 > **Session** : Cadrage : PDF sous droits déjà diffusés en ligne
-> **Statut** : trois décisions de la coordination (15/10) + une question ouverte (§4).
-> Les tâches techniques du §8 ne sont **pas** encore versées au backlog : elles le
-> seront à leur validation (CLAUDE.md, règles 11-12).
+> **Statut** : ✅ **cadrage accepté par la coordination le 15/10**, option *(b)* du §4
+> retenue, versement côté serveur (T4) validé. Décisions au REGISTRE §47
+> (`NUMDIF-1` à `NUMDIF-5`) ; tâches versées au backlog v34 (`D13` à `D19`, `G20`).
+> Le présent document reste la trace ; le REGISTRE fait foi.
 > **Doctrine de référence** : [`DECISION_profil_numerisation_2026-08-20.md`](../arbitrages/DECISION_profil_numerisation_2026-08-20.md),
 > § « La troisième voie : le numérique suit le physique ».
 
@@ -25,8 +26,9 @@ qu'on fait du lien vers la copie d'origine. Ce cadrage le dit.
 | **D2** | Typologie des sources en trois cas (§3.2). | Le statut de droits et l'accès découlent du cas. |
 | **D3** | Quand on peut lire la copie restreinte, on **affiche aussi le lien** vers le fichier trouvé ailleurs. | Revient sur le masquage posé le 20/08 dans `read-digital-asset` (§4). |
 
-Ce qui reste ouvert : la forme exacte de D3 (§4), et la ratification de la
-« troisième voie » par l'assemblée générale (§9), toujours en attente.
+La forme de D3 est tranchée le 15/10 : option *(b)*, le lien vers la **page**,
+jamais vers le fichier (§4). Reste ouverte la ratification de la « troisième
+voie » par l'assemblée générale (§9).
 
 ---
 
@@ -141,7 +143,7 @@ incident de la ressource 61 du 20/08). D3 revient sur ce masquage. Le masquage
 doit rester **côté serveur** : c'est la fonction qui décide de renvoyer le lien,
 pas l'écran qui le cache.
 
-## 4. Question ouverte — la forme de D3
+## 4. La forme de D3 — tranchée le 15/10 : option *(b)*
 
 Le §2 montre que **cinq liens sur sept sont des fichiers** en téléchargement
 direct. Deux options :
@@ -158,7 +160,7 @@ direct. Deux options :
 **Recommandation : (b).** Elle tient D3 (le lien est là, la source est créditée)
 sans transformer AnarBib en distributeur de liens de téléchargement, et elle
 évite à une personne qui lit d'être envoyée, sans le savoir, vers un fichier
-hébergé sans autorisation. À trancher par la coordination.
+hébergé sans autorisation. **Retenue par la coordination le 15/10** (`NUMDIF-3`).
 
 ## 5. La méthode : une file de candidats
 
@@ -208,13 +210,16 @@ d'Archive.org pèse 3 à 5 Go (les deux Reclus : 84 Mo).
 
 ## 8. Tâches techniques
 
+Versées au backlog v34 le 15/10 : T1 → `D13`, T2 → `D14`, T3 → `D15`, T4 → `D16`,
+T5 et T6 → `D17`, T7 → `D18`, T8 → `D19` ; les questions du §9 → `G20`.
+
 | # | Tâche | Notes |
 |---|---|---|
 | T1 | Table `ingest.digital_candidates` + RLS (lecture/écriture : coordination de la bibliothèque détentrice, administration du réseau) | Migration au gabarit `_TEMPLATE.sql`. |
 | T2 | Outil de recherche + identification (script `scripts/`, lancé à la main) | Archive.org d'abord ; écrit les candidats dans T1. |
 | T3 | Écran de validation (page Importations ou catalogage) | PDF ouvert, verdict D1, cas D2, justification. |
 | T4 | Versement sans clé manipulée : fonction Edge appelée avec le JWT de la coordination, qui télécharge l'URL validée **côté serveur**, vérifie l'empreinte SHA-256 validée, verse dans le bon bucket et crée la ressource | Supprime l'étape manuelle de la clé (§7). |
-| T5 | D3 selon l'option retenue au §4 : `read-digital-asset` renvoie le lien quand l'accès est accordé ; (b) : nouvelle colonne pour l'URL de la page | Garder le contrôle côté serveur ; i18n 10 locales pour « aussi en ligne ». |
+| T5 | D3, option *(b)* : nouvelle colonne pour l'URL de la page ; `read-digital-asset` la renvoie quand l'accès est accordé, et ne renvoie jamais l'URL du fichier d'une ressource restreinte | Garder le contrôle côté serveur ; i18n 10 locales pour « aussi en ligne ». |
 | T6 | Corriger le commentaire de `read-digital-asset` sur le filigrane (§2) | Doit dire ce que le masquage protège vraiment. |
 | T7 | Revue des 7 ressources restreintes : ressource 62 (D1), et classement page/fichier des URL sources | Préalable à T5. |
 | T8 | Garde-fou « restreint sans détenteur » observable | Item ouvert de la décision du 20/08. |
