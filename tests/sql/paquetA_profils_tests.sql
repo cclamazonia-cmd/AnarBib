@@ -401,13 +401,21 @@ DECLARE
                            'fn_library_uses_governance', 'fn_library_has_staff_roles'];
   v_txt text;
 BEGIN
+  -- 14/10/2026 (20261014181057) : 15.1 exigeait les quatre lecteurs de mode
+  -- ouverts a anon, « pour que la page publique d'une bibliotheque se rende ».
+  -- Ce n'etait pas mesure : aucun fichier du front, d'une Edge Function ni de
+  -- la vitrine ne les a jamais nommes (git log -S vide) ; leurs seuls
+  -- appelants sont DEFINER (fn_propose_library_profile_change,
+  -- fn_required_governance_for_transition). Ils sont fermes a anon,
+  -- authenticated et PUBLIC ; 15.1 garde l'inverse, 15.3 ne les compte plus,
+  -- 15.4 les tient fermes.
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
     FROM unnest(c_modes) AS nom
-   WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
-                      WHERE routine_schema = 'public' AND routine_name = nom
-                        AND grantee = 'anon' AND privilege_type = 'EXECUTE');
+   WHERE EXISTS (SELECT 1 FROM information_schema.routine_privileges
+                  WHERE routine_schema = 'public' AND routine_name = nom
+                    AND grantee IN ('anon', 'PUBLIC') AND privilege_type = 'EXECUTE');
   IF v_txt IS NOT NULL THEN
-    RAISE EXCEPTION 'TEST 15.1 FAILED : lecteur(s) de mode fermes a anon -> % (la page publique d''une bibliotheque ne peut plus se rendre)', v_txt;
+    RAISE EXCEPTION 'TEST 15.1 FAILED : lecteur(s) de mode rouverts a anon -> % (aucun appelant sous anon : la reouverture se decide avec son appelant)', v_txt;
   END IF;
 
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
@@ -430,7 +438,7 @@ BEGIN
   -- appelants DEFINER (fn_peb_authorized, private.fn_cartography_network_rows)
   -- — elle passe de 15.3 a 15.4.
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
-    FROM unnest(c_modes || ARRAY['fn_library_has_circulation','fn_library_has_full_sigb']) AS nom
+    FROM unnest(ARRAY['fn_library_has_circulation','fn_library_has_full_sigb']) AS nom
    WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
                       WHERE routine_schema = 'public' AND routine_name = nom
                         AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
@@ -440,7 +448,7 @@ BEGIN
 
   SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
     FROM unnest(ARRAY['fn_library_has_staff_roles','fn_library_publishes_catalog','fn_library_uses_governance',
-                      'fn_library_is_federated']) AS nom
+                      'fn_library_is_federated'] || c_modes) AS nom
    WHERE EXISTS (SELECT 1 FROM information_schema.routine_privileges
                   WHERE routine_schema = 'public' AND routine_name = nom
                     AND grantee IN ('authenticated', 'PUBLIC') AND privilege_type = 'EXECUTE');
@@ -448,7 +456,7 @@ BEGIN
     RAISE EXCEPTION 'TEST 15.4 FAILED : predicat(s) sans appelant rouverts a authenticated -> % (leur reouverture se decide avec un ecran, elle ne se constate pas)', v_txt;
   END IF;
 
-  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 2 predicats servis ouverts, 4 sans appelant sous authenticated fermes';
+  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode fermes a anon, 2 predicats servis ouverts, 8 sans appelant sous authenticated fermes';
 END $$;
 
 -- ============================================================

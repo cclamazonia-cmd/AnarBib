@@ -226,3 +226,34 @@ La recherche du catalogue (`api.catalog_works_v1`, `api.catalog_search_ids_v1`, 
 - `private.fn_mots_proches(text, text)` — `INVOKER`, `IMMUTABLE` : une distance d'édition (`extensions.levenshtein_less_equal`) entre deux textes que l'appelant lui donne. Rien n'est lu.
 
 `REVOKE … FROM PUBLIC` puis `GRANT EXECUTE … TO anon, authenticated, service_role`, gardé à la sortie de la migration (`aclexplode`, `has_function_privilege`). Elles entrent dans la liste **T12** de `grants_herites_tests.sql` ; **T10** (DEFINER de `public` et `api`) et le lint 0028 ne comptent pas `private` : ils ne bougent pas.
+
+---
+
+## Addendum — 14/10/2026 : sept entrées de la section B sortent de la liste (0028 : 29 → 22)
+
+La section B juge chaque ouverture à `anon` par « un usage anonyme réel ».
+L'usage existe pour chacun des groupes ci-dessous, mais il est porté par une
+**porte** `SECURITY DEFINER` qui reste ouverte, et pas par l'aide qu'elle
+appelle. Relevé en production le 14/10 (politiques, vues, fonctions INVOKER,
+cron, `pg_depend`) et dans le dépôt (`src/`, `supabase/functions/`,
+`scripts/`, `deploy/`, la vitrine `anarbib/pages`, et `git log -S` sur le
+front et les Edge Functions) : ces sept aides n'ont **aucun** appelant qui
+s'exécute sous `anon` ou `authenticated`.
+
+| Aide fermée | Usage public, porté par | Ce que l'audit supposait |
+|---|---|---|
+| `fn_library_catalog_mode`, `fn_library_circulation_mode`, `fn_library_governance_mode`, `fn_library_network_mode` | aucun appel public ; seuls appelants : `fn_propose_library_profile_change`, `fn_required_governance_for_transition` (DEFINER) | « une visiteuse doit savoir si une bibliothèque publie son catalogue pour que sa page se rende » — aucune page ne les a jamais appelés |
+| `fn_oai_library_is_harvest_eligible` | `fn_oai_harvestable_libraries`, `fn_oai_harvestable_records` (DEFINER, ouvertes à `anon`) | l'OAI-PMH est anonyme — vrai, par les deux portes |
+| `fn_consume_library_request_claim` | `fn_submit_library_request_via_claim` (DEFINER, ouverte à `anon`) | la candidature se fait sans compte — vrai, par la porte |
+| `fn_book_restricted_pdf_state` | `fn_book_restricted_pdf_state_for_current_user` (DEFINER, ouverte à `anon`) ; son appelant direct, l'Edge Function `read-pdf`, a été retiré par F3 (`82afd616`, 05/10) | la fiche publique d'un livre |
+
+Fermées par `20261014181057` (`REVOKE … FROM PUBLIC, anon, authenticated` ;
+`service_role` garde ce qu'il avait), avec une garde qui revérifie les
+appelants au déploiement et que les quatre portes restent ouvertes à `anon` et
+DEFINER. Éprouvée en production dans une transaction annulée : 0028 = 22,
+0029 = 430. Listes **T10** et **T12** de `grants_herites_tests.sql` réduites
+d'autant ; `paquetA_profils` TEST 15.1 inversé (les lecteurs de mode restent
+fermés à `anon`) ; `aides_definer_fermees_tests` les tient fermées (T1, T2) et
+joue les portes sous le rôle `anon` (T5).
+
+Compte attendu au prochain relevé : **0028 = 22**.

@@ -2076,3 +2076,22 @@ Trois portes nouvelles pour `authenticated`, aucune pour `anon`, toutes dans `ap
 | `private.fn_avant_requete()` | INVOKER | **Saine.** Ouverte à `anon`, `authenticated`, `service_role` parce que PostgREST l'appellera sous le rôle de chaque requête ; rend la main aussitôt hors `authenticated` et en `aal2` ; échec ouvert sur toute erreur imprévue. |
 
 Comptes attendus, `public` + `api` : **0029 = 436** (433 relevé en production le 13/10 + 3), **0028 = 29** (inchangé).
+
+## Complément du 14/10/2026 — la passe du 06/10 refaite (437 → 430)
+
+Export du tableau de bord du 14/10 (18 h 03 UTC) : 467 WARN = **437** (0029) +
+**29** (0028) + **1** (0011, `fn_locale_from_idioma`, voulu). Le complément
+précédent attendait 436 : une DEFINER de plus est née depuis le 13/10, hors de
+cette passe.
+
+Même méthode que le 06/10 au soir. Sur les 437 : 384 sans appelant SQL sous le
+rôle du lecteur ; 375 d'entre elles appelées par le front, une Edge Function ou
+un script (les seize `.rpc(variable)` prennent leur nom d'un littéral). Les neuf
+qui restent sont celles que le 06/10 avait laissées ouvertes : les deux RPC
+d'admin réseau de F12 (`api.fn_outbox_abandonnees`, `api.fn_outbox_acquitter`,
+voulues sans écran, **elles restent**) et sept aides de la liste T10, ouvertes
+aussi à `anon`. Ces sept-là sont fermées par `20261014181057` ; leur verdict est
+dans l'addendum du 14/10 de `AUDIT_execute_anon_2026-08-30.md`. Les DEFINER nées
+depuis le 06/10 sont toutes câblées : la passe ne trouve rien d'autre.
+
+Comptes attendus au prochain relevé : **0029 = 430**, **0028 = 22**, **0011 = 1**.

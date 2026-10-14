@@ -34,6 +34,13 @@
 --    T1 et T2 valent pour elles aussi. Leurs seuls appelants sont DEFINER
 --    (`fn_correspondance_lit` et les cinq portes de `api`).
 --
+-- 14/10/2026 — sept de plus (37 → 44, migration 20261014181057), ouvertes
+--    jusque-là à anon par la liste T10 : les quatre lecteurs de mode,
+--    fn_oai_library_is_harvest_eligible, fn_consume_library_request_claim,
+--    fn_book_restricted_pdf_state. Leur usage public est porté par des
+--    portes DEFINER qui restent ouvertes à anon (c_portes_anon) : T3 les
+--    tient ouvertes, T5 les joue sous le rôle anon.
+--
 -- Rien n'est écrit : la suite se termine par un RAISE.
 -- =====================================================================
 DO $$
@@ -85,7 +92,23 @@ DECLARE
     'public.fn_ensure_current_user_profile()',
     'public.fn_correspondance_coordonne(uuid)',
     'public.fn_correspondance_langue(text, uuid)',
-    'public.fn_correspondance_poser_message(bigint, uuid, text, text)'
+    'public.fn_correspondance_poser_message(bigint, uuid, text, text)',
+    -- 14/10/2026 (20261014181057) : sept aides ouvertes à anon par T10, sans
+    -- appelant sous anon ni authenticated
+    'public.fn_library_catalog_mode(uuid)',
+    'public.fn_library_circulation_mode(uuid)',
+    'public.fn_library_governance_mode(uuid)',
+    'public.fn_library_network_mode(uuid)',
+    'public.fn_oai_library_is_harvest_eligible(uuid)',
+    'public.fn_consume_library_request_claim(text, uuid)',
+    'public.fn_book_restricted_pdf_state(text)'
+  ];
+  -- Les portes par lesquelles le public (anon) atteint les sept du 14/10.
+  c_portes_anon text[] := ARRAY[
+    'public.fn_oai_harvestable_libraries()',
+    'public.fn_oai_harvestable_records(text, timestamp with time zone, timestamp with time zone, integer, integer, bigint)',
+    'public.fn_submit_library_request_via_claim(text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, boolean, boolean, text, text, text, text, text)',
+    'public.fn_book_restricted_pdf_state_for_current_user(text)'
   ];
   c_portes   text[] := ARRAY[
     'api.get_library_institutional_workspace(uuid)',
@@ -107,10 +130,10 @@ DECLARE
   ];
 BEGIN
   -- ── T1 ──────────────────────────────────────────────────────────────
-  v_t := 'T1 les 37 existent et sont fermees a anon, authenticated et PUBLIC';
+  v_t := 'T1 les 44 existent et sont fermees a anon, authenticated et PUBLIC';
   BEGIN
     v_txt := '';
-    IF cardinality(c_fermees) <> 37 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
+    IF cardinality(c_fermees) <> 44 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
     FOREACH v_f IN ARRAY c_fermees LOOP
       v_oid := to_regprocedure(v_f);
       IF v_oid IS NULL THEN v_txt := v_txt || 'absente:' || v_f || ' '; CONTINUE; END IF;
@@ -126,7 +149,7 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   -- ── T2 ──────────────────────────────────────────────────────────────
-  v_t := 'T2 aucune n a d appelant sous authenticated (politique, vue, dependance, INVOKER)';
+  v_t := 'T2 aucune n a d appelant sous anon ni authenticated (politique, vue, dependance, INVOKER)';
   BEGIN
     v_txt := '';
     FOREACH v_f IN ARRAY c_fermees LOOP
@@ -171,6 +194,13 @@ BEGIN
     FOREACH v_f IN ARRAY c_portes LOOP
       v_oid := to_regprocedure(v_f);
       IF v_oid IS NULL THEN v_txt := v_txt || 'absente:' || v_f || ' '; CONTINUE; END IF;
+      IF NOT has_function_privilege('authenticated', v_oid, 'EXECUTE') THEN v_txt := v_txt || 'fermee:' || v_f || ' '; END IF;
+      IF NOT (SELECT p.prosecdef FROM pg_proc p WHERE p.oid = v_oid) THEN v_txt := v_txt || 'invoker:' || v_f || ' '; END IF;
+    END LOOP;
+    FOREACH v_f IN ARRAY c_portes_anon LOOP
+      v_oid := to_regprocedure(v_f);
+      IF v_oid IS NULL THEN v_txt := v_txt || 'absente:' || v_f || ' '; CONTINUE; END IF;
+      IF NOT has_function_privilege('anon', v_oid, 'EXECUTE') THEN v_txt := v_txt || 'fermee-a-anon:' || v_f || ' '; END IF;
       IF NOT has_function_privilege('authenticated', v_oid, 'EXECUTE') THEN v_txt := v_txt || 'fermee:' || v_f || ' '; END IF;
       IF NOT (SELECT p.prosecdef FROM pg_proc p WHERE p.oid = v_oid) THEN v_txt := v_txt || 'invoker:' || v_f || ' '; END IF;
     END LOOP;
@@ -232,6 +262,44 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
     IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'correspondance-fils:' || v_err || ' '; END IF;
     IF v_err IS NULL OR v_err !~ 'not_coordinator' THEN v_txt := v_txt || 'correspondance-fils-sans-refus-metier:' || coalesce(v_err, 'aucune erreur') || ' '; END IF;
+
+    EXECUTE 'RESET ROLE';
+    PERFORM set_config('request.jwt.claims', '', true);
+    IF v_txt = '' THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    EXECUTE 'RESET ROLE';
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM);
+  END;
+
+  -- ── T5 ──────────────────────────────────────────────────────────────
+  -- 14/10 : le public (anon, sans session) frappe aux portes de l'OAI, de la
+  -- fiche et de la candidature. Elles appellent les sept fermées du 14/10 ;
+  -- elles doivent répondre ou refuser pour une raison métier, jamais buter
+  -- sur le privilège d'une fermée.
+  v_t := 'T5 les portes anonymes, sous anon, ne butent jamais sur le privilege d une fermee';
+  BEGIN
+    v_txt := '';
+    PERFORM set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
+    EXECUTE 'SET LOCAL ROLE anon';
+
+    v_err := NULL;
+    BEGIN PERFORM public.fn_oai_harvestable_libraries();
+    EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
+    IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'oai-bibliotheques:' || v_err || ' '; END IF;
+
+    v_err := NULL;
+    BEGIN PERFORM public.fn_book_restricted_pdf_state_for_current_user('B-inconnue-0001');
+    EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
+    IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'pdf-restreint:' || v_err || ' '; END IF;
+
+    v_err := NULL;
+    BEGIN PERFORM public.fn_submit_library_request_via_claim('jeton-inconnu',
+      'Bibliotheque T5', 'T5', 'Ville', 'Region', 'BR', 't5@example.invalid', '', '',
+      'idea', 'Contact', 't5@example.invalid', '', 'membre', 'self', 'resume', '', '', '',
+      true, true, 'public', 'none', 'standalone', 'simple', NULL);
+    EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
+    IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'candidature:' || v_err || ' '; END IF;
 
     EXECUTE 'RESET ROLE';
     PERFORM set_config('request.jwt.claims', '', true);

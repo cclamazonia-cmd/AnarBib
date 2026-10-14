@@ -235,6 +235,13 @@ BEGIN
   -- que par un defaut de creation, sans GRANT ecrit, et rien ne les appelle
   -- sous anon (deux DEFINER, une policy d'INSERT). 28 -> 26 ; le lint 0028 doit
   -- rendre 26.
+  -- 14/10/2026 (20261014181057) : sept entrees sortent de T10 et de T12 --
+  -- les quatre lecteurs de mode, fn_oai_library_is_harvest_eligible,
+  -- fn_consume_library_request_claim, fn_book_restricted_pdf_state. Leur
+  -- « usage anonyme reel » (audit du 30/08, section B) est porte par des
+  -- portes DEFINER qui restent ouvertes (fn_oai_harvestable_*,
+  -- fn_submit_library_request_via_claim, fn_book_restricted_pdf_state_for_current_user) ;
+  -- elles-memes n'avaient aucun appelant sous anon ni authenticated. 29 -> 22.
   v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
   BEGIN
     WITH nommees(fn) AS (VALUES
@@ -247,20 +254,13 @@ BEGIN
       -- 04/10/2026 (20261004215035) : l'indicateur numérique du catalogue public.
       ('public.catalog_digital_access_v1'),
       ('public.fn_book_due_dates'),
-      ('public.fn_book_restricted_pdf_state'),
       ('public.fn_book_restricted_pdf_state_for_current_user'),
       ('public.fn_caller_is_library_staff'),
       ('public.fn_caller_is_network_admin'),
-      ('public.fn_consume_library_request_claim'),
       ('public.fn_get_library_request_claim_context'),
-      ('public.fn_library_catalog_mode'),
-      ('public.fn_library_circulation_mode'),
-      ('public.fn_library_governance_mode'),
-      ('public.fn_library_network_mode'),
       ('public.fn_library_visible_to_caller'),
       ('public.fn_oai_harvestable_libraries'),
       ('public.fn_oai_harvestable_records'),
-      ('public.fn_oai_library_is_harvest_eligible'),
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_submit_library_request'),
       ('public.fn_submit_library_request_via_claim'),
@@ -397,13 +397,11 @@ BEGIN
       ('public.circulation_material_scope_from_tipo_material'),
       ('public.f_normalize_search'),
       ('public.fn_book_due_dates'),
-      ('public.fn_book_restricted_pdf_state'),
       ('public.fn_book_restricted_pdf_state_for_current_user'),
       ('public.fn_caller_is_library_staff'),
       ('public.fn_caller_is_network_admin'),
       ('public.fn_check_consulta_transition'),
       ('public.fn_check_loan_action'),
-      ('public.fn_consume_library_request_claim'),
       ('public.fn_export_my_data'),
       ('public.fn_format_holding_refs'),
       ('public.fn_get_consulta_context'),
@@ -412,16 +410,11 @@ BEGIN
       ('public.fn_get_retention_policy'),
       ('public.fn_hash_claim_token'),
       ('public.fn_is_critical_action_type'),
-      ('public.fn_library_catalog_mode'),
-      ('public.fn_library_circulation_mode'),
-      ('public.fn_library_governance_mode'),
-      ('public.fn_library_network_mode'),
       ('public.fn_library_visible_to_caller'),
       ('public.fn_locale_from_idioma'),
       ('public.fn_normalize_name'),
       ('public.fn_oai_harvestable_libraries'),
       ('public.fn_oai_harvestable_records'),
-      ('public.fn_oai_library_is_harvest_eligible'),
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_set_retention_policy'),
       ('public.fn_sigle_sans_points'),
