@@ -83,9 +83,6 @@ gazette_submission_notification_outbox
 gazette_submissions
 ill_digital_share_events
 ill_digital_shares
-import_blmf_books_rows
-import_blmf_exemplares_rows
-import_terra_livre_zotero_staging
 interlibrary_loan_events
 interlibrary_loan_items_v2
 interlibrary_loan_notification_events

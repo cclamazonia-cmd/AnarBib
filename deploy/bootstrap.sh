@@ -451,9 +451,6 @@ public.altcha_consumed_challenges
 public.author_name_aliases
 public.catalog_partner_capabilities
 public.catalog_partner_probe_runs
-public.import_blmf_books_rows
-public.import_blmf_exemplares_rows
-public.import_terra_livre_zotero_staging
 public.interlibrary_loan_events
 public.library_theme_configs
 public.library_themes

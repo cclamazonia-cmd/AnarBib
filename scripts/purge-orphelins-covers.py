@@ -5,8 +5,11 @@ rien ne reference, en epargnant les couvertures perdues.
 CE QU'IL FAIT, ET SURTOUT CE QU'IL REFUSE DE FAIRE.
 
 Un objet de `covers` est ORPHELIN quand aucun `cover_object_path` ne le designe,
-dans aucune des trois tables qui portent ce champ : books, book_drafts,
-import_blmf_books_rows. Mais tous les orphelins ne sont pas des dechets. Le
+dans aucune des deux tables qui portent ce champ : books, book_drafts.
+(import_blmf_books_rows en etait une troisieme jusqu'a sa suppression le
+14/10/2026, migration 20261014181633 : une seule capa n'etait designee que
+par elle, une ancienne version de 0000142.) Mais tous les orphelins ne sont
+pas des dechets. Le
 script les classe en trois, et n'en supprime que deux :
 
   A  aucune notice ni brouillon ne porte la reference du dossier
@@ -171,8 +174,7 @@ def main():
     print(">>> 1/4 — lecture des references en base")
     livres = lire_table(base, key, "books", "bib_ref,cover_object_path")
     brouillons = lire_table(base, key, "book_drafts", "bib_ref,cover_object_path")
-    imports = lire_table(base, key, "import_blmf_books_rows", "cover_object_path")
-    references = {r["cover_object_path"] for r in (livres + brouillons + imports)
+    references = {r["cover_object_path"] for r in (livres + brouillons)
                   if r.get("cover_object_path")}
     # Une reference peut porter plusieurs notices : on retient si AU MOINS une
     # notice de cette reference est depourvue de couverture.

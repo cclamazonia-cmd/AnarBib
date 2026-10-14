@@ -134,7 +134,7 @@ CADRAGE_importacoes_module_2026-06-04 (trace — chantier-cadre Importações, m
   ├──→ registre FED-5 (rôle = coordenador intégral)
   ├──→ book_drafts + spec-catalogacao-fiche-et-paliers (cible des imports → couplage révision/publication)
   ├──→ catalog_partners / #PARTNERS (fédération : pull gaté par consentement, catalog_partner_*_import)
-  └──→ staging import_blmf_* + import_terra_livre_zotero_staging (sources legacy + Zotero)
+  └──→ (staging import_blmf_* + import_terra_livre_zotero_staging : supprimés le 14/10/2026, migration 20261014181633)
 
 spec-catalogacao-fiche-et-paliers v0.4 (chantier Catalogação — UX/champs, aucune migration DB)
   ├──→ spec-exemplaires-circulation (le padrão fiche sème la destination)

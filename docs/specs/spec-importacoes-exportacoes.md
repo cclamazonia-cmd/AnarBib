@@ -97,7 +97,7 @@ Un import est long → **objet « run d'import »** (nouveau, **DDL à trancher*
 - **Écritures via RPC** (`DOC-RPC-3`) : promotion de lot, application d'un profil, journalisation. Lectures simples sous RLS tolérées ; `storage.from()` hors périmètre RPC.
 - **Journal** : `book_draft_import_events` (`event_kind`, `source_partner_code` / `source_system_code` / `source_format_code`, `import_method_code`, `review_status_code`, `confidence_level_code`, `event_payload` jsonb…).
 - **Réfs contrôlées** : `catalog_ref_source_formats` / `_methods` / `_partners` / `_systems`.
-- **Staging** existant : `import_blmf_books_rows`, `import_blmf_exemplares_rows`, `import_terra_livre_zotero_staging`.
+- **Staging** : celui du module (`ingest.partner_catalog_staging_rows`). Les dumps figés d'avant le module — `import_blmf_books_rows`, `import_blmf_exemplares_rows`, `import_terra_livre_zotero_staging` et ses deux vues `v_terra_livre_books_ready*` — sont **supprimés le 14/10/2026** (migration `20261014181633`, décision de Xavier).
 - **Fontes externas** : cache `partner_source_records` / `_holdings` / `_items` ; relation `catalog_partners` + `catalog_partners_policy_flags_v2`.
 - **Export** : sérialiseurs réutilisant la couche §5 ; partilha = objets de `spec-flux-partage-numerique` (à coder).
 
