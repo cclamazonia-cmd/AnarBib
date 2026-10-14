@@ -172,13 +172,17 @@ export default function CatalogResultsTable(p) {
               <span className="ab-copies__muted">{t({ id: 'catalog.works.copiesNone' })}</span>
             ) : libs.map(l => {
               const s = copyStatus(l, book);
+              // Les numéros d'inventaire de CETTE bibliothèque ; local_bib_ref est la
+              // référence de la notice, la même partout quand la notice est partagée.
+              const tombos = Array.isArray(l.tombos) ? l.tombos.filter(Boolean) : [];
+              const ref = tombos.length > 0 ? tombos.join(', ') : l.local_bib_ref;
               return (
                 <div className="ab-copies__row" key={l.library_slug || l.library_name}>
                   <span className="ab-copies__lib">{l.short_name || l.library_name}{l.city ? ` (${l.city})` : ''}</span>
                   {l.is_session_library && <span className="ab-copies__mine">{t({ id: 'catalog.works.yourLibrary' })}</span>}
                   <span>{t({ id: 'catalog.works.copiesCount' }, { count: Number(l.exemplares_total) || 0 })}</span>
                   <span className={`ab-status-dot ab-status-dot--${s.cls}`}>{s.label}</span>
-                  {l.local_bib_ref && <span className="ab-copies__muted">{l.local_bib_ref}</span>}
+                  {ref && <span className="ab-copies__muted">{ref}</span>}
                 </div>
               );
             })}

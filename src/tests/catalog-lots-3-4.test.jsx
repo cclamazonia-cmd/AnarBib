@@ -174,6 +174,25 @@ describe('CatalogResultsTable — la table hors de la page (lot 4)', () => {
     expect(screen.getByRole('button', { name: 'catalog.works.hideCopies' })).toBeTruthy();
   });
 
+  it('une notice partagée : chaque bibliothèque montre SES numéros d’inventaire, pas la référence commune de la notice', () => {
+    const p = propsTable({
+      expandedCopies: new Set([1]),
+      tableRows: [{ type: 'edition', book: LIVRE, depth: 1 }, { type: 'copies', book: LIVRE, depth: 2 }],
+      copiesByBook: { 1: { loading: false, libraries: [
+        { library_slug: 'btl', short_name: 'BTL', local_bib_ref: 'BTL-TL-001961', tombos: ['BTL-TL-EX-001961'], exemplares_total: 1 },
+        { library_slug: 'mleg', short_name: 'MLEG', local_bib_ref: 'BTL-TL-001961', tombos: ['MLEG-2026-0224'], exemplares_total: 1 },
+        { library_slug: 'x', short_name: 'X', local_bib_ref: 'X-REF', exemplares_total: 1 },
+      ] } },
+    });
+    monter(<CatalogResultsTable {...p} />);
+    const rows = [...document.querySelectorAll('.ab-copies__row')].map(r => r.textContent);
+    expect(rows[0]).toContain('BTL-TL-EX-001961');
+    expect(rows[1]).toContain('MLEG-2026-0224');
+    expect(rows[1]).not.toContain('BTL-TL-001961');
+    // sans numéro d'inventaire transmis : repli sur la référence de la notice
+    expect(rows[2]).toContain('X-REF');
+  });
+
   it('une œuvre à deux éditions : une seule ligne, le bouton déplie par le geste de la page, les années en fourchette', () => {
     const w = { key: 'k1', work_id: 5, rep_book_id: 1, editions: [LIVRE, LIVRE2], library_names: ['BTL'], year_min: 2020, year_max: 2021 };
     const p = propsTable({ books: [LIVRE, LIVRE2], tableRows: [{ type: 'work', w }] });
