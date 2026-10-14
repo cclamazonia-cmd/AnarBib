@@ -170,7 +170,6 @@ const EL_SANS_GREC_LEGITIME = [
 // faire, et doit pouvoir se défendre.
 const IDENTIQUE_A_EN_LEGITIME = [
   'app.name',
-  'account.constitution.guidePath', // ro → /en/welcome/ tant que la vitrine n'a pas de pages /ro/ (lot 5)
   'book.isbn', 'book.meta.isbn', 'book.meta.issn', 'book.meta.cdd',
   'catalogacao.form.isbn', 'catalogacao.form.issn', 'catalogacao.form.cdd',
   'catalogacao.field.marcJson',

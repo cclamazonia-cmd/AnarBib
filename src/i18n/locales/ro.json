@@ -6831,7 +6831,7 @@
   "account.constitution.banner.title": "Candidatura ta a fost acceptată — urmează constituirea",
   "account.constitution.banner.body": "Biblioteca ta este preactivă. Termină atelierul de constituire și du regulamentul în adunare; ghidul de primire te însoțește pas cu pas.",
   "account.constitution.banner.cta": "Deschide ghidul de primire",
-  "account.constitution.guidePath": "/en/welcome/",
+  "account.constitution.guidePath": "/ro/bun-venit/",
   "atelier.guide.callout": "Fiecare alegere din acest atelier este o decizie a colectivului, nu un câmp de completat. Ghidul de primire spune ce schimbă fiecare în practică.",
   "relatar.title": "Semnalează o problemă",
   "relatar.intro": "Ceva n-a mers sau nu cum te așteptai? Povestește aici, fără cont și fără Codeberg. Persoanele care administrează rețeaua îți primesc semnalarea prin e-mail.",

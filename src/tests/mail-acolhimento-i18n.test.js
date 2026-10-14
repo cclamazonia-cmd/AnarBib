@@ -86,7 +86,8 @@ describe("mail d'acceptation — le guide d'accueil dans les dix langues", () =>
     for (const l of LOCALES) {
       expect(valeur(l, 'approved.guidePath'), l).toBe(locales[l]['account.constitution.guidePath']);
       // Un chemin, jamais une adresse : le domaine n'a rien à faire dans un dictionnaire.
-      expect(valeur(l, 'approved.guidePath'), l).toMatch(/^\/[a-z]{2}\/[a-z]+\/$/);
+      // Slug à tirets admis (/ro/bun-venit/), comme d'autres pages de la vitrine.
+      expect(valeur(l, 'approved.guidePath'), l).toMatch(/^\/[a-z]{2}\/[a-z]+(-[a-z]+)*\/$/);
     }
   });
 

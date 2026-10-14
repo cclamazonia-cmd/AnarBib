@@ -377,7 +377,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "approved.path": "Începe cu trei pași: schimbă parola provizorie, deschide atelierul de constituire în /atelier și du etapa 0 — cele patru axe ale profilului — la următoarea întâlnire a colectivului. Ghidul de primire îi explică pe fiecare.",
     "approved.human": "Înainte de a decide, nu după: scrie la anarbib@proton.me. Rețeaua are ca principiu ca o decizie de constituire să fie discutată cu un tovarăș/o tovarășă înainte de a deveni un formular.",
     "approved.ctaLabel": "Citește ghidul de primire",
-    "approved.guidePath": "/en/welcome/",
+    "approved.guidePath": "/ro/bun-venit/",
     "refused.subject": "Cerere respinsă",
     "refused.intro": "Cererea bibliotecii {library} nu a fost acceptată în această etapă.",
     "message.subject": "Mesaj nou de la echipa de coordonare",

@@ -17,6 +17,7 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fr from '@/i18n/locales/fr.json';
 import el from '@/i18n/locales/el.json';
+import ro from '@/i18n/locales/ro.json';
 import MinhaSolicitacaoPanel from '@/components/account/MinhaSolicitacaoPanel';
 import { siteUrl } from '@/lib/siteUrl';
 
@@ -64,7 +65,7 @@ function rendre(locale, messages) {
 }
 
 describe('/conta — bandeau de constitution vers le guide d\'accueil', () => {
-  for (const [locale, messages, slug] of [['fr', fr, 'fr/accueil'], ['el', el, 'el/ypodochi']]) {
+  for (const [locale, messages, slug] of [['fr', fr, 'fr/accueil'], ['el', el, 'el/ypodochi'], ['ro', ro, 'ro/bun-venit']]) {
     it(`en ${locale} : titre du bandeau, lien vers ${slug} et libellé de la locale`, async () => {
       rendre(locale, messages);
       expect(await screen.findByText(messages['account.constitution.banner.title'])).toBeTruthy();

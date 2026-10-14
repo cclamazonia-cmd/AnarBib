@@ -236,6 +236,7 @@ function buildMailShell({ pretitle, title, subtitle, logoTable, contentHtml }) {
 const SITE_LANG_BY_LOCALE = {
   "pt-BR": "pt", pt: "pt", fr: "fr", es: "es",
   it: "it", en: "en", de: "de", ca: "ca", eo: "eo",
+  nl: "nl", el: "el", ro: "ro",
 };
 function localeToSiteLang(locale) {
   return SITE_LANG_BY_LOCALE[String(locale || "").trim()] || "pt";
@@ -245,6 +246,7 @@ function localeToSiteLang(locale) {
 const SITE_PROJECT_SLUG_BY_LOCALE = {
   "pt-BR": "projeto", pt: "projeto", fr: "projet", es: "proyecto",
   it: "progetto", en: "project", de: "projekt", ca: "projecte", eo: "projekto",
+  nl: "project", el: "egcheirima", ro: "proiect",
 };
 function projectUrl(locale) {
   const lang = localeToSiteLang(locale);
