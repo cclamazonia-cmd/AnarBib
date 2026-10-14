@@ -2,6 +2,7 @@
 -- AnarBib — Tests d'acceptation : un même ISBN est une même édition, sous ses
 -- deux formes ; un éditeur ne change pas de nom pour un mot générique
 -- Date : 2026-09-28 · Migration 20260928163920_un_meme_isbn_est_une_meme_edition
+--        + 2026-10-14 · Migration 20261013235651_un_editeur_colle_est_le_meme_editeur (T9)
 --
 -- POURQUOI. BTL-TL-000504 et BTL-TL-000727 (Anarquistas, Suriano, Manantial,
 -- 2001), ISBN-13 d'un côté, ISBN-10 de l'autre, même œuvre : jamais proposées
@@ -93,6 +94,17 @@ BEGIN
      AND NOT has_function_privilege('anon', 'public.fn_meme_editeur(text, text)', 'EXECUTE')
      AND NOT has_function_privilege('anon', 'public.fn_editions_distinctes(text, text, text, text, text, text, text, text)', 'EXECUTE') THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
+
+  -- DEDUP-16 (14/10) : BTL-TL-000005 / 000012, Venezuela (Uzcátegui, 2010) — « LaMalatesta Editorial »
+  -- dans une co-édition contre « La Malatesta » : un mot collé n'est pas un autre éditeur.
+  v_t := 'T9 un nom d''éditeur collé à sa majuscule interne est le même éditeur que son écriture en deux mots, seul ou dans une co-édition';
+  IF public.fn_editeur_coeur('LaMalatesta Editorial') = 'malatesta'
+     AND public.fn_meme_editeur('LaMalatesta Editorial', 'La Malatesta')
+     AND public.fn_meme_editeur('El Libertario/La Cucaracha Ilustrada/Libros de Anarres/Tierra de fuego/LaMalatesta Editorial', 'La Malatesta')
+     AND NOT public.fn_editions_distinctes('', '', '2010', '2010', 'El Libertario/La Cucaracha Ilustrada/Libros de Anarres/Tierra de fuego/LaMalatesta Editorial', 'La Malatesta', '', '')
+     AND public.fn_editeur_coeur('CNT-AIT') = public.fn_editeur_coeur('cnt ait')
+     AND NOT public.fn_meme_editeur('LaMalatesta Editorial', 'Hedra') THEN v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || public.fn_editeur_coeur('LaMalatesta Editorial') || ' / ' || public.fn_editeur_coeur('El Libertario/La Cucaracha Ilustrada/Libros de Anarres/Tierra de fuego/LaMalatesta Editorial')); END IF;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'EDITIONS DISTINCTES ECHEC : %/% OK, % échec(s) | %', v_passed, v_passed + v_failed, v_failed,
