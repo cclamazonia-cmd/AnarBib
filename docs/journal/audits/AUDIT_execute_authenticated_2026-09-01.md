@@ -2095,3 +2095,32 @@ dans l'addendum du 14/10 de `AUDIT_execute_anon_2026-08-30.md`. Les DEFINER née
 depuis le 06/10 sont toutes câblées : la passe ne trouve rien d'autre.
 
 Comptes attendus au prochain relevé : **0029 = 430**, **0028 = 22**, **0011 = 1**.
+
+## Complément du 14/10/2026, soir — la 437e : `fn_attach_received_asset_garde`
+
+Le complément du 13/10 attendait 436 ; l'export du 14/10 en comptait 437. La
+fonction en plus, retrouvée par `oid` décroissant (la plus récente des DEFINER
+ouvertes à `authenticated`, après les trois du double facteur), est la garde
+posée le 13/10 par le correctif de sécurité `470e79e8` (constat de l'audit B42
+des Edge Functions), migration `20261013182842`. Elle n'avait pas de verdict.
+
+| Fonction | Né le | Garde | Verdict |
+|---|---|---|---|
+| `public.fn_attach_received_asset_garde(bigint, bigint)` | 13/10 (B42, `20261013182842`) | (a) le fichier reçu existe et son run appartient à une bibliothèque dont l'appelant est **coordination active** — ou il administre le réseau ; (b) le livre est détenu (`book_holdings`) par une bibliothèque dont l'appelant est coordination active — ou il administre le réseau. Tout refus est le même : « Recurso recebido introuvável. », HINT `error.edge.received_asset_not_found` | **Saine.** STABLE, `search_path` vide, n'écrit rien : rend `true` ou lève. Elle existe pour être appelée **sous le jeton de l'appelant** par l'Edge Function `attach-received-asset`, avant tout geste à la clé de service (lecture du dépôt, téléversement, effacement) — c'est ce qui referme le défaut que B42 avait trouvé, un simple lecteur déclenchant ces effets. L'ouverture à `authenticated` est donc sa raison d'être ; `anon` et `PUBLIC` fermés (`REVOKE ALL … FROM PUBLIC, anon, authenticated` puis `GRANT … TO authenticated, service_role`). Ses règles sont celles de `fn_attach_received_asset_record`, à l'identique (`attach_recu_garde_tests` T4 tient les deux d'accord, cas par cas) ; le refus unique suit la doctrine de l'oracle d'existence (B14). |
+
+Vérifié en production le 14/10, par lecture du catalogue seulement : le corps
+est identique à celui de la migration (1 172 caractères, même empreinte md5
+après normalisation des blancs) ; propriétaire `postgres` ; ACL
+`{postgres, service_role, authenticated}` ; aucun appelant SQL, seul appelant
+l'Edge Function (`supabase/functions/attach-received-asset/index.ts`).
+
+*Forme à noter.* Pour un·e admin réseau, la règle (b) ne vérifie pas que le
+livre existe : la garde rend `true`, et l'Edge Function téléverse la copie
+avant que `fn_attach_received_asset_record` n'échoue sur la clé étrangère, puis
+l'efface. C'est un aller-retour inutile, réservé à l'administration et sans
+trace durable : ce n'est pas une faille. À reprendre seulement si l'on touche
+de nouveau cette garde.
+
+**Compte au 14/10, après le déploiement de `20261014181057`.** 0029 = **430**,
+tous justifiés (437 − 7 fermées, dont celle-ci reste ouverte et justifiée) ;
+0028 = **22** ; 0011 = **1** (voulu).
