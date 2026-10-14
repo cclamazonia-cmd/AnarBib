@@ -32,6 +32,16 @@ export function pickLabel(labels, locale, pivot = 'fr') {
   );
 }
 
+/**
+ * Libellés d'un terme du thésaurus FICEDL : ceux de la source (`labels`, tels
+ * qu'aspirés), complétés par les traductions qu'AnarBib propose à la FICEDL
+ * (`labels_proposes`) dans les langues que la source n'a pas. La source
+ * l'emporte toujours (THES-FIC1).
+ */
+export function libellesFicedl(term) {
+  return { ...((term && term.labels_proposes) || {}), ...((term && term.labels) || {}) };
+}
+
 /** Vrai si aucun libellé n'existe dans la locale active (ni sa forme courte). */
 export function isLabelMissing(labels, locale) {
   if (!labels || typeof labels !== 'object') return true;

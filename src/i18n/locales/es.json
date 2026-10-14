@@ -31,6 +31,7 @@
   "ficedl.term.notFound": "Descriptor no encontrado.",
   "ficedl.term.hierarchy": "Jerarquía",
   "ficedl.term.allLanguages": "En las diez lenguas",
+  "ficedl.term.proposed": "Propuesto por AnarBib, todavía no está en el tesauro de la FICEDL",
   "ficedl.term.partnerCatalogs": "En los catálogos asociados",
   "ficedl.term.source": "Ver en el tesauro FICEDL",
   "account.refused.retry.title": "Inscripción no validada",

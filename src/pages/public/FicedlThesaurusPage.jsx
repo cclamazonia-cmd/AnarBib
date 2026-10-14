@@ -14,7 +14,7 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { supabase } from '@/lib/supabase';
-import { pickLabel } from '@/lib/i18nLabel';
+import { pickLabel, libellesFicedl } from '@/lib/i18nLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 // « dates » depuis le 03/09 (H1) : les 159 années du thésaurus sont en base, avec libellé et liens.
@@ -41,7 +41,7 @@ export default function FicedlThesaurusPage() {
     (async () => {
       const { data } = await supabase
         .from('ficedl_thesaurus_terms')
-        .select('mot_id, facet, labels');
+        .select('mot_id, facet, labels, labels_proposes');
       if (!cancelled) setTerms(Array.isArray(data) ? data : []);
     })();
     return () => { cancelled = true; };
@@ -53,7 +53,7 @@ export default function FicedlThesaurusPage() {
     const q = norm(query.trim());
     return terms
       .filter((tm) => Array.isArray(tm.facet) && tm.facet.includes(facet))
-      .map((tm) => ({ ...tm, _label: pickLabel(tm.labels, locale) }))
+      .map((tm) => ({ ...tm, _label: pickLabel(libellesFicedl(tm), locale) }))
       .filter((tm) => !q || norm(tm._label).includes(q))
       .sort((a, b) => a._label.localeCompare(b._label, undefined, { sensitivity: 'base' }));
   }, [terms, facet, query, locale]);

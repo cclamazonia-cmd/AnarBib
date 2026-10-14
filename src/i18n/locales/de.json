@@ -31,6 +31,7 @@
   "ficedl.term.notFound": "Deskriptor nicht gefunden.",
   "ficedl.term.hierarchy": "Hierarchie",
   "ficedl.term.allLanguages": "In allen zehn Sprachen",
+  "ficedl.term.proposed": "Von AnarBib vorgeschlagen, noch nicht im Thesaurus der FICEDL",
   "ficedl.term.partnerCatalogs": "In den Partnerkatalogen",
   "ficedl.term.source": "Im FICEDL-Thesaurus ansehen",
   "account.refused.retry.title": "Anmeldung nicht bestätigt",

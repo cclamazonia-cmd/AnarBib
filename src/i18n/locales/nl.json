@@ -31,6 +31,7 @@
   "ficedl.term.notFound": "Descriptor niet gevonden.",
   "ficedl.term.hierarchy": "Hiërarchie",
   "ficedl.term.allLanguages": "In de tien talen",
+  "ficedl.term.proposed": "Voorgesteld door AnarBib, nog niet in de thesaurus van de FICEDL",
   "ficedl.term.partnerCatalogs": "In de partnercatalogi",
   "ficedl.term.source": "Bekijk in de FICEDL-thesaurus",
   "account.refused.retry.title": "Inschrijving niet gevalideerd",

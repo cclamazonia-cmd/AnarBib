@@ -19,7 +19,7 @@ import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { supabase } from '@/lib/supabase';
-import { pickLabel } from '@/lib/i18nLabel';
+import { pickLabel, libellesFicedl } from '@/lib/i18nLabel';
 import { normalizePartnerLinks } from '@/lib/ficedlPartners';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
@@ -46,7 +46,7 @@ export default function FicedlTermPage() {
     (async () => {
       const { data } = await supabase
         .from('ficedl_thesaurus_terms')
-        .select('mot_id, facet, labels, el_roman, hierarchy, catalog_links, source_url')
+        .select('mot_id, facet, labels, labels_proposes, el_roman, hierarchy, catalog_links, source_url')
         .eq('mot_id', motId)
         .maybeSingle();
       if (!cancelled) setTerm(data || null);
@@ -54,7 +54,11 @@ export default function FicedlTermPage() {
     return () => { cancelled = true; };
   }, [motId]);
 
-  const label = term ? pickLabel(term.labels, locale) : '';
+  const label = term ? pickLabel(libellesFicedl(term), locale) : '';
+  // Traductions proposées par AnarBib, dans les langues que la source n'a pas.
+  const proposes = term
+    ? Object.entries(term.labels_proposes || {}).filter(([code, v]) => v && !(term.labels && term.labels[code]))
+    : [];
   const partnerLinks = term ? normalizePartnerLinks(term.catalog_links) : [];
   useDocumentTitle(label || t({ id: 'pageTitle.ficedl' }));
 
@@ -126,6 +130,20 @@ export default function FicedlTermPage() {
                   </div>
                 ))}
               </dl>
+
+              {proposes.length > 0 && (
+                <>
+                  <div style={sectionTitle}>{t({ id: 'ficedl.term.proposed' })}</div>
+                  <dl style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr)', gap: '4px 14px', margin: 0, fontSize: '.92rem' }}>
+                    {proposes.map(([code, v]) => (
+                      <div key={code} style={{ display: 'contents' }}>
+                        <dt style={{ color: 'var(--brand-muted)', textTransform: 'capitalize' }}>{langName(code, locale)}</dt>
+                        <dd style={{ margin: 0, color: '#f4f4f4', fontStyle: 'italic' }}>{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </>
+              )}
 
               {/* Fédération ENTRANTE : ce terme dans les catalogues partenaires */}
               {partnerLinks.length > 0 && (

@@ -31,6 +31,7 @@
   "ficedl.term.notFound": "Descriptorul nu a fost găsit.",
   "ficedl.term.hierarchy": "Ierarhie",
   "ficedl.term.allLanguages": "În cele zece limbi",
+  "ficedl.term.proposed": "Propus de AnarBib, încă nu figurează în tezaurul FICEDL",
   "ficedl.term.partnerCatalogs": "În cataloagele partenere",
   "ficedl.term.source": "Vezi în tezaurul FICEDL",
   "account.refused.retry.title": "Înregistrare nevalidată",

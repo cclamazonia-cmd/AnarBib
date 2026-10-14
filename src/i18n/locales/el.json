@@ -31,6 +31,7 @@
   "ficedl.term.notFound": "Ο περιγραφέας δεν βρέθηκε.",
   "ficedl.term.hierarchy": "Ιεραρχία",
   "ficedl.term.allLanguages": "Και στις δέκα γλώσσες",
+  "ficedl.term.proposed": "Πρόταση του AnarBib, δεν περιλαμβάνεται ακόμη στον θησαυρό της FICEDL",
   "ficedl.term.partnerCatalogs": "Στους συνεργαζόμενους καταλόγους",
   "ficedl.term.source": "Προβολή στον θησαυρό FICEDL",
   "account.refused.retry.title": "Η εγγραφή δεν επικυρώθηκε",

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
-import { pickLabel } from '@/lib/i18nLabel';
+import { pickLabel, libellesFicedl } from '@/lib/i18nLabel';
 import { MATCH_TYPES, MATCH_LABEL_KEY } from '@/lib/ficedlMatch';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import { LOCALE_CODES } from '@/i18n/locales';
@@ -97,9 +97,9 @@ export default function SubjectLabelEditor() {
         const short = (locale || '').split('-')[0];
         const { data } = await supabase
           .from('ficedl_thesaurus_terms')
-          .select('mot_id, labels')
+          .select('mot_id, labels, labels_proposes')
           .contains('facet', ['sujets'])
-          .or(`labels->>fr.ilike.%${q}%,labels->>${short}.ilike.%${q}%`)
+          .or(`labels->>fr.ilike.%${q}%,labels->>${short}.ilike.%${q}%,labels_proposes->>${short}.ilike.%${q}%`)
           .limit(8);
         const linked = new Set(ficedl.map((f) => f.mot_id));
         setFicResults((Array.isArray(data) ? data : []).filter((r) => !linked.has(r.mot_id)));
@@ -279,7 +279,7 @@ export default function SubjectLabelEditor() {
               <div style={resultsBox}>
                 {ficResults.map((r) => (
                   <button key={r.mot_id} type="button" style={resultBtn} disabled={busy} onClick={() => addFicedl(r.mot_id)}>
-                    + {pickLabel(r.labels, locale, 'fr')} <span style={{ opacity: .6 }}>· {r.mot_id}</span>
+                    + {pickLabel(libellesFicedl(r), locale, 'fr')} <span style={{ opacity: .6 }}>· {r.mot_id}</span>
                   </button>
                 ))}
               </div>
