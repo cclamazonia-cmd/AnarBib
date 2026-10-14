@@ -92,3 +92,25 @@ tâches proposées aux équipes, et le thésaurus de la FICEDL — ce dernier en
 Forme des descripteurs : minuscules comme la source, deux-points collés
 (« economie: șomaj »), le même mot de domaine partout (44 domaines vérifiés),
 « (generalități) » pour « (généralités) ».
+
+## Documents (lot 4, `cf64ee88`)
+
+Onze documents servis dans Fédération → Communs, plus le guide d'accueil des
+coordinations, le DPA et la confidentialité de la BLMF. Ordre de relecture
+proposé : confidentialité de la BLMF, guide d'accueil, charte de langage
+inclusif (section « Română (ro) »), puis le guide de gouvernance.
+
+| Source | Roumain choisi | Question |
+|---|---|---|
+| sous-traitant ultérieur (DPA) | persoană împuternicită secundară | Le RGPD roumain dit « altă persoană împuternicită » ; « subîmputernicit » existe aussi. |
+| SIGB (le logiciel) | SIGB (gouvernance), SIIB (DPA) | Une seule forme ? L'application dit « sistem integrat de bibliotecă ». |
+| J+7, J-30 | Z+7, Z-30 | « Z » pour « zi » : lisible ? |
+| « Je passe la main » (bouton cité) | „Îmi cedez rolul” | L'application dit „Părăsește coordonarea” : le guide français est en retard sur l'écran. |
+| camarade (doublet) | „un tovarăș/o tovarășă pe care îl/o vei putea suna din nou” | Lourd : reformulation épicène ? |
+| infokiosque, Vieille Taupe… | voir la partie « Données » | — |
+
+Les documents français eux-mêmes ont deux retards, que la traduction a
+suivis sans les corriger : ils disent encore « dix langues » à plusieurs
+endroits (D6), et plusieurs boutons cités n'existent plus sous ce nom
+(« Je passe la main », « Inviter dans l'équipe », « Compte actif (restreint) »,
+les anciens libellés portugais de l'indexation).

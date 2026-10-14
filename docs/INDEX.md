@@ -43,8 +43,8 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 ```
 docs/
 ├── INDEX.md                          ← vous êtes ici
-├── manual.md + manual-{ca,de,el,en,eo,es,it,nl,pt-BR}.md      Manuel d'utilisation (10 langues)
-├── cotation-et-cdd.md + cotation-et-cdd-{9 langues}.md        Guide cotation / CDD (10 langues)
+├── manual.md + manual-{ca,de,el,en,eo,es,it,nl,pt-BR,ro}.md   Manuel d'utilisation (toutes les langues)
+├── cotation-et-cdd.md + cotation-et-cdd-{autres langues}.md   Guide cotation / CDD (toutes les langues)
 ├── multiformat-viewers.md            Doc technique viewer multi-format
 │
 ├── specs/                            Spécifications techniques et fonctionnelles
@@ -84,16 +84,16 @@ docs/
 ├── db/                               Dumps Supabase (hors git — README uniquement)
 │   └── README.md                     → convention de dump (les *.sql ne sont pas suivis)
 │
-├── governance/                       Guide de gouvernance traduit (10 langues, .md + .docx)
-│   └── guide-gouvernance-{ca,de,el,en,eo,es,fr,it,nl,pt-BR}.{md,docx}
+├── governance/                       Guide de gouvernance traduit (toutes les langues, .md + .docx)
+│   └── guide-gouvernance-{ca,de,el,en,eo,es,fr,it,nl,pt-BR,ro}.{md,docx}
 │
 ├── legal/                            Documentation réglementaire (RGPD/LGPD)
 │   ├── README.md
 │   ├── INCIDENT_RESPONSE.md
 │   ├── REGISTRE_TRAITEMENTS.md       → registre art. 30 (aligné 20/08/2026)
-│   └── dpa-{de,en,es,fr,it,pt-BR}.md
+│   └── dpa-{ca,de,el,en,eo,es,fr,it,nl,pt-BR,ro}.md
 │
-├── guides/                           Vadémécums pratiques du commun, servis dans l'app (10 langues chacun)
+├── guides/                           Vadémécums pratiques du commun, servis dans l'app (toutes les langues chacun)
 │   ├── guide-{digitalizar,indexar-assunto,scan-qr,thesaurus-ficedl}-{lang}.md
 │   └── guide-reimport-pmb-{fr,pt-BR}.md   → le premier réimport d'un catalogue PMB (H21 lot 8, 11/10/2026) ; fr et pt-BR seulement, hors de l'app
 │
@@ -175,7 +175,7 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 ### `governance/` — Guide de gouvernance traduit
 
-Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr, it, nl, pt-BR`), en `.md` + `.docx`. **Foyer canonique : `guide-gouvernance-fr.md`** (les autres langues en sont les traductions). Documentation stable.
+Le guide de gouvernance d'AnarBib dans **toutes les langues du projet** (`ca, de, el, en, eo, es, fr, it, nl, pt-BR, ro`), en `.md` + `.docx`. **Foyer canonique : `guide-gouvernance-fr.md`** (les autres langues en sont les traductions). Documentation stable.
 
 ---
 

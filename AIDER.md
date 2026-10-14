@@ -19,7 +19,7 @@ Le réseau n'a **qu'une seule personne administratrice**. Des décisions fédér
 
 ## Relire une langue — `E2`, `E4`
 
-L'interface existe en dix langues, à parité stricte : 6 177 chaînes dans chacune, vérifiée à chaque intégration. Mais la parité compte les clés, pas leur justesse. **Le néerlandais est à l'état de brouillon, le grec reste à définir**, et l'italien ne suit pas encore sa propre convention d'écriture inclusive.
+L'interface existe dans toutes les langues du réseau, à parité stricte : plus de 7 600 chaînes dans chacune, vérifiée à chaque intégration. Mais la parité compte les clés, pas leur justesse. **Le néerlandais est à l'état de brouillon, le grec reste à définir, le roumain attend sa première relecture**, et l'italien ne suit pas encore sa propre convention d'écriture inclusive.
 
 **Ce que ça demande** : être locutrice ou locuteur natif. Rien d'autre. Si git vous fait peur, on vous envoie un fichier par courriel et vous le renvoyez modifié.
 **Ce que ça apporte** : deux langues qui cessent d'être des traductions approximatives.
@@ -47,7 +47,7 @@ Des fonctionnalités d'accessibilité sont implémentées. **Aucun audit indépe
 
 Cette page a longtemps dit : « personne n'a jamais vérifié que ce projet est reprenable par quelqu'un d'autre que celui qui l'a écrit ». Entre le 6 et le 15 septembre 2026, un camarade l'a vérifié : il a rebâti la pile complète chez lui, depuis le dépôt seul, et en a tiré un installateur, `install.sh`. Cela fait deux machines. La troisième est la vôtre : lancer `install.sh` sur une machine vierge, en suivant [`deploy/README.md`](deploy/README.md) et rien d'autre, et écrire ce qui casse. Aucun secret, aucun accès, aucune coordination.
 
-**Ce que ça demande** : Docker, une machine, une soirée. Aucune connaissance du projet ; l'installateur parle les dix langues du projet.
+**Ce que ça demande** : Docker, une machine, une soirée. Aucune connaissance du projet ; l'installateur parle les langues du projet.
 **Ce que ça apporte** : la première reconstruction a dit que le projet est reprenable ; la vôtre dira si l'installateur l'est. C'est l'une des conditions à réunir avant de quitter l'hébergeur actuel, et par définition elle ne peut pas venir de nous. **Un rapport d'échec détaillé vaut toujours plus qu'un correctif** : c'est la liste de ce qui ne marche que sur deux machines.
 
 ## Lire nos courriels dans votre client de messagerie — `F11`
@@ -98,7 +98,7 @@ A rede tem **uma única pessoa administradora**. Decisões federais são deliber
 
 ## Revisar uma língua — `E2`, `E4`
 
-A interface existe em dez línguas, em paridade estrita: 6 177 cadeias em cada uma, verificada a cada integração. Mas a paridade conta as chaves, não a justeza delas. **O neerlandês está em estado de rascunho, o grego resta a definir**, e o italiano ainda não segue a própria convenção de escrita inclusiva.
+A interface existe em todas as línguas da rede, em paridade estrita: mais de 7 600 cadeias em cada uma, verificada a cada integração. Mas a paridade conta as chaves, não a justeza delas. **O neerlandês está em estado de rascunho, o grego resta a definir, o romeno aguarda a primeira revisão**, e o italiano ainda não segue a própria convenção de escrita inclusiva.
 
 **O que exige**: ser falante nativo·a. Nada mais. Se o git lhe assusta, enviamos um arquivo por e-mail e você o devolve modificado.
 **O que traz**: duas línguas que deixam de ser traduções aproximativas.
@@ -126,7 +126,7 @@ Funcionalidades de acessibilidade estão implementadas. **Nenhuma auditoria inde
 
 Esta página dizia há muito tempo: « ninguém jamais verificou se este projeto é retomável por outra pessoa além de quem o escreveu ». Entre 6 e 15 de setembro de 2026, um companheiro verificou: reconstruiu a pilha completa na máquina dele, a partir do repositório sozinho, e tirou disso um instalador, `install.sh`. São duas máquinas. A terceira é a sua: rodar `install.sh` numa máquina limpa, seguindo [`deploy/README.md`](deploy/README.md) e nada mais, e escrever o que quebra. Nenhum segredo, nenhum acesso, nenhuma coordenação.
 
-**O que exige**: Docker, uma máquina, uma noite. Nenhum conhecimento do projeto; o instalador fala as dez línguas do projeto.
+**O que exige**: Docker, uma máquina, uma noite. Nenhum conhecimento do projeto; o instalador fala as línguas do projeto.
 **O que traz**: a primeira reconstrução disse que o projeto é retomável; a sua dirá se o instalador também é. É uma das condições a reunir antes de deixar o provedor atual, e por definição ela não pode vir de nós. **Um relatório de falha detalhado vale sempre mais que uma correção**: é a lista do que só funciona em duas máquinas.
 
 ## Ler nossos e-mails no seu cliente de correio — `F11`
@@ -177,7 +177,7 @@ The network has **exactly one administrator**. Federation-level decisions are de
 
 ## Review a language — `E2`, `E4`
 
-The interface exists in ten languages at strict parity: 6,177 strings in each, checked on every integration. But parity counts keys, not whether they are right. **Dutch is still a draft, Greek is undecided**, and Italian does not yet follow its own inclusive-writing convention.
+The interface exists in every language of the network at strict parity: more than 7,600 strings in each, checked on every integration. But parity counts keys, not whether they are right. **Dutch is still a draft, Greek is undecided, Romanian awaits its first review**, and Italian does not yet follow its own inclusive-writing convention.
 
 **What it takes**: being a native speaker. Nothing else. If git frightens you, we email you a file and you send it back edited.
 
@@ -201,7 +201,7 @@ Accessibility features are implemented. **No independent audit has ever been car
 
 For a long time this page said: "nobody has ever checked whether this project can be picked up by someone other than the person who wrote it". Between 6 and 15 September 2026, a comrade checked: he rebuilt the full stack on his own machine, from the repository alone, and turned it into an installer, `install.sh`. That makes two machines. The third is yours: run `install.sh` on a clean machine, following [`deploy/README.md`](deploy/README.md) and nothing else, and write down what breaks. No secrets, no access, no coordination needed.
 
-**What it takes**: Docker, a machine, an evening. No knowledge of the project; the installer speaks the project's ten languages.
+**What it takes**: Docker, a machine, an evening. No knowledge of the project; the installer speaks the project's languages.
 **What it gives**: the first rebuild said the project can be picked up; yours will say whether the installer can. It is one of the conditions to meet before leaving the current host, and by definition it cannot come from us. **A detailed failure report is still worth more than a fix**: it is the list of what only works on two machines.
 
 ## Read our emails in your own mail client — `F11`

@@ -22,7 +22,7 @@ In practice, this means:
 - **A network with no centre.** Catalogues are shared through an open protocol (OAI-PMH); a library stays in control of what it publishes.
 - **No tracking.** No trackers, advertising or statistical; the anti-bot check and the map tiles are served by the project's own infrastructure, with no call to an outside service.
 - **A shared vocabulary, not a captured one.** Subject indexing relies on the [shared thesaurus of the FICEDL](https://thesaurus.ficedl.info), whose labels AnarBib takes up without ever rewriting them.
-- **Ten languages, inclusive writing.** The interface exists in Brazilian Portuguese, French, Spanish, English, Italian, German, Catalan, Esperanto, Dutch and Greek, following an [inclusive language charter](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) specific to each language.
+- **The network's languages, inclusive writing.** The interface exists in Brazilian Portuguese, French, Spanish, English, Italian, German, Catalan, Esperanto, Dutch, Greek and Romanian (under review), following an [inclusive language charter](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) specific to each language.
 
 ## Who uses it
 
@@ -65,7 +65,7 @@ AnarBib is a web application (React and Vite) backed by Supabase (PostgreSQL and
 ./install.sh
 ```
 
-The installer speaks the project's ten languages; the details are in [`deploy/README.md`](deploy/README.md).
+The installer speaks the project's languages; the details are in [`deploy/README.md`](deploy/README.md).
 
 **Run the tests**:
 
@@ -76,7 +76,7 @@ npm test
 **Where to find what**:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — getting started, the working rhythm, what to read before touching the code.
-- [`docs/INDEX.md`](docs/INDEX.md) — the map of the documentation (specifications, guides, manuals in ten languages).
+- [`docs/INDEX.md`](docs/INDEX.md) — the map of the documentation (specifications, guides, manuals in the project's languages).
 - [`docs/specs/REGISTRE_decisions.md`](docs/specs/REGISTRE_decisions.md) — the decision register, which is authoritative.
 - [`docs/backlogs/`](docs/backlogs/INDEX.md) — what is in progress, what remains to be done, and the project's figures, dated.
 

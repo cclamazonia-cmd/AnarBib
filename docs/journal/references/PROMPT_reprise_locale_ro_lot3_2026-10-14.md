@@ -49,14 +49,10 @@ s'édite dans la langue d'affichage).
 
 ## Lots suivants
 
-- **Lot 4, documentation du dépôt** :
-  - familles `-ro.md` ;
-  - phrases « dix langues » selon D6 ;
-  - manuel : `docs/manual-ro.md`, puis l'entrée
-    `ro: { fichier: 'manual-ro.md', A, B }` dans l'objet T de
-    `scripts/manuel-b42-double-authentification.cjs`, à rejouer. Les
-    libellés viennent de ro.json (twoFactor.*, nav.account,
-    account.tab.profile, rede.tab.twoFactor, nav.network).
+- **Lot 4, documentation du dépôt : FAIT** (`cf64ee88`, 14/10). Restent, côté
+  français : les « dix langues » écrites DANS les documents des Communs (D6),
+  et les boutons cités qui n'existent plus (voir la fin de
+  `RELECTURE_roumain_2026-10-14.md`).
 - **Lot 5, vitrine** (`anarbib/pages`) :
   - une ligne dans `tools/locales.json` et les slugs `ro` ;
   - 17 pages `/ro/` ;

@@ -101,7 +101,7 @@ Pour reconstruire la pile complète — Postgres, PostgREST, authentification, s
 
 ### Sur les tests
 
-La suite Vitest doit rester verte. Les dix locales sont à **parité stricte de clés**, vérifiée par l'intégration continue : ajouter une clé dans une langue et pas dans les neuf autres fait échouer la construction. C'est voulu.
+La suite Vitest doit rester verte. Toutes les locales sont à **parité stricte de clés**, vérifiée par l'intégration continue : ajouter une clé dans une langue et pas dans toutes les autres fait échouer la construction. C'est voulu.
 
 *Note* : l'intégration continue tourne sur **Forgejo Actions**, avec un exécuteur auto-hébergé sur la machine du mainteneur — rien ne se construit tant qu'elle est éteinte. Si un workflow échoue sans rapport avec votre travail, ce n'est probablement pas vous. *(Woodpecker a été remplacé le 11/06/2026.)*
 

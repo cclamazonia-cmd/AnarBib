@@ -22,7 +22,7 @@ Na prática, isso significa:
 - **Uma rede sem centro.** Os catálogos são compartilhados por um protocolo aberto (OAI-PMH); cada biblioteca mantém o controle do que publica.
 - **Sem rastreamento.** Nenhum rastreador, publicitário ou estatístico; o anti-robô e o mapa de fundo são servidos pela infraestrutura do próprio projeto, sem chamada a serviço externo.
 - **Um vocabulário comum, não apropriado.** A indexação por assunto se apoia no [tesauro compartilhado da FICEDL](https://thesaurus.ficedl.info), cujos termos o AnarBib retoma sem nunca reescrevê-los.
-- **Dez idiomas, escrita inclusiva.** A interface existe em português do Brasil, francês, espanhol, inglês, italiano, alemão, catalão, esperanto, holandês e grego, segundo uma [carta de linguagem inclusiva](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) própria de cada idioma.
+- **Os idiomas da rede, escrita inclusiva.** A interface existe em português do Brasil, francês, espanhol, inglês, italiano, alemão, catalão, esperanto, holandês, grego e romeno (em revisão), segundo uma [carta de linguagem inclusiva](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) própria de cada idioma.
 
 ## Quem usa
 
@@ -65,7 +65,7 @@ O AnarBib é um aplicativo web (React e Vite) apoiado no Supabase (PostgreSQL e 
 ./install.sh
 ```
 
-O instalador fala os dez idiomas do projeto; os detalhes estão em [`deploy/README.md`](deploy/README.md).
+O instalador fala os idiomas do projeto; os detalhes estão em [`deploy/README.md`](deploy/README.md).
 
 **Rodar os testes**:
 
@@ -76,7 +76,7 @@ npm test
 **Onde encontrar o quê**:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — como começar, o ritmo de trabalho, o que ler antes de mexer no código.
-- [`docs/INDEX.md`](docs/INDEX.md) — o mapa da documentação (especificações, guias, manuais em dez idiomas).
+- [`docs/INDEX.md`](docs/INDEX.md) — o mapa da documentação (especificações, guias, manuais nos idiomas do projeto).
 - [`docs/specs/REGISTRE_decisions.md`](docs/specs/REGISTRE_decisions.md) — o registro de decisões, que é a referência.
 - [`docs/backlogs/`](docs/backlogs/INDEX.md) — o que está em andamento, o que falta fazer e os números do projeto, datados.
 

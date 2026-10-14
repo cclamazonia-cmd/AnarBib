@@ -22,7 +22,7 @@ Concrètement, cela donne :
 - **Un réseau sans centre.** Les catalogues se partagent par un protocole ouvert (OAI-PMH) ; une bibliothèque garde la main sur ce qu'elle publie.
 - **Pas de pistage.** Aucun traceur, publicitaire ou statistique ; l'anti-robot et le fond de carte sont servis par l'infrastructure du projet, sans appel à un service extérieur.
 - **Un vocabulaire commun, pas confisqué.** L'indexation par sujet s'appuie sur le [thésaurus partagé de la FICEDL](https://thesaurus.ficedl.info), dont AnarBib reprend les libellés sans jamais les réécrire.
-- **Dix langues, une écriture inclusive.** L'interface existe en portugais du Brésil, français, espagnol, anglais, italien, allemand, catalan, espéranto, néerlandais et grec, selon une [charte de langage inclusif](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) propre à chaque langue.
+- **Les langues du réseau, une écriture inclusive.** L'interface existe en portugais du Brésil, français, espagnol, anglais, italien, allemand, catalan, espéranto, néerlandais, grec et roumain (en relecture), selon une [charte de langage inclusif](docs/notes-audit/anarbib-charte-langage-inclusif-v2.md) propre à chaque langue.
 
 ## Qui l'utilise
 
@@ -65,7 +65,7 @@ AnarBib est une application web (React et Vite) appuyée sur Supabase (PostgreSQ
 ./install.sh
 ```
 
-L'installateur parle les dix langues du projet ; le détail est dans [`deploy/README.md`](deploy/README.md).
+L'installateur parle les langues du projet ; le détail est dans [`deploy/README.md`](deploy/README.md).
 
 **Lancer les tests** :
 
@@ -76,7 +76,7 @@ npm test
 **Où trouver quoi** :
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — mettre en route, le rythme du travail, ce qu'il faut lire avant de toucher au code.
-- [`docs/INDEX.md`](docs/INDEX.md) — la carte de la documentation (spécifications, guides, manuels en dix langues).
+- [`docs/INDEX.md`](docs/INDEX.md) — la carte de la documentation (spécifications, guides, manuels dans les langues du projet).
 - [`docs/specs/REGISTRE_decisions.md`](docs/specs/REGISTRE_decisions.md) — le registre des décisions, qui fait foi.
 - [`docs/backlogs/`](docs/backlogs/INDEX.md) — ce qui est en cours, ce qui reste à faire, et l'état chiffré du projet, daté.
 
