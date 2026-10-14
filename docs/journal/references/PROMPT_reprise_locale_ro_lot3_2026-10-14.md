@@ -1,0 +1,91 @@
+# Prompt de reprise — chantier « locale ro », après le lot 3 (14/10/2026)
+
+Document de référence : « AnarBib — passer de 10 à 11 locales : inventaire et
+plan pour le roumain » (https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73).
+Backlog : `E39`. Doctrine : `DOC-I18N-4` (sources), `DOC-I18N-5` (décisions D1
+à D7). Reprise précédente : `PROMPT_reprise_locale_ro_lot1_2026-10-13.md`.
+Notes pour la relecture : `RELECTURE_roumain_2026-10-14.md` (même dossier).
+
+## Où on en est
+
+Le roumain est **servi et hors des sélecteurs** (D5) depuis le commit
+`49b479ae` (migration `20261014192932_le_roumain_onzieme_locale`) :
+
+- `ro` est la onzième entrée des sources, avec `listed: false`, dans
+  `src/i18n/locales.js` et `_shared/i18n/locales.ts` ; `fn_supported_locales()`
+  rend onze codes.
+- On l'atteint par `?lang=ro`, par la préférence d'un profil ou par le
+  `localStorage`. La langue du navigateur ne choisit qu'une langue offerte
+  (`LISTED_CODES`).
+- Les sélecteurs passent par `localesDuSelecteur(...courantes)` : ils offrent
+  les langues `listed`, plus celle qu'on a déjà. Ces sélecteurs sont
+  LocaleSwitcher, LocaleSelector, ReadLanguagesField, InvitationsPanel et la
+  gazette.
+- Ce qui est traduit :
+  - `ro.json` (7 631 clés) ;
+  - les 709 gabarits de `mail-strings.ts` et les arbres des autres fonctions ;
+  - `install.sh` (85 messages, « d » accepté comme oui) ;
+  - la page « Viața rețelei » de la gazette ;
+  - la casse de phrase et les mots-outils, côté base et dans `titleCase.js` ;
+  - `ro/ron/rum → ro` dans `fn_locale_from_idioma` ;
+  - le titre de la tâche « lot de fonds reçu ».
+- Ce qui retombe sur une autre langue :
+  - les recueils PDF (`null` → pt-BR, D7) ;
+  - les sous-titres des tutoriels ;
+  - le guide d'accueil des coordinations (`/en/welcome/`, jusqu'au lot 5).
+
+Rien n'est encore relu par une personne roumanophone. Xavier sollicitera
+lui-même Adrian (Anarhiva, Cluj-Napoca), en français : ne pas lui écrire.
+
+## Reste du lot 3 : les données en base
+
+Elles retombent sur leur langue de repli d'ici là. Une migration de données
+par table, depuis la définition réelle des lignes en prod (lecture seule) :
+
+- la carte (≈ 187 libellés) ;
+- les sujets (≈ 39) ;
+- les tâches (≈ 21) ;
+- le thésaurus FICEDL (461 libellés). Il appartient à la FICEDL : demander à
+  Xavier si on le traduit, et qui le valide, avant d'y toucher.
+
+## Lots suivants
+
+- **Lot 4, documentation du dépôt** :
+  - familles `-ro.md` ;
+  - phrases « dix langues » selon D6 ;
+  - manuel : `docs/manual-ro.md`, puis l'entrée
+    `ro: { fichier: 'manual-ro.md', A, B }` dans l'objet T de
+    `scripts/manuel-b42-double-authentification.cjs`, à rejouer. Les
+    libellés viennent de ro.json (twoFactor.*, nav.account,
+    account.tab.profile, rede.tab.twoFactor, nav.network).
+- **Lot 5, vitrine** (`anarbib/pages`) :
+  - une ligne dans `tools/locales.json` et les slugs `ro` ;
+  - 17 pages `/ro/` ;
+  - `node tools/pose-selecteur.cjs` ;
+  - ensuite, remettre `account.constitution.guidePath` et `approved.guidePath`
+    sur la page roumaine (app et `mail-strings.ts`), et retirer l'exception
+    d'`IDENTIQUE_A_EN_LEGITIME`.
+- **Lot 6** :
+  - bloc roumain en fin de chaque recueil PDF (D7), puis les entrées `ro` de
+    `COMPLETE_BLOCKS`, `READER_START` et `GOVERNANCE_START` dans
+    `src/lib/docLinks.js` ;
+  - sous-titres des tutoriels (`SUBTITLE_LANG.ro`).
+- **Lot 7** :
+  - relecture et corrections ;
+  - `listed: true` dans les deux sources ;
+  - annonce ;
+  - amendement de `DOC-I18N-1` (11 locales) ;
+  - clôture d'E39.
+
+## Pièges vus pendant le lot 3
+
+- Le seuil des homographes de `DOC-I18N-3` (valeur identique à pt-BR dans
+  ≥ 7 locales) bouge avec chaque langue. Une valeur laissée telle quelle en
+  roumain peut faire tomber le vocabulaire légitime des autres langues : il
+  faut la traduire (c'est ce qui a été fait pour « Dewey: » et
+  « ID secundar »).
+- Les entrées de `mail-strings.ts` écrites sur une ligne doivent y rester :
+  `mail-invitation-i18n` les lit ligne à ligne.
+- Les tests de scripts antérieurs au roumain (h21, h30) portent sur
+  `LANGUES_DU_SCRIPT` (= `LOCALE_CODES` sans `ro`) : y ajouter `ro` quand le
+  script sera traduit.

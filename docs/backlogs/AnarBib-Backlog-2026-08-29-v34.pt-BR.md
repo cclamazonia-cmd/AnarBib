@@ -691,7 +691,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
-| **E39** | Adicionar o romeno (ro), décima primeira língua — lotes 2 a 7 | `P3` | Aberto |
+| **E39** | Adicionar o romeno (ro), décima primeira língua — resto do lote 3, lotes 4 a 7 | `P3` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
 
@@ -848,13 +848,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `clôture E25` · `commit 0cc2b6d3`*
 
-#### E39 — Adicionar o romeno (ro), décima primeira língua — lotes 2 a 7
+#### E39 — Adicionar o romeno (ro), décima primeira língua — resto do lote 3, lotes 4 a 7
 
 `P3` Adiado · Estado : **Aberto** · Carga : várias semanas · O que exige : língua materna
 
-**Estado.** Inventário de 13/10/2026 (« AnarBib — passer de 10 à 11 locales », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). O lote 1 — fonte única das locales, `DOC-I18N-4` — foi entregue sem romeno (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde): adicionar uma língua agora cabe em uma linha por camada. Decisões D1 a D7 tomadas em 13/10 (`DOC-I18N-5`); revisão a propor à Anarhiva (Cluj-Napoca). Lote 2 FEITO em 14/10 (fonte dos PDF, fontes web verificadas, ro no WD_LANGUAGES 1c517238, guarda de escrita romena); dois pontos adiados para o lote 3.
+**Estado.** Inventário de 13/10/2026 (« AnarBib — passer de 10 à 11 locales », https://claude.ai/code/artifact/50a03cff-ad18-4211-8581-e94207565e73). O lote 1 — fonte única das locales, `DOC-I18N-4` — foi entregue sem romeno (cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde): adicionar uma língua agora cabe em uma linha por camada. Decisões D1 a D7 tomadas em 13/10 (`DOC-I18N-5`); revisão a propor à Anarhiva (Cluj-Napoca). Lote 2 FEITO em 14/10 (fonte dos PDF, fontes web verificadas, ro no WD_LANGUAGES 1c517238, guarda de escrita romena); dois pontos adiados para o lote 3. Lote 3 FEITO em 14/10 (49b479ae): ro nas três fontes com listed: false, app, e-mails, install.sh e base traduzidos; ainda sem revisão romenófona. Resta do lote 3: os dados em base (mapa, assuntos, tarefas; tesauro FICEDL a decidir).
 
-*Verificado : 13/10 — lote 1 implantado e verificado em produção (37e02906); fonte dos PDF implantada (85b4835f); decisões D1 a D7 inscritas (DOC-I18N-5). Lote 2: 1c517238.*
+*Verificado : 13/10 — lote 1 implantado e verificado em produção (37e02906); fonte dos PDF implantada (85b4835f); decisões D1 a D7 inscritas (DOC-I18N-5). Lote 2: 1c517238. Lote 3: 49b479ae implantado e verificado às 22 h 06.*
 
 **O que é.** Lote 2, pré-requisitos técnicos: fonte TTF no jspdf, glifos ș ț ă, rum/ron → ro na catalogação, ro na caixa de frase e em WD_LANGUAGES. Lote 3, tradução em uma passada e ativação (ro.json, e-mails, install.sh, dados em base) com listed: false. Lote 4, documentação. Lote 5, vitrine (17 páginas /ro/). Lote 6, coletâneas PDF e legendas. Lote 7, revisão por pessoa romenófona, listed: true, anúncio.
 
@@ -868,7 +868,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Dependências.** Uma pessoa romenófona para validar D2 e revisar (Anarhiva, Cluj-Napoca, a contatar).
 
-*Remissões : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde` · `DOC-I18N-5`*
+*Remissões : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde` · `DOC-I18N-5` · `lot 3 : 49b479ae` · `RELECTURE_roumain_2026-10-14.md`*
 
 ---
 
