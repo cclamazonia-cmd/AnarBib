@@ -8,6 +8,7 @@
 // sans drapeau ni code d'État (même règle que LocaleSelector).
 import { useIntl } from 'react-intl';
 import { SUPPORTED_LOCALES } from '@/i18n';
+import { localesDuSelecteur } from '@/i18n/locales';
 
 export default function ReadLanguagesField({ value, onChange, disabled = false }) {
   const { formatMessage: t } = useIntl();
@@ -22,7 +23,7 @@ export default function ReadLanguagesField({ value, onChange, disabled = false }
         {t({ id: 'biblioteca.identity.readLanguages' })}
       </legend>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px' }}>
-        {SUPPORTED_LOCALES.map((l) => (
+        {localesDuSelecteur(choisies).map((l) => (
           <label key={l.code} lang={l.code} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '.9rem' }}>
             <input type="checkbox" checked={choisies.includes(l.code)} disabled={disabled} onChange={() => basculer(l.code)} />
             {l.label}

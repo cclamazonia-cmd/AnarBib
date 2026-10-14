@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { LOCALES, DEFAULT_LOCALE } from '@/i18n/locales';
+import { LISTED_LOCALES, LOCALES, DEFAULT_LOCALE } from '@/i18n/locales';
 
 // ─────────────────────────────────────────────────────────────
 // LocaleSelector — composant de sélection de la locale d'une biblio
@@ -42,9 +42,11 @@ import { LOCALES, DEFAULT_LOCALE } from '@/i18n/locales';
 //
 // L'option `name` est le nom de la langue dans sa propre langue.
 // Pas de drapeau, pas de code pays/État dans le label visible.
+// Les langues offertes (listed) seulement : une langue pas encore relue n'est
+// pas proposée comme langue d'une bibliothèque (DOC-I18N-5, D5).
 export const LOCALE_OPTIONS = [
-  ...LOCALES.filter((l) => l.code === DEFAULT_LOCALE),
-  ...LOCALES.filter((l) => l.code !== DEFAULT_LOCALE).sort((a, b) => a.code.localeCompare(b.code)),
+  ...LISTED_LOCALES.filter((l) => l.code === DEFAULT_LOCALE),
+  ...LISTED_LOCALES.filter((l) => l.code !== DEFAULT_LOCALE).sort((a, b) => a.code.localeCompare(b.code)),
 ].map(({ code, label }) => ({ code, name: label }));
 
 export default function LocaleSelector({ value, onChange, disabled = false, className, style }) {
@@ -53,7 +55,10 @@ export default function LocaleSelector({ value, onChange, disabled = false, clas
   // Si la valeur ne correspond à aucune option connue (ex: locale ajoutée en
   // DB mais pas encore dans le composant), on l'affiche quand même via une
   // option « ghost » pour ne pas la perdre silencieusement au prochain save.
-  const isKnown = LOCALE_OPTIONS.some(opt => opt.code === current);
+  // Une langue servie mais non offerte (déjà choisie) garde son vrai nom.
+  const servie = LOCALES.find((l) => l.code === current && !LOCALE_OPTIONS.some((o) => o.code === current));
+  const options = servie ? [...LOCALE_OPTIONS, { code: servie.code, name: servie.label }] : LOCALE_OPTIONS;
+  const isKnown = options.some(opt => opt.code === current);
   return (
     <select
       value={current}
@@ -66,7 +71,7 @@ export default function LocaleSelector({ value, onChange, disabled = false, clas
       {!isKnown && (
         <option value={current}>{current} — {t({ id: 'biblioteca.identity.defaultLocale.unknown' })}</option>
       )}
-      {LOCALE_OPTIONS.map(opt => (
+      {options.map(opt => (
         <option key={opt.code} value={opt.code}>
           {opt.name}
         </option>

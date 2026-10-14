@@ -18,6 +18,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { TASK_STATES, TASK_LIVE, TASK_CLOSED, TASK_ADVANCE, TASK_PRIORITIES, isTaskClosed, taskStatusLabel, taskVisibleTags } from '../lib/taskStatus.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const racine = path.resolve(here, '..', '..');
@@ -66,7 +67,7 @@ describe('vocabulaire des tâches internes', () => {
   it('chaque état a son libellé dans les dix locales', () => {
     const dossier = path.resolve(here, '..', 'i18n', 'locales');
     const locales = readdirSync(dossier).filter(f => f.endsWith('.json'));
-    expect(locales.length).toBe(10);
+    expect(locales.length).toBe(LOCALE_CODES.length);
     for (const f of locales) {
       const j = JSON.parse(readFileSync(path.join(dossier, f), 'utf8'));
       for (const s of TASK_STATES) {

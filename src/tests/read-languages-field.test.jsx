@@ -15,6 +15,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
 import ReadLanguagesField from '@/pages/biblioteca/ReadLanguagesField';
+import { LOCALE_CODES, LISTED_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -27,7 +28,7 @@ describe('les langues que l’équipe lit (G19 lot 4)', () => {
     const onChange = vi.fn();
     render(<IntlProvider locale="fr" messages={fr}><ReadLanguagesField value={['es']} onChange={onChange} /></IntlProvider>);
     const cases = screen.getAllByRole('checkbox');
-    expect(cases).toHaveLength(10);
+    expect(cases).toHaveLength(LISTED_CODES.length);
     expect(screen.getByLabelText('Ελληνικά')).toBeTruthy();
     expect(screen.getByLabelText('Castellano').checked).toBe(true);
     fireEvent.click(screen.getByLabelText('Français'));
@@ -48,7 +49,7 @@ describe('les langues que l’équipe lit (G19 lot 4)', () => {
   it('les clés du lot existent dans les dix locales', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     for (const f of fichiers) {
       const j = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
       for (const k of ['biblioteca.identity.readLanguages', 'biblioteca.identity.readLanguagesHelp', 'biblioteca.correspondance.readsLanguages', 'biblioteca.correspondance.commonLanguage', 'biblioteca.correspondance.noCommonLanguage']) {

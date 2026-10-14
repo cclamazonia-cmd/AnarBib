@@ -59,6 +59,7 @@ vi.mock('@/lib/supabase', () => ({
 }));
 
 import CorrespondanceSection from '@/pages/biblioteca/CorrespondanceSection';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -166,7 +167,7 @@ describe('l’onglet Correspondance (G19 lot 2)', () => {
   it('les clés de l’onglet existent dans les dix locales', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     const cles = Object.keys(fr).filter((k) => k.startsWith('biblioteca.correspondance.') || k === 'biblioteca.tab.correspondance');
     expect(cles.length).toBeGreaterThanOrEqual(20);
     for (const f of fichiers) {

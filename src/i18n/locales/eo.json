@@ -7628,5 +7628,6 @@
   "twoFactor.guide.keepassxc.4": "Poste, kun la ero elektita, Ctrl+T kopias la kodon („Copy TOTP“); per la etendaĵo KeePassXC-Browser, ĝi pleniĝas per unu klako en la koda kampo.",
   "twoFactor.guide.other.1": "En via aplikaĵo, serĉu „+“, „Aldoni“ aŭ „Skani QR-kodon“ kaj celu la supran QR-kodon. En la telefono mem, la ligilo „{lien}“ ŝparas la skanadon.",
   "twoFactor.guide.other.2": "Sen fotilo, elektu permanan enigon kaj algluu la ŝlosilon; lasu la defaŭltajn agordojn (TOTP, ses ciferoj, 30 sekundoj).",
-  "twoFactor.guide.other.3": "Tajpu sube la sesciferan kodon, kiun la aplikaĵo montras."
+  "twoFactor.guide.other.3": "Tajpu sube la sesciferan kodon, kiun la aplikaĵo montras.",
+  "catalogacao.bio.titleIn.ro": "Biografio en la rumana"
 }

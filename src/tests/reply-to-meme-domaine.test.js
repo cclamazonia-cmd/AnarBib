@@ -7,6 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const ROOT = join(__dirname, '..', '..');
 const FN = join(ROOT, 'supabase', 'functions');
@@ -70,7 +71,7 @@ describe('F14 — Reply-To du même domaine que l\'expéditeur', () => {
     const src = lire('supabase/functions/_shared/i18n/mail-strings.ts');
     const i = src.indexOf('"welcome.autoMessage": {');
     const bloc = src.slice(i, src.indexOf('\n  },', i));
-    expect((bloc.match(/anarbib@proton\.me/g) || []).length).toBe(10);
+    expect((bloc.match(/anarbib@proton\.me/g) || []).length).toBe(LOCALE_CODES.length);
     expect(bloc).not.toMatch(/encaminhadas|transmises|forwarded/);
   });
 

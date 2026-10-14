@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const racine = path.resolve(here, '..', '..');
@@ -28,7 +29,7 @@ describe('Mon compte — vider l’historique et supprimer le compte ne se confi
   const locales = readdirSync(dirLocales).filter((f) => f.endsWith('.json'));
 
   it('dix locales, deux mots par locale, en capitales, jamais le même', () => {
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     for (const f of locales) {
       const m = JSON.parse(readFileSync(path.join(dirLocales, f), 'utf8'));
       const hist = m[K_HIST], cpt = m[K_CPT];

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import { SUPPORTED_LOCALES, setLocale } from '@/i18n';
+import { setLocale } from '@/i18n';
+import { localesDuSelecteur } from '@/i18n/locales';
 import './LocaleSwitcher.css';
 
 /**
@@ -83,7 +84,7 @@ export function LocaleSwitcher({ variant = 'header' }) {
         disabled={updating}
         aria-label={t({ id: 'language.selector' })}
       >
-        {SUPPORTED_LOCALES.map(l => (
+        {localesDuSelecteur(currentLocale).map(l => (
           <option key={l.code} value={l.code}>
             {l.label}
           </option>

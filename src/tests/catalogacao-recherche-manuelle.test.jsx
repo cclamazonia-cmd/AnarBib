@@ -26,6 +26,7 @@ vi.mock('@/pages/painel/tabs/CardScanner', () => ({ default: () => null }));
 import LookupPanel from '@/pages/catalogacao/LookupPanel';
 import { LOOKUP_SOURCE_LABELS } from '@/lib/catalogacao/bookDraft';
 import { CATALOGUES_MANUELS, CLE_CATALOGUE_MANUEL, adresseRechercheManuelle, requeteManuelle, catalogueParDefaut } from '@/lib/catalogacao/rechercheManuelle';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const fr = JSON.parse(readFileSync(path.join(RACINE, 'src/i18n/locales/fr.json'), 'utf8'));
@@ -128,7 +129,7 @@ describe('recherche manuelle — locales', () => {
   it('les quatre clés existent dans les dix locales, les deux anciennes ont disparu', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     for (const f of fichiers) {
       const j = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
       for (const k of ['catalogacao.ui.manualSearch', 'catalogacao.ui.manualSearchCatalog', 'catalogacao.msg.manualSearchOpened', 'catalogacao.ui.manualSearchBrazilOnly']) {

@@ -26,6 +26,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
@@ -67,7 +68,7 @@ describe('catalogue — le bloc « Explorer » naît replié (E17)', () => {
   it('les dix locales portent les deux clés, et le pluriel est bien formé', () => {
     const dir = path.resolve(here, '..', 'i18n', 'locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     for (const f of fichiers) {
       const j = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
       const replie = j['catalog.section.exploreCollapsed'];
@@ -75,7 +76,7 @@ describe('catalogue — le bloc « Explorer » naît replié (E17)', () => {
       expect(replie, `${f} : exploreCollapsed`).toBeTruthy();
       // Replié, le libellé dit PLUS que le titre nu du bloc ouvert.
       expect(replie.length, `${f} : libellé replié trop court`).toBeGreaterThan(j['catalog.section.explore'].length + 8);
-      expect(actif, `${f} : exploreActive`).toMatch(/^\{count, plural, one \{# [^{}]+\} other \{# [^{}]+\}\}$/);
+      expect(actif, `${f} : exploreActive`).toMatch(/^\{count, plural, one \{# [^{}]+\}( few \{# [^{}]+\})? other \{# [^{}]+\}\}$/);   // few : roumain
     }
   });
 });

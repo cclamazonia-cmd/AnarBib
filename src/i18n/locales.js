@@ -49,6 +49,9 @@ export const LOCALES = [
   { code: 'eo', label: 'Esperanto', siteCode: 'eo', phraseCase: true, listed: true },
   { code: 'nl', label: 'Nederlands', siteCode: 'nl', phraseCase: true, listed: true },
   { code: 'el', label: 'Ελληνικά', siteCode: 'el', phraseCase: true, listed: true },
+  // Le roumain (DOC-I18N-5, 14/10/2026) : livré en entier, hors des sélecteurs
+  // jusqu'à sa relecture par une personne roumanophone (D5).
+  { code: 'ro', label: 'Română', siteCode: 'ro', phraseCase: true, listed: false },
 ];
 
 export const DEFAULT_LOCALE = 'pt-BR';
@@ -61,6 +64,19 @@ export const SITE_CODES = LOCALES.map((l) => l.siteCode);
 
 /** Code de l'app → code du site (« pt-BR » → « pt »). */
 export const SITE_CODE = Object.fromEntries(LOCALES.map((l) => [l.code, l.siteCode]));
+
+/** Les langues offertes dans les sélecteurs (listed). */
+export const LISTED_LOCALES = LOCALES.filter((l) => l.listed);
+export const LISTED_CODES = LISTED_LOCALES.map((l) => l.code);
+
+/**
+ * Les langues d'un sélecteur : celles qui sont offertes, plus les langues
+ * courantes qui ne le sont pas (une personne arrivée par ?lang=ro voit sa
+ * langue choisie, au lieu d'un sélecteur qui ment). Ordre canonique.
+ */
+export function localesDuSelecteur(...courantes) {
+  return LOCALES.filter((l) => l.listed || courantes.flat().includes(l.code));
+}
 
 /** Codes du site des langues dont les titres vont en casse de phrase. */
 export const PHRASE_CASE_CODES = LOCALES.filter((l) => l.phraseCase).map((l) => l.siteCode);

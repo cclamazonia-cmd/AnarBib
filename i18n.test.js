@@ -22,6 +22,8 @@ import ca from '@/i18n/locales/ca.json';
 import eo from '@/i18n/locales/eo.json';
 import nl from '@/i18n/locales/nl.json';
 import el from '@/i18n/locales/el.json';
+import ro from '@/i18n/locales/ro.json';
+import { LOCALE_CODES } from '@/i18n/locales';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,7 +33,9 @@ const SRC_DIR = join(__dirname, 'src');
 // servies par l'app depuis SUPPORTED_LOCALES : une clé citée par le code et
 // oubliée dans nl.json passait donc la CI, et ne se voyait à l'écran que si
 // quelqu'un naviguait en néerlandais — la langue d'Anarchief, justement.
-const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo, nl, el };
+const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo, nl, el, ro };
+// ro ajouté le 14/10/2026. Pour ne plus oublier une langue ici, la liste est
+// comparée à la source (src/i18n/locales.js) : test « les locales de la garde ».
 const PT_KEYS = Object.keys(ptBR);
 
 // ─────────────────────────────────────────────────────────────
@@ -302,5 +306,11 @@ describe('inclusive language charter compliance', () => {
       );
     }
     expect(violations.length).toBeLessThan(5);
+  });
+});
+
+describe('i18n — les locales de la garde', () => {
+  it('sont exactement celles de src/i18n/locales.js (DOC-I18N-4)', () => {
+    expect(Object.keys(LOCALES).sort()).toEqual([...LOCALE_CODES].sort());
   });
 });

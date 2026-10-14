@@ -30,6 +30,7 @@ const TUTORIALS = [
 export const SUBTITLE_LANG = {
   'pt-BR': 'pt', en: 'en', fr: 'fr', es: 'es-419', de: 'de',
   it: 'it', ca: 'ca', el: 'el', eo: 'eo', nl: 'nl',
+  ro: null,   // pas encore de sous-titres roumains sur Kolektiva (lot 6) : piste par défaut
 };
 
 // Construit l'URL d'embed Kolektiva.

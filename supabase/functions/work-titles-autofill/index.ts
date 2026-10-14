@@ -24,6 +24,7 @@ const LOCALES: readonly string[] = LOCALE_CODES;
 const LOCALE_NAMES: Record<string, string> = {
   "pt-BR": "português do Brasil", fr: "français", es: "español", it: "italiano", en: "English",
   de: "Deutsch", ca: "català", eo: "Esperanto", nl: "Nederlands", el: "ελληνικά",
+  ro: "română",
 };
 const ANTHROPIC_MODEL = "claude-opus-5";
 const BATCH = 5; // œuvres par tick

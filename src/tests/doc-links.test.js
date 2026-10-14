@@ -9,6 +9,8 @@ import {
 import { LOCALE_CODES } from '../i18n/locales.js';
 
 const LOCALES = LOCALE_CODES;
+// Les langues dont les recueils ont paru (le roumain y entrera en fin de recueil, D7).
+const AVEC_RECUEIL = LOCALES.filter((l) => COMPLETE_BLOCKS[l] !== null);
 
 describe('tables des recueils', () => {
   it('couvrent les dix langues servies', () => {
@@ -18,9 +20,16 @@ describe('tables des recueils', () => {
       expect(GOVERNANCE_START[l], l).toBeDefined();
     }
   });
+  it('une langue dont le recueil n’a pas encore paru (null) retombe sur pt-BR', () => {
+    for (const l of LOCALES.filter((x) => COMPLETE_BLOCKS[x] === null)) {
+      expect(completeManualUrl(l, 3)).toBe(completeManualUrl('pt-BR', 3));
+      expect(readerManualUrl(l, 'loans')).toBe(readerManualUrl('pt-BR', 'loans'));
+      expect(governanceGuideUrl(l)).toBe(governanceGuideUrl('pt-BR'));
+    }
+  });
   it('dix blocs croissants par langue, et les langues ne se chevauchent pas', () => {
     const starts = [];
-    for (const l of LOCALES) {
+    for (const l of AVEC_RECUEIL) {
       const b = COMPLETE_BLOCKS[l];
       expect(b).toHaveLength(10);
       for (let i = 1; i < b.length; i++) expect(b[i]).toBeGreaterThan(b[i - 1]);
@@ -30,7 +39,7 @@ describe('tables des recueils', () => {
     for (let i = 1; i < sorted.length; i++) expect(sorted[i] - sorted[i - 1]).toBeGreaterThanOrEqual(60);
   });
   it('le manuel lecteur·rice : dix-neuf pages par langue (B42), sections dans l’ordre', () => {
-    const s = LOCALES.map(l => READER_START[l]).sort((a, b) => a - b);
+    const s = AVEC_RECUEIL.map(l => READER_START[l]).sort((a, b) => a - b);
     for (let i = 1; i < s.length; i++) expect(s[i] - s[i - 1]).toBe(19);
     expect(READER_SECTIONS.catalogue).toBeLessThan(READER_SECTIONS.account);
     expect(READER_SECTIONS.reserve).toBeLessThan(READER_SECTIONS.loans);

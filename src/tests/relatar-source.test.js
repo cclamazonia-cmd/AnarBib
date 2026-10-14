@@ -16,6 +16,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const racine = path.resolve(here, '..', '..');
@@ -99,7 +100,7 @@ describe('« Signaler un problème » — les pièces tiennent ensemble (E14)', 
   it('les clés existent dans les dix locales (page, file, pied, intention, accusé de réception)', () => {
     const dirLocales = path.resolve(racine, 'src/i18n/locales');
     const locales = readdirSync(dirLocales).filter((f) => f.endsWith('.json'));
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     for (const f of locales) {
       const m = JSON.parse(readFileSync(path.join(dirLocales, f), 'utf8'));
       for (const k of ['relatar.title', 'relatar.what', 'relatar.duplicate', 'relatar.fila.title', 'nav.report', 'inicio.i.report', 'inicio.kw.report']) {

@@ -11,7 +11,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import ptBR from './locales/pt-BR.json';
-import { LOCALES, DEFAULT_LOCALE } from './locales.js';
+import { LOCALES, DEFAULT_LOCALE, LISTED_CODES } from './locales.js';
 
 export { DEFAULT_LOCALE };
 
@@ -79,12 +79,14 @@ export function detectLocale() {
     // ignore (privacy mode, etc.)
   }
 
-  // 3. Navigateur (match partiel: pt → pt-BR, fr-FR → fr)
+  // 3. Navigateur (match partiel: pt → pt-BR, fr-FR → fr). Seulement parmi les
+  // langues offertes (listed) : une langue livrée mais pas encore relue ne
+  // s'impose pas à qui n'a rien demandé (DOC-I18N-5, D5).
   try {
-    const codes = SUPPORTED_LOCALES.map((l) => l.code);
+    const codes = LISTED_CODES;
     const navLangs = navigator.languages || [navigator.language];
     for (const lang of navLangs) {
-      if (isSupported(lang)) return lang;
+      if (codes.includes(lang)) return lang;
       const short = (lang || '').split('-')[0];
       const match = codes.find((k) => k.startsWith(short));
       if (match) return match;

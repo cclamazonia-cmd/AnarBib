@@ -8,11 +8,11 @@ import { describe, it, expect } from 'vitest';
 import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
-  LOCALES, LOCALE_CODES, SITE_CODES, SITE_CODE, PHRASE_CASE_CODES, DEFAULT_LOCALE,
+  LOCALES, LOCALE_CODES, LISTED_CODES, SITE_CODES, SITE_CODE, PHRASE_CASE_CODES, DEFAULT_LOCALE,
 } from '../i18n/locales.js';
 import { SUPPORTED_LOCALES, isSupported } from '../i18n/index.js';
 import { LOCALE_OPTIONS } from '../components/library/LocaleSelector.jsx';
-import { LOCALE_NAMES as NOMS_GAZETTE, UI as UI_GAZETTE } from '../pages/federacao/GazetteTab.jsx';
+import { LOCALE_NAMES as NOMS_GAZETTE, UI as UI_GAZETTE, PROV as PROV_GAZETTE } from '../pages/federacao/GazetteTab.jsx';
 import { LOCALE_NAMES as NOMS_LETTRE } from '../pages/federacao/LettreTab.jsx';
 import { BIO_TITLE_KEYS } from '../pages/catalogacao/AuthorDraftForm.jsx';
 import { SUBTITLE_LANG } from '../components/account/ReaderTutorialsCard.jsx';
@@ -48,8 +48,10 @@ describe('la source unique (src/i18n/locales.js)', () => {
     expect(isSupported('xx')).toBe(false);
   });
 
-  it('le sélecteur de la langue par défaut d’une bibliothèque offre toutes les langues (6 → 10, 13/10/2026)', () => {
-    expect(trie(LOCALE_OPTIONS.map((o) => o.code))).toEqual(trie(LOCALE_CODES));
+  it('le sélecteur de la langue par défaut d’une bibliothèque offre toutes les langues offertes (6 → 10, 13/10/2026)', () => {
+    expect(trie(LOCALE_OPTIONS.map((o) => o.code))).toEqual(trie(LISTED_CODES));
+    // Une langue livrée mais pas encore relue n'est pas proposée (DOC-I18N-5, D5).
+    for (const l of LOCALES.filter((x) => !x.listed)) expect(LOCALE_OPTIONS.map((o) => o.code), l.code).not.toContain(l.code);
     expect(LOCALE_OPTIONS[0].code).toBe('pt-BR');
     const suite = LOCALE_OPTIONS.slice(1).map((o) => o.code);
     expect(suite).toEqual([...suite].sort((a, b) => a.localeCompare(b)));
@@ -69,6 +71,7 @@ describe('les dictionnaires indexés par langue ont exactement les clés de LOCA
     memesCles(NOMS_GAZETTE);
     memesCles(UI_GAZETTE);
     memesCles(NOMS_LETTRE);
+    memesCles(PROV_GAZETTE);
   });
   it('fiche d’autorité : titres des biographies par langue', () => memesCles(BIO_TITLE_KEYS));
   it('tutoriels vidéo : une piste de sous-titres par langue', () => memesCles(SUBTITLE_LANG));
@@ -83,7 +86,12 @@ describe('les dictionnaires indexés par langue ont exactement les clés de LOCA
     const UNE_SEULE_LANGUE = new Set(['note-ag-samizdats']);
     for (const d of COMMUNS_DOCS.filter((x) => x.byLocale)) {
       if (UNE_SEULE_LANGUE.has(d.id)) expect(Object.keys(d.byLocale), d.id).toEqual(['fr']);
-      else expect(trie(Object.keys(d.byLocale)), d.id).toEqual(trie(LOCALE_CODES));
+      // Chaque langue offerte a sa version ; une langue hors sélecteur peut attendre
+      // la sienne (repli fr, cf. resolveDocMd) — documentation du roumain : lot 4.
+      else {
+        for (const c of LISTED_CODES) expect(d.byLocale[c], `${d.id} ${c}`).toBeTruthy();
+        for (const c of Object.keys(d.byLocale)) expect(LOCALE_CODES, `${d.id} ${c}`).toContain(c);
+      }
     }
   });
 });

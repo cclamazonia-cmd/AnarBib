@@ -38,7 +38,7 @@ export const BIO_TITLE_KEYS = {
   'pt-BR': 'catalogacao.bio.titleIn.ptBR', fr: 'catalogacao.bio.titleIn.fr', es: 'catalogacao.bio.titleIn.es',
   en: 'catalogacao.bio.titleIn.en', it: 'catalogacao.bio.titleIn.it', de: 'catalogacao.bio.titleIn.de',
   ca: 'catalogacao.bio.titleIn.ca', eo: 'catalogacao.bio.titleIn.eo', nl: 'catalogacao.bio.titleIn.nl',
-  el: 'catalogacao.bio.titleIn.el',
+  el: 'catalogacao.bio.titleIn.el', ro: 'catalogacao.bio.titleIn.ro',
 };
 
 const SOURCE_KIND_KEYS = {

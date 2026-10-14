@@ -25,6 +25,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const MIG_DIR = path.resolve(__dirname, '../../supabase/migrations');
 const LOC_DIR = path.resolve(__dirname, '../i18n/locales');
@@ -132,7 +133,7 @@ describe('E23 — chaque HINT error.* de la base a son libellé', () => {
   const locales = readdirSync(LOC_DIR).filter((f) => f.endsWith('.json'));
 
   it('la lecture des migrations trouve les HINT (garde-fou du lecteur)', () => {
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     expect(hints.length).toBeGreaterThan(150);
     expect(hints).toContain('error.publish.exemplar_moved');   // posé par une réécriture en bloc DO (C14)
     expect(hints).toContain('error.catalog.staff_only');

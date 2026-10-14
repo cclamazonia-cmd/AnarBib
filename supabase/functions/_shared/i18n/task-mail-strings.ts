@@ -517,6 +517,61 @@ const TASK_STRINGS = {
       title: "Πρόσκληση σε εσωτερική εργασία",
       introHtml: `<p style="margin:0 0 10px;">Έλαβες μια <b>πρόσκληση να συμμετάσχεις σε μια εσωτερική εργασία</b> της βιβλιοθήκης.</p><p style="margin:0;">Αν σου ταιριάζει, άνοιξε τον πίνακα της βιβλιοθήκης για να παρακολουθήσεις την οργάνωση αυτής της εργασίας.</p>`
     }
+  },
+  "ro": {
+    "status": {
+      "aberta": "Deschisă",
+      "pendente": "În așteptare",
+      "a_fazer": "De făcut",
+      "em_andamento": "În curs",
+      "bloqueada": "Blocată",
+      "concluida": "Finalizată",
+      "cancelada": "Anulată",
+      "arquivada": "Arhivată"
+    },
+    "priority": {
+      "alta": "Ridicată",
+      "media": "Medie",
+      "baixa": "Scăzută",
+      "urgente": "Urgentă"
+    },
+    "label": {
+      "tarefa": "Sarcină",
+      "prioridade": "Prioritate",
+      "situacao": "Stare",
+      "prazo": "Termen",
+      "marcadores": "Etichete",
+      "descricao": "Descriere",
+      "organizacao": "Persoana responsabilă",
+      "mudancas": "Schimbări importante"
+    },
+    "greetingPlain": "Salut!",
+    "untitled": "sarcină fără titlu",
+    "orgCreated": {
+      "subject": "Sarcină internă nouă în responsabilitatea ta",
+      "title": "Sarcină internă nouă",
+      "introHtml": "<p style=\"margin:0 0 10px;\">A fost înregistrată o <b>sarcină internă nouă</b> în responsabilitatea ta.</p><p style=\"margin:0;\">Deschide panoul bibliotecii ca să urmărești cum avansează și să organizezi pașii următori.</p>"
+    },
+    "orgUpdated": {
+      "subject": "Actualizare importantă a unei sarcini interne",
+      "title": "Actualizare importantă a unei sarcini interne",
+      "introHtml": "<p style=\"margin:0 0 10px;\">O sarcină internă aflată în responsabilitatea ta a primit o <b>actualizare importantă</b>.</p><p style=\"margin:0;\">Verifică panoul bibliotecii ca să validezi noua situație și să ajustezi urmărirea.</p>"
+    },
+    "libCreated": {
+      "subject": "Sarcină internă nouă înregistrată",
+      "title": "Sarcină internă nouă înregistrată",
+      "introHtml": "<p style=\"margin:0 0 10px;\">A fost înregistrată o <b>sarcină internă nouă</b> pentru această bibliotecă.</p><p style=\"margin:0;\">Acest anunț are caracter informativ și este separat de invitațiile individuale trimise persoanelor invitate.</p>"
+    },
+    "libUpdated": {
+      "subject": "Actualizare importantă a unei sarcini a bibliotecii",
+      "title": "Actualizare importantă a unei sarcini a bibliotecii",
+      "introHtml": "<p style=\"margin:0 0 10px;\">O sarcină internă a bibliotecii a primit o <b>actualizare importantă</b>.</p><p style=\"margin:0;\">Acest anunț ajută la urmărirea schimbărilor centrale fără a depinde de invitațiile individuale.</p>"
+    },
+    "invitation": {
+      "subject": "Invitație la o sarcină internă",
+      "title": "Invitație la o sarcină internă",
+      "introHtml": "<p style=\"margin:0 0 10px;\">Ai primit o <b>invitație de a participa la o sarcină internă</b> a bibliotecii.</p><p style=\"margin:0;\">Dacă ți se potrivește, deschide panoul bibliotecii ca să urmărești organizarea acestei sarcini.</p>"
+    }
   }
 };
 

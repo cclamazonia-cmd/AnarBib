@@ -697,6 +697,7 @@ async function stepAssembleReseau(number: number) {
     "ca":   { sec:"Vida de la xarxa",   intro:"Aquesta pàgina pertany als membres d'AnarBib — col·lectius, biblioteques, distros i individus.", cta:"▸ Proposeu les vostres breus",  ctp:"Aquesta pàgina és la vostra. Transmeteu les vostres notícies via l'aplicació." },
     "eo":   { sec:"Vivo de la reto",    intro:"Ĉi tiu paĝo apartenas al la membroj de AnarBib — kolektivoj, bibliotekoj, distroj kaj individuoj.", cta:"▸ Proponu viajn novaĵetojn",   ctp:"Ĉi tiu paĝo estas la via. Transdonu viajn novaĵojn per la aplikaĵo." },
     "nl":   { sec:"Leven van het netwerk", intro:"Deze pagina behoort toe aan de leden van AnarBib — collectieven, bibliotheken, distro's en individuen.", cta:"▸ Dien jullie korte berichten in", ctp:"Deze pagina is de jouwe. Bezorg ons jullie nieuws via de applicatie." },
+    "ro":   { sec:"Viața rețelei",      intro:"Această pagină aparține membrilor AnarBib — colective, biblioteci, distro-uri și persoane.", cta:"▸ Propuneți-vă știrile scurte", ctp:"Această pagină este a voastră. Trimiteți-vă noutățile prin aplicație." },
   };
   const { data: subs } = await sb.from("gazette_submissions")
     .select("id,title,body,link,title_i18n,body_i18n").eq("rubric", "reseau")

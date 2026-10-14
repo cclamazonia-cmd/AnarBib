@@ -29,6 +29,8 @@ export const LOCALES = [
   { code: "eo", label: "Esperanto", siteCode: "eo", phraseCase: true, listed: true },
   { code: "nl", label: "Nederlands", siteCode: "nl", phraseCase: true, listed: true },
   { code: "el", label: "Ελληνικά", siteCode: "el", phraseCase: true, listed: true },
+  // Le roumain (DOC-I18N-5, 14/10/2026) : livré, hors des sélecteurs jusqu'à sa relecture.
+  { code: "ro", label: "Română", siteCode: "ro", phraseCase: true, listed: false },
 ] as const;
 
 export type SupportedLocale = typeof LOCALES[number]["code"];

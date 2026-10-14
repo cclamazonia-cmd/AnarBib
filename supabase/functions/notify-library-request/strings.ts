@@ -360,6 +360,41 @@ export const STRINGS: Record<string, Record<string, string>> = {
     "admin_invitation.subject": "Αίτημα συνομιλίας από αιτούσα",
     "admin_invitation.intro": "Η βιβλιοθήκη {library} ζητά συνομιλία με τον συντονισμό του δικτύου.",
   },
+  ro: {
+    "subtitle": "Cerere instituțională · notificare automată",
+    "greetingNamed": "Salut, {name},",
+    "greeting": "Salut,",
+    "footer": "Dacă ai vreun dubiu, răspunde la acest e-mail.",
+    "created.subject": "Cerere primită",
+    "created.intro": "Am primit cererea instituțională a bibliotecii {library}. Echipa de coordonare a rețelei o va examina.",
+    "in_analysis.subject": "Cerere în curs de examinare",
+    "in_analysis.intro": "Cererea bibliotecii {library} este în curs de examinare de către echipa de coordonare a rețelei.",
+    "more_info.subject": "Sunt necesare informații suplimentare",
+    "more_info.intro": "Echipa de coordonare are nevoie de informații suplimentare despre cererea bibliotecii {library}. Răspunde la acest e-mail.",
+    "approved.subject": "Cerere aprobată",
+    "approved.intro": "Cererea bibliotecii {library} a fost aprobată. Bun venit în rețea!",
+    "approved.notYet": "Biblioteca ta nu este încă activă: este pre-activă și rămâne așa până când regulamentul este discutat în adunare și încărcat din nou. Ai la dispoziție 60 de zile și nimeni nu se așteaptă să faci asta fără ajutor.",
+    "approved.path": "Începe cu trei pași: schimbă parola provizorie, deschide atelierul de constituire în /atelier și du etapa 0 — cele patru axe ale profilului — la următoarea întâlnire a colectivului. Ghidul de primire îi explică pe fiecare.",
+    "approved.human": "Înainte de a decide, nu după: scrie la anarbib@proton.me. Rețeaua are ca principiu ca o decizie de constituire să fie discutată cu un tovarăș/o tovarășă înainte de a deveni un formular.",
+    "approved.ctaLabel": "Citește ghidul de primire",
+    "approved.guidePath": "/en/welcome/",
+    "refused.subject": "Cerere respinsă",
+    "refused.intro": "Cererea bibliotecii {library} nu a fost acceptată în această etapă.",
+    "message.subject": "Mesaj nou de la echipa de coordonare",
+    "message.intro": "Echipa de coordonare a rețelei a trimis un mesaj despre cererea bibliotecii {library}.",
+    "invitation_proposed.subject": "Invitație la o discuție",
+    "invitation_proposed.intro": "Echipa de coordonare propune o discuție despre cererea bibliotecii {library}.",
+    "invitation_response.subject": "Răspuns la invitația ta",
+    "invitation_response.intro": "Echipa de coordonare a răspuns la invitația de a discuta despre cererea bibliotecii {library}.",
+    "admin_created.subject": "Cerere instituțională nouă",
+    "admin_created.intro": "A fost înregistrată o nouă cerere instituțională: {library}. Consultă panoul rețelei.",
+    "admin_update.subject": "Actualizarea unei cereri instituționale",
+    "admin_update.intro": "Cererea bibliotecii {library} a fost actualizată în panoul rețelei.",
+    "admin_message.subject": "Mesaj de la o bibliotecă solicitantă",
+    "admin_message.intro": "Biblioteca {library} a răspuns în legătură cu cererea sa. Consultă panoul rețelei.",
+    "admin_invitation.subject": "Cerere de discuție de la o bibliotecă solicitantă",
+    "admin_invitation.intro": "Biblioteca {library} cere o discuție cu echipa de coordonare a rețelei."
+  },
 };
 
 // Résout la chaîne pour une locale (fallback pt-BR), avec interpolation {var}.
@@ -393,5 +428,6 @@ const LBL: Record<string, Record<string, string>> = {
   eo: { "lbl.library": "Biblioteko", "lbl.shortName": "Mallongigo", "lbl.location": "Loko", "lbl.stage": "Situacio", "lbl.contact": "Kontakto", "lbl.contactEmail": "Kontakt-retpoŝto", "lbl.firstManager": "Unua respondeculo", "lbl.currentStatus": "Nuna stato", "lbl.sentAt": "Sendita la", "lbl.coordination": "Kunordigado", "lbl.coordinationMessage": "Mesaĝo de la kunordigado", "lbl.libraryEmail": "Retpoŝto de la biblioteko", "lbl.libraryPhone": "Telefono de la biblioteko", "lbl.submitterEmail": "Retpoŝto de la sendo", "lbl.presentation": "Prezento", "lbl.newStatus": "Nova stato", "lbl.reviewNote": "Reviza noto", "lbl.message": "Mesaĝo", "lbl.subject": "Temo", "lbl.proposedTime": "Proponita momento", "status.pendente": "Atendanta", "status.em_analise": "Pritaksata", "status.proposta_aprovacao": "Akcepto proponita", "status.proposta_recusa": "Rifuzo proponita", "status.aguardando_info": "Atendante informojn", "status.aprovada": "Aprobita", "status.recusada": "Rifuzita", "status.cancelada": "Nuligita", "status.arquivada": "Arkivita", "stage.em_funcionamento": "Jam funkcianta", "stage.em_montagem": "Establiĝanta", "stage.em_planejamento": "Planata", "stage.reativacao": "Reaktivigo", "stage.em_formacao": "Formiĝanta", "stage.em_organizacao": "Organiziĝanta", "mgr.sim": "Jes", "mgr.nao": "Ne", "mgr.a_definir": "Difinota" },
   nl: { "lbl.library": "Bibliotheek", "lbl.shortName": "Afkorting", "lbl.location": "Plaats", "lbl.stage": "Situatie", "lbl.contact": "Contact", "lbl.contactEmail": "Contact-e-mail", "lbl.firstManager": "Eerste verantwoordelijke", "lbl.currentStatus": "Huidige status", "lbl.sentAt": "Verzonden op", "lbl.coordination": "Coördinatie", "lbl.coordinationMessage": "Bericht van de coördinatie", "lbl.libraryEmail": "E-mail van de bibliotheek", "lbl.libraryPhone": "Telefoon van de bibliotheek", "lbl.submitterEmail": "E-mail van de inzending", "lbl.presentation": "Voorstelling", "lbl.newStatus": "Nieuwe status", "lbl.reviewNote": "Beoordelingsnotitie", "lbl.message": "Bericht", "lbl.subject": "Onderwerp", "lbl.proposedTime": "Voorgesteld moment", "status.pendente": "In behandeling", "status.em_analise": "In beoordeling", "status.proposta_aprovacao": "Aanvaarding voorgesteld", "status.proposta_recusa": "Weigering voorgesteld", "status.aguardando_info": "Wacht op informatie", "status.aprovada": "Goedgekeurd", "status.recusada": "Afgewezen", "status.cancelada": "Geannuleerd", "status.arquivada": "Gearchiveerd", "stage.em_funcionamento": "Al in werking", "stage.em_montagem": "In opbouw", "stage.em_planejamento": "In planning", "stage.reativacao": "Heractivering", "stage.em_formacao": "In oprichting", "stage.em_organizacao": "In organisatie", "mgr.sim": "Ja", "mgr.nao": "Nee", "mgr.a_definir": "Te bepalen" },
   el: { "lbl.library": "Βιβλιοθήκη", "lbl.shortName": "Ακρωνύμιο", "lbl.location": "Τόπος", "lbl.stage": "Κατάσταση", "lbl.contact": "Επικοινωνία", "lbl.contactEmail": "Email επικοινωνίας", "lbl.firstManager": "Πρώτο υπεύθυνο άτομο", "lbl.currentStatus": "Τρέχουσα κατάσταση", "lbl.sentAt": "Στάλθηκε στις", "lbl.coordination": "Συντονισμός", "lbl.coordinationMessage": "Μήνυμα του συντονισμού", "lbl.libraryEmail": "Email της βιβλιοθήκης", "lbl.libraryPhone": "Τηλέφωνο της βιβλιοθήκης", "lbl.submitterEmail": "Email της υποβολής", "lbl.presentation": "Παρουσίαση", "lbl.newStatus": "Νέα κατάσταση", "lbl.reviewNote": "Σημείωση εξέτασης", "lbl.message": "Μήνυμα", "lbl.subject": "Θέμα", "lbl.proposedTime": "Προτεινόμενη ώρα", "status.pendente": "Σε εκκρεμότητα", "status.em_analise": "Υπό εξέταση", "status.proposta_aprovacao": "Προτάθηκε αποδοχή", "status.proposta_recusa": "Προτάθηκε απόρριψη", "status.aguardando_info": "Αναμονή πληροφοριών", "status.aprovada": "Εγκρίθηκε", "status.recusada": "Απορρίφθηκε", "status.cancelada": "Ακυρώθηκε", "status.arquivada": "Αρχειοθετήθηκε", "stage.em_funcionamento": "Ήδη σε λειτουργία", "stage.em_montagem": "Υπό συγκρότηση", "stage.em_planejamento": "Υπό σχεδιασμό", "stage.reativacao": "Επανενεργοποίηση", "stage.em_formacao": "Υπό διαμόρφωση", "stage.em_organizacao": "Υπό οργάνωση", "mgr.sim": "Ναι", "mgr.nao": "Όχι", "mgr.a_definir": "Προς καθορισμό" },
+  ro: { "lbl.library": "Bibliotecă", "lbl.shortName": "Acronim", "lbl.location": "Localitate", "lbl.stage": "Situație", "lbl.contact": "Contact", "lbl.contactEmail": "E-mail de contact", "lbl.firstManager": "Prima persoană responsabilă", "lbl.currentStatus": "Stare actuală", "lbl.sentAt": "Trimisă la", "lbl.coordination": "Coordonare", "lbl.coordinationMessage": "Mesajul echipei de coordonare", "lbl.libraryEmail": "E-mailul bibliotecii", "lbl.libraryPhone": "Telefonul bibliotecii", "lbl.submitterEmail": "E-mailul expeditorului/expeditoarei", "lbl.presentation": "Prezentare", "lbl.newStatus": "Stare nouă", "lbl.reviewNote": "Notă de examinare", "lbl.message": "Mesaj", "lbl.subject": "Subiect", "lbl.proposedTime": "Moment propus", "status.pendente": "În așteptare", "status.em_analise": "În examinare", "status.proposta_aprovacao": "Acceptare propusă", "status.proposta_recusa": "Respingere propusă", "status.aguardando_info": "În așteptarea informațiilor", "status.aprovada": "Aprobată", "status.recusada": "Respinsă", "status.cancelada": "Anulată", "status.arquivada": "Arhivată", "stage.em_funcionamento": "Deja în funcțiune", "stage.em_montagem": "În curs de amenajare", "stage.em_planejamento": "În curs de planificare", "stage.reativacao": "Reactivare", "stage.em_formacao": "În curs de formare", "stage.em_organizacao": "În curs de organizare", "mgr.sim": "Da", "mgr.nao": "Nu", "mgr.a_definir": "De stabilit" },
 };
 for (const l of Object.keys(STRINGS)) Object.assign(STRINGS[l], LBL[l] || {});

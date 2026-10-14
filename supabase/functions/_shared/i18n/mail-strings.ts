@@ -42,7 +42,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem rebut el teu avís — {ref}",
     eo: "Ni ricevis vian raporton — {ref}",
     nl: "We hebben je melding ontvangen — {ref}",
-    el: "Λάβαμε την αναφορά σου — {ref}"
+    el: "Λάβαμε την αναφορά σου — {ref}",
+    ro: "Semnalarea ta a fost primită — {ref}"
   },
   "bugreport.ack.intro": {
     "pt-BR": "Obrigada por relatar. As pessoas que administram a rede vão ler o seu relato; não haverá acompanhamento automático.",
@@ -54,7 +55,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Gràcies per avisar. Les persones que administren la xarxa el llegiran; no hi haurà seguiment automàtic.",
     eo: "Dankon pro la raporto. La homoj, kiuj administras la reton, legos ĝin; ne estos aŭtomata sekvado.",
     nl: "Bedankt voor je melding. De mensen die het netwerk beheren lezen haar; er volgt geen automatische opvolging.",
-    el: "Ευχαριστούμε για την αναφορά. Τα άτομα που διαχειρίζονται το δίκτυο θα τη διαβάσουν· δεν θα υπάρξει αυτόματη συνέχεια."
+    el: "Ευχαριστούμε για την αναφορά. Τα άτομα που διαχειρίζονται το δίκτυο θα τη διαβάσουν· δεν θα υπάρξει αυτόματη συνέχεια.",
+    ro: "Mulțumim că ai semnalat această problemă. Persoanele care administrează rețeaua o vor citi; nu va exista o urmărire automată."
   },
   "bugreport.ack.ref": {
     "pt-BR": "Número do relato: {ref}.",
@@ -66,7 +68,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Número de l'avís: {ref}.",
     eo: "Numero de la raporto: {ref}.",
     nl: "Nummer van de melding: {ref}.",
-    el: "Αριθμός αναφοράς: {ref}."
+    el: "Αριθμός αναφοράς: {ref}.",
+    ro: "Numărul semnalării: {ref}."
   },
   "bugreport.ack.noreply": {
     "pt-BR": "Não responda a esta mensagem. Para falar com uma pessoa: {email}.",
@@ -78,7 +81,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "No responguis a aquest missatge. Per parlar amb una persona: {email}.",
     eo: "Ne respondu al ĉi tiu mesaĝo. Por atingi homon: {email}.",
     nl: "Antwoord niet op dit bericht. Om een persoon te bereiken: {email}.",
-    el: "Μην απαντήσεις σε αυτό το μήνυμα. Για να μιλήσεις με κάποιο άτομο: {email}."
+    el: "Μην απαντήσεις σε αυτό το μήνυμα. Για να μιλήσεις με κάποιο άτομο: {email}.",
+    ro: "Nu răspunde la acest mesaj. Ca să iei legătura cu o persoană: {email}."
   },
 
   // ── Accueil dans l'équipe : invitation (lot 4) ────────────────────────────
@@ -92,7 +96,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una invitació per avalar — {libraryName}",
     eo: "Invito por aprobi — {libraryName}",
     nl: "Een uitnodiging om te steunen — {libraryName}",
-    el: "Μια πρόσκληση προς υποστήριξη — {libraryName}"
+    el: "Μια πρόσκληση προς υποστήριξη — {libraryName}",
+    ro: "O invitație care așteaptă susținerea ta — {libraryName}"
   },
   "team.invitation_proposed.intro": {
     "pt-BR": "{actorName} propõe acolher {targetName} na equipe de {libraryName}. Seu endosso (coordenação) é necessário para finalizar o acolhimento. Acesse o painel da equipe para endossar.",
@@ -104,7 +109,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} proposa acollir {targetName} a l'equip de {libraryName}. El teu aval (coordinació) és necessari per finalitzar l'acolliment. Vés al tauler de l'equip per avalar.",
     eo: "{actorName} proponas akcepti {targetName} en la teamon de {libraryName}. Via aprobo (kunordigo) necesas por finpretigi. Iru al la teama panelo por aprobi.",
     nl: "{actorName} stelt voor om {targetName} in het team van {libraryName} op te nemen. Jouw steun (coördinatie) is nodig om dit af te ronden. Ga naar het teampaneel om te steunen.",
-    el: "{actorName} προτείνει την ένταξη του ατόμου {targetName} στην ομάδα της {libraryName}. Η υποστήριξή σας (συντονισμός) χρειάζεται για την ολοκλήρωση. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε."
+    el: "{actorName} προτείνει την ένταξη του ατόμου {targetName} στην ομάδα της {libraryName}. Η υποστήριξή σας (συντονισμός) χρειάζεται για την ολοκλήρωση. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε.",
+    ro: "{actorName} propune primirea persoanei {targetName} în echipa bibliotecii {libraryName}. Susținerea ta (ca parte din echipa de coordonare) este necesară pentru a finaliza primirea. Mergi în panoul echipei ca s-o susții."
   },
   "team.invitation_ready.sub": {
     "pt-BR": "Convite para integrar a equipe de {libraryName}",
@@ -116,7 +122,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Invitació per formar part de l'equip de {libraryName}",
     eo: "Invito aliĝi al la teamo de {libraryName}",
     nl: "Uitnodiging om bij het team van {libraryName} te komen",
-    el: "Πρόσκληση για ένταξη στην ομάδα της {libraryName}"
+    el: "Πρόσκληση για ένταξη στην ομάδα της {libraryName}",
+    ro: "Invitație de a te alătura echipei bibliotecii {libraryName}"
   },
   "team.invitation_ready.intro": {
     "pt-BR": "Seu convite para integrar a equipe de {libraryName} está pronto. Acesse sua conta (Minhas bibliotecas) para aceitar ou recusar.",
@@ -128,7 +135,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva invitació per formar part de l'equip de {libraryName} està a punt. Vés al teu compte (Les meves biblioteques) per acceptar-la o rebutjar-la.",
     eo: "Via invito aliĝi al la teamo de {libraryName} estas preta. Iru al via konto (Miaj bibliotekoj) por akcepti aŭ rifuzi ĝin.",
     nl: "Je uitnodiging om bij het team van {libraryName} te komen is klaar. Ga naar je account (Mijn bibliotheken) om die te aanvaarden of te weigeren.",
-    el: "Η πρόσκλησή σας για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να την αποδεχτείτε ή να την απορρίψετε."
+    el: "Η πρόσκλησή σας για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να την αποδεχτείτε ή να την απορρίψετε.",
+    ro: "Invitația ta de a te alătura echipei bibliotecii {libraryName} este gata. Mergi în contul tău (Bibliotecile mele) ca s-o accepți sau s-o refuzi."
   },
 
   // ── Passage à la coordination : proposition collégiale ────────────────────
@@ -146,7 +154,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una proposta d'equip caduca d'aquí a nou dies — {libraryName}",
     eo: "Teama propono senvalidiĝos post naŭ tagoj — {libraryName}",
     nl: "Een teamvoorstel vervalt over negen dagen — {libraryName}",
-    el: "Μια πρόταση ομάδας λήγει σε εννέα ημέρες — {libraryName}"
+    el: "Μια πρόταση ομάδας λήγει σε εννέα ημέρες — {libraryName}",
+    ro: "O propunere de echipă expiră peste nouă zile — {libraryName}"
   },
   "team.invitation_reminder.intro": {
     "pt-BR": "A proposta que diz respeito a {targetName} em {libraryName} ainda não se concluiu. Ela se fechará sozinha em nove dias. Nada obriga a aceitá-la — mas se o coletivo quiser decidir, é agora.",
@@ -158,7 +167,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta relativa a {targetName} a {libraryName} encara no ha reeixit. Es tancarà tota sola d'aquí a nou dies. Res no obliga a acceptar-la — però si el col·lectiu vol decidir, és ara.",
     eo: "La propono pri {targetName} ĉe {libraryName} ankoraŭ ne sukcesis. Ĝi fermiĝos memstare post naŭ tagoj. Nenio devigas akcepti ĝin — sed se la kolektivo volas decidi, estas nun.",
     nl: "Het voorstel over {targetName} bij {libraryName} is nog niet rond. Het sluit zichzelf over negen dagen. Niets verplicht om het te aanvaarden — maar als het collectief wil beslissen, is het nu.",
-    el: "Η πρόταση που αφορά το άτομο {targetName} στη {libraryName} δεν έχει ακόμη ολοκληρωθεί. Θα κλείσει από μόνη της σε εννέα ημέρες. Τίποτα δεν υποχρεώνει την αποδοχή της — αλλά αν το συλλογικό θέλει να αποφασίσει, είναι τώρα."
+    el: "Η πρόταση που αφορά το άτομο {targetName} στη {libraryName} δεν έχει ακόμη ολοκληρωθεί. Θα κλείσει από μόνη της σε εννέα ημέρες. Τίποτα δεν υποχρεώνει την αποδοχή της — αλλά αν το συλλογικό θέλει να αποφασίσει, είναι τώρα.",
+    ro: "Propunerea privind persoana {targetName} la biblioteca {libraryName} nu s-a finalizat încă. Se va închide de la sine peste nouă zile. Nimic nu obligă la acceptarea ei — dar dacă colectivul vrea să decidă, acum e momentul."
   },
   "team.invitation_expired.sub": {
     "pt-BR": "Uma proposta de equipe expirou — {libraryName}",
@@ -170,7 +180,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una proposta d'equip ha caducat — {libraryName}",
     eo: "Teama propono senvalidiĝis — {libraryName}",
     nl: "Een teamvoorstel is vervallen — {libraryName}",
-    el: "Μια πρόταση ομάδας έληξε — {libraryName}"
+    el: "Μια πρόταση ομάδας έληξε — {libraryName}",
+    ro: "O propunere de echipă a expirat — {libraryName}"
   },
   "team.invitation_expired.intro": {
     "pt-BR": "A proposta que dizia respeito a {targetName} em {libraryName} se fechou sem se concluir, por falta de resposta em trinta dias. Isso não é uma recusa: ninguém decidiu. Ela pode ser reapresentada quando o coletivo quiser.",
@@ -182,7 +193,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta relativa a {targetName} a {libraryName} s'ha tancat sense reeixir, per manca de resposta en trenta dies. No és un rebuig: ningú no ha decidit. Es pot tornar a proposar quan el col·lectiu vulgui.",
     eo: "La propono pri {targetName} ĉe {libraryName} fermiĝis sen sukcesi, pro manko de respondo dum tridek tagoj. Tio ne estas rifuzo: neniu decidis. Ĝi repropopeblas kiam la kolektivo volos.",
     nl: "Het voorstel over {targetName} bij {libraryName} is gesloten zonder rond te komen, bij gebrek aan antwoord binnen dertig dagen. Dit is geen weigering: niemand heeft beslist. Het kan opnieuw worden voorgesteld wanneer het collectief dat wil.",
-    el: "Η πρόταση που αφορούσε το άτομο {targetName} στη {libraryName} έκλεισε χωρίς να ολοκληρωθεί, ελλείψει απάντησης μέσα σε τριάντα ημέρες. Δεν πρόκειται για άρνηση: κανείς δεν αποφάσισε. Μπορεί να υποβληθεί ξανά όποτε το θελήσει το συλλογικό."
+    el: "Η πρόταση που αφορούσε το άτομο {targetName} στη {libraryName} έκλεισε χωρίς να ολοκληρωθεί, ελλείψει απάντησης μέσα σε τριάντα ημέρες. Δεν πρόκειται για άρνηση: κανείς δεν αποφάσισε. Μπορεί να υποβληθεί ξανά όποτε το θελήσει το συλλογικό.",
+    ro: "Propunerea privind persoana {targetName} la biblioteca {libraryName} s-a închis fără să se finalizeze, în lipsa unui răspuns în treizeci de zile. Nu este un refuz: nimeni nu a decis. Poate fi propusă din nou oricând vrea colectivul."
   },
   "team.invitation_coord_proposed.sub": {
     "pt-BR": "Uma passagem à coordenação a endossar — {libraryName}",
@@ -194,7 +206,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Un pas a la coordinació per avalar — {libraryName}",
     eo: "Transiro al la kunordigo por aprobi — {libraryName}",
     nl: "Een overstap naar de coördinatie om te steunen — {libraryName}",
-    el: "Μια μετάβαση στον συντονισμό προς υποστήριξη — {libraryName}"
+    el: "Μια μετάβαση στον συντονισμό προς υποστήριξη — {libraryName}",
+    ro: "O trecere în coordonare care așteaptă susținerea ta — {libraryName}"
   },
   "team.invitation_coord_proposed.intro": {
     "pt-BR": "{actorName} propõe que {targetName} passe à coordenação de {libraryName}. Seu endosso é necessário: a coordenação não se dá sozinha. Acesse o painel da equipe para endossar ou deixar correr.",
@@ -206,7 +219,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} proposa que {targetName} passi a la coordinació de {libraryName}. El teu aval és necessari: la coordinació no es dona en solitari. Vés al tauler de l'equip per avalar, o deixa-ho caducar.",
     eo: "{actorName} proponas ke {targetName} transiru al la kunordigo de {libraryName}. Via aprobo necesas: kunordigo ne donacigas sole. Iru al la teama panelo por aprobi, aŭ lasu ĝin senvalidiĝi.",
     nl: "{actorName} stelt voor dat {targetName} overstapt naar de coördinatie van {libraryName}. Jouw steun is nodig: coördinatie geef je niet alleen door. Ga naar het teampaneel om te steunen, of laat het vervallen.",
-    el: "{actorName} προτείνει το άτομο {targetName} να περάσει στον συντονισμό της {libraryName}. Η υποστήριξή σας χρειάζεται: ο συντονισμός δεν δίνεται μόνος. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή να το αφήσετε να λήξει."
+    el: "{actorName} προτείνει το άτομο {targetName} να περάσει στον συντονισμό της {libraryName}. Η υποστήριξή σας χρειάζεται: ο συντονισμός δεν δίνεται μόνος. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή να το αφήσετε να λήξει.",
+    ro: "{actorName} propune ca {targetName} să treacă în echipa de coordonare a bibliotecii {libraryName}. Susținerea ta este necesară: coordonarea nu o acordă o singură persoană. Mergi în panoul echipei ca s-o susții sau ca s-o lași să expire."
   },
   "team.invitation_coord_ready.sub": {
     "pt-BR": "A equipe propõe que você entre na coordenação de {libraryName}",
@@ -218,7 +232,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip et proposa entrar a la coordinació de {libraryName}",
     eo: "La teamo proponas ke vi eniru la kunordigon de {libraryName}",
     nl: "Het team stelt voor dat je toetreedt tot de coördinatie van {libraryName}",
-    el: "Η ομάδα σάς προτείνει να μπείτε στον συντονισμό της {libraryName}"
+    el: "Η ομάδα σάς προτείνει να μπείτε στον συντονισμό της {libraryName}",
+    ro: "Echipa îți propune să intri în echipa de coordonare a bibliotecii {libraryName}"
   },
   "team.invitation_coord_ready.intro": {
     "pt-BR": "A proposta foi endossada: falta só a sua palavra. Coordenar {libraryName} dá acesso aos parâmetros da biblioteca, à gestão da equipe e às decisões de organização — é uma carga, e ela se aceita. Recusar não custa nada, e passar a mão continua sendo um direito depois. Acesse sua conta (Minhas bibliotecas) para responder.",
@@ -230,7 +245,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta ha estat avalada: només falta la teva paraula. Coordinar {libraryName} dona accés als paràmetres de la biblioteca, a la gestió de l'equip i a les decisions d'organització — és una càrrega, i s'accepta. Rebutjar no costa res, i passar el relleu continuarà sent un dret després. Vés al teu compte (Les meves biblioteques) per respondre.",
     eo: "La propono estis aprobita: mankas nur via vorto. Kunordigi {libraryName} donas aliron al la agordoj de la biblioteko, al la administrado de la teamo kaj al organizaj decidoj — tio estas ŝarĝo, kaj ĝi akceptiĝas. Rifuzi kostas nenion, kaj transdoni restos rajto poste. Iru al via konto (Miaj bibliotekoj) por respondi.",
     nl: "Het voorstel is gesteund: alleen jouw woord ontbreekt nog. De coördinatie van {libraryName} geeft toegang tot de instellingen van de bibliotheek, tot teambeheer en tot organisatorische beslissingen — het is een last, en die aanvaard je. Weigeren kost niets, en het later doorgeven blijft een recht. Ga naar je account (Mijn bibliotheken) om te antwoorden.",
-    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Ο συντονισμός της {libraryName} δίνει πρόσβαση στις ρυθμίσεις της βιβλιοθήκης, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις — είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε."
+    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Ο συντονισμός της {libraryName} δίνει πρόσβαση στις ρυθμίσεις της βιβλιοθήκης, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις — είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε.",
+    ro: "Propunerea a fost susținută: mai lipsește doar cuvântul tău. Coordonarea bibliotecii {libraryName} dă acces la setările bibliotecii, la gestionarea echipei și la deciziile de organizare — este o responsabilitate, iar ea se acceptă, nu se impune. Refuzul nu costă nimic, iar a preda ștafeta va rămâne un drept și după aceea. Mergi în contul tău (Bibliotecile mele) ca să răspunzi."
   },
 
   // v2 saut collégial (GOUV-14) : variantes « saut » — la personne visée n'est
@@ -247,7 +263,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} proposa que {targetName} — lector·a de {libraryName}, encara fora de l'equip — passi directament a la coordinació. La vostra biblioteca ha activat el salt col·legiat: el circuit continua sencer, i cal el teu aval. Vés al panell de l'equip per avalar, o deixa-ho córrer.",
     eo: "{actorName} proponas, ke {targetName} — leganto de {libraryName}, ankoraŭ ekster la teamo — rekte transiru al la kunordigo. Via biblioteko aktivigis la kolegian salton: la cirkvito restas kompleta, kaj via aprobo necesas. Iru al la panelo de la teamo por aprobi, aŭ lasu pasi.",
     nl: "{actorName} stelt voor dat {targetName} — lezer van {libraryName}, nog geen teamlid — rechtstreeks naar de coördinatie gaat. Jullie bibliotheek heeft de collegiale sprong geactiveerd: het traject blijft volledig, en jouw steun is nodig. Ga naar het teampaneel om te steunen, of laat het verlopen.",
-    el: "Ο/Η {actorName} προτείνει ο/η {targetName} — αναγνώστης/στρια της {libraryName}, όχι ακόμη μέλος της ομάδας — να περάσει απευθείας στον συντονισμό. Η βιβλιοθήκη σας έχει ενεργοποιήσει το συλλογικό άλμα: η διαδικασία μένει πλήρης, και χρειάζεται η υποστήριξή σας. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή αφήστε το να λήξει."
+    el: "Ο/Η {actorName} προτείνει ο/η {targetName} — αναγνώστης/στρια της {libraryName}, όχι ακόμη μέλος της ομάδας — να περάσει απευθείας στον συντονισμό. Η βιβλιοθήκη σας έχει ενεργοποιήσει το συλλογικό άλμα: η διαδικασία μένει πλήρης, και χρειάζεται η υποστήριξή σας. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή αφήστε το να λήξει.",
+    ro: "{actorName} propune ca {targetName} — cititor/cititoare la biblioteca {libraryName}, care încă nu face parte din echipă — să treacă direct în echipa de coordonare. Biblioteca ta a activat saltul colegial: circuitul rămâne întreg, iar susținerea ta este necesară. Mergi în panoul echipei ca s-o susții sau ca s-o lași să expire."
   },
   "team.invitation_coord_ready_direct.intro": {
     "pt-BR": "A proposta foi endossada: falta só a sua palavra. Você entraria na equipe de {libraryName} diretamente pela coordenação — acesso aos parâmetros, à gestão da equipe e às decisões de organização, sem etapa intermediária. É uma carga, e ela se aceita. Recusar não custa nada, e passar a mão continua sendo um direito depois. Acesse sua conta (Minhas bibliotecas) para responder.",
@@ -259,7 +276,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta ha estat avalada: només falta la teva paraula. Entraries a l'equip de {libraryName} directament per la coordinació — accés als paràmetres, a la gestió de l'equip i a les decisions d'organització, sense etapa intermèdia. És una càrrega, i s'accepta. Rebutjar no costa res, i passar el relleu continuarà sent un dret després. Vés al teu compte (Les meves biblioteques) per respondre.",
     eo: "La propono estis aprobita: mankas nur via vorto. Vi aliĝus al la teamo de {libraryName} rekte ĉe la kunordigo — aliro al la agordoj, al la administrado de la teamo kaj al organizaj decidoj, sen intera ŝtupo. Tio estas ŝarĝo, kaj ĝi akceptiĝas. Rifuzi kostas nenion, kaj transdoni restos rajto poste. Iru al via konto (Miaj bibliotekoj) por respondi.",
     nl: "Het voorstel is gesteund: alleen jouw woord ontbreekt nog. Je zou het team van {libraryName} rechtstreeks in de coördinatie binnenkomen — toegang tot de instellingen, tot teambeheer en tot organisatorische beslissingen, zonder tussenstap. Het is een last, en die aanvaard je. Weigeren kost niets, en het later doorgeven blijft een recht. Ga naar je account (Mijn bibliotheken) om te antwoorden.",
-    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Θα εντασσόσασταν στην ομάδα της {libraryName} απευθείας στον συντονισμό — πρόσβαση στις ρυθμίσεις, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις, χωρίς ενδιάμεσο βήμα. Είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε."
+    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Θα εντασσόσασταν στην ομάδα της {libraryName} απευθείας στον συντονισμό — πρόσβαση στις ρυθμίσεις, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις, χωρίς ενδιάμεσο βήμα. Είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε.",
+    ro: "Propunerea a fost susținută: mai lipsește doar cuvântul tău. Te-ai alătura echipei bibliotecii {libraryName} direct în echipa de coordonare — acces la setări, la gestionarea echipei și la deciziile de organizare, fără etapă intermediară. Este o responsabilitate, iar ea se acceptă, nu se impune. Refuzul nu costă nimic, iar a preda ștafeta va rămâne un drept și după aceea. Mergi în contul tău (Bibliotecile mele) ca să răspunzi."
   },
 
   // ── Actus réseau : digest hebdomadaire (EF notify-rede-digest) ────────────
@@ -273,7 +291,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{brand} · Novetats de la xarxa",
     eo: "{brand} · Novaĵoj de la reto",
     nl: "{brand} · Netwerknieuws",
-    el: "{brand} · Νέα του δικτύου"
+    el: "{brand} · Νέα του δικτύου",
+    ro: "{brand} · Noutăți din rețea"
   },
   "rede.digest.title": {
     "pt-BR": "Novidades da rede",
@@ -285,7 +304,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Novetats de la xarxa",
     eo: "Novaĵoj de la reto",
     nl: "Netwerknieuws",
-    el: "Νέα του δικτύου"
+    el: "Νέα του δικτύου",
+    ro: "Noutăți din rețea"
   },
   "rede.digest.intro": {
     "pt-BR": "Aqui está o que há de novo na rede desde a última vez.",
@@ -297,7 +317,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Això és el que hi ha de nou a la xarxa des de l'última vegada.",
     eo: "Jen kio novas en la reto ekde la lasta fojo.",
     nl: "Dit is er nieuw in het netwerk sinds de vorige keer.",
-    el: "Να τι νέο υπάρχει στο δίκτυο από την τελευταία φορά."
+    el: "Να τι νέο υπάρχει στο δίκτυο από την τελευταία φορά.",
+    ro: "Iată ce e nou în rețea de la ultima dată."
   },
   "rede.digest.gazette.heading": {
     "pt-BR": "Gazeta",
@@ -309,7 +330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Gaseta",
     eo: "Gazeto",
     nl: "Gazette",
-    el: "Εφημερίδα"
+    el: "Εφημερίδα",
+    ro: "Gazeta"
   },
   "rede.digest.circles.heading": {
     "pt-BR": "Novos círculos",
@@ -321,7 +343,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nous cercles",
     eo: "Novaj rondoj",
     nl: "Nieuwe kringen",
-    el: "Νέοι κύκλοι"
+    el: "Νέοι κύκλοι",
+    ro: "Cercuri noi"
   },
   "rede.digest.unsub": {
     "pt-BR": "Cancelar a inscrição na Carta da federação",
@@ -333,7 +356,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Donar-se de baixa de la Carta de la federació",
     eo: "Malaboni la Leteron de la federacio",
     nl: "Uitschrijven van de Brief van de federatie",
-    el: "Διαγραφή από την Επιστολή της ομοσπονδίας"
+    el: "Διαγραφή από την Επιστολή της ομοσπονδίας",
+    ro: "Dezabonare de la Buletinul federației"
   },
 
   // ── Cotisation : expiration (notify-event · #25, J-7 rappel) ──────────────
@@ -347,7 +371,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota està a punt de vèncer",
     eo: "Via kotizo baldaŭ eksvalidiĝos",
     nl: "Je lidmaatschapsbijdrage verloopt binnenkort",
-    el: "Η συνδρομή σου λήγει σύντομα"
+    el: "Η συνδρομή σου λήγει σύντομα",
+    ro: "Cotizația ta expiră în curând"
   },
   "cotisation.expiring.intro": {
     "pt-BR": "A sua contribuição à {library} vence em {date}. Lembre-se de renová-la junto à biblioteca para continuar a pegar emprestado.",
@@ -359,7 +384,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota a {library} venç el {date}. Recorda renovar-la a la biblioteca per continuar fent préstecs.",
     eo: "Via kotizo ĉe {library} eksvalidiĝos je {date}. Memoru renovigi ĝin ĉe la biblioteko por daŭre prunti.",
     nl: "Je lidmaatschapsbijdrage bij {library} verloopt op {date}. Vergeet niet om die bij de bibliotheek te verlengen zodat je kunt blijven lenen.",
-    el: "Η συνδρομή σου στη {library} λήγει στις {date}. Θυμήσου να την ανανεώσεις στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι."
+    el: "Η συνδρομή σου στη {library} λήγει στις {date}. Θυμήσου να την ανανεώσεις στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι.",
+    ro: "Cotizația ta la {library} expiră pe {date}. Nu uita s-o reînnoiești la bibliotecă, ca să poți împrumuta în continuare."
   },
   // ── Cotisation : expiration (notify-event · #25, J-0 jour J) ──────────────
   "cotisation.expiring_today.subject": {
@@ -372,7 +398,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota venç avui",
     eo: "Via kotizo eksvalidiĝas hodiaŭ",
     nl: "Je lidmaatschapsbijdrage verloopt vandaag",
-    el: "Η συνδρομή σου λήγει σήμερα"
+    el: "Η συνδρομή σου λήγει σήμερα",
+    ro: "Cotizația ta expiră azi"
   },
   "cotisation.expiring_today.intro": {
     "pt-BR": "A sua contribuição à {library} vence hoje ({date}). Renove-a junto à biblioteca para continuar a pegar emprestado.",
@@ -384,7 +411,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota a {library} venç avui ({date}). Renova-la a la biblioteca per continuar fent préstecs.",
     eo: "Via kotizo ĉe {library} eksvalidiĝas hodiaŭ ({date}). Renovigu ĝin ĉe la biblioteko por daŭre prunti.",
     nl: "Je lidmaatschapsbijdrage bij {library} verloopt vandaag ({date}). Verleng die bij de bibliotheek zodat je kunt blijven lenen.",
-    el: "Η συνδρομή σου στη {library} λήγει σήμερα ({date}). Ανανέωσέ την στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι."
+    el: "Η συνδρομή σου στη {library} λήγει σήμερα ({date}). Ανανέωσέ την στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι.",
+    ro: "Cotizația ta la {library} expiră azi ({date}). Reînnoiește-o la bibliotecă, ca să poți împrumuta în continuare."
   },
 
   // ── Entraide (notify-event · notif au cercle) ─────────────────────────────
@@ -398,7 +426,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova crida de suport mutu al teu cercle {circle}",
     eo: "Nova alvoko de reciproka helpo en via rondo {circle}",
     nl: "Nieuwe hulpoproep in jouw kring {circle}",
-    el: "Νέο κάλεσμα αλληλοβοήθειας στον κύκλο σου {circle}"
+    el: "Νέο κάλεσμα αλληλοβοήθειας στον κύκλο σου {circle}",
+    ro: "Apel nou de ajutor reciproc în cercul tău {circle}"
   },
   "entraide.request_circle.intro": {
     "pt-BR": "Uma biblioteca do seu círculo « {circle} » publicou um chamado de apoio mútuo: {subject}. Você pode responder na aba Apoio mútuo.",
@@ -410,7 +439,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una biblioteca del teu cercle « {circle} » ha publicat una crida d'ajuda: {subject}. Pots respondre a la pestanya Suport mutu.",
     eo: "Biblioteko de via rondo « {circle} » afiŝis alvokon por helpo: {subject}. Vi povas respondi en la langeto Reciproka helpo.",
     nl: "Een bibliotheek uit jouw kring “{circle}” heeft een hulpoproep geplaatst: {subject}. Je kunt reageren op het tabblad Onderlinge hulp.",
-    el: "Μια βιβλιοθήκη του κύκλου σου « {circle} » δημοσίευσε ένα κάλεσμα βοήθειας: {subject}. Μπορείς να απαντήσεις στην καρτέλα Αλληλοβοήθεια."
+    el: "Μια βιβλιοθήκη του κύκλου σου « {circle} » δημοσίευσε ένα κάλεσμα βοήθειας: {subject}. Μπορείς να απαντήσεις στην καρτέλα Αλληλοβοήθεια.",
+    ro: "O bibliotecă din cercul tău „{circle}” a postat un apel de ajutor: {subject}. Poți răspunde în fila Ajutor reciproc."
   },
 
   // ── Gazette (notify-event · Étape A) ──────────────────────────────────────
@@ -424,7 +454,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova nota proposada per a la Gaseta",
     eo: "Nova noto proponita por la Gazeto",
     nl: "Nieuw bericht voorgesteld voor de Gazette",
-    el: "Νέο σημείωμα προτάθηκε για την εφημερίδα"
+    el: "Νέο σημείωμα προτάθηκε για την εφημερίδα",
+    ro: "Notă scurtă nouă propusă pentru Gazetă"
   },
   "gazette.contribution.received.intro": {
     "pt-BR": "Uma nova nota foi proposta para a rubrica « {rubric} »: {title}. Proposta por {author}. Para triar (aceitar ou rejeitar) no painel da rede.",
@@ -436,7 +467,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha proposat una nova nota per a la secció « {rubric} »: {title}. Proposada per {author}. Per triar (acceptar o rebutjar) al tauler de la xarxa.",
     eo: "Nova noto estis proponita por la rubriko « {rubric} »: {title}. Proponita de {author}. Por trakti (akcepti aŭ malakcepti) en la reta panelo.",
     nl: "Er is een nieuw bericht voorgesteld voor de rubriek « {rubric} »: {title}. Voorgesteld door {author}. Te sorteren (accepteren of weigeren) in het netwerkpaneel.",
-    el: "Προτάθηκε ένα νέο σημείωμα για την ενότητα « {rubric} »: {title}. Προτάθηκε από {author}. Για διαλογή (αποδοχή ή απόρριψη) στον πίνακα του δικτύου."
+    el: "Προτάθηκε ένα νέο σημείωμα για την ενότητα « {rubric} »: {title}. Προτάθηκε από {author}. Για διαλογή (αποδοχή ή απόρριψη) στον πίνακα του δικτύου.",
+    ro: "A fost propusă o notă scurtă nouă pentru rubrica „{rubric}”: {title}. Propusă de {author}. De sortat (acceptă sau respinge) în panoul rețelei."
   },
   "gazette.draft.ready_for_review.sub": {
     "pt-BR": "Rascunho da Gazeta n.º {number} para revisar",
@@ -448,7 +480,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Esborrany de la Gaseta núm. {number} per revisar",
     eo: "Malneto de la Gazeto n-ro {number} por revizii",
     nl: "Concept van de Gazette nr. {number} om na te kijken",
-    el: "Πρόχειρο της εφημερίδας αρ. {number} προς αναθεώρηση"
+    el: "Πρόχειρο της εφημερίδας αρ. {number} προς αναθεώρηση",
+    ro: "Ciorna Gazetei nr. {number} așteaptă recitirea"
   },
   "gazette.draft.ready_for_review.intro": {
     "pt-BR": "O rascunho mensal da Gazeta (n.º {number}) está pronto. Revise as 10 locales, corrija se necessário e publique pelo painel da rede. Nada é publicado automaticamente.",
@@ -460,7 +493,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'esborrany mensual de la Gaseta (núm. {number}) està a punt. Revisa les 10 locales, corregeix si cal i publica'l des del tauler de la xarxa. No es publica res automàticament.",
     eo: "La monata malneto de la Gazeto (n-ro {number}) estas preta. Reviziu la 10 lingvojn, korektu se necese, poste publikigu ĝin el la reta panelo. Nenio estas publikigita aŭtomate.",
     nl: "Het maandelijkse concept van de Gazette (nr. {number}) is klaar. Bekijk de 10 talen, corrigeer indien nodig en publiceer het via het netwerkpaneel. Er wordt niets automatisch gepubliceerd.",
-    el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε τις 10 γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα."
+    el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε τις 10 γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα.",
+    ro: "Ciorna lunară a Gazetei (nr. {number}) este gata. Recitește cele 10 limbi, corectează dacă e nevoie, apoi public-o din panoul rețelei. Nimic nu se publică automat."
   },
   "gazette.issue.published.sub": {
     "pt-BR": "A Gazeta n.º {number} foi publicada!",
@@ -472,7 +506,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Ja ha sortit la Gaseta núm. {number}!",
     eo: "La Gazeto n-ro {number} aperis!",
     nl: "Gazette nr. {number} is uit!",
-    el: "Κυκλοφόρησε η εφημερίδα αρ. {number}!"
+    el: "Κυκλοφόρησε η εφημερίδα αρ. {number}!",
+    ro: "Gazeta nr. {number} a apărut!"
   },
   "gazette.issue.published.intro": {
     "pt-BR": "O número {number} da Gazeta da rede acaba de sair. Boa leitura — e fique à vontade para divulgá-la.",
@@ -484,7 +519,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Acaba de sortir el número {number} de la Gaseta de la xarxa. Bona lectura — i no dubtis a difondre-la.",
     eo: "Ĵus aperis la numero {number} de la reta Gazeto. Bonan legadon — kaj disvastigu ĝin laŭplaĉe.",
     nl: "Nummer {number} van de netwerk-Gazette is zojuist verschenen. Veel leesplezier — en deel het gerust.",
-    el: "Μόλις κυκλοφόρησε το τεύχος {number} της εφημερίδας του δικτύου. Καλή ανάγνωση — και μη διστάσεις να τη διαδώσεις."
+    el: "Μόλις κυκλοφόρησε το τεύχος {number} της εφημερίδας του δικτύου. Καλή ανάγνωση — και μη διστάσεις να τη διαδώσεις.",
+    ro: "Numărul {number} al Gazetei rețelei tocmai a apărut. Lectură plăcută — și nu ezita s-o răspândești în jurul tău."
   },
 
   // ── Gazette · GAZ-7 : la décision est dite à la personne qui a écrit ──────
@@ -498,7 +534,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Represa d'una breu rebutjada anteriorment: aquesta és la versió corregida per la persona.",
     eo: "Reprezento de antaŭe malakceptita novaĵeto: jen la versio korektita de la persono.",
     nl: "Opnieuw ingestuurd na een eerdere afwijzing: dit is de door de persoon aangepaste versie.",
-    el: "Επανυποβολή σημειώματος που είχε απορριφθεί: αυτή είναι η διορθωμένη εκδοχή από το άτομο."
+    el: "Επανυποβολή σημειώματος που είχε απορριφθεί: αυτή είναι η διορθωμένη εκδοχή από το άτομο.",
+    ro: "Reluarea unei note scurte respinse anterior: aceasta este versiunea corectată de persoana care a propus-o."
   },
   "gazette.contribution.rejected.sub": {
     "pt-BR": "Sua nota « {title} » não foi retida — eis por quê",
@@ -510,7 +547,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva breu « {title} » no s'ha retingut — t'expliquem per què",
     eo: "Via novaĵeto « {title} » ne estis akceptita — jen kial",
     nl: "Je bericht ‘{title}’ is niet opgenomen — dit is waarom",
-    el: "Το σημείωμά σου «{title}» δεν κρατήθηκε — να γιατί"
+    el: "Το σημείωμά σου «{title}» δεν κρατήθηκε — να γιατί",
+    ro: "Nota ta scurtă „{title}” nu a fost reținută — iată de ce"
   },
   "gazette.contribution.rejected.intro": {
     "pt-BR": "A equipe da rede leu sua proposta para a rubrica « {rubric} » e decidiu não a publicar tal como está. O motivo, escrito por quem a leu:",
@@ -522,7 +560,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip de la xarxa ha llegit la teva proposta per a la secció « {rubric} » i ha decidit no publicar-la tal com està. El motiu, escrit per qui l'ha llegida:",
     eo: "La reta teamo legis vian proponon por la rubriko « {rubric} » kaj decidis ne publikigi ĝin tia, kia ĝi estas. La kialo, skribita de tiu, kiu legis ĝin:",
     nl: "Het netwerkteam heeft je voorstel voor de rubriek ‘{rubric}’ gelezen en besloten het zo niet te publiceren. De reden, in de woorden van wie het las:",
-    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου για την ενότητα «{rubric}» και αποφάσισε να μην τη δημοσιεύσει ως έχει. Ο λόγος, όπως τον έγραψε το άτομο που τη διάβασε:"
+    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου για την ενότητα «{rubric}» και αποφάσισε να μην τη δημοσιεύσει ως έχει. Ο λόγος, όπως τον έγραψε το άτομο που τη διάβασε:",
+    ro: "Echipa rețelei a citit propunerea ta pentru rubrica „{rubric}” și a decis să n-o publice în forma actuală. Motivul, scris de persoana care a citit-o:"
   },
   "gazette.contribution.rejected.resubmit.title": {
     "pt-BR": "Você pode corrigir sua nota e reenviá-la",
@@ -534,7 +573,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Pots corregir la teva breu i tornar-la a enviar",
     eo: "Vi povas korekti vian novaĵeton kaj resendi ĝin",
     nl: "Je kunt je bericht aanpassen en opnieuw insturen",
-    el: "Μπορείς να διορθώσεις το σημείωμά σου και να το ξαναστείλεις"
+    el: "Μπορείς να διορθώσεις το σημείωμά σου και να το ξαναστείλεις",
+    ro: "Poți să-ți corectezi nota scurtă și s-o retrimiți"
   },
   "gazette.contribution.rejected.resubmit.cta": {
     "pt-BR": "Corrigir e reenviar",
@@ -546,7 +586,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Corregir i reenviar",
     eo: "Korekti kaj resendi",
     nl: "Aanpassen en opnieuw insturen",
-    el: "Διόρθωση και επαναποστολή"
+    el: "Διόρθωση και επαναποστολή",
+    ro: "Corectează și retrimite"
   },
   "gazette.contribution.rejected.resubmit.expires": {
     "pt-BR": "O link abre o formulário já preenchido com seu texto e o motivo. Serve uma única vez e vale até {date}. Se preferir não retomar, não há nada a fazer.",
@@ -558,7 +599,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'enllaç obre el formulari ja omplert amb el teu text i el motiu. Serveix una sola vegada i val fins al {date}. Si prefereixes deixar-ho aquí, no cal fer res.",
     eo: "La ligilo malfermas la formularon jam plenigitan per via teksto kaj la kialo. Ĝi validas nur unufoje, ĝis {date}. Se vi preferas lasi ĝin tiel, nenio plu necesas.",
     nl: "De link opent het formulier, al ingevuld met je tekst en de reden. Hij werkt één keer en is geldig tot {date}. Wil je het hierbij laten, dan hoef je niets te doen.",
-    el: "Ο σύνδεσμος ανοίγει τη φόρμα ήδη συμπληρωμένη με το κείμενό σου και τον λόγο. Ισχύει μία μόνο φορά, έως {date}. Αν προτιμάς να το αφήσεις εκεί, δεν χρειάζεται να κάνεις τίποτα."
+    el: "Ο σύνδεσμος ανοίγει τη φόρμα ήδη συμπληρωμένη με το κείμενό σου και τον λόγο. Ισχύει μία μόνο φορά, έως {date}. Αν προτιμάς να το αφήσεις εκεί, δεν χρειάζεται να κάνεις τίποτα.",
+    ro: "Linkul deschide formularul deja completat cu textul tău și cu motivul. Funcționează o singură dată și este valabil până pe {date}. Dacă preferi să lași lucrurile așa, nu trebuie să faci nimic."
   },
   "gazette.contribution.accepted.sub": {
     "pt-BR": "Sua nota « {title} » foi aceita para a Gazeta",
@@ -570,7 +612,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva breu « {title} » s'ha acceptat per a la Gaseta",
     eo: "Via novaĵeto « {title} » estis akceptita por la Gazeto",
     nl: "Je bericht ‘{title}’ is aangenomen voor de Gazette",
-    el: "Το σημείωμά σου «{title}» έγινε δεκτό για την εφημερίδα"
+    el: "Το σημείωμά σου «{title}» έγινε δεκτό για την εφημερίδα",
+    ro: "Nota ta scurtă „{title}” a fost reținută pentru Gazetă"
   },
   "gazette.contribution.accepted.intro": {
     "pt-BR": "A equipe da rede leu sua proposta « {title} » e a reteve. Ela entrará na página « Vida da rede » do próximo número, traduzida nas dez línguas da rede. Obrigado por ter escrito: é dessas notas que a página é feita.",
@@ -582,7 +625,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip de la xarxa ha llegit la teva proposta « {title} » i l'ha retinguda. Entrarà a la pàgina « Vida de la xarxa » del proper número, traduïda a les deu llengües de la xarxa. Gràcies per escriure: d'aquestes breus està feta la pàgina.",
     eo: "La reta teamo legis vian proponon « {title} » kaj akceptis ĝin. Ĝi aperos en la paĝo « Vivo de la reto » de la venonta numero, tradukita en la dek lingvojn de la reto. Dankon pro via skribo: el tiaj novaĵetoj la paĝo konsistas.",
     nl: "Het netwerkteam heeft je voorstel ‘{title}’ gelezen en aangenomen. Het komt op de pagina ‘Leven van het netwerk’ van het volgende nummer, vertaald in de tien talen van het netwerk. Bedankt voor het schrijven — van zulke berichten is die pagina gemaakt.",
-    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου «{title}» και την κράτησε. Θα μπει στη σελίδα «Ζωή του δικτύου» του επόμενου τεύχους, μεταφρασμένη στις δέκα γλώσσες του δικτύου. Ευχαριστούμε που έγραψες: από τέτοια σημειώματα φτιάχνεται η σελίδα."
+    el: "Η ομάδα του δικτύου διάβασε την πρότασή σου «{title}» και την κράτησε. Θα μπει στη σελίδα «Ζωή του δικτύου» του επόμενου τεύχους, μεταφρασμένη στις δέκα γλώσσες του δικτύου. Ευχαριστούμε που έγραψες: από τέτοια σημειώματα φτιάχνεται η σελίδα.",
+    ro: "Echipa rețelei a citit propunerea ta „{title}” și a reținut-o. Va apărea pe pagina „Viața rețelei” din numărul următor, tradusă în cele zece limbi ale rețelei. Mulțumim că ai scris: din astfel de note e făcută pagina."
   },
   "gazette.contribution.accepted.corrected": {
     "pt-BR": "A equipe fez algumas correções antes de a reter. Eis o texto tal como sairá:",
@@ -594,7 +638,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip hi ha fet algunes correccions abans de retenir-la. Aquest és el text tal com sortirà:",
     eo: "La teamo faris kelkajn korektojn antaŭ ol akcepti ĝin. Jen la teksto tia, kia ĝi aperos:",
     nl: "Het team heeft enkele correcties aangebracht voor het werd aangenomen. Dit is de tekst zoals die verschijnt:",
-    el: "Η ομάδα έκανε μερικές διορθώσεις πριν το κρατήσει. Να το κείμενο όπως θα δημοσιευτεί:"
+    el: "Η ομάδα έκανε μερικές διορθώσεις πριν το κρατήσει. Να το κείμενο όπως θα δημοσιευτεί:",
+    ro: "Echipa a făcut câteva corecturi înainte s-o rețină. Iată textul așa cum va apărea:"
   },
 
   // === Lettre de la fédération (double opt-in : confirmation + pages de retour) ===
@@ -608,7 +653,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Confirma la teva subscripció al Butlletí de la xarxa",
     eo: "Konfirmu vian abonon al la reta bulteno",
     nl: "Bevestig je inschrijving op de nieuwsbrief van het netwerk",
-    el: "Επιβεβαίωσε την εγγραφή σου στο ενημερωτικό δελτίο του δικτύου"
+    el: "Επιβεβαίωσε την εγγραφή σου στο ενημερωτικό δελτίο του δικτύου",
+    ro: "Confirmă-ți abonamentul la Buletinul federației"
   },
   "lettre.optin.confirm.intro": {
     "pt-BR": "Você pediu para receber o Boletim da rede. Para confirmar sua inscrição, clique no botão abaixo.",
@@ -620,7 +666,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has demanat rebre el Butlletí de la xarxa. Per confirmar la teva subscripció, fes clic al botó de sota.",
     eo: "Vi petis ricevi la retan bultenon. Por konfirmi vian abonon, klaku la suban butonon.",
     nl: "Je hebt je aangemeld voor de nieuwsbrief van het netwerk. Klik op de knop hieronder om je inschrijving te bevestigen.",
-    el: "Ζήτησες να λαμβάνεις το ενημερωτικό δελτίο του δικτύου. Για να επιβεβαιώσεις την εγγραφή σου, πάτησε το κουμπί παρακάτω."
+    el: "Ζήτησες να λαμβάνεις το ενημερωτικό δελτίο του δικτύου. Για να επιβεβαιώσεις την εγγραφή σου, πάτησε το κουμπί παρακάτω.",
+    ro: "Ai cerut să primești Buletinul federației. Ca să-ți confirmi abonamentul, apasă butonul de mai jos."
   },
   "lettre.optin.confirm.cta": {
     "pt-BR": "Confirmar minha inscrição",
@@ -632,7 +679,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Confirma la meva subscripció",
     eo: "Konfirmi mian abonon",
     nl: "Mijn inschrijving bevestigen",
-    el: "Επιβεβαίωση της εγγραφής μου"
+    el: "Επιβεβαίωση της εγγραφής μου",
+    ro: "Confirm abonamentul"
   },
   "lettre.optin.confirm.note": {
     "pt-BR": "Se não foi você quem fez este pedido, ignore esta mensagem: nada será enviado sem sua confirmação.",
@@ -644,12 +692,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Si no has fet aquesta sol·licitud, ignora aquest missatge: no se t'enviarà res sense la teva confirmació.",
     eo: "Se vi ne faris ĉi tiun peton, simple ignoru ĉi tiun mesaĝon: nenio estos sendita sen via konfirmo.",
     nl: "Heb je dit niet aangevraagd? Negeer dit bericht dan: zonder je bevestiging wordt er niets verstuurd.",
-    el: "Αν δεν έκανες εσύ αυτό το αίτημα, αγνόησε αυτό το μήνυμα: τίποτα δεν θα σταλεί χωρίς την επιβεβαίωσή σου."
+    el: "Αν δεν έκανες εσύ αυτό το αίτημα, αγνόησε αυτό το μήνυμα: τίποτα δεν θα σταλεί χωρίς την επιβεβαίωσή σου.",
+    ro: "Dacă nu tu ai făcut această cerere, ignoră mesajul: nu ți se va trimite nimic fără confirmarea ta."
   },
   "lettre.landing.cta": {
     "pt-BR": "Voltar ao AnarBib", fr: "Retour à AnarBib", es: "Volver a AnarBib", en: "Back to AnarBib",
     it: "Torna ad AnarBib", de: "Zurück zu AnarBib", ca: "Torna a AnarBib", eo: "Reen al AnarBib",
-    nl: "Terug naar AnarBib", el: "Επιστροφή στο AnarBib"
+    nl: "Terug naar AnarBib", el: "Επιστροφή στο AnarBib",
+    ro: "Înapoi la AnarBib"
   },
   "lettre.landing.confirmed": {
     "pt-BR": "Inscrição confirmada! Você vai receber o Boletim da rede.",
@@ -661,7 +711,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Subscripció confirmada! Rebràs el Butlletí de la xarxa.",
     eo: "Abono konfirmita! Vi ricevos la retan bultenon.",
     nl: "Inschrijving bevestigd! Je ontvangt voortaan de nieuwsbrief van het netwerk.",
-    el: "Η εγγραφή επιβεβαιώθηκε! Θα λαμβάνεις το ενημερωτικό δελτίο του δικτύου."
+    el: "Η εγγραφή επιβεβαιώθηκε! Θα λαμβάνεις το ενημερωτικό δελτίο του δικτύου.",
+    ro: "Abonament confirmat! Vei primi Buletinul federației."
   },
   "lettre.landing.already": {
     "pt-BR": "Sua inscrição já estava confirmada.",
@@ -673,7 +724,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva subscripció ja estava confirmada.",
     eo: "Via abono jam estis konfirmita.",
     nl: "Je inschrijving was al bevestigd.",
-    el: "Η εγγραφή σου είχε ήδη επιβεβαιωθεί."
+    el: "Η εγγραφή σου είχε ήδη επιβεβαιωθεί.",
+    ro: "Abonamentul tău era deja confirmat."
   },
   "lettre.landing.expired": {
     "pt-BR": "Este link de confirmação expirou. Você pode pedir um novo a partir da sua conta.",
@@ -685,20 +737,23 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aquest enllaç de confirmació ha caducat. Pots demanar-ne un de nou des del teu compte.",
     eo: "Ĉi tiu konfirma ligilo eksvalidiĝis. Vi povas peti novan el via konto.",
     nl: "Deze bevestigingslink is verlopen. Je kunt een nieuwe aanvragen vanuit je account.",
-    el: "Αυτός ο σύνδεσμος επιβεβαίωσης έληξε. Μπορείς να ζητήσεις νέον από τον λογαριασμό σου."
+    el: "Αυτός ο σύνδεσμος επιβεβαίωσης έληξε. Μπορείς να ζητήσεις νέον από τον λογαριασμό σου.",
+    ro: "Acest link de confirmare a expirat. Poți cere unul nou din contul tău."
   },
   "lettre.landing.invalid": {
     "pt-BR": "Link inválido ou expirado.", fr: "Lien invalide ou expiré.", es: "Enlace no válido o caducado.",
     en: "Invalid or expired link.", it: "Link non valido o scaduto.", de: "Ungültiger oder abgelaufener Link.",
     ca: "Enllaç no vàlid o caducat.", eo: "Nevalida aŭ eksvalidiĝinta ligilo.", nl: "Ongeldige of verlopen link.",
-    el: "Μη έγκυρος ή ληγμένος σύνδεσμος."
+    el: "Μη έγκυρος ή ληγμένος σύνδεσμος.",
+    ro: "Link invalid sau expirat."
   },
   "lettre.landing.error": {
     "pt-BR": "Ocorreu um erro. Tente de novo mais tarde.", fr: "Une erreur est survenue. Réessaie plus tard.",
     es: "Se ha producido un error. Inténtalo de nuevo más tarde.", en: "Something went wrong. Please try again later.",
     it: "Si è verificato un errore. Riprova più tardi.", de: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
     ca: "S'ha produït un error. Torna-ho a provar més tard.", eo: "Okazis eraro. Bonvolu reprovi poste.",
-    nl: "Er ging iets mis. Probeer het later opnieuw.", el: "Κάτι πήγε στραβά. Δοκίμασε ξανά αργότερα."
+    nl: "Er ging iets mis. Probeer het later opnieuw.", el: "Κάτι πήγε στραβά. Δοκίμασε ξανά αργότερα.",
+    ro: "A apărut o eroare. Încearcă din nou mai târziu."
   },
   "lettre.landing.unsubscribed": {
     "pt-BR": "Pronto! Você deixou de receber o Boletim da rede.",
@@ -710,7 +765,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Fet: t'has donat de baixa del Butlletí de la xarxa.",
     eo: "Farite: vi malabonis la retan bultenon.",
     nl: "Klaar: je bent uitgeschreven voor de nieuwsbrief van het netwerk.",
-    el: "Έτοιμο: διαγράφηκες από το ενημερωτικό δελτίο του δικτύου."
+    el: "Έτοιμο: διαγράφηκες από το ενημερωτικό δελτίο του δικτύου.",
+    ro: "Gata: te-ai dezabonat de la Buletinul federației."
   },
 
   // === Lettre de la fédération — numéros (Lot 3) ===
@@ -724,17 +780,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Butlletí de la xarxa — núm. {number}",
     eo: "Reta bulteno — n-ro {number}",
     nl: "Nieuwsbrief van het netwerk — nr. {number}",
-    el: "Ενημερωτικό δελτίο του δικτύου — αρ. {number}"
+    el: "Ενημερωτικό δελτίο του δικτύου — αρ. {number}",
+    ro: "Buletinul federației — nr. {number}"
   },
   "lettre.issue.section.circles": {
     "pt-BR": "Novos círculos", fr: "Nouveaux cercles", es: "Nuevos círculos", en: "New circles",
     it: "Nuovi circoli", de: "Neue Kreise", ca: "Nous cercles", eo: "Novaj rondoj",
-    nl: "Nieuwe kringen", el: "Νέοι κύκλοι"
+    nl: "Nieuwe kringen", el: "Νέοι κύκλοι",
+    ro: "Cercuri noi"
   },
   "lettre.issue.section.assemblies": {
     "pt-BR": "Assembleias por vir", fr: "Assemblées à venir", es: "Asambleas próximas", en: "Upcoming assemblies",
     it: "Assemblee in arrivo", de: "Kommende Versammlungen", ca: "Assemblees properes", eo: "Venontaj asembleoj",
-    nl: "Komende vergaderingen", el: "Επερχόμενες συνελεύσεις"
+    nl: "Komende vergaderingen", el: "Επερχόμενες συνελεύσεις",
+    ro: "Adunări viitoare"
   },
   "lettre.issue.gazetteLink": {
     "pt-BR": "Saiu o n.º {number} da Fractale — venha ler",
@@ -746,14 +805,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Ja ha sortit el núm. {number} de Fractale — a llegir",
     eo: "Aperis la n-ro {number} de Fractale — legu ĝin",
     nl: "Fractale nr. {number} is uit — lees mee",
-    el: "Κυκλοφόρησε το αρ. {number} της Fractale — διάβασέ το"
+    el: "Κυκλοφόρησε το αρ. {number} της Fractale — διάβασέ το",
+    ro: "Fractale nr. {number} a apărut — citește-l"
   },
   "lettre.issue.empty": {
     "pt-BR": "Nada de novo desta vez — até breve.", fr: "Rien de neuf cette fois — à très vite.",
     es: "Nada nuevo esta vez — hasta pronto.", en: "Nothing new this time — see you soon.",
     it: "Niente di nuovo stavolta — a presto.", de: "Diesmal nichts Neues — bis bald.",
     ca: "Res de nou aquest cop — fins aviat.", eo: "Nenio nova ĉi-foje — ĝis baldaŭ.",
-    nl: "Niets nieuws deze keer — tot snel.", el: "Τίποτα νέο αυτή τη φορά — τα λέμε σύντομα."
+    nl: "Niets nieuws deze keer — tot snel.", el: "Τίποτα νέο αυτή τη φορά — τα λέμε σύντομα.",
+    ro: "Nimic nou de data asta — pe curând."
   },
   "lettre.issue.unsubscribePrefix": {
     "pt-BR": "Você recebe este boletim porque se inscreveu nele.",
@@ -765,12 +826,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reps aquest butlletí perquè t'hi vas subscriure.",
     eo: "Vi ricevas ĉi tiun bultenon ĉar vi abonis ĝin.",
     nl: "Je ontvangt deze nieuwsbrief omdat je je ervoor hebt ingeschreven.",
-    el: "Λαμβάνεις αυτό το δελτίο επειδή εγγράφηκες σε αυτό."
+    el: "Λαμβάνεις αυτό το δελτίο επειδή εγγράφηκες σε αυτό.",
+    ro: "Primești acest buletin pentru că te-ai abonat la el."
   },
   "lettre.issue.unsubscribeLink": {
     "pt-BR": "Cancelar inscrição", fr: "Se désabonner", es: "Darse de baja", en: "Unsubscribe",
     it: "Disiscriviti", de: "Abbestellen", ca: "Donar-se de baixa", eo: "Malaboni",
-    nl: "Uitschrijven", el: "Διαγραφή"
+    nl: "Uitschrijven", el: "Διαγραφή",
+    ro: "Dezabonare"
   },
 
   // ── Correspondance entre bibliothèques (G19 lot 3, 08/10/2026 ; CORR-2) ───────
@@ -785,6 +848,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Korespondado: {library} skribis",
     nl: "Correspondentie: {library} schreef",
     el: "Αλληλογραφία: η {library} έγραψε",
+    ro: "Corespondență: {library} a scris",
   },
   "corr.bell.body": {
     "pt-BR": "{subject} — {excerpt} (em {lang})",
@@ -797,6 +861,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "{subject} — {excerpt} (en {lang})",
     nl: "{subject} — {excerpt} (in {lang})",
     el: "{subject} — {excerpt} (σε {lang})",
+    ro: "{subject} — {excerpt} (în {lang})",
   },
   "corr.mail.title": {
     "pt-BR": "Uma carta de {library}",
@@ -809,6 +874,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Letero de {library}",
     nl: "Een brief van {library}",
     el: "Μια επιστολή από {library}",
+    ro: "O scrisoare de la {library}",
   },
   "corr.mail.subject": {
     "pt-BR": "Correspondência — {library}: {subject}",
@@ -821,6 +887,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Korespondado — {library}: {subject}",
     nl: "Correspondentie — {library}: {subject}",
     el: "Αλληλογραφία — {library}: {subject}",
+    ro: "Corespondență — {library}: {subject}",
   },
   "corr.mail.intro": {
     "pt-BR": "{library} escreveu a {recipient} no AnarBib. A mensagem fica na língua em que foi escrita; a coordenação responde no AnarBib, não por e-mail.",
@@ -833,6 +900,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "{library} skribis al {recipient} en AnarBib. La mesaĝo restas en la lingvo en kiu ĝi estis skribita; la kunordigo respondas en AnarBib, ne retpoŝte.",
     nl: "{library} schreef aan {recipient} in AnarBib. Het bericht blijft in de taal waarin het geschreven is; de coördinatie antwoordt in AnarBib, niet per e-mail.",
     el: "Η {library} έγραψε στη {recipient} στο AnarBib. Το μήνυμα παραμένει στη γλώσσα στην οποία γράφτηκε· ο συντονισμός απαντά στο AnarBib, όχι με e-mail.",
+    ro: "{library} a scris către {recipient} în AnarBib. Mesajul rămâne în limba în care a fost scris; echipa de coordonare răspunde în AnarBib, nu prin e-mail.",
   },
   "corr.mail.lang": {
     "pt-BR": "Escrito em {lang}.",
@@ -845,6 +913,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Skribita en {lang}.",
     nl: "Geschreven in {lang}.",
     el: "Γραμμένο σε {lang}.",
+    ro: "Scris în {lang}.",
   },
   "corr.mail.ctaTitle": {
     "pt-BR": "Responder no AnarBib",
@@ -857,6 +926,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Respondi en AnarBib",
     nl: "Antwoorden in AnarBib",
     el: "Απάντηση στο AnarBib",
+    ro: "Răspunde în AnarBib",
   },
   "corr.mail.cta": {
     "pt-BR": "Abrir a correspondência",
@@ -869,6 +939,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Malfermi la korespondadon",
     nl: "De correspondentie openen",
     el: "Άνοιγμα της αλληλογραφίας",
+    ro: "Deschide corespondența",
   },
 
   "lmsg.reader.sub": {
@@ -881,7 +952,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Un missatge de la teva biblioteca",
     eo: "Mesaĝo de via biblioteko",
     nl: "Een bericht van je bibliotheek",
-    el: "Ένα μήνυμα από τη βιβλιοθήκη σου"
+    el: "Ένα μήνυμα από τη βιβλιοθήκη σου",
+    ro: "Mesaj de la biblioteca ta"
   },
   "lmsg.reader.intro": {
     "pt-BR": "Sua biblioteca lhe enviou uma mensagem:",
@@ -893,7 +965,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva biblioteca t'ha escrit:",
     eo: "Via biblioteko skribis al vi:",
     nl: "Je bibliotheek heeft je een bericht gestuurd:",
-    el: "Η βιβλιοθήκη σου σού έστειλε ένα μήνυμα:"
+    el: "Η βιβλιοθήκη σου σού έστειλε ένα μήνυμα:",
+    ro: "Biblioteca ta ți-a scris:"
   },
 
   "rmsg.staff.sub": {
@@ -906,7 +979,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou missatge d'una persona de la biblioteca",
     eo: "Nova mesaĝo de leganto",
     nl: "Nieuw bericht van een lezer",
-    el: "Νέο μήνυμα από έναν/μία αναγνώστη/στρια"
+    el: "Νέο μήνυμα από έναν/μία αναγνώστη/στρια",
+    ro: "Mesaj nou de la un cititor/o cititoare"
   },
   "rmsg.staff.intro": {
     "pt-BR": "Uma pessoa associada à sua biblioteca enviou um recado pelo sistema.",
@@ -918,7 +992,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una persona vinculada a la vostra biblioteca us ha escrit a través del sistema.",
     eo: "Persono ligita al via biblioteko skribis al vi per la sistemo.",
     nl: "Iemand die bij jullie bibliotheek hoort heeft via het systeem een bericht gestuurd.",
-    el: "Κάποιο άτομο που σχετίζεται με τη βιβλιοθήκη σας σάς έστειλε μήνυμα μέσω του συστήματος."
+    el: "Κάποιο άτομο που σχετίζεται με τη βιβλιοθήκη σας σάς έστειλε μήνυμα μέσω του συστήματος.",
+    ro: "O persoană legată de biblioteca voastră v-a scris prin sistem."
   },
   "rmsg.reader.sub": {
     "pt-BR": "Seu recado foi enviado",
@@ -930,7 +1005,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu missatge s'ha enviat",
     eo: "Via mesaĝo estis sendita",
     nl: "Je bericht is verzonden",
-    el: "Το μήνυμά σου στάλθηκε"
+    el: "Το μήνυμά σου στάλθηκε",
+    ro: "Mesajul tău a fost trimis"
   },
   "rmsg.reader.intro": {
     "pt-BR": "Recebemos seu recado e avisamos a biblioteca. Aqui está uma cópia:",
@@ -942,7 +1018,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem rebut el teu missatge i hem avisat la biblioteca. Aquí en tens una còpia:",
     eo: "Ni ricevis vian mesaĝon kaj avertis la bibliotekon. Jen kopio:",
     nl: "We hebben je bericht ontvangen en de bibliotheek op de hoogte gebracht. Hier is een kopie:",
-    el: "Λάβαμε το μήνυμά σου και ειδοποιήσαμε τη βιβλιοθήκη. Ορίστε ένα αντίγραφο:"
+    el: "Λάβαμε το μήνυμά σου και ειδοποιήσαμε τη βιβλιοθήκη. Ορίστε ένα αντίγραφο:",
+    ro: "Am primit mesajul tău și am anunțat biblioteca. Iată o copie:"
   },
 
   // ===== Greetings ==========================================================
@@ -956,7 +1033,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, {name}!",
     eo: "Saluton, {name}!",
     nl: "Hallo, {name}!",
-    el: "Γεια σου, {name}!"
+    el: "Γεια σου, {name}!",
+    ro: "Bună, {name}!"
   },
   "greeting.anonymous": {
     "pt-BR": "Olá!",
@@ -968,7 +1046,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola!",
     eo: "Saluton!",
     nl: "Hallo!",
-    el: "Γεια σου!"
+    el: "Γεια σου!",
+    ro: "Bună!"
   },
 
   // ===== Layout =============================================================
@@ -982,7 +1061,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Notificació automàtica",
     eo: "Aŭtomata sciigo",
     nl: "Automatische melding",
-    el: "Αυτόματη ειδοποίηση"
+    el: "Αυτόματη ειδοποίηση",
+    ro: "Notificare automată"
   },
   "layout.footerContact": {
     "pt-BR": "Em caso de dúvida, entre em contato com a biblioteca.",
@@ -994,7 +1074,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "En cas de dubte, contacta la biblioteca.",
     eo: "En kazo de dubo, kontaktu la bibliotekon.",
     nl: "Neem bij twijfel contact op met de bibliotheek.",
-    el: "Σε περίπτωση αμφιβολίας, επικοινώνησε με τη βιβλιοθήκη."
+    el: "Σε περίπτωση αμφιβολίας, επικοινώνησε με τη βιβλιοθήκη.",
+    ro: "Dacă ai întrebări, contactează biblioteca."
   },
   "layout.keepMsg": {
     "pt-BR": "Guarde esta mensagem.",
@@ -1006,7 +1087,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Conserva aquest missatge.",
     eo: "Konservu ĉi tiun mesaĝon.",
     nl: "Bewaar dit bericht.",
-    el: "Κράτησε αυτό το μήνυμα."
+    el: "Κράτησε αυτό το μήνυμα.",
+    ro: "Păstrează acest mesaj."
   },
 
   // ===== F2 (01/09/2026) — pied de page d'exploitation =====
@@ -1023,7 +1105,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Alerta d'operació, emesa per la sonda health-probe (control automàtic cada 5 minuts).",
     eo: "Funkciiga averto, sendita de la sondilo health-probe (aŭtomata kontrolo ĉiujn 5 minutojn).",
     nl: "Beheermelding, afgegeven door de health-probe-controle (automatisch, elke 5 minuten).",
-    el: "Ειδοποίηση λειτουργίας από τον έλεγχο health-probe (αυτόματα, κάθε 5 λεπτά)."
+    el: "Ειδοποίηση λειτουργίας από τον έλεγχο health-probe (αυτόματα, κάθε 5 λεπτά).",
+    ro: "Alertă operațională, emisă de sonda health-probe (verificare automată la fiecare 5 minute)."
   },
   "layout.opsWhereToLook": {
     "pt-BR": "Onde olhar: a tabela service_health_incidents, os registros backup_heartbeats e o diário da máquina que hospeda os backups.",
@@ -1035,7 +1118,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "On mirar: la taula service_health_incidents, els registres backup_heartbeats i el diari de la màquina que allotja les còpies.",
     eo: "Kie rigardi: la tabelo service_health_incidents, la registroj backup_heartbeats, kaj la protokolo de la maŝino kiu gastigas la savkopiojn.",
     nl: "Waar te kijken: de tabel service_health_incidents, de backup_heartbeats-records en het journaal van de machine met de back-ups.",
-    el: "Πού να κοιτάξεις: στον πίνακα service_health_incidents, στις εγγραφές backup_heartbeats και στο ημερολόγιο του μηχανήματος με τα αντίγραφα."
+    el: "Πού να κοιτάξεις: στον πίνακα service_health_incidents, στις εγγραφές backup_heartbeats και στο ημερολόγιο του μηχανήματος με τα αντίγραφα.",
+    ro: "Unde să te uiți: tabelul service_health_incidents, martorii backup_heartbeats și jurnalul calculatorului care găzduiește copiile de siguranță."
   },
   "layout.opsAck": {
     "pt-BR": "Nada a confirmar: o incidente se fecha sozinho quando tudo volta ao verde, e uma mensagem de incidente fechado virá em seguida.",
@@ -1047,7 +1131,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Res a confirmar: l'incident es tanca sol quan tot torna al verd, i seguirà un missatge d'incident tancat.",
     eo: "Nenio konfirmenda: la incidento fermiĝas mem kiam ĉio reverdiĝas, kaj mesaĝo pri fermita incidento sekvos.",
     nl: "Niets te bevestigen: het incident sluit zichzelf zodra alles weer groen is; een bericht over het gesloten incident volgt.",
-    el: "Τίποτα προς επιβεβαίωση: το συμβάν κλείνει μόνο του όταν όλα ξαναγίνουν πράσινα· θα ακολουθήσει μήνυμα ότι το συμβάν έκλεισε."
+    el: "Τίποτα προς επιβεβαίωση: το συμβάν κλείνει μόνο του όταν όλα ξαναγίνουν πράσινα· θα ακολουθήσει μήνυμα ότι το συμβάν έκλεισε.",
+    ro: "Nu e nimic de confirmat: incidentul se închide singur când verificările revin la verde, iar apoi va sosi un mesaj „incident închis”."
   },
 
   // ===== Chantier i18n layout 2B (18/05/2026) — labels footer générique =====
@@ -1061,7 +1146,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Telèfon",
     eo: "Telefono",
     nl: "Telefoon",
-    el: "Τηλέφωνο"
+    el: "Τηλέφωνο",
+    ro: "Telefon"
   },
   "layout.regimentoLabel": {
     "pt-BR": "Regimento",
@@ -1073,7 +1159,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reglament",
     eo: "Regularo",
     nl: "Reglement",
-    el: "Κανονισμός"
+    el: "Κανονισμός",
+    ro: "Regulament"
   },
   "layout.regimentoOpen": {
     "pt-BR": "abrir",
@@ -1085,7 +1172,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "obrir",
     eo: "malfermi",
     nl: "openen",
-    el: "άνοιγμα"
+    el: "άνοιγμα",
+    ro: "deschide"
   },
   "layout.footerText": {
     "pt-BR": "Mensagem automática da biblioteca. Responda apenas se o campo de resposta indicar um contato local.",
@@ -1097,7 +1185,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Missatge automàtic de la biblioteca. Respon únicament si el camp de resposta indica un contacte local.",
     eo: "Aŭtomata mesaĝo de la biblioteko. Respondu nur se la respondkampo indikas lokan kontakton.",
     nl: "Automatisch bericht van de bibliotheek. Antwoord alleen als het antwoordveld een lokaal contact aangeeft.",
-    el: "Αυτόματο μήνυμα από τη βιβλιοθήκη. Απάντησε μόνο αν το πεδίο απάντησης υποδεικνύει τοπική επαφή."
+    el: "Αυτόματο μήνυμα από τη βιβλιοθήκη. Απάντησε μόνο αν το πεδίο απάντησης υποδεικνύει τοπική επαφή.",
+    ro: "Mesaj automat de la bibliotecă. Răspunde doar dacă adresa de răspuns indică un contact local."
   },
 
   // ===== Labels (l.*) =======================================================
@@ -1111,7 +1200,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Document",
     eo: "Dokumento",
     nl: "Document",
-    el: "Βιβλίο"
+    el: "Βιβλίο",
+    ro: "Document"
   },
   "l.items": {
     "pt-BR": "Itens",
@@ -1123,7 +1213,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Documents",
     eo: "Dokumentoj",
     nl: "Documenten",
-    el: "Τεκμήρια"
+    el: "Τεκμήρια",
+    ro: "Documente"
   },
   "l.itemsReturned": {
     "pt-BR": "Documentos devolvidos",
@@ -1135,7 +1226,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Documents retornats",
     eo: "Redonitaj dokumentoj",
     nl: "Ingeleverde documenten",
-    el: "Τεκμήρια που επιστράφηκαν"
+    el: "Τεκμήρια που επιστράφηκαν",
+    ro: "Documente returnate"
   },
   "l.itemsRemaining": {
     "pt-BR": "Documentos ainda em mãos",
@@ -1147,7 +1239,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Documents encara per retornar",
     eo: "Dokumentoj ankoraŭ redonendaj",
     nl: "Nog in te leveren documenten",
-    el: "Τεκμήρια προς επιστροφή"
+    el: "Τεκμήρια προς επιστροφή",
+    ro: "Documente încă de returnat"
   },
   "l.ref": {
     "pt-BR": "Referência",
@@ -1159,7 +1252,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Referència",
     eo: "Referenco",
     nl: "Referentie",
-    el: "Αναφορά"
+    el: "Αναφορά",
+    ro: "Referință"
   },
   "l.refs": {
     "pt-BR": "Referências",
@@ -1171,7 +1265,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Referències",
     eo: "Referencoj",
     nl: "Referenties",
-    el: "Αναφορές"
+    el: "Αναφορές",
+    ro: "Referințe"
   },
   "l.ids": {
     "pt-BR": "IDs",
@@ -1183,7 +1278,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "IDs",
     eo: "IDoj",
     nl: "ID's",
-    el: "IDs"
+    el: "IDs",
+    ro: "ID-uri"
   },
   "l.date": {
     "pt-BR": "Data",
@@ -1195,7 +1291,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Data",
     eo: "Dato",
     nl: "Datum",
-    el: "Ημερομηνία"
+    el: "Ημερομηνία",
+    ro: "Data"
   },
   "l.executed_at": {
     "pt-BR": "Data de execução",
@@ -1207,7 +1304,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Data d'execució",
     eo: "Plenuma dato",
     nl: "Uitvoeringsdatum",
-    el: "Ημερομηνία εκτέλεσης"
+    el: "Ημερομηνία εκτέλεσης",
+    ro: "Data executării"
   },
   "l.dueDate": {
     "pt-BR": "Devolução prevista",
@@ -1219,7 +1317,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn previst",
     eo: "Planita redono",
     nl: "Inleverdatum",
-    el: "Προβλεπόμενη επιστροφή"
+    el: "Προβλεπόμενη επιστροφή",
+    ro: "Returnare prevăzută"
   },
   "l.newDueDate": {
     "pt-BR": "Nova devolução",
@@ -1231,7 +1330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou retorn",
     eo: "Nova redono",
     nl: "Nieuwe inleverdatum",
-    el: "Νέα προβλεπόμενη επιστροφή"
+    el: "Νέα προβλεπόμενη επιστροφή",
+    ro: "Nouă dată de returnare"
   },
   "l.deadline": {
     "pt-BR": "Prazo",
@@ -1243,7 +1343,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Termini",
     eo: "Limdato",
     nl: "Uiterste datum",
-    el: "Προθεσμία"
+    el: "Προθεσμία",
+    ro: "Termen"
   },
   "l.registration": {
     "pt-BR": "Registro",
@@ -1255,7 +1356,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Registre",
     eo: "Registro",
     nl: "Registratie",
-    el: "Καταχώριση"
+    el: "Καταχώριση",
+    ro: "Înregistrare"
   },
   "l.renewal": {
     "pt-BR": "Renovação em",
@@ -1267,7 +1369,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Renovació el",
     eo: "Renovigo la",
     nl: "Verlengd op",
-    el: "Ανανεώθηκε στις"
+    el: "Ανανεώθηκε στις",
+    ro: "Prelungit pe"
   },
   "l.return": {
     "pt-BR": "Devolução",
@@ -1279,7 +1382,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn",
     eo: "Redono",
     nl: "Inlevering",
-    el: "Επιστροφή"
+    el: "Επιστροφή",
+    ro: "Returnare"
   },
   "l.reader": {
     "pt-BR": "Leitor(a/e)",
@@ -1291,7 +1395,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Lector-a-e",
     eo: "Legant-in-o",
     nl: "Lezer",
-    el: "Αναγνώστης/στρια"
+    el: "Αναγνώστης/στρια",
+    ro: "Cititor/cititoare"
   },
   "l.pickup": {
     "pt-BR": "Retirada",
@@ -1303,7 +1408,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida",
     eo: "Elpreno",
     nl: "Afhaling",
-    el: "Παραλαβή"
+    el: "Παραλαβή",
+    ro: "Ridicare"
   },
   "l.status": {
     "pt-BR": "Situação",
@@ -1315,7 +1421,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Situació",
     eo: "Situacio",
     nl: "Status",
-    el: "Κατάσταση"
+    el: "Κατάσταση",
+    ro: "Situație"
   },
   "l.reason": {
     "pt-BR": "Motivo",
@@ -1327,7 +1434,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu",
     eo: "Motivo",
     nl: "Reden",
-    el: "Λόγος"
+    el: "Λόγος",
+    ro: "Motiv"
   },
   "l.note": {
     "pt-BR": "Observação",
@@ -1339,7 +1447,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Observació",
     eo: "Observo",
     nl: "Opmerking",
-    el: "Παρατήρηση"
+    el: "Παρατήρηση",
+    ro: "Observație"
   },
   "l.contact": {
     "pt-BR": "Contato",
@@ -1351,7 +1460,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contacte",
     eo: "Kontakto",
     nl: "Contact",
-    el: "Επαφή"
+    el: "Επαφή",
+    ro: "Contact"
   },
   "l.task": {
     "pt-BR": "Tarefa",
@@ -1363,7 +1473,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Tasca",
     eo: "Tasko",
     nl: "Taak",
-    el: "Εργασία"
+    el: "Εργασία",
+    ro: "Sarcină"
   },
   "l.priority": {
     "pt-BR": "Prioridade",
@@ -1375,7 +1486,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Prioritat",
     eo: "Prioritato",
     nl: "Prioriteit",
-    el: "Προτεραιότητα"
+    el: "Προτεραιότητα",
+    ro: "Prioritate"
   },
   "l.tags": {
     "pt-BR": "Marcadores",
@@ -1387,7 +1499,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Etiquetes",
     eo: "Etikedoj",
     nl: "Tags",
-    el: "Ετικέτες"
+    el: "Ετικέτες",
+    ro: "Etichete"
   },
   "l.firstDate": {
     "pt-BR": "Próximo vencimento",
@@ -1399,7 +1512,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Proper venciment",
     eo: "Sekva limdato",
     nl: "Volgende inleverdatum",
-    el: "Επόμενη προθεσμία"
+    el: "Επόμενη προθεσμία",
+    ro: "Următorul termen"
   },
   "l.pendingItems": {
     "pt-BR": "Itens pendentes",
@@ -1411,7 +1525,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Documents en curs",
     eo: "Kurantaj dokumentoj",
     nl: "Lopende documenten",
-    el: "Τεκμήρια σε εκκρεμότητα"
+    el: "Τεκμήρια σε εκκρεμότητα",
+    ro: "Documente în curs"
   },
   "l.readerNote": {
     "pt-BR": "Observação d(o/a/e) leitor(a/e)",
@@ -1423,7 +1538,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nota de le lector-a-e",
     eo: "Noto de la legant-in-o",
     nl: "Opmerking van de lezer",
-    el: "Σημείωση αναγνώστη/στριας"
+    el: "Σημείωση αναγνώστη/στριας",
+    ro: "Nota cititorului/cititoarei"
   },
   "l.reply": {
     "pt-BR": "Resposta",
@@ -1435,7 +1551,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Resposta",
     eo: "Respondo",
     nl: "Antwoord",
-    el: "Απάντηση"
+    el: "Απάντηση",
+    ro: "Răspuns"
   },
   "l.restrictedSince": {
     "pt-BR": "Restrição desde",
@@ -1447,7 +1564,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Restricció des de",
     eo: "Restrikto ekde",
     nl: "Beperkt sinds",
-    el: "Σε περιορισμό από"
+    el: "Σε περιορισμό από",
+    ro: "Restricție din"
   },
 
   // ===== Reservation events (res.*) =========================================
@@ -1461,7 +1579,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva registrada",
     eo: "Rezervo registrita",
     nl: "Reservering geregistreerd",
-    el: "Η κράτηση καταχωρίστηκε"
+    el: "Η κράτηση καταχωρίστηκε",
+    ro: "Rezervare înregistrată"
   },
   "res.created.pre": {
     "pt-BR": "Sua reserva foi registrada com sucesso.",
@@ -1473,7 +1592,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva reserva s'ha registrat correctament.",
     eo: "Via rezervo estis sukcese registrita.",
     nl: "Je reservering is geregistreerd.",
-    el: "Η κράτησή σου καταχωρίστηκε."
+    el: "Η κράτησή σου καταχωρίστηκε.",
+    ro: "Rezervarea ta a fost înregistrată."
   },
   "res.created.intro": {
     "pt-BR": "Recebemos sua reserva. A biblioteca confirmará a disponibilidade em breve.",
@@ -1485,7 +1605,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem rebut la teva reserva. La biblioteca confirmarà aviat la disponibilitat.",
     eo: "Ni ricevis vian rezervon. La biblioteko baldaŭ konfirmos la disponeblecon.",
     nl: "We hebben je reservering ontvangen. De bibliotheek bevestigt binnenkort de beschikbaarheid.",
-    el: "Λάβαμε την κράτησή σου. Η βιβλιοθήκη θα επιβεβαιώσει σύντομα τη διαθεσιμότητα."
+    el: "Λάβαμε την κράτησή σου. Η βιβλιοθήκη θα επιβεβαιώσει σύντομα τη διαθεσιμότητα.",
+    ro: "Am primit rezervarea ta. Biblioteca va confirma în curând disponibilitatea."
   },
   "res.created.hint": {
     "pt-BR": "Você pode acompanhar o estado d(o/a/e) seu pedido na sua conta.",
@@ -1497,7 +1618,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Pots seguir l'estat de le teu sol·licitud al teu compte.",
     eo: "Vi povas sekvi la staton de via peto en via konto.",
     nl: "Je kunt de status van je aanvraag volgen in je account.",
-    el: "Μπορείς να παρακολουθείς την κατάσταση του αιτήματός σου στον λογαριασμό σου."
+    el: "Μπορείς να παρακολουθείς την κατάσταση του αιτήματός σου στον λογαριασμό σου.",
+    ro: "Poți urmări starea cererii tale în contul tău."
   },
   "res.created.admin": {
     "pt-BR": "Nova reserva registrada",
@@ -1509,7 +1631,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova reserva registrada",
     eo: "Nova rezervo registrita",
     nl: "Nieuwe reservering geregistreerd",
-    el: "Καταχωρίστηκε νέα κράτηση"
+    el: "Καταχωρίστηκε νέα κράτηση",
+    ro: "Rezervare nouă înregistrată"
   },
   "res.cancelStaff.sub": {
     "pt-BR": "Reserva cancelada pela biblioteca",
@@ -1521,7 +1644,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva cancel·lada per la biblioteca",
     eo: "Rezervo nuligita de la biblioteko",
     nl: "Reservering geannuleerd door de bibliotheek",
-    el: "Η κράτηση ακυρώθηκε από τη βιβλιοθήκη"
+    el: "Η κράτηση ακυρώθηκε από τη βιβλιοθήκη",
+    ro: "Rezervare anulată de bibliotecă"
   },
   "res.cancelStaff.intro": {
     "pt-BR": "Informamos que a biblioteca precisou cancelar a sua reserva. Isso não é uma recusa do seu pedido: o exemplar pode estar indisponível, danificado ou já de volta à circulação. Você pode reservá-lo novamente mais tarde, ou passar na biblioteca para encontrarmos uma solução junt-o-a-e.",
@@ -1533,7 +1657,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "T'informem que la biblioteca ha hagut d'anul·lar la teva reserva. No és un rebuig de la teva sol·licitud: l'exemplar pot estar no disponible, malmès o ja de tornada en circulació. El pots reservar de nou més endavant, o passar per la biblioteca per trobar una solució plegades.",
     eo: "Ni informas vin, ke la biblioteko devis nuligi vian rezervon. Tio ne estas rifuzo de via peto: la ekzemplero povas esti nedisponebla, difektita aŭ jam reen en cirkulado. Vi povas rezervi ĝin denove poste, aŭ viziti la bibliotekon por ke ni trovu solvon kune.",
     nl: "We laten je weten dat de bibliotheek je reservering heeft moeten annuleren. Dit is geen afwijzing van je aanvraag: het exemplaar kan onbeschikbaar of beschadigd zijn, of alweer terug in circulatie. Je kunt het later opnieuw reserveren, of langskomen bij de bibliotheek zodat we samen een oplossing vinden.",
-    el: "Σου γνωστοποιούμε ότι η βιβλιοθήκη χρειάστηκε να ακυρώσει την κράτησή σου. Δεν πρόκειται για απόρριψη του αιτήματός σου: το αντίτυπο μπορεί να είναι μη διαθέσιμο, φθαρμένο ή να έχει ήδη επιστρέψει στην κυκλοφορία. Μπορείς να το ξανακρατήσεις αργότερα ή να περάσεις από τη βιβλιοθήκη για να βρούμε μαζί μια λύση."
+    el: "Σου γνωστοποιούμε ότι η βιβλιοθήκη χρειάστηκε να ακυρώσει την κράτησή σου. Δεν πρόκειται για απόρριψη του αιτήματός σου: το αντίτυπο μπορεί να είναι μη διαθέσιμο, φθαρμένο ή να έχει ήδη επιστρέψει στην κυκλοφορία. Μπορείς να το ξανακρατήσεις αργότερα ή να περάσεις από τη βιβλιοθήκη για να βρούμε μαζί μια λύση.",
+    ro: "Te anunțăm că biblioteca a trebuit să-ți anuleze rezervarea. Nu este un refuz al cererii tale: exemplarul poate fi indisponibil, deteriorat sau deja repus în circulație. Îl poți rezerva din nou mai târziu sau poți trece pe la bibliotecă, ca să găsim împreună o soluție."
   },
   "res.cancelStaff.adminIntro": {
     "pt-BR": "Uma reserva foi cancelada pela biblioteca. Os exemplares correspondentes foram automaticamente recolocados em circulação. O motivo registrado no momento do cancelamento está indicado abaixo.",
@@ -1545,7 +1670,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una reserva ha estat anul·lada per la biblioteca. Els exemplars corresponents s'han tornat a posar en circulació automàticament. El motiu registrat en el moment de l'anul·lació s'indica a continuació.",
     eo: "Rezervo estis nuligita de la biblioteko. La koncernaj ekzempleroj estis aŭtomate remetitaj en cirkuladon. La kialo registrita dum la nuligo estas montrita sube.",
     nl: "Een reservering is geannuleerd door de bibliotheek. De betreffende exemplaren zijn automatisch terug in circulatie gebracht. De reden die bij de annulering is ingevoerd, staat hieronder.",
-    el: "Μια κράτηση ακυρώθηκε από τη βιβλιοθήκη. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Ο λόγος που καταχωρίστηκε κατά την ακύρωση εμφανίζεται παρακάτω."
+    el: "Μια κράτηση ακυρώθηκε από τη βιβλιοθήκη. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Ο λόγος που καταχωρίστηκε κατά την ακύρωση εμφανίζεται παρακάτω.",
+    ro: "O rezervare a fost anulată de bibliotecă. Exemplarele în cauză au fost repuse automat în circulație. Motivul introdus la momentul anulării este indicat mai jos."
   },
   "res.cancelReader.sub": {
     "pt-BR": "Reserva cancelada por você",
@@ -1557,7 +1683,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva cancel·lada per tu",
     eo: "Rezervo nuligita de vi",
     nl: "Reservering door jou geannuleerd",
-    el: "Η κράτηση ακυρώθηκε από εσένα"
+    el: "Η κράτηση ακυρώθηκε από εσένα",
+    ro: "Rezervare anulată de tine"
   },
   "res.cancelReader.intro": {
     "pt-BR": "Confirmamos que a sua reserva foi cancelada a seu pedido. O exemplar volta a ficar disponível para outras pessoas. Você pode fazer uma nova reserva quando quiser.",
@@ -1569,7 +1696,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Confirmem que la teva reserva s'ha anul·lat a petició teva. L'exemplar torna a estar disponible per a altres persones. Pots fer una nova reserva quan vulguis.",
     eo: "Ni konfirmas, ke via rezervo estis nuligita laŭ via peto. La ekzemplero denove disponeblas por aliaj personoj. Vi povas fari novan rezervon kiam ajn vi volas.",
     nl: "We bevestigen dat je reservering op je verzoek is geannuleerd. Het exemplaar is weer beschikbaar voor anderen. Je kunt een nieuwe reservering maken wanneer je maar wilt.",
-    el: "Επιβεβαιώνουμε ότι η κράτησή σου ακυρώθηκε κατόπιν αιτήματός σου. Το αντίτυπο γίνεται ξανά διαθέσιμο για άλλα άτομα. Μπορείς να κάνεις νέα κράτηση όποτε θέλεις."
+    el: "Επιβεβαιώνουμε ότι η κράτησή σου ακυρώθηκε κατόπιν αιτήματός σου. Το αντίτυπο γίνεται ξανά διαθέσιμο για άλλα άτομα. Μπορείς να κάνεις νέα κράτηση όποτε θέλεις.",
+    ro: "Îți confirmăm că rezervarea ta a fost anulată la cererea ta. Exemplarul devine din nou disponibil pentru alte persoane. Poți face o nouă rezervare oricând dorești."
   },
   "res.cancelReader.adminIntro": {
     "pt-BR": "Um-a-e leitor-a-e cancelou a própria reserva. Os exemplares correspondentes foram automaticamente recolocados em circulação. Nenhuma ação da equipe é necessária.",
@@ -1581,7 +1709,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Un·a lector·a ha anul·lat la seva pròpia reserva. Els exemplars corresponents s'han tornat a posar en circulació automàticament. No cal cap acció de l'equip.",
     eo: "Leganto nuligis sian propran rezervon. La koncernaj ekzempleroj estis aŭtomate remetitaj en cirkuladon. Neniu ago de la teamo necesas.",
     nl: "Een lezer heeft de eigen reservering geannuleerd. De betreffende exemplaren zijn automatisch terug in circulatie gebracht. Er is geen actie van het team nodig.",
-    el: "Ένας/Μία αναγνώστης/στρια ακύρωσε τη δική του/της κράτηση. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα."
+    el: "Ένας/Μία αναγνώστης/στρια ακύρωσε τη δική του/της κράτηση. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα.",
+    ro: "Un cititor/o cititoare și-a anulat propria rezervare. Exemplarele în cauză au fost repuse automat în circulație. Nu este necesară nicio acțiune din partea echipei."
   },
   // Sujet de la COPIE BIBLIO (≠ sujet lecteur·rice « …par toi/vous ») : doit
   // indiquer que c'est le/la lecteur·rice qui a annulé, jamais la biblio.
@@ -1595,7 +1724,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva cancel·lada per le lector-a-e",
     eo: "Rezervo nuligita de la legant-in-o",
     nl: "Reservering geannuleerd door de lezer",
-    el: "Η κράτηση ακυρώθηκε από τον/την αναγνώστη/στρια"
+    el: "Η κράτηση ακυρώθηκε από τον/την αναγνώστη/στρια",
+    ro: "Rezervare anulată de cititor/cititoare"
   },
   "res.expired.sub": {
     "pt-BR": "Reserva expirada",
@@ -1607,7 +1737,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva expirada",
     eo: "Rezervo eksvalidiĝinta",
     nl: "Reservering verlopen",
-    el: "Η κράτηση έληξε"
+    el: "Η κράτηση έληξε",
+    ro: "Rezervare expirată"
   },
   "res.expired.intro": {
     "pt-BR": "Informamos que a sua reserva expirou: o prazo para retirar o exemplar foi ultrapassado. O exemplar volta à circulação para outras pessoas. Se ainda tiver interesse, você pode fazer uma nova reserva quando quiser.",
@@ -1619,7 +1750,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "T'informem que la teva reserva ha expirat: s'ha superat el termini per recollir l'exemplar. L'exemplar torna a la circulació per a altres persones. Si encara t'interessa, pots fer una nova reserva quan vulguis.",
     eo: "Ni informas vin, ke via rezervo eksvalidiĝis: la limdato por preni la ekzempleron pasis. La ekzemplero revenas en cirkuladon por aliaj personoj. Se vi ankoraŭ interesiĝas, vi povas fari novan rezervon kiam ajn vi volas.",
     nl: "We laten je weten dat je reservering is verlopen: de termijn om het exemplaar af te halen is verstreken. Het exemplaar gaat terug in circulatie voor anderen. Ben je nog steeds geïnteresseerd, dan kun je een nieuwe reservering maken wanneer je maar wilt.",
-    el: "Σου γνωστοποιούμε ότι η κράτησή σου έληξε: η προθεσμία παραλαβής του αντιτύπου παρήλθε. Το αντίτυπο επιστρέφει στην κυκλοφορία για άλλα άτομα. Αν εξακολουθείς να ενδιαφέρεσαι, μπορείς να κάνεις νέα κράτηση όποτε θέλεις."
+    el: "Σου γνωστοποιούμε ότι η κράτησή σου έληξε: η προθεσμία παραλαβής του αντιτύπου παρήλθε. Το αντίτυπο επιστρέφει στην κυκλοφορία για άλλα άτομα. Αν εξακολουθείς να ενδιαφέρεσαι, μπορείς να κάνεις νέα κράτηση όποτε θέλεις.",
+    ro: "Te anunțăm că rezervarea ta a expirat: termenul de ridicare a exemplarului a fost depășit. Exemplarul revine în circulație pentru alte persoane. Dacă te interesează în continuare, poți face o nouă rezervare oricând dorești."
   },
   "res.expired.adminIntro": {
     "pt-BR": "Uma reserva expirou automaticamente: o prazo de retirada foi ultrapassado sem que o exemplar fosse retirado. Os exemplares correspondentes voltaram à circulação. Nenhuma ação da equipe é necessária.",
@@ -1631,7 +1763,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una reserva ha expirat automàticament: s'ha superat el termini de recollida sense que es recollís l'exemplar. Els exemplars corresponents han tornat a la circulació. No cal cap acció de l'equip.",
     eo: "Rezervo aŭtomate eksvalidiĝis: la limdato de preno pasis sen ke la ekzemplero estu prenita. La koncernaj ekzempleroj revenis en cirkuladon. Neniu ago de la teamo necesas.",
     nl: "Een reservering is automatisch verlopen: de afhaaltermijn is verstreken zonder dat het exemplaar is opgehaald. De betreffende exemplaren zijn terug in circulatie. Er is geen actie van het team nodig.",
-    el: "Μια κράτηση έληξε αυτόματα: η προθεσμία παραλαβής παρήλθε χωρίς να παραληφθεί το αντίτυπο. Τα σχετικά αντίτυπα επέστρεψαν στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα."
+    el: "Μια κράτηση έληξε αυτόματα: η προθεσμία παραλαβής παρήλθε χωρίς να παραληφθεί το αντίτυπο. Τα σχετικά αντίτυπα επέστρεψαν στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα.",
+    ro: "O rezervare a expirat automat: termenul de ridicare a fost depășit fără ca exemplarul să fie ridicat. Exemplarele în cauză au revenit în circulație. Nu este necesară nicio acțiune din partea echipei."
   },
   "res.converted.sub": {
     "pt-BR": "Reserva convertida em empréstimo",
@@ -1643,7 +1776,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva convertida en préstec",
     eo: "Rezervo konvertita en prunton",
     nl: "Reservering omgezet in een uitlening",
-    el: "Η κράτηση μετατράπηκε σε δανεισμό"
+    el: "Η κράτηση μετατράπηκε σε δανεισμό",
+    ro: "Rezervare transformată în împrumut"
   },
   "res.converted.intro": {
     "pt-BR": "Boa notícia: a sua reserva foi convertida em empréstimo. O exemplar agora está com você. A data de devolução prevista está indicada abaixo — você receberá um lembrete quando ela se aproximar.",
@@ -1655,7 +1789,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Bona notícia: la teva reserva s'ha convertit en préstec. L'exemplar ja és a les teves mans. La data de retorn prevista s'indica a continuació — rebràs un recordatori quan s'acosti.",
     eo: "Bona novaĵo: via rezervo estis konvertita en prunton. La ekzemplero nun estas en viaj manoj. La planita redona dato estas montrita sube — vi ricevos memorigon kiam ĝi proksimiĝos.",
     nl: "Goed nieuws: je reservering is omgezet in een uitlening. Het exemplaar is nu in jouw handen. De verwachte inleverdatum staat hieronder — je krijgt een herinnering wanneer die nadert.",
-    el: "Καλά νέα: η κράτησή σου μετατράπηκε σε δανεισμό. Το αντίτυπο είναι πλέον στα χέρια σου. Η προβλεπόμενη ημερομηνία επιστροφής εμφανίζεται παρακάτω — θα λάβεις υπενθύμιση καθώς πλησιάζει."
+    el: "Καλά νέα: η κράτησή σου μετατράπηκε σε δανεισμό. Το αντίτυπο είναι πλέον στα χέρια σου. Η προβλεπόμενη ημερομηνία επιστροφής εμφανίζεται παρακάτω — θα λάβεις υπενθύμιση καθώς πλησιάζει.",
+    ro: "Vești bune: rezervarea ta a fost transformată în împrumut. Exemplarul este acum la tine. Data de returnare prevăzută este indicată mai jos — vei primi un memento când se apropie termenul."
   },
   "res.converted.adminIntro": {
     "pt-BR": "Uma reserva foi convertida em empréstimo após a retirada presencial do exemplar. O empréstimo está agora ativo. A data de devolução prevista está indicada abaixo.",
@@ -1667,7 +1802,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una reserva s'ha convertit en préstec després de la recollida presencial de l'exemplar. El préstec ara està actiu. La data de retorn prevista s'indica a continuació.",
     eo: "Rezervo estis konvertita en prunton post la surloka preno de la ekzemplero. La prunto nun estas aktiva. La planita redona dato estas montrita sube.",
     nl: "Een reservering is omgezet in een uitlening nadat het exemplaar ter plaatse is opgehaald. De uitlening is nu actief. De verwachte inleverdatum staat hieronder.",
-    el: "Μια κράτηση μετατράπηκε σε δανεισμό μετά την επιτόπια παραλαβή του αντιτύπου. Ο δανεισμός είναι πλέον ενεργός. Η προβλεπόμενη ημερομηνία επιστροφής εμφανίζεται παρακάτω."
+    el: "Μια κράτηση μετατράπηκε σε δανεισμό μετά την επιτόπια παραλαβή του αντιτύπου. Ο δανεισμός είναι πλέον ενεργός. Η προβλεπόμενη ημερομηνία επιστροφής εμφανίζεται παρακάτω.",
+    ro: "O rezervare a fost transformată în împrumut după ridicarea exemplarului pe loc. Împrumutul este acum activ. Data de returnare prevăzută este indicată mai jos."
   },
 
   // ── Statuts d'étapes de réservation (F21) ──────────────────────────────────
@@ -1681,7 +1817,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitada",
     eo: "Petita",
     nl: "Aangevraagd",
-    el: "Ζητήθηκε"
+    el: "Ζητήθηκε",
+    ro: "Cerută"
   },
   "wf.stage.em_preparacao": {
     "pt-BR": "Em preparação",
@@ -1693,7 +1830,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "En preparació",
     eo: "En preparado",
     nl: "In voorbereiding",
-    el: "Υπό προετοιμασία"
+    el: "Υπό προετοιμασία",
+    ro: "În pregătire"
   },
   "wf.stage.retirada_a_combinar": {
     "pt-BR": "Retirada a combinar",
@@ -1705,7 +1843,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida a convenir",
     eo: "Elpreno interkonsentenda",
     nl: "Ophaling af te spreken",
-    el: "Παραλαβή προς συνεννόηση"
+    el: "Παραλαβή προς συνεννόηση",
+    ro: "Ridicare de stabilit"
   },
   "wf.stage.retirada_agendada": {
     "pt-BR": "Retirada agendada",
@@ -1717,7 +1856,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida planificada",
     eo: "Elpreno planita",
     nl: "Ophaling ingepland",
-    el: "Παραλαβή προγραμματισμένη"
+    el: "Παραλαβή προγραμματισμένη",
+    ro: "Ridicare programată"
   },
   "wf.stage.re_retirada_agendada": {
     "pt-BR": "Retirada reagendada",
@@ -1729,7 +1869,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida replanificada",
     eo: "Elpreno replanita",
     nl: "Ophaling opnieuw ingepland",
-    el: "Παραλαβή επαναπρογραμματίστηκε"
+    el: "Παραλαβή επαναπρογραμματίστηκε",
+    ro: "Ridicare reprogramată"
   },
   "wf.stage.pronta_para_retirada": {
     "pt-BR": "Pronta para retirada",
@@ -1741,7 +1882,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "A punt per recollir",
     eo: "Preta por elpreno",
     nl: "Klaar om op te halen",
-    el: "Έτοιμη για παραλαβή"
+    el: "Έτοιμη για παραλαβή",
+    ro: "Gata de ridicare"
   },
   "wf.stage.retirada_efetivada": {
     "pt-BR": "Retirada efetivada",
@@ -1753,7 +1895,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida efectuada",
     eo: "Elpreno efektivigita",
     nl: "Ophaling voltooid",
-    el: "Παραλαβή ολοκληρώθηκε"
+    el: "Παραλαβή ολοκληρώθηκε",
+    ro: "Ridicare efectuată"
   },
   "wf.stage.cancelada_leitor": {
     "pt-BR": "Cancelada pelo leitor",
@@ -1765,7 +1908,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cancel·lada per le lector-a-e",
     eo: "Nuligita de la legant-in-o",
     nl: "Geannuleerd door lezer",
-    el: "Ακυρώθηκε από τον/την αναγνώστη/στρια"
+    el: "Ακυρώθηκε από τον/την αναγνώστη/στρια",
+    ro: "Anulată de cititor/cititoare"
   },
   "wf.stage.cancelada_biblioteca": {
     "pt-BR": "Cancelada pela biblioteca",
@@ -1777,7 +1921,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cancel·lada per la biblioteca",
     eo: "Nuligita de la biblioteko",
     nl: "Geannuleerd door bibliotheek",
-    el: "Ακυρώθηκε από τη βιβλιοθήκη"
+    el: "Ακυρώθηκε από τη βιβλιοθήκη",
+    ro: "Anulată de bibliotecă"
   },
   "wf.stage.nao_retirada": {
     "pt-BR": "Não retirada",
@@ -1789,7 +1934,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "No recollida",
     eo: "Ne elprenita",
     nl: "Niet opgehaald",
-    el: "Δεν παραλήφθηκε"
+    el: "Δεν παραλήφθηκε",
+    ro: "Neridicată"
   },
   "wf.stage.retirada_no_show": {
     "pt-BR": "Não retirada",
@@ -1801,7 +1947,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "No recollida",
     eo: "Ne elprenita",
     nl: "Niet opgehaald",
-    el: "Δεν παραλήφθηκε"
+    el: "Δεν παραλήφθηκε",
+    ro: "Neridicată"
   },
   "wf.stage.liberada_para_circulacao": {
     "pt-BR": "Liberada para circulação",
@@ -1813,7 +1960,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Tornada a posar en circulació",
     eo: "Remetita en cirkuladon",
     nl: "Vrijgegeven voor circulatie",
-    el: "Απελευθερώθηκε στην κυκλοφορία"
+    el: "Απελευθερώθηκε στην κυκλοφορία",
+    ro: "Repusă în circulație"
   },
   "wf.stage.expirada": {
     "pt-BR": "Expirada",
@@ -1825,7 +1973,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Expirada",
     eo: "Eksvalidiĝinta",
     nl: "Verlopen",
-    el: "Έληξε"
+    el: "Έληξε",
+    ro: "Expirată"
   },
   "wf.stage.convertida_em_emprestimo": {
     "pt-BR": "Convertida em empréstimo",
@@ -1837,7 +1986,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Convertida en préstec",
     eo: "Konvertita en prunton",
     nl: "Omgezet in uitlening",
-    el: "Μετατράπηκε σε δανεισμό"
+    el: "Μετατράπηκε σε δανεισμό",
+    ro: "Transformată în împrumut"
   },
 
   // ===== Workflow events (wf.*) =============================================
@@ -1851,7 +2001,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida programada",
     eo: "Elpreno planita",
     nl: "Afhaling gepland",
-    el: "Παραλαβή προγραμματισμένη"
+    el: "Παραλαβή προγραμματισμένη",
+    ro: "Ridicare programată"
   },
   "wf.ready": {
     "pt-BR": "Sua reserva está pronta para retirada",
@@ -1863,7 +2014,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva reserva està llesta per recollir",
     eo: "Via rezervo estas preta por elpreno",
     nl: "Je reservering ligt klaar om af te halen",
-    el: "Η κράτησή σου είναι έτοιμη για παραλαβή"
+    el: "Η κράτησή σου είναι έτοιμη για παραλαβή",
+    ro: "Rezervarea ta e gata de ridicare"
   },
   "wf.readyShort": {
     "pt-BR": "Reserva pronta",
@@ -1875,7 +2027,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva llesta",
     eo: "Rezervo preta",
     nl: "Reservering klaar",
-    el: "Κράτηση έτοιμη"
+    el: "Κράτηση έτοιμη",
+    ro: "Rezervare gata"
   },
   "wf.noShow": {
     "pt-BR": "Retirada não realizada",
@@ -1887,7 +2040,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida no efectuada",
     eo: "Elpreno ne efektivigita",
     nl: "Afhaling gemist",
-    el: "Η παραλαβή δεν έγινε"
+    el: "Η παραλαβή δεν έγινε",
+    ro: "Ridicare neefectuată"
   },
   "wf.closed": {
     "pt-BR": "Reserva encerrada",
@@ -1899,7 +2053,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva tancada",
     eo: "Rezervo fermita",
     nl: "Reservering afgesloten",
-    el: "Η κράτηση έκλεισε"
+    el: "Η κράτηση έκλεισε",
+    ro: "Rezervare închisă"
   },
   "wf.preparing": {
     "pt-BR": "Sua reserva está em preparação",
@@ -1911,7 +2066,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva reserva s'està preparant",
     eo: "Via rezervo estas preparata",
     nl: "Je reservering wordt voorbereid",
-    el: "Η κράτησή σου προετοιμάζεται"
+    el: "Η κράτησή σου προετοιμάζεται",
+    ro: "Rezervarea ta e în pregătire"
   },
   "wf.preparingShort": {
     "pt-BR": "Em preparação",
@@ -1923,7 +2079,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "En preparació",
     eo: "En preparado",
     nl: "In voorbereiding",
-    el: "Υπό προετοιμασία"
+    el: "Υπό προετοιμασία",
+    ro: "În pregătire"
   },
   "wf.toCoordinate": {
     "pt-BR": "Retirada a combinar com a biblioteca",
@@ -1935,7 +2092,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida a coordinar amb la biblioteca",
     eo: "Elpreno interkonsentenda kun la biblioteko",
     nl: "Afhaling te regelen met de bibliotheek",
-    el: "Παραλαβή προς συνεννόηση με τη βιβλιοθήκη"
+    el: "Παραλαβή προς συνεννόηση με τη βιβλιοθήκη",
+    ro: "Ridicare de stabilit cu biblioteca"
   },
   "wf.toCoordinateShort": {
     "pt-BR": "A combinar",
@@ -1947,7 +2105,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "A convenir",
     eo: "Interkonsentenda",
     nl: "Te regelen",
-    el: "Προς συνεννόηση"
+    el: "Προς συνεννόηση",
+    ro: "De stabilit"
   },
     "wf.checkAccount": {
     "pt-BR": "Confira sua conta para mais detalhes.",
@@ -1959,7 +2118,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Consulta el teu compte per a més detalls.",
     eo: "Konsultu vian konton por pliaj detaloj.",
     nl: "Bekijk je account voor meer details.",
-    el: "Δες τον λογαριασμό σου για περισσότερες λεπτομέρειες."
+    el: "Δες τον λογαριασμό σου για περισσότερες λεπτομέρειες.",
+    ro: "Consultă-ți contul pentru mai multe detalii."
   },
 
   // ===== Workflow v3 — lecteur (wf.reader.*) ================================
@@ -1973,7 +2133,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Franja de recollida proposada per la biblioteca",
     eo: "Elpren-tempfendo proponita de la biblioteko",
     nl: "Afhaalmoment voorgesteld door de bibliotheek",
-    el: "Χρόνος παραλαβής που πρότεινε η βιβλιοθήκη"
+    el: "Χρόνος παραλαβής που πρότεινε η βιβλιοθήκη",
+    ro: "Interval de ridicare propus de bibliotecă"
   },
   "wf.reader.libraryProposed.body": {
     "pt-BR": "A biblioteca propõe um horário para você vir retirar seu livro. Você pode aceitar este horário, propor outro, ou cancelar a reserva pela sua conta.",
@@ -1985,7 +2146,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca et proposa una franja per venir a recollir el teu llibre. Pots acceptar aquesta franja, proposar-ne una altra, o cancel·lar la teva reserva des del teu compte.",
     eo: "La biblioteko proponas al vi tempfendon por veni elpreni vian libron. Vi povas akcepti ĉi tiun tempfendon, proponi alian, aŭ nuligi vian rezervon el via konto.",
     nl: "De bibliotheek stelt een tijdslot voor om je boek te komen afhalen. Je kunt dit tijdslot accepteren, een ander voorstellen of je reservering annuleren vanuit je account.",
-    el: "Η βιβλιοθήκη σου προτείνει έναν χρόνο για να έρθεις να παραλάβεις το βιβλίο σου. Μπορείς να αποδεχτείς αυτόν τον χρόνο, να προτείνεις άλλον ή να ακυρώσεις την κράτησή σου από τον λογαριασμό σου."
+    el: "Η βιβλιοθήκη σου προτείνει έναν χρόνο για να έρθεις να παραλάβεις το βιβλίο σου. Μπορείς να αποδεχτείς αυτόν τον χρόνο, να προτείνεις άλλον ή να ακυρώσεις την κράτησή σου από τον λογαριασμό σου.",
+    ro: "Biblioteca îți propune un interval în care să vii să-ți ridici cartea. Poți accepta acest interval, poți propune altul sau îți poți anula rezervarea din contul tău."
   },
   "wf.reader.youCounterProposed.subject": {
     "pt-BR": "Contra-proposta enviada (tentativa {iter}/{max})",
@@ -1997,7 +2159,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contraproposta enviada (intent {iter}/{max})",
     eo: "Kontraŭpropono sendita (provo {iter}/{max})",
     nl: "Tegenvoorstel verzonden (poging {iter}/{max})",
-    el: "Αντιπρόταση στάλθηκε (προσπάθεια {iter}/{max})"
+    el: "Αντιπρόταση στάλθηκε (προσπάθεια {iter}/{max})",
+    ro: "Contrapropunere trimisă (încercarea {iter}/{max})"
   },
   "wf.reader.youCounterProposed.body": {
     "pt-BR": "Sua contra-proposta foi enviada à biblioteca (tentativa {iter}/{max}). Você será avisado(a/e) assim que ela responder.",
@@ -2009,7 +2172,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva contraproposta s'ha enviat a la biblioteca (intent {iter}/{max}). Se t'avisarà tan bon punt respongui.",
     eo: "Via kontraŭpropono estis sendita al la biblioteko (provo {iter}/{max}). Vi estos avertita tuj kiam ĝi respondos.",
     nl: "Je tegenvoorstel is naar de bibliotheek verzonden (poging {iter}/{max}). Je krijgt bericht zodra zij reageren.",
-    el: "Η αντιπρότασή σου στάλθηκε στη βιβλιοθήκη (προσπάθεια {iter}/{max}). Θα ειδοποιηθείς μόλις απαντήσει."
+    el: "Η αντιπρότασή σου στάλθηκε στη βιβλιοθήκη (προσπάθεια {iter}/{max}). Θα ειδοποιηθείς μόλις απαντήσει.",
+    ro: "Contrapropunerea ta a fost trimisă bibliotecii (încercarea {iter}/{max}). Te vom anunța de îndată ce biblioteca răspunde."
   },
   "wf.reader.slotLocked.subject": {
     "pt-BR": "Horário de retirada confirmado",
@@ -2021,7 +2185,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Franja de recollida confirmada",
     eo: "Elpren-tempfendo konfirmita",
     nl: "Afhaalmoment bevestigd",
-    el: "Ο χρόνος παραλαβής επιβεβαιώθηκε"
+    el: "Ο χρόνος παραλαβής επιβεβαιώθηκε",
+    ro: "Interval de ridicare confirmat"
   },
   "wf.reader.slotLocked.body": {
     "pt-BR": "O horário está confirmado e bloqueado. O livro estará em breve pronto para retirada — você receberá uma notificação assim que isso acontecer.",
@@ -2033,7 +2198,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La franja està confirmada i bloquejada. El llibre estarà aviat llest per recollir — rebràs una notificació tan bon punt sigui el cas.",
     eo: "La tempfendo estas konfirmita kaj ŝlosita. La libro baldaŭ estos preta por elpreno — vi ricevos sciigon tuj kiam tio okazos.",
     nl: "Het tijdslot is bevestigd en vergrendeld. Het boek ligt binnenkort klaar om af te halen — je krijgt een melding zodra dat zo is.",
-    el: "Ο χρόνος επιβεβαιώθηκε και κλειδώθηκε. Το βιβλίο θα είναι σύντομα έτοιμο για παραλαβή — θα λάβεις ειδοποίηση μόλις γίνει αυτό."
+    el: "Ο χρόνος επιβεβαιώθηκε και κλειδώθηκε. Το βιβλίο θα είναι σύντομα έτοιμο για παραλαβή — θα λάβεις ειδοποίηση μόλις γίνει αυτό.",
+    ro: "Intervalul este confirmat și blocat. Cartea va fi în curând gata de ridicare — vei primi o notificare imediat ce se întâmplă asta."
   },
   "wf.reader.maxIterations.subject": {
     "pt-BR": "Negociação sem acordo — contato direto recomendado",
@@ -2045,7 +2211,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Negociació sense acord — es recomana contacte directe",
     eo: "Traktado sen interkonsento — rekta kontakto rekomendata",
     nl: "Onderhandeling zonder akkoord — direct contact aangeraden",
-    el: "Διαπραγμάτευση χωρίς συμφωνία — συνιστάται άμεση επαφή"
+    el: "Διαπραγμάτευση χωρίς συμφωνία — συνιστάται άμεση επαφή",
+    ro: "Negociere fără acord — se recomandă contactul direct"
   },
   "wf.reader.maxIterations.body": {
     "pt-BR": "Várias trocas sem encontrar um horário que funcione para todo mundo. Para continuar, o melhor é entrar em contato diretamente com a biblioteca para conversar.",
@@ -2057,7 +2224,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Diversos intercanvis sense trobar una franja que funcioni per a tothom. Per continuar, el millor és contactar directament la biblioteca per parlar-ne.",
     eo: "Pluraj interŝanĝoj sen trovi tempfendon kiu konvenas al ĉiuj. Por daŭrigi, plej bone estas kontakti rekte la bibliotekon por priparoli.",
     nl: "Meerdere keren heen en weer zonder een tijdslot te vinden dat voor iedereen werkt. Om verder te gaan, kun je het beste rechtstreeks contact opnemen met de bibliotheek om te overleggen.",
-    el: "Αρκετές ανταλλαγές χωρίς να βρεθεί χρόνος που να βολεύει όλους/ες. Για να συνεχίσεις, το καλύτερο είναι να επικοινωνήσεις απευθείας με τη βιβλιοθήκη για να το συζητήσετε."
+    el: "Αρκετές ανταλλαγές χωρίς να βρεθεί χρόνος που να βολεύει όλους/ες. Για να συνεχίσεις, το καλύτερο είναι να επικοινωνήσεις απευθείας με τη βιβλιοθήκη για να το συζητήσετε.",
+    ro: "Mai multe schimburi, fără să găsim un interval care să convină tuturor. Ca să mergi mai departe, cel mai bine e să contactezi direct biblioteca pentru a discuta."
   },
   "wf.reader.negotiationTimeout.subject": {
     "pt-BR": "Reserva liberada — prazo de negociação expirado",
@@ -2069,7 +2237,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva alliberada — termini de negociació vençut",
     eo: "Rezervo liberigita — trakta limdato eksvalidiĝinta",
     nl: "Reservering vrijgegeven — onderhandelingstermijn verstreken",
-    el: "Η κράτηση απελευθερώθηκε — η προθεσμία διαπραγμάτευσης παρήλθε"
+    el: "Η κράτηση απελευθερώθηκε — η προθεσμία διαπραγμάτευσης παρήλθε",
+    ro: "Rezervare eliberată — termenul de negociere a fost depășit"
   },
   "wf.reader.negotiationTimeout.body": {
     "pt-BR": "A negociação do seu horário ultrapassou o prazo sem acordo. A reserva foi liberada e o livro voltou à circulação. Você pode reservá-lo novamente quando quiser.",
@@ -2081,7 +2250,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La negociació de la teva franja ha superat el termini sense acord. La reserva s'ha alliberat i el llibre ha tornat a la circulació. Pots reservar-lo de nou quan vulguis.",
     eo: "La traktado de via tempfendo superis la limdaton sen interkonsento. La rezervo estis liberigita kaj la libro revenis al cirkulado. Vi povas rezervi ĝin denove kiam vi volas.",
     nl: "De onderhandeling over je tijdslot heeft de termijn overschreden zonder akkoord. De reservering is vrijgegeven, het boek gaat terug in circulatie. Je kunt het opnieuw reserveren wanneer je maar wilt.",
-    el: "Η διαπραγμάτευση για τον χρόνο σου ξεπέρασε την προθεσμία χωρίς συμφωνία. Η κράτηση απελευθερώθηκε, το βιβλίο επιστρέφει στην κυκλοφορία. Μπορείς να το ξανακρατήσεις όποτε θέλεις."
+    el: "Η διαπραγμάτευση για τον χρόνο σου ξεπέρασε την προθεσμία χωρίς συμφωνία. Η κράτηση απελευθερώθηκε, το βιβλίο επιστρέφει στην κυκλοφορία. Μπορείς να το ξανακρατήσεις όποτε θέλεις.",
+    ro: "Negocierea pentru intervalul tău a depășit termenul fără acord. Rezervarea a fost eliberată, iar cartea revine în circulație. O poți rezerva din nou oricând vrei."
   },
 
   // ===== Workflow v3 — biblio (wf.staff.*) ==================================
@@ -2095,7 +2265,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Negociació de franja oberta amb le lector-a-e",
     eo: "Tempfenda traktado malfermita kun la legant-in-o",
     nl: "Onderhandeling over tijdslot geopend met de lezer",
-    el: "Άνοιξε διαπραγμάτευση χρόνου με τον/την αναγνώστη/στρια"
+    el: "Άνοιξε διαπραγμάτευση χρόνου με τον/την αναγνώστη/στρια",
+    ro: "Negociere de interval deschisă cu cititorul/cititoarea"
   },
   "wf.staff.negotiationOpened.body": {
     "pt-BR": "A negociação de um horário de retirada foi aberta com o(a/e) leitor(a/e). O(a/e) leitor(a/e) foi avisado(a/e) por e-mail e pode aceitar, contra-propor ou cancelar pela própria conta.",
@@ -2107,7 +2278,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha obert la negociació d'una franja de recollida amb le lector-a-e. Le lector-a-e ha estat avisade per correu i pot acceptar, contraproposar o cancel·lar des del seu compte.",
     eo: "La traktado de elpren-tempfendo estis malfermita kun la legant-in-o. La legant-in-o estis avertita retpoŝte kaj povas akcepti, kontraŭproponi aŭ nuligi el sia konto.",
     nl: "Er is een onderhandeling geopend met de lezer over een afhaalmoment. De lezer heeft een e-mail gekregen en kan accepteren, een tegenvoorstel doen of annuleren vanuit het eigen account.",
-    el: "Άνοιξε διαπραγμάτευση χρόνου παραλαβής με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια ειδοποιήθηκε με email και μπορεί να αποδεχτεί, να αντιπροτείνει ή να ακυρώσει από τον λογαριασμό του/της."
+    el: "Άνοιξε διαπραγμάτευση χρόνου παραλαβής με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια ειδοποιήθηκε με email και μπορεί να αποδεχτεί, να αντιπροτείνει ή να ακυρώσει από τον λογαριασμό του/της.",
+    ro: "A fost deschisă negocierea unui interval de ridicare cu cititorul/cititoarea. Persoana a fost anunțată prin e-mail și poate accepta, face o contrapropunere sau anula din contul său."
   },
   "wf.staff.readerCounterProposed.subject": {
     "pt-BR": "Contra-proposta do(a/e) leitor(a/e) — ação esperada",
@@ -2119,7 +2291,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contraproposta de le lector-a-e — acció esperada",
     eo: "Kontraŭpropono de la legant-in-o — ago atendata",
     nl: "Tegenvoorstel van de lezer — actie verwacht",
-    el: "Αντιπρόταση από τον/την αναγνώστη/στρια — αναμένεται ενέργεια"
+    el: "Αντιπρόταση από τον/την αναγνώστη/στρια — αναμένεται ενέργεια",
+    ro: "Contrapropunere de la cititor/cititoare — acțiune așteptată"
   },
   "wf.staff.readerCounterProposed.body": {
     "pt-BR": "O(a/e) leitor(a/e) contra-propôs outro horário para a retirada. <b>Resposta esperada</b> : abrir o painel para aceitar, contra-propor por sua vez, ou cancelar.",
@@ -2131,7 +2304,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Le lector-a-e ha contraproposat una altra franja per a la recollida. <b>Resposta esperada</b> : obrir el tauler per acceptar, contraproposar al teu torn, o cancel·lar.",
     eo: "La legant-in-o kontraŭproponis alian tempfendon por la elpreno. <b>Atendata respondo</b> : malfermi la panelon por akcepti, kontraŭproponi siavice, aŭ nuligi.",
     nl: "De lezer heeft een ander tijdslot voorgesteld voor de afhaling. <b>Reactie verwacht</b>: open het dashboard om te accepteren, zelf een tegenvoorstel te doen of te annuleren.",
-    el: "Ο/Η αναγνώστης/στρια αντιπρότεινε άλλον χρόνο για την παραλαβή. <b>Αναμένεται απάντηση</b> : ανοίξτε τον πίνακα ελέγχου για να αποδεχτείτε, να αντιπροτείνετε με τη σειρά σας ή να ακυρώσετε."
+    el: "Ο/Η αναγνώστης/στρια αντιπρότεινε άλλον χρόνο για την παραλαβή. <b>Αναμένεται απάντηση</b> : ανοίξτε τον πίνακα ελέγχου για να αποδεχτείτε, να αντιπροτείνετε με τη σειρά σας ή να ακυρώσετε.",
+    ro: "Cititorul/cititoarea a propus un alt interval pentru ridicare. <b>Răspuns așteptat</b>: deschide panoul ca să accepți, să faci la rândul tău o contrapropunere sau să anulezi."
   },
   "wf.staff.readerAccepted.subject": {
     "pt-BR": "Horário aceito pelo(a/e) leitor(a/e)",
@@ -2143,7 +2317,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Franja acceptada per le lector-a-e",
     eo: "Tempfendo akceptita de la legant-in-o",
     nl: "Tijdslot geaccepteerd door de lezer",
-    el: "Ο χρόνος έγινε αποδεκτός από τον/την αναγνώστη/στρια"
+    el: "Ο χρόνος έγινε αποδεκτός από τον/την αναγνώστη/στρια",
+    ro: "Interval acceptat de cititor/cititoare"
   },
   "wf.staff.readerAccepted.body": {
     "pt-BR": "O(a/e) leitor(a/e) aceitou o horário proposto. O horário está bloqueado — o livro pode ser preparado para a retirada.",
@@ -2155,7 +2330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Le lector-a-e ha acceptat la franja proposada. La franja està bloquejada — el llibre es pot preparar per a la recollida.",
     eo: "La legant-in-o akceptis la proponitan tempfendon. La tempfendo estas ŝlosita — la libro povas esti preparita por la elpreno.",
     nl: "De lezer heeft het voorgestelde tijdslot geaccepteerd. Het tijdslot is vergrendeld — het boek kan worden voorbereid voor de afhaling.",
-    el: "Ο/Η αναγνώστης/στρια αποδέχτηκε τον προτεινόμενο χρόνο. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή."
+    el: "Ο/Η αναγνώστης/στρια αποδέχτηκε τον προτεινόμενο χρόνο. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή.",
+    ro: "Cititorul/cititoarea a acceptat intervalul propus. Intervalul este blocat — cartea poate fi pregătită pentru ridicare."
   },
   "wf.staff.staffConfirmed.subject": {
     "pt-BR": "Horário do(a/e) leitor(a/e) confirmado",
@@ -2167,7 +2343,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Franja de le lector-a-e confirmada",
     eo: "Tempfendo de la legant-in-o konfirmita",
     nl: "Tijdslot van de lezer bevestigd",
-    el: "Ο χρόνος του/της αναγνώστη/στριας επιβεβαιώθηκε"
+    el: "Ο χρόνος του/της αναγνώστη/στριας επιβεβαιώθηκε",
+    ro: "Intervalul cititorului/cititoarei, confirmat"
   },
   "wf.staff.staffConfirmed.body": {
     "pt-BR": "Você confirmou o horário proposto pelo(a/e) leitor(a/e). O horário está bloqueado — o livro pode ser preparado para a retirada.",
@@ -2179,7 +2356,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has confirmat la franja proposada per le lector-a-e. La franja està bloquejada — el llibre es pot preparar per a la recollida.",
     eo: "Vi konfirmis la tempfendon proponitan de la legant-in-o. La tempfendo estas ŝlosita — la libro povas esti preparita por la elpreno.",
     nl: "Je hebt het door de lezer voorgestelde tijdslot bevestigd. Het tijdslot is vergrendeld — het boek kan worden voorbereid voor de afhaling.",
-    el: "Επιβεβαιώσατε τον χρόνο που πρότεινε ο/η αναγνώστης/στρια. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή."
+    el: "Επιβεβαιώσατε τον χρόνο που πρότεινε ο/η αναγνώστης/στρια. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή.",
+    ro: "Ai confirmat intervalul propus de cititor/cititoare. Intervalul este blocat — cartea poate fi pregătită pentru ridicare."
   },
   "wf.staff.ready.subject": {
     "pt-BR": "Livro pronto para retirada — leitor(a/e) avisado(a/e)",
@@ -2191,7 +2369,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Llibre llest per recollir — lector-a-e avisade",
     eo: "Libro preta por elpreno — legant-in-o avertita",
     nl: "Boek klaar — lezer op de hoogte gebracht",
-    el: "Βιβλίο έτοιμο — ο/η αναγνώστης/στρια ειδοποιήθηκε"
+    el: "Βιβλίο έτοιμο — ο/η αναγνώστης/στρια ειδοποιήθηκε",
+    ro: "Carte gata — persoana care citește a fost anunțată"
   },
   "wf.staff.ready.body": {
     "pt-BR": "Você sinalizou que o livro está pronto para a retirada. O(a/e) leitor(a/e) foi avisado(a/e).",
@@ -2203,7 +2382,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has indicat que el llibre està llest per ser recollit. Le lector-a-e ha estat avisade.",
     eo: "Vi indikis ke la libro estas preta por elpreno. La legant-in-o estis avertita.",
     nl: "Je hebt aangegeven dat het boek klaarligt om af te halen. De lezer heeft bericht gekregen.",
-    el: "Επισημάνατε ότι το βιβλίο είναι έτοιμο για παραλαβή. Ο/Η αναγνώστης/στρια ειδοποιήθηκε."
+    el: "Επισημάνατε ότι το βιβλίο είναι έτοιμο για παραλαβή. Ο/Η αναγνώστης/στρια ειδοποιήθηκε.",
+    ro: "Ai semnalat că cartea este gata de ridicare. Persoana care citește a fost anunțată."
   },
   "wf.staff.noShow.subject": {
     "pt-BR": "Retirada não realizada",
@@ -2215,7 +2395,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida no efectuada",
     eo: "Elpreno ne efektivigita",
     nl: "Afhaling gemist",
-    el: "Η παραλαβή δεν έγινε"
+    el: "Η παραλαβή δεν έγινε",
+    ro: "Ridicare neefectuată"
   },
   "wf.staff.noShow.body": {
     "pt-BR": "O livro não foi retirado no horário previsto. A reserva foi marcada como não-retirada — o livro voltará em breve à circulação livre.",
@@ -2227,7 +2408,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El llibre no s'ha recollit en la franja prevista. La reserva s'ha marcat com a no-recollida — el llibre tornarà aviat a la circulació lliure.",
     eo: "La libro ne estis elprenita en la planita tempfendo. La rezervo estis markita kiel ne-elpreno — la libro baldaŭ revenos al libera cirkulado.",
     nl: "Het boek is niet afgehaald op het geplande moment. De reservering is gemarkeerd als niet-afgehaald — het boek gaat binnenkort terug in vrije circulatie.",
-    el: "Το βιβλίο δεν παραλήφθηκε τον προγραμματισμένο χρόνο. Η κράτηση σημειώνεται ως μη παραλαβή — το βιβλίο θα επιστρέψει σύντομα στην ελεύθερη κυκλοφορία."
+    el: "Το βιβλίο δεν παραλήφθηκε τον προγραμματισμένο χρόνο. Η κράτηση σημειώνεται ως μη παραλαβή — το βιβλίο θα επιστρέψει σύντομα στην ελεύθερη κυκλοφορία.",
+    ro: "Cartea nu a fost ridicată în intervalul prevăzut. Rezervarea este marcată ca neridicată — cartea va reveni în curând în circulație liberă."
   },
   "wf.staff.closed.subject": {
     "pt-BR": "Reserva encerrada",
@@ -2239,7 +2421,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva tancada",
     eo: "Rezervo fermita",
     nl: "Reservering afgesloten",
-    el: "Η κράτηση έκλεισε"
+    el: "Η κράτηση έκλεισε",
+    ro: "Rezervare închisă"
   },
   "wf.staff.closed.body": {
     "pt-BR": "A reserva está encerrada, o livro voltou à circulação livre. Nenhuma ação adicional é esperada de sua parte.",
@@ -2251,7 +2434,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La reserva està tancada, el llibre torna a la circulació lliure. No s'espera cap acció addicional per part teva.",
     eo: "La rezervo estas fermita, la libro revenas al libera cirkulado. Neniu plia ago estas atendata de vi.",
     nl: "De reservering is afgesloten, het boek gaat terug in vrije circulatie. Er wordt geen verdere actie van je verwacht.",
-    el: "Η κράτηση έκλεισε, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία. Δεν αναμένεται καμία επιπλέον ενέργεια από εσάς."
+    el: "Η κράτηση έκλεισε, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία. Δεν αναμένεται καμία επιπλέον ενέργεια από εσάς.",
+    ro: "Rezervarea este închisă, cartea revine în circulație liberă. Nu se mai așteaptă nicio altă acțiune din partea ta."
   },
   "wf.staff.maxIterations.subject": {
     "pt-BR": "Negociação sem acordo — leitor(a/e) convidado(a/e) ao contato direto",
@@ -2263,7 +2447,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Negociació sense acord — lector-a-e convidade al contacte directe",
     eo: "Traktado sen interkonsento — legant-in-o invitita al rekta kontakto",
     nl: "Onderhandeling zonder akkoord — lezer uitgenodigd voor direct contact",
-    el: "Διαπραγμάτευση χωρίς συμφωνία — ο/η αναγνώστης/στρια κλήθηκε για άμεση επαφή"
+    el: "Διαπραγμάτευση χωρίς συμφωνία — ο/η αναγνώστης/στρια κλήθηκε για άμεση επαφή",
+    ro: "Negociere fără acord — persoana care citește, invitată la contact direct"
   },
   "wf.staff.maxIterations.body": {
     "pt-BR": "Várias trocas sem acordo com o(a/e) leitor(a/e). O(a/e) leitor(a/e) foi convidado(a/e) a entrar em contato diretamente para encontrar uma solução.",
@@ -2275,7 +2460,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Diversos intercanvis sense acord amb le lector-a-e. Le lector-a-e ha estat convidade a contactar-vos directament per trobar una solució.",
     eo: "Pluraj interŝanĝoj sen interkonsento kun la legant-in-o. La legant-in-o estis invitita kontakti vin rekte por trovi solvon.",
     nl: "Meerdere keren heen en weer zonder akkoord met de lezer. De lezer is uitgenodigd om rechtstreeks contact met je op te nemen om een oplossing te vinden.",
-    el: "Αρκετές ανταλλαγές χωρίς συμφωνία με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια κλήθηκε να επικοινωνήσει απευθείας μαζί σας για να βρεθεί λύση."
+    el: "Αρκετές ανταλλαγές χωρίς συμφωνία με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια κλήθηκε να επικοινωνήσει απευθείας μαζί σας για να βρεθεί λύση.",
+    ro: "Mai multe schimburi fără acord cu cititorul/cititoarea. Persoana a fost invitată să ia legătura direct cu biblioteca, pentru a găsi o soluție."
   },
 
   // ===== Workflow v3 — re-proposition staff après contre-prop lecteur =======
@@ -2296,7 +2482,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova proposta de la biblioteca",
     eo: "Nova propono de la biblioteko",
     nl: "Nieuw voorstel van de bibliotheek",
-    el: "Νέα πρόταση από τη βιβλιοθήκη"
+    el: "Νέα πρόταση από τη βιβλιοθήκη",
+    ro: "Propunere nouă de la bibliotecă"
   },
   "wf.reader.libraryCounterProposed.body": {
     "pt-BR": "A biblioteca respondeu à sua contra-proposta com um novo horário. Você pode aceitar este horário, propor outro, ou cancelar a reserva pela sua conta.",
@@ -2308,7 +2495,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca ha respost a la teva contraproposta amb una nova franja. Pots acceptar aquesta franja, proposar-ne una altra, o cancel·lar la teva reserva des del teu compte.",
     eo: "La biblioteko respondis al via kontraŭpropono per nova tempfendo. Vi povas akcepti ĉi tiun tempfendon, proponi alian, aŭ nuligi vian rezervon el via konto.",
     nl: "De bibliotheek heeft op je tegenvoorstel gereageerd met een nieuw tijdslot. Je kunt dit tijdslot accepteren, een ander voorstellen of je reservering annuleren vanuit je account.",
-    el: "Η βιβλιοθήκη απάντησε στην αντιπρότασή σου με νέο χρόνο. Μπορείς να αποδεχτείς αυτόν τον χρόνο, να προτείνεις άλλον ή να ακυρώσεις την κράτησή σου από τον λογαριασμό σου."
+    el: "Η βιβλιοθήκη απάντησε στην αντιπρότασή σου με νέο χρόνο. Μπορείς να αποδεχτείς αυτόν τον χρόνο, να προτείνεις άλλον ή να ακυρώσεις την κράτησή σου από τον λογαριασμό σου.",
+    ro: "Biblioteca a răspuns la contrapropunerea ta cu un nou interval. Poți accepta acest interval, poți propune altul sau îți poți anula rezervarea din contul tău."
   },
   "wf.staff.staffCounterProposed.subject": {
     "pt-BR": "Contra-proposta enviada ao(a/e) leitor(a/e)",
@@ -2320,7 +2508,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contraproposta enviada a le lector-a-e",
     eo: "Kontraŭpropono sendita al la legant-in-o",
     nl: "Tegenvoorstel naar de lezer verzonden",
-    el: "Αντιπρόταση στάλθηκε στον/στην αναγνώστη/στρια"
+    el: "Αντιπρόταση στάλθηκε στον/στην αναγνώστη/στρια",
+    ro: "Contrapropunere trimisă cititorului/cititoarei"
   },
   "wf.staff.staffCounterProposed.body": {
     "pt-BR": "Você enviou uma nova contra-proposta de horário ao(a/e) leitor(a/e) em resposta à proposta recebida. Aguarde a resposta.",
@@ -2332,7 +2521,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has enviat una nova contraproposta de franja a le lector-a-e en resposta a la seva proposta. A l'espera de la seva resposta.",
     eo: "Vi sendis novan tempfendan kontraŭproponon al la legant-in-o responde al ĝia propono. Atendante ĝian respondon.",
     nl: "Je hebt een nieuw tegenvoorstel naar de lezer verzonden als reactie op het voorstel. In afwachting van een reactie.",
-    el: "Στείλατε νέα αντιπρόταση χρόνου στον/στην αναγνώστη/στρια ως απάντηση στην πρότασή του/της. Σε αναμονή της απάντησής του/της."
+    el: "Στείλατε νέα αντιπρόταση χρόνου στον/στην αναγνώστη/στρια ως απάντηση στην πρότασή του/της. Σε αναμονή της απάντησής του/της.",
+    ro: "Ai trimis cititorului/cititoarei o nouă contrapropunere de interval, ca răspuns la propunerea sa. Se așteaptă răspunsul."
   },
 
   // ===== Workflow v3 — cron timeout (wf.staff.negotiationTimedOut) ==========
@@ -2346,7 +2536,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Negociació expirada — reserva alliberada",
     eo: "Traktado eksvalidiĝinta — rezervo liberigita",
     nl: "Onderhandeling verlopen — reservering vrijgegeven",
-    el: "Η διαπραγμάτευση έληξε — η κράτηση απελευθερώθηκε"
+    el: "Η διαπραγμάτευση έληξε — η κράτηση απελευθερώθηκε",
+    ro: "Negociere expirată — rezervare eliberată"
   },
   "wf.staff.negotiationTimedOut.body": {
     "pt-BR": "A negociação para a retirada expirou sem acordo ({days} dias sem resposta). A reserva foi liberada automaticamente e o livro voltou à circulação livre.",
@@ -2358,7 +2549,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La negociació per a la recollida ha expirat sense acord ({days} dies sense resposta). La reserva s'ha alliberat automàticament i el llibre ha tornat a la circulació lliure.",
     eo: "La traktado por la elpreno eksvalidiĝis sen interkonsento ({days} tagoj sen respondo). La rezervo estis liberigita aŭtomate kaj la libro revenas al libera cirkulado.",
     nl: "De onderhandeling over de afhaling is verlopen zonder akkoord ({days} dagen zonder reactie). De reservering is automatisch vrijgegeven, het boek gaat terug in vrije circulatie.",
-    el: "Η διαπραγμάτευση για την παραλαβή έληξε χωρίς συμφωνία ({days} ημέρες χωρίς απάντηση). Η κράτηση απελευθερώθηκε αυτόματα, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία."
+    el: "Η διαπραγμάτευση για την παραλαβή έληξε χωρίς συμφωνία ({days} ημέρες χωρίς απάντηση). Η κράτηση απελευθερώθηκε αυτόματα, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία.",
+    ro: "Negocierea pentru ridicare a expirat fără acord (zile fără răspuns: {days}). Rezervarea a fost eliberată automat, cartea revine în circulație liberă."
   },
 
   // ===== Action/info boxes (wf.staff.*Box.*) ================================
@@ -2375,7 +2567,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Acció esperada",
     eo: "Atendata ago",
     nl: "Actie verwacht",
-    el: "Αναμένεται ενέργεια"
+    el: "Αναμένεται ενέργεια",
+    ro: "Acțiune așteptată"
   },
   "wf.staff.actionBox.openPanel": {
     "pt-BR": "Abrir o painel",
@@ -2387,7 +2580,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Obrir el tauler",
     eo: "Malfermi la panelon",
     nl: "Open het dashboard",
-    el: "Άνοιγμα του πίνακα ελέγχου"
+    el: "Άνοιγμα του πίνακα ελέγχου",
+    ro: "Deschide panoul"
   },
   "wf.staff.infoBox.title": {
     "pt-BR": "Para sua informação",
@@ -2399,7 +2593,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per a la teva informació",
     eo: "Por via informo",
     nl: "Ter informatie",
-    el: "Προς ενημέρωσή σας"
+    el: "Προς ενημέρωσή σας",
+    ro: "Spre informare"
   },
 
   // ===== Subject prefixes (subj.*) ==========================================
@@ -2415,7 +2610,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "[Acció requerida]",
     eo: "[Ago postulata]",
     nl: "[Actie vereist]",
-    el: "[Απαιτείται ενέργεια]"
+    el: "[Απαιτείται ενέργεια]",
+    ro: "[Acțiune necesară]"
   },
   "subj.staff.info": {
     "pt-BR": "[Info]",
@@ -2427,7 +2623,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "[Info]",
     eo: "[Info]",
     nl: "[Info]",
-    el: "[Πληροφορία]"
+    el: "[Πληροφορία]",
+    ro: "[Info]"
   },
   // ===== Footer libre diffusion (paquet 6 commit fix-up) ====================
   // Remplace l'ancien symbole © (idéologiquement incompatible avec un projet
@@ -2445,7 +2642,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "lliure difusió",
     eo: "libera disvastigo",
     nl: "vrije verspreiding",
-    el: "ελεύθερη διάδοση"
+    el: "ελεύθερη διάδοση",
+    ro: "difuzare liberă"
   },
 
 
@@ -2460,7 +2658,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec registrat",
     eo: "Prunto registrita",
     nl: "Uitlening geregistreerd",
-    el: "Ο δανεισμός καταχωρίστηκε"
+    el: "Ο δανεισμός καταχωρίστηκε",
+    ro: "Împrumut înregistrat"
   },
   "loan.created.intro": {
     "pt-BR": "Seu empréstimo foi registrado.",
@@ -2472,7 +2671,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu préstec s'ha registrat correctament.",
     eo: "Via prunto estis sukcese registrita.",
     nl: "Je uitlening is geregistreerd.",
-    el: "Ο δανεισμός σου καταχωρίστηκε."
+    el: "Ο δανεισμός σου καταχωρίστηκε.",
+    ro: "Împrumutul tău a fost înregistrat."
   },
   "loan.dueIn": {
     "pt-BR": "Devolução prevista para {date}.",
@@ -2484,7 +2684,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn previst per al {date}.",
     eo: "Redono planita por la {date}.",
     nl: "Inleverdatum: {date}.",
-    el: "Προβλεπόμενη επιστροφή: {date}."
+    el: "Προβλεπόμενη επιστροφή: {date}.",
+    ro: "Returnare prevăzută pe {date}."
   },
   "loan.renewed.sub": {
     "pt-BR": "Renovação confirmada",
@@ -2496,7 +2697,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Renovació confirmada",
     eo: "Renovigo konfirmita",
     nl: "Verlenging bevestigd",
-    el: "Η ανανέωση επιβεβαιώθηκε"
+    el: "Η ανανέωση επιβεβαιώθηκε",
+    ro: "Prelungire confirmată"
   },
   "loan.renewed.intro": {
     "pt-BR": "Sua prorrogação foi confirmada.",
@@ -2508,7 +2710,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva renovació s'ha confirmat correctament.",
     eo: "Via renovigo estis sukcese konfirmita.",
     nl: "Je verlenging is bevestigd.",
-    el: "Η ανανέωσή σου επιβεβαιώθηκε."
+    el: "Η ανανέωσή σου επιβεβαιώθηκε.",
+    ro: "Prelungirea ta a fost confirmată."
   },
   "loan.newDue": {
     "pt-BR": "Nova data de devolução: {date}.",
@@ -2520,7 +2723,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova data de retorn: {date}.",
     eo: "Nova redato: {date}.",
     nl: "Nieuwe inleverdatum: {date}.",
-    el: "Νέα ημερομηνία επιστροφής: {date}."
+    el: "Νέα ημερομηνία επιστροφής: {date}.",
+    ro: "Nouă dată de returnare: {date}."
   },
   "loan.renewed.once": {
     "pt-BR": "Lembre-se: cada exemplar pode ser prorrogado apenas uma vez.",
@@ -2532,7 +2736,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recorda: cada exemplar només es pot renovar una vegada.",
     eo: "Memoru: ĉiu ekzemplero povas esti renovigita nur unufoje.",
     nl: "Ter herinnering: elk exemplaar kan slechts één keer worden verlengd.",
-    el: "Υπενθύμιση: κάθε αντίτυπο μπορεί να ανανεωθεί μόνο μία φορά."
+    el: "Υπενθύμιση: κάθε αντίτυπο μπορεί να ανανεωθεί μόνο μία φορά.",
+    ro: "Reamintim: fiecare exemplar poate fi prelungit o singură dată."
   },
   "loan.returned.sub": {
     "pt-BR": "Devolução registrada",
@@ -2544,7 +2749,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn registrat",
     eo: "Redono registrita",
     nl: "Inlevering geregistreerd",
-    el: "Η επιστροφή καταχωρίστηκε"
+    el: "Η επιστροφή καταχωρίστηκε",
+    ro: "Returnare înregistrată"
   },
   "loan.returned.intro": {
     "pt-BR": "Registramos a devolução. Obrigad(o/a/e)!",
@@ -2556,7 +2762,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem registrat el retorn. Gràcies!",
     eo: "Ni registris la redonon. Dankon!",
     nl: "We hebben de inlevering geregistreerd. Bedankt!",
-    el: "Καταγράψαμε την επιστροφή. Ευχαριστούμε!"
+    el: "Καταγράψαμε την επιστροφή. Ευχαριστούμε!",
+    ro: "Am înregistrat returnarea. Mulțumim!"
   },
   "loan.returned.browse": {
     "pt-BR": "Continue navegando no acervo para suas próximas leituras.",
@@ -2568,7 +2775,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Continua explorant el fons per a les teves properes lectures.",
     eo: "Daŭrigu esplori la fonduson por viaj sekvaj legaĵoj.",
     nl: "Blijf de collectie verkennen voor je volgende leesvoer.",
-    el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου."
+    el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου.",
+    ro: "Continuă să explorezi fondul pentru următoarele tale lecturi."
   },
   "loan.partialReturn.sub": {
     "pt-BR": "Devolução parcial registrada",
@@ -2580,7 +2788,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn parcial registrat",
     eo: "Parta redono registrita",
     nl: "Gedeeltelijke inlevering geregistreerd",
-    el: "Καταγράφηκε μερική επιστροφή"
+    el: "Καταγράφηκε μερική επιστροφή",
+    ro: "Returnare parțială înregistrată"
   },
   "loan.partialReturn.intro": {
     "pt-BR": "Registramos a devolução parcial do seu empréstimo. Obrigad(o/a/e) por trazer alguns documentos!",
@@ -2592,7 +2801,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem registrat el retorn parcial del teu préstec. Gràcies per portar alguns documents!",
     eo: "Ni registris la partan redonon de via prunto. Dankon pro reporti kelkajn dokumentojn!",
     nl: "We hebben de gedeeltelijke inlevering van je uitlening geregistreerd. Bedankt voor het terugbrengen van een deel van de documenten!",
-    el: "Καταγράψαμε τη μερική επιστροφή του δανεισμού σου. Ευχαριστούμε που έφερες πίσω μέρος των τεκμηρίων!"
+    el: "Καταγράψαμε τη μερική επιστροφή του δανεισμού σου. Ευχαριστούμε που έφερες πίσω μέρος των τεκμηρίων!",
+    ro: "Am înregistrat returnarea parțială a împrumutului tău. Mulțumim că ai adus înapoi o parte din documente!"
   },
   "loan.partialReturn.dueReminder": {
     "pt-BR": "Lembrete: a data de devolução dos documentos restantes é {date}.",
@@ -2604,7 +2814,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recordatori: la data de retorn dels documents restants és el {date}.",
     eo: "Memorigo: la redato de la restantaj dokumentoj estas la {date}.",
     nl: "Ter herinnering: de inleverdatum voor de resterende documenten is {date}.",
-    el: "Υπενθύμιση: η ημερομηνία επιστροφής για τα υπόλοιπα τεκμήρια είναι {date}."
+    el: "Υπενθύμιση: η ημερομηνία επιστροφής για τα υπόλοιπα τεκμήρια είναι {date}.",
+    ro: "Reamintire: data de returnare a documentelor rămase este {date}."
   },
   "loan.partialReturn.outro": {
     "pt-BR": "Não esqueça de passar pela biblioteca para devolver os documentos restantes.",
@@ -2616,7 +2827,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "No oblidis passar per la biblioteca per retornar els documents restants.",
     eo: "Ne forgesu viziti la bibliotekon por redoni la restantajn dokumentojn.",
     nl: "Vergeet niet langs te komen bij de bibliotheek om de resterende documenten in te leveren.",
-    el: "Μην ξεχάσεις να περάσεις από τη βιβλιοθήκη για να επιστρέψεις τα υπόλοιπα τεκμήρια."
+    el: "Μην ξεχάσεις να περάσεις από τη βιβλιοθήκη για να επιστρέψεις τα υπόλοιπα τεκμήρια.",
+    ro: "Nu uita să treci pe la bibliotecă, ca să returnezi documentele rămase."
   },
   "loan.fullyReturnedAfterPartial.sub": {
     "pt-BR": "Empréstimo concluído",
@@ -2628,7 +2840,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec finalitzat",
     eo: "Prunto finita",
     nl: "Uitlening afgesloten",
-    el: "Ο δανεισμός ολοκληρώθηκε"
+    el: "Ο δανεισμός ολοκληρώθηκε",
+    ro: "Împrumut încheiat"
   },
   "loan.fullyReturnedAfterPartial.intro": {
     "pt-BR": "Você devolveu o último documento do seu empréstimo. Tudo voltou! Obrigad(o/a/e) por cuidar bem dos livros da biblioteca.",
@@ -2640,7 +2853,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has retornat l'últim document del teu préstec. Tot ha tornat! Gràcies per tenir cura dels documents de la biblioteca.",
     eo: "Vi redonis la lastan dokumenton de via prunto. Ĉio revenis! Dankon pro zorgi pri la dokumentoj de la biblioteko.",
     nl: "Je hebt het laatste document van je uitlening ingeleverd. Alles is terug! Bedankt voor het goed zorgen voor de documenten van de bibliotheek.",
-    el: "Μόλις επέστρεψες το τελευταίο τεκμήριο του δανεισμού σου. Όλα επιστράφηκαν! Ευχαριστούμε που φρόντισες τα τεκμήρια της βιβλιοθήκης."
+    el: "Μόλις επέστρεψες το τελευταίο τεκμήριο του δανεισμού σου. Όλα επιστράφηκαν! Ευχαριστούμε που φρόντισες τα τεκμήρια της βιβλιοθήκης.",
+    ro: "Tocmai ai returnat ultimul document din împrumutul tău. Totul s-a întors! Mulțumim că ai avut grijă de documentele bibliotecii."
   },
   "loan.fullyReturnedAfterPartial.browse": {
     "pt-BR": "Continue navegando no acervo para suas próximas leituras.",
@@ -2652,7 +2866,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Continua explorant el fons per a les teves properes lectures.",
     eo: "Daŭrigu esplori la fonduson por viaj sekvaj legaĵoj.",
     nl: "Blijf de collectie verkennen voor je volgende leesvoer.",
-    el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου."
+    el: "Συνέχισε να εξερευνείς τη συλλογή για τα επόμενα διαβάσματά σου.",
+    ro: "Continuă să explorezi fondul pentru următoarele tale lecturi."
   },
 
   // ===== Profile notices (prof.*) ===========================================
@@ -2668,7 +2883,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció rebutjada",
     eo: "Aliĝo rifuzita",
     nl: "Inschrijving geweigerd",
-    el: "Η εγγραφή απορρίφθηκε"
+    el: "Η εγγραφή απορρίφθηκε",
+    ro: "Înregistrare refuzată"
   },
   "membership_refused.intro": {
     "pt-BR": "Uma solicitação de inscrição em validação foi recusada pela equipe. Para registro e acompanhamento:",
@@ -2680,7 +2896,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una sol·licitud d'inscripció pendent ha estat rebutjada per l'equip. Per a registre i seguiment:",
     eo: "Atendanta aliĝpeto estis rifuzita de la teamo. Por registro kaj sekvado:",
     nl: "Een openstaand aanmeldverzoek is door het team geweigerd. Ter kennisname en opvolging:",
-    el: "Ένα εκκρεμές αίτημα εγγραφής απορρίφθηκε από την ομάδα. Για αρχείο και παρακολούθηση:"
+    el: "Ένα εκκρεμές αίτημα εγγραφής απορρίφθηκε από την ομάδα. Για αρχείο και παρακολούθηση:",
+    ro: "O cerere de înregistrare în așteptare a fost refuzată de echipă. Pentru evidență și urmărire:"
   },
   "membership_refused.statusLabel": {
     "pt-BR": "Situação",
@@ -2692,7 +2909,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Estat",
     eo: "Stato",
     nl: "Status",
-    el: "Κατάσταση"
+    el: "Κατάσταση",
+    ro: "Stare"
   },
   "membership_refused.retry": {
     "pt-BR": "Primeira recusa — a pessoa pode enviar um segundo pedido (reexame).",
@@ -2704,7 +2922,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Primera negativa — la persona pot enviar una segona sol·licitud (reexamen).",
     eo: "Unua rifuzo — la persono povas sendi duan peton (reekzameno).",
     nl: "Eerste weigering — de persoon kan een tweede verzoek indienen (herbeoordeling).",
-    el: "Πρώτη απόρριψη — το άτομο μπορεί να υποβάλει δεύτερο αίτημα (επανεξέταση)."
+    el: "Πρώτη απόρριψη — το άτομο μπορεί να υποβάλει δεύτερο αίτημα (επανεξέταση).",
+    ro: "Primul refuz — persoana poate depune o a doua cerere (reexaminare)."
   },
   "membership_refused.final": {
     "pt-BR": "Recusa definitiva — não é possível um novo pedido.",
@@ -2716,7 +2935,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Negativa definitiva — no és possible cap nova sol·licitud.",
     eo: "Definitiva rifuzo — neniu nova peto eblas.",
     nl: "Definitieve weigering — geen nieuw verzoek mogelijk.",
-    el: "Οριστική απόρριψη — δεν είναι δυνατό νέο αίτημα."
+    el: "Οριστική απόρριψη — δεν είναι δυνατό νέο αίτημα.",
+    ro: "Refuz definitiv — nu mai este posibilă nicio cerere nouă."
   },
   "membership_refused.reasonLabel": {
     "pt-BR": "Motivo",
@@ -2728,7 +2948,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu",
     eo: "Kialo",
     nl: "Reden",
-    el: "Λόγος"
+    el: "Λόγος",
+    ro: "Motiv"
   },
   "membership_validation_requested.subject": {
     "pt-BR": "Nova solicitação de inscrição",
@@ -2740,7 +2961,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova sol·licitud d'inscripció",
     eo: "Nova aliĝpeto",
     nl: "Nieuw aanmeldverzoek",
-    el: "Νέο αίτημα εγγραφής"
+    el: "Νέο αίτημα εγγραφής",
+    ro: "Cerere nouă de înregistrare"
   },
   "membership_validation_requested.intro": {
     "pt-BR": "Uma pessoa solicitou ingressar na sua biblioteca e aguarda validação presencial.",
@@ -2752,7 +2974,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una persona ha sol·licitat unir-se a la vostra biblioteca i espera una validació presencial.",
     eo: "Iu petis aliĝi al via biblioteko kaj atendas surlokan validon.",
     nl: "Iemand heeft gevraagd om lid te worden van jullie bibliotheek en wacht op validatie ter plaatse.",
-    el: "Κάποιο άτομο ζήτησε να εγγραφεί στη βιβλιοθήκη σας και αναμένει δια ζώσης επικύρωση."
+    el: "Κάποιο άτομο ζήτησε να εγγραφεί στη βιβλιοθήκη σας και αναμένει δια ζώσης επικύρωση.",
+    ro: "O persoană cere să se alăture bibliotecii voastre și așteaptă o validare față în față."
   },
   "membership_validation_requested.actionTitle": {
     "pt-BR": "Validar a inscrição",
@@ -2764,7 +2987,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Validar la inscripció",
     eo: "Validigi la aliĝon",
     nl: "Aanmelding valideren",
-    el: "Επικύρωση της εγγραφής"
+    el: "Επικύρωση της εγγραφής",
+    ro: "Validează înregistrarea"
   },
   "membership_validation_requested.cta": {
     "pt-BR": "Abrir o painel",
@@ -2776,32 +3000,37 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Obrir el tauler",
     eo: "Malfermi la panelon",
     nl: "Paneel openen",
-    el: "Άνοιγμα του πίνακα"
+    el: "Άνοιγμα του πίνακα",
+    ro: "Deschide panoul"
   },
   "partnership.partnerLabel": {
     "pt-BR": "Biblioteca parceira", fr: "Bibliothèque partenaire", es: "Biblioteca asociada",
     en: "Partner library", it: "Biblioteca partner", de: "Partnerbibliothek",
     ca: "Biblioteca associada", eo: "Partnera biblioteko", nl: "Partnerbibliotheek",
-    el: "Συνεργαζόμενη βιβλιοθήκη"
+    el: "Συνεργαζόμενη βιβλιοθήκη",
+    ro: "Bibliotecă parteneră"
   },
   "partnership.actionTitle": {
     "pt-BR": "Gerenciar a parceria", fr: "Gérer le partenariat", es: "Gestionar la asociación",
     en: "Manage the partnership", it: "Gestisci il partenariato", de: "Partnerschaft verwalten",
     ca: "Gestionar el partenariat", eo: "Administri la partnerecon", nl: "Partnerschap beheren",
-    el: "Διαχείριση της συνεργασίας"
+    el: "Διαχείριση της συνεργασίας",
+    ro: "Gestionează parteneriatul"
   },
   "partnership.cta": {
     "pt-BR": "Abrir a biblioteca", fr: "Ouvrir la bibliothèque", es: "Abrir la biblioteca",
     en: "Open the library", it: "Apri la biblioteca", de: "Bibliothek öffnen",
     ca: "Obrir la biblioteca", eo: "Malfermi la bibliotekon", nl: "Bibliotheek openen",
-    el: "Άνοιγμα της βιβλιοθήκης"
+    el: "Άνοιγμα της βιβλιοθήκης",
+    ro: "Deschide biblioteca"
   },
   "partnership_proposed.subject": {
     "pt-BR": "Nova proposta de parceria", fr: "Nouvelle proposition de partenariat",
     es: "Nueva propuesta de asociación", en: "New partnership proposal",
     it: "Nuova proposta di partenariato", de: "Neuer Partnerschaftsvorschlag",
     ca: "Nova proposta de partenariat", eo: "Nova propono de partnereco",
-    nl: "Nieuw partnerschapsvoorstel", el: "Νέα πρόταση συνεργασίας"
+    nl: "Nieuw partnerschapsvoorstel", el: "Νέα πρόταση συνεργασίας",
+    ro: "Propunere nouă de parteneriat"
   },
   "partnership_proposed.intro": {
     "pt-BR": "A biblioteca parceira abaixo propôs uma parceria à sua biblioteca. Você pode aceitá-la ou recusá-la na página da biblioteca.",
@@ -2813,13 +3042,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca associada de sota ha proposat un partenariat a la vostra biblioteca. Podeu acceptar-lo o rebutjar-lo des de la pàgina de la biblioteca.",
     eo: "La suba partnera biblioteko proponis partnerecon al via biblioteko. Vi povas akcepti aŭ rifuzi ĝin el la bibliotekpaĝo.",
     nl: "De onderstaande partnerbibliotheek heeft jullie bibliotheek een partnerschap voorgesteld. Je kunt het accepteren of weigeren op de bibliotheekpagina.",
-    el: "Η παρακάτω συνεργαζόμενη βιβλιοθήκη πρότεινε συνεργασία στη βιβλιοθήκη σας. Μπορείτε να την αποδεχτείτε ή να την απορρίψετε από τη σελίδα της βιβλιοθήκης."
+    el: "Η παρακάτω συνεργαζόμενη βιβλιοθήκη πρότεινε συνεργασία στη βιβλιοθήκη σας. Μπορείτε να την αποδεχτείτε ή να την απορρίψετε από τη σελίδα της βιβλιοθήκης.",
+    ro: "Biblioteca parteneră de mai jos propune un parteneriat bibliotecii voastre. Propunerea poate fi acceptată sau refuzată din pagina bibliotecii."
   },
   "partnership_accepted.subject": {
     "pt-BR": "Parceria aceita", fr: "Partenariat accepté", es: "Asociación aceptada",
     en: "Partnership accepted", it: "Partenariato accettato", de: "Partnerschaft angenommen",
     ca: "Partenariat acceptat", eo: "Partnereco akceptita", nl: "Partnerschap geaccepteerd",
-    el: "Η συνεργασία έγινε δεκτή"
+    el: "Η συνεργασία έγινε δεκτή",
+    ro: "Parteneriat acceptat"
   },
   "partnership_accepted.intro": {
     "pt-BR": "A biblioteca parceira aceitou sua proposta de parceria. A parceria está agora ativa: você pode ativar os direitos recíprocos na página da biblioteca.",
@@ -2831,14 +3062,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca associada ha acceptat la vostra proposta de partenariat. El partenariat ja és actiu: podeu activar els drets recíprocs des de la pàgina de la biblioteca.",
     eo: "La partnera biblioteko akceptis vian proponon de partnereco. La partnereco nun estas aktiva: vi povas aktivigi la reciprokajn rajtojn el la bibliotekpaĝo.",
     nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geaccepteerd. Het partnerschap is nu actief: je kunt de wederzijdse rechten op de bibliotheekpagina inschakelen.",
-    el: "Η συνεργαζόμενη βιβλιοθήκη αποδέχτηκε την πρότασή σας για συνεργασία. Η συνεργασία είναι πλέον ενεργή: μπορείτε να ενεργοποιήσετε τα αμοιβαία δικαιώματα από τη σελίδα της βιβλιοθήκης."
+    el: "Η συνεργαζόμενη βιβλιοθήκη αποδέχτηκε την πρότασή σας για συνεργασία. Η συνεργασία είναι πλέον ενεργή: μπορείτε να ενεργοποιήσετε τα αμοιβαία δικαιώματα από τη σελίδα της βιβλιοθήκης.",
+    ro: "Biblioteca parteneră a acceptat propunerea voastră de parteneriat. Parteneriatul este acum activ: drepturile reciproce pot fi activate din pagina bibliotecii."
   },
   "partnership_refused.subject": {
     "pt-BR": "Proposta de parceria recusada", fr: "Proposition de partenariat refusée",
     es: "Propuesta de asociación rechazada", en: "Partnership proposal declined",
     it: "Proposta di partenariato rifiutata", de: "Partnerschaftsvorschlag abgelehnt",
     ca: "Proposta de partenariat rebutjada", eo: "Propono de partnereco rifuzita",
-    nl: "Partnerschapsvoorstel geweigerd", el: "Η πρόταση συνεργασίας απορρίφθηκε"
+    nl: "Partnerschapsvoorstel geweigerd", el: "Η πρόταση συνεργασίας απορρίφθηκε",
+    ro: "Propunere de parteneriat refuzată"
   },
   "partnership_refused.intro": {
     "pt-BR": "A biblioteca parceira recusou sua proposta de parceria. Você pode propor novamente mais tarde, se desejar.",
@@ -2850,13 +3083,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca associada ha rebutjat la vostra proposta de partenariat. Podeu tornar a proposar-ne una més endavant si voleu.",
     eo: "La partnera biblioteko rifuzis vian proponon de partnereco. Vi povas reproponi poste, se vi deziras.",
     nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geweigerd. Je kunt later opnieuw een voorstel doen als je wilt.",
-    el: "Η συνεργαζόμενη βιβλιοθήκη απέρριψε την πρότασή σας για συνεργασία. Μπορείτε να προτείνετε ξανά αργότερα, αν θέλετε."
+    el: "Η συνεργαζόμενη βιβλιοθήκη απέρριψε την πρότασή σας για συνεργασία. Μπορείτε να προτείνετε ξανά αργότερα, αν θέλετε.",
+    ro: "Biblioteca parteneră a refuzat propunerea voastră de parteneriat. O nouă propunere poate fi făcută mai târziu, dacă doriți."
   },
   "partnership_broken.subject": {
     "pt-BR": "Parceria encerrada", fr: "Partenariat rompu", es: "Asociación finalizada",
     en: "Partnership ended", it: "Partenariato terminato", de: "Partnerschaft beendet",
     ca: "Partenariat finalitzat", eo: "Partnereco ĉesigita", nl: "Partnerschap beëindigd",
-    el: "Η συνεργασία τερματίστηκε"
+    el: "Η συνεργασία τερματίστηκε",
+    ro: "Parteneriat rupt"
   },
   "partnership_broken.intro": {
     "pt-BR": "A parceria com a biblioteca parceira abaixo foi encerrada. Os direitos recíprocos foram desativados nos dois lados.",
@@ -2868,7 +3103,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El partenariat amb la biblioteca associada de sota ha finalitzat. Els drets recíprocs s'han desactivat a banda i banda.",
     eo: "La partnereco kun la suba partnera biblioteko ĉesis. La reciprokaj rajtoj estis malaktivigitaj ambaŭflanke.",
     nl: "Het partnerschap met de onderstaande partnerbibliotheek is beëindigd. De wederzijdse rechten zijn aan beide kanten uitgeschakeld.",
-    el: "Η συνεργασία με την παρακάτω συνεργαζόμενη βιβλιοθήκη τερματίστηκε. Τα αμοιβαία δικαιώματα απενεργοποιήθηκαν και στις δύο πλευρές."
+    el: "Η συνεργασία με την παρακάτω συνεργαζόμενη βιβλιοθήκη τερματίστηκε. Τα αμοιβαία δικαιώματα απενεργοποιήθηκαν και στις δύο πλευρές.",
+    ro: "Parteneriatul cu biblioteca parteneră de mai jos a fost rupt. Drepturile reciproce au fost dezactivate de ambele părți."
   },
   "partnership_transparence_enabled.subject": {
     "pt-BR": "Compartilhamento entre suas bibliotecas: seu consentimento",
@@ -2880,7 +3116,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Compartició entre les teves biblioteques: el teu consentiment",
     eo: "Kunhavigo inter viaj bibliotekoj: via konsento",
     nl: "Delen tussen je bibliotheken: jouw toestemming",
-    el: "Κοινή χρήση μεταξύ των βιβλιοθηκών σου: η συγκατάθεσή σου"
+    el: "Κοινή χρήση μεταξύ των βιβλιοθηκών σου: η συγκατάθεσή σου",
+    ro: "Partajarea între bibliotecile tale: consimțământul tău"
   },
   "partnership_transparence_enabled.intro": {
     "pt-BR": "Duas bibliotecas das quais você é membro(a/e) formaram uma parceria e ativaram um compartilhamento de informações sobre você entre elas (« transparência »). Esse compartilhamento só vale se você consentir. Você pode dar ou retirar seu consentimento a qualquer momento no seu espaço.",
@@ -2892,24 +3129,28 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Dues biblioteques de les quals ets membre han format un partenariat i han activat una compartició d'informació sobre tu entre elles (« transparència »). Aquesta compartició només té efecte si hi dónes el teu consentiment. Pots donar-lo o retirar-lo en qualsevol moment des del teu espai.",
     eo: "Du bibliotekoj, al kiuj vi apartenas, formis partnerecon kaj aktivigis kunhavigon de informoj pri vi inter ili (« travidebleco »). Tiu kunhavigo efikas nur se vi konsentas. Vi povas doni aŭ retiri vian konsenton iam ajn el via konto.",
     nl: "Twee bibliotheken waar je lid van bent zijn een partnerschap aangegaan en hebben het delen van informatie over jou tussen hen ingeschakeld (« transparantie »). Dit delen werkt alleen als je ermee instemt. Je kunt je toestemming op elk moment geven of intrekken vanuit je account.",
-    el: "Δύο βιβλιοθήκες στις οποίες ανήκεις σύναψαν συνεργασία και ενεργοποίησαν την κοινή χρήση πληροφοριών που σε αφορούν μεταξύ τους (« διαφάνεια »). Η κοινή χρήση ισχύει μόνο αν συναινέσεις. Μπορείς να δώσεις ή να ανακαλέσεις τη συγκατάθεσή σου ανά πάσα στιγμή από τον λογαριασμό σου."
+    el: "Δύο βιβλιοθήκες στις οποίες ανήκεις σύναψαν συνεργασία και ενεργοποίησαν την κοινή χρήση πληροφοριών που σε αφορούν μεταξύ τους (« διαφάνεια »). Η κοινή χρήση ισχύει μόνο αν συναινέσεις. Μπορείς να δώσεις ή να ανακαλέσεις τη συγκατάθεσή σου ανά πάσα στιγμή από τον λογαριασμό σου.",
+    ro: "Două biblioteci din care faci parte au format un parteneriat și au activat între ele o partajare de informații care te privesc („transparență”). Această partajare intră în vigoare doar dacă îți dai consimțământul. Îți poți da sau retrage consimțământul oricând, din spațiul tău."
   },
   "partnership_transparence_enabled.librariesLabel": {
     "pt-BR": "Bibliotecas envolvidas", fr: "Bibliothèques concernées", es: "Bibliotecas implicadas",
     en: "Libraries involved", it: "Biblioteche coinvolte", de: "Beteiligte Bibliotheken",
     ca: "Biblioteques implicades", eo: "Koncernataj bibliotekoj", nl: "Betrokken bibliotheken",
-    el: "Εμπλεκόμενες βιβλιοθήκες"
+    el: "Εμπλεκόμενες βιβλιοθήκες",
+    ro: "Biblioteci implicate"
   },
   "partnership_transparence_enabled.actionTitle": {
     "pt-BR": "Gerenciar seu consentimento", fr: "Gérer ton consentement", es: "Gestionar tu consentimiento",
     en: "Manage your consent", it: "Gestisci il tuo consenso", de: "Deine Zustimmung verwalten",
     ca: "Gestionar el teu consentiment", eo: "Administri vian konsenton", nl: "Je toestemming beheren",
-    el: "Διαχείριση της συγκατάθεσής σου"
+    el: "Διαχείριση της συγκατάθεσής σου",
+    ro: "Gestionează-ți consimțământul"
   },
   "partnership_transparence_enabled.cta": {
     "pt-BR": "Minha conta", fr: "Mon compte", es: "Mi cuenta", en: "My account",
     it: "Il mio spazio", de: "Mein Konto", ca: "El meu compte", eo: "Mia konto",
-    nl: "Mijn account", el: "Ο λογαριασμός μου"
+    nl: "Mijn account", el: "Ο λογαριασμός μου",
+    ro: "Contul meu"
   },
   "partnership_config_expanded.subject": {
     "pt-BR": "Os termos de uma parceria mudaram: revise seu consentimento",
@@ -2921,7 +3162,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Han canviat les condicions d'un partenariat: revisa el teu consentiment",
     eo: "La kondiĉoj de partnereco ŝanĝiĝis: rekontrolu vian konsenton",
     nl: "De voorwaarden van een partnerschap zijn gewijzigd: herzie je toestemming",
-    el: "Οι όροι μιας συνεργασίας άλλαξαν: αναθεώρησε τη συγκατάθεσή σου"
+    el: "Οι όροι μιας συνεργασίας άλλαξαν: αναθεώρησε τη συγκατάθεσή σου",
+    ro: "Condițiile unui parteneriat s-au schimbat: reexaminează-ți consimțământul"
   },
   "partnership_config_expanded.intro": {
     "pt-BR": "Uma parceria entre duas bibliotecas das quais você é membro(a/e) ampliou seu compartilhamento. Seu consentimento anterior não cobre mais os novos termos: enquanto você não o revisar, o compartilhamento ampliado sobre você fica pausado. Você pode reexaminar e renovar (ou recusar) seu consentimento no seu espaço.",
@@ -2933,14 +3175,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Un partenariat entre dues biblioteques de les quals ets membre ha ampliat la seva compartició. El teu consentiment anterior ja no cobreix les noves condicions: mentre no el revisis, la compartició ampliada sobre tu queda en pausa. Pots revisar i renovar (o rebutjar) el teu consentiment des del teu espai.",
     eo: "Partnereco inter du bibliotekoj, al kiuj vi apartenas, plilarĝigis sian kunhavigon. Via antaŭa konsento ne plu kovras la novajn kondiĉojn: ĝis vi rekontrolas ĝin, la plilarĝigita kunhavigo pri vi restas paŭzigita. Vi povas rekontroli kaj renovigi (aŭ rifuzi) vian konsenton el via konto.",
     nl: "Een partnerschap tussen twee bibliotheken waar je lid van bent heeft het delen uitgebreid. Je vorige toestemming dekt de nieuwe voorwaarden niet meer: zolang je het niet herziet, blijft het uitgebreide delen over jou gepauzeerd. Je kunt je toestemming herzien en vernieuwen (of weigeren) vanuit je account.",
-    el: "Μια συνεργασία μεταξύ δύο βιβλιοθηκών στις οποίες ανήκεις διεύρυνε την κοινή χρήση της. Η προηγούμενη συγκατάθεσή σου δεν καλύπτει πλέον τους νέους όρους: μέχρι να την αναθεωρήσεις, η διευρυμένη κοινή χρήση που σε αφορά παραμένει σε παύση. Μπορείς να αναθεωρήσεις και να ανανεώσεις (ή να αρνηθείς) τη συγκατάθεσή σου από τον λογαριασμό σου."
+    el: "Μια συνεργασία μεταξύ δύο βιβλιοθηκών στις οποίες ανήκεις διεύρυνε την κοινή χρήση της. Η προηγούμενη συγκατάθεσή σου δεν καλύπτει πλέον τους νέους όρους: μέχρι να την αναθεωρήσεις, η διευρυμένη κοινή χρήση που σε αφορά παραμένει σε παύση. Μπορείς να αναθεωρήσεις και να ανανεώσεις (ή να αρνηθείς) τη συγκατάθεσή σου από τον λογαριασμό σου.",
+    ro: "Un parteneriat între două biblioteci din care faci parte și-a extins partajarea. Consimțământul tău anterior nu mai acoperă noile condiții: până nu-l reexaminezi, partajarea extinsă care te privește rămâne suspendată. Îți poți reexamina și reînnoi (sau refuza) consimțământul din spațiul tău."
   },
   "partnership_config_expanded.actionTitle": {
     "pt-BR": "Reexaminar seu consentimento", fr: "Réexaminer ton consentement",
     es: "Revisar tu consentimiento", en: "Review your consent",
     it: "Riesaminare il tuo consenso", de: "Deine Zustimmung prüfen",
     ca: "Revisar el teu consentiment", eo: "Rekontroli vian konsenton",
-    nl: "Je toestemming herzien", el: "Αναθεώρηση της συγκατάθεσής σου"
+    nl: "Je toestemming herzien", el: "Αναθεώρηση της συγκατάθεσής σου",
+    ro: "Reexaminează-ți consimțământul"
   },
   "validation_confirmed.subject": {
     "pt-BR": "Inscrição confirmada",
@@ -2952,7 +3196,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció confirmada",
     eo: "Aliĝo konfirmita",
     nl: "Aanmelding bevestigd",
-    el: "Η εγγραφή επιβεβαιώθηκε"
+    el: "Η εγγραφή επιβεβαιώθηκε",
+    ro: "Înregistrare confirmată"
   },
   "validation_confirmed.intro": {
     "pt-BR": "Sua inscrição foi validada pela equipe. Agora você pode reservar e pegar documentos emprestados.",
@@ -2964,7 +3209,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva inscripció ha estat validada per l'equip. Ara pots reservar i agafar en préstec documents.",
     eo: "Via aliĝo estis validigita de la teamo. Vi nun povas rezervi kaj prunti dokumentojn.",
     nl: "Je aanmelding is gevalideerd door het team. Je kunt nu materialen reserveren en lenen.",
-    el: "Η εγγραφή σου επικυρώθηκε από την ομάδα. Μπορείς πλέον να κρατάς και να δανείζεσαι τεκμήρια."
+    el: "Η εγγραφή σου επικυρώθηκε από την ομάδα. Μπορείς πλέον να κρατάς και να δανείζεσαι τεκμήρια.",
+    ro: "Înregistrarea ta a fost validată de echipă. De acum poți rezerva și împrumuta documente."
   },
   "validation_confirmed.libraryLabel": {
     "pt-BR": "Biblioteca",
@@ -2976,7 +3222,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Biblioteca",
     eo: "Biblioteko",
     nl: "Bibliotheek",
-    el: "Βιβλιοθήκη"
+    el: "Βιβλιοθήκη",
+    ro: "Bibliotecă"
   },
   "validation_confirmed.readerNumberLabel": {
     "pt-BR": "Nº de leitor(a)",
@@ -2988,7 +3235,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Núm. de lector·a",
     eo: "Leganto-n-ro",
     nl: "Lezersnr.",
-    el: "Αρ. μέλους"
+    el: "Αρ. μέλους",
+    ro: "Nr. de cititor/cititoare"
   },
   "validation_confirmed.actionTitle": {
     "pt-BR": "Acesse seu espaço",
@@ -3000,7 +3248,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedeix al teu espai",
     eo: "Iru al via konto",
     nl: "Ga naar je account",
-    el: "Μετάβαση στον λογαριασμό σου"
+    el: "Μετάβαση στον λογαριασμό σου",
+    ro: "Intră în spațiul tău"
   },
   "validation_confirmed.cta": {
     "pt-BR": "Minha conta",
@@ -3012,7 +3261,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El meu compte",
     eo: "Mia konto",
     nl: "Mijn account",
-    el: "Ο λογαριασμός μου"
+    el: "Ο λογαριασμός μου",
+    ro: "Contul meu"
   },
   "reader_identity_assigned.subject": {
     "pt-BR": "Sua identidade de leitor(a/e)",
@@ -3024,7 +3274,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva identitat de lector-a-e",
     eo: "Via legant-in-a identigo",
     nl: "Je lezersidentiteit",
-    el: "Η ταυτότητά σου ως αναγνώστη/στριας"
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας",
+    ro: "Identitatea ta de cititor/cititoare"
   },
   "reader_identity_assigned.intro": {
     "pt-BR": "A equipe atribuiu a você uma identidade nesta biblioteca. Você pode apresentá-la nas suas visitas.",
@@ -3036,7 +3287,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip t'ha assignat una identitat en aquesta biblioteca. Pots presentar-la a les teves visites.",
     eo: "La teamo atribuis al vi identigon en ĉi tiu biblioteko. Vi povas montri ĝin dum viaj vizitoj.",
     nl: "Het team heeft je een identiteit toegekend bij deze bibliotheek. Je kunt die tonen bij je bezoek.",
-    el: "Η ομάδα σού απέδωσε μια ταυτότητα σε αυτή τη βιβλιοθήκη. Μπορείς να την δείχνεις στις επισκέψεις σου."
+    el: "Η ομάδα σού απέδωσε μια ταυτότητα σε αυτή τη βιβλιοθήκη. Μπορείς να την δείχνεις στις επισκέψεις σου.",
+    ro: "Echipa ți-a atribuit o identitate în această bibliotecă. O poți prezenta când treci pe acolo."
   },
   "reader_identity_assigned.identityLabel": {
     "pt-BR": "Identidade",
@@ -3048,7 +3300,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Identitat",
     eo: "Identigo",
     nl: "Identiteit",
-    el: "Ταυτότητα"
+    el: "Ταυτότητα",
+    ro: "Identitate"
   },
   "reader_identity_assigned.adminSubject": {
     "pt-BR": "Identidade atribuída",
@@ -3060,7 +3313,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Identitat assignada",
     eo: "Identigo atribuita",
     nl: "Identiteit toegekend",
-    el: "Αποδόθηκε ταυτότητα"
+    el: "Αποδόθηκε ταυτότητα",
+    ro: "Identitate atribuită"
   },
   "reader_identity_assigned.adminIntro": {
     "pt-BR": "Uma identidade local foi atribuída a {reader} em {library}.",
@@ -3072,7 +3326,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha assignat una identitat local a {reader} a {library}.",
     eo: "Loka identigo estis atribuita al {reader} en {library}.",
     nl: "Aan {reader} is een lokale identiteit toegekend bij {library}.",
-    el: "Αποδόθηκε τοπική ταυτότητα σε {reader} στη {library}."
+    el: "Αποδόθηκε τοπική ταυτότητα σε {reader} στη {library}.",
+    ro: "O identitate locală a fost atribuită persoanei {reader} la {library}."
   },
   "cotisation.payment.subject": {
     "pt-BR": "Pagamento de contribuição registrado",
@@ -3084,7 +3339,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Pagament de quota registrat",
     eo: "Kotizpago registrita",
     nl: "Bijdragebetaling geregistreerd",
-    el: "Η πληρωμή συνδρομής καταχωρήθηκε"
+    el: "Η πληρωμή συνδρομής καταχωρήθηκε",
+    ro: "Plata cotizației, înregistrată"
   },
   "cotisation.payment.intro": {
     "pt-BR": "Sua contribuição foi registrada. Aqui está o seu comprovante.",
@@ -3096,7 +3352,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota s'ha registrat. Aquí tens el teu comprovant.",
     eo: "Via kotizo estis registrita. Jen via kvitanco.",
     nl: "Je bijdrage is geregistreerd. Hier is je bewijs.",
-    el: "Η συνεισφορά σου καταχωρήθηκε. Ορίστε η απόδειξή σου."
+    el: "Η συνεισφορά σου καταχωρήθηκε. Ορίστε η απόδειξή σου.",
+    ro: "Cotizația ta a fost înregistrată. Iată chitanța ta."
   },
   "deposit.collected.subject": {
     "pt-BR": "Caução registrada",
@@ -3108,7 +3365,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Dipòsit de garantia registrat",
     eo: "Garantia depono registrita",
     nl: "Waarborg geregistreerd",
-    el: "Η εγγύηση καταχωρήθηκε"
+    el: "Η εγγύηση καταχωρήθηκε",
+    ro: "Garanție înregistrată"
   },
   "deposit.collected.intro": {
     "pt-BR": "Sua caução foi registrada. Ela será devolvida na entrega da obra. Aqui está o seu comprovante.",
@@ -3120,7 +3378,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu dipòsit de garantia s'ha registrat. Se't tornarà en retornar l'obra. Aquí tens el teu comprovant.",
     eo: "Via garantia depono estis registrita. Ĝi estos redonita al vi je la repreno de la verko. Jen via kvitanco.",
     nl: "Je waarborg is geregistreerd. Je krijgt deze terug bij het inleveren van het werk. Hier is je bewijs.",
-    el: "Η εγγύησή σου καταχωρήθηκε. Θα σου επιστραφεί κατά την επιστροφή του τεκμηρίου. Ορίστε η απόδειξή σου."
+    el: "Η εγγύησή σου καταχωρήθηκε. Θα σου επιστραφεί κατά την επιστροφή του τεκμηρίου. Ορίστε η απόδειξή σου.",
+    ro: "Garanția ta a fost înregistrată. Îți va fi restituită la returnarea documentului. Iată chitanța ta."
   },
   "deposit.refunded.subject": {
     "pt-BR": "Caução devolvida",
@@ -3132,7 +3391,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Dipòsit de garantia retornat",
     eo: "Garantia depono redonita",
     nl: "Waarborg terugbetaald",
-    el: "Η εγγύηση επιστράφηκε"
+    el: "Η εγγύηση επιστράφηκε",
+    ro: "Garanție restituită"
   },
   "deposit.refunded.intro": {
     "pt-BR": "Sua caução foi devolvida integralmente. Aqui está o seu comprovante.",
@@ -3144,7 +3404,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu dipòsit de garantia se t'ha retornat íntegrament. Aquí tens el teu comprovant.",
     eo: "Via garantia depono estis plene redonita al vi. Jen via kvitanco.",
     nl: "Je waarborg is volledig terugbetaald. Hier is je bewijs.",
-    el: "Η εγγύησή σου επιστράφηκε πλήρως. Ορίστε η απόδειξή σου."
+    el: "Η εγγύησή σου επιστράφηκε πλήρως. Ορίστε η απόδειξή σου.",
+    ro: "Garanția ți-a fost restituită integral. Iată chitanța ta."
   },
   "deposit.refunded_partial.subject": {
     "pt-BR": "Caução parcialmente devolvida",
@@ -3156,7 +3417,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Dipòsit de garantia retornat parcialment",
     eo: "Garantia depono parte redonita",
     nl: "Waarborg gedeeltelijk terugbetaald",
-    el: "Η εγγύηση επιστράφηκε εν μέρει"
+    el: "Η εγγύηση επιστράφηκε εν μέρει",
+    ro: "Garanție restituită parțial"
   },
   "deposit.refunded_partial.intro": {
     "pt-BR": "Parte da sua caução foi devolvida. Veja os detalhes.",
@@ -3168,7 +3430,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una part del teu dipòsit de garantia se t'ha retornat. Aquí tens el detall.",
     eo: "Parto de via garantia depono estis redonita al vi. Jen la detaloj.",
     nl: "Een deel van je waarborg is terugbetaald. Hier zijn de details.",
-    el: "Ένα μέρος της εγγύησής σου σου επιστράφηκε. Ορίστε οι λεπτομέρειες."
+    el: "Ένα μέρος της εγγύησής σου σου επιστράφηκε. Ορίστε οι λεπτομέρειες.",
+    ro: "O parte din garanția ta ți-a fost restituită. Iată detaliile."
   },
   "deposit.amountLabel": {
     "pt-BR": "Valor",
@@ -3180,7 +3443,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Import",
     eo: "Sumo",
     nl: "Bedrag",
-    el: "Ποσό"
+    el: "Ποσό",
+    ro: "Sumă"
   },
   "deposit.refundedLabel": {
     "pt-BR": "Valor devolvido",
@@ -3192,7 +3456,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Import retornat",
     eo: "Redonita sumo",
     nl: "Terugbetaald bedrag",
-    el: "Ποσό επιστροφής"
+    el: "Ποσό επιστροφής",
+    ro: "Sumă restituită"
   },
   "deposit.loanLabel": {
     "pt-BR": "Empréstimo",
@@ -3204,7 +3469,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec",
     eo: "Prunto",
     nl: "Uitlening",
-    el: "Δανεισμός"
+    el: "Δανεισμός",
+    ro: "Împrumut"
   },
   "deposit.methodLabel": {
     "pt-BR": "Método",
@@ -3216,7 +3482,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Mètode",
     eo: "Metodo",
     nl: "Methode",
-    el: "Μέθοδος"
+    el: "Μέθοδος",
+    ro: "Metodă"
   },
   "cot.noExpiry": {
     "pt-BR": "sem vencimento",
@@ -3228,7 +3495,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "sense venciment",
     eo: "sen limdato",
     nl: "zonder vervaldatum",
-    el: "χωρίς λήξη"
+    el: "χωρίς λήξη",
+    ro: "fără termen"
   },
   "l.cotAmount": {
     "pt-BR": "Valor",
@@ -3240,7 +3508,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Import",
     eo: "Sumo",
     nl: "Bedrag",
-    el: "Ποσό"
+    el: "Ποσό",
+    ro: "Sumă"
   },
   "l.cotPeriod": {
     "pt-BR": "Período de validade",
@@ -3252,7 +3521,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Període de validesa",
     eo: "Validperiodo",
     nl: "Geldigheidsperiode",
-    el: "Περίοδος ισχύος"
+    el: "Περίοδος ισχύος",
+    ro: "Perioadă de valabilitate"
   },
   "l.cotMethod": {
     "pt-BR": "Forma de pagamento",
@@ -3264,7 +3534,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Forma de pagament",
     eo: "Pagmaniero",
     nl: "Betaalwijze",
-    el: "Τρόπος πληρωμής"
+    el: "Τρόπος πληρωμής",
+    ro: "Mijloc de plată"
   },
   "cot.method.cash": {
     "pt-BR": "Dinheiro",
@@ -3276,7 +3547,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Efectiu",
     eo: "Kontanta mono",
     nl: "Contant",
-    el: "Μετρητά"
+    el: "Μετρητά",
+    ro: "Numerar"
   },
   "cot.method.transfer": {
     "pt-BR": "Transferência",
@@ -3288,7 +3560,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Transferència",
     eo: "Bankĝiro",
     nl: "Overschrijving",
-    el: "Τραπεζικό έμβασμα"
+    el: "Τραπεζικό έμβασμα",
+    ro: "Transfer bancar"
   },
   "cot.method.card": {
     "pt-BR": "Cartão",
@@ -3300,7 +3573,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Targeta",
     eo: "Karto",
     nl: "Kaart",
-    el: "Κάρτα"
+    el: "Κάρτα",
+    ro: "Card"
   },
   "cot.method.check": {
     "pt-BR": "Cheque",
@@ -3312,7 +3586,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Xec",
     eo: "Ĉeko",
     nl: "Cheque",
-    el: "Επιταγή"
+    el: "Επιταγή",
+    ro: "Cec"
   },
   "cot.method.in_kind": {
     "pt-BR": "Em espécie",
@@ -3324,7 +3599,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "En espècie",
     eo: "Naturkotizo",
     nl: "In natura",
-    el: "Σε είδος"
+    el: "Σε είδος",
+    ro: "În natură"
   },
   "cot.method.exemption": {
     "pt-BR": "Isenção",
@@ -3336,7 +3612,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Exempció",
     eo: "Sendevigo",
     nl: "Vrijstelling",
-    el: "Απαλλαγή"
+    el: "Απαλλαγή",
+    ro: "Scutire"
   },
   "cot.method.other": {
     "pt-BR": "Outro",
@@ -3348,7 +3625,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Altre",
     eo: "Alia",
     nl: "Anders",
-    el: "Άλλο"
+    el: "Άλλο",
+    ro: "Alta"
   },
   "restriction.global.subject": {
     "pt-BR": "Conta congelada (rede)",
@@ -3360,7 +3638,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Compte congelat (xarxa)",
     eo: "Konto frostigita (reto)",
     nl: "Account bevroren (netwerk)",
-    el: "Λογαριασμός παγωμένος (δίκτυο)"
+    el: "Λογαριασμός παγωμένος (δίκτυο)",
+    ro: "Cont înghețat (rețea)"
   },
   "restriction.global.intro": {
     "pt-BR": "Sua conta foi congelada em toda a rede.",
@@ -3372,7 +3651,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte s'ha congelat a tota la xarxa.",
     eo: "Via konto estis frostigita tra la tuta reto.",
     nl: "Je account is in het hele netwerk bevroren.",
-    el: "Ο λογαριασμός σου παγώθηκε σε όλο το δίκτυο."
+    el: "Ο λογαριασμός σου παγώθηκε σε όλο το δίκτυο.",
+    ro: "Contul tău a fost înghețat în toată rețeaua."
   },
   "restriction.lifted.subject": {
     "pt-BR": "Restrição removida",
@@ -3384,7 +3664,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Restricció retirada",
     eo: "Restrikto forigita",
     nl: "Beperking opgeheven",
-    el: "Ο περιορισμός ήρθη"
+    el: "Ο περιορισμός ήρθη",
+    ro: "Restricție ridicată"
   },
   "restriction.lifted.intro": {
     "pt-BR": "Sua restrição foi removida. Sua conta está novamente plenamente ativa.",
@@ -3396,7 +3677,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva restricció s'ha retirat. El teu compte torna a estar plenament actiu.",
     eo: "Via restrikto estis forigita. Via konto denove estas plene aktiva.",
     nl: "Je beperking is opgeheven. Je account is weer volledig actief.",
-    el: "Ο περιορισμός σου ήρθη. Ο λογαριασμός σου είναι ξανά πλήρως ενεργός."
+    el: "Ο περιορισμός σου ήρθη. Ο λογαριασμός σου είναι ξανά πλήρως ενεργός.",
+    ro: "Restricția ta a fost ridicată. Contul tău este din nou pe deplin activ."
   },
   "l.scope": {
     "pt-BR": "Abrangência",
@@ -3408,7 +3690,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Abast",
     eo: "Amplekso",
     nl: "Bereik",
-    el: "Εμβέλεια"
+    el: "Εμβέλεια",
+    ro: "Domeniu de aplicare"
   },
   "restriction.scope.network": {
     "pt-BR": "Rede AnarBib",
@@ -3420,7 +3703,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Xarxa AnarBib",
     eo: "Reto AnarBib",
     nl: "AnarBib-netwerk",
-    el: "Δίκτυο AnarBib"
+    el: "Δίκτυο AnarBib",
+    ro: "Rețeaua AnarBib"
   },
   "prof.restricted": {
     "pt-BR": "Cadastro com restrições",
@@ -3432,7 +3716,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Compte amb restriccions",
     eo: "Konto kun restriktoj",
     nl: "Account met beperkingen",
-    el: "Λογαριασμός με περιορισμούς"
+    el: "Λογαριασμός με περιορισμούς",
+    ro: "Cont cu restricții"
   },
   "prof.restricted.intro": {
     "pt-BR": "Seu cadastro foi marcado com restrições.",
@@ -3444,7 +3729,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte s'ha marcat amb restriccions.",
     eo: "Via konto estis markita kun restriktoj.",
     nl: "Je account is gemarkeerd met beperkingen.",
-    el: "Ο λογαριασμός σου επισημάνθηκε με περιορισμούς."
+    el: "Ο λογαριασμός σου επισημάνθηκε με περιορισμούς.",
+    ro: "Contul tău a fost marcat cu restricții."
   },
   "prof.contactLibrary": {
     "pt-BR": "Entre em contato com a biblioteca para regularizar sua situação.",
@@ -3456,7 +3742,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contacta la biblioteca per regularitzar la teva situació.",
     eo: "Kontaktu la bibliotekon por reguligi vian situacion.",
     nl: "Neem contact op met de bibliotheek om je situatie recht te zetten.",
-    el: "Επικοινώνησε με τη βιβλιοθήκη για να τακτοποιήσεις την κατάστασή σου."
+    el: "Επικοινώνησε με τη βιβλιοθήκη για να τακτοποιήσεις την κατάστασή σου.",
+    ro: "Contactează biblioteca pentru a-ți regulariza situația."
   },
   "prof.formalNotice": {
     "pt-BR": "Aviso formal de restrição",
@@ -3468,7 +3755,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís formal sobre la restricció",
     eo: "Formala avizo pri la restrikto",
     nl: "Formele kennisgeving over de beperking",
-    el: "Τυπική ειδοποίηση σχετικά με τον περιορισμό"
+    el: "Τυπική ειδοποίηση σχετικά με τον περιορισμό",
+    ro: "Notificare formală privind restricția"
   },
   "prof.formalNotice.intro": {
     "pt-BR": "Esta mensagem é um aviso formal sobre a restrição d(o/a/e) seu cadastro.",
@@ -3480,7 +3768,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aquest missatge és un avís formal sobre la restricció del teu compte.",
     eo: "Ĉi tiu mesaĝo estas formala avizo pri la restrikto de via konto.",
     nl: "Dit bericht is een formele kennisgeving over de beperking van je account.",
-    el: "Αυτό το μήνυμα είναι μια τυπική ειδοποίηση σχετικά με τον περιορισμό του λογαριασμού σου."
+    el: "Αυτό το μήνυμα είναι μια τυπική ειδοποίηση σχετικά με τον περιορισμό του λογαριασμού σου.",
+    ro: "Acest mesaj este o notificare formală privind restricția contului tău."
   },
 
   // ===== Admin subjects (admin.*) ===========================================
@@ -3494,7 +3783,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou préstec registrat",
     eo: "Nova prunto registrita",
     nl: "Nieuwe uitlening geregistreerd",
-    el: "Καταχωρίστηκε νέος δανεισμός"
+    el: "Καταχωρίστηκε νέος δανεισμός",
+    ro: "Împrumut nou înregistrat"
   },
   "admin.renewalDone": {
     "pt-BR": "Prorrogação registrada",
@@ -3506,7 +3796,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Renovació registrada",
     eo: "Renovigo registrita",
     nl: "Verlenging geregistreerd",
-    el: "Καταγράφηκε ανανέωση"
+    el: "Καταγράφηκε ανανέωση",
+    ro: "Prelungire înregistrată"
   },
   "admin.returnDone": {
     "pt-BR": "Devolução registrada",
@@ -3518,7 +3809,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn registrat",
     eo: "Redono registrita",
     nl: "Inlevering geregistreerd",
-    el: "Καταγράφηκε επιστροφή"
+    el: "Καταγράφηκε επιστροφή",
+    ro: "Returnare înregistrată"
   },
   "admin.partialReturnDone": {
     "pt-BR": "Devolução parcial registrada",
@@ -3530,7 +3822,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn parcial registrat",
     eo: "Parta redono registrita",
     nl: "Gedeeltelijke inlevering geregistreerd",
-    el: "Καταγράφηκε μερική επιστροφή"
+    el: "Καταγράφηκε μερική επιστροφή",
+    ro: "Returnare parțială înregistrată"
   },
   "admin.fullyReturnedAfterPartialDone": {
     "pt-BR": "Empréstimo concluído (após devolução parcial)",
@@ -3542,7 +3835,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec finalitzat (després de retorn parcial)",
     eo: "Prunto finita (post parta redono)",
     nl: "Uitlening afgesloten (na gedeeltelijke inlevering)",
-    el: "Ο δανεισμός ολοκληρώθηκε (μετά από μερική επιστροφή)"
+    el: "Ο δανεισμός ολοκληρώθηκε (μετά από μερική επιστροφή)",
+    ro: "Împrumut încheiat (după o returnare parțială)"
   },
   "admin.loanUpdate": {
     "pt-BR": "Atualização d(o/a/e) empréstimo",
@@ -3554,7 +3848,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Actualització del préstec",
     eo: "Ĝisdatigo de la prunto",
     nl: "Update van de uitlening",
-    el: "Ενημέρωση δανεισμού"
+    el: "Ενημέρωση δανεισμού",
+    ro: "Actualizarea împrumutului"
   },
   "admin.resUpdate": {
     "pt-BR": "Atualização da reserva",
@@ -3566,7 +3861,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Actualització de la reserva",
     eo: "Ĝisdatigo de la rezervo",
     nl: "Update van de reservering",
-    el: "Ενημέρωση κράτησης"
+    el: "Ενημέρωση κράτησης",
+    ro: "Actualizarea rezervării"
   },
   "admin.profileNotice": {
     "pt-BR": "Aviso sobre cadastro",
@@ -3578,7 +3874,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís sobre un compte",
     eo: "Avizo pri konto",
     nl: "Bericht over een account",
-    el: "Ειδοποίηση για έναν λογαριασμό"
+    el: "Ειδοποίηση για έναν λογαριασμό",
+    ro: "Notificare privind un cont"
   },
 
   // ===== Task statuses (ts.*) — usage Painel internal tasks =================
@@ -3592,7 +3889,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Oberta",
     eo: "Malferma",
     nl: "Open",
-    el: "Ανοιχτή"
+    el: "Ανοιχτή",
+    ro: "Deschisă"
   },
   "ts.a_fazer": {
     "pt-BR": "A fazer",
@@ -3604,7 +3902,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per fer",
     eo: "Farenda",
     nl: "Te doen",
-    el: "Προς εκτέλεση"
+    el: "Προς εκτέλεση",
+    ro: "De făcut"
   },
   "ts.em_andamento": {
     "pt-BR": "Em andamento",
@@ -3616,7 +3915,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "En curs",
     eo: "En kurso",
     nl: "In uitvoering",
-    el: "Σε εξέλιξη"
+    el: "Σε εξέλιξη",
+    ro: "În curs"
   },
   "ts.concluida": {
     "pt-BR": "Concluída",
@@ -3628,7 +3928,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Completada",
     eo: "Finita",
     nl: "Voltooid",
-    el: "Ολοκληρωμένη"
+    el: "Ολοκληρωμένη",
+    ro: "Finalizată"
   },
   "ts.cancelada": {
     "pt-BR": "Cancelada",
@@ -3640,7 +3941,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cancel·lada",
     eo: "Nuligita",
     nl: "Geannuleerd",
-    el: "Ακυρωμένη"
+    el: "Ακυρωμένη",
+    ro: "Anulată"
   },
 
   // ===== Task priorities (tp.*) =============================================
@@ -3654,7 +3956,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Alta",
     eo: "Alta",
     nl: "Hoog",
-    el: "Υψηλή"
+    el: "Υψηλή",
+    ro: "Ridicată"
   },
   "tp.media": {
     "pt-BR": "Média",
@@ -3666,7 +3969,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Mitjana",
     eo: "Meza",
     nl: "Gemiddeld",
-    el: "Μεσαία"
+    el: "Μεσαία",
+    ro: "Medie"
   },
   "tp.baixa": {
     "pt-BR": "Baixa",
@@ -3678,7 +3982,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Baixa",
     eo: "Malalta",
     nl: "Laag",
-    el: "Χαμηλή"
+    el: "Χαμηλή",
+    ro: "Scăzută"
   },
   "tp.urgente": {
     "pt-BR": "Urgente",
@@ -3690,7 +3995,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Urgent",
     eo: "Urĝa",
     nl: "Urgent",
-    el: "Επείγουσα"
+    el: "Επείγουσα",
+    ro: "Urgentă"
   },
 
   // ===== Team — Rôles dynamiques (team.role.*) ==============================
@@ -3704,7 +4010,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "bibliotecari-ària-e",
     eo: "bibliotekist-in-o",
     nl: "bibliothecaris",
-    el: "βιβλιοθηκάριος"
+    el: "βιβλιοθηκάριος",
+    ro: "bibliotecar/bibliotecară"
   },
   "team.role.coordenador": {
     "pt-BR": "coordenador(o/a/e)",
@@ -3716,7 +4023,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "coordinador-a-e",
     eo: "kunordigant-in-o",
     nl: "coördinator",
-    el: "συντονιστής/στρια"
+    el: "συντονιστής/στρια",
+    ro: "coordonator/coordonatoare"
   },
 
   // ===== Team — Admissions concertées (team.promoted_*) =====================
@@ -3730,7 +4038,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has estat admès-a-e com a bibliotecari-ària-e",
     eo: "Vi estis akceptita kiel bibliotekist-in-o",
     nl: "Je bent toegelaten als bibliothecaris",
-    el: "Έγινες δεκτός/ή ως βιβλιοθηκάριος"
+    el: "Έγινες δεκτός/ή ως βιβλιοθηκάριος",
+    ro: "Ai fost primit/primită ca bibliotecar/bibliotecară"
   },
   "team.promoted_to_librarian.intro": {
     "pt-BR": "Você acaba de ser admitid(o/a/e) bibliotecári(o/a/e) na {libraryName} de maneira concertada pela equipe de animação da biblioteca. Seja bem-vind(o/a/e)!",
@@ -3742,7 +4051,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Acabes de ser admès-a-e com a bibliotecari-ària-e a le {libraryName} de manera concertada per l'equip d'animació de la biblioteca. Benvingut-da-e!",
     eo: "Vi ĵus estis akceptita kiel bibliotekist-in-o ĉe {libraryName} interkonsente fare de la animteamo de la biblioteko. Bonvenon!",
     nl: "Je bent zojuist toegelaten als bibliothecaris bij {libraryName} via een gezamenlijk besluit van het animatieteam van de bibliotheek. Welkom!",
-    el: "Μόλις έγινες δεκτός/ή ως βιβλιοθηκάριος στη {libraryName} με συναινετική απόφαση της ομάδας εμψύχωσης της βιβλιοθήκης. Καλώς όρισες!"
+    el: "Μόλις έγινες δεκτός/ή ως βιβλιοθηκάριος στη {libraryName} με συναινετική απόφαση της ομάδας εμψύχωσης της βιβλιοθήκης. Καλώς όρισες!",
+    ro: "Tocmai ai fost primit/primită ca bibliotecar/bibliotecară la {libraryName}, printr-o decizie luată de comun acord de echipa de animare a bibliotecii. Bine ai venit!"
   },
   "team.promoted_to_coordenador.sub": {
     "pt-BR": "Você foi admitid(o/a/e) coordenador(o/a/e)",
@@ -3754,7 +4064,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has estat admès-a-e com a coordinador-a-e",
     eo: "Vi estis akceptita kiel kunordigant-in-o",
     nl: "Je bent toegelaten als coördinator",
-    el: "Έγινες δεκτός/ή ως συντονιστής/στρια"
+    el: "Έγινες δεκτός/ή ως συντονιστής/στρια",
+    ro: "Ai fost primit/primită ca coordonator/coordonatoare"
   },
   "team.promoted_to_coordenador.intro": {
     "pt-BR": "Você acaba de ser admitid(o/a/e) coordenador(o/a/e) na {libraryName} de maneira concertada. Você se junta ao círculo de coordenação. Suas responsabilidades se ampliam: governança da equipe, validações sensíveis. O regimento interno está aqui: {regimentoUrl}",
@@ -3766,7 +4077,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Acabes de ser admès-a-e com a coordinador-a-e a le {libraryName} de manera concertada. T'incorpores al cercle de coordinació. Les teves responsabilitats s'amplien: governança de l'equip, validacions sensibles. El reglament intern és aquí: {regimentoUrl}",
     eo: "Vi ĵus estis akceptita kiel kunordigant-in-o ĉe {libraryName} interkonsente. Vi aliĝas al la kunordiga rondo. Viaj respondecoj plivastiĝas: memmastrumado de la teamo, sentemaj validigoj. La interna regularo estas ĉi tie: {regimentoUrl}",
     nl: "Je bent zojuist toegelaten als coördinator bij {libraryName} via een gezamenlijk besluit. Je treedt toe tot de coördinatiekring. Je verantwoordelijkheden worden groter: teambestuur, gevoelige validaties. Het huishoudelijk reglement vind je hier: {regimentoUrl}",
-    el: "Μόλις έγινες δεκτός/ή ως συντονιστής/στρια στη {libraryName} με συναινετική απόφαση. Εντάσσεσαι στον κύκλο συντονισμού. Οι ευθύνες σου διευρύνονται: διακυβέρνηση της ομάδας, ευαίσθητες επικυρώσεις. Ο εσωτερικός κανονισμός είναι εδώ: {regimentoUrl}"
+    el: "Μόλις έγινες δεκτός/ή ως συντονιστής/στρια στη {libraryName} με συναινετική απόφαση. Εντάσσεσαι στον κύκλο συντονισμού. Οι ευθύνες σου διευρύνονται: διακυβέρνηση της ομάδας, ευαίσθητες επικυρώσεις. Ο εσωτερικός κανονισμός είναι εδώ: {regimentoUrl}",
+    ro: "Tocmai ai fost primit/primită ca coordonator/coordonatoare la {libraryName}, printr-o decizie luată de comun acord. Intri în cercul de coordonare. Responsabilitățile tale se lărgesc: guvernanța echipei, validările sensibile. Regulamentul intern se află aici: {regimentoUrl}"
   },
 
   // ===== Team — Retour volontaire à un autre rôle (team.self_demoted) =======
@@ -3780,7 +4092,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha tornat al rol de {toRole}",
     eo: "{actorName} revenis al la rolo de {toRole}",
     nl: "{actorName} is teruggekeerd naar de rol van {toRole}",
-    el: "Ο/Η {actorName} επέστρεψε στον ρόλο {toRole}"
+    el: "Ο/Η {actorName} επέστρεψε στον ρόλο {toRole}",
+    ro: "{actorName} a revenit la rolul de {toRole}"
   },
   "team.self_demoted.intro": {
     "pt-BR": "{actorName} retornou do papel de {fromRole} ao papel de {toRole} na {libraryName}. Esta decisão é voluntária e imediata.",
@@ -3792,7 +4105,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha tornat del rol de {fromRole} al rol de {toRole} a le {libraryName}. Aquesta decisió és voluntària i immediata.",
     eo: "{actorName} revenis de la rolo de {fromRole} al la rolo de {toRole} ĉe {libraryName}. Ĉi tiu decido estas volonta kaj tuja.",
     nl: "{actorName} is teruggekeerd van de rol van {fromRole} naar de rol van {toRole} bij {libraryName}. Dit besluit is vrijwillig en gaat onmiddellijk in.",
-    el: "Ο/Η {actorName} επέστρεψε από τον ρόλο {fromRole} στον ρόλο {toRole} στη {libraryName}. Αυτή η απόφαση είναι εθελοντική και άμεση."
+    el: "Ο/Η {actorName} επέστρεψε από τον ρόλο {fromRole} στον ρόλο {toRole} στη {libraryName}. Αυτή η απόφαση είναι εθελοντική και άμεση.",
+    ro: "{actorName} a trecut de la rolul de {fromRole} la rolul de {toRole} la {libraryName}. Această decizie este voluntară și se aplică imediat."
   },
 
   // ===== Team — Demande de retrait avec carence 7j (team.removal_*) =========
@@ -3806,7 +4120,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de retirada que et concerneix",
     eo: "Forigpeto koncernanta vin",
     nl: "Verzoek tot verwijdering dat jou betreft",
-    el: "Αίτημα απομάκρυνσης που σε αφορά"
+    el: "Αίτημα απομάκρυνσης που σε αφορά",
+    ro: "Cerere de retragere care te privește"
   },
   "team.removal_requested.intro": {
     "pt-BR": "Um pedido de retirada do papel de {role} concernente a você foi depositado na {libraryName}. Este pedido está submetido a um prazo de 7 dias durante o qual você pode trocar com outr(o/a/e)s coordenador(o/a/e)s para compreender ou contestar esta decisão. Sem anulação da parte del(e/a/e)s antes de {pendingUntilDate}, seu papel de {role} será retirado.",
@@ -3818,7 +4133,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha presentat una sol·licitud de retirada del rol de {role} que et concerneix a le {libraryName}. Aquesta sol·licitud està sotmesa a un termini de 7 dies durant el qual pots intercanviar amb les altres coordinadores per comprendre o impugnar aquesta decisió. Sense anul·lació per part seva abans del {pendingUntilDate}, el teu rol de {role} serà retirat.",
     eo: "Forigpeto pri la rolo de {role} koncernanta vin estis deponita ĉe {libraryName}. Ĉi tiu peto estas submetita al limdato de 7 tagoj dum kiu vi povas interŝanĝi kun la aliaj kunordigant-in-oj por kompreni aŭ kontesti ĉi tiun decidon. Sen nuligo flanke de ili antaŭ la {pendingUntilDate}, via rolo de {role} estos forigita.",
     nl: "Er is een verzoek ingediend om je rol van {role} bij {libraryName} te verwijderen. Voor dit verzoek geldt een wachttijd van 7 dagen waarin je met de andere coördinatoren kunt overleggen om dit besluit te begrijpen of aan te vechten. Zonder annulering van hun kant vóór {pendingUntilDate} wordt je rol van {role} verwijderd.",
-    el: "Κατατέθηκε αίτημα απομάκρυνσης του ρόλου σου {role} στη {libraryName}. Αυτό το αίτημα υπόκειται σε περίοδο αναμονής 7 ημερών, στη διάρκεια της οποίας μπορείς να συζητήσεις με τους/τις άλλους/ες συντονιστές/στριες για να κατανοήσεις ή να αμφισβητήσεις αυτή την απόφαση. Χωρίς ακύρωση από μέρους τους πριν τις {pendingUntilDate}, ο ρόλος σου {role} θα αφαιρεθεί."
+    el: "Κατατέθηκε αίτημα απομάκρυνσης του ρόλου σου {role} στη {libraryName}. Αυτό το αίτημα υπόκειται σε περίοδο αναμονής 7 ημερών, στη διάρκεια της οποίας μπορείς να συζητήσεις με τους/τις άλλους/ες συντονιστές/στριες για να κατανοήσεις ή να αμφισβητήσεις αυτή την απόφαση. Χωρίς ακύρωση από μέρους τους πριν τις {pendingUntilDate}, ο ρόλος σου {role} θα αφαιρεθεί.",
+    ro: "La {libraryName} a fost depusă o cerere de retragere a rolului tău de {role}. Cererea are un termen de 7 zile, în care poți discuta cu celelalte persoane din coordonare ca să înțelegi sau să contești această decizie. Dacă nu o anulează până la {pendingUntilDate}, rolul tău de {role} va fi retras."
   },
   "team.removal_cancelled.sub": {
     "pt-BR": "O pedido de retirada concernente a você foi anulado",
@@ -3830,7 +4146,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La sol·licitud de retirada que et concerneix s'ha anul·lat",
     eo: "La forigpeto koncernanta vin estis nuligita",
     nl: "Het verzoek tot verwijdering dat jou betreft is geannuleerd",
-    el: "Το αίτημα απομάκρυνσης που σε αφορά ακυρώθηκε"
+    el: "Το αίτημα απομάκρυνσης που σε αφορά ακυρώθηκε",
+    ro: "Cererea de retragere care te privea a fost anulată"
   },
   "team.removal_cancelled.intro": {
     "pt-BR": "O pedido de retirada concernente a você na {libraryName} foi anulado por {cancellerName}. Você recupera todos os seus direitos de {role} imediatamente.",
@@ -3842,7 +4159,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La sol·licitud de retirada que et concerneix a le {libraryName} ha estat anul·lada per {cancellerName}. Recuperes immediatament tots els teus drets de {role}.",
     eo: "La forigpeto koncernanta vin ĉe {libraryName} estis nuligita de {cancellerName}. Vi tuj reakiras ĉiujn viajn rajtojn de {role}.",
     nl: "Het verzoek tot verwijdering dat jou betreft bij {libraryName} is geannuleerd door {cancellerName}. Je krijgt al je {role}-rechten onmiddellijk terug.",
-    el: "Το αίτημα απομάκρυνσης που σε αφορά στη {libraryName} ακυρώθηκε από {cancellerName}. Ανακτάς αμέσως όλα τα δικαιώματά σου ως {role}."
+    el: "Το αίτημα απομάκρυνσης που σε αφορά στη {libraryName} ακυρώθηκε από {cancellerName}. Ανακτάς αμέσως όλα τα δικαιώματά σου ως {role}.",
+    ro: "Cererea de retragere care te privea la {libraryName} a fost anulată de {cancellerName}. Îți recapeți imediat toate drepturile de {role}."
   },
   "team.removal_completed.sub": {
     "pt-BR": "Sua retirada do papel de {role} foi finalizada",
@@ -3854,7 +4172,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva retirada del rol de {role} s'ha finalitzat",
     eo: "Via forigo el la rolo de {role} estis finita",
     nl: "Je verwijdering uit de rol van {role} is afgerond",
-    el: "Η απομάκρυνσή σου από τον ρόλο {role} οριστικοποιήθηκε"
+    el: "Η απομάκρυνσή σου από τον ρόλο {role} οριστικοποιήθηκε",
+    ro: "Retragerea ta din rolul de {role} a fost finalizată"
   },
   "team.removal_completed.intro": {
     "pt-BR": "O prazo de 7 dias decorreu sem anulação. Seu papel de {role} na {libraryName} foi retirado. Se você deseja compreender esta decisão ou discuti-la, entre em contato com (o/a/e)s coordenador(o/a/e)s.",
@@ -3866,7 +4185,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El termini de 7 dies ha transcorregut sense anul·lació. El teu rol de {role} a le {libraryName} ha estat retirat. Si vols comprendre aquesta decisió o discutir-la, contacta les coordinadores.",
     eo: "La limdato de 7 tagoj forpasis sen nuligo. Via rolo de {role} ĉe {libraryName} estis forigita. Se vi deziras kompreni ĉi tiun decidon aŭ priparoli ĝin, kontaktu la kunordigant-in-ojn.",
     nl: "De termijn van 7 dagen is verstreken zonder annulering. Je rol van {role} bij {libraryName} is verwijderd. Als je dit besluit wilt begrijpen of erover wilt praten, neem dan contact op met de coördinatoren.",
-    el: "Η περίοδος των 7 ημερών παρήλθε χωρίς ακύρωση. Ο ρόλος σου {role} στη {libraryName} αφαιρέθηκε. Αν θέλεις να κατανοήσεις αυτή την απόφαση ή να τη συζητήσεις, επικοινώνησε με τους/τις συντονιστές/στριες."
+    el: "Η περίοδος των 7 ημερών παρήλθε χωρίς ακύρωση. Ο ρόλος σου {role} στη {libraryName} αφαιρέθηκε. Αν θέλεις να κατανοήσεις αυτή την απόφαση ή να τη συζητήσεις, επικοινώνησε με τους/τις συντονιστές/στριες.",
+    ro: "Termenul de 7 zile a trecut fără nicio anulare. Rolul tău de {role} la {libraryName} a fost retras. Dacă vrei să înțelegi această decizie sau să discuți despre ea, contactează persoanele din coordonare."
   },
 
   // ===== Team — Suspension immédiate (team.suspended_*) =====================
@@ -3880,7 +4200,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Suspensió immediata dels teus drets de {role}",
     eo: "Tuja suspendo de viaj rajtoj de {role}",
     nl: "Onmiddellijke schorsing van je {role}-rechten",
-    el: "Άμεση αναστολή των δικαιωμάτων σου ως {role}"
+    el: "Άμεση αναστολή των δικαιωμάτων σου ως {role}",
+    ro: "Suspendarea imediată a drepturilor tale de {role}"
   },
   "team.suspended.intro": {
     "pt-BR": "Seus direitos de {role} na {libraryName} foram suspensos por medida cautelar. Motivo comunicado: {reason}. Para compreender ou contestar esta decisão, entre em contato com (o/a/e)s coordenador(o/a/e)s o mais rápido possível.",
@@ -3892,7 +4213,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Els teus drets de {role} a le {libraryName} han estat suspesos per mesura cautelar. Motiu comunicat: {reason}. Per comprendre o impugnar aquesta decisió, contacta les coordinadores com més aviat millor.",
     eo: "Viaj rajtoj de {role} ĉe {libraryName} estis suspenditaj kiel antaŭgarda mezuro. Komunikita motivo: {reason}. Por kompreni aŭ kontesti ĉi tiun decidon, kontaktu la kunordigant-in-ojn kiel eble plej baldaŭ.",
     nl: "Je {role}-rechten bij {libraryName} zijn als voorzorgsmaatregel geschorst. Meegedeelde reden: {reason}. Om dit besluit te begrijpen of aan te vechten, neem zo snel mogelijk contact op met de coördinatoren.",
-    el: "Τα δικαιώματά σου ως {role} στη {libraryName} ανεστάλησαν ως προληπτικό μέτρο. Λόγος που γνωστοποιήθηκε: {reason}. Για να κατανοήσεις ή να αμφισβητήσεις αυτή την απόφαση, επικοινώνησε με τους/τις συντονιστές/στριες το συντομότερο."
+    el: "Τα δικαιώματά σου ως {role} στη {libraryName} ανεστάλησαν ως προληπτικό μέτρο. Λόγος που γνωστοποιήθηκε: {reason}. Για να κατανοήσεις ή να αμφισβητήσεις αυτή την απόφαση, επικοινώνησε με τους/τις συντονιστές/στριες το συντομότερο.",
+    ro: "Drepturile tale de {role} la {libraryName} au fost suspendate ca măsură de precauție. Motivul comunicat: {reason}. Ca să înțelegi sau să contești această decizie, contactează cât mai repede persoanele din coordonare."
   },
   "team.unsuspended.sub": {
     "pt-BR": "Levantamento da sua suspensão",
@@ -3904,7 +4226,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aixecament de la teva suspensió",
     eo: "Levo de via suspendo",
     nl: "Opheffing van je schorsing",
-    el: "Άρση της αναστολής σου"
+    el: "Άρση της αναστολής σου",
+    ro: "Ridicarea suspendării tale"
   },
   "team.unsuspended.intro": {
     "pt-BR": "A suspensão dos seus direitos de {role} na {libraryName} foi levantada por {actorName}. Você recupera imediatamente seus acessos.",
@@ -3916,7 +4239,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La suspensió dels teus drets de {role} a le {libraryName} ha estat aixecada per {actorName}. Recuperes immediatament els teus accessos.",
     eo: "La suspendo de viaj rajtoj de {role} ĉe {libraryName} estis levita de {actorName}. Vi tuj reakiras viajn alirojn.",
     nl: "De schorsing van je {role}-rechten bij {libraryName} is opgeheven door {actorName}. Je krijgt onmiddellijk weer toegang.",
-    el: "Η αναστολή των δικαιωμάτων σου ως {role} στη {libraryName} ήρθη από {actorName}. Ανακτάς αμέσως την πρόσβασή σου."
+    el: "Η αναστολή των δικαιωμάτων σου ως {role} στη {libraryName} ήρθη από {actorName}. Ανακτάς αμέσως την πρόσβασή σου.",
+    ro: "Suspendarea drepturilor tale de {role} la {libraryName} a fost ridicată de {actorName}. Îți recapeți imediat accesul."
   },
 
   // ===== Team — Escalades aux administrateur·rices AnarBib (team.last_*) ====
@@ -3930,7 +4254,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName} ja no té coordinador-a-e",
     eo: "{libraryName} ne plu havas kunordigant-in-on",
     nl: "{libraryName} heeft geen coördinator meer",
-    el: "Η {libraryName} δεν έχει πλέον συντονιστή/στρια"
+    el: "Η {libraryName} δεν έχει πλέον συντονιστή/στρια",
+    ro: "{libraryName} nu mai are pe nimeni în coordonare"
   },
   "team.last_coordinator_left.intro": {
     "pt-BR": "A biblioteca {libraryName} encontra-se sem coordenador(o/a/e) ativ(o/a/e). {actorName} acaba de retornar a um papel não-coordenador, e ninguém mais ocupa o papel. A biblioteca permanece funcional tecnicamente (os bibliotecári(o/a/e)s podem continuar a operar) mas não tem mais instância de coordenação interna. Uma intervenção política da rede AnarBib é provavelmente necessária.",
@@ -3942,7 +4267,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca {libraryName} es troba sense coordinador-a-e actiu-iva-e. {actorName} acaba de tornar a un rol no coordinador, i ningú més ocupa el rol. La biblioteca segueix sent funcional tècnicament (les bibliotecàries poden continuar operant) però ja no té instància de coordinació interna. Probablement cal una intervenció política de la xarxa AnarBib.",
     eo: "La biblioteko {libraryName} troviĝas sen aktiva kunordigant-in-o. {actorName} ĵus revenis al ne-kunordiga rolo, kaj neniu alia okupas la rolon. La biblioteko restas teknike funkcia (la bibliotekist-in-oj povas plu funkcii) sed ne plu havas internan kunordigan instancon. Politika interveno de la reto AnarBib estas verŝajne necesa.",
     nl: "Bibliotheek {libraryName} bevindt zich zonder actieve coördinator. {actorName} is zojuist teruggekeerd naar een niet-coördinerende rol, en niemand anders bekleedt die rol. De bibliotheek blijft technisch functioneel (bibliothecarissen kunnen nog werken), maar heeft geen intern coördinatieorgaan meer. Een politieke interventie van het AnarBib-netwerk is waarschijnlijk nodig.",
-    el: "Η βιβλιοθήκη {libraryName} βρίσκεται χωρίς ενεργό/ή συντονιστή/στρια. Ο/Η {actorName} μόλις επέστρεψε σε ρόλο μη συντονιστή/στριας, και κανείς άλλος δεν κατέχει τον ρόλο. Η βιβλιοθήκη παραμένει τεχνικά λειτουργική (οι βιβλιοθηκάριοι μπορούν ακόμη να λειτουργούν) αλλά δεν έχει πλέον εσωτερικό όργανο συντονισμού. Πιθανότατα απαιτείται πολιτική παρέμβαση του δικτύου AnarBib."
+    el: "Η βιβλιοθήκη {libraryName} βρίσκεται χωρίς ενεργό/ή συντονιστή/στρια. Ο/Η {actorName} μόλις επέστρεψε σε ρόλο μη συντονιστή/στριας, και κανείς άλλος δεν κατέχει τον ρόλο. Η βιβλιοθήκη παραμένει τεχνικά λειτουργική (οι βιβλιοθηκάριοι μπορούν ακόμη να λειτουργούν) αλλά δεν έχει πλέον εσωτερικό όργανο συντονισμού. Πιθανότατα απαιτείται πολιτική παρέμβαση του δικτύου AnarBib.",
+    ro: "Biblioteca {libraryName} a rămas fără nicio persoană activă în coordonare. {actorName} tocmai a revenit la un rol din afara coordonării și nimeni altcineva nu ocupă acest rol. Tehnic, biblioteca funcționează în continuare (bibliotecarii și bibliotecarele pot lucra ca până acum), dar nu mai are un organ intern de coordonare. Probabil este nevoie de o intervenție politică a rețelei AnarBib."
   },
   "team.last_coordinator_pending_removal.sub": {
     "pt-BR": "{libraryName} corre risco de ficar sem coordenador(o/a/e)",
@@ -3954,7 +4280,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName} corre el risc de quedar-se sense coordinador-a-e",
     eo: "{libraryName} riskas resti sen kunordigant-in-o",
     nl: "{libraryName} dreigt zonder coördinator te komen",
-    el: "Η {libraryName} κινδυνεύει να μείνει χωρίς συντονιστή/στρια"
+    el: "Η {libraryName} κινδυνεύει να μείνει χωρίς συντονιστή/στρια",
+    ro: "{libraryName} riscă să rămână fără nimeni în coordonare"
   },
   "team.last_coordinator_pending_removal.intro": {
     "pt-BR": "A biblioteca {libraryName} não terá mais coordenador(o/a/e) ativ(o/a/e) a partir de {pendingUntilDate} se o pedido de retirada em curso não for anulado. {actorName} pediu a retirada d(o/a/e) últim(o/a/e) coordenador(o/a/e) ativ(o/a/e) da biblioteca. Você pode observar a situação, ou intervir politicamente se necessário.",
@@ -3966,7 +4293,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca {libraryName} ja no tindrà coordinador-a-e actiu-iva-e a partir del {pendingUntilDate} si la sol·licitud de retirada en curs no s'anul·la. {actorName} ha sol·licitat la retirada de le darrere coordinador-a-e actiu-iva-e de la biblioteca. Pots observar la situació, o intervenir políticament si cal.",
     eo: "La biblioteko {libraryName} ne plu havos aktivan kunordigant-in-on ekde la {pendingUntilDate} se la kuranta forigpeto ne estos nuligita. {actorName} petis la forigon de la lasta aktiva kunordigant-in-o de la biblioteko. Vi povas observi la situacion, aŭ interveni politike se necese.",
     nl: "Bibliotheek {libraryName} heeft vanaf {pendingUntilDate} geen actieve coördinator meer als het lopende verzoek tot verwijdering niet wordt geannuleerd. {actorName} heeft de verwijdering van de laatste actieve coördinator van de bibliotheek aangevraagd. Je kunt de situatie volgen, of indien nodig politiek ingrijpen.",
-    el: "Η βιβλιοθήκη {libraryName} δεν θα έχει ενεργό/ή συντονιστή/στρια από τις {pendingUntilDate} και μετά, αν το εκκρεμές αίτημα απομάκρυνσης δεν ακυρωθεί. Ο/Η {actorName} ζήτησε την απομάκρυνση του/της τελευταίου/ας ενεργού/ής συντονιστή/στριας της βιβλιοθήκης. Μπορείς να παρακολουθήσεις την κατάσταση ή να παρέμβεις πολιτικά αν χρειαστεί."
+    el: "Η βιβλιοθήκη {libraryName} δεν θα έχει ενεργό/ή συντονιστή/στρια από τις {pendingUntilDate} και μετά, αν το εκκρεμές αίτημα απομάκρυνσης δεν ακυρωθεί. Ο/Η {actorName} ζήτησε την απομάκρυνση του/της τελευταίου/ας ενεργού/ής συντονιστή/στριας της βιβλιοθήκης. Μπορείς να παρακολουθήσεις την κατάσταση ή να παρέμβεις πολιτικά αν χρειαστεί.",
+    ro: "Biblioteca {libraryName} nu va mai avea nicio persoană activă în coordonare începând cu {pendingUntilDate}, dacă cererea de retragere în curs nu este anulată. {actorName} a cerut retragerea ultimei persoane active din coordonarea bibliotecii. Poți urmări situația sau poți interveni politic, dacă e nevoie."
   },
 
   // ===== Team — Avertissements et passage en inactif (team.inactive_*) ======
@@ -3982,7 +4310,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte passarà a inactiu d'aquí a 30 dies",
     eo: "Via konto iĝos neaktiva post 30 tagoj",
     nl: "Je account wordt over 30 dagen inactief",
-    el: "Ο λογαριασμός σου θα γίνει ανενεργός σε 30 ημέρες"
+    el: "Ο λογαριασμός σου θα γίνει ανενεργός σε 30 ημέρες",
+    ro: "Contul tău va deveni inactiv peste 30 de zile"
   },
   "team.inactive_warning_30d.intro": {
     "pt-BR": "Você não se conectou em AnarBib há 8 meses. Sem conexão da sua parte nos próximos 30 dias, seu status de {role} na {libraryName} passará automaticamente a inativo. Para conservar seus acessos, conecte-se simplesmente a AnarBib antes de {deadlineDate}.",
@@ -3994,7 +4323,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Fa 8 mesos que no et connectes a AnarBib. Sense connexió per part teva en els pròxims 30 dies, el teu estat de {role} a le {libraryName} passarà automàticament a inactiu. Per conservar els teus accessos, simplement connecta't a AnarBib abans del {deadlineDate}.",
     eo: "Vi ne konektiĝis al AnarBib de 8 monatoj. Sen konekto flanke de vi en la venontaj 30 tagoj, via stato de {role} ĉe {libraryName} aŭtomate iĝos neaktiva. Por konservi viajn alirojn, simple konektiĝu al AnarBib antaŭ la {deadlineDate}.",
     nl: "Je hebt al 8 maanden niet ingelogd op AnarBib. Zonder dat je binnen de komende 30 dagen inlogt, wordt je status van {role} bij {libraryName} automatisch inactief. Om je toegang te behouden, log je gewoon in op AnarBib vóór {deadlineDate}.",
-    el: "Δεν έχεις συνδεθεί στο AnarBib εδώ και 8 μήνες. Χωρίς σύνδεση από μέρους σου μέσα στις επόμενες 30 ημέρες, η ιδιότητά σου ως {role} στη {libraryName} θα γίνει αυτόματα ανενεργή. Για να διατηρήσεις την πρόσβασή σου, απλώς συνδέσου στο AnarBib πριν τις {deadlineDate}."
+    el: "Δεν έχεις συνδεθεί στο AnarBib εδώ και 8 μήνες. Χωρίς σύνδεση από μέρους σου μέσα στις επόμενες 30 ημέρες, η ιδιότητά σου ως {role} στη {libraryName} θα γίνει αυτόματα ανενεργή. Για να διατηρήσεις την πρόσβασή σου, απλώς συνδέσου στο AnarBib πριν τις {deadlineDate}.",
+    ro: "Nu te-ai mai conectat la AnarBib de 8 luni. Dacă nu te conectezi în următoarele 30 de zile, statutul tău de {role} la {libraryName} va deveni automat inactiv. Ca să-ți păstrezi accesul, conectează-te pur și simplu la AnarBib înainte de {deadlineDate}."
   },
   "team.inactive_warning_7d.sub": {
     "pt-BR": "Último lembrete: sua conta passa a inativa em 7 dias",
@@ -4006,7 +4336,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Últim recordatori: el teu compte passa a inactiu d'aquí a 7 dies",
     eo: "Lasta memorigo: via konto iĝas neaktiva post 7 tagoj",
     nl: "Laatste herinnering: je account wordt over 7 dagen inactief",
-    el: "Τελευταία υπενθύμιση: ο λογαριασμός σου γίνεται ανενεργός σε 7 ημέρες"
+    el: "Τελευταία υπενθύμιση: ο λογαριασμός σου γίνεται ανενεργός σε 7 ημέρες",
+    ro: "Ultimul memento: contul tău devine inactiv peste 7 zile"
   },
   "team.inactive_warning_7d.intro": {
     "pt-BR": "Sem conexão da sua parte nos próximos 7 dias, seu status de {role} na {libraryName} passará automaticamente a inativo em {deadlineDate}.",
@@ -4018,7 +4349,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sense connexió per part teva en els pròxims 7 dies, el teu estat de {role} a le {libraryName} passarà automàticament a inactiu el {deadlineDate}.",
     eo: "Sen konekto flanke de vi en la venontaj 7 tagoj, via stato de {role} ĉe {libraryName} aŭtomate iĝos neaktiva la {deadlineDate}.",
     nl: "Zonder dat je binnen de komende 7 dagen inlogt, wordt je status van {role} bij {libraryName} op {deadlineDate} automatisch inactief.",
-    el: "Χωρίς σύνδεση από μέρους σου μέσα στις επόμενες 7 ημέρες, η ιδιότητά σου ως {role} στη {libraryName} θα γίνει αυτόματα ανενεργή στις {deadlineDate}."
+    el: "Χωρίς σύνδεση από μέρους σου μέσα στις επόμενες 7 ημέρες, η ιδιότητά σου ως {role} στη {libraryName} θα γίνει αυτόματα ανενεργή στις {deadlineDate}.",
+    ro: "Dacă nu te conectezi în următoarele 7 zile, statutul tău de {role} la {libraryName} va deveni automat inactiv pe {deadlineDate}."
   },
   "team.inactive_auto.sub": {
     "pt-BR": "Sua conta passou a inativa",
@@ -4030,7 +4362,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte ha passat a inactiu",
     eo: "Via konto iĝis neaktiva",
     nl: "Je account is inactief geworden",
-    el: "Ο λογαριασμός σου έγινε ανενεργός"
+    el: "Ο λογαριασμός σου έγινε ανενεργός",
+    ro: "Contul tău a devenit inactiv"
   },
   "team.inactive_auto.intro": {
     "pt-BR": "Após 9 meses sem conexão, seu status de {role} na {libraryName} passou a inativo. Seus acessos estão fechados. Se você desejar recuperá-los, entre em contato com (o/a/e)s coordenador(o/a/e)s da biblioteca para uma reativação.",
@@ -4042,7 +4375,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Després de 9 mesos sense connexió, el teu estat de {role} a le {libraryName} ha passat a inactiu. Els teus accessos estan tancats. Si vols recuperar-los, contacta les coordinadores de la biblioteca per a una reactivació.",
     eo: "Post 9 monatoj sen konekto, via stato de {role} ĉe {libraryName} iĝis neaktiva. Viaj aliroj estas fermitaj. Se vi deziras reakiri ilin, kontaktu la kunordigant-in-ojn de la biblioteko por reaktivigo.",
     nl: "Na 9 maanden zonder inloggen is je status van {role} bij {libraryName} inactief geworden. Je toegang is gesloten. Als je die wilt terugkrijgen, neem dan contact op met de coördinatoren van de bibliotheek voor een heractivering.",
-    el: "Μετά από 9 μήνες χωρίς σύνδεση, η ιδιότητά σου ως {role} στη {libraryName} έγινε ανενεργή. Η πρόσβασή σου έκλεισε. Αν θέλεις να την ανακτήσεις, επικοινώνησε με τους/τις συντονιστές/στριες της βιβλιοθήκης για επανενεργοποίηση."
+    el: "Μετά από 9 μήνες χωρίς σύνδεση, η ιδιότητά σου ως {role} στη {libraryName} έγινε ανενεργή. Η πρόσβασή σου έκλεισε. Αν θέλεις να την ανακτήσεις, επικοινώνησε με τους/τις συντονιστές/στριες της βιβλιοθήκης για επανενεργοποίηση.",
+    ro: "După 9 luni fără conectare, statutul tău de {role} la {libraryName} a devenit inactiv. Accesul tău este închis. Dacă vrei să-l recapeți, contactează persoanele din coordonarea bibliotecii pentru o reactivare."
   },
 
   // ===== TM-B (#153.B) — titres et intros des mails admin team.* =====
@@ -4056,7 +4390,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Admissió concertada — {role}",
     eo: "Interkonsentita akcepto — {role}",
     nl: "Gezamenlijke toelating — {role}",
-    el: "Συναινετική ένταξη — {role}"
+    el: "Συναινετική ένταξη — {role}",
+    ro: "Primire de comun acord — {role}"
   },
   "team.promoted.admin.intro": {
     "pt-BR": "{actorName} admitiu {targetName} como {role} na {libraryName}.",
@@ -4068,7 +4403,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha admès {targetName} com a {role} a la {libraryName}.",
     eo: "{actorName} akceptis {targetName} kiel {role} ĉe {libraryName}.",
     nl: "{actorName} heeft {targetName} toegelaten als {role} bij {libraryName}.",
-    el: "Ο/Η {actorName} δέχτηκε τον/την {targetName} ως {role} στη {libraryName}."
+    el: "Ο/Η {actorName} δέχτηκε τον/την {targetName} ως {role} στη {libraryName}.",
+    ro: "{targetName} a fost primit/primită ca {role} la {libraryName} de {actorName}."
   },
   "team.self_demoted.admin.sub": {
     "pt-BR": "Retorno voluntário ao papel de {toRole}",
@@ -4080,7 +4416,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retorn voluntari al rol de {toRole}",
     eo: "Memvola reveno al la rolo {toRole}",
     nl: "Vrijwillige terugkeer naar de rol van {toRole}",
-    el: "Εθελοντική επιστροφή στον ρόλο {toRole}"
+    el: "Εθελοντική επιστροφή στον ρόλο {toRole}",
+    ro: "Revenire voluntară la rolul de {toRole}"
   },
   "team.self_demoted.admin.intro": {
     "pt-BR": "{actorName} retornou do papel de {fromRole} ao papel de {toRole} na {libraryName}.",
@@ -4092,7 +4429,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha tornat del rol de {fromRole} al rol de {toRole} a la {libraryName}.",
     eo: "{actorName} revenis de la rolo {fromRole} al la rolo {toRole} ĉe {libraryName}.",
     nl: "{actorName} is teruggetreden van de rol van {fromRole} naar de rol van {toRole} bij {libraryName}.",
-    el: "Ο/Η {actorName} επέστρεψε από τον ρόλο {fromRole} στον ρόλο {toRole} στη {libraryName}."
+    el: "Ο/Η {actorName} επέστρεψε από τον ρόλο {fromRole} στον ρόλο {toRole} στη {libraryName}.",
+    ro: "{actorName} a trecut de la rolul de {fromRole} la rolul de {toRole} la {libraryName}."
   },
   "team.removal_requested.admin.sub": {
     "pt-BR": "Pedido de retirada — {role}",
@@ -4104,7 +4442,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de retirada — {role}",
     eo: "Forigpeto — {role}",
     nl: "Verzoek tot verwijdering — {role}",
-    el: "Αίτημα απομάκρυνσης — {role}"
+    el: "Αίτημα απομάκρυνσης — {role}",
+    ro: "Cerere de retragere — {role}"
   },
   "team.removal_requested.admin.intro": {
     "pt-BR": "{actorName} solicitou a retirada de {targetName} do papel de {role} na {libraryName}. Prazo de carência: 7 dias.",
@@ -4116,7 +4455,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha sol·licitat la retirada de {targetName} del rol de {role} a la {libraryName}. Termini de gràcia: 7 dies.",
     eo: "{actorName} petis la forigon de {targetName} el la rolo {role} ĉe {libraryName}. Prokrastperiodo: 7 tagoj.",
     nl: "{actorName} heeft de verwijdering van {targetName} uit de rol van {role} bij {libraryName} aangevraagd. Respijtperiode: 7 dagen.",
-    el: "Ο/Η {actorName} ζήτησε την απομάκρυνση του/της {targetName} από τον ρόλο {role} στη {libraryName}. Περίοδος χάριτος: 7 ημέρες."
+    el: "Ο/Η {actorName} ζήτησε την απομάκρυνση του/της {targetName} από τον ρόλο {role} στη {libraryName}. Περίοδος χάριτος: 7 ημέρες.",
+    ro: "{actorName} a cerut retragerea lui {targetName} din rolul de {role} la {libraryName}. Termen de așteptare: 7 zile."
   },
   "team.removal_cancelled.admin.sub": {
     "pt-BR": "Pedido de retirada anulado — {role}",
@@ -4128,7 +4468,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de retirada anul·lada — {role}",
     eo: "Forigpeto nuligita — {role}",
     nl: "Verzoek tot verwijdering geannuleerd — {role}",
-    el: "Αίτημα απομάκρυνσης ακυρώθηκε — {role}"
+    el: "Αίτημα απομάκρυνσης ακυρώθηκε — {role}",
+    ro: "Cerere de retragere anulată — {role}"
   },
   "team.removal_cancelled.admin.intro": {
     "pt-BR": "{cancellerName} anulou o pedido de retirada de {targetName} do papel de {role} na {libraryName}. {targetName} recupera todos os direitos imediatamente.",
@@ -4140,7 +4481,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{cancellerName} ha anul·lat la sol·licitud de retirada de {targetName} del rol de {role} a la {libraryName}. {targetName} recupera tots els drets immediatament.",
     eo: "{cancellerName} nuligis la forigpeton de {targetName} el la rolo {role} ĉe {libraryName}. {targetName} tuj reakiras ĉiujn rajtojn.",
     nl: "{cancellerName} heeft het verzoek tot verwijdering van {targetName} uit de rol van {role} bij {libraryName} geannuleerd. {targetName} krijgt alle rechten onmiddellijk terug.",
-    el: "Ο/Η {cancellerName} ακύρωσε το αίτημα απομάκρυνσης του/της {targetName} από τον ρόλο {role} στη {libraryName}. Ο/Η {targetName} ανακτά όλα τα δικαιώματα αμέσως."
+    el: "Ο/Η {cancellerName} ακύρωσε το αίτημα απομάκρυνσης του/της {targetName} από τον ρόλο {role} στη {libraryName}. Ο/Η {targetName} ανακτά όλα τα δικαιώματα αμέσως.",
+    ro: "{cancellerName} a anulat cererea de retragere a lui {targetName} din rolul de {role} la {libraryName}. {targetName} își recapătă imediat toate drepturile."
   },
   "team.removal_completed.admin.sub": {
     "pt-BR": "Retirada finalizada — {role}",
@@ -4152,7 +4494,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retirada finalitzada — {role}",
     eo: "Forigo finita — {role}",
     nl: "Verwijdering afgerond — {role}",
-    el: "Απομάκρυνση ολοκληρώθηκε — {role}"
+    el: "Απομάκρυνση ολοκληρώθηκε — {role}",
+    ro: "Retragere finalizată — {role}"
   },
   "team.removal_completed.admin.intro": {
     "pt-BR": "O prazo de 7 dias decorreu sem anulação. {targetName} foi retirad-o-a-e do papel de {role} na {libraryName}.",
@@ -4164,7 +4507,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El termini de 7 dies ha transcorregut sense anul·lació. {targetName} ha estat retirat(a/e) del rol de {role} a la {libraryName}.",
     eo: "La 7-taga periodo pasis sen nuligo. {targetName} estis forigita el la rolo {role} ĉe {libraryName}.",
     nl: "De termijn van 7 dagen is verstreken zonder annulering. {targetName} is verwijderd uit de rol van {role} bij {libraryName}.",
-    el: "Η περίοδος των 7 ημερών παρήλθε χωρίς ακύρωση. Ο/Η {targetName} απομακρύνθηκε από τον ρόλο {role} στη {libraryName}."
+    el: "Η περίοδος των 7 ημερών παρήλθε χωρίς ακύρωση. Ο/Η {targetName} απομακρύνθηκε από τον ρόλο {role} στη {libraryName}.",
+    ro: "Termenul de 7 zile a trecut fără nicio anulare. {targetName} nu mai are rolul de {role} la {libraryName}."
   },
   "team.suspended.admin.sub": {
     "pt-BR": "Suspensão imediata — {role}",
@@ -4176,7 +4520,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Suspensió immediata — {role}",
     eo: "Tuja suspendo — {role}",
     nl: "Onmiddellijke schorsing — {role}",
-    el: "Άμεση αναστολή — {role}"
+    el: "Άμεση αναστολή — {role}",
+    ro: "Suspendare imediată — {role}"
   },
   "team.suspended.admin.intro": {
     "pt-BR": "{actorName} suspendeu os direitos de {role} de {targetName} na {libraryName} por medida cautelar.",
@@ -4188,7 +4533,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha suspès els drets de {role} de {targetName} a la {libraryName} com a mesura cautelar.",
     eo: "{actorName} suspendis la {role}-rajtojn de {targetName} ĉe {libraryName} kiel antaŭzorgan rimedon.",
     nl: "{actorName} heeft de {role}-rechten van {targetName} bij {libraryName} als voorzorgsmaatregel geschorst.",
-    el: "Ο/Η {actorName} ανέστειλε τα δικαιώματα {role} του/της {targetName} στη {libraryName} ως προληπτικό μέτρο."
+    el: "Ο/Η {actorName} ανέστειλε τα δικαιώματα {role} του/της {targetName} στη {libraryName} ως προληπτικό μέτρο.",
+    ro: "{actorName} a suspendat drepturile de {role} ale lui {targetName} la {libraryName}, ca măsură de precauție."
   },
   "team.unsuspended.admin.sub": {
     "pt-BR": "Levantamento de suspensão — {role}",
@@ -4200,7 +4546,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aixecament de la suspensió — {role}",
     eo: "Nuligo de suspendo — {role}",
     nl: "Schorsing opgeheven — {role}",
-    el: "Άρση αναστολής — {role}"
+    el: "Άρση αναστολής — {role}",
+    ro: "Suspendare ridicată — {role}"
   },
   "team.unsuspended.admin.intro": {
     "pt-BR": "{actorName} levantou a suspensão dos direitos de {role} de {targetName} na {libraryName}. Acessos restaurados.",
@@ -4212,7 +4559,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} ha aixecat la suspensió dels drets de {role} de {targetName} a la {libraryName}. Accessos restaurats.",
     eo: "{actorName} nuligis la suspendon de la {role}-rajtoj de {targetName} ĉe {libraryName}. Aliroj restarigitaj.",
     nl: "{actorName} heeft de schorsing van de {role}-rechten van {targetName} bij {libraryName} opgeheven. Toegang hersteld.",
-    el: "Ο/Η {actorName} ήρε την αναστολή των δικαιωμάτων {role} του/της {targetName} στη {libraryName}. Η πρόσβαση αποκαταστάθηκε."
+    el: "Ο/Η {actorName} ήρε την αναστολή των δικαιωμάτων {role} του/της {targetName} στη {libraryName}. Η πρόσβαση αποκαταστάθηκε.",
+    ro: "{actorName} a ridicat suspendarea drepturilor de {role} ale lui {targetName} la {libraryName}. Accesul a fost restabilit."
   },
   "team.inactive_warning_7d.admin.sub": {
     "pt-BR": "Aviso de inatividade — 7 dias antes da passagem para inativo",
@@ -4224,7 +4572,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís d'inactivitat — 7 dies abans del pas a inactiu",
     eo: "Averto pri neaktiveco — 7 tagoj antaŭ la ŝanĝo al neaktiva",
     nl: "Inactiviteitswaarschuwing — 7 dagen vóór inactiviteit",
-    el: "Προειδοποίηση αδράνειας — 7 ημέρες πριν γίνει ανενεργός"
+    el: "Προειδοποίηση αδράνειας — 7 ημέρες πριν γίνει ανενεργός",
+    ro: "Avertisment de inactivitate — 7 zile până la trecerea la inactiv"
   },
   "team.inactive_warning_7d.admin.intro": {
     "pt-BR": "{targetName} está prestes a passar para inativo (papel de {role}) na {libraryName} em {deadlineDate} se não se conectar.",
@@ -4236,7 +4585,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{targetName} està a punt de passar a inactiu (rol de {role}) a la {libraryName} el {deadlineDate} si no es connecta.",
     eo: "{targetName} baldaŭ fariĝos neaktiva (rolo {role}) ĉe {libraryName} je {deadlineDate}, se ri ne ensalutos.",
     nl: "{targetName} staat op het punt inactief te worden (rol van {role}) bij {libraryName} op {deadlineDate}, tenzij die inlogt.",
-    el: "Ο/Η {targetName} πρόκειται να γίνει ανενεργός/ή (ρόλος {role}) στη {libraryName} στις {deadlineDate} εκτός αν συνδεθεί."
+    el: "Ο/Η {targetName} πρόκειται να γίνει ανενεργός/ή (ρόλος {role}) στη {libraryName} στις {deadlineDate} εκτός αν συνδεθεί.",
+    ro: "{targetName} urmează să treacă la statutul inactiv (rolul de {role}) la {libraryName} pe {deadlineDate}, dacă nu se conectează."
   },
   // ===== TM-A (#153.B) — escalade réseau au seuil J-7 (dernier·e coord) =====
   "team.inactive_warning_7d.escalation.sub": {
@@ -4249,7 +4599,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Escalada de xarxa — última coordinació inactiva: {libraryName}",
     eo: "Reta plialtigo — lasta kunordigo neaktiva: {libraryName}",
     nl: "Netwerkescalatie — laatste coördinatie inactief: {libraryName}",
-    el: "Κλιμάκωση δικτύου — ανενεργός/ή ο/η τελευταίος/α συντονιστής/στρια: {libraryName}"
+    el: "Κλιμάκωση δικτύου — ανενεργός/ή ο/η τελευταίος/α συντονιστής/στρια: {libraryName}",
+    ro: "Escaladare la nivelul rețelei — ultima persoană din coordonare inactivă: {libraryName}"
   },
   "team.inactive_warning_7d.escalation.intro": {
     "pt-BR": "{targetName}, únic-o-a-e coordenador-a-e de {libraryName}, está inativ-o-a-e e passará automaticamente para inativo em {deadlineDate} (em 7 dias). Como não há outra coordenação local para ser avisada, esta notificação é escalada à administração da rede. Sem reação, a biblioteca ficará sem coordenação ativa.",
@@ -4261,7 +4612,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{targetName}, únic(a/e) coordinador(a/e) de {libraryName}, està inactiv(a/e) i passarà automàticament a inactiu el {deadlineDate} (d'aquí a 7 dies). Com que no hi ha cap altra coordinació local a qui avisar, aquesta notificació s'escala a l'administració de la xarxa. Sense reacció, la biblioteca quedarà sense coordinació activa.",
     eo: "{targetName}, sola kunordiganto de {libraryName}, estas neaktiva kaj aŭtomate fariĝos neaktiva je {deadlineDate} (post 7 tagoj). Ĉar ne ekzistas alia loka kunordigo por averti, ĉi tiu sciigo estas plialtigita al la reta administrado. Sen reago, la biblioteko restos sen aktiva kunordigo.",
     nl: "{targetName}, de enige coördinator van {libraryName}, is inactief en wordt op {deadlineDate} (over 7 dagen) automatisch inactief. Omdat er geen andere lokale coördinatie is om te waarschuwen, wordt deze melding geëscaleerd naar het netwerkbeheer. Zonder reactie blijft de bibliotheek zonder actieve coördinatie.",
-    el: "Ο/Η {targetName}, ο/η μοναδικός/ή συντονιστής/στρια της {libraryName}, είναι αδρανής και θα γίνει αυτόματα ανενεργός/ή στις {deadlineDate} (σε 7 ημέρες). Καθώς δεν υπάρχει άλλος τοπικός συντονισμός για ειδοποίηση, αυτή η ειδοποίηση κλιμακώνεται στη διαχείριση του δικτύου. Χωρίς ενέργεια, η βιβλιοθήκη θα μείνει χωρίς ενεργό συντονισμό."
+    el: "Ο/Η {targetName}, ο/η μοναδικός/ή συντονιστής/στρια της {libraryName}, είναι αδρανής και θα γίνει αυτόματα ανενεργός/ή στις {deadlineDate} (σε 7 ημέρες). Καθώς δεν υπάρχει άλλος τοπικός συντονισμός για ειδοποίηση, αυτή η ειδοποίηση κλιμακώνεται στη διαχείριση του δικτύου. Χωρίς ενέργεια, η βιβλιοθήκη θα μείνει χωρίς ενεργό συντονισμό.",
+    ro: "{targetName}, singura persoană din coordonarea {libraryName}, este inactivă și va trece automat la statutul inactiv pe {deadlineDate} (peste 7 zile). Pentru că nu există altă coordonare locală care să fie anunțată, această notificare este transmisă administrării rețelei. Fără nicio reacție, biblioteca va rămâne fără coordonare activă."
   },
   "team.inactive_auto.admin.sub": {
     "pt-BR": "Passagem para inativo confirmada — {role}",
@@ -4273,7 +4625,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Pas a inactiu confirmat — {role}",
     eo: "Ŝanĝo al neaktiva konfirmita — {role}",
     nl: "Overgang naar inactief bevestigd — {role}",
-    el: "Μετάβαση σε ανενεργό επιβεβαιώθηκε — {role}"
+    el: "Μετάβαση σε ανενεργό επιβεβαιώθηκε — {role}",
+    ro: "Trecere la inactiv confirmată — {role}"
   },
   "team.inactive_auto.admin.intro": {
     "pt-BR": "{targetName} passou para inativo após 9 meses sem conexão (papel de {role}) na {libraryName}. Acessos fechados.",
@@ -4285,7 +4638,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{targetName} ha passat a inactiu després de 9 mesos sense connexió (rol de {role}) a la {libraryName}. Accessos tancats.",
     eo: "{targetName} fariĝis neaktiva post 9 monatoj sen ensaluto (rolo {role}) ĉe {libraryName}. Aliroj fermitaj.",
     nl: "{targetName} is inactief geworden na 9 maanden zonder inloggen (rol van {role}) bij {libraryName}. Toegang gesloten.",
-    el: "Ο/Η {targetName} έγινε ανενεργός/ή μετά από 9 μήνες χωρίς σύνδεση (ρόλος {role}) στη {libraryName}. Η πρόσβαση έκλεισε."
+    el: "Ο/Η {targetName} έγινε ανενεργός/ή μετά από 9 μήνες χωρίς σύνδεση (ρόλος {role}) στη {libraryName}. Η πρόσβαση έκλεισε.",
+    ro: "{targetName} a trecut la statutul inactiv după 9 luni fără conectare (rolul de {role}) la {libraryName}. Accesul a fost închis."
   },
 
   // ===== Welcome — mail de bienvenue post-inscription (welcome.*) ============
@@ -4304,7 +4658,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Notificació de la coordinació AnarBib",
     eo: "Sciigo de la AnarBib-kunordigo",
     nl: "Melding van de AnarBib-coördinatie",
-    el: "Ειδοποίηση του συντονισμού AnarBib"
+    el: "Ειδοποίηση του συντονισμού AnarBib",
+    ro: "Notificare de la coordonarea AnarBib"
   },
   "register.internal.pretitle.library": {
     "pt-BR": "Notificação da biblioteca",
@@ -4316,7 +4671,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Notificació de la biblioteca",
     eo: "Sciigo de la biblioteko",
     nl: "Melding van de bibliotheek",
-    el: "Ειδοποίηση της βιβλιοθήκης"
+    el: "Ειδοποίηση της βιβλιοθήκης",
+    ro: "Notificare de la bibliotecă"
   },
   "register.internal.pretitle.management": {
     "pt-BR": "Notificação da gestão AnarBib",
@@ -4328,7 +4684,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Notificació de la gestió AnarBib",
     eo: "Sciigo de la AnarBib-administrado",
     nl: "Melding van het AnarBib-beheer",
-    el: "Ειδοποίηση της διαχείρισης AnarBib"
+    el: "Ειδοποίηση της διαχείρισης AnarBib",
+    ro: "Notificare de la administrarea AnarBib"
   },
   "register.internal.title.orphan": {
     "pt-BR": "Cadastro de leitor-a-e órfã-o-e — {displayName}",
@@ -4340,7 +4697,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Registre de lector(a/e) orfe(na/e) — {displayName}",
     eo: "Registriĝo de senbiblioteka leganto — {displayName}",
     nl: "Inschrijving van een niet-aangesloten lezer — {displayName}",
-    el: "Εγγραφή ανένταχτου/ης αναγνώστη/στριας — {displayName}"
+    el: "Εγγραφή ανένταχτου/ης αναγνώστη/στριας — {displayName}",
+    ro: "Înregistrare a unei persoane care citește, fără bibliotecă — {displayName}"
   },
   "register.internal.title.initial": {
     "pt-BR": "Cadastro inicial sem biblioteca — {displayName}",
@@ -4352,7 +4710,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Registre inicial sense biblioteca — {displayName}",
     eo: "Komenca registriĝo sen biblioteko — {displayName}",
     nl: "Initiële inschrijving zonder bibliotheek — {displayName}",
-    el: "Αρχική εγγραφή χωρίς βιβλιοθήκη — {displayName}"
+    el: "Αρχική εγγραφή χωρίς βιβλιοθήκη — {displayName}",
+    ro: "Înregistrare inițială fără bibliotecă — {displayName}"
   },
   "register.internal.title.standard": {
     "pt-BR": "Novo cadastro — {displayName}",
@@ -4364,7 +4723,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou registre — {displayName}",
     eo: "Nova registriĝo — {displayName}",
     nl: "Nieuwe inschrijving — {displayName}",
-    el: "Νέα εγγραφή — {displayName}"
+    el: "Νέα εγγραφή — {displayName}",
+    ro: "Înregistrare nouă — {displayName}"
   },
   "register.internal.subtitle.orphan": {
     "pt-BR": "Nov-o-a-e leitor-a-e órfã-o-e (biblioteca ainda não no AnarBib), ID {publicId}.",
@@ -4376,7 +4736,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova lectora òrfena (biblioteca encara no a AnarBib), ID {publicId}.",
     eo: "Nova senbiblioteka leganto (biblioteko ankoraŭ ne en AnarBib), ID {publicId}.",
     nl: "Nieuwe niet-aangesloten lezer (bibliotheek nog niet op AnarBib), ID {publicId}.",
-    el: "Νέος/α ανένταχτος/η αναγνώστης/στρια (η βιβλιοθήκη δεν είναι ακόμη στο AnarBib), ID {publicId}."
+    el: "Νέος/α ανένταχτος/η αναγνώστης/στρια (η βιβλιοθήκη δεν είναι ακόμη στο AnarBib), ID {publicId}.",
+    ro: "Persoană nouă care citește, fără bibliotecă (biblioteca nu este încă pe AnarBib), ID {publicId}."
   },
   "register.internal.subtitle.initial": {
     "pt-BR": "Novo cadastro inicial sem biblioteca vinculada, com ID {publicId}.",
@@ -4388,7 +4749,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou registre inicial sense biblioteca vinculada, amb ID {publicId}.",
     eo: "Nova komenca registriĝo sen ligita biblioteko, ID {publicId}.",
     nl: "Nieuwe initiële inschrijving zonder gekoppelde bibliotheek, ID {publicId}.",
-    el: "Νέα αρχική εγγραφή χωρίς συνδεδεμένη βιβλιοθήκη, ID {publicId}."
+    el: "Νέα αρχική εγγραφή χωρίς συνδεδεμένη βιβλιοθήκη, ID {publicId}.",
+    ro: "Înregistrare inițială nouă, fără bibliotecă asociată, ID {publicId}."
   },
   "register.internal.subtitle.standard": {
     "pt-BR": "Novo cadastro de leitor-a-e com ID {publicId}.",
@@ -4400,7 +4762,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou registre de lector(a/e), amb ID {publicId}.",
     eo: "Nova registriĝo de leganto, ID {publicId}.",
     nl: "Nieuwe inschrijving van een lezer, ID {publicId}.",
-    el: "Νέα εγγραφή αναγνώστη/στριας, ID {publicId}."
+    el: "Νέα εγγραφή αναγνώστη/στριας, ID {publicId}.",
+    ro: "Înregistrare nouă de cititor/cititoare, ID {publicId}."
   },
   "register.internal.orphanLib.mentioned": {
     "pt-BR": " Biblioteca mencionada: \"{libraryName}\".",
@@ -4412,7 +4775,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: " Biblioteca esmentada: «{libraryName}».",
     eo: " Menciita biblioteko: \"{libraryName}\".",
     nl: " Genoemde bibliotheek: „{libraryName}”.",
-    el: " Αναφερόμενη βιβλιοθήκη: «{libraryName}»."
+    el: " Αναφερόμενη βιβλιοθήκη: «{libraryName}».",
+    ro: " Bibliotecă menționată: „{libraryName}”."
   },
   "register.internal.orphanLib.none": {
     "pt-BR": " Nenhuma biblioteca mencionada.",
@@ -4424,7 +4788,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: " Cap biblioteca esmentada.",
     eo: " Neniu biblioteko menciita.",
     nl: " Geen bibliotheek genoemd.",
-    el: " Καμία βιβλιοθήκη δεν αναφέρθηκε."
+    el: " Καμία βιβλιοθήκη δεν αναφέρθηκε.",
+    ro: " Nicio bibliotecă menționată."
   },
   "register.internal.testContextNote": {
     "pt-BR": "Este cadastro passou por uma rota com redirecionamento ou marcação de teste ativa.",
@@ -4436,7 +4801,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aquest registre ha passat per una ruta amb redirecció o marcatge de prova actiu.",
     eo: "Ĉi tiu registriĝo pasis tra vojo kun aktiva alidirektado aŭ testmarko.",
     nl: "Deze inschrijving liep via een route met een actieve omleiding of testmarkering.",
-    el: "Αυτή η εγγραφή πέρασε από διαδρομή με ενεργή ανακατεύθυνση ή σήμανση δοκιμής."
+    el: "Αυτή η εγγραφή πέρασε από διαδρομή με ενεργή ανακατεύθυνση ή σήμανση δοκιμής.",
+    ro: "Această înregistrare a trecut printr-o rută cu redirecționare sau cu marcaj de test activ."
   },
   "register.internal.subject": {
     "pt-BR": "Novo cadastro — {displayName} — {publicId}",
@@ -4448,7 +4814,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou registre — {displayName} — {publicId}",
     eo: "Nova registriĝo — {displayName} — {publicId}",
     nl: "Nieuwe inschrijving — {displayName} — {publicId}",
-    el: "Νέα εγγραφή — {displayName} — {publicId}"
+    el: "Νέα εγγραφή — {displayName} — {publicId}",
+    ro: "Înregistrare nouă — {displayName} — {publicId}"
   },
   "welcome.subject": {
     "pt-BR": "Cadastro criado — {displayName}",
@@ -4460,7 +4827,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció creada — {displayName}",
     eo: "Registriĝo kreita — {displayName}",
     nl: "Inschrijving aangemaakt — {displayName}",
-    el: "Η εγγραφή δημιουργήθηκε — {displayName}"
+    el: "Η εγγραφή δημιουργήθηκε — {displayName}",
+    ro: "Înregistrare creată — {displayName}"
   },
   "welcome.subject.initial": {
     "pt-BR": "Cadastro inicial criado — {displayName}",
@@ -4472,7 +4840,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció inicial creada — {displayName}",
     eo: "Komenca registriĝo kreita — {displayName}",
     nl: "Initiële inschrijving aangemaakt — {displayName}",
-    el: "Η αρχική εγγραφή δημιουργήθηκε — {displayName}"
+    el: "Η αρχική εγγραφή δημιουργήθηκε — {displayName}",
+    ro: "Înregistrare inițială creată — {displayName}"
   },
   "welcome.pretitle": {
     "pt-BR": "Cadastro criado",
@@ -4484,7 +4853,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció creada",
     eo: "Registriĝo kreita",
     nl: "Inschrijving aangemaakt",
-    el: "Η εγγραφή δημιουργήθηκε"
+    el: "Η εγγραφή δημιουργήθηκε",
+    ro: "Înregistrare creată"
   },
   "welcome.pretitle.initial": {
     "pt-BR": "Cadastro inicial criado",
@@ -4496,7 +4866,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Inscripció inicial creada",
     eo: "Komenca registriĝo kreita",
     nl: "Initiële inschrijving aangemaakt",
-    el: "Η αρχική εγγραφή δημιουργήθηκε"
+    el: "Η αρχική εγγραφή δημιουργήθηκε",
+    ro: "Înregistrare inițială creată"
   },
   "welcome.title.initial": {
     "pt-BR": "Bem-vind(o/a/e) à rede AnarBib",
@@ -4508,7 +4879,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Benvingut-da-e a la xarxa AnarBib",
     eo: "Bonvenon en la reton AnarBib",
     nl: "Welkom bij het AnarBib-netwerk",
-    el: "Καλώς όρισες στο δίκτυο AnarBib"
+    el: "Καλώς όρισες στο δίκτυο AnarBib",
+    ro: "Bun venit în rețeaua AnarBib"
   },
    "welcome.title": {
     "pt-BR": "Bem-vind(o/a/e) à {libraryName}",
@@ -4520,7 +4892,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Benvingut-da-e a le {libraryName}",
     eo: "Bonvenon ĉe {libraryName}",
     nl: "Welkom bij {libraryName}",
-    el: "Καλώς όρισες στη {libraryName}"
+    el: "Καλώς όρισες στη {libraryName}",
+    ro: "Bun venit la {libraryName}"
   },
   "welcome.subtitle": {
     "pt-BR": "Seu acesso inicial ao AnarBib já está pronto.",
@@ -4532,7 +4905,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu accés inicial a AnarBib ja està llest.",
     eo: "Via komenca aliro al AnarBib estas preta.",
     nl: "Je eerste toegang tot AnarBib staat klaar.",
-    el: "Η αρχική σου πρόσβαση στο AnarBib είναι έτοιμη."
+    el: "Η αρχική σου πρόσβαση στο AnarBib είναι έτοιμη.",
+    ro: "Accesul tău inițial la AnarBib este gata."
   },
   "welcome.greeting": {
     "pt-BR": "Olá, <b>{firstName}</b>.",
@@ -4544,7 +4918,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, <b>{firstName}</b>.",
     eo: "Saluton, <b>{firstName}</b>.",
     nl: "Hallo, <b>{firstName}</b>.",
-    el: "Γεια σου, <b>{firstName}</b>."
+    el: "Γεια σου, <b>{firstName}</b>.",
+    ro: "Bună, <b>{firstName}</b>."
   },
   "welcome.context.standard": {
     "pt-BR": "Seu cadastro de leitor(a/e) na <b>{libraryName}</b> foi criado com sucesso.",
@@ -4556,7 +4931,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva inscripció com a lector-a-e a le <b>{libraryName}</b> s'ha creat correctament.",
     eo: "Via registriĝo kiel legant-in-o ĉe <b>{libraryName}</b> estis sukcese kreita.",
     nl: "Je inschrijving als lezer bij <b>{libraryName}</b> is succesvol aangemaakt.",
-    el: "Η εγγραφή σου ως αναγνώστης/στρια στη <b>{libraryName}</b> δημιουργήθηκε με επιτυχία."
+    el: "Η εγγραφή σου ως αναγνώστης/στρια στη <b>{libraryName}</b> δημιουργήθηκε με επιτυχία.",
+    ro: "Înregistrarea ta ca cititor/cititoare la <b>{libraryName}</b> a fost creată cu succes."
   },
   "welcome.context.initial": {
     "pt-BR": "Sua conta inicial no <b>AnarBib</b> foi criada com sucesso. A próxima etapa é enviar a solicitação institucional da sua biblioteca para análise da coordenação da rede.",
@@ -4568,7 +4944,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte inicial a <b>AnarBib</b> s'ha creat correctament. El pròxim pas és enviar la sol·licitud institucional de la teva biblioteca per a l'anàlisi de la coordinació de la xarxa.",
     eo: "Via komenca konto ĉe <b>AnarBib</b> estis sukcese kreita. La sekva etapo estas sendi la institucian peton de via biblioteko por analizo fare de la kunordigo de la reto.",
     nl: "Je initiële account op <b>AnarBib</b> is succesvol aangemaakt. De volgende stap is om de institutionele aanvraag voor je bibliotheek in te dienen bij de netwerkcoördinatie ter beoordeling.",
-    el: "Ο αρχικός σου λογαριασμός στο <b>AnarBib</b> δημιουργήθηκε με επιτυχία. Το επόμενο βήμα είναι να υποβάλεις το θεσμικό αίτημα της βιβλιοθήκης σου προς εξέταση από τον συντονισμό του δικτύου."
+    el: "Ο αρχικός σου λογαριασμός στο <b>AnarBib</b> δημιουργήθηκε με επιτυχία. Το επόμενο βήμα είναι να υποβάλεις το θεσμικό αίτημα της βιβλιοθήκης σου προς εξέταση από τον συντονισμό του δικτύου.",
+    ro: "Contul tău inițial pe <b>AnarBib</b> a fost creat cu succes. Pasul următor este să trimiți cererea instituțională a bibliotecii tale, ca s-o analizeze echipa de coordonare a rețelei."
   },
   "welcome.publicIdLabel": {
     "pt-BR": "Seu ID público",
@@ -4580,7 +4957,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu ID públic",
     eo: "Via publika ID",
     nl: "Je openbare ID",
-    el: "Το δημόσιο ID σου"
+    el: "Το δημόσιο ID σου",
+    ro: "Identificatorul tău public"
   },
   "welcome.tempPasswordLabel": {
     "pt-BR": "Senha provisória",
@@ -4592,7 +4970,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contrasenya provisional",
     eo: "Provizora pasvorto",
     nl: "Tijdelijk wachtwoord",
-    el: "Προσωρινός κωδικός"
+    el: "Προσωρινός κωδικός",
+    ro: "Parolă provizorie"
   },
   "welcome.nextAccess": {
     "pt-BR": "Nos próximos acessos ao AnarBib, entre com seu <b>ID público</b> e sua senha.",
@@ -4604,7 +4983,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per als teus pròxims accessos a AnarBib, connecta't amb el teu <b>ID públic</b> i la teva contrasenya.",
     eo: "Por viaj sekvaj aliroj al AnarBib, konektiĝu per via <b>publika ID</b> kaj via pasvorto.",
     nl: "Voor je volgende bezoeken aan AnarBib log je in met je <b>openbare ID</b> en je wachtwoord.",
-    el: "Για τις επόμενες επισκέψεις σου στο AnarBib, συνδέσου με το <b>δημόσιο ID σου</b> και τον κωδικό σου."
+    el: "Για τις επόμενες επισκέψεις σου στο AnarBib, συνδέσου με το <b>δημόσιο ID σου</b> και τον κωδικό σου.",
+    ro: "Data viitoare când intri pe AnarBib, conectează-te cu <b>identificatorul tău public</b> și cu parola ta."
   },
   "welcome.important": {
     "pt-BR": "<b>Importante:</b> a senha enviada aqui é provisória. Depois do primeiro acesso, altere-a na página <b>Conta</b>.",
@@ -4616,7 +4996,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "<b>Important:</b> la contrasenya enviada aquí és provisional. Al teu primer accés, se t'invitarà a canviar-la.",
     eo: "<b>Grave:</b> la pasvorto sendita ĉi tie estas provizora. Ĉe via unua aliro, vi estos invitita ŝanĝi ĝin.",
     nl: "<b>Belangrijk:</b> het hier verzonden wachtwoord is tijdelijk. Bij je eerste keer inloggen word je gevraagd het te wijzigen.",
-    el: "<b>Σημαντικό:</b> ο κωδικός που στάλθηκε εδώ είναι προσωρινός. Στην πρώτη σου σύνδεση, θα σου ζητηθεί να τον αλλάξεις."
+    el: "<b>Σημαντικό:</b> ο κωδικός που στάλθηκε εδώ είναι προσωρινός. Στην πρώτη σου σύνδεση, θα σου ζητηθεί να τον αλλάξεις.",
+    ro: "<b>Important:</b> parola trimisă aici este provizorie. La prima conectare, ți se va cere s-o schimbi."
   },
   "welcome.forgotHint": {
     "pt-BR": "Se você perder o acesso, use o botão <b>\"Esqueci minha senha\"</b> na página de login.",
@@ -4628,7 +5009,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Si perds l'accés, fes servir el botó <b>«He oblidat la contrasenya»</b> a la pàgina d'inici de sessió.",
     eo: "Se vi perdas la aliron, uzu la butonon <b>«Mi forgesis mian pasvorton»</b> en la ensaluta paĝo.",
     nl: "Als je de toegang verliest, gebruik dan de knop <b>„Wachtwoord vergeten”</b> op de inlogpagina.",
-    el: "Αν χάσεις την πρόσβαση, χρησιμοποίησε το κουμπί <b>«Ξέχασα τον κωδικό μου»</b> στη σελίδα σύνδεσης."
+    el: "Αν χάσεις την πρόσβαση, χρησιμοποίησε το κουμπί <b>«Ξέχασα τον κωδικό μου»</b> στη σελίδα σύνδεσης.",
+    ro: "Dacă pierzi accesul, folosește butonul <b>„Am uitat parola”</b> de pe pagina de conectare."
   },
   "welcome.libraryRequest.intro": {
     "pt-BR": "Use o botão abaixo para iniciar a solicitação institucional da sua biblioteca. Este link já está ligado à sua conta inicial, não precisa entrar manualmente de novo para começar.",
@@ -4640,7 +5022,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Fes servir el botó de sota per iniciar la sol·licitud institucional de la teva biblioteca. Aquest enllaç ja està vinculat al teu compte inicial, no cal que tornis a iniciar sessió manualment per començar.",
     eo: "Uzu la suban butonon por komenci la institucian peton de via biblioteko. Ĉi tiu ligilo jam estas ligita al via komenca konto, vi ne bezonas reensaluti permane por komenci.",
     nl: "Gebruik de knop hieronder om de institutionele aanvraag voor je bibliotheek te starten. Deze link is al gekoppeld aan je initiële account — je hoeft niet opnieuw handmatig in te loggen om te beginnen.",
-    el: "Χρησιμοποίησε το παρακάτω κουμπί για να ξεκινήσεις το θεσμικό αίτημα της βιβλιοθήκης σου. Αυτός ο σύνδεσμος είναι ήδη συνδεδεμένος με τον αρχικό σου λογαριασμό — δεν χρειάζεται να συνδεθείς ξανά χειροκίνητα για να ξεκινήσεις."
+    el: "Χρησιμοποίησε το παρακάτω κουμπί για να ξεκινήσεις το θεσμικό αίτημα της βιβλιοθήκης σου. Αυτός ο σύνδεσμος είναι ήδη συνδεδεμένος με τον αρχικό σου λογαριασμό — δεν χρειάζεται να συνδεθείς ξανά χειροκίνητα για να ξεκινήσεις.",
+    ro: "Folosește butonul de mai jos ca să începi cererea instituțională a bibliotecii tale. Linkul este deja legat de contul tău inițial, nu trebuie să te conectezi din nou ca să începi."
   },
   "welcome.libraryRequest.cta": {
     "pt-BR": "Iniciar solicitação da biblioteca",
@@ -4652,7 +5035,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Iniciar la sol·licitud de la biblioteca",
     eo: "Komenci la peton de la biblioteko",
     nl: "De bibliotheekaanvraag starten",
-    el: "Ξεκίνα το αίτημα βιβλιοθήκης"
+    el: "Ξεκίνα το αίτημα βιβλιοθήκης",
+    ro: "Începe cererea bibliotecii"
   },
   "welcome.libraryRequest.fallback": {
     "pt-BR": "Se o link expirar, entre em contato com a coordenação do AnarBib para receber um novo acesso.",
@@ -4664,7 +5048,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Si l'enllaç expira, contacta la coordinació d'AnarBib per rebre un accés nou.",
     eo: "Se la ligilo eksvalidiĝas, kontaktu la kunordigon de AnarBib por ricevi novan aliron.",
     nl: "Als de link verloopt, neem dan contact op met de AnarBib-coördinatie om een nieuwe toegang te ontvangen.",
-    el: "Αν ο σύνδεσμος λήξει, επικοινώνησε με τον συντονισμό του AnarBib για να λάβεις νέα πρόσβαση."
+    el: "Αν ο σύνδεσμος λήξει, επικοινώνησε με τον συντονισμό του AnarBib για να λάβεις νέα πρόσβαση.",
+    ro: "Dacă linkul expiră, contactează echipa de coordonare AnarBib ca să primești un acces nou."
   },
   "welcome.libraryAddressLabel": {
     "pt-BR": "Endereço da biblioteca:",
@@ -4676,7 +5061,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Adreça de la biblioteca:",
     eo: "Adreso de la biblioteko:",
     nl: "Adres van de bibliotheek:",
-    el: "Διεύθυνση βιβλιοθήκης:"
+    el: "Διεύθυνση βιβλιοθήκης:",
+    ro: "Adresa bibliotecii:"
   },
   "welcome.libraryContactLabel": {
     "pt-BR": "Contato da biblioteca:",
@@ -4688,7 +5074,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Contacte de la biblioteca:",
     eo: "Kontakto de la biblioteko:",
     nl: "Contact van de bibliotheek:",
-    el: "Επαφή βιβλιοθήκης:"
+    el: "Επαφή βιβλιοθήκης:",
+    ro: "Contactul bibliotecii:"
   },
   "welcome.howItWorks.title": {
     "pt-BR": "Como funciona sua biblioteca",
@@ -4700,7 +5087,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Com funciona la teva biblioteca",
     eo: "Kiel funkcias via biblioteko",
     nl: "Hoe je bibliotheek werkt",
-    el: "Πώς λειτουργεί η βιβλιοθήκη σου"
+    el: "Πώς λειτουργεί η βιβλιοθήκη σου",
+    ro: "Cum funcționează biblioteca ta"
   },
   "welcome.howItWorks.card": {
     "pt-BR": "Você vai receber uma carteira de leitor(a/e).",
@@ -4712,7 +5100,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Rebràs un carnet de lector-a-e.",
     eo: "Vi ricevos legant-in-an karton.",
     nl: "Je ontvangt een lezerspas.",
-    el: "Θα λάβεις κάρτα αναγνώστη/στριας."
+    el: "Θα λάβεις κάρτα αναγνώστη/στριας.",
+    ro: "Vei primi un card de cititor."
   },
   "welcome.howItWorks.identity.remote": {
     "pt-BR": "Sua identidade de leitor(a/e) será enviada a você por e-mail.",
@@ -4724,7 +5113,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva identitat de lector-a-e t'arribarà per correu electrònic.",
     eo: "Via legant-in-a identigo estos sendita al vi retpoŝte.",
     nl: "Je lezersidentiteit wordt je per e-mail toegestuurd.",
-    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου σταλεί με email."
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου σταλεί με email.",
+    ro: "Identitatea ta de cititor/cititoare îți va fi trimisă prin e-mail."
   },
   "welcome.howItWorks.identity.presential": {
     "pt-BR": "Sua identidade de leitor(a/e) será atribuída a você na sua primeira visita.",
@@ -4736,7 +5126,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva identitat de lector-a-e t'assignaran a la teva primera visita.",
     eo: "Via legant-in-a identigo estos atribuita al vi dum via unua vizito.",
     nl: "Je lezersidentiteit wordt toegekend bij je eerste bezoek.",
-    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου αποδοθεί στην πρώτη σου επίσκεψη."
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου αποδοθεί στην πρώτη σου επίσκεψη.",
+    ro: "Identitatea ta de cititor/cititoare îți va fi atribuită la prima vizită."
   },
   "welcome.pending": {
     "pt-BR": "Sua inscrição precisa ser validada pela equipe: você poderá pegar emprestado e reservar assim que for validada.",
@@ -4748,7 +5139,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva inscripció ha de ser validada per l'equip: podràs agafar en préstec i reservar un cop validada.",
     eo: "Via aliĝo devas esti validigita de la teamo: vi povos prunti kaj rezervi post validigo.",
     nl: "Je aanmelding moet door het team worden gevalideerd: zodra dat gebeurd is, kun je lenen en reserveren.",
-    el: "Η εγγραφή σου πρέπει να επικυρωθεί από την ομάδα: μόλις επικυρωθεί, θα μπορείς να δανείζεσαι και να κρατάς."
+    el: "Η εγγραφή σου πρέπει να επικυρωθεί από την ομάδα: μόλις επικυρωθεί, θα μπορείς να δανείζεσαι και να κρατάς.",
+    ro: "Înregistrarea ta trebuie validată de echipă: vei putea împrumuta și rezerva după validare."
   },
   "welcome.autoMessage": {
     "pt-BR": "Mensagem automática do cadastro AnarBib — não responda a este e-mail. Para falar com uma pessoa: anarbib@proton.me.",
@@ -4760,7 +5152,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Missatge automàtic de la inscripció AnarBib — no hi responguis. Per parlar amb una persona: anarbib@proton.me.",
     eo: "Aŭtomata mesaĝo de la registriĝo AnarBib — ne respondu al ĝi. Por atingi homon: anarbib@proton.me.",
     nl: "Automatisch bericht van de AnarBib-inschrijving — niet beantwoorden. Om een persoon te bereiken: anarbib@proton.me.",
-    el: "Αυτόματο μήνυμα από την εγγραφή στο AnarBib — μην απαντήσεις σε αυτό. Για να μιλήσεις με έναν άνθρωπο: anarbib@proton.me."
+    el: "Αυτόματο μήνυμα από την εγγραφή στο AnarBib — μην απαντήσεις σε αυτό. Για να μιλήσεις με έναν άνθρωπο: anarbib@proton.me.",
+    ro: "Mesaj automat de la înregistrarea AnarBib — nu răspunde la el. Ca să ajungi la o persoană: anarbib@proton.me."
   },
   // ===== Paquet 6 criar-conta — mail welcome-reader-orphan (welcome.*.orphan) =
   "welcome.pretitle.orphan": {
@@ -4773,7 +5166,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Compte creat",
     eo: "Konto kreita",
     nl: "Account aangemaakt",
-    el: "Ο λογαριασμός δημιουργήθηκε"
+    el: "Ο λογαριασμός δημιουργήθηκε",
+    ro: "Cont creat"
   },
   "welcome.title.orphan": {
     "pt-BR": "Bem-vind-a-e ao AnarBib",
@@ -4785,7 +5179,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Benvingut-da-e a la xarxa AnarBib",
     eo: "Bonvenon en la reton AnarBib",
     nl: "Welkom bij het AnarBib-netwerk",
-    el: "Καλώς όρισες στο δίκτυο AnarBib"
+    el: "Καλώς όρισες στο δίκτυο AnarBib",
+    ro: "Bun venit în rețeaua AnarBib"
   },
   "welcome.subject.orphan": {
     "pt-BR": "Sua conta no AnarBib foi criada",
@@ -4797,7 +5192,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte d'AnarBib s'ha creat",
     eo: "Via konto ĉe AnarBib estis kreita",
     nl: "Je AnarBib-account is aangemaakt",
-    el: "Ο λογαριασμός σου στο AnarBib δημιουργήθηκε"
+    el: "Ο λογαριασμός σου στο AnarBib δημιουργήθηκε",
+    ro: "Contul tău AnarBib a fost creat"
   },
   "welcome.context.orphan": {
     "pt-BR": "Sua conta foi criada. Como você nos indicou, sua biblioteca ainda não está na rede AnarBib. Fale do AnarBib com a equipe da sua biblioteca: se essa decidir aderir, você poderá ser integrad-a-e como leitor-a-e com a mesma conta que acaba de criar. Enquanto isso, você pode explorar livremente os catálogos das bibliotecas que escolheram torná-los públicos.",
@@ -4809,7 +5205,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte s'ha creat. Tal com ens vas indicar, la teva biblioteca encara no forma part de la xarxa AnarBib. Parla d'AnarBib amb l'equip de la teva biblioteca: si aquest decideix adherir-s'hi, podràs ser integrat-da-e com a lector-a-e amb el mateix compte que acabes de crear. Mentrestant, pots explorar lliurement els catàlegs de les biblioteques que han decidit fer-los públics.",
     eo: "Via konto estis kreita. Kiel vi indikis al ni, via biblioteko ankoraŭ ne apartenas al la reto AnarBib. Parolu pri AnarBib kun la teamo de via biblioteko: se ĝi decidas aliĝi, vi povos esti integrit-in-e kiel legant-in-e per la sama konto kiun vi ĵus kreis. Dume, vi povas libere esplori la katalogojn de la bibliotekoj kiuj elektis publikigi ilin.",
     nl: "Je account is aangemaakt. Zoals je ons hebt aangegeven, maakt je bibliotheek nog geen deel uit van het AnarBib-netwerk. Praat over AnarBib met het team van je bibliotheek: als die besluit toe te treden, kun je als lezer worden toegevoegd met hetzelfde account dat je net hebt aangemaakt. In de tussentijd kun je vrij de catalogi verkennen van de bibliotheken die ervoor hebben gekozen ze openbaar te maken.",
-    el: "Ο λογαριασμός σου δημιουργήθηκε. Όπως μας ανέφερες, η βιβλιοθήκη σου δεν είναι ακόμη μέρος του δικτύου AnarBib. Μίλησε για το AnarBib στην ομάδα της βιβλιοθήκης σου: αν αποφασίσει να ενταχθεί, θα μπορέσεις να προστεθείς ως αναγνώστης/στρια με τον ίδιο λογαριασμό που μόλις δημιούργησες. Στο μεταξύ, μπορείς να εξερευνήσεις ελεύθερα τους καταλόγους των βιβλιοθηκών που επέλεξαν να τους κάνουν δημόσιους."
+    el: "Ο λογαριασμός σου δημιουργήθηκε. Όπως μας ανέφερες, η βιβλιοθήκη σου δεν είναι ακόμη μέρος του δικτύου AnarBib. Μίλησε για το AnarBib στην ομάδα της βιβλιοθήκης σου: αν αποφασίσει να ενταχθεί, θα μπορέσεις να προστεθείς ως αναγνώστης/στρια με τον ίδιο λογαριασμό που μόλις δημιούργησες. Στο μεταξύ, μπορείς να εξερευνήσεις ελεύθερα τους καταλόγους των βιβλιοθηκών που επέλεξαν να τους κάνουν δημόσιους.",
+    ro: "Contul tău a fost creat. Cum ne-ai spus, biblioteca ta nu face încă parte din rețeaua AnarBib. Vorbește despre AnarBib cu echipa bibliotecii tale: dacă decide să adere, vei putea fi adăugat/adăugată acolo ca cititor/cititoare cu contul pe care tocmai l-ai creat. Până atunci, poți explora liber cataloagele bibliotecilor care au ales să le facă publice."
   },
   "welcome.orphan.exploreCta": {
     "pt-BR": "→ Explorar os catálogos",
@@ -4821,7 +5218,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "→ Explorar els catàlegs",
     eo: "→ Esplori la katalogojn",
     nl: "→ Verken de catalogi",
-    el: "→ Εξερεύνησε τους καταλόγους"
+    el: "→ Εξερεύνησε τους καταλόγους",
+    ro: "→ Explorează cataloagele"
   },
   "welcome.orphan.aboutIntro": {
     "pt-BR": "Para saber mais sobre o projeto AnarBib e como sua biblioteca pode aderir, acesse:",
@@ -4833,7 +5231,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per saber-ne més sobre el projecte AnarBib i com pot adherir-s'hi la teva biblioteca, vés a:",
     eo: "Por scii pli pri la projekto AnarBib kaj kiel via biblioteko povas aliĝi, iru al:",
     nl: "Wil je meer weten over het AnarBib-project en hoe je bibliotheek kan toetreden, ga dan naar:",
-    el: "Για να μάθεις περισσότερα για το εγχείρημα AnarBib και πώς μπορεί να ενταχθεί η βιβλιοθήκη σου, πήγαινε στο:"
+    el: "Για να μάθεις περισσότερα για το εγχείρημα AnarBib και πώς μπορεί να ενταχθεί η βιβλιοθήκη σου, πήγαινε στο:",
+    ro: "Ca să afli mai multe despre proiectul AnarBib și despre cum poate adera biblioteca ta, intră pe:"
   },
   "welcome.orphan.fallback": {
     "pt-BR": "Se o botão não funcionar, copie este endereço no seu navegador:",
@@ -4845,7 +5244,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Si el botó no funciona, copia aquesta adreça al teu navegador:",
     eo: "Se la butono ne funkcias, kopiu ĉi tiun adreson en vian retumilon:",
     nl: "Werkt de knop niet, kopieer dan dit adres in je browser:",
-    el: "Αν το κουμπί δεν λειτουργεί, αντίγραψε αυτή τη διεύθυνση στο πρόγραμμα περιήγησής σου:"
+    el: "Αν το κουμπί δεν λειτουργεί, αντίγραψε αυτή τη διεύθυνση στο πρόγραμμα περιήγησής σου:",
+    ro: "Dacă butonul nu funcționează, copiază această adresă în browserul tău:"
   },
 
 // ============================================================================
@@ -4891,7 +5291,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, {proposerName}. La teva proposta de cooptació de {targetName} encara no ha rebut prou vots. La proposta expira el {expiresAt}. Pots seguir-ne l'evolució a la teva àrea d'administració.",
     eo: "Saluton, {proposerName}. Via kooptad-propono pri {targetName} ankoraŭ ne ricevis sufiĉe da voĉdonoj. La propono eksvalidiĝas la {expiresAt}. Vi povas sekvi ĝian progreson en via administra spaco.",
     nl: "Hallo {proposerName}. Je coöptatievoorstel voor {targetName} heeft nog niet genoeg stemmen verzameld. Het voorstel verloopt op {expiresAt}. Je kunt de voortgang volgen in je beheerruimte.",
-    el: "Γεια σου {proposerName}. Η πρότασή σου για κοόπτηση του/της {targetName} δεν έχει συγκεντρώσει ακόμη αρκετές ψήφους. Η πρόταση λήγει στις {expiresAt}. Μπορείς να παρακολουθείς την πρόοδό της στον χώρο διαχείρισής σου."
+    el: "Γεια σου {proposerName}. Η πρότασή σου για κοόπτηση του/της {targetName} δεν έχει συγκεντρώσει ακόμη αρκετές ψήφους. Η πρόταση λήγει στις {expiresAt}. Μπορείς να παρακολουθείς την πρόοδό της στον χώρο διαχείρισής σου.",
+    ro: "Bună, {proposerName}. Propunerea ta de cooptare a lui {targetName} nu a strâns încă destule voturi. Propunerea expiră pe {expiresAt}. Îi poți urmări evoluția în spațiul tău de administrare."
   },
   "network.cooptation_reminder.sub": {
     "pt-BR": "Lembrete : votação pendente sobre a cooptação de {proposedName}",
@@ -4903,7 +5304,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recordatori · votació pendent sobre la cooptació de {proposedName}",
     eo: "Memorigo · atendanta voĉdono pri la kooptado de {proposedName}",
     nl: "Herinnering · stem in afwachting over de coöptatie van {proposedName}",
-    el: "Υπενθύμιση · εκκρεμεί ψήφος για την κοόπτηση του/της {proposedName}"
+    el: "Υπενθύμιση · εκκρεμεί ψήφος για την κοόπτηση του/της {proposedName}",
+    ro: "Memento · vot în așteptare pentru cooptarea lui {proposedName}"
   },
   "network.cooptation_reminder.intro": {
     "pt-BR": "Uma proposta de cooptação foi aberta há vários dias e ainda aguarda sua decisão. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo.",
@@ -4915,7 +5317,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha obert una proposta de cooptació fa diversos dies i encara espera la vostra decisió. La unanimitat de les administradores actives és necessària per concloure el procés.",
     eo: "Kooptad-propono estis malfermita antaŭ pluraj tagoj kaj ankoraŭ atendas vian decidon. La unuanimeco de la aktivaj administrant-in-oj estas necesa por konkludi la procezon.",
     nl: "Een coöptatievoorstel is enkele dagen geleden geopend en wacht nog op je beslissing. Unanimiteit onder de actieve netwerkbeheerders is vereist om het proces af te ronden.",
-    el: "Μια πρόταση κοόπτησης άνοιξε πριν αρκετές ημέρες και αναμένει ακόμη την απόφασή σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία."
+    el: "Μια πρόταση κοόπτησης άνοιξε πριν αρκετές ημέρες και αναμένει ακόμη την απόφασή σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία.",
+    ro: "O propunere de cooptare a fost deschisă acum câteva zile și încă îți așteaptă decizia. Este nevoie de unanimitatea persoanelor active din administrarea rețelei pentru a încheia procesul."
   },
   "network.cooptation_reminder.cta": {
     "pt-BR": "Acessar a proposta e votar",
@@ -4927,7 +5330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedir a la proposta i votar",
     eo: "Aliri la proponon kaj voĉdoni",
     nl: "Open het voorstel en stem",
-    el: "Άνοιξε την πρόταση και ψήφισε"
+    el: "Άνοιξε την πρόταση και ψήφισε",
+    ro: "Deschide propunerea și votează"
   },
   "network.cooptation_reminder.deadline_label": {
     "pt-BR": "A proposta expira em {pendingDeadline}.",
@@ -4939,7 +5343,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta expira el {pendingDeadline}.",
     eo: "La propono eksvalidiĝas la {pendingDeadline}.",
     nl: "Het voorstel verloopt op {pendingDeadline}.",
-    el: "Η πρόταση λήγει στις {pendingDeadline}."
+    el: "Η πρόταση λήγει στις {pendingDeadline}.",
+    ro: "Propunerea expiră pe {pendingDeadline}."
   },
 
   // ===== network.request_eval_digest (#111 — digest d'évaluation des demandes) =====
@@ -4953,7 +5358,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avaluació de sol·licituds — acció necessària",
     eo: "Pritakso de petoj — ago necesa",
     nl: "Beoordeling van aanvragen — actie nodig",
-    el: "Αξιολόγηση αιτημάτων — απαιτείται ενέργεια"
+    el: "Αξιολόγηση αιτημάτων — απαιτείται ενέργεια",
+    ro: "Evaluarea cererilor — e nevoie de acțiune"
   },
   "network.request_eval_digest.intro_proposal": {
     "pt-BR": "Uma proposta de decisão sobre uma solicitação de adesão aguarda seu voto. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s da rede é necessária.",
@@ -4965,7 +5371,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una proposta de decisió sobre una sol·licitud d'adhesió espera el vostre vot. Cal la unanimitat de les administradores actives de la xarxa.",
     eo: "Decid-propono pri aliĝpeto atendas vian voĉdonon. Necesas la unuanimeco de la aktivaj retaj administrant-in-oj.",
     nl: "Een beslissingsvoorstel over een toetredingsaanvraag wacht op je stem. Unanimiteit onder de actieve netwerkbeheerders is vereist.",
-    el: "Μια πρόταση απόφασης για ένα αίτημα ένταξης αναμένει την ψήφο σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου."
+    el: "Μια πρόταση απόφασης για ένα αίτημα ένταξης αναμένει την ψήφο σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου.",
+    ro: "O propunere de decizie privind o cerere de aderare îți așteaptă votul. Este nevoie de unanimitatea persoanelor active din administrarea rețelei."
   },
   "network.request_eval_digest.intro_backlog": {
     "pt-BR": "{count} solicitação(ões) de adesão aguardam avaliação pela coordenação da rede.",
@@ -4977,7 +5384,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{count} sol·licitud·s d'adhesió esperen una avaluació per la coordinació de la xarxa.",
     eo: "{count} aliĝpeto(j) atendas pritakson de la reta kunordigado.",
     nl: "{count} toetredingsaanvraag/-aanvragen wachten op beoordeling door de netwerkcoördinatie.",
-    el: "{count} αίτημα(τα) ένταξης αναμένουν αξιολόγηση από τον συντονισμό του δικτύου."
+    el: "{count} αίτημα(τα) ένταξης αναμένουν αξιολόγηση από τον συντονισμό του δικτύου.",
+    ro: "Cereri de aderare care așteaptă evaluarea echipei de coordonare a rețelei: {count}."
   },
   "network.request_eval_digest.cta": {
     "pt-BR": "Abrir o painel de rede",
@@ -4989,7 +5397,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Obrir el tauler de xarxa",
     eo: "Malfermi la retan panelon",
     nl: "Het netwerkpaneel openen",
-    el: "Άνοιγμα του πίνακα δικτύου"
+    el: "Άνοιγμα του πίνακα δικτύου",
+    ro: "Deschide panoul rețelei"
   },
 
   // ===== network.collective_removal_proposed ================================
@@ -5005,7 +5414,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Proposta de retirada col·lectiva · {proposedName}",
     eo: "Propono de kolektiva forigo · {proposedName}",
     nl: "Voorstel tot collectieve afzetting · {proposedName}",
-    el: "Πρόταση συλλογικής απομάκρυνσης · {proposedName}"
+    el: "Πρόταση συλλογικής απομάκρυνσης · {proposedName}",
+    ro: "Propunere de retragere colectivă · {proposedName}"
   },
   "network.collective_removal_proposed.intro": {
     "pt-BR": "{proposerName} abriu uma proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}. Esta é uma decisão política grave que exige unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s (excluíd(o/a/e) (o/a/e) próprio(a/e) target). Seu voto é necessário.",
@@ -5017,7 +5427,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{proposerName} ha obert una proposta de retirada col·lectiva de l'administrador-a-e {proposedName}. Es tracta d'una decisió política greu que requereix la unanimitat de les administradores actives (excloent la persona objecte de la proposta). El vostre vot és necessari.",
     eo: "{proposerName} malfermis proponon de kolektiva forigo de la administrant-in-o {proposedName}. Temas pri grava politika decido kiu postulas la unuanimecon de la aktivaj administrant-in-oj (escepte de la celata persono). Via voĉdono estas necesa.",
     nl: "{proposerName} heeft een voorstel geopend tot collectieve afzetting van netwerkbeheerder {proposedName}. Dit is een ernstige politieke beslissing die unanimiteit vereist onder de actieve beheerders (met uitzondering van de betrokken persoon). Je stem is nodig.",
-    el: "Ο/Η {proposerName} άνοιξε πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας δικτύου {proposedName}. Πρόκειται για σοβαρή πολιτική απόφαση που απαιτεί ομοφωνία των ενεργών διαχειριστών/στριών (εξαιρουμένου/ης του/της εμπλεκόμενου/ης). Η ψήφος σας είναι απαραίτητη."
+    el: "Ο/Η {proposerName} άνοιξε πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας δικτύου {proposedName}. Πρόκειται για σοβαρή πολιτική απόφαση που απαιτεί ομοφωνία των ενεργών διαχειριστών/στριών (εξαιρουμένου/ης του/της εμπλεκόμενου/ης). Η ψήφος σας είναι απαραίτητη.",
+    ro: "{proposerName} a deschis o propunere de retragere colectivă a lui {proposedName} din administrarea rețelei. Este o decizie politică gravă, care cere unanimitatea persoanelor active din administrare (fără persoana vizată). Votul tău este necesar."
   },
   "network.collective_removal_proposed.cta": {
     "pt-BR": "Acessar a proposta e votar",
@@ -5029,7 +5440,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedir a la proposta i votar",
     eo: "Aliri la proponon kaj voĉdoni",
     nl: "Open het voorstel en stem",
-    el: "Άνοιξε την πρόταση και ψήφισε"
+    el: "Άνοιξε την πρόταση και ψήφισε",
+    ro: "Deschide propunerea și votează"
   },
   "network.collective_removal_proposed.motivation_label": {
     "pt-BR": "Motivação invocada :",
@@ -5041,7 +5453,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motivació invocada:",
     eo: "Invokita motivo:",
     nl: "Aangevoerde motivatie:",
-    el: "Αιτιολόγηση που προβλήθηκε:"
+    el: "Αιτιολόγηση που προβλήθηκε:",
+    ro: "Motivația invocată:"
   },
 
   // ===== network.collective_removal_vote_cast ===============================
@@ -5059,7 +5472,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Vot registrat · retirada col·lectiva de {proposedName}",
     eo: "Voĉdono registrita · kolektiva forigo de {proposedName}",
     nl: "Stem geregistreerd · collectieve afzetting van {proposedName}",
-    el: "Ψήφος καταχωρίστηκε · συλλογική απομάκρυνση του/της {proposedName}"
+    el: "Ψήφος καταχωρίστηκε · συλλογική απομάκρυνση του/της {proposedName}",
+    ro: "Vot înregistrat · retragerea colectivă a lui {proposedName}"
   },
   "network.collective_removal_vote_cast.intro": {
     "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar.",
@@ -5071,7 +5485,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una administradora de xarxa acaba de votar sobre la proposta de retirada col·lectiva de l'administrador-a-e {proposedName}, oberta per {proposerName}. Accediu a l'aplicació per veure l'estat actual de la deliberació i votar.",
     eo: "Reta administrant-in-o ĵus voĉdonis pri la propono de kolektiva forigo de la administrant-in-o {proposedName}, malfermita de {proposerName}. Aliru la aplikaĵon por vidi la nunan staton de la pridiskuto kaj voĉdoni.",
     nl: "Een netwerkbeheerder heeft zojuist gestemd over het voorstel tot collectieve afzetting van beheerder {proposedName}, geopend door {proposerName}. Open de app om de huidige stand van de beraadslaging te zien en te stemmen.",
-    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε."
+    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε.",
+    ro: "O persoană din administrarea rețelei tocmai a votat propunerea de retragere colectivă a lui {proposedName} din administrare, deschisă de {proposerName}. Intră în aplicație ca să vezi stadiul actual al deliberării și să votezi."
   },
   "network.collective_removal_vote_cast.rationale_label": {
     "pt-BR": "Motivo do voto contrário :",
@@ -5083,7 +5498,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu del vot contrari:",
     eo: "Motivo de la kontraŭa voĉdono:",
     nl: "Reden voor de tegenstem:",
-    el: "Λόγος αρνητικής ψήφου:"
+    el: "Λόγος αρνητικής ψήφου:",
+    ro: "Motivul votului împotrivă:"
   },
 
   // ===== network.collective_removal_unanimous ===============================
@@ -5101,7 +5517,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retirada col·lectiva confirmada per unanimitat · {proposedName} — termini de gràcia de 7 dies",
     eo: "Kolektiva forigo konfirmita unuanime · {proposedName} — grac-periodo de 7 tagoj",
     nl: "Collectieve afzetting unaniem bevestigd · {proposedName} — respijtperiode van 7 dagen",
-    el: "Συλλογική απομάκρυνση επιβεβαιώθηκε με ομοφωνία · {proposedName} — περίοδος χάριτος 7 ημερών"
+    el: "Συλλογική απομάκρυνση επιβεβαιώθηκε με ομοφωνία · {proposedName} — περίοδος χάριτος 7 ημερών",
+    ro: "Retragere colectivă confirmată în unanimitate · {proposedName} — perioadă de așteptare de 7 zile"
   },
   "network.collective_removal_unanimous.intro": {
     "pt-BR": "A unanimidade d(o/a/e)s administrador(a/e)s foi alcançada sobre a retirada coletiva d(o/a/e) {proposedName}. Uma carência de 7 dias se aplica antes da efetivação. Durante este período, qualquer votante pode anular a decisão se houver mudança de posição coletiva.",
@@ -5113,7 +5530,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha assolit la unanimitat de les administradores sobre la retirada col·lectiva de {proposedName}. S'aplica un termini de gràcia de 7 dies abans de l'execució. Durant aquest període, qualsevol votant pot anul·lar la decisió si hi ha un canvi de posició col·lectiva.",
     eo: "La unuanimeco de la administrant-in-oj estis atingita pri la kolektiva forigo de {proposedName}. Grac-periodo de 7 tagoj validas antaŭ la plenumo. Dum ĉi tiu periodo, ĉiu voĉdoninto povas nuligi la decidon en kazo de ŝanĝo de kolektiva pozicio.",
     nl: "Onder de netwerkbeheerders is unanimiteit bereikt over de collectieve afzetting van {proposedName}. Vóór uitvoering geldt een respijtperiode van 7 dagen. Tijdens deze periode kan elke stemmer de beslissing annuleren als het collectieve standpunt verandert.",
-    el: "Επιτεύχθηκε ομοφωνία των διαχειριστών/στριών του δικτύου για τη συλλογική απομάκρυνση του/της {proposedName}. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Σε αυτό το διάστημα, κάθε ψηφοφόρος μπορεί να ακυρώσει την απόφαση αν αλλάξει η συλλογική θέση."
+    el: "Επιτεύχθηκε ομοφωνία των διαχειριστών/στριών του δικτύου για τη συλλογική απομάκρυνση του/της {proposedName}. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Σε αυτό το διάστημα, κάθε ψηφοφόρος μπορεί να ακυρώσει την απόφαση αν αλλάξει η συλλογική θέση.",
+    ro: "S-a ajuns la unanimitatea persoanelor din administrare privind retragerea colectivă a lui {proposedName}. Se aplică o perioadă de așteptare de 7 zile înainte de executare. În această perioadă, orice persoană care a votat poate anula decizia, dacă poziția colectivă se schimbă."
   },
   "network.collective_removal_unanimous.target_intro": {
     "pt-BR": "Esta mensagem informa que a unanimidade d(o/a/e)s outr(o/a/e)s administrador(a/e)s ativ(o/a/e)s foi alcançada sobre a sua retirada coletiva. Uma carência de 7 dias se aplica antes da efetivação. Sua palavra é livre durante esta janela.",
@@ -5125,7 +5543,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aquest missatge us informa que s'ha assolit la unanimitat de les altres administradores actives sobre la vostra retirada col·lectiva. S'aplica un termini de gràcia de 7 dies abans de l'execució. La vostra paraula és lliure durant aquesta finestra.",
     eo: "Ĉi tiu mesaĝo informas vin ke la unuanimeco de la aliaj aktivaj administrant-in-oj estis atingita pri via kolektiva forigo. Grac-periodo de 7 tagoj validas antaŭ la plenumo. Via parolo estas libera dum ĉi tiu fenestro.",
     nl: "Dit bericht informeert je dat onder de andere actieve netwerkbeheerders unanimiteit is bereikt over je collectieve afzetting. Vóór uitvoering geldt een respijtperiode van 7 dagen. Je stem blijft vrij tijdens dit venster.",
-    el: "Αυτό το μήνυμα σάς ενημερώνει ότι επιτεύχθηκε ομοφωνία μεταξύ των άλλων ενεργών διαχειριστών/στριών του δικτύου σχετικά με τη συλλογική σας απομάκρυνση. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Ο λόγος σας παραμένει ελεύθερος σε αυτό το διάστημα."
+    el: "Αυτό το μήνυμα σάς ενημερώνει ότι επιτεύχθηκε ομοφωνία μεταξύ των άλλων ενεργών διαχειριστών/στριών του δικτύου σχετικά με τη συλλογική σας απομάκρυνση. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Ο λόγος σας παραμένει ελεύθερος σε αυτό το διάστημα.",
+    ro: "Acest mesaj te informează că s-a ajuns la unanimitatea celorlalte persoane active din administrare privind retragerea ta colectivă. Se aplică o perioadă de așteptare de 7 zile înainte de executare. În acest interval, cuvântul tău rămâne liber."
   },
   "network.collective_removal_unanimous.carence_label": {
     "pt-BR": "Período de carência : a execução efetiva ocorrerá em {executionDate}.",
@@ -5137,7 +5556,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Període de gràcia: l'execució efectiva tindrà lloc el {executionDate}.",
     eo: "Grac-periodo: la efektiva plenumo okazos la {executionDate}.",
     nl: "Respijtperiode: de daadwerkelijke uitvoering vindt plaats op {executionDate}.",
-    el: "Περίοδος χάριτος: η εκτέλεση θα πραγματοποιηθεί στις {executionDate}."
+    el: "Περίοδος χάριτος: η εκτέλεση θα πραγματοποιηθεί στις {executionDate}.",
+    ro: "Perioadă de așteptare: executarea efectivă va avea loc pe {executionDate}."
   },
 
   // ===== network.collective_removal_cancelled ===============================
@@ -5153,7 +5573,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu de l'anul·lació:",
     eo: "Motivo de la nuligo:",
     nl: "Reden voor annulering:",
-    el: "Λόγος ακύρωσης:"
+    el: "Λόγος ακύρωσης:",
+    ro: "Motivul anulării:"
   },
   "network.collective_removal_cancelled.sub": {
     "pt-BR": "Retirada coletiva cancelada : {proposedName}",
@@ -5165,7 +5586,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retirada col·lectiva anul·lada · {proposedName}",
     eo: "Kolektiva forigo nuligita · {proposedName}",
     nl: "Collectieve afzetting geannuleerd · {proposedName}",
-    el: "Συλλογική απομάκρυνση ακυρώθηκε · {proposedName}"
+    el: "Συλλογική απομάκρυνση ακυρώθηκε · {proposedName}",
+    ro: "Retragere colectivă anulată · {proposedName}"
   },
   "network.collective_removal_cancelled.target_intro": {
     "pt-BR": "Olá, {targetName}. A proposta de retirada coletiva que tinha sido aberta sobre você foi anulada. Você permanece administrador·a ativo·a da rede AnarBib. Esta decisão é coletiva e política.",
@@ -5177,7 +5599,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, {targetName}. La proposta de retirada col·lectiva que s'havia obert sobre tu ha estat anul·lada. Continues sent administrador-a-e actiu-iva-e de la xarxa AnarBib. Aquesta decisió és col·lectiva i política.",
     eo: "Saluton, {targetName}. La propono de kolektiva forigo kiu estis malfermita pri vi estis nuligita. Vi restas aktiva administrant-in-o de la reto AnarBib. Ĉi tiu decido estas kolektiva kaj politika.",
     nl: "Hallo {targetName}. Het voorstel tot collectieve afzetting dat over jou was geopend, is geannuleerd. Je blijft een actieve beheerder van het AnarBib-netwerk. Deze beslissing is collectief en politiek.",
-    el: "Γεια σου {targetName}. Η πρόταση συλλογικής απομάκρυνσης που είχε ανοίξει σχετικά με εσένα ακυρώθηκε. Παραμένεις ενεργός/ή διαχειριστής/στρια του δικτύου AnarBib. Αυτή η απόφαση είναι συλλογική και πολιτική."
+    el: "Γεια σου {targetName}. Η πρόταση συλλογικής απομάκρυνσης που είχε ανοίξει σχετικά με εσένα ακυρώθηκε. Παραμένεις ενεργός/ή διαχειριστής/στρια του δικτύου AnarBib. Αυτή η απόφαση είναι συλλογική και πολιτική.",
+    ro: "Bună, {targetName}. Propunerea de retragere colectivă deschisă în privința ta a fost anulată. Rămâi persoană activă în administrarea rețelei AnarBib. Această decizie este colectivă și politică."
   },
   "network.collective_removal_cancelled.intro": {
     "pt-BR": "A proposta de retirada coletiva d(o/a/e) {proposedName} foi anulada. Nenhuma efetivação será realizada. Esta decisão é registrada no histórico militante da rede.",
@@ -5189,7 +5612,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta de retirada col·lectiva de {proposedName} ha estat anul·lada. No es realitzarà cap execució. Aquesta decisió queda registrada a l'historial militant de la xarxa.",
     eo: "La propono de kolektiva forigo de {proposedName} estis nuligita. Neniu plenumo okazos. Ĉi tiu decido estas registrita en la aktivisma historio de la reto.",
     nl: "Het voorstel tot collectieve afzetting van {proposedName} is geannuleerd. Er vindt geen uitvoering plaats. Deze beslissing wordt vastgelegd in de militante geschiedenis van het netwerk.",
-    el: "Η πρόταση συλλογικής απομάκρυνσης του/της {proposedName} ακυρώθηκε. Δεν θα γίνει καμία εκτέλεση. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό του δικτύου."
+    el: "Η πρόταση συλλογικής απομάκρυνσης του/της {proposedName} ακυρώθηκε. Δεν θα γίνει καμία εκτέλεση. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό του δικτύου.",
+    ro: "Propunerea de retragere colectivă a lui {proposedName} a fost anulată. Nu va avea loc nicio executare. Decizia este consemnată în istoricul militant al rețelei."
   },
 
   // ===== network.collective_removal_executed ================================
@@ -5206,7 +5630,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retirada col·lectiva executada · {proposedName}",
     eo: "Kolektiva forigo plenumita · {proposedName}",
     nl: "Collectieve afzetting uitgevoerd · {proposedName}",
-    el: "Συλλογική απομάκρυνση εκτελέστηκε · {proposedName}"
+    el: "Συλλογική απομάκρυνση εκτελέστηκε · {proposedName}",
+    ro: "Retragere colectivă executată · {proposedName}"
   },
   "network.collective_removal_executed.intro": {
     "pt-BR": "Após o término da carência de 7 dias, a retirada coletiva d(o/a/e) {proposedName} foi efetivada. Esta pessoa não tem mais o papel d(o/a/e) administrador(a/e) de rede. A decisão é registrada no histórico militante d(o/a/e) AnarBib.",
@@ -5218,7 +5643,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Un cop finalitzat el termini de gràcia de 7 dies, la retirada col·lectiva de {proposedName} s'ha fet efectiva. Aquesta persona ja no ocupa la funció d'administrador-a-e de xarxa. La decisió queda registrada a l'historial militant d'AnarBib.",
     eo: "Post la fino de la grac-periodo de 7 tagoj, la kolektiva forigo de {proposedName} estis efektivigita. Ĉi tiu persono ne plu okupas la funkcion de reta administrant-in-o. La decido estas registrita en la aktivisma historio de AnarBib.",
     nl: "Na de respijtperiode van 7 dagen is de collectieve afzetting van {proposedName} uitgevoerd. Deze persoon bekleedt de functie van netwerkbeheerder niet langer. De beslissing wordt vastgelegd in de militante geschiedenis van AnarBib.",
-    el: "Μετά την περίοδο χάριτος 7 ημερών, η συλλογική απομάκρυνση του/της {proposedName} πραγματοποιήθηκε. Αυτό το άτομο δεν κατέχει πλέον τον ρόλο του/της διαχειριστή/στριας δικτύου. Η απόφαση καταγράφεται στο αγωνιστικό ιστορικό του AnarBib."
+    el: "Μετά την περίοδο χάριτος 7 ημερών, η συλλογική απομάκρυνση του/της {proposedName} πραγματοποιήθηκε. Αυτό το άτομο δεν κατέχει πλέον τον ρόλο του/της διαχειριστή/στριας δικτύου. Η απόφαση καταγράφεται στο αγωνιστικό ιστορικό του AnarBib.",
+    ro: "La capătul perioadei de așteptare de 7 zile, retragerea colectivă a lui {proposedName} a fost efectuată. Această persoană nu mai face parte din administrarea rețelei. Decizia este consemnată în istoricul militant al AnarBib."
   },
   "network.collective_removal_executed.target_intro": {
     "pt-BR": "A carência de 7 dias terminou e a retirada coletiva votada por unanimidade está agora efetiva. Sua função d(o/a/e) administrador(a/e) de rede no AnarBib foi removida. Esta decisão é registrada no histórico militante.",
@@ -5230,7 +5656,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El termini de gràcia de 7 dies ha acabat i la retirada col·lectiva votada per unanimitat entra en vigor. La vostra funció d'administrador-a-e de xarxa a AnarBib ha estat retirada. Aquesta decisió queda registrada a l'historial militant.",
     eo: "La grac-periodo de 7 tagoj finiĝis kaj la kolektiva forigo voĉdonita unuanime ekvalidas. Via funkcio de reta administrant-in-o en AnarBib estis forigita. Ĉi tiu decido estas registrita en la aktivisma historio.",
     nl: "De respijtperiode van 7 dagen is afgelopen en de unaniem aangenomen collectieve afzetting wordt nu van kracht. Je functie van netwerkbeheerder in AnarBib is verwijderd. Deze beslissing wordt vastgelegd in de militante geschiedenis.",
-    el: "Η περίοδος χάριτος 7 ημερών έληξε και η συλλογική απομάκρυνση που ψηφίστηκε ομόφωνα τίθεται σε ισχύ. Ο ρόλος σας ως διαχειριστής/στρια δικτύου στο AnarBib αφαιρέθηκε. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό."
+    el: "Η περίοδος χάριτος 7 ημερών έληξε και η συλλογική απομάκρυνση που ψηφίστηκε ομόφωνα τίθεται σε ισχύ. Ο ρόλος σας ως διαχειριστής/στρια δικτύου στο AnarBib αφαιρέθηκε. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό.",
+    ro: "Perioada de așteptare de 7 zile s-a încheiat, iar retragerea colectivă votată în unanimitate intră în vigoare. Funcția ta în administrarea rețelei AnarBib a fost retrasă. Decizia este consemnată în istoricul militant."
   },
 // ============================================================================
 // Paquet E.1bis - Bloc i18n cooptation (4 events x 6 locales)
@@ -5264,7 +5691,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Assemblea de la xarxa convocada — {title}",
     eo: "Reta asembleo kunvokita — {title}",
     nl: "Netwerkvergadering bijeengeroepen — {title}",
-    el: "Συνέλευση του δικτύου συγκλήθηκε — {title}"
+    el: "Συνέλευση του δικτύου συγκλήθηκε — {title}",
+    ro: "Adunare a rețelei convocată — {title}"
   },
   "network.assembleia.convocada.intro": {
     "pt-BR": "Uma assembleia da rede foi convocada: « {title} ». A ordem do dia está se constituindo — é hora de avisar sua biblioteca e preparar o mandato de quem a representará.",
@@ -5276,7 +5704,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "S'ha convocat una assemblea de la xarxa: « {title} ». L'ordre del dia s'està constituint — és el moment d'avisar la teva biblioteca i preparar el mandat de qui us representi.",
     eo: "Reta asembleo estas kunvokita: « {title} ». La tagordo formiĝas — jen la momento por averti vian bibliotekon kaj prepari la mandaton de via reprezentanto.",
     nl: "Er is een netwerkvergadering bijeengeroepen: « {title} ». De agenda krijgt vorm — informeer nu je bibliotheek en bereid het mandaat van jullie afgevaardigde voor.",
-    el: "Συγκλήθηκε συνέλευση του δικτύου: « {title} ». Η ημερήσια διάταξη διαμορφώνεται — είναι η στιγμή να ενημερώσετε τη βιβλιοθήκη σας και να προετοιμάσετε την εντολή του εκπροσώπου σας."
+    el: "Συγκλήθηκε συνέλευση του δικτύου: « {title} ». Η ημερήσια διάταξη διαμορφώνεται — είναι η στιγμή να ενημερώσετε τη βιβλιοθήκη σας και να προετοιμάσετε την εντολή του εκπροσώπου σας.",
+    ro: "A fost convocată o adunare a rețelei: „{title}”. Ordinea de zi se conturează — acum e momentul să anunți biblioteca ta și să pregătiți mandatul delegatului/delegatei voastre."
   },
   "network.assembleia.convocada.cta": {
     "pt-BR": "Ver a assembleia",
@@ -5288,7 +5717,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure l'assemblea",
     eo: "Vidi la asembleon",
     nl: "Vergadering bekijken",
-    el: "Δείτε τη συνέλευση"
+    el: "Δείτε τη συνέλευση",
+    ro: "Vezi adunarea"
   },
   "network.assembleia.agenda_published.sub": {
     "pt-BR": "Ordem do dia publicada — {title}",
@@ -5300,7 +5730,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Ordre del dia publicat — {title}",
     eo: "Tagordo publikigita — {title}",
     nl: "Agenda gepubliceerd — {title}",
-    el: "Δημοσιεύτηκε η ημερήσια διάταξη — {title}"
+    el: "Δημοσιεύτηκε η ημερήσια διάταξη — {title}",
+    ro: "Ordinea de zi a fost publicată — {title}"
   },
   "network.assembleia.agenda_published.intro": {
     "pt-BR": "A ordem do dia de « {title} » está fixada e traduzida. Tomem conhecimento e mandatem quem representará vocês ponto a ponto antes da realização.",
@@ -5312,7 +5743,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'ordre del dia de « {title} » està fixat i traduït. Preneu-ne coneixement i mandateu qui us representi punt per punt abans de la realització.",
     eo: "La tagordo de « {title} » estas fiksita kaj tradukita. Konatiĝu kun ĝi kaj mandatu vian reprezentanton punkton post punkto antaŭ la okazigo.",
     nl: "De agenda van « {title} » is vastgesteld en vertaald. Neem er kennis van en mandateer jullie afgevaardigde punt voor punt vóór de bijeenkomst.",
-    el: "Η ημερήσια διάταξη της « {title} » οριστικοποιήθηκε και μεταφράστηκε. Λάβετε γνώση και δώστε εντολή στον εκπρόσωπό σας σημείο προς σημείο πριν από τη διεξαγωγή."
+    el: "Η ημερήσια διάταξη της « {title} » οριστικοποιήθηκε και μεταφράστηκε. Λάβετε γνώση και δώστε εντολή στον εκπρόσωπό σας σημείο προς σημείο πριν από τη διεξαγωγή.",
+    ro: "Ordinea de zi pentru „{title}” este fixată și tradusă. Citiți-o și dați-i delegatului/delegatei voastre mandatul punct cu punct, înainte de adunare."
   },
   "network.assembleia.agenda_published.cta": {
     "pt-BR": "Ler a ordem do dia",
@@ -5324,7 +5756,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Llegir l'ordre del dia",
     eo: "Legi la tagordon",
     nl: "Agenda lezen",
-    el: "Διαβάστε την ημερήσια διάταξη"
+    el: "Διαβάστε την ημερήσια διάταξη",
+    ro: "Citește ordinea de zi"
   },
   "network.assembleia.item_proposed.sub": {
     "pt-BR": "Novo ponto na ordem do dia — {title}",
@@ -5336,7 +5769,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou punt a l'ordre del dia — {title}",
     eo: "Nova tagordero — {title}",
     nl: "Nieuw agendapunt — {title}",
-    el: "Νέο σημείο στην ημερήσια διάταξη — {title}"
+    el: "Νέο σημείο στην ημερήσια διάταξη — {title}",
+    ro: "Punct nou pe ordinea de zi — {title}"
   },
   "network.assembleia.item_proposed.intro": {
     "pt-BR": "{library} inscreveu um ponto: « {itemTitle} ». A ordenar na ordem do dia no momento certo — sem nunca suprimi-lo.",
@@ -5348,7 +5782,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{library} ha inscrit un punt: « {itemTitle} ». A ordenar a l'ordre del dia quan sigui el moment — sense suprimir-lo mai.",
     eo: "{library} enskribis punkton: « {itemTitle} ». Ordigenda en la tagordo ĝustatempe — neniam forigenda.",
     nl: "{library} heeft een punt ingediend: « {itemTitle} ». Te ordenen in de agenda wanneer het moment daar is — nooit te verwijderen.",
-    el: "{library} κατέθεσε ένα σημείο: « {itemTitle} ». Προς τακτοποίηση στην ημερήσια διάταξη όταν έρθει η ώρα — χωρίς ποτέ να αφαιρεθεί."
+    el: "{library} κατέθεσε ένα σημείο: « {itemTitle} ». Προς τακτοποίηση στην ημερήσια διάταξη όταν έρθει η ώρα — χωρίς ποτέ να αφαιρεθεί.",
+    ro: "{library} a propus un punct: „{itemTitle}”. Va fi așezat în ordinea de zi la momentul potrivit — fără să fie șters vreodată."
   },
   "network.assembleia.item_proposed.cta": {
     "pt-BR": "Ver a ordem do dia",
@@ -5360,7 +5795,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure l'ordre del dia",
     eo: "Vidi la tagordon",
     nl: "Agenda bekijken",
-    el: "Δείτε την ημερήσια διάταξη"
+    el: "Δείτε την ημερήσια διάταξη",
+    ro: "Vezi ordinea de zi"
   },
   // ===== network.cooptation_proposed ========================================
   // Envoye aux autres admins actifs (hors proposeur, hors target).
@@ -5376,7 +5812,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Proposta de cooptació: {proposedName}",
     eo: "Kooptad-propono: {proposedName}",
     nl: "Coöptatievoorstel: {proposedName}",
-    el: "Πρόταση κοόπτησης: {proposedName}"
+    el: "Πρόταση κοόπτησης: {proposedName}",
+    ro: "Propunere de cooptare: {proposedName}"
   },
   "network.cooptation_proposed.intro": {
     "pt-BR": "{proposerName} propôs cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo. Seu voto é esperado.",
@@ -5388,7 +5825,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{proposerName} proposa cooptar {proposedName} com a administrador-a-e de xarxa. La unanimitat de les administradores actives és necessària per concloure el procés. S'espera el vostre vot.",
     eo: "{proposerName} proponas koopti {proposedName} kiel retan administrant-in-on. La unuanimeco de la aktivaj administrant-in-oj estas necesa por konkludi la procezon. Via voĉdono estas atendata.",
     nl: "{proposerName} stelt voor om {proposedName} te coöpteren als netwerkbeheerder. Unanimiteit onder de actieve netwerkbeheerders is vereist om het proces af te ronden. Je stem wordt verwacht.",
-    el: "Ο/Η {proposerName} προτείνει την κοόπτηση του/της {proposedName} ως διαχειριστή/στρια του δικτύου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία. Αναμένεται η ψήφος σας."
+    el: "Ο/Η {proposerName} προτείνει την κοόπτηση του/της {proposedName} ως διαχειριστή/στρια του δικτύου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία. Αναμένεται η ψήφος σας.",
+    ro: "{proposerName} propune cooptarea lui {proposedName} în administrarea rețelei. Este nevoie de unanimitatea persoanelor active din administrare pentru a încheia procesul. Votul tău este așteptat."
   },
   "network.cooptation_proposed.cta": {
     "pt-BR": "Acessar a proposta e votar",
@@ -5400,7 +5838,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedir a la proposta i votar",
     eo: "Aliri la proponon kaj voĉdoni",
     nl: "Open het voorstel en stem",
-    el: "Άνοιξε την πρόταση και ψήφισε"
+    el: "Άνοιξε την πρόταση και ψήφισε",
+    ro: "Deschide propunerea și votează"
   },
   "network.cooptation_proposed.motivation_label": {
     "pt-BR": "Motivação invocada :",
@@ -5412,7 +5851,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motivació invocada:",
     eo: "Invokita motivo:",
     nl: "Aangevoerde motivatie:",
-    el: "Αιτιολόγηση που προβλήθηκε:"
+    el: "Αιτιολόγηση που προβλήθηκε:",
+    ro: "Motivația invocată:"
   },
 
   // ===== network.cooptation_voted ===========================================
@@ -5429,7 +5869,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Vot registrat · cooptació de {proposedName}",
     eo: "Voĉdono registrita · kooptado de {proposedName}",
     nl: "Stem geregistreerd · coöptatie van {proposedName}",
-    el: "Ψήφος καταχωρίστηκε · κοόπτηση του/της {proposedName}"
+    el: "Ψήφος καταχωρίστηκε · κοόπτηση του/της {proposedName}",
+    ro: "Vot înregistrat · cooptarea lui {proposedName}"
   },
   "network.cooptation_voted.intro": {
     "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de cooptação de {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar se ainda não o fez.",
@@ -5441,7 +5882,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una administradora de xarxa acaba de votar sobre la proposta de cooptació de {proposedName}, oberta per {proposerName}. Accediu a l'aplicació per veure l'estat actual de la deliberació i votar si encara no ho heu fet.",
     eo: "Reta administrant-in-o ĵus voĉdonis pri la kooptad-propono de {proposedName}, malfermita de {proposerName}. Aliru la aplikaĵon por vidi la nunan staton de la pridiskuto kaj voĉdoni se vi ankoraŭ ne faris tion.",
     nl: "Een netwerkbeheerder heeft zojuist gestemd over het coöptatievoorstel van {proposedName}, geopend door {proposerName}. Open de app om de huidige stand van de beraadslaging te zien en te stemmen als je dat nog niet hebt gedaan.",
-    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε αν δεν το έχετε ήδη κάνει."
+    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε αν δεν το έχετε ήδη κάνει.",
+    ro: "O persoană din administrarea rețelei tocmai a votat propunerea de cooptare a lui {proposedName}, deschisă de {proposerName}. Intră în aplicație ca să vezi stadiul actual al deliberării și să votezi, dacă n-ai făcut-o deja."
   },
   "network.cooptation_voted.rationale_label": {
     "pt-BR": "Motivo do voto contrário :",
@@ -5453,7 +5895,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu del vot contrari:",
     eo: "Motivo de la kontraŭa voĉdono:",
     nl: "Reden voor de tegenstem:",
-    el: "Λόγος αρνητικής ψήφου:"
+    el: "Λόγος αρνητικής ψήφου:",
+    ro: "Motivul votului împotrivă:"
   },
 
   // ===== network.cooptation_rejected ========================================
@@ -5470,7 +5913,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cooptació rebutjada · {proposedName}",
     eo: "Kooptado rifuzita · {proposedName}",
     nl: "Coöptatie afgewezen · {proposedName}",
-    el: "Κοόπτηση απορρίφθηκε · {proposedName}"
+    el: "Κοόπτηση απορρίφθηκε · {proposedName}",
+    ro: "Cooptare respinsă · {proposedName}"
   },
   "network.cooptation_rejected.intro": {
     "pt-BR": "A proposta de cooptação de {proposedName}, aberta por {proposerName}, foi rejeitada por pelo menos um voto contrário. A unanimidade requerida não foi alcançada e o processo é encerrado.",
@@ -5482,7 +5926,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta de cooptació de {proposedName}, oberta per {proposerName}, ha estat rebutjada per almenys un vot contrari. La unanimitat requerida no s'ha assolit i el procés es tanca.",
     eo: "La kooptad-propono de {proposedName}, malfermita de {proposerName}, estis rifuzita pro almenaŭ unu kontraŭa voĉdono. La postulata unuanimeco ne estis atingita kaj la procezo fermiĝas.",
     nl: "Het coöptatievoorstel van {proposedName}, geopend door {proposerName}, is afgewezen door minstens één tegenstem. De vereiste unanimiteit is niet bereikt en het proces is afgesloten.",
-    el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, απορρίφθηκε από τουλάχιστον μία αρνητική ψήφο. Η απαιτούμενη ομοφωνία δεν επιτεύχθηκε και η διαδικασία έκλεισε."
+    el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, απορρίφθηκε από τουλάχιστον μία αρνητική ψήφο. Η απαιτούμενη ομοφωνία δεν επιτεύχθηκε και η διαδικασία έκλεισε.",
+    ro: "Propunerea de cooptare a lui {proposedName}, deschisă de {proposerName}, a fost respinsă prin cel puțin un vot împotrivă. Unanimitatea necesară nu a fost atinsă, iar procesul este închis."
   },
   "network.cooptation_rejected.target_intro": {
     "pt-BR": "Olá {targetName}. Uma proposta de cooptação para integrar você como administrador(a/e) de rede AnarBib foi aberta e discutida pel(o/a/e)s administrador(a/e)s ativ(o/a/e)s. Esta proposta não foi acolhida à unanimidade : recebeu pelo menos um voto contrário e o processo é encerrado. Esta decisão é coletiva e política, não pessoal.",
@@ -5494,7 +5939,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, {targetName}. S'ha obert i discutit una proposta de cooptació per integrar-te com a administrador-a-e de la xarxa AnarBib per part de les administradores actives. Aquesta proposta no ha obtingut la unanimitat: ha rebut almenys un vot contrari i el procés es tanca. Aquesta decisió és col·lectiva i política, no personal.",
     eo: "Saluton, {targetName}. Kooptad-propono por integri vin kiel administrant-in-on de la reto AnarBib estis malfermita kaj pridiskutita de la aktivaj administrant-in-oj. Ĉi tiu propono ne atingis la unuanimecon: ĝi ricevis almenaŭ unu kontraŭan voĉdonon kaj la procezo fermiĝas. Ĉi tiu decido estas kolektiva kaj politika, ne persona.",
     nl: "Hallo {targetName}. Een coöptatievoorstel om jou op te nemen als netwerkbeheerder van AnarBib is geopend en besproken door de actieve beheerders. Dit voorstel heeft geen unanimiteit bereikt: het kreeg minstens één tegenstem en het proces is afgesloten. Deze beslissing is collectief en politiek, niet persoonlijk.",
-    el: "Γεια σου {targetName}. Μια πρόταση κοόπτησης για την ένταξή σου ως διαχειριστή/στρια του δικτύου AnarBib άνοιξε και συζητήθηκε από τους/τις ενεργούς/ές διαχειριστές/στριες. Αυτή η πρόταση δεν συγκέντρωσε ομοφωνία: έλαβε τουλάχιστον μία αρνητική ψήφο και η διαδικασία έκλεισε. Αυτή η απόφαση είναι συλλογική και πολιτική, όχι προσωπική."
+    el: "Γεια σου {targetName}. Μια πρόταση κοόπτησης για την ένταξή σου ως διαχειριστή/στρια του δικτύου AnarBib άνοιξε και συζητήθηκε από τους/τις ενεργούς/ές διαχειριστές/στριες. Αυτή η πρόταση δεν συγκέντρωσε ομοφωνία: έλαβε τουλάχιστον μία αρνητική ψήφο και η διαδικασία έκλεισε. Αυτή η απόφαση είναι συλλογική και πολιτική, όχι προσωπική.",
+    ro: "Bună, {targetName}. O propunere de cooptare care te-ar fi adus în administrarea rețelei AnarBib a fost deschisă și discutată de persoanele active din administrare. Propunerea nu a întrunit unanimitatea: a primit cel puțin un vot împotrivă, iar procesul este închis. Această decizie este colectivă și politică, nu personală."
   },
 
   // ===== network.cooptation_completed =======================================
@@ -5510,7 +5956,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cooptació conclosa per unanimitat · {proposedName}",
     eo: "Kooptado konkludita unuanime · {proposedName}",
     nl: "Coöptatie unaniem afgerond · {proposedName}",
-    el: "Κοόπτηση ολοκληρώθηκε ομόφωνα · {proposedName}"
+    el: "Κοόπτηση ολοκληρώθηκε ομόφωνα · {proposedName}",
+    ro: "Cooptare încheiată în unanimitate · {proposedName}"
   },
   "network.cooptation_completed.intro": {
     "pt-BR": "A proposta de cooptação de {proposedName}, aberta por {proposerName}, foi concluída à unanimidade. {proposedName} torna-se administrador(a/e) de rede ativ(o/a/e) da AnarBib.",
@@ -5522,7 +5969,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta de cooptació de {proposedName}, oberta per {proposerName}, s'ha conclòs per unanimitat. {proposedName} esdevé administrador-a-e de xarxa actiu-iva-e d'AnarBib.",
     eo: "La kooptad-propono de {proposedName}, malfermita de {proposerName}, estis konkludita unuanime. {proposedName} iĝas aktiva reta administrant-in-o de AnarBib.",
     nl: "Het coöptatievoorstel van {proposedName}, geopend door {proposerName}, is unaniem afgerond. {proposedName} wordt een actieve netwerkbeheerder van AnarBib.",
-    el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, ολοκληρώθηκε ομόφωνα. Ο/Η {proposedName} γίνεται ενεργός/ή διαχειριστής/στρια του δικτύου AnarBib."
+    el: "Η πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}, ολοκληρώθηκε ομόφωνα. Ο/Η {proposedName} γίνεται ενεργός/ή διαχειριστής/στρια του δικτύου AnarBib.",
+    ro: "Propunerea de cooptare a lui {proposedName}, deschisă de {proposerName}, a fost încheiată în unanimitate. {proposedName} devine persoană activă în administrarea rețelei AnarBib."
   },
   "network.cooptation_completed.target_intro": {
     "pt-BR": "Olá {targetName}. A proposta de cooptação para integrar você como administrador(a/e) de rede AnarBib foi concluída à unanimidade. Seja bem-vind(o/a/e) à equipe de administração de rede.",
@@ -5534,7 +5982,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hola, {targetName}. La proposta de cooptació per integrar-te com a administrador-a-e de la xarxa AnarBib s'ha conclòs per unanimitat. Benvingut-da-e a l'equip d'administració de la xarxa.",
     eo: "Saluton, {targetName}. La kooptad-propono por integri vin kiel administrant-in-on de la reto AnarBib estis konkludita unuanime. Bonvenon en la retadministran teamon.",
     nl: "Hallo {targetName}. Het coöptatievoorstel om jou op te nemen als netwerkbeheerder van AnarBib is unaniem afgerond. Welkom in het netwerkbeheerteam.",
-    el: "Γεια σου {targetName}. Η πρόταση κοόπτησης για την ένταξή σου ως διαχειριστή/στρια του δικτύου AnarBib ολοκληρώθηκε ομόφωνα. Καλώς όρισες στην ομάδα διαχείρισης του δικτύου."
+    el: "Γεια σου {targetName}. Η πρόταση κοόπτησης για την ένταξή σου ως διαχειριστή/στρια του δικτύου AnarBib ολοκληρώθηκε ομόφωνα. Καλώς όρισες στην ομάδα διαχείρισης του δικτύου.",
+    ro: "Bună, {targetName}. Propunerea de cooptare care te aduce în administrarea rețelei AnarBib a fost încheiată în unanimitate. Bine ai venit în echipa de administrare a rețelei."
   },
   "network.cooptation_completed.cta": {
     "pt-BR": "Acessar o painel de administração de rede",
@@ -5546,7 +5995,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedir al tauler d'administració de la xarxa",
     eo: "Aliri la retadministran panelon",
     nl: "Open het netwerkbeheerpaneel",
-    el: "Άνοιγμα του πίνακα διαχείρισης του δικτύου"
+    el: "Άνοιγμα του πίνακα διαχείρισης του δικτύου",
+    ro: "Deschide panoul de administrare a rețelei"
   },
   // ===== Consulta locale lifecycle (con.*) =================================
   "con.created.sub": {
@@ -5559,7 +6009,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de consulta in situ rebuda",
     eo: "Peto de surloka konsulto ricevita",
     nl: "Aanvraag voor raadpleging ter plaatse ontvangen",
-    el: "Λήφθηκε αίτημα επιτόπιας μελέτης"
+    el: "Λήφθηκε αίτημα επιτόπιας μελέτης",
+    ro: "Am primit cererea de consultare pe loc"
   },
   "con.created.pre": {
     "pt-BR": "Sua consulta foi registrada.",
@@ -5571,7 +6022,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva consulta s'ha registrat.",
     eo: "Via konsulto estis registrita.",
     nl: "Je raadpleging is geregistreerd.",
-    el: "Η μελέτη σου καταχωρίστηκε."
+    el: "Η μελέτη σου καταχωρίστηκε.",
+    ro: "Consultarea ta a fost înregistrată."
   },
   "con.created.intro": {
     "pt-BR": "Recebemos seu pedido de consulta local. A biblioteca confirmará a data e o horário em breve.",
@@ -5583,7 +6035,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem rebut la teva sol·licitud de consulta in situ. La biblioteca et confirmarà aviat la data i l'hora.",
     eo: "Ni ricevis vian peton de surloka konsulto. La biblioteko baldaŭ konfirmos al vi la daton kaj la horon.",
     nl: "We hebben je aanvraag voor raadpleging ter plaatse ontvangen. De bibliotheek bevestigt binnenkort de datum en het tijdstip.",
-    el: "Λάβαμε το αίτημά σου για επιτόπια μελέτη. Η βιβλιοθήκη θα σου επιβεβαιώσει σύντομα την ημερομηνία και την ώρα."
+    el: "Λάβαμε το αίτημά σου για επιτόπια μελέτη. Η βιβλιοθήκη θα σου επιβεβαιώσει σύντομα την ημερομηνία και την ώρα.",
+    ro: "Am primit cererea ta de consultare pe loc. Biblioteca îți va confirma în curând data și ora."
   },
   "con.created.hint": {
     "pt-BR": "Lembramos que a consulta local acontece nos espaços da biblioteca, sem empréstimo do(s) item(ns).",
@@ -5595,7 +6048,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recorda: la consulta in situ es fa als espais de la biblioteca, sense préstec del document.",
     eo: "Memoru: la surloka konsulto okazas en la spacoj de la biblioteko, sen prunto de la dokumento.",
     nl: "Ter herinnering: de raadpleging vindt plaats in de bibliotheek, zonder uitlening van het document.",
-    el: "Υπενθύμιση: η μελέτη γίνεται στους χώρους της βιβλιοθήκης, χωρίς δανεισμό του τεκμηρίου."
+    el: "Υπενθύμιση: η μελέτη γίνεται στους χώρους της βιβλιοθήκης, χωρίς δανεισμό του τεκμηρίου.",
+    ro: "Reține: consultarea are loc în spațiile bibliotecii, fără împrumutul lucrării."
   },
   "con.created.admin": {
     "pt-BR": "Novo pedido de consulta local",
@@ -5607,7 +6061,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova sol·licitud de consulta in situ",
     eo: "Nova peto de surloka konsulto",
     nl: "Nieuwe aanvraag voor raadpleging ter plaatse",
-    el: "Νέο αίτημα επιτόπιας μελέτης"
+    el: "Νέο αίτημα επιτόπιας μελέτης",
+    ro: "Cerere nouă de consultare pe loc"
   },
   "con.realized": {
     "pt-BR": "Consulta local registrada como realizada",
@@ -5619,7 +6074,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Consulta in situ registrada com a efectuada",
     eo: "Surloka konsulto registrita kiel efektivigita",
     nl: "Raadpleging ter plaatse gemarkeerd als voltooid",
-    el: "Η επιτόπια μελέτη καταχωρίστηκε ως πραγματοποιηθείσα"
+    el: "Η επιτόπια μελέτη καταχωρίστηκε ως πραγματοποιηθείσα",
+    ro: "Consultare pe loc înregistrată ca efectuată"
   },
   "con.cancelReader": {
     "pt-BR": "O(a/e) leitor(a/e) cancelou um pedido de consulta local",
@@ -5631,7 +6087,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Le lector-a-e ha cancel·lat una sol·licitud de consulta in situ",
     eo: "La legant-in-o nuligis peton de surloka konsulto",
     nl: "De lezer heeft een aanvraag voor raadpleging geannuleerd",
-    el: "Ο/Η αναγνώστης/στρια ακύρωσε ένα αίτημα μελέτης"
+    el: "Ο/Η αναγνώστης/στρια ακύρωσε ένα αίτημα μελέτης",
+    ro: "Cititorul/cititoarea a anulat o cerere de consultare"
   },
   "con.cancelStaff": {
     "pt-BR": "A biblioteca cancelou seu pedido de consulta local",
@@ -5643,7 +6100,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca ha cancel·lat la teva sol·licitud de consulta in situ",
     eo: "La biblioteko nuligis vian peton de surloka konsulto",
     nl: "De bibliotheek heeft je aanvraag voor raadpleging geannuleerd",
-    el: "Η βιβλιοθήκη ακύρωσε το αίτημα μελέτης σου"
+    el: "Η βιβλιοθήκη ακύρωσε το αίτημα μελέτης σου",
+    ro: "Biblioteca ți-a anulat cererea de consultare"
   },
   "con.cancelStaffAdmin": {
     "pt-BR": "A biblioteca cancelou um pedido de consulta local",
@@ -5655,7 +6113,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca ha cancel·lat una sol·licitud de consulta in situ",
     eo: "La biblioteko nuligis peton de surloka konsulto",
     nl: "De bibliotheek heeft een aanvraag voor raadpleging geannuleerd",
-    el: "Η βιβλιοθήκη ακύρωσε ένα αίτημα μελέτης"
+    el: "Η βιβλιοθήκη ακύρωσε ένα αίτημα μελέτης",
+    ro: "Biblioteca a anulat o cerere de consultare"
   },
   "con.expired": {
     "pt-BR": "Pedido de consulta local expirado",
@@ -5667,7 +6126,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de consulta in situ expirada",
     eo: "Peto de surloka konsulto eksvalidiĝinta",
     nl: "Aanvraag voor raadpleging verlopen",
-    el: "Το αίτημα μελέτης έληξε"
+    el: "Το αίτημα μελέτης έληξε",
+    ro: "Cerere de consultare expirată"
   },
 
   // ===== Consulta workflow (cwf.*) =========================================
@@ -5681,7 +6141,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca t'ha proposat un horari per a la teva consulta in situ: {date}, de {time_start} a {time_end} ({tz}). Confirma si aquest horari et va bé.",
     eo: "La biblioteko proponis al vi horon por via surloka konsulto: {date}, de {time_start} ĝis {time_end} ({tz}). Konfirmu ĉu ĉi tiu horo konvenas al vi.",
     nl: "De bibliotheek stelt een tijdstip voor je raadpleging voor: {date}, van {time_start} tot {time_end} ({tz}). Bevestig of dit je past.",
-    el: "Η βιβλιοθήκη σου πρότεινε έναν χρόνο για τη μελέτη σου: {date}, από {time_start} έως {time_end} ({tz}). Επιβεβαίωσε αν σου ταιριάζει."
+    el: "Η βιβλιοθήκη σου πρότεινε έναν χρόνο για τη μελέτη σου: {date}, από {time_start} έως {time_end} ({tz}). Επιβεβαίωσε αν σου ταιριάζει.",
+    ro: "Biblioteca îți propune un interval pentru consultare: {date}, de la {time_start} la {time_end} ({tz}). Confirmă dacă îți convine."
   },
   "cwf.reader.rescheduled": {
     "pt-BR": "A biblioteca atualizou o horário proposto para sua consulta local: {date}, das {time_start} às {time_end} ({tz}). Confirme se este novo horário funciona.",
@@ -5693,7 +6154,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca ha actualitzat l'horari proposat per a la teva consulta in situ: {date}, de {time_start} a {time_end} ({tz}). Confirma si aquest nou horari et va bé.",
     eo: "La biblioteko ĝisdatigis la proponitan horon por via surloka konsulto: {date}, de {time_start} ĝis {time_end} ({tz}). Konfirmu ĉu ĉi tiu nova horo konvenas.",
     nl: "De bibliotheek heeft het voorgestelde tijdstip voor je raadpleging gewijzigd: {date}, van {time_start} tot {time_end} ({tz}). Bevestig of dit nieuwe tijdstip je past.",
-    el: "Η βιβλιοθήκη τροποποίησε τον προτεινόμενο χρόνο για τη μελέτη σου: {date}, από {time_start} έως {time_end} ({tz}). Επιβεβαίωσε αν σου ταιριάζει αυτός ο νέος χρόνος."
+    el: "Η βιβλιοθήκη τροποποίησε τον προτεινόμενο χρόνο για τη μελέτη σου: {date}, από {time_start} έως {time_end} ({tz}). Επιβεβαίωσε αν σου ταιριάζει αυτός ο νέος χρόνος.",
+    ro: "Biblioteca a modificat intervalul propus pentru consultarea ta: {date}, de la {time_start} la {time_end} ({tz}). Confirmă dacă noul interval îți convine."
   },
   "cwf.staff.scheduled": {
     "pt-BR": "Horário proposto ao(à/e) leitor(a/e)",
@@ -5705,7 +6167,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Horari proposat a le lector-a-e",
     eo: "Horo proponita al la legant-in-o",
     nl: "Tijdstip voorgesteld aan de lezer",
-    el: "Χρόνος που προτάθηκε στον/στην αναγνώστη/στρια"
+    el: "Χρόνος που προτάθηκε στον/στην αναγνώστη/στρια",
+    ro: "Interval propus cititorului/cititoarei"
   },
   "cwf.staff.rescheduled": {
     "pt-BR": "Horário atualizado proposto ao(à/e) leitor(a/e)",
@@ -5717,7 +6180,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Horari actualitzat proposat a le lector-a-e",
     eo: "Ĝisdatigita horo proponita al la legant-in-o",
     nl: "Gewijzigd tijdstip voorgesteld aan de lezer",
-    el: "Τροποποιημένος χρόνος που προτάθηκε στον/στην αναγνώστη/στρια"
+    el: "Τροποποιημένος χρόνος που προτάθηκε στον/στην αναγνώστη/στρια",
+    ro: "Interval modificat propus cititorului/cititoarei"
   },
   "cwf.staff.readerConfirmed": {
     "pt-BR": "O(a/e) leitor(a/e) confirmou o horário proposto",
@@ -5729,7 +6193,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Le lector-a-e ha confirmat l'horari proposat",
     eo: "La legant-in-o konfirmis la proponitan horon",
     nl: "De lezer heeft het voorgestelde tijdstip bevestigd",
-    el: "Ο/Η αναγνώστης/στρια επιβεβαίωσε τον προτεινόμενο χρόνο"
+    el: "Ο/Η αναγνώστης/στρια επιβεβαίωσε τον προτεινόμενο χρόνο",
+    ro: "Cititorul/cititoarea a confirmat intervalul propus"
   },
   "cwf.staff.readerRefused": {
     "pt-BR": "O(a/e) leitor(a/e) recusou o horário proposto",
@@ -5741,7 +6206,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Le lector-a-e ha rebutjat l'horari proposat",
     eo: "La legant-in-o rifuzis la proponitan horon",
     nl: "De lezer heeft het voorgestelde tijdstip geweigerd",
-    el: "Ο/Η αναγνώστης/στρια απέρριψε τον προτεινόμενο χρόνο"
+    el: "Ο/Η αναγνώστης/στρια απέρριψε τον προτεινόμενο χρόνο",
+    ro: "Cititorul/cititoarea a refuzat intervalul propus"
   },
   // ===== Paquet 141.2 (16/05/2026) =====
   // Templates pour 2 nouveaux events workflow consultas :
@@ -5759,7 +6225,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva sol·licitud de consulta in situ s'està preparant. La biblioteca et proposarà un horari aviat.",
     eo: "Via peto de surloka konsulto estas preparata. La biblioteko baldaŭ proponos al vi horon.",
     nl: "Je aanvraag voor raadpleging wordt voorbereid. De bibliotheek stelt binnenkort een tijdstip voor.",
-    el: "Το αίτημά σου για επιτόπια μελέτη προετοιμάζεται. Η βιβλιοθήκη θα σου προτείνει χρόνο σύντομα."
+    el: "Το αίτημά σου για επιτόπια μελέτη προετοιμάζεται. Η βιβλιοθήκη θα σου προτείνει χρόνο σύντομα.",
+    ro: "Cererea ta de consultare este în pregătire. Biblioteca îți va propune în curând un interval."
   },
   "cwf.reader.nao_compareceu": {
     "pt-BR": "Você foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} às {time_end}. A biblioteca tinha se preparado para receber você. Caso queira marcar um novo horário, entre em contato com a biblioteca.",
@@ -5771,7 +6238,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Has estat marcat-da-e com a absent-a-e a la consulta in situ prevista per al {date}, de {time_start} a {time_end}. La biblioteca s'havia preparat per rebre't. Si vols fixar un nou horari, contacta la biblioteca.",
     eo: "Vi estis markita kiel forestanta ĉe la surloka konsulto planita por la {date}, de {time_start} ĝis {time_end}. La biblioteko estis preparinta sin por akcepti vin. Se vi deziras fiksi novan horon, kontaktu la bibliotekon.",
     nl: "Je bent gemarkeerd als afwezig voor de raadpleging ter plaatse die gepland was op {date}, van {time_start} tot {time_end}. De bibliotheek had zich voorbereid om je te ontvangen. Als je een nieuw tijdstip wilt afspreken, neem dan contact op met de bibliotheek.",
-    el: "Σημειώθηκες ως απών/απούσα στην επιτόπια μελέτη που ήταν προγραμματισμένη στις {date}, από {time_start} έως {time_end}. Η βιβλιοθήκη είχε προετοιμαστεί να σε υποδεχτεί. Αν θέλεις να ορίσεις νέο χρόνο, επικοινώνησε με τη βιβλιοθήκη."
+    el: "Σημειώθηκες ως απών/απούσα στην επιτόπια μελέτη που ήταν προγραμματισμένη στις {date}, από {time_start} έως {time_end}. Η βιβλιοθήκη είχε προετοιμαστεί να σε υποδεχτεί. Αν θέλεις να ορίσεις νέο χρόνο, επικοινώνησε με τη βιβλιοθήκη.",
+    ro: "Absența ta a fost înregistrată la consultarea programată pe {date}, de la {time_start} la {time_end}. Biblioteca se pregătise să te primească. Dacă vrei să stabilești un nou interval, contactează biblioteca."
   },
   "cwf.staff.nao_compareceu": {
     "pt-BR": "Não comparecimento registrado",
@@ -5783,7 +6251,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "No-presentació registrada",
     eo: "Neapero registrita",
     nl: "Niet-verschijning geregistreerd",
-    el: "Μη εμφάνιση καταγράφηκε"
+    el: "Μη εμφάνιση καταγράφηκε",
+    ro: "Neprezentare înregistrată"
   },
   "cwf.actionBox.replySlot": {
     "pt-BR": "Responder à proposta",
@@ -5795,7 +6264,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Respondre a la proposta",
     eo: "Respondi al la propono",
     nl: "Reageer op het voorstel",
-    el: "Απάντησε στην πρόταση"
+    el: "Απάντησε στην πρόταση",
+    ro: "Răspunde la propunere"
   },
   "cwf.actionBox.seeConsultas": {
     "pt-BR": "Ver minhas consultas",
@@ -5807,7 +6277,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure les meves consultes",
     eo: "Vidi miajn konsultojn",
     nl: "Mijn raadplegingen bekijken",
-    el: "Δες τις μελέτες μου"
+    el: "Δες τις μελέτες μου",
+    ro: "Vezi consultările mele"
   },
   "cwf.actionBox.preparePainel": {
     "pt-BR": "Abrir o painel",
@@ -5819,7 +6290,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Obrir el tauler",
     eo: "Malfermi la panelon",
     nl: "Open het paneel",
-    el: "Άνοιγμα του πίνακα"
+    el: "Άνοιγμα του πίνακα",
+    ro: "Deschide panoul"
   },
   // Section #114.A : labels et valeurs de vote pour la cooptation reseau
   "l.vote": {
@@ -5832,7 +6304,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Vot",
     eo: "Voĉdono",
     nl: "Stem",
-    el: "Ψήφος"
+    el: "Ψήφος",
+    ro: "Vot"
   },
   "l.voter": {
     "pt-BR": "Voto emitido por",
@@ -5844,7 +6317,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Vot emès per",
     eo: "Voĉdono donita de",
     nl: "Stem uitgebracht door",
-    el: "Ψήφος από"
+    el: "Ψήφος από",
+    ro: "Vot exprimat de"
   },
   "l.proposer": {
     "pt-BR": "Proposta por",
@@ -5856,7 +6330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Proposada per",
     eo: "Proponita de",
     nl: "Voorgesteld door",
-    el: "Προτάθηκε από"
+    el: "Προτάθηκε από",
+    ro: "Propusă de"
   },
   // ===== TM-B (#153.B) — libelles de details mails admin team.* =====
   "l.target": {
@@ -5869,7 +6344,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Persona concernida",
     eo: "Koncernata persono",
     nl: "Betrokken persoon",
-    el: "Εμπλεκόμενο άτομο"
+    el: "Εμπλεκόμενο άτομο",
+    ro: "Persoana vizată"
   },
   "l.actor": {
     "pt-BR": "Autor-a-e da ação",
@@ -5881,7 +6357,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Autor(a/e) de l'acció",
     eo: "Aŭtoro de la ago",
     nl: "Actie uitgevoerd door",
-    el: "Ενέργεια από"
+    el: "Ενέργεια από",
+    ro: "Acțiune făcută de"
   },
   "l.cancelledBy": {
     "pt-BR": "Anulado por",
@@ -5893,7 +6370,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Anul·lat per",
     eo: "Nuligita de",
     nl: "Geannuleerd door",
-    el: "Ακυρώθηκε από"
+    el: "Ακυρώθηκε από",
+    ro: "Anulat de"
   },
   "l.library": {
     "pt-BR": "Biblioteca",
@@ -5905,7 +6383,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Biblioteca",
     eo: "Biblioteko",
     nl: "Bibliotheek",
-    el: "Βιβλιοθήκη"
+    el: "Βιβλιοθήκη",
+    ro: "Bibliotecă"
   },
   "l.role": {
     "pt-BR": "Papel",
@@ -5917,7 +6396,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Rol",
     eo: "Rolo",
     nl: "Rol",
-    el: "Ρόλος"
+    el: "Ρόλος",
+    ro: "Rol"
   },
   "l.roleConcerned": {
     "pt-BR": "Papel concernido",
@@ -5929,7 +6409,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Rol concernit",
     eo: "Koncernata rolo",
     nl: "Betrokken rol",
-    el: "Σχετικός ρόλος"
+    el: "Σχετικός ρόλος",
+    ro: "Rolul vizat"
   },
   "l.roleRemoved": {
     "pt-BR": "Papel retirado",
@@ -5941,7 +6422,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Rol retirat",
     eo: "Forigita rolo",
     nl: "Verwijderde rol",
-    el: "Ρόλος που αφαιρέθηκε"
+    el: "Ρόλος που αφαιρέθηκε",
+    ro: "Rol retras"
   },
   "l.roleFrom": {
     "pt-BR": "Papel anterior",
@@ -5953,7 +6435,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Rol anterior",
     eo: "Antaŭa rolo",
     nl: "Vorige rol",
-    el: "Προηγούμενος ρόλος"
+    el: "Προηγούμενος ρόλος",
+    ro: "Rolul anterior"
   },
   "l.roleTo": {
     "pt-BR": "Novo papel",
@@ -5965,7 +6448,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nou rol",
     eo: "Nova rolo",
     nl: "Nieuwe rol",
-    el: "Νέος ρόλος"
+    el: "Νέος ρόλος",
+    ro: "Rolul nou"
   },
   "l.gracePeriodEnd": {
     "pt-BR": "Fim do prazo de carência",
@@ -5977,7 +6461,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Fi del termini de gràcia",
     eo: "Fino de la prokrastperiodo",
     nl: "Einde van de respijtperiode",
-    el: "Τέλος περιόδου χάριτος"
+    el: "Τέλος περιόδου χάριτος",
+    ro: "Sfârșitul perioadei de așteptare"
   },
   // ===== TR-4 (#153.B) — libelles des mails internes register =====
   "l.publicId": {
@@ -5990,7 +6475,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "ID públic",
     eo: "Publika ID",
     nl: "Openbare ID",
-    el: "Δημόσιο ID"
+    el: "Δημόσιο ID",
+    ro: "ID public"
   },
   "l.name": {
     "pt-BR": "Nome",
@@ -6002,7 +6488,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nom",
     eo: "Nomo",
     nl: "Naam",
-    el: "Όνομα"
+    el: "Όνομα",
+    ro: "Nume"
   },
   "l.email": {
     "pt-BR": "E-mail",
@@ -6014,7 +6501,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Correu electrònic",
     eo: "Retpoŝto",
     nl: "E-mail",
-    el: "Email"
+    el: "Email",
+    ro: "E-mail"
   },
   "l.phone": {
     "pt-BR": "Telefone",
@@ -6026,7 +6514,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Telèfon",
     eo: "Telefono",
     nl: "Telefoon",
-    el: "Τηλέφωνο"
+    el: "Τηλέφωνο",
+    ro: "Telefon"
   },
   "l.address": {
     "pt-BR": "Endereço informado",
@@ -6038,7 +6527,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Adreça indicada",
     eo: "Indikita adreso",
     nl: "Opgegeven adres",
-    el: "Δηλωμένη διεύθυνση"
+    el: "Δηλωμένη διεύθυνση",
+    ro: "Adresa indicată"
   },
   "l.registrationDate": {
     "pt-BR": "Data do cadastro",
@@ -6050,7 +6540,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Data de registre",
     eo: "Dato de registriĝo",
     nl: "Inschrijvingsdatum",
-    el: "Ημερομηνία εγγραφής"
+    el: "Ημερομηνία εγγραφής",
+    ro: "Data înregistrării"
   },
   "l.testContext": {
     "pt-BR": "Contexto de teste",
@@ -6062,7 +6553,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Context de prova",
     eo: "Testa kunteksto",
     nl: "Testcontext",
-    el: "Πλαίσιο δοκιμής"
+    el: "Πλαίσιο δοκιμής",
+    ro: "Context de test"
   },
   "l.organization": {
     "pt-BR": "Organização / coletivo",
@@ -6074,7 +6566,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Organització / col·lectiu",
     eo: "Organizo / kolektivo",
     nl: "Organisatie / collectief",
-    el: "Οργάνωση / συλλογικότητα"
+    el: "Οργάνωση / συλλογικότητα",
+    ro: "Organizație / colectiv"
   },
   "l.motivation": {
     "pt-BR": "Motivação",
@@ -6086,38 +6579,39 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motivació",
     eo: "Motivo",
     nl: "Motivatie",
-    el: "Κίνητρο"
+    el: "Κίνητρο",
+    ro: "Motivație"
   },
-  "authority.proposal_opened.subject": { "pt-BR": "Nova proposta no acervo de autoridades", "fr": "Nouvelle proposition dans le corpus d'autorités", "es": "Nueva propuesta en el corpus de autoridades", "en": "New proposal in the authorities corpus", "it": "New proposal in the authorities corpus", "de": "New proposal in the authorities corpus", "ca": "New proposal in the authorities corpus", "eo": "New proposal in the authorities corpus", "nl": "New proposal in the authorities corpus", "el": "New proposal in the authorities corpus" },
-  "authority.proposal_opened.intro": { "pt-BR": "Uma proposta de contribuição foi aberta sobre uma autoridade que sua biblioteca utiliza. Sem objeção motivada até o prazo, ela será aplicada por consentimento.", "fr": "Une proposition de contribution vient d'être ouverte sur une autorité que ta bibliothèque utilise. Sans objection motivée avant l'échéance, elle sera appliquée par consentement.", "es": "Se ha abierto una propuesta de contribución sobre una autoridad que tu biblioteca utiliza. Sin objeción motivada antes del plazo, se aplicará por consentimiento.", "en": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "it": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "de": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "ca": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "eo": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "nl": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "el": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent." },
-  "authority.proposal_objected.subject": { "pt-BR": "Objeção registrada em uma proposta", "fr": "Objection déposée sur une proposition", "es": "Objeción registrada en una propuesta", "en": "Objection filed on a proposal", "it": "Objection filed on a proposal", "de": "Objection filed on a proposal", "ca": "Objection filed on a proposal", "eo": "Objection filed on a proposal", "nl": "Objection filed on a proposal", "el": "Objection filed on a proposal" },
-  "authority.proposal_objected.intro": { "pt-BR": "Uma objeção motivada foi registrada sobre uma proposta. A discussão permanece aberta (anti-blackball).", "fr": "Une objection motivée a été déposée sur une proposition. La discussion reste ouverte (anti-blackball).", "es": "Se ha registrado una objeción motivada sobre una propuesta. La discusión permanece abierta (anti-blackball).", "en": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "it": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "de": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "ca": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "eo": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "nl": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "el": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball)." },
-  "authority.proposal_resolved_consent.subject": { "pt-BR": "Proposta aceita por consentimento", "fr": "Proposition adoptée par consentement", "es": "Propuesta aceptada por consentimiento", "en": "Proposal accepted by consent", "it": "Proposal accepted by consent", "de": "Proposal accepted by consent", "ca": "Proposal accepted by consent", "eo": "Proposal accepted by consent", "nl": "Proposal accepted by consent", "el": "Proposal accepted by consent" },
-  "authority.proposal_resolved_consent.intro": { "pt-BR": "O prazo terminou sem objeção: a proposta foi aceita por consentimento. Um membro da equipe poderá aplicá-la.", "fr": "L'échéance est passée sans objection : la proposition est adoptée par consentement. Un membre de l'équipe pourra l'appliquer.", "es": "El plazo terminó sin objeción: la propuesta fue aceptada por consentimiento. Un miembro del equipo podrá aplicarla.", "en": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "it": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "de": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "ca": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "eo": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "nl": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "el": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it." },
-  "authority.proposal_refused.subject": { "pt-BR": "Proposta recusada", "fr": "Proposition refusée", "es": "Propuesta rechazada", "en": "Proposal refused", "it": "Proposal refused", "de": "Proposal refused", "ca": "Proposal refused", "eo": "Proposal refused", "nl": "Proposal refused", "el": "Proposal refused" },
-  "authority.proposal_refused.intro": { "pt-BR": "Sua proposta foi recusada após objeção(ões) motivada(s). A motivação está indicada abaixo.", "fr": "Ta proposition a été refusée suite à une ou des objections motivées. La motivation est indiquée ci-dessous.", "es": "Tu propuesta fue rechazada tras una o varias objeciones motivadas. La motivación se indica a continuación.", "en": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "it": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "de": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "ca": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "eo": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "nl": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "el": "Your proposal was refused after one or more motivated objections. The reason is shown below." },
-  "authority.merge_executed.subject": { "pt-BR": "Fusão aplicada no acervo de autoridades", "fr": "Fusion appliquée dans le corpus d'autorités", "es": "Fusión aplicada en el corpus de autoridades", "en": "Merge applied in the authorities corpus", "it": "Merge applied in the authorities corpus", "de": "Merge applied in the authorities corpus", "ca": "Merge applied in the authorities corpus", "eo": "Merge applied in the authorities corpus", "nl": "Merge applied in the authorities corpus", "el": "Merge applied in the authorities corpus" },
-  "authority.merge_executed.intro": { "pt-BR": "Uma fusão de duplicata foi aplicada em uma autoridade que sua biblioteca utiliza.", "fr": "Une fusion de doublon a été appliquée sur une autorité que ta bibliothèque utilise.", "es": "Se aplicó una fusión de duplicado en una autoridad que tu biblioteca utiliza.", "en": "A duplicate merge was applied on an authority your library uses.", "it": "A duplicate merge was applied on an authority your library uses.", "de": "A duplicate merge was applied on an authority your library uses.", "ca": "A duplicate merge was applied on an authority your library uses.", "eo": "A duplicate merge was applied on an authority your library uses.", "nl": "A duplicate merge was applied on an authority your library uses.", "el": "A duplicate merge was applied on an authority your library uses." },
-  "authority.edit_applied.subject": { "pt-BR": "Edição aplicada no acervo de autoridades", "fr": "Édition appliquée dans le corpus d'autorités", "es": "Edición aplicada en el corpus de autoridades", "en": "Edit applied in the authorities corpus", "it": "Edit applied in the authorities corpus", "de": "Edit applied in the authorities corpus", "ca": "Edit applied in the authorities corpus", "eo": "Edit applied in the authorities corpus", "nl": "Edit applied in the authorities corpus", "el": "Edit applied in the authorities corpus" },
-  "authority.edit_applied.intro": { "pt-BR": "Uma edição foi aplicada em uma autoridade que sua biblioteca utiliza.", "fr": "Une édition a été appliquée sur une autorité que ta bibliothèque utilise.", "es": "Se aplicó una edición en una autoridad que tu biblioteca utiliza.", "en": "An edit was applied on an authority your library uses.", "it": "An edit was applied on an authority your library uses.", "de": "An edit was applied on an authority your library uses.", "ca": "An edit was applied on an authority your library uses.", "eo": "An edit was applied on an authority your library uses.", "nl": "An edit was applied on an authority your library uses.", "el": "An edit was applied on an authority your library uses." },
-  "authority.label.kind": { "pt-BR": "Tipo de proposta", "fr": "Type de proposition", "es": "Tipo de propuesta", "en": "Proposal type", "it": "Proposal type", "de": "Proposal type", "ca": "Proposal type", "eo": "Proposal type", "nl": "Proposal type", "el": "Proposal type" },
-  "authority.label.authority": { "pt-BR": "Autoridade", "fr": "Autorité", "es": "Autoridad", "en": "Authority", "it": "Authority", "de": "Authority", "ca": "Authority", "eo": "Authority", "nl": "Authority", "el": "Authority" },
-  "authority.label.reason": { "pt-BR": "Motivação", "fr": "Motivation", "es": "Motivación", "en": "Reason", "it": "Reason", "de": "Reason", "ca": "Reason", "eo": "Reason", "nl": "Reason", "el": "Reason" },
-  "authority.kind.creation": { "pt-BR": "Criação", "fr": "Création", "es": "Creación", "en": "Creation", "it": "Creation", "de": "Creation", "ca": "Creation", "eo": "Creation", "nl": "Creation", "el": "Creation" },
-  "authority.kind.edition": { "pt-BR": "Edição", "fr": "Édition", "es": "Edición", "en": "Edit", "it": "Edit", "de": "Edit", "ca": "Edit", "eo": "Edit", "nl": "Edit", "el": "Edit" },
-  "authority.kind.fusion": { "pt-BR": "Fusão", "fr": "Fusion", "es": "Fusión", "en": "Merge", "it": "Merge", "de": "Merge", "ca": "Merge", "eo": "Merge", "nl": "Merge", "el": "Merge" },
-  "authority.kind.traduction": { "pt-BR": "Tradução", "fr": "Traduction", "es": "Traducción", "en": "Translation", "it": "Translation", "de": "Translation", "ca": "Translation", "eo": "Translation", "nl": "Translation", "el": "Translation" },
-  "authority.action.title": { "pt-BR": "Oficina de autoridades", "fr": "Atelier des autorités", "es": "Taller de autoridades", "en": "Authorities workshop", "it": "Authorities workshop", "de": "Authorities workshop", "ca": "Authorities workshop", "eo": "Authorities workshop", "nl": "Authorities workshop", "el": "Authorities workshop" },
-  "authority.action.cta": { "pt-BR": "Abrir a oficina", "fr": "Ouvrir l'atelier", "es": "Abrir el taller", "en": "Open the workshop", "it": "Open the workshop", "de": "Open the workshop", "ca": "Open the workshop", "eo": "Open the workshop", "nl": "Open the workshop", "el": "Open the workshop" },
-  "welcome.context.contributor": { "pt-BR": "Sua conta de contribuinte foi criada. Você integra a equipe de contribuição do AnarBib: ajude a melhorar o acervo compartilhado de autoridades (pessoas, coletividades, matérias) propondo fusões, correções e traduções. Não é preciso ter biblioteca para isso.", "fr": "Ton compte de contributeur·rice est créé. Tu rejoins l'équipe de contribution d'AnarBib : aide à améliorer le corpus partagé d'autorités (personnes, collectivités, matières) en proposant des fusions, des corrections et des traductions. Pas besoin de bibliothèque pour cela.", "es": "Tu cuenta de colaboración ha sido creada. Te unes al equipo de contribución de AnarBib: ayuda a mejorar el corpus compartido de autoridades (personas, colectividades, materias) proponiendo fusiones, correcciones y traducciones. No hace falta tener biblioteca para ello.", "en": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "it": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "de": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "ca": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "eo": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "nl": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "el": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that." },
-  "welcome.contributor.atelierCta": { "pt-BR": "Abrir a oficina de contribuição", "fr": "Ouvrir l'atelier de contribution", "es": "Abrir el taller de contribución", "en": "Open the contribution workshop", "it": "Open the contribution workshop", "de": "Open the contribution workshop", "ca": "Open the contribution workshop", "eo": "Open the contribution workshop", "nl": "Open the contribution workshop", "el": "Open the contribution workshop" },
-  "welcome.contributor.catalogIntro": { "pt-BR": "Você também pode explorar o acervo compartilhado:", "fr": "Tu peux aussi explorer le catalogue partagé :", "es": "También puedes explorar el catálogo compartido:", "en": "You can also browse the shared catalog:", "it": "You can also browse the shared catalog:", "de": "You can also browse the shared catalog:", "ca": "You can also browse the shared catalog:", "eo": "You can also browse the shared catalog:", "nl": "You can also browse the shared catalog:", "el": "You can also browse the shared catalog:" },
-  "welcome.pretitle.contributor": { "pt-BR": "CONTA DE CONTRIBUINTE", "fr": "COMPTE CONTRIBUTEUR·RICE", "es": "CUENTA DE COLABORACIÓN", "en": "CONTRIBUTOR ACCOUNT", "it": "CONTRIBUTOR ACCOUNT", "de": "CONTRIBUTOR ACCOUNT", "ca": "CONTRIBUTOR ACCOUNT", "eo": "CONTRIBUTOR ACCOUNT", "nl": "CONTRIBUTOR ACCOUNT", "el": "CONTRIBUTOR ACCOUNT" },
-  "welcome.title.contributor": { "pt-BR": "Bem-vinde à equipe de contribuição", "fr": "Bienvenue dans l'équipe de contribution", "es": "Bienvenide al equipo de contribución", "en": "Welcome to the contribution team", "it": "Welcome to the contribution team", "de": "Welcome to the contribution team", "ca": "Welcome to the contribution team", "eo": "Welcome to the contribution team", "nl": "Welcome to the contribution team", "el": "Welcome to the contribution team" },
-  "welcome.subtitle.contributor": { "pt-BR": "Sua conta de contribuinte do AnarBib está pronta.", "fr": "Ton compte de contributeur·rice AnarBib est prêt.", "es": "Tu cuenta de colaboración en AnarBib está lista.", "en": "Your AnarBib contributor account is ready.", "it": "Your AnarBib contributor account is ready.", "de": "Your AnarBib contributor account is ready.", "ca": "Your AnarBib contributor account is ready.", "eo": "Your AnarBib contributor account is ready.", "nl": "Your AnarBib contributor account is ready.", "el": "Your AnarBib contributor account is ready." },
-  "welcome.subject.contributor": { "pt-BR": "Bem-vinde à equipe de contribuição do AnarBib", "fr": "Bienvenue dans l'équipe de contribution d'AnarBib", "es": "Bienvenide al equipo de contribución de AnarBib", "en": "Welcome to the AnarBib contribution team", "it": "Welcome to the AnarBib contribution team", "de": "Welcome to the AnarBib contribution team", "ca": "Welcome to the AnarBib contribution team", "eo": "Welcome to the AnarBib contribution team", "nl": "Welcome to the AnarBib contribution team", "el": "Welcome to the AnarBib contribution team" },
-  "register.internal.title.contributor": { "pt-BR": "Novo contribuinte de rede", "fr": "Nouveau·elle contributeur·rice de réseau", "es": "Nuevo·a colaborador·e de red", "en": "New network contributor", "it": "New network contributor", "de": "New network contributor", "ca": "New network contributor", "eo": "New network contributor", "nl": "New network contributor", "el": "New network contributor" },
-  "register.internal.subtitle.contributor": { "pt-BR": "Novo·a contribuinte de rede (sem biblioteca), ID {publicId}.", "fr": "Nouveau·elle contributeur·rice de réseau (sans bibliothèque), ID {publicId}.", "es": "Nuevo·a colaborador·e de red (sin biblioteca), ID {publicId}.", "en": "New network contributor (no library), ID {publicId}.", "it": "New network contributor (no library), ID {publicId}.", "de": "New network contributor (no library), ID {publicId}.", "ca": "New network contributor (no library), ID {publicId}.", "eo": "New network contributor (no library), ID {publicId}.", "nl": "New network contributor (no library), ID {publicId}.", "el": "New network contributor (no library), ID {publicId}." },
+  "authority.proposal_opened.subject": { "pt-BR": "Nova proposta no acervo de autoridades", "fr": "Nouvelle proposition dans le corpus d'autorités", "es": "Nueva propuesta en el corpus de autoridades", "en": "New proposal in the authorities corpus", "it": "New proposal in the authorities corpus", "de": "New proposal in the authorities corpus", "ca": "New proposal in the authorities corpus", "eo": "New proposal in the authorities corpus", "nl": "New proposal in the authorities corpus", "el": "New proposal in the authorities corpus", ro: "Propunere nouă în corpusul de autorități" },
+  "authority.proposal_opened.intro": { "pt-BR": "Uma proposta de contribuição foi aberta sobre uma autoridade que sua biblioteca utiliza. Sem objeção motivada até o prazo, ela será aplicada por consentimento.", "fr": "Une proposition de contribution vient d'être ouverte sur une autorité que ta bibliothèque utilise. Sans objection motivée avant l'échéance, elle sera appliquée par consentement.", "es": "Se ha abierto una propuesta de contribución sobre una autoridad que tu biblioteca utiliza. Sin objeción motivada antes del plazo, se aplicará por consentimiento.", "en": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "it": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "de": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "ca": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "eo": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "nl": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", "el": "A contribution proposal has been opened on an authority your library uses. Without a motivated objection before the deadline, it will be applied by consent.", ro: "Tocmai a fost deschisă o propunere de contribuție privind o autoritate pe care o folosește biblioteca ta. Dacă nu apare nicio obiecție motivată până la termen, va fi aplicată prin consimțământ." },
+  "authority.proposal_objected.subject": { "pt-BR": "Objeção registrada em uma proposta", "fr": "Objection déposée sur une proposition", "es": "Objeción registrada en una propuesta", "en": "Objection filed on a proposal", "it": "Objection filed on a proposal", "de": "Objection filed on a proposal", "ca": "Objection filed on a proposal", "eo": "Objection filed on a proposal", "nl": "Objection filed on a proposal", "el": "Objection filed on a proposal", ro: "Obiecție depusă la o propunere" },
+  "authority.proposal_objected.intro": { "pt-BR": "Uma objeção motivada foi registrada sobre uma proposta. A discussão permanece aberta (anti-blackball).", "fr": "Une objection motivée a été déposée sur une proposition. La discussion reste ouverte (anti-blackball).", "es": "Se ha registrado una objeción motivada sobre una propuesta. La discusión permanece abierta (anti-blackball).", "en": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "it": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "de": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "ca": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "eo": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "nl": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", "el": "A motivated objection has been filed on a proposal. The discussion stays open (anti-blackball).", ro: "La o propunere a fost depusă o obiecție motivată. Discuția rămâne deschisă (anti-blackball)." },
+  "authority.proposal_resolved_consent.subject": { "pt-BR": "Proposta aceita por consentimento", "fr": "Proposition adoptée par consentement", "es": "Propuesta aceptada por consentimiento", "en": "Proposal accepted by consent", "it": "Proposal accepted by consent", "de": "Proposal accepted by consent", "ca": "Proposal accepted by consent", "eo": "Proposal accepted by consent", "nl": "Proposal accepted by consent", "el": "Proposal accepted by consent", ro: "Propunere adoptată prin consimțământ" },
+  "authority.proposal_resolved_consent.intro": { "pt-BR": "O prazo terminou sem objeção: a proposta foi aceita por consentimento. Um membro da equipe poderá aplicá-la.", "fr": "L'échéance est passée sans objection : la proposition est adoptée par consentement. Un membre de l'équipe pourra l'appliquer.", "es": "El plazo terminó sin objeción: la propuesta fue aceptada por consentimiento. Un miembro del equipo podrá aplicarla.", "en": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "it": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "de": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "ca": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "eo": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "nl": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", "el": "The deadline passed without objection: the proposal is accepted by consent. A team member may apply it.", ro: "Termenul a trecut fără nicio obiecție: propunerea este adoptată prin consimțământ. O persoană din echipă o va putea aplica." },
+  "authority.proposal_refused.subject": { "pt-BR": "Proposta recusada", "fr": "Proposition refusée", "es": "Propuesta rechazada", "en": "Proposal refused", "it": "Proposal refused", "de": "Proposal refused", "ca": "Proposal refused", "eo": "Proposal refused", "nl": "Proposal refused", "el": "Proposal refused", ro: "Propunere refuzată" },
+  "authority.proposal_refused.intro": { "pt-BR": "Sua proposta foi recusada após objeção(ões) motivada(s). A motivação está indicada abaixo.", "fr": "Ta proposition a été refusée suite à une ou des objections motivées. La motivation est indiquée ci-dessous.", "es": "Tu propuesta fue rechazada tras una o varias objeciones motivadas. La motivación se indica a continuación.", "en": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "it": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "de": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "ca": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "eo": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "nl": "Your proposal was refused after one or more motivated objections. The reason is shown below.", "el": "Your proposal was refused after one or more motivated objections. The reason is shown below.", ro: "Propunerea ta a fost refuzată în urma uneia sau mai multor obiecții motivate. Motivația este indicată mai jos." },
+  "authority.merge_executed.subject": { "pt-BR": "Fusão aplicada no acervo de autoridades", "fr": "Fusion appliquée dans le corpus d'autorités", "es": "Fusión aplicada en el corpus de autoridades", "en": "Merge applied in the authorities corpus", "it": "Merge applied in the authorities corpus", "de": "Merge applied in the authorities corpus", "ca": "Merge applied in the authorities corpus", "eo": "Merge applied in the authorities corpus", "nl": "Merge applied in the authorities corpus", "el": "Merge applied in the authorities corpus", ro: "Fuziune aplicată în corpusul de autorități" },
+  "authority.merge_executed.intro": { "pt-BR": "Uma fusão de duplicata foi aplicada em uma autoridade que sua biblioteca utiliza.", "fr": "Une fusion de doublon a été appliquée sur une autorité que ta bibliothèque utilise.", "es": "Se aplicó una fusión de duplicado en una autoridad que tu biblioteca utiliza.", "en": "A duplicate merge was applied on an authority your library uses.", "it": "A duplicate merge was applied on an authority your library uses.", "de": "A duplicate merge was applied on an authority your library uses.", "ca": "A duplicate merge was applied on an authority your library uses.", "eo": "A duplicate merge was applied on an authority your library uses.", "nl": "A duplicate merge was applied on an authority your library uses.", "el": "A duplicate merge was applied on an authority your library uses.", ro: "O fuziune de duplicate a fost aplicată unei autorități pe care o folosește biblioteca ta." },
+  "authority.edit_applied.subject": { "pt-BR": "Edição aplicada no acervo de autoridades", "fr": "Édition appliquée dans le corpus d'autorités", "es": "Edición aplicada en el corpus de autoridades", "en": "Edit applied in the authorities corpus", "it": "Edit applied in the authorities corpus", "de": "Edit applied in the authorities corpus", "ca": "Edit applied in the authorities corpus", "eo": "Edit applied in the authorities corpus", "nl": "Edit applied in the authorities corpus", "el": "Edit applied in the authorities corpus", ro: "Modificare aplicată în corpusul de autorități" },
+  "authority.edit_applied.intro": { "pt-BR": "Uma edição foi aplicada em uma autoridade que sua biblioteca utiliza.", "fr": "Une édition a été appliquée sur une autorité que ta bibliothèque utilise.", "es": "Se aplicó una edición en una autoridad que tu biblioteca utiliza.", "en": "An edit was applied on an authority your library uses.", "it": "An edit was applied on an authority your library uses.", "de": "An edit was applied on an authority your library uses.", "ca": "An edit was applied on an authority your library uses.", "eo": "An edit was applied on an authority your library uses.", "nl": "An edit was applied on an authority your library uses.", "el": "An edit was applied on an authority your library uses.", ro: "O modificare a fost aplicată unei autorități pe care o folosește biblioteca ta." },
+  "authority.label.kind": { "pt-BR": "Tipo de proposta", "fr": "Type de proposition", "es": "Tipo de propuesta", "en": "Proposal type", "it": "Proposal type", "de": "Proposal type", "ca": "Proposal type", "eo": "Proposal type", "nl": "Proposal type", "el": "Proposal type", ro: "Tipul propunerii" },
+  "authority.label.authority": { "pt-BR": "Autoridade", "fr": "Autorité", "es": "Autoridad", "en": "Authority", "it": "Authority", "de": "Authority", "ca": "Authority", "eo": "Authority", "nl": "Authority", "el": "Authority", ro: "Autoritate" },
+  "authority.label.reason": { "pt-BR": "Motivação", "fr": "Motivation", "es": "Motivación", "en": "Reason", "it": "Reason", "de": "Reason", "ca": "Reason", "eo": "Reason", "nl": "Reason", "el": "Reason", ro: "Motivație" },
+  "authority.kind.creation": { "pt-BR": "Criação", "fr": "Création", "es": "Creación", "en": "Creation", "it": "Creation", "de": "Creation", "ca": "Creation", "eo": "Creation", "nl": "Creation", "el": "Creation", ro: "Creare" },
+  "authority.kind.edition": { "pt-BR": "Edição", "fr": "Édition", "es": "Edición", "en": "Edit", "it": "Edit", "de": "Edit", "ca": "Edit", "eo": "Edit", "nl": "Edit", "el": "Edit", ro: "Modificare" },
+  "authority.kind.fusion": { "pt-BR": "Fusão", "fr": "Fusion", "es": "Fusión", "en": "Merge", "it": "Merge", "de": "Merge", "ca": "Merge", "eo": "Merge", "nl": "Merge", "el": "Merge", ro: "Fuziune" },
+  "authority.kind.traduction": { "pt-BR": "Tradução", "fr": "Traduction", "es": "Traducción", "en": "Translation", "it": "Translation", "de": "Translation", "ca": "Translation", "eo": "Translation", "nl": "Translation", "el": "Translation", ro: "Traducere" },
+  "authority.action.title": { "pt-BR": "Oficina de autoridades", "fr": "Atelier des autorités", "es": "Taller de autoridades", "en": "Authorities workshop", "it": "Authorities workshop", "de": "Authorities workshop", "ca": "Authorities workshop", "eo": "Authorities workshop", "nl": "Authorities workshop", "el": "Authorities workshop", ro: "Atelierul autorităților" },
+  "authority.action.cta": { "pt-BR": "Abrir a oficina", "fr": "Ouvrir l'atelier", "es": "Abrir el taller", "en": "Open the workshop", "it": "Open the workshop", "de": "Open the workshop", "ca": "Open the workshop", "eo": "Open the workshop", "nl": "Open the workshop", "el": "Open the workshop", ro: "Deschide atelierul" },
+  "welcome.context.contributor": { "pt-BR": "Sua conta de contribuinte foi criada. Você integra a equipe de contribuição do AnarBib: ajude a melhorar o acervo compartilhado de autoridades (pessoas, coletividades, matérias) propondo fusões, correções e traduções. Não é preciso ter biblioteca para isso.", "fr": "Ton compte de contributeur·rice est créé. Tu rejoins l'équipe de contribution d'AnarBib : aide à améliorer le corpus partagé d'autorités (personnes, collectivités, matières) en proposant des fusions, des corrections et des traductions. Pas besoin de bibliothèque pour cela.", "es": "Tu cuenta de colaboración ha sido creada. Te unes al equipo de contribución de AnarBib: ayuda a mejorar el corpus compartido de autoridades (personas, colectividades, materias) proponiendo fusiones, correcciones y traducciones. No hace falta tener biblioteca para ello.", "en": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "it": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "de": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "ca": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "eo": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "nl": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", "el": "Your contributor account has been created. You're joining AnarBib's contribution team: help improve the shared authorities corpus (people, collectivities, subjects) by proposing merges, corrections and translations. No library is needed for that.", ro: "Contul tău de contribuitor/contribuitoare a fost creat. Intri în echipa de contribuție a AnarBib: ajută la îmbunătățirea corpusului comun de autorități (persoane, colectivități, subiecte) propunând fuziuni, corecturi și traduceri. Nu ai nevoie de o bibliotecă pentru asta." },
+  "welcome.contributor.atelierCta": { "pt-BR": "Abrir a oficina de contribuição", "fr": "Ouvrir l'atelier de contribution", "es": "Abrir el taller de contribución", "en": "Open the contribution workshop", "it": "Open the contribution workshop", "de": "Open the contribution workshop", "ca": "Open the contribution workshop", "eo": "Open the contribution workshop", "nl": "Open the contribution workshop", "el": "Open the contribution workshop", ro: "Deschide atelierul de contribuție" },
+  "welcome.contributor.catalogIntro": { "pt-BR": "Você também pode explorar o acervo compartilhado:", "fr": "Tu peux aussi explorer le catalogue partagé :", "es": "También puedes explorar el catálogo compartido:", "en": "You can also browse the shared catalog:", "it": "You can also browse the shared catalog:", "de": "You can also browse the shared catalog:", "ca": "You can also browse the shared catalog:", "eo": "You can also browse the shared catalog:", "nl": "You can also browse the shared catalog:", "el": "You can also browse the shared catalog:", ro: "Poți explora și catalogul comun:" },
+  "welcome.pretitle.contributor": { "pt-BR": "CONTA DE CONTRIBUINTE", "fr": "COMPTE CONTRIBUTEUR·RICE", "es": "CUENTA DE COLABORACIÓN", "en": "CONTRIBUTOR ACCOUNT", "it": "CONTRIBUTOR ACCOUNT", "de": "CONTRIBUTOR ACCOUNT", "ca": "CONTRIBUTOR ACCOUNT", "eo": "CONTRIBUTOR ACCOUNT", "nl": "CONTRIBUTOR ACCOUNT", "el": "CONTRIBUTOR ACCOUNT", ro: "CONT DE CONTRIBUITOR/CONTRIBUITOARE" },
+  "welcome.title.contributor": { "pt-BR": "Bem-vinde à equipe de contribuição", "fr": "Bienvenue dans l'équipe de contribution", "es": "Bienvenide al equipo de contribución", "en": "Welcome to the contribution team", "it": "Welcome to the contribution team", "de": "Welcome to the contribution team", "ca": "Welcome to the contribution team", "eo": "Welcome to the contribution team", "nl": "Welcome to the contribution team", "el": "Welcome to the contribution team", ro: "Bun venit în echipa de contribuție" },
+  "welcome.subtitle.contributor": { "pt-BR": "Sua conta de contribuinte do AnarBib está pronta.", "fr": "Ton compte de contributeur·rice AnarBib est prêt.", "es": "Tu cuenta de colaboración en AnarBib está lista.", "en": "Your AnarBib contributor account is ready.", "it": "Your AnarBib contributor account is ready.", "de": "Your AnarBib contributor account is ready.", "ca": "Your AnarBib contributor account is ready.", "eo": "Your AnarBib contributor account is ready.", "nl": "Your AnarBib contributor account is ready.", "el": "Your AnarBib contributor account is ready.", ro: "Contul tău de contribuitor/contribuitoare AnarBib este gata." },
+  "welcome.subject.contributor": { "pt-BR": "Bem-vinde à equipe de contribuição do AnarBib", "fr": "Bienvenue dans l'équipe de contribution d'AnarBib", "es": "Bienvenide al equipo de contribución de AnarBib", "en": "Welcome to the AnarBib contribution team", "it": "Welcome to the AnarBib contribution team", "de": "Welcome to the AnarBib contribution team", "ca": "Welcome to the AnarBib contribution team", "eo": "Welcome to the AnarBib contribution team", "nl": "Welcome to the AnarBib contribution team", "el": "Welcome to the AnarBib contribution team", ro: "Bun venit în echipa de contribuție AnarBib" },
+  "register.internal.title.contributor": { "pt-BR": "Novo contribuinte de rede", "fr": "Nouveau·elle contributeur·rice de réseau", "es": "Nuevo·a colaborador·e de red", "en": "New network contributor", "it": "New network contributor", "de": "New network contributor", "ca": "New network contributor", "eo": "New network contributor", "nl": "New network contributor", "el": "New network contributor", ro: "Contribuitor/contribuitoare nou/nouă în rețea" },
+  "register.internal.subtitle.contributor": { "pt-BR": "Novo·a contribuinte de rede (sem biblioteca), ID {publicId}.", "fr": "Nouveau·elle contributeur·rice de réseau (sans bibliothèque), ID {publicId}.", "es": "Nuevo·a colaborador·e de red (sin biblioteca), ID {publicId}.", "en": "New network contributor (no library), ID {publicId}.", "it": "New network contributor (no library), ID {publicId}.", "de": "New network contributor (no library), ID {publicId}.", "ca": "New network contributor (no library), ID {publicId}.", "eo": "New network contributor (no library), ID {publicId}.", "nl": "New network contributor (no library), ID {publicId}.", "el": "New network contributor (no library), ID {publicId}.", ro: "Contribuitor/contribuitoare nou/nouă în rețea (fără bibliotecă), ID {publicId}." },
   "network.cooptation_voted.cta": {
     "pt-BR": "Acessar a proposta e votar",
     fr: "Accéder à la proposition et voter",
@@ -6128,7 +6622,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Accedir a la proposta i votar",
     eo: "Aliri la proponon kaj voĉdoni",
     nl: "Open het voorstel en stem",
-    el: "Άνοιξε την πρόταση και ψήφισε"
+    el: "Άνοιξε την πρόταση και ψήφισε",
+    ro: "Deschide propunerea și votează"
   },
   "network.vote.favorable": {
     "pt-BR": "favorável",
@@ -6140,7 +6635,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "favorable",
     eo: "favora",
     nl: "voor",
-    el: "υπέρ"
+    el: "υπέρ",
+    ro: "pentru"
   },
   "network.vote.opposed": {
     "pt-BR": "contrário",
@@ -6152,7 +6648,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "contrari",
     eo: "kontraŭa",
     nl: "tegen",
-    el: "κατά"
+    el: "κατά",
+    ro: "împotrivă"
   },
   "network.vote.abstain": {
     "pt-BR": "abstenção",
@@ -6164,7 +6661,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "abstenció",
     eo: "sindeteno",
     nl: "onthouding",
-    el: "αποχή"
+    el: "αποχή",
+    ro: "abținere"
   },
   // ===== B.5 — library_profile : sujets ====================================
   "library_profile.proposed.sub": {
@@ -6177,7 +6675,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: nova proposta de transició — {axisLoc}",
     eo: "{libraryName}: nova transir-propono — {axisLoc}",
     nl: "{libraryName}: nieuw overgangsvoorstel — {axisLoc}",
-    el: "{libraryName}: νέα πρόταση μετάβασης — {axisLoc}"
+    el: "{libraryName}: νέα πρόταση μετάβασης — {axisLoc}",
+    ro: "{libraryName}: nouă propunere de tranziție — {axisLoc}"
   },
   "library_profile.voted.sub": {
     "pt-BR": "{libraryName}: novo voto sobre {axisLoc}",
@@ -6189,7 +6688,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: nou vot sobre {axisLoc}",
     eo: "{libraryName}: nova voĉdono pri {axisLoc}",
     nl: "{libraryName}: nieuwe stem over {axisLoc}",
-    el: "{libraryName}: νέα ψήφος για {axisLoc}"
+    el: "{libraryName}: νέα ψήφος για {axisLoc}",
+    ro: "{libraryName}: vot nou privind {axisLoc}"
   },
   "library_profile.accepted.sub": {
     "pt-BR": "{libraryName}: transição em {axisLoc} aprovada coletivamente",
@@ -6201,7 +6701,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: transició sobre {axisLoc} acceptada col·lectivament",
     eo: "{libraryName}: transiro pri {axisLoc} kolektive akceptita",
     nl: "{libraryName}: overgang op {axisLoc} collectief aanvaard",
-    el: "{libraryName}: η μετάβαση για {axisLoc} έγινε αποδεκτή συλλογικά"
+    el: "{libraryName}: η μετάβαση για {axisLoc} έγινε αποδεκτή συλλογικά",
+    ro: "{libraryName}: tranziția privind {axisLoc} a fost acceptată colectiv"
   },
   "library_profile.rejected.sub": {
     "pt-BR": "{libraryName}: proposta em {axisLoc} não passou",
@@ -6213,7 +6714,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: proposta sobre {axisLoc} no acceptada",
     eo: "{libraryName}: propono pri {axisLoc} ne sukcesis",
     nl: "{libraryName}: voorstel over {axisLoc} niet aangenomen",
-    el: "{libraryName}: η πρόταση για {axisLoc} δεν πέρασε"
+    el: "{libraryName}: η πρόταση για {axisLoc} δεν πέρασε",
+    ro: "{libraryName}: propunerea privind {axisLoc} nu a fost adoptată"
   },
   "library_profile.cancelled.sub": {
     "pt-BR": "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
@@ -6225,7 +6727,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: proposta sobre {axisLoc} retirada per le proposant-a-e",
     eo: "{libraryName}: propono pri {axisLoc} retirita de la propon-int-o",
     nl: "{libraryName}: voorstel over {axisLoc} ingetrokken door de indiener",
-    el: "{libraryName}: η πρόταση για {axisLoc} αποσύρθηκε από τον/την προτείνοντα/ουσα"
+    el: "{libraryName}: η πρόταση για {axisLoc} αποσύρθηκε από τον/την προτείνοντα/ουσα",
+    ro: "{libraryName}: propunerea privind {axisLoc} a fost retrasă de persoana care a făcut-o"
   },
   "library_profile.executed.sub": {
     "pt-BR": "{libraryName}: transição em {axisLoc} agora em vigor",
@@ -6237,7 +6740,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: transició sobre {axisLoc} ara en vigor",
     eo: "{libraryName}: transiro pri {axisLoc} nun en vigoro",
     nl: "{libraryName}: overgang op {axisLoc} nu van kracht",
-    el: "{libraryName}: η μετάβαση για {axisLoc} είναι πλέον σε ισχύ"
+    el: "{libraryName}: η μετάβαση για {axisLoc} είναι πλέον σε ισχύ",
+    ro: "{libraryName}: tranziția privind {axisLoc} este de acum în vigoare"
   },
 
   // ===== B.5 — library_profile : intros ====================================
@@ -6251,7 +6755,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "<b>{proposerName}</b> ha obert una proposta perquè <b>{libraryName}</b> canviï el seu <b>{axisLoc}</b>, passant de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. S'invita l'equip a deliberar i votar.",
     eo: "<b>{proposerName}</b> malfermis proponon por ke <b>{libraryName}</b> ŝanĝu sian <b>{axisLoc}</b>, transirante de <i>{oldValueLoc}</i> al <b>{newValueLoc}</b>. La teamo estas invitita pridiskuti kaj voĉdoni.",
     nl: "<b>{proposerName}</b> heeft een voorstel geopend om <b>{libraryName}</b> zijn <b>{axisLoc}</b> te laten wijzigen, van <i>{oldValueLoc}</i> naar <b>{newValueLoc}</b>. Het team wordt uitgenodigd om te beraadslagen en te stemmen.",
-    el: "Ο/Η <b>{proposerName}</b> άνοιξε πρόταση ώστε η <b>{libraryName}</b> να αλλάξει τον/το <b>{axisLoc}</b>, μετακινούμενη από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>. Η ομάδα καλείται να διαβουλευτεί και να ψηφίσει."
+    el: "Ο/Η <b>{proposerName}</b> άνοιξε πρόταση ώστε η <b>{libraryName}</b> να αλλάξει τον/το <b>{axisLoc}</b>, μετακινούμενη από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>. Η ομάδα καλείται να διαβουλευτεί και να ψηφίσει.",
+    ro: "<b>{proposerName}</b> a deschis o propunere ca biblioteca <b>{libraryName}</b> să-și schimbe <b>{axisLoc}</b>, trecând de la <i>{oldValueLoc}</i> la <b>{newValueLoc}</b>. Echipa este invitată să delibereze și să voteze."
   },
   "library_profile.voted.intro": {
     "pt-BR": "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
@@ -6263,7 +6768,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "<b>{voterName}</b> ha votat <b>{voteLoc}</b> sobre la proposta de transició de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>).",
     eo: "<b>{voterName}</b> voĉdonis <b>{voteLoc}</b> pri la transir-propono de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> al <b>{newValueLoc}</b>).",
     nl: "<b>{voterName}</b> heeft <b>{voteLoc}</b> gestemd op het overgangsvoorstel voor <b>{axisLoc}</b> bij <b>{libraryName}</b> (van <i>{oldValueLoc}</i> naar <b>{newValueLoc}</b>).",
-    el: "Ο/Η <b>{voterName}</b> ψήφισε <b>{voteLoc}</b> στην πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>)."
+    el: "Ο/Η <b>{voterName}</b> ψήφισε <b>{voteLoc}</b> στην πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>).",
+    ro: "<b>{voterName}</b> a votat la propunerea de tranziție privind <b>{axisLoc}</b> a bibliotecii <b>{libraryName}</b> (de la <i>{oldValueLoc}</i> la <b>{newValueLoc}</b>): <b>{voteLoc}</b>."
   },
   "library_profile.accepted.intro": {
     "pt-BR": "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
@@ -6275,7 +6781,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La col·lectivitat de <b>{libraryName}</b> ha acceptat (<i>{acceptedLoc}</i>) la transició de <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. La decisió entrarà en vigor després del termini de reflexió, durant el qual la comunitat encara pot manifestar-se.",
     eo: "La kolektivo de <b>{libraryName}</b> akceptis (<i>{acceptedLoc}</i>) la transiron de <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> al <b>{newValueLoc}</b>. La decido ekvalidos post la pripensa periodo, dum kiu la komunumo ankoraŭ povas esprimiĝi.",
     nl: "Het collectief van <b>{libraryName}</b> heeft de overgang van <b>{axisLoc}</b> aanvaard (<i>{acceptedLoc}</i>): van <i>{oldValueLoc}</i> naar <b>{newValueLoc}</b>. De beslissing wordt van kracht na de bedenktijd, waarin de gemeenschap nog bezwaar kan maken.",
-    el: "Η συλλογικότητα της <b>{libraryName}</b> αποδέχτηκε (<i>{acceptedLoc}</i>) τη μετάβαση του/της <b>{axisLoc}</b>: από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>. Η απόφαση θα τεθεί σε ισχύ μετά την περίοδο σκέψης, στη διάρκεια της οποίας η κοινότητα μπορεί ακόμη να εκφράσει αντιρρήσεις."
+    el: "Η συλλογικότητα της <b>{libraryName}</b> αποδέχτηκε (<i>{acceptedLoc}</i>) τη μετάβαση του/της <b>{axisLoc}</b>: από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>. Η απόφαση θα τεθεί σε ισχύ μετά την περίοδο σκέψης, στη διάρκεια της οποίας η κοινότητα μπορεί ακόμη να εκφράσει αντιρρήσεις.",
+    ro: "Colectivul bibliotecii <b>{libraryName}</b> a acceptat (<i>{acceptedLoc}</i>) tranziția privind <b>{axisLoc}</b>: de la <i>{oldValueLoc}</i> la <b>{newValueLoc}</b>. Decizia va intra în vigoare după perioada de reflecție, în care comunitatea se mai poate pronunța."
   },
   "library_profile.rejected.intro": {
     "pt-BR": "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
@@ -6287,7 +6794,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta de transició de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>) no ha prosperat: <i>{reasonLoc}</i>. El funcionament actual es manté en vigor.",
     eo: "La transir-propono de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> al <b>{newValueLoc}</b>) ne sukcesis: <i>{reasonLoc}</i>. La nuna funkciado restas en vigoro.",
     nl: "Het overgangsvoorstel voor <b>{axisLoc}</b> bij <b>{libraryName}</b> (van <i>{oldValueLoc}</i> naar <b>{newValueLoc}</b>) is niet aangenomen: <i>{reasonLoc}</i>. De huidige opzet blijft van kracht.",
-    el: "Η πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>) δεν πέρασε: <i>{reasonLoc}</i>. Η τρέχουσα ρύθμιση παραμένει σε ισχύ."
+    el: "Η πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (από <i>{oldValueLoc}</i> σε <b>{newValueLoc}</b>) δεν πέρασε: <i>{reasonLoc}</i>. Η τρέχουσα ρύθμιση παραμένει σε ισχύ.",
+    ro: "Propunerea de tranziție privind <b>{axisLoc}</b> a bibliotecii <b>{libraryName}</b> (de la <i>{oldValueLoc}</i> la <b>{newValueLoc}</b>) nu a fost adoptată: <i>{reasonLoc}</i>. Funcționarea actuală rămâne în vigoare."
   },
   "library_profile.cancelled.intro": {
     "pt-BR": "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
@@ -6299,7 +6807,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "<b>{proposerName}</b> ha retirat la seva pròpia proposta de transició de <b>{axisLoc}</b> de <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> a <i>{newValueLoc}</i>). El funcionament actual es manté en vigor.",
     eo: "<b>{proposerName}</b> retiris sian propran transir-proponon de <b>{axisLoc}</b> de <b>{libraryName}</b> (kiu estis: de <i>{oldValueLoc}</i> al <i>{newValueLoc}</i>). La nuna funkciado restas en vigoro.",
     nl: "<b>{proposerName}</b> heeft het eigen overgangsvoorstel voor <b>{axisLoc}</b> bij <b>{libraryName}</b> ingetrokken (dat was: van <i>{oldValueLoc}</i> naar <i>{newValueLoc}</i>). De huidige opzet blijft van kracht.",
-    el: "Ο/Η <b>{proposerName}</b> απέσυρε τη δική του/της πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (που ήταν: από <i>{oldValueLoc}</i> σε <i>{newValueLoc}</i>). Η τρέχουσα ρύθμιση παραμένει σε ισχύ."
+    el: "Ο/Η <b>{proposerName}</b> απέσυρε τη δική του/της πρόταση μετάβασης για <b>{axisLoc}</b> στη <b>{libraryName}</b> (που ήταν: από <i>{oldValueLoc}</i> σε <i>{newValueLoc}</i>). Η τρέχουσα ρύθμιση παραμένει σε ισχύ.",
+    ro: "<b>{proposerName}</b> și-a retras propria propunere de tranziție privind <b>{axisLoc}</b> a bibliotecii <b>{libraryName}</b> (care era: de la <i>{oldValueLoc}</i> la <i>{newValueLoc}</i>). Funcționarea actuală rămâne în vigoare."
   },
   "library_profile.executed.intro": {
     "pt-BR": "A <b>{libraryName}</b> acaba de mudar seu <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
@@ -6311,7 +6820,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "<b>{libraryName}</b> adopta un nou <b>{axisLoc}</b>: a partir d'ara, <i>{oldValueLoc}</i> esdevé <b>{newValueLoc}</b>. Aquesta transició s'ha decidit col·lectivament.",
     eo: "<b>{libraryName}</b> adoptas novan <b>{axisLoc}</b>: ekde nun, <i>{oldValueLoc}</i> iĝas <b>{newValueLoc}</b>. Ĉi tiu transiro estis decidita kolektive.",
     nl: "<b>{libraryName}</b> neemt een nieuwe <b>{axisLoc}</b> aan: vanaf nu wordt <i>{oldValueLoc}</i> <b>{newValueLoc}</b>. Deze overgang is collectief besloten.",
-    el: "Η <b>{libraryName}</b> υιοθετεί νέο/α <b>{axisLoc}</b>: από εδώ και πέρα, το <i>{oldValueLoc}</i> γίνεται <b>{newValueLoc}</b>. Αυτή η μετάβαση αποφασίστηκε συλλογικά."
+    el: "Η <b>{libraryName}</b> υιοθετεί νέο/α <b>{axisLoc}</b>: από εδώ και πέρα, το <i>{oldValueLoc}</i> γίνεται <b>{newValueLoc}</b>. Αυτή η μετάβαση αποφασίστηκε συλλογικά.",
+    ro: "<b>{libraryName}</b> își schimbă <b>{axisLoc}</b>: de acum înainte, <i>{oldValueLoc}</i> devine <b>{newValueLoc}</b>. Această tranziție a fost decisă colectiv."
   },
 
   // ===== B.5 — library_profile : CTA et infos ==============================
@@ -6325,7 +6835,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Deliberar i votar",
     eo: "Pridiskuti kaj voĉdoni",
     nl: "Beraadslagen en stemmen",
-    el: "Διαβουλεύσου και ψήφισε"
+    el: "Διαβουλεύσου και ψήφισε",
+    ro: "Deliberează și votează"
   },
   "library_profile.voted.cta": {
     "pt-BR": "Ver a proposta",
@@ -6337,7 +6848,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure la proposta",
     eo: "Vidi la proponon",
     nl: "Bekijk het voorstel",
-    el: "Δες την πρόταση"
+    el: "Δες την πρόταση",
+    ro: "Vezi propunerea"
   },
   "library_profile.accepted.cta": {
     "pt-BR": "Ver os detalhes",
@@ -6349,7 +6861,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure els detalls",
     eo: "Vidi la detalojn",
     nl: "Bekijk de details",
-    el: "Δες τις λεπτομέρειες"
+    el: "Δες τις λεπτομέρειες",
+    ro: "Vezi detaliile"
   },
   "library_profile.accepted.gracePeriodInfo": {
     "pt-BR": "Período de carência em curso",
@@ -6361,7 +6874,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Termini de reflexió en curs",
     eo: "Pripensa periodo en kurso",
     nl: "Bedenktijd loopt",
-    el: "Περίοδος σκέψης σε εξέλιξη"
+    el: "Περίοδος σκέψης σε εξέλιξη",
+    ro: "Perioadă de reflecție în curs"
   },
   "library_profile.executed.cta": {
     "pt-BR": "Ver o perfil da biblioteca",
@@ -6373,7 +6887,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure el perfil de la biblioteca",
     eo: "Vidi la profilon de la biblioteko",
     nl: "Bekijk het bibliotheekprofiel",
-    el: "Δες το προφίλ της βιβλιοθήκης"
+    el: "Δες το προφίλ της βιβλιοθήκης",
+    ro: "Vezi profilul bibliotecii"
   },
   "library_profile.executed.info": {
     "pt-BR": "Transição aplicada",
@@ -6385,7 +6900,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Transició aplicada",
     eo: "Transiro aplikita",
     nl: "Overgang toegepast",
-    el: "Η μετάβαση εφαρμόστηκε"
+    el: "Η μετάβαση εφαρμόστηκε",
+    ro: "Tranziție aplicată"
   },
 
   // ===== B.7 — library_profile reader_executed (mail lecteur·rice·s sur circulation_mode) =====
@@ -6399,7 +6915,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{libraryName}: canvi en {axisLoc}",
     eo: "{libraryName}: ŝanĝo de {axisLoc}",
     nl: "{libraryName}: wijziging in {axisLoc}",
-    el: "{libraryName}: αλλαγή στο/στον {axisLoc}"
+    el: "{libraryName}: αλλαγή στο/στον {axisLoc}",
+    ro: "{libraryName}: se schimbă {axisLoc}"
   },
   "library_profile.reader_executed.intro": {
     "pt-BR": "A coletividade de <b>{libraryName}</b> decidiu mudar seu <b>{axisLoc}</b>: a partir de agora, <i>{oldValueLoc}</i> torna-se <b>{newValueLoc}</b>.",
@@ -6411,7 +6928,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La col·lectivitat de <b>{libraryName}</b> ha decidit canviar el seu <b>{axisLoc}</b>: a partir d'ara, <i>{oldValueLoc}</i> esdevé <b>{newValueLoc}</b>.",
     eo: "La kolektivo de <b>{libraryName}</b> decidis ŝanĝi sian <b>{axisLoc}</b>: ekde nun, <i>{oldValueLoc}</i> iĝas <b>{newValueLoc}</b>.",
     nl: "Het collectief van <b>{libraryName}</b> heeft besloten zijn <b>{axisLoc}</b> te wijzigen: vanaf nu wordt <i>{oldValueLoc}</i> <b>{newValueLoc}</b>.",
-    el: "Η συλλογικότητα της <b>{libraryName}</b> αποφάσισε να αλλάξει τον/το <b>{axisLoc}</b>: από εδώ και πέρα, το <i>{oldValueLoc}</i> γίνεται <b>{newValueLoc}</b>."
+    el: "Η συλλογικότητα της <b>{libraryName}</b> αποφάσισε να αλλάξει τον/το <b>{axisLoc}</b>: από εδώ και πέρα, το <i>{oldValueLoc}</i> γίνεται <b>{newValueLoc}</b>.",
+    ro: "Colectivul bibliotecii <b>{libraryName}</b> a decis să-și schimbe <b>{axisLoc}</b>: de acum înainte, <i>{oldValueLoc}</i> devine <b>{newValueLoc}</b>."
   },
   "library_profile.reader_executed.impact.full_sigb": {
     "pt-BR": "Para você como leitor·a·e: a partir de agora, você pode pegar emprestados livros, fazer reservas e consultar documentos no local através da interface AnarBib de <b>{libraryName}</b>.",
@@ -6423,7 +6941,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per a tu com a lector-a-e: a partir d'ara, pots demanar llibres en préstec, fer reserves i consultar documents in situ a través de la interfície AnarBib de <b>{libraryName}</b>.",
     eo: "Por vi kiel legant-in-o: ekde nun, vi povas prunti librojn, fari rezervojn kaj surloke konsulti dokumentojn pere de la interfaco AnarBib de <b>{libraryName}</b>.",
     nl: "Voor jou als lezer: vanaf nu kun je boeken lenen, reserveringen maken en documenten ter plaatse raadplegen via de AnarBib-interface van <b>{libraryName}</b>.",
-    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, μπορείς να δανείζεσαι βιβλία, να κάνεις κρατήσεις και να μελετάς τεκμήρια επιτόπου μέσω της διεπαφής AnarBib της <b>{libraryName}</b>."
+    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, μπορείς να δανείζεσαι βιβλία, να κάνεις κρατήσεις και να μελετάς τεκμήρια επιτόπου μέσω της διεπαφής AnarBib της <b>{libraryName}</b>.",
+    ro: "Pentru tine, ca cititor/cititoare: de acum înainte poți împrumuta cărți, face rezervări și consulta documente pe loc prin interfața AnarBib a bibliotecii <b>{libraryName}</b>."
   },
   "library_profile.reader_executed.impact.informal": {
     "pt-BR": "Para você como leitor·a·e: a partir de agora, a circulação acontece de maneira informal, fora da interface AnarBib. Entre em contato diretamente com <b>{libraryName}</b> para pegar emprestado ou consultar.",
@@ -6435,7 +6954,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per a tu com a lector-a-e: a partir d'ara, la circulació es fa de manera informal, fora de la interfície AnarBib. Contacta directament <b>{libraryName}</b> per demanar en préstec o consultar.",
     eo: "Por vi kiel legant-in-o: ekde nun, la cirkulado okazas neformale, ekster la interfaco AnarBib. Kontaktu rekte <b>{libraryName}</b> por prunti aŭ konsulti.",
     nl: "Voor jou als lezer: vanaf nu verloopt de circulatie informeel, buiten de AnarBib-interface. Neem rechtstreeks contact op met <b>{libraryName}</b> om te lenen of te raadplegen.",
-    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, η κυκλοφορία γίνεται ανεπίσημα, εκτός της διεπαφής AnarBib. Επικοινώνησε απευθείας με τη <b>{libraryName}</b> για δανεισμό ή μελέτη."
+    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, η κυκλοφορία γίνεται ανεπίσημα, εκτός της διεπαφής AnarBib. Επικοινώνησε απευθείας με τη <b>{libraryName}</b> για δανεισμό ή μελέτη.",
+    ro: "Pentru tine, ca cititor/cititoare: de acum înainte, circulația se face informal, în afara interfeței AnarBib. Contactează direct biblioteca <b>{libraryName}</b> ca să împrumuți sau să consulți documente."
   },
   "library_profile.reader_executed.impact.off": {
     "pt-BR": "Para você como leitor·a·e: a partir de agora, <b>{libraryName}</b> não oferece mais serviço de empréstimo nem de consulta para leitor·a·e·s via AnarBib. Você ainda pode entrar em contato com a biblioteca para conversar sobre o acervo.",
@@ -6447,7 +6967,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per a tu com a lector-a-e: a partir d'ara, <b>{libraryName}</b> ja no ofereix servei de préstec ni de consulta per a lectores via AnarBib. Encara pots contactar la biblioteca per parlar del fons.",
     eo: "Por vi kiel legant-in-o: ekde nun, <b>{libraryName}</b> ne plu ofertas prunt- aŭ konsult-servon por legant-in-oj pere de AnarBib. Vi ankoraŭ povas kontakti la bibliotekon por priparoli la fonduson.",
     nl: "Voor jou als lezer: vanaf nu biedt <b>{libraryName}</b> geen uitleen- of raadpleegdienst voor lezers meer aan via AnarBib. Je kunt nog altijd contact opnemen met de bibliotheek om over de collectie te praten.",
-    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, η <b>{libraryName}</b> δεν προσφέρει πλέον υπηρεσίες δανεισμού ή μελέτης για αναγνώστες/στριες μέσω AnarBib. Μπορείς ακόμη να επικοινωνήσεις με τη βιβλιοθήκη για να συζητήσεις για τη συλλογή."
+    el: "Για σένα ως αναγνώστη/στρια: από εδώ και πέρα, η <b>{libraryName}</b> δεν προσφέρει πλέον υπηρεσίες δανεισμού ή μελέτης για αναγνώστες/στριες μέσω AnarBib. Μπορείς ακόμη να επικοινωνήσεις με τη βιβλιοθήκη για να συζητήσεις για τη συλλογή.",
+    ro: "Pentru tine, ca cititor/cititoare: de acum înainte, <b>{libraryName}</b> nu mai oferă prin AnarBib servicii de împrumut sau de consultare pentru persoanele care citesc. Poți în continuare să contactezi biblioteca pentru a discuta despre fond."
   },
   "library_profile.reader_executed.cta": {
     "pt-BR": "Ver a biblioteca",
@@ -6459,7 +6980,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure la biblioteca",
     eo: "Vidi la bibliotekon",
     nl: "Bekijk de bibliotheek",
-    el: "Δες τη βιβλιοθήκη"
+    el: "Δες τη βιβλιοθήκη",
+    ro: "Vezi biblioteca"
   },
 
   // ===== B.5 — Labels d'axe ================================================
@@ -6473,7 +6995,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "mode de catalogació",
     eo: "katalogada reĝimo",
     nl: "catalogiseermodus",
-    el: "λειτουργία καταλογογράφησης"
+    el: "λειτουργία καταλογογράφησης",
+    ro: "modul de catalogare"
   },
   "lp.axis.circulation_mode": {
     "pt-BR": "modo de circulação",
@@ -6485,7 +7008,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "mode de circulació",
     eo: "cirkulada reĝimo",
     nl: "circulatiemodus",
-    el: "λειτουργία κυκλοφορίας"
+    el: "λειτουργία κυκλοφορίας",
+    ro: "modul de circulație"
   },
   "lp.axis.network_mode": {
     "pt-BR": "vínculo à federação",
@@ -6497,7 +7021,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "vincle amb la federació",
     eo: "ligo al la federacio",
     nl: "band met de federatie",
-    el: "σύνδεση με την ομοσπονδία"
+    el: "σύνδεση με την ομοσπονδία",
+    ro: "legătura cu federația"
   },
   "lp.axis.governance_mode": {
     "pt-BR": "modo de governança",
@@ -6509,7 +7034,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "mode de governança",
     eo: "memmastruma reĝimo",
     nl: "bestuursmodus",
-    el: "λειτουργία διακυβέρνησης"
+    el: "λειτουργία διακυβέρνησης",
+    ro: "modul de guvernanță"
   },
 
   // ===== B.5 — Labels de valeur d'axe ======================================
@@ -6523,7 +7049,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "catàleg només local",
     eo: "nur loka katalogo",
     nl: "alleen lokale catalogus",
-    el: "μόνο τοπικός κατάλογος"
+    el: "μόνο τοπικός κατάλογος",
+    ro: "doar catalog local"
   },
   "lp.value.catalog_mode.network_published": {
     "pt-BR": "catálogo publicado na federação",
@@ -6535,7 +7062,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "catàleg publicat a la federació",
     eo: "katalogo publikigita en la federacio",
     nl: "catalogus gepubliceerd in de federatie",
-    el: "κατάλογος δημοσιευμένος στην ομοσπονδία"
+    el: "κατάλογος δημοσιευμένος στην ομοσπονδία",
+    ro: "catalog publicat în federație"
   },
   "lp.value.circulation_mode.off": {
     "pt-BR": "sem circulação",
@@ -6547,7 +7075,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "sense circulació",
     eo: "sen cirkulado",
     nl: "zonder circulatie",
-    el: "χωρίς κυκλοφορία"
+    el: "χωρίς κυκλοφορία",
+    ro: "fără circulație"
   },
   "lp.value.circulation_mode.informal": {
     "pt-BR": "circulação informal",
@@ -6559,7 +7088,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "circulació informal",
     eo: "neformala cirkulado",
     nl: "informele circulatie",
-    el: "ανεπίσημη κυκλοφορία"
+    el: "ανεπίσημη κυκλοφορία",
+    ro: "circulație informală"
   },
   "lp.value.circulation_mode.full_sigb": {
     "pt-BR": "SIGB completo (empréstimos, reservas, consultas)",
@@ -6571,7 +7101,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "SIGB complet (préstecs, reserves, consultes)",
     eo: "kompleta SIGB (pruntoj, rezervoj, konsultoj)",
     nl: "volledig bibliotheeksysteem (uitleningen, reserveringen, raadplegingen)",
-    el: "πλήρες σύστημα διαχείρισης βιβλιοθήκης (δανεισμοί, κρατήσεις, μελέτες)"
+    el: "πλήρες σύστημα διαχείρισης βιβλιοθήκης (δανεισμοί, κρατήσεις, μελέτες)",
+    ro: "sistem integrat de bibliotecă complet (împrumuturi, rezervări, consultări)"
   },
   "lp.value.network_mode.isolated": {
     "pt-BR": "isolada da federação",
@@ -6583,7 +7114,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "aïllada de la federació",
     eo: "izolita de la federacio",
     nl: "geïsoleerd van de federatie",
-    el: "απομονωμένη από την ομοσπονδία"
+    el: "απομονωμένη από την ομοσπονδία",
+    ro: "izolată de federație"
   },
   "lp.value.network_mode.observer": {
     "pt-BR": "observadora da federação",
@@ -6595,7 +7127,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "observadora de la federació",
     eo: "observanta la federacion",
     nl: "waarnemer van de federatie",
-    el: "παρατηρήτρια της ομοσπονδίας"
+    el: "παρατηρήτρια της ομοσπονδίας",
+    ro: "observatoare a federației"
   },
   "lp.value.network_mode.federated": {
     "pt-BR": "federada (participação plena)",
@@ -6607,7 +7140,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "federada (participació plena)",
     eo: "federita (plena partopreno)",
     nl: "gefedereerd (volledige deelname)",
-    el: "ομόσπονδη (πλήρης συμμετοχή)"
+    el: "ομόσπονδη (πλήρης συμμετοχή)",
+    ro: "federată (participare deplină)"
   },
   "lp.value.governance_mode.informal": {
     "pt-BR": "governança informal (sem papéis declarados)",
@@ -6619,7 +7153,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "governança informal (sense rols declarats)",
     eo: "neformala memmastrumado (sen deklaritaj roloj)",
     nl: "informeel bestuur (geen verklaarde rollen)",
-    el: "ανεπίσημη διακυβέρνηση (χωρίς δηλωμένους ρόλους)"
+    el: "ανεπίσημη διακυβέρνηση (χωρίς δηλωμένους ρόλους)",
+    ro: "guvernanță informală (fără roluri declarate)"
   },
   "lp.value.governance_mode.staff_roles": {
     "pt-BR": "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
@@ -6631,7 +7166,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "rols declarats (bibliotecari-ària-e i coordinador-a-e)",
     eo: "deklaritaj roloj (bibliotekist-in-o kaj kunordigant-in-o)",
     nl: "verklaarde rollen (bibliothecarissen en coördinatoren)",
-    el: "δηλωμένοι ρόλοι (βιβλιοθηκάριοι και συντονιστές/στριες)"
+    el: "δηλωμένοι ρόλοι (βιβλιοθηκάριοι και συντονιστές/στριες)",
+    ro: "roluri declarate (bibliotecari/bibliotecare și coordonatori/coordonatoare)"
   },
   "lp.value.governance_mode.full_governance": {
     "pt-BR": "governança plena (com todas as rotinas coletivas)",
@@ -6643,7 +7179,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "governança plena (amb totes les rutines col·lectives)",
     eo: "plena memmastrumado (kun ĉiuj kolektivaj rutinoj)",
     nl: "volledig bestuur (met alle collectieve routines)",
-    el: "πλήρης διακυβέρνηση (με όλες τις συλλογικές ρουτίνες)"
+    el: "πλήρης διακυβέρνηση (με όλες τις συλλογικές ρουτίνες)",
+    ro: "guvernanță deplină (cu toate rutinele colective)"
   },
 
   // ===== B.5 — Labels de type de transition ================================
@@ -6657,7 +7194,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "transició directa (sense deliberació)",
     eo: "rekta transiro (sen pridiskuto)",
     nl: "directe overgang (zonder beraadslaging)",
-    el: "άμεση μετάβαση (χωρίς διαβούλευση)"
+    el: "άμεση μετάβαση (χωρίς διαβούλευση)",
+    ro: "tranziție directă (fără deliberare)"
   },
   "lp.transition.majority": {
     "pt-BR": "maioria simples",
@@ -6669,7 +7207,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "majoria simple",
     eo: "simpla plimulto",
     nl: "gewone meerderheid",
-    el: "απλή πλειοψηφία"
+    el: "απλή πλειοψηφία",
+    ro: "majoritate simplă"
   },
   "lp.transition.unanimous": {
     "pt-BR": "unanimidade",
@@ -6681,7 +7220,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "unanimitat",
     eo: "unuanimeco",
     nl: "unanimiteit",
-    el: "ομοφωνία"
+    el: "ομοφωνία",
+    ro: "unanimitate"
   },
   "lp.transition.unanimous_extended": {
     "pt-BR": "unanimidade alargada (com período de carência reforçado)",
@@ -6693,7 +7233,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "unanimitat ampliada (amb termini de reflexió reforçat)",
     eo: "etendita unuanimeco (kun plifortigita pripensa periodo)",
     nl: "uitgebreide unanimiteit (met versterkte bedenktijd)",
-    el: "εκτεταμένη ομοφωνία (με ενισχυμένη περίοδο σκέψης)"
+    el: "εκτεταμένη ομοφωνία (με ενισχυμένη περίοδο σκέψης)",
+    ro: "unanimitate extinsă (cu perioadă de reflecție prelungită)"
   },
   "lp.transition.unknown": {
     "pt-BR": "tipo de transição desconhecido",
@@ -6705,7 +7246,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "tipus de transició desconegut",
     eo: "nekonata transir-tipo",
     nl: "onbekend overgangstype",
-    el: "άγνωστος τύπος μετάβασης"
+    el: "άγνωστος τύπος μετάβασης",
+    ro: "tip de tranziție necunoscut"
   },
 
   // ===== B.5 — Labels de vote ==============================================
@@ -6719,7 +7261,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "a favor",
     eo: "por",
     nl: "voor",
-    el: "υπέρ"
+    el: "υπέρ",
+    ro: "pentru"
   },
   "lp.vote.against": {
     "pt-BR": "contra",
@@ -6731,7 +7274,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "en contra",
     eo: "kontraŭ",
     nl: "tegen",
-    el: "κατά"
+    el: "κατά",
+    ro: "împotrivă"
   },
   "lp.vote.abstain": {
     "pt-BR": "abstenção",
@@ -6743,7 +7287,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "abstenció",
     eo: "sindeteno",
     nl: "onthouding",
-    el: "αποχή"
+    el: "αποχή",
+    ro: "abținere"
   },
 
   // ===== B.5 — Labels de statut acceptation =================================
@@ -6757,7 +7302,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "per unanimitat",
     eo: "unuanime",
     nl: "unaniem",
-    el: "ομόφωνα"
+    el: "ομόφωνα",
+    ro: "în unanimitate"
   },
   "lp.status.accepted_majority": {
     "pt-BR": "por maioria",
@@ -6769,7 +7315,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "per majoria",
     eo: "plimulte",
     nl: "met meerderheid",
-    el: "κατά πλειοψηφία"
+    el: "κατά πλειοψηφία",
+    ro: "cu majoritate de voturi"
   },
 
   // ===== B.5 — Labels de raison de rejet ===================================
@@ -6783,7 +7330,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "vot col·lectiu desfavorable",
     eo: "malfavora kolektiva voĉdono",
     nl: "ongunstige collectieve stemming",
-    el: "δυσμενής συλλογική ψήφος"
+    el: "δυσμενής συλλογική ψήφος",
+    ro: "vot colectiv nefavorabil"
   },
   "lp.rejected.reason.expired": {
     "pt-BR": "prazo de deliberação atingido sem decisão",
@@ -6795,7 +7343,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "termini de deliberació assolit sense decisió",
     eo: "pridiskuta limdato atingita sen decido",
     nl: "beraadslagingstermijn bereikt zonder beslissing",
-    el: "η προθεσμία διαβούλευσης παρήλθε χωρίς απόφαση"
+    el: "η προθεσμία διαβούλευσης παρήλθε χωρίς απόφαση",
+    ro: "termenul de deliberare a expirat fără o decizie"
   },
 
   // ===== B.5 — Labels génériques (via label()) =============================
@@ -6809,7 +7358,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Tipus de transició",
     eo: "Transir-tipo",
     nl: "Overgangstype",
-    el: "Τύπος μετάβασης"
+    el: "Τύπος μετάβασης",
+    ro: "Tip de tranziție"
   },
   "l.lp.motivation": {
     "pt-BR": "Motivação",
@@ -6821,7 +7371,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motivació",
     eo: "Motivo",
     nl: "Motivatie",
-    el: "Αιτιολόγηση"
+    el: "Αιτιολόγηση",
+    ro: "Motivație"
   },
   "l.lp.proposer": {
     "pt-BR": "Proponente",
@@ -6833,7 +7384,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Proposant-a-e",
     eo: "Propon-int-o",
     nl: "Indiener",
-    el: "Προτείνων/ουσα"
+    el: "Προτείνων/ουσα",
+    ro: "Persoana care propune"
   },
   "l.lp.voteCount": {
     "pt-BR": "Votos",
@@ -6845,7 +7397,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Vots",
     eo: "Voĉdonoj",
     nl: "Stemmen",
-    el: "Ψήφοι"
+    el: "Ψήφοι",
+    ro: "Voturi"
   },
   "l.lp.rationaleAgainst": {
     "pt-BR": "Justificação do voto contra",
@@ -6857,7 +7410,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Justificació del vot en contra",
     eo: "Pravigo de la kontraŭa voĉdono",
     nl: "Motivering van de tegenstem",
-    el: "Αιτιολόγηση ψήφου κατά"
+    el: "Αιτιολόγηση ψήφου κατά",
+    ro: "Justificarea votului împotrivă"
   },
   "l.lp.gracePeriodUntil": {
     "pt-BR": "Carência até",
@@ -6869,7 +7423,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Termini de reflexió fins al",
     eo: "Pripensa periodo ĝis",
     nl: "Bedenktijd tot",
-    el: "Περίοδος σκέψης έως"
+    el: "Περίοδος σκέψης έως",
+    ro: "Perioadă de reflecție până la"
   },
   "l.lp.reason": {
     "pt-BR": "Razão",
@@ -6881,7 +7436,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Raó",
     eo: "Kialo",
     nl: "Reden",
-    el: "Λόγος"
+    el: "Λόγος",
+    ro: "Motiv"
   },
   "l.lp.cancelledMotivation": {
     "pt-BR": "Motivo do retiro",
@@ -6893,7 +7449,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Motiu de la retirada",
     eo: "Motivo de la retiro",
     nl: "Reden voor intrekking",
-    el: "Λόγος απόσυρσης"
+    el: "Λόγος απόσυρσης",
+    ro: "Motivul retragerii"
   },
   "l.lp.executedAt": {
     "pt-BR": "Aplicada em",
@@ -6905,7 +7462,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aplicada el",
     eo: "Aplikita la",
     nl: "Toegepast op",
-    el: "Εφαρμόστηκε στις"
+    el: "Εφαρμόστηκε στις",
+    ro: "Aplicată la"
   },
 
   // ===== Prêts interbibliothèques (PEB / ILL) ==============================
@@ -6926,7 +7484,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — nova sol·licitud",
     eo: "Interbiblioteka prunto {lender} → {borrower} — nova peto",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — nieuwe aanvraag",
-    el: "Διαδανεισμός {lender} → {borrower} — νέο αίτημα"
+    el: "Διαδανεισμός {lender} → {borrower} — νέο αίτημα",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — cerere nouă"
   },
   "ill.subject.prepared": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — preparado",
@@ -6938,7 +7497,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — preparat",
     eo: "Interbiblioteka prunto {lender} → {borrower} — preparita",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — voorbereid",
-    el: "Διαδανεισμός {lender} → {borrower} — προετοιμασμένος"
+    el: "Διαδανεισμός {lender} → {borrower} — προετοιμασμένος",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — pregătit"
   },
   "ill.subject.dispatched": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — em circulação",
@@ -6950,7 +7510,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — en circulació",
     eo: "Interbiblioteka prunto {lender} → {borrower} — en cirkulado",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — onderweg",
-    el: "Διαδανεισμός {lender} → {borrower} — σε μεταφορά"
+    el: "Διαδανεισμός {lender} → {borrower} — σε μεταφορά",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — în circulație"
   },
   "ill.subject.return_started": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — devolução iniciada",
@@ -6962,7 +7523,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — devolució iniciada",
     eo: "Interbiblioteka prunto {lender} → {borrower} — redono komencita",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — retour gestart",
-    el: "Διαδανεισμός {lender} → {borrower} — έναρξη επιστροφής"
+    el: "Διαδανεισμός {lender} → {borrower} — έναρξη επιστροφής",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — returnare începută"
   },
   "ill.subject.returned": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — encerrado",
@@ -6974,7 +7536,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — tancat",
     eo: "Interbiblioteka prunto {lender} → {borrower} — fermita",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — afgesloten",
-    el: "Διαδανεισμός {lender} → {borrower} — έκλεισε"
+    el: "Διαδανεισμός {lender} → {borrower} — έκλεισε",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — încheiat"
   },
   "ill.subject.cancelled": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — cancelado",
@@ -6986,7 +7549,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — anul·lat",
     eo: "Interbiblioteka prunto {lender} → {borrower} — nuligita",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — geannuleerd",
-    el: "Διαδανεισμός {lender} → {borrower} — ακυρώθηκε"
+    el: "Διαδανεισμός {lender} → {borrower} — ακυρώθηκε",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — anulat"
   },
   "ill.subject.overdue": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — em atraso",
@@ -6998,7 +7562,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — endarrerit",
     eo: "Interbiblioteka prunto {lender} → {borrower} — malfruita",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — te laat",
-    el: "Διαδανεισμός {lender} → {borrower} — σε καθυστέρηση"
+    el: "Διαδανεισμός {lender} → {borrower} — σε καθυστέρηση",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — în întârziere"
   },
   "ill.subject.partially_returned": {
     "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — devolução parcial",
@@ -7010,7 +7575,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec interbibliotecari {lender} → {borrower} — devolució parcial",
     eo: "Interbiblioteka prunto {lender} → {borrower} — parta redono",
     nl: "Interbibliothecair leenverkeer {lender} → {borrower} — gedeeltelijke retour",
-    el: "Διαδανεισμός {lender} → {borrower} — μερική επιστροφή"
+    el: "Διαδανεισμός {lender} → {borrower} — μερική επιστροφή",
+    ro: "Împrumut între biblioteci {lender} → {borrower} — returnare parțială"
   },
 
   // --- Titres (8) ----------------------------------------------------------
@@ -7024,7 +7590,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Nova sol·licitud de préstec interbibliotecari",
     eo: "Nova peto de interbiblioteka prunto",
     nl: "Nieuwe aanvraag interbibliothecair leenverkeer",
-    el: "Νέο αίτημα διαδανεισμού"
+    el: "Νέο αίτημα διαδανεισμού",
+    ro: "Cerere nouă de împrumut între biblioteci"
   },
   "ill.title.prepared": {
     "pt-BR": "Empréstimo preparado",
@@ -7036,7 +7603,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec preparat",
     eo: "Prunto preparita",
     nl: "Uitlening voorbereid",
-    el: "Ο δανεισμός προετοιμάστηκε"
+    el: "Ο δανεισμός προετοιμάστηκε",
+    ro: "Împrumut pregătit"
   },
   "ill.title.dispatched": {
     "pt-BR": "Empréstimo em circulação",
@@ -7048,7 +7616,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec en circulació",
     eo: "Prunto en cirkulado",
     nl: "Uitlening onderweg",
-    el: "Ο δανεισμός σε μεταφορά"
+    el: "Ο δανεισμός σε μεταφορά",
+    ro: "Împrumut în circulație"
   },
   "ill.title.return_started": {
     "pt-BR": "Devolução iniciada",
@@ -7060,7 +7629,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Devolució iniciada",
     eo: "Redono komencita",
     nl: "Retour gestart",
-    el: "Έναρξη επιστροφής"
+    el: "Έναρξη επιστροφής",
+    ro: "Returnare începută"
   },
   "ill.title.returned": {
     "pt-BR": "Empréstimo encerrado",
@@ -7072,7 +7642,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec tancat",
     eo: "Prunto fermita",
     nl: "Uitlening afgesloten",
-    el: "Ο δανεισμός έκλεισε"
+    el: "Ο δανεισμός έκλεισε",
+    ro: "Împrumut încheiat"
   },
   "ill.title.cancelled": {
     "pt-BR": "Empréstimo cancelado",
@@ -7084,7 +7655,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec anul·lat",
     eo: "Prunto nuligita",
     nl: "Uitlening geannuleerd",
-    el: "Ο δανεισμός ακυρώθηκε"
+    el: "Ο δανεισμός ακυρώθηκε",
+    ro: "Împrumut anulat"
   },
   "ill.title.overdue": {
     "pt-BR": "Empréstimo em atraso",
@@ -7096,7 +7668,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Préstec endarrerit",
     eo: "Prunto malfruita",
     nl: "Uitlening te laat",
-    el: "Δανεισμός σε καθυστέρηση"
+    el: "Δανεισμός σε καθυστέρηση",
+    ro: "Împrumut în întârziere"
   },
   "ill.title.partially_returned": {
     "pt-BR": "Devolução parcial",
@@ -7108,7 +7681,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Devolució parcial",
     eo: "Parta redono",
     nl: "Gedeeltelijke retour",
-    el: "Μερική επιστροφή"
+    el: "Μερική επιστροφή",
+    ro: "Returnare parțială"
   },
 
   // --- Intros de 'created' — matrice à 2 axes (4) --------------------------
@@ -7122,7 +7696,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La vostra biblioteca acaba de proposar un préstec de documents a {borrower}. La sol·licitud {loanRef} està registrada. {borrower} ha estat informada i us respondrà per donar curs a aquesta proposta. El detall dels documents implicats és a sota.",
     eo: "Via biblioteko ĵus proponis prunton de dokumentoj al {borrower}. La peto {loanRef} estas registrita. {borrower} estis informita kaj respondos por daŭrigi ĉi tiun proponon. La detalo de la koncernaj dokumentoj estas sube.",
     nl: "Je bibliotheek heeft zojuist een uitlening van documenten aangeboden aan {borrower}. Aanvraag {loanRef} is geregistreerd. {borrower} is op de hoogte gebracht en zal reageren om dit voorstel een vervolg te geven. De lijst met betrokken documenten staat hieronder.",
-    el: "Η βιβλιοθήκη σας μόλις πρότεινε δανεισμό τεκμηρίων στη {borrower}. Το αίτημα {loanRef} καταχωρίστηκε. Η {borrower} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτή η πρόταση. Η λίστα των σχετικών τεκμηρίων είναι παρακάτω."
+    el: "Η βιβλιοθήκη σας μόλις πρότεινε δανεισμό τεκμηρίων στη {borrower}. Το αίτημα {loanRef} καταχωρίστηκε. Η {borrower} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτή η πρόταση. Η λίστα των σχετικών τεκμηρίων είναι παρακάτω.",
+    ro: "Biblioteca voastră tocmai a propus un împrumut de documente către {borrower}. Cererea {loanRef} este înregistrată. {borrower} a fost informată și vă va răspunde pentru a da curs acestei propuneri. Lista documentelor vizate se află mai jos."
   },
   "ill.intro.created.borrower_partner": {
     "pt-BR": "{lender} propõe à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para aceitar, conversar ou organizar a retirada, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos propostos está mais abaixo.",
@@ -7134,7 +7709,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{lender} proposa a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per acceptar, parlar-ne o organitzar la recollida, contacteu la persona indicada a sota. El detall dels documents proposats és més avall.",
     eo: "{lender} proponas al via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por akcepti, priparoli aŭ organizi la prenon, kontaktu la personon indikitan sube. La detalo de la proponitaj dokumentoj estas pli sube.",
     nl: "{lender} biedt je bibliotheek een uitlening van documenten aan. Aanvraag {loanRef} is zojuist geopend. Om te accepteren, te overleggen of de afhaling te regelen, neem contact op met de hieronder vermelde persoon. De lijst met aangeboden documenten staat verderop.",
-    el: "Η {lender} προσφέρει στη βιβλιοθήκη σας δανεισμό τεκμηρίων. Το αίτημα {loanRef} μόλις άνοιξε. Για να αποδεχτείτε, να το συζητήσετε ή να οργανώσετε την παραλαβή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των προσφερόμενων τεκμηρίων είναι πιο κάτω."
+    el: "Η {lender} προσφέρει στη βιβλιοθήκη σας δανεισμό τεκμηρίων. Το αίτημα {loanRef} μόλις άνοιξε. Για να αποδεχτείτε, να το συζητήσετε ή να οργανώσετε την παραλαβή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των προσφερόμενων τεκμηρίων είναι πιο κάτω.",
+    ro: "{lender} propune bibliotecii voastre un împrumut de documente. Cererea {loanRef} tocmai a fost deschisă. Ca s-o acceptați, s-o discutați sau să organizați ridicarea, contactați persoana indicată mai jos. Lista documentelor propuse se află mai departe în mesaj."
   },
   "ill.intro.created.borrower_initiator": {
     "pt-BR": "Sua biblioteca acaba de solicitar um empréstimo de documentos a {lender}. O pedido {loanRef} está registrado. {lender} foi informada e responderá para dar seguimento a este pedido. O detalhe dos documentos solicitados está abaixo.",
@@ -7146,7 +7722,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La vostra biblioteca acaba de sol·licitar un préstec de documents a {lender}. La sol·licitud {loanRef} està registrada. {lender} ha estat informada i us respondrà per donar curs a aquesta sol·licitud. El detall dels documents sol·licitats és a sota.",
     eo: "Via biblioteko ĵus petis prunton de dokumentoj de {lender}. La peto {loanRef} estas registrita. {lender} estis informita kaj respondos por daŭrigi ĉi tiun peton. La detalo de la petitaj dokumentoj estas sube.",
     nl: "Je bibliotheek heeft zojuist een uitlening van documenten aangevraagd bij {lender}. Aanvraag {loanRef} is geregistreerd. {lender} is op de hoogte gebracht en zal reageren om deze aanvraag een vervolg te geven. De lijst met aangevraagde documenten staat hieronder.",
-    el: "Η βιβλιοθήκη σας μόλις ζήτησε δανεισμό τεκμηρίων από τη {lender}. Το αίτημα {loanRef} καταχωρίστηκε. Η {lender} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτό το αίτημα. Η λίστα των τεκμηρίων που ζητήθηκαν είναι παρακάτω."
+    el: "Η βιβλιοθήκη σας μόλις ζήτησε δανεισμό τεκμηρίων από τη {lender}. Το αίτημα {loanRef} καταχωρίστηκε. Η {lender} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτό το αίτημα. Η λίστα των τεκμηρίων που ζητήθηκαν είναι παρακάτω.",
+    ro: "Biblioteca voastră tocmai a solicitat un împrumut de documente de la {lender}. Cererea {loanRef} este înregistrată. {lender} a fost informată și vă va răspunde pentru a da curs acestei cereri. Lista documentelor solicitate se află mai jos."
   },
   "ill.intro.created.lender_partner": {
     "pt-BR": "{borrower} solicita à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para responder, conversar ou organizar o envio, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos solicitados está mais abaixo.",
@@ -7158,7 +7735,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{borrower} sol·licita a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per respondre, parlar-ne o organitzar l'enviament, contacteu la persona indicada a sota. El detall dels documents sol·licitats és més avall.",
     eo: "{borrower} petas de via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por respondi, priparoli aŭ organizi la sendon, kontaktu la personon indikitan sube. La detalo de la petitaj dokumentoj estas pli sube.",
     nl: "{borrower} vraagt je bibliotheek een uitlening van documenten aan. Aanvraag {loanRef} is zojuist geopend. Om te reageren, te overleggen of de verzending te regelen, neem contact op met de hieronder vermelde persoon. De lijst met aangevraagde documenten staat verderop.",
-    el: "Η {borrower} ζητά δανεισμό τεκμηρίων από τη βιβλιοθήκη σας. Το αίτημα {loanRef} μόλις άνοιξε. Για να απαντήσετε, να το συζητήσετε ή να οργανώσετε την αποστολή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των τεκμηρίων που ζητήθηκαν είναι πιο κάτω."
+    el: "Η {borrower} ζητά δανεισμό τεκμηρίων από τη βιβλιοθήκη σας. Το αίτημα {loanRef} μόλις άνοιξε. Για να απαντήσετε, να το συζητήσετε ή να οργανώσετε την αποστολή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των τεκμηρίων που ζητήθηκαν είναι πιο κάτω.",
+    ro: "{borrower} solicită bibliotecii voastre un împrumut de documente. Cererea {loanRef} tocmai a fost deschisă. Ca să răspundeți, s-o discutați sau să organizați trimiterea, contactați persoana indicată mai jos. Lista documentelor solicitate se află mai departe în mesaj."
   },
 
   // --- Intros de statut — symétriques (7) ----------------------------------
@@ -7172,7 +7750,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ja està preparat. Els documents estan reunits i a punt per sortir. El detall és a sota.",
     eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} nun estas preparita. La dokumentoj estas kunigitaj kaj pretaj por foriri. La detalo estas sube.",
     nl: "Het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} is nu voorbereid. De documenten zijn verzameld en klaar om te vertrekken. De details staan hieronder.",
-    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} είναι πλέον προετοιμασμένος. Τα τεκμήρια συγκεντρώθηκαν και είναι έτοιμα να φύγουν. Οι λεπτομέρειες είναι παρακάτω."
+    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} είναι πλέον προετοιμασμένος. Τα τεκμήρια συγκεντρώθηκαν και είναι έτοιμα να φύγουν. Οι λεπτομέρειες είναι παρακάτω.",
+    ro: "Împrumutul între biblioteci {loanRef} dintre {lender} și {borrower} este acum pregătit. Documentele sunt adunate și gata de plecare. Detaliile se află mai jos."
   },
   "ill.intro.dispatched": {
     "pt-BR": "Os documentos do empréstimo interbibliotecas {loanRef} estão em circulação entre {lender} e {borrower}. Conforme o modo combinado, viajam pelo correio ou em mãos. O detalhe está abaixo.",
@@ -7184,7 +7763,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Els documents del préstec interbibliotecari {loanRef} estan en circulació entre {lender} i {borrower}. Segons el mode acordat, viatgen per correu o en mà. El detall és a sota.",
     eo: "La dokumentoj de la interbiblioteka prunto {loanRef} estas en cirkulado inter {lender} kaj {borrower}. Laŭ la interkonsentita maniero, ili vojaĝas poŝte aŭ man-al-mane. La detalo estas sube.",
     nl: "De documenten van het interbibliothecair leenverkeer {loanRef} zijn onderweg tussen {lender} en {borrower}. Afhankelijk van de afgesproken wijze reizen ze per post of van hand tot hand. De details staan hieronder.",
-    el: "Τα τεκμήρια του διαδανεισμού {loanRef} βρίσκονται σε μεταφορά μεταξύ {lender} και {borrower}. Ανάλογα με τον συμφωνημένο τρόπο, ταξιδεύουν ταχυδρομικά ή από χέρι σε χέρι. Οι λεπτομέρειες είναι παρακάτω."
+    el: "Τα τεκμήρια του διαδανεισμού {loanRef} βρίσκονται σε μεταφορά μεταξύ {lender} και {borrower}. Ανάλογα με τον συμφωνημένο τρόπο, ταξιδεύουν ταχυδρομικά ή από χέρι σε χέρι. Οι λεπτομέρειες είναι παρακάτω.",
+    ro: "Documentele împrumutului între biblioteci {loanRef} sunt în circulație între {lender} și {borrower}. În funcție de modul convenit, călătoresc prin poștă sau din mână în mână. Detaliile se află mai jos."
   },
   "ill.intro.return_started": {
     "pt-BR": "A devolução do empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} acaba de ser iniciada. Os documentos fazem o caminho de volta. O detalhe está abaixo.",
@@ -7196,7 +7776,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La devolució del préstec interbibliotecari {loanRef} entre {lender} i {borrower} acaba d'iniciar-se. Els documents fan el camí de tornada. El detall és a sota.",
     eo: "La redono de la interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} ĵus komenciĝis. La dokumentoj faras la revojon. La detalo estas sube.",
     nl: "De retour van het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} is zojuist gestart. De documenten maken de terugreis. De details staan hieronder.",
-    el: "Η επιστροφή του διαδανεισμού {loanRef} μεταξύ {lender} και {borrower} μόλις ξεκίνησε. Τα τεκμήρια κάνουν την αντίστροφη διαδρομή. Οι λεπτομέρειες είναι παρακάτω."
+    el: "Η επιστροφή του διαδανεισμού {loanRef} μεταξύ {lender} και {borrower} μόλις ξεκίνησε. Τα τεκμήρια κάνουν την αντίστροφη διαδρομή. Οι λεπτομέρειες είναι παρακάτω.",
+    ro: "Returnarea împrumutului între biblioteci {loanRef} dintre {lender} și {borrower} tocmai a început. Documentele fac drumul înapoi. Detaliile se află mai jos."
   },
   "ill.intro.returned": {
     "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} está encerrado. Os documentos voltaram à sua biblioteca. Um acervo circulou de um coletivo a outro: é assim que vivem nossas bibliotecas.",
@@ -7208,7 +7789,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} està tancat. Els documents han tornat a la seva biblioteca. Un fons ha circulat d'un col·lectiu a un altre: així és com viuen les nostres biblioteques.",
     eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estas fermita. La dokumentoj revenis al sia biblioteko. Kolekto cirkulis de unu kolektivo al alia: tiel vivas niaj bibliotekoj.",
     nl: "Het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} is afgesloten. De documenten zijn teruggekeerd naar hun bibliotheek. Een collectie is van het ene collectief naar het andere gereisd: zo leven onze bibliotheken.",
-    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} έκλεισε. Τα τεκμήρια επέστρεψαν στη βιβλιοθήκη τους. Μια συλλογή ταξίδεψε από μια συλλογικότητα σε μια άλλη: έτσι ζουν οι βιβλιοθήκες μας."
+    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} έκλεισε. Τα τεκμήρια επέστρεψαν στη βιβλιοθήκη τους. Μια συλλογή ταξίδεψε από μια συλλογικότητα σε μια άλλη: έτσι ζουν οι βιβλιοθήκες μας.",
+    ro: "Împrumutul între biblioteci {loanRef} dintre {lender} și {borrower} s-a încheiat. Documentele s-au întors la biblioteca lor. Un fond a circulat de la un colectiv la altul: așa trăiesc bibliotecile noastre."
   },
   "ill.intro.cancelled": {
     "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} foi cancelado. Nenhuma troca ocorrerá no âmbito deste pedido. Para qualquer dúvida, as duas bibliotecas podem se contatar diretamente.",
@@ -7220,7 +7802,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha estat anul·lat. No hi haurà cap intercanvi en el marc d'aquesta sol·licitud. Per a qualsevol dubte, les dues biblioteques poden contactar-se directament.",
     eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estis nuligita. Neniu interŝanĝo okazos en la kadro de ĉi tiu peto. Por iu ajn demando, la du bibliotekoj povas rekte interkontaktiĝi.",
     nl: "Het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} is geannuleerd. Er vindt geen uitwisseling plaats in het kader van deze aanvraag. Bij vragen kunnen de twee bibliotheken rechtstreeks contact met elkaar opnemen.",
-    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} ακυρώθηκε. Καμία ανταλλαγή δεν θα γίνει στο πλαίσιο αυτού του αιτήματος. Για οποιαδήποτε ερώτηση, οι δύο βιβλιοθήκες μπορούν να επικοινωνήσουν απευθείας."
+    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} ακυρώθηκε. Καμία ανταλλαγή δεν θα γίνει στο πλαίσιο αυτού του αιτήματος. Για οποιαδήποτε ερώτηση, οι δύο βιβλιοθήκες μπορούν να επικοινωνήσουν απευθείας.",
+    ro: "Împrumutul între biblioteci {loanRef} dintre {lender} și {borrower} a fost anulat. Nu va avea loc niciun schimb în cadrul acestei cereri. Pentru orice întrebare, cele două biblioteci pot lua legătura direct."
   },
   "ill.intro.overdue": {
     "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} ultrapassou a data de devolução prevista. As duas bibliotecas são convidadas a se aproximar para fazer o ponto sobre a situação dos documentos. O detalhe está abaixo.",
@@ -7232,7 +7815,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha superat la data de devolució prevista. Es convida les dues biblioteques a posar-se en contacte per fer el punt sobre la situació dels documents. El detall és a sota.",
     eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} preterpasis sian antaŭviditan redatan daton. La du bibliotekoj estas invitataj interkontaktiĝi por pripensi la situacion de la dokumentoj. La detalo estas sube.",
     nl: "Het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} heeft de verwachte retourdatum overschreden. Beide bibliotheken worden uitgenodigd om contact op te nemen en de stand van zaken van de documenten te bekijken. De details staan hieronder.",
-    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} ξεπέρασε την προβλεπόμενη ημερομηνία επιστροφής. Οι δύο βιβλιοθήκες καλούνται να επικοινωνήσουν για να κάνουν τον απολογισμό της κατάστασης των τεκμηρίων. Οι λεπτομέρειες είναι παρακάτω."
+    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} ξεπέρασε την προβλεπόμενη ημερομηνία επιστροφής. Οι δύο βιβλιοθήκες καλούνται να επικοινωνήσουν για να κάνουν τον απολογισμό της κατάστασης των τεκμηρίων. Οι λεπτομέρειες είναι παρακάτω.",
+    ro: "Împrumutul între biblioteci {loanRef} dintre {lender} și {borrower} a depășit data de returnare prevăzută. Cele două biblioteci sunt invitate să ia legătura pentru a face bilanțul situației documentelor. Detaliile se află mai jos."
   },
   "ill.intro.partially_returned": {
     "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} foi parcialmente devolvido. Uma parte dos documentos voltou à sua biblioteca; o restante ainda está em circulação. O detalhe está abaixo, documento por documento.",
@@ -7244,7 +7828,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha estat retornat parcialment. Una part dels documents ha tornat a la seva biblioteca; la resta encara està en circulació. El detall és a sota, document per document.",
     eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estis parte redonita. Parto de la dokumentoj revenis al sia biblioteko; la cetero ankoraŭ estas en cirkulado. La detalo estas sube, dokumento post dokumento.",
     nl: "Het interbibliothecair leenverkeer {loanRef} tussen {lender} en {borrower} is gedeeltelijk teruggebracht. Een deel van de documenten is teruggekeerd naar hun bibliotheek; de rest is nog onderweg. De details staan hieronder, document voor document.",
-    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} επιστράφηκε μερικώς. Μέρος των τεκμηρίων επέστρεψε στη βιβλιοθήκη του· τα υπόλοιπα βρίσκονται ακόμη σε μεταφορά. Οι λεπτομέρειες είναι παρακάτω, τεκμήριο προς τεκμήριο."
+    el: "Ο διαδανεισμός {loanRef} μεταξύ {lender} και {borrower} επιστράφηκε μερικώς. Μέρος των τεκμηρίων επέστρεψε στη βιβλιοθήκη του· τα υπόλοιπα βρίσκονται ακόμη σε μεταφορά. Οι λεπτομέρειες είναι παρακάτω, τεκμήριο προς τεκμήριο.",
+    ro: "Împrumutul între biblioteci {loanRef} dintre {lender} și {borrower} a fost returnat parțial. O parte din documente s-au întors la biblioteca lor; restul sunt încă în circulație. Detaliile se află mai jos, document cu document."
   },
 
   // --- ActionBox (1) -------------------------------------------------------
@@ -7258,7 +7843,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Per donar curs, contacteu amb: {contact}",
     eo: "Por daŭrigi, kontaktu: {contact}",
     nl: "Neem voor het vervolg contact op: {contact}",
-    el: "Για να προχωρήσει, επικοινωνήστε: {contact}"
+    el: "Για να προχωρήσει, επικοινωνήστε: {contact}",
+    ro: "Pentru a da curs, contactați: {contact}"
   },
 
   // --- Libellés de détails (9) ---------------------------------------------
@@ -7267,63 +7853,72 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "Referencia del préstamo", en: "Loan reference",
     it: "Riferimento del prestito", de: "Leih-Referenz",
     ca: "Referència del préstec", eo: "Referenco de la prunto", nl: "Referentie van de uitlening",
-    el: "Αναφορά δανεισμού"
+    el: "Αναφορά δανεισμού",
+    ro: "Referința împrumutului"
   },
   "ill.detail.lender": {
     "pt-BR": "Biblioteca emprestadora", fr: "Bibliothèque prêteuse",
     es: "Biblioteca prestadora", en: "Lending library",
     it: "Biblioteca prestatrice", de: "Verleihende Bibliothek",
     ca: "Biblioteca prestadora", eo: "Pruntedonanta biblioteko", nl: "Uitlenende bibliotheek",
-    el: "Δανείζουσα βιβλιοθήκη"
+    el: "Δανείζουσα βιβλιοθήκη",
+    ro: "Biblioteca care dă cu împrumut"
   },
   "ill.detail.borrower": {
     "pt-BR": "Biblioteca tomadora", fr: "Bibliothèque emprunteuse",
     es: "Biblioteca prestataria", en: "Borrowing library",
     it: "Biblioteca richiedente", de: "Entleihende Bibliothek",
     ca: "Biblioteca prestatària", eo: "Prunteprenanta biblioteko", nl: "Lenende bibliotheek",
-    el: "Δανειζόμενη βιβλιοθήκη"
+    el: "Δανειζόμενη βιβλιοθήκη",
+    ro: "Biblioteca care primește împrumutul"
   },
   "ill.detail.startDate": {
     "pt-BR": "Data de partida", fr: "Date de départ",
     es: "Fecha de salida", en: "Start date",
     it: "Data di partenza", de: "Startdatum",
     ca: "Data de sortida", eo: "Ekdato", nl: "Vertrekdatum",
-    el: "Ημερομηνία αναχώρησης"
+    el: "Ημερομηνία αναχώρησης",
+    ro: "Data plecării"
   },
   "ill.detail.dueDate": {
     "pt-BR": "Devolução prevista", fr: "Retour prévu",
     es: "Devolución prevista", en: "Expected return",
     it: "Restituzione prevista", de: "Erwartete Rückgabe",
     ca: "Devolució prevista", eo: "Antaŭvidita redono", nl: "Verwachte retour",
-    el: "Προβλεπόμενη επιστροφή"
+    el: "Προβλεπόμενη επιστροφή",
+    ro: "Returnare prevăzută"
   },
   "ill.detail.logistics": {
     "pt-BR": "Logística", fr: "Logistique",
     es: "Logística", en: "Logistics",
     it: "Logistica", de: "Logistik",
     ca: "Logística", eo: "Loĝistiko", nl: "Logistiek",
-    el: "Εφοδιαστική"
+    el: "Εφοδιαστική",
+    ro: "Logistică"
   },
   "ill.detail.meetingPoint": {
     "pt-BR": "Ponto de encontro", fr: "Point de rencontre",
     es: "Punto de encuentro", en: "Meeting point",
     it: "Punto d'incontro", de: "Treffpunkt",
     ca: "Punt de trobada", eo: "Renkontiĝejo", nl: "Ontmoetingspunt",
-    el: "Σημείο συνάντησης"
+    el: "Σημείο συνάντησης",
+    ro: "Punct de întâlnire"
   },
   "ill.detail.itemCount": {
     "pt-BR": "Número de documentos", fr: "Nombre de documents",
     es: "Número de documentos", en: "Number of documents",
     it: "Numero di documenti", de: "Anzahl der Dokumente",
     ca: "Nombre de documents", eo: "Nombro de dokumentoj", nl: "Aantal documenten",
-    el: "Αριθμός τεκμηρίων"
+    el: "Αριθμός τεκμηρίων",
+    ro: "Număr de documente"
   },
   "ill.detail.itemLine": {
     "pt-BR": "Documento", fr: "Document",
     es: "Documento", en: "Document",
     it: "Documento", de: "Dokument",
     ca: "Document", eo: "Dokumento", nl: "Document",
-    el: "Τεκμήριο"
+    el: "Τεκμήριο",
+    ro: "Document"
   },
 
   // --- Logistique (1) ------------------------------------------------------
@@ -7332,7 +7927,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "A convenir", en: "To be arranged",
     it: "Da concordare", de: "Noch festzulegen",
     ca: "A convenir", eo: "Interkonsentota", nl: "Af te spreken",
-    el: "Προς συνεννόηση"
+    el: "Προς συνεννόηση",
+    ro: "De stabilit"
   },
   // ===== PEB — statut d'exemplaire & synthèse retour partiel ===============
   // #ILL-partial. Utilisées par buildDetails() de notify-interlibrary-loan,
@@ -7351,7 +7947,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reservat per a la sortida",
     eo: "Rezervita por la foriro",
     nl: "Gereserveerd voor verzending",
-    el: "Δεσμευμένο για αποστολή"
+    el: "Δεσμευμένο για αποστολή",
+    ro: "Rezervat pentru plecare"
   },
   "ill.itemStatus.emprestado": {
     "pt-BR": "Ainda em circulação",
@@ -7363,7 +7960,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Encara en circulació",
     eo: "Ankoraŭ en cirkulado",
     nl: "Nog in circulatie",
-    el: "Ακόμη σε κυκλοφορία"
+    el: "Ακόμη σε κυκλοφορία",
+    ro: "Încă în circulație"
   },
   "ill.itemStatus.devolvido": {
     "pt-BR": "Devolvido",
@@ -7375,7 +7973,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retornat",
     eo: "Redonita",
     nl: "Teruggebracht",
-    el: "Επιστράφηκε"
+    el: "Επιστράφηκε",
+    ro: "Returnat"
   },
   "ill.itemStatus.perdido": {
     "pt-BR": "Perdido",
@@ -7387,7 +7986,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Perdut",
     eo: "Perdita",
     nl: "Verloren",
-    el: "Χαμένο"
+    el: "Χαμένο",
+    ro: "Pierdut"
   },
   "ill.itemStatus.danificado": {
     "pt-BR": "Danificado",
@@ -7399,7 +7999,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Malmès",
     eo: "Difektita",
     nl: "Beschadigd",
-    el: "Φθαρμένο"
+    el: "Φθαρμένο",
+    ro: "Deteriorat"
   },
   "ill.itemStatus.cancelado": {
     "pt-BR": "Retirado do empréstimo",
@@ -7411,7 +8012,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Retirat del préstec",
     eo: "Forigita el la prunto",
     nl: "Uit de uitlening verwijderd",
-    el: "Αφαιρέθηκε από τον δανεισμό"
+    el: "Αφαιρέθηκε από τον δανεισμό",
+    ro: "Retras din împrumut"
   },
   "ill.detail.returnSummary": {
     "pt-BR": "Balanço da devolução",
@@ -7423,7 +8025,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Balanç de la devolució",
     eo: "Bilanco de la redono",
     nl: "Overzicht van de retour",
-    el: "Απολογισμός επιστροφής"
+    el: "Απολογισμός επιστροφής",
+    ro: "Bilanțul returnării"
   },
   "ill.detail.returnSummaryValue": {
     "pt-BR": "{settled} resolvido(s), {outstanding} ainda em circulação",
@@ -7435,7 +8038,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{settled} resolt(s), {outstanding} encara en circulació",
     eo: "{settled} solvita(j), {outstanding} ankoraŭ en cirkulado",
     nl: "{settled} afgehandeld, {outstanding} nog in circulatie",
-    el: "{settled} τακτοποιημένα, {outstanding} ακόμη σε κυκλοφορία"
+    el: "{settled} τακτοποιημένα, {outstanding} ακόμη σε κυκλοφορία",
+    ro: "Rezolvate: {settled}, încă în circulație: {outstanding}"
   },
   // ===== PEB — modes logistiques (#ILL-logistics) ==========================
   // Utilisés par renderLogistics() de notify-interlibrary-loan. 'a_combinar'
@@ -7451,7 +8055,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Enviament postal",
     eo: "Poŝta sendo",
     nl: "Verzending per post",
-    el: "Ταχυδρομική αποστολή"
+    el: "Ταχυδρομική αποστολή",
+    ro: "Trimitere poștală"
   },
   "ill.logistics.entrega_em_maos": {
     "pt-BR": "Entrega em mãos",
@@ -7463,7 +8068,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Lliurament en mà",
     eo: "Enmana transdono",
     nl: "Persoonlijke overhandiging",
-    el: "Παράδοση στο χέρι"
+    el: "Παράδοση στο χέρι",
+    ro: "Predare în mână"
   },
   "ill.logistics.transporte_militante": {
     "pt-BR": "Transporte militante",
@@ -7475,7 +8081,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Transport militant",
     eo: "Aktivisma transporto",
     nl: "Militant transport",
-    el: "Αγωνιστική μεταφορά"
+    el: "Αγωνιστική μεταφορά",
+    ro: "Transport militant"
   },
 
   // ===== RGPD purge warning (Spec §7.1, 31/05/2026) =========================
@@ -7489,7 +8096,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís de supressió de dades — préstecs",
     eo: "Sciigo pri datumforviŝo — pruntoj",
     nl: "Bericht over gegevensverwijdering — uitleningen",
-    el: "Ειδοποίηση διαγραφής δεδομένων — δανεισμοί"
+    el: "Ειδοποίηση διαγραφής δεδομένων — δανεισμοί",
+    ro: "Notificare de ștergere a datelor — împrumuturi"
   },
   "rgpd.purge.loans.intro": {
     "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de empréstimos antigos será excluído em 30 dias.",
@@ -7501,7 +8109,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "D'acord amb la nostra política de retenció de dades, el teu historial de préstecs antics serà eliminat en 30 dies.",
     eo: "Laŭ nia datumretenpolitiko, via historio de malnovaj pruntoj estos forviŝita post 30 tagoj.",
     nl: "Conform ons gegevensbewaarbeleid wordt je geschiedenis van oude uitleningen over 30 dagen verwijderd.",
-    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου δανεισμών θα διαγραφεί σε 30 ημέρες."
+    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου δανεισμών θα διαγραφεί σε 30 ημέρες.",
+    ro: "Conform politicii noastre de păstrare a datelor, istoricul împrumuturilor tale vechi va fi șters peste 30 de zile."
   },
   "rgpd.purge.reservations.title": {
     "pt-BR": "Aviso de exclusão de dados — reservas",
@@ -7513,7 +8122,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís de supressió de dades — reserves",
     eo: "Sciigo pri datumforviŝo — rezervoj",
     nl: "Bericht over gegevensverwijdering — reserveringen",
-    el: "Ειδοποίηση διαγραφής δεδομένων — κρατήσεις"
+    el: "Ειδοποίηση διαγραφής δεδομένων — κρατήσεις",
+    ro: "Notificare de ștergere a datelor — rezervări"
   },
   "rgpd.purge.reservations.intro": {
     "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de reservas antigas será excluído em 30 dias.",
@@ -7525,7 +8135,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "D'acord amb la nostra política de retenció de dades, el teu historial de reserves antigues serà eliminat en 30 dies.",
     eo: "Laŭ nia datumretenpolitiko, via historio de malnovaj rezervoj estos forviŝita post 30 tagoj.",
     nl: "Conform ons gegevensbewaarbeleid wordt je geschiedenis van oude reserveringen over 30 dagen verwijderd.",
-    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου κρατήσεων θα διαγραφεί σε 30 ημέρες."
+    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου κρατήσεων θα διαγραφεί σε 30 ημέρες.",
+    ro: "Conform politicii noastre de păstrare a datelor, istoricul rezervărilor tale vechi va fi șters peste 30 de zile."
   },
   "rgpd.purge.consultations.title": {
     "pt-BR": "Aviso de exclusão de dados — consultas locais",
@@ -7537,7 +8148,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Avís de supressió de dades — consultes locals",
     eo: "Sciigo pri datumforviŝo — surlokaj konsultoj",
     nl: "Bericht over gegevensverwijdering — raadplegingen ter plaatse",
-    el: "Ειδοποίηση διαγραφής δεδομένων — επιτόπιες μελέτες"
+    el: "Ειδοποίηση διαγραφής δεδομένων — επιτόπιες μελέτες",
+    ro: "Notificare de ștergere a datelor — consultări pe loc"
   },
   "rgpd.purge.consultations.intro": {
     "pt-BR": "Conforme nossa política de retenção de dados, seu histórico de consultas locais antigas será excluído em 30 dias.",
@@ -7549,7 +8161,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "D'acord amb la nostra política de retenció de dades, el teu historial de consultes locals antigues serà eliminat en 30 dies.",
     eo: "Laŭ nia datumretenpolitiko, via historio de malnovaj surlokaj konsultoj estos forviŝita post 30 tagoj.",
     nl: "Conform ons gegevensbewaarbeleid wordt je geschiedenis van oude raadplegingen ter plaatse over 30 dagen verwijderd.",
-    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου επιτόπιων μελετών θα διαγραφεί σε 30 ημέρες."
+    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, το ιστορικό των παλιών σου επιτόπιων μελετών θα διαγραφεί σε 30 ημέρες.",
+    ro: "Conform politicii noastre de păstrare a datelor, istoricul vechilor tale consultări pe loc va fi șters peste 30 de zile."
   },
   "rgpd.purge.windowExplain": {
     "pt-BR": "Esta exclusão é automática e definitiva. Não há nenhuma cópia conservada após o prazo.",
@@ -7561,7 +8174,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aquesta supressió és automàtica i definitiva. No es conserva cap còpia després del termini.",
     eo: "Tiu ĉi forviŝo estas aŭtomata kaj definitiva. Neniu kopio estas konservita post la limdato.",
     nl: "Deze verwijdering is automatisch en definitief. Er wordt geen kopie bewaard na de termijn.",
-    el: "Αυτή η διαγραφή είναι αυτόματη και οριστική. Κανένα αντίγραφο δεν διατηρείται μετά την προθεσμία."
+    el: "Αυτή η διαγραφή είναι αυτόματη και οριστική. Κανένα αντίγραφο δεν διατηρείται μετά την προθεσμία.",
+    ro: "Această ștergere este automată și definitivă. Nu se păstrează nicio copie după acest termen."
   },
   "rgpd.purge.howToCancel": {
     "pt-BR": "Se quiser exportar seus dados antes da exclusão, entre em contato com a biblioteca pelos canais habituais.",
@@ -7573,7 +8187,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Si vols exportar les teves dades abans de la supressió, contacta amb la biblioteca pels canals habituals.",
     eo: "Se vi volas eksporti viajn datumojn antaŭ la forviŝo, kontaktu la bibliotekon per la kutimaj kanaloj.",
     nl: "Als je je gegevens vóór verwijdering wilt exporteren, neem dan contact op met de bibliotheek via de gebruikelijke kanalen.",
-    el: "Αν θέλεις να εξαγάγεις τα δεδομένα σου πριν τη διαγραφή, επικοινώνησε με τη βιβλιοθήκη μέσω των συνηθισμένων καναλιών."
+    el: "Αν θέλεις να εξαγάγεις τα δεδομένα σου πριν τη διαγραφή, επικοινώνησε με τη βιβλιοθήκη μέσω των συνηθισμένων καναλιών.",
+    ro: "Dacă vrei să-ți exporți datele înainte de ștergere, contactează biblioteca pe canalele obișnuite."
   },
 
   // ========================================================================
@@ -7585,7 +8200,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "Solicitud de apertura OAI — {lib}", en: "OAI opening request — {lib}",
     it: "Richiesta di apertura OAI — {lib}", de: "OAI-Öffnungsanfrage — {lib}",
     ca: "Sol·licitud d'obertura OAI — {lib}", eo: "Peto de malfermo OAI — {lib}",
-    nl: "OAI-openstellingsverzoek — {lib}", el: "Αίτημα ανοίγματος OAI — {lib}"
+    nl: "OAI-openstellingsverzoek — {lib}", el: "Αίτημα ανοίγματος OAI — {lib}",
+    ro: "Cerere de deschidere OAI — {lib}"
   },
   "oai.requested.intro": {
     "pt-BR": "A biblioteca {lib} pede a abertura do seu catálogo à colheita OAI-PMH. Basta o acordo de um(a/e) admin da rede para validar.",
@@ -7597,14 +8213,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La biblioteca {lib} demana obrir el seu catàleg a la collita OAI-PMH. Amb l'acord d'una admin de la xarxa n'hi ha prou.",
     eo: "La biblioteko {lib} petas malfermi sian katalogon al rikolto OAI-PMH. Sufiĉas la konsento de unu reta administranto.",
     nl: "De bibliotheek {lib} vraagt om haar catalogus open te stellen voor OAI-PMH-oogst. De goedkeuring van één netwerkbeheerder volstaat.",
-    el: "Η βιβλιοθήκη {lib} ζητά να ανοίξει τον κατάλογό της σε συγκομιδή OAI-PMH. Αρκεί η έγκριση μίας διαχειρίστριας του δικτύου."
+    el: "Η βιβλιοθήκη {lib} ζητά να ανοίξει τον κατάλογό της σε συγκομιδή OAI-PMH. Αρκεί η έγκριση μίας διαχειρίστριας του δικτύου.",
+    ro: "Biblioteca {lib} cere deschiderea catalogului său pentru recoltarea OAI-PMH. Acordul unei singure persoane din administrarea rețelei este suficient pentru validare."
   },
   "oai.approved.sub": {
     "pt-BR": "Abertura OAI aprovada — {lib}", fr: "Ouverture OAI approuvée — {lib}",
     es: "Apertura OAI aprobada — {lib}", en: "OAI opening approved — {lib}",
     it: "Apertura OAI approvata — {lib}", de: "OAI-Öffnung genehmigt — {lib}",
     ca: "Obertura OAI aprovada — {lib}", eo: "Malfermo OAI aprobita — {lib}",
-    nl: "OAI-openstelling goedgekeurd — {lib}", el: "Το άνοιγμα OAI εγκρίθηκε — {lib}"
+    nl: "OAI-openstelling goedgekeurd — {lib}", el: "Το άνοιγμα OAI εγκρίθηκε — {lib}",
+    ro: "Deschidere OAI aprobată — {lib}"
   },
   "oai.approved.intro": {
     "pt-BR": "Seu pedido de abertura OAI para {lib} foi aprovado. Lembre-se de fechar assim que a colheita for confirmada como concluída.",
@@ -7616,14 +8234,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva sol·licitud d'obertura OAI per a {lib} ha estat aprovada. Recorda tancar-la tan bon punt la collita es confirmi acabada.",
     eo: "Via peto de malfermo OAI por {lib} estis aprobita. Memoru fermi tuj kiam la rikolto estas konfirmita finita.",
     nl: "Je OAI-openstellingsverzoek voor {lib} is goedgekeurd. Denk eraan te sluiten zodra de oogst als voltooid is bevestigd.",
-    el: "Το αίτημα ανοίγματος OAI για {lib} εγκρίθηκε. Θυμήσου να το κλείσεις μόλις επιβεβαιωθεί ότι η συγκομιδή ολοκληρώθηκε."
+    el: "Το αίτημα ανοίγματος OAI για {lib} εγκρίθηκε. Θυμήσου να το κλείσεις μόλις επιβεβαιωθεί ότι η συγκομιδή ολοκληρώθηκε.",
+    ro: "Cererea ta de deschidere OAI pentru {lib} a fost aprobată. Nu uita să închizi accesul imediat ce se confirmă că recoltarea s-a terminat."
   },
   "oai.refused.sub": {
     "pt-BR": "Abertura OAI recusada — {lib}", fr: "Ouverture OAI refusée — {lib}",
     es: "Apertura OAI rechazada — {lib}", en: "OAI opening refused — {lib}",
     it: "Apertura OAI rifiutata — {lib}", de: "OAI-Öffnung abgelehnt — {lib}",
     ca: "Obertura OAI rebutjada — {lib}", eo: "Malfermo OAI rifuzita — {lib}",
-    nl: "OAI-openstelling geweigerd — {lib}", el: "Το άνοιγμα OAI απορρίφθηκε — {lib}"
+    nl: "OAI-openstelling geweigerd — {lib}", el: "Το άνοιγμα OAI απορρίφθηκε — {lib}",
+    ro: "Deschidere OAI refuzată — {lib}"
   },
   "oai.refused.intro": {
     "pt-BR": "Seu pedido de abertura OAI para {lib} foi recusado por um(a/e) admin da rede.",
@@ -7635,14 +8255,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva sol·licitud d'obertura OAI per a {lib} ha estat rebutjada per una admin de la xarxa.",
     eo: "Via peto de malfermo OAI por {lib} estis rifuzita de reta administranto.",
     nl: "Je OAI-openstellingsverzoek voor {lib} is geweigerd door een netwerkbeheerder.",
-    el: "Το αίτημα ανοίγματος OAI για {lib} απορρίφθηκε από διαχειρίστρια του δικτύου."
+    el: "Το αίτημα ανοίγματος OAI για {lib} απορρίφθηκε από διαχειρίστρια του δικτύου.",
+    ro: "Cererea ta de deschidere OAI pentru {lib} a fost refuzată de o persoană din administrarea rețelei."
   },
   "oai.proposed.sub": {
     "pt-BR": "Consulta da rede — colheita por {entity}", fr: "Consultation réseau — moissonnage par {entity}",
     es: "Consulta de la red — recolección por {entity}", en: "Network consultation — harvesting by {entity}",
     it: "Consultazione della rete — raccolta da {entity}", de: "Netz-Abstimmung — Ernte durch {entity}",
     ca: "Consulta de la xarxa — collita per {entity}", eo: "Reta konsulto — rikolto de {entity}",
-    nl: "Netwerkraadpleging — oogst door {entity}", el: "Διαβούλευση δικτύου — συγκομιδή από {entity}"
+    nl: "Netwerkraadpleging — oogst door {entity}", el: "Διαβούλευση δικτύου — συγκομιδή από {entity}",
+    ro: "Consultare în rețea — recoltare de către {entity}"
   },
   "oai.proposed.intro": {
     "pt-BR": "{entity} pede para colher o catálogo da rede. Sua biblioteca está envolvida: vote até {date}. Sem resposta, seu acordo é presumido; um único recuso bloqueia.",
@@ -7654,14 +8276,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{entity} demana collir el catàleg de la xarxa. La teva biblioteca hi està implicada: vota abans del {date}. Sense resposta, es presumeix el teu acord; un sol rebuig ho bloqueja.",
     eo: "{entity} petas rikolti la retan katalogon. Via biblioteko estas koncernata: voĉdonu antaŭ {date}. Sen respondo, via konsento estas supozata; unu sola rifuzo blokas.",
     nl: "{entity} vraagt om de netwerkcatalogus te oogsten. Jouw bibliotheek is betrokken: stem vóór {date}. Geen antwoord betekent instemming; één weigering blokkeert.",
-    el: "Η/Ο {entity} ζητά να συγκομίσει τον κατάλογο του δικτύου. Η βιβλιοθήκη σου εμπλέκεται: ψήφισε έως {date}. Χωρίς απάντηση τεκμαίρεται συναίνεση· μία άρνηση μπλοκάρει."
+    el: "Η/Ο {entity} ζητά να συγκομίσει τον κατάλογο του δικτύου. Η βιβλιοθήκη σου εμπλέκεται: ψήφισε έως {date}. Χωρίς απάντηση τεκμαίρεται συναίνεση· μία άρνηση μπλοκάρει.",
+    ro: "{entity} cere să recolteze catalogul rețelei. Biblioteca ta este vizată: votează până la {date}. Fără răspuns, acordul tău este prezumat; un singur refuz blochează cererea."
   },
   "oai.resolvedOpen.sub": {
     "pt-BR": "Consulta OAI concluída — {entity}", fr: "Consultation OAI aboutie — {entity}",
     es: "Consulta OAI concluida — {entity}", en: "OAI consultation passed — {entity}",
     it: "Consultazione OAI conclusa — {entity}", de: "OAI-Abstimmung angenommen — {entity}",
     ca: "Consulta OAI conclosa — {entity}", eo: "Konsulto OAI sukcesa — {entity}",
-    nl: "OAI-raadpleging geslaagd — {entity}", el: "Η διαβούλευση OAI ολοκληρώθηκε — {entity}"
+    nl: "OAI-raadpleging geslaagd — {entity}", el: "Η διαβούλευση OAI ολοκληρώθηκε — {entity}",
+    ro: "Consultare OAI încheiată cu acord — {entity}"
   },
   "oai.resolvedOpen.intro": {
     "pt-BR": "A consulta para {entity} é unânime: a rede está aberta à colheita.",
@@ -7673,14 +8297,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La consulta per a {entity} és unànime: la xarxa està oberta a la collita.",
     eo: "La konsulto por {entity} estas unuanima: la reto estas malfermita al rikoltado.",
     nl: "De raadpleging voor {entity} is unaniem: het netwerk staat open voor oogst.",
-    el: "Η διαβούλευση για {entity} είναι ομόφωνη: το δίκτυο είναι ανοιχτό σε συγκομιδή."
+    el: "Η διαβούλευση για {entity} είναι ομόφωνη: το δίκτυο είναι ανοιχτό σε συγκομιδή.",
+    ro: "Consultarea pentru {entity} este unanimă: rețeaua este deschisă recoltării."
   },
   "oai.resolvedRefused.sub": {
     "pt-BR": "Consulta OAI encerrada — {entity}", fr: "Consultation OAI close — {entity}",
     es: "Consulta OAI cerrada — {entity}", en: "OAI consultation closed — {entity}",
     it: "Consultazione OAI chiusa — {entity}", de: "OAI-Abstimmung abgelehnt — {entity}",
     ca: "Consulta OAI tancada — {entity}", eo: "Konsulto OAI fermita — {entity}",
-    nl: "OAI-raadpleging gesloten — {entity}", el: "Η διαβούλευση OAI έκλεισε — {entity}"
+    nl: "OAI-raadpleging gesloten — {entity}", el: "Η διαβούλευση OAI έκλεισε — {entity}",
+    ro: "Consultare OAI închisă — {entity}"
   },
   "oai.resolvedRefused.intro": {
     "pt-BR": "A consulta para {entity} foi bloqueada por um recuso: a rede não está aberta.",
@@ -7692,14 +8318,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La consulta per a {entity} ha estat bloquejada per un rebuig: la xarxa no està oberta.",
     eo: "La konsulto por {entity} estis blokita de rifuzo: la reto ne estas malfermita.",
     nl: "De raadpleging voor {entity} is geblokkeerd door een weigering: het netwerk is niet opengesteld.",
-    el: "Η διαβούλευση για {entity} μπλοκαρίστηκε από μία άρνηση: το δίκτυο δεν ανοίγει."
+    el: "Η διαβούλευση για {entity} μπλοκαρίστηκε από μία άρνηση: το δίκτυο δεν ανοίγει.",
+    ro: "Consultarea pentru {entity} a fost blocată de un refuz: rețeaua nu este deschisă."
   },
   "oai.closed.sub": {
     "pt-BR": "Abertura OAI fechada — {target}", fr: "Ouverture OAI refermée — {target}",
     es: "Apertura OAI cerrada — {target}", en: "OAI opening closed — {target}",
     it: "Apertura OAI chiusa — {target}", de: "OAI-Öffnung geschlossen — {target}",
     ca: "Obertura OAI tancada — {target}", eo: "Malfermo OAI fermita — {target}",
-    nl: "OAI-openstelling gesloten — {target}", el: "Το άνοιγμα OAI έκλεισε — {target}"
+    nl: "OAI-openstelling gesloten — {target}", el: "Το άνοιγμα OAI έκλεισε — {target}",
+    ro: "Deschidere OAI închisă — {target}"
   },
   "oai.closed.intro": {
     "pt-BR": "Uma abertura OAI referente a {target} foi fechada.",
@@ -7711,16 +8339,19 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una obertura OAI relativa a {target} s'ha tancat.",
     eo: "Malfermo OAI koncernanta {target} estis fermita.",
     nl: "Een OAI-openstelling met betrekking tot {target} is gesloten.",
-    el: "Ένα άνοιγμα OAI σχετικά με {target} έκλεισε."
+    el: "Ένα άνοιγμα OAI σχετικά με {target} έκλεισε.",
+    ro: "O deschidere OAI privind {target} a fost închisă."
   },
   "oai.networkWord": {
     "pt-BR": "a rede", fr: "le réseau", es: "la red", en: "the network", it: "la rete",
-    de: "das Netz", ca: "la xarxa", eo: "la reto", nl: "het netwerk", el: "το δίκτυο"
+    de: "das Netz", ca: "la xarxa", eo: "la reto", nl: "het netwerk", el: "το δίκτυο",
+    ro: "rețeaua"
   },
   "oai.cta": {
     "pt-BR": "Abrir na Rede", fr: "Ouvrir dans Réseau", es: "Abrir en Red", en: "Open in Network",
     it: "Apri in Rete", de: "Im Netz öffnen", ca: "Obrir a Xarxa", eo: "Malfermi en Reto",
-    nl: "Openen in Netwerk", el: "Άνοιγμα στο Δίκτυο"
+    nl: "Openen in Netwerk", el: "Άνοιγμα στο Δίκτυο",
+    ro: "Deschide în Rețea"
   },
 
   // ========================================================================
@@ -7732,7 +8363,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "Solicitud de compartición digital — {book}", en: "Digital sharing request — {book}",
     it: "Richiesta di condivisione digitale — {book}", de: "Anfrage zur digitalen Teilung — {book}",
     ca: "Sol·licitud de compartició digital — {book}", eo: "Peto de cifereca kunhavigo — {book}",
-    nl: "Verzoek om digitaal delen — {book}", el: "Αίτημα ψηφιακής κοινοποίησης — {book}"
+    nl: "Verzoek om digitaal delen — {book}", el: "Αίτημα ψηφιακής κοινοποίησης — {book}",
+    ro: "Cerere de partajare digitală — {book}"
   },
   "ill.requested.intro": {
     "pt-BR": "{requester} solicita o compartilhamento digital do documento « {book} ». Cabe a você aceitar, recusar ou sinalizar a indisponibilidade.",
@@ -7744,13 +8376,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{requester} sol·licita la compartició digital del document « {book} ». Et toca acceptar, rebutjar o assenyalar la indisponibilitat.",
     eo: "{requester} petas la ciferecan kunhavigon de la dokumento « {book} ». Vi povas akcepti, rifuzi aŭ signali nedisponeblon.",
     nl: "{requester} vraagt om het digitaal delen van « {book} ». Aan jou om te accepteren, te weigeren of als onbeschikbaar te melden.",
-    el: "Η/Ο {requester} ζητά την ψηφιακή κοινοποίηση του τεκμηρίου « {book} ». Σε εσένα να αποδεχθείς, να αρνηθείς ή να δηλώσεις μη διαθεσιμότητα."
+    el: "Η/Ο {requester} ζητά την ψηφιακή κοινοποίηση του τεκμηρίου « {book} ». Σε εσένα να αποδεχθείς, να αρνηθείς ή να δηλώσεις μη διαθεσιμότητα.",
+    ro: "{requester} solicită partajarea digitală a documentului „{book}”. Tu decizi dacă accepți, refuzi sau semnalezi că nu este disponibil."
   },
   "ill.accepted.sub": {
     "pt-BR": "Compartilhamento aceito — {book}", fr: "Partage accepté — {book}", es: "Compartición aceptada — {book}",
     en: "Sharing accepted — {book}", it: "Condivisione accettata — {book}", de: "Teilung angenommen — {book}",
     ca: "Compartició acceptada — {book}", eo: "Kunhavigo akceptita — {book}",
-    nl: "Delen geaccepteerd — {book}", el: "Η κοινοποίηση έγινε δεκτή — {book}"
+    nl: "Delen geaccepteerd — {book}", el: "Η κοινοποίηση έγινε δεκτή — {book}",
+    ro: "Partajare acceptată — {book}"
   },
   "ill.accepted.intro": {
     "pt-BR": "{source} aceitou seu pedido de compartilhamento para « {book} ». A digitalização segue.",
@@ -7762,13 +8396,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{source} ha acceptat la teva sol·licitud de compartició per a « {book} ». La digitalització segueix.",
     eo: "{source} akceptis vian peton de kunhavigo por « {book} ». La ciferecigo sekvas.",
     nl: "{source} heeft je deelverzoek voor « {book} » geaccepteerd. Digitalisering volgt.",
-    el: "Η/Ο {source} αποδέχθηκε το αίτημά σου για « {book} ». Ακολουθεί η ψηφιοποίηση."
+    el: "Η/Ο {source} αποδέχθηκε το αίτημά σου για « {book} ». Ακολουθεί η ψηφιοποίηση.",
+    ro: "{source} a acceptat cererea ta de partajare pentru „{book}”. Urmează digitalizarea."
   },
   "ill.refused.sub": {
     "pt-BR": "Compartilhamento recusado — {book}", fr: "Partage refusé — {book}", es: "Compartición rechazada — {book}",
     en: "Sharing refused — {book}", it: "Condivisione rifiutata — {book}", de: "Teilung abgelehnt — {book}",
     ca: "Compartició rebutjada — {book}", eo: "Kunhavigo rifuzita — {book}",
-    nl: "Delen geweigerd — {book}", el: "Η κοινοποίηση απορρίφθηκε — {book}"
+    nl: "Delen geweigerd — {book}", el: "Η κοινοποίηση απορρίφθηκε — {book}",
+    ro: "Partajare refuzată — {book}"
   },
   "ill.refused.intro": {
     "pt-BR": "{source} recusou seu pedido de compartilhamento para « {book} ». Motivo: {reason}",
@@ -7780,14 +8416,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{source} ha rebutjat la teva sol·licitud de compartició per a « {book} ». Motiu: {reason}",
     eo: "{source} rifuzis vian peton de kunhavigo por « {book} ». Kialo: {reason}",
     nl: "{source} heeft je deelverzoek voor « {book} » geweigerd. Reden: {reason}",
-    el: "Η/Ο {source} αρνήθηκε το αίτημά σου για « {book} ». Αιτία: {reason}"
+    el: "Η/Ο {source} αρνήθηκε το αίτημά σου για « {book} ». Αιτία: {reason}",
+    ro: "{source} a refuzat cererea ta de partajare pentru „{book}”. Motiv: {reason}"
   },
   "ill.unavailable.sub": {
     "pt-BR": "Documento indisponível — {book}", fr: "Document indisponible — {book}",
     es: "Documento no disponible — {book}", en: "Document unavailable — {book}",
     it: "Documento non disponibile — {book}", de: "Dokument nicht verfügbar — {book}",
     ca: "Document no disponible — {book}", eo: "Dokumento nedisponebla — {book}",
-    nl: "Document niet beschikbaar — {book}", el: "Μη διαθέσιμο τεκμήριο — {book}"
+    nl: "Document niet beschikbaar — {book}", el: "Μη διαθέσιμο τεκμήριο — {book}",
+    ro: "Document indisponibil — {book}"
   },
   "ill.unavailable.intro": {
     "pt-BR": "{source} sinaliza que « {book} » está indisponível para compartilhamento no momento.",
@@ -7799,14 +8437,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{source} assenyala que « {book} » no està disponible per compartir de moment.",
     eo: "{source} signalas, ke « {book} » estas nuntempe nedisponebla por kunhavigo.",
     nl: "{source} meldt dat « {book} » momenteel niet beschikbaar is om te delen.",
-    el: "Η/Ο {source} αναφέρει ότι το « {book} » δεν είναι διαθέσιμο για κοινοποίηση αυτή τη στιγμή."
+    el: "Η/Ο {source} αναφέρει ότι το « {book} » δεν είναι διαθέσιμο για κοινοποίηση αυτή τη στιγμή.",
+    ro: "{source} semnalează că „{book}” nu este disponibil pentru partajare deocamdată."
   },
   "ill.transmitted.sub": {
     "pt-BR": "Documento transmitido — {book}", fr: "Document transmis — {book}",
     es: "Documento transmitido — {book}", en: "Document transmitted — {book}",
     it: "Documento trasmesso — {book}", de: "Dokument übermittelt — {book}",
     ca: "Document transmès — {book}", eo: "Dokumento transdonita — {book}",
-    nl: "Document verzonden — {book}", el: "Το τεκμήριο διαβιβάστηκε — {book}"
+    nl: "Document verzonden — {book}", el: "Το τεκμήριο διαβιβάστηκε — {book}",
+    ro: "Document transmis — {book}"
   },
   "ill.transmitted.intro": {
     "pt-BR": "{source} transmitiu « {book} ». Você pode consultá-lo no espaço de compartilhamento.",
@@ -7818,13 +8458,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{source} ha transmès « {book} ». El pots consultar a l'espai de compartició.",
     eo: "{source} transdonis « {book} ». Vi povas konsulti ĝin en la kunhaviga spaco.",
     nl: "{source} heeft « {book} » verzonden. Je kunt het bekijken in de deelruimte.",
-    el: "Η/Ο {source} διαβίβασε το « {book} ». Μπορείς να το δεις στον χώρο κοινοποίησης."
+    el: "Η/Ο {source} διαβίβασε το « {book} ». Μπορείς να το δεις στον χώρο κοινοποίησης.",
+    ro: "{source} a transmis „{book}”. Îl poți consulta în spațiul de partajare."
   },
   "ill.closed.sub": {
     "pt-BR": "Compartilhamento encerrado — {book}", fr: "Partage clôturé — {book}", es: "Compartición cerrada — {book}",
     en: "Sharing closed — {book}", it: "Condivisione chiusa — {book}", de: "Teilung abgeschlossen — {book}",
     ca: "Compartició tancada — {book}", eo: "Kunhavigo fermita — {book}",
-    nl: "Delen afgesloten — {book}", el: "Η κοινοποίηση έκλεισε — {book}"
+    nl: "Delen afgesloten — {book}", el: "Η κοινοποίηση έκλεισε — {book}",
+    ro: "Partajare încheiată — {book}"
   },
   "ill.closed.intro": {
     "pt-BR": "O compartilhamento digital de « {book} » foi encerrado.",
@@ -7836,12 +8478,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La compartició digital de « {book} » s'ha tancat.",
     eo: "La cifereca kunhavigo de « {book} » estis fermita.",
     nl: "Het digitaal delen van « {book} » is afgesloten.",
-    el: "Η ψηφιακή κοινοποίηση του « {book} » έκλεισε."
+    el: "Η ψηφιακή κοινοποίηση του « {book} » έκλεισε.",
+    ro: "Partajarea digitală pentru „{book}” s-a încheiat."
   },
   "ill.cta": {
     "pt-BR": "Abrir o compartilhamento", fr: "Ouvrir le partage", es: "Abrir la compartición", en: "Open the share",
     it: "Apri la condivisione", de: "Teilung öffnen", ca: "Obrir la compartició", eo: "Malfermi la kunhavigon",
-    nl: "Delen openen", el: "Άνοιγμα κοινοποίησης"
+    nl: "Delen openen", el: "Άνοιγμα κοινοποίησης",
+    ro: "Deschide partajarea"
   },
 
   // ── Notes système consulta/réserve (Route B) ──────────────────────────────
@@ -7859,7 +8503,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de consulta creada des del compte de lector-a-e.",
     eo: "Konsultpeto kreita el la konto de legant-in-o.",
     nl: "Aanvraag voor raadpleging ter plaatse aangemaakt vanuit het lezersaccount.",
-    el: "Αίτημα επιτόπιας μελέτης που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας."
+    el: "Αίτημα επιτόπιας μελέτης που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας.",
+    ro: "Cerere de consultare creată din contul de cititor/cititoare."
   },
   "account.reserve.noteLoan": {
     "pt-BR": "Reserva criada pela conta do(a-e) leitor(a-e).",
@@ -7871,7 +8516,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva creada des del compte de lector-a-e.",
     eo: "Rezervo kreita el la konto de legant-in-o.",
     nl: "Reservering aangemaakt vanuit het lezersaccount.",
-    el: "Κράτηση που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας."
+    el: "Κράτηση που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας.",
+    ro: "Rezervare creată din contul de cititor/cititoare."
   },
   "catalog.quickReserve.note": {
     "pt-BR": "Reserva criada a partir do catálogo.",
@@ -7883,7 +8529,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva creada des del catàleg.",
     eo: "Rezervo kreita el la katalogo.",
     nl: "Reservering aangemaakt vanuit de catalogus.",
-    el: "Η κράτηση δημιουργήθηκε από τον κατάλογο."
+    el: "Η κράτηση δημιουργήθηκε από τον κατάλογο.",
+    ro: "Rezervare creată din catalog."
   },
   "catalog.quickConsulta.note": {
     "pt-BR": "Pedido feito desde a busca",
@@ -7895,7 +8542,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud feta des de la cerca",
     eo: "Peto farita el la serĉo",
     nl: "Aangevraagd vanuit de zoekopdracht",
-    el: "Ζητήθηκε από την αναζήτηση"
+    el: "Ζητήθηκε από την αναζήτηση",
+    ro: "Cerere făcută din căutare"
   },
   "book.reserve.consult.note": {
     "pt-BR": "Pedido feito desde a página do documento",
@@ -7907,7 +8555,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud feta des de la fitxa del document",
     eo: "Peto farita el la slipo de la dokumento",
     nl: "Aangevraagd vanaf de documentpagina",
-    el: "Ζητήθηκε από τη σελίδα του τεκμηρίου"
+    el: "Ζητήθηκε από τη σελίδα του τεκμηρίου",
+    ro: "Cerere făcută din fișa documentului"
   },
   "systemNote.consultaReceived": {
     "pt-BR": "Pedido de consulta local recebido.",
@@ -7919,7 +8568,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud de consulta rebuda.",
     eo: "Konsultpeto ricevita.",
     nl: "Aanvraag voor raadpleging ter plaatse ontvangen.",
-    el: "Το αίτημα επιτόπιας μελέτης ελήφθη."
+    el: "Το αίτημα επιτόπιας μελέτης ελήφθη.",
+    ro: "Cerere de consultare locală primită."
   },
   "systemNote.reservaReceived": {
     "pt-BR": "Reserva recebida.",
@@ -7931,7 +8581,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva rebuda.",
     eo: "Rezervo ricevita.",
     nl: "Reservering ontvangen.",
-    el: "Η κράτηση ελήφθη."
+    el: "Η κράτηση ελήφθη.",
+    ro: "Rezervare primită."
   },
   "systemNote.cancelRequestedByReader": {
     "pt-BR": "Cancelamento solicitado pela conta do(a-e) leitor(a-e).",
@@ -7943,7 +8594,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cancel·lació sol·licitada des del compte de lector-a-e.",
     eo: "Nuligo petita el la konto de legant-in-o.",
     nl: "Annulering aangevraagd vanuit het lezersaccount.",
-    el: "Ακύρωση που ζητήθηκε από λογαριασμό αναγνώστη/στριας."
+    el: "Ακύρωση που ζητήθηκε από λογαριασμό αναγνώστη/στριας.",
+    ro: "Anulare cerută din contul de cititor/cititoare."
   },
   "systemNote.cancelledByLibrary": {
     "pt-BR": "Cancelamento efetuado pela biblioteca.",
@@ -7955,7 +8607,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Cancel·lació efectuada per la biblioteca.",
     eo: "Nuligo farita de la biblioteko.",
     nl: "Annulering uitgevoerd door de bibliotheek.",
-    el: "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη."
+    el: "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη.",
+    ro: "Anulare efectuată de bibliotecă."
   },
   "systemNote.consultaExpiredAuto": {
     "pt-BR": "Pedido expirado automaticamente: prazo de validade ultrapassado.",
@@ -7967,7 +8620,8 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sol·licitud expirada automàticament: termini de validesa superat.",
     eo: "Peto aŭtomate eksvalidiĝis: la limdato de valideco pasis.",
     nl: "Aanvraag automatisch verlopen: geldigheidstermijn overschreden.",
-    el: "Το αίτημα έληξε αυτόματα: η προθεσμία ισχύος παρήλθε."
+    el: "Το αίτημα έληξε αυτόματα: η προθεσμία ισχύος παρήλθε.",
+    ro: "Cerere expirată automat: termenul de valabilitate a fost depășit."
   },
   "systemNote.noShowAuto": {
     "pt-BR": "Retirada não realizada no prazo (no-show automático).",
@@ -7979,24 +8633,25 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Recollida no realitzada dins el termini (no-show automàtic).",
     eo: "Repreno ne plenumita ĝustatempe (aŭtomata neapero).",
     nl: "Ophaling niet binnen de termijn voltooid (automatische no-show).",
-    el: "Η παραλαβή δεν ολοκληρώθηκε εντός της προθεσμίας (αυτόματο no-show)."
+    el: "Η παραλαβή δεν ολοκληρώθηκε εντός της προθεσμίας (αυτόματο no-show).",
+    ro: "Ridicare neefectuată în termen (neprezentare automată)."
   },
   // ===== invitation.* — mail d'invitation d'une bibliotheque (27/08/2026) =====
   // Texte francais valide par la coordination ; les neuf autres en sont la
   // declinaison. Registre : « vous » de collectif — on ecrit a une bibliotheque,
   // pas a une personne. Cf. CADRAGE_invitation_bibliotheque_2026-08-27.
-  "invitation.subject": { "pt-BR": "{libraryName} — um convite para entrar na rede AnarBib", fr: "{libraryName} — une invitation à rejoindre le réseau AnarBib", es: "{libraryName} — una invitación a sumarse a la red AnarBib", en: "{libraryName} — an invitation to join the AnarBib network", it: "{libraryName} — un invito a entrare nella rete AnarBib", de: "{libraryName} — eine Einladung, dem AnarBib-Netzwerk beizutreten", ca: "{libraryName} — una invitació a unir-se a la xarxa AnarBib", eo: "{libraryName} — invito aliĝi al la reto AnarBib", nl: "{libraryName} — een uitnodiging om je bij het AnarBib-netwerk aan te sluiten", el: "{libraryName} — μια πρόσκληση να ενταχθείτε στο δίκτυο AnarBib" },
-  "invitation.title": { "pt-BR": "Um convite para entrar na rede", fr: "Une invitation à rejoindre le réseau", es: "Una invitación a sumarse a la red", en: "An invitation to join the network", it: "Un invito a entrare nella rete", de: "Eine Einladung, dem Netzwerk beizutreten", ca: "Una invitació a unir-se a la xarxa", eo: "Invito aliĝi al la reto", nl: "Een uitnodiging om je bij het netwerk aan te sluiten", el: "Μια πρόσκληση να ενταχθείτε στο δίκτυο" },
-  "invitation.greeting": { "pt-BR": "Olá, companheir@s,", fr: "Bonjour camarades,", es: "Hola, compañeres,", en: "Hello comrades,", it: "Ciao compagn*,", de: "Hallo Genoss*innen,", ca: "Hola, companyes i companys,", eo: "Saluton, gekamaradoj,", nl: "Dag kameraden,", el: "Γεια σας, σύντροφοι και συντρόφισσες," },
-  "invitation.intro": { "pt-BR": "A coordenação do AnarBib — rede de bibliotecas libertárias, e sistema integrado para geri-las — convida {libraryName} a entrar na rede.", fr: "La coordination d'AnarBib — réseau de bibliothèques libertaires, et système intégré pour les gérer — invite {libraryName} à rejoindre le réseau.", es: "La coordinación de AnarBib — red de bibliotecas libertarias, y sistema integrado para gestionarlas — invita a {libraryName} a sumarse a la red.", en: "The AnarBib coordination — a network of libertarian libraries, and an integrated system to run them — invites {libraryName} to join the network.", it: "Il coordinamento di AnarBib — rete di biblioteche libertarie, e sistema integrato per gestirle — invita {libraryName} a entrare nella rete.", de: "Die Koordination von AnarBib — Netzwerk libertärer Bibliotheken und integriertes System zu ihrer Verwaltung — lädt {libraryName} ein, dem Netzwerk beizutreten.", ca: "La coordinació d'AnarBib — xarxa de biblioteques llibertàries, i sistema integrat per gestionar-les — convida {libraryName} a unir-se a la xarxa.", eo: "La kunordigo de AnarBib — reto de liberecanaj bibliotekoj, kaj integrita sistemo por administri ilin — invitas {libraryName} aliĝi al la reto.", nl: "De coördinatie van AnarBib — netwerk van libertaire bibliotheken, en geïntegreerd systeem om ze te beheren — nodigt {libraryName} uit om zich bij het netwerk aan te sluiten.", el: "Ο συντονισμός του AnarBib — δίκτυο ελευθεριακών βιβλιοθηκών και ολοκληρωμένο σύστημα για τη διαχείρισή τους — προσκαλεί τη {libraryName} να ενταχθεί στο δίκτυο." },
-  "invitation.cta": { "pt-BR": "Responder ao convite", fr: "Répondre à l'invitation", es: "Responder a la invitación", en: "Respond to the invitation", it: "Rispondere all'invito", de: "Auf die Einladung antworten", ca: "Respondre a la invitació", eo: "Respondi al la invito", nl: "Op de uitnodiging reageren", el: "Απάντησε στην πρόσκληση" },
-  "invitation.validity": { "pt-BR": "Link válido até {date}.", fr: "Lien valable jusqu'au {date}.", es: "Enlace válido hasta el {date}.", en: "Link valid until {date}.", it: "Link valido fino al {date}.", de: "Link gültig bis {date}.", ca: "Enllaç vàlid fins al {date}.", eo: "Ligilo valida ĝis {date}.", nl: "Link geldig tot {date}.", el: "Ο σύνδεσμος ισχύει έως {date}." },
-  "invitation.whatOpens": { "pt-BR": "O que esse link abre: quem o seguir cria a sua conta. Uma conta pessoal, não uma conta de biblioteca — é ela que vai carregar o pedido, receber as nossas respostas e, se a biblioteca entrar, o mandato de coordenação. Depois preenche um formulário que descreve a sua biblioteca e o modo como vocês já a fazem viver: são vocês que descrevem o funcionamento, e o aplicativo se adapta, não o contrário.", fr: "Ce que ce lien ouvre : la personne qui le suit crée son compte. Un compte personnel, pas un compte de bibliothèque — c'est lui qui portera la demande, recevra nos réponses et, si la bibliothèque entre, le mandat de coordination. Elle remplit ensuite un formulaire qui décrit votre bibliothèque et la façon dont vous la faites déjà vivre : c'est vous qui décrivez votre fonctionnement, l'application s'y adapte, et non l'inverse.", es: "Lo que abre este enlace: quien lo siga crea su cuenta. Una cuenta personal, no una cuenta de biblioteca — es la que va a llevar el pedido, recibir nuestras respuestas y, si la biblioteca entra, el mandato de coordinación. Luego completa un formulario que describe su biblioteca y la forma en que ustedes ya la hacen vivir: son ustedes quienes describen su funcionamiento, y la aplicación se adapta, no al revés.", en: "What this link opens: whoever follows it creates their own account. A personal account, not a library account — it carries the request, receives our replies and, if the library joins, the coordination mandate. They then fill in a form describing your library and the way you already make it live: you describe how you work, and the application adapts to it, not the other way round.", it: "Cosa apre questo link: chi lo segue crea il proprio account. Un account personale, non un account di biblioteca — è quello che porterà la richiesta, riceverà le nostre risposte e, se la biblioteca entra, il mandato di coordinamento. Poi compila un modulo che descrive la vostra biblioteca e il modo in cui la fate già vivere: siete voi a descrivere il vostro funzionamento, e l'applicazione vi si adatta, non il contrario.", de: "Was dieser Link öffnet: Wer ihm folgt, erstellt ein eigenes Konto. Ein persönliches Konto, kein Bibliothekskonto — es trägt den Antrag, empfängt unsere Antworten und, wenn die Bibliothek beitritt, das Koordinationsmandat. Danach füllt diese Person ein Formular aus, das eure Bibliothek und die Art beschreibt, wie ihr sie schon jetzt lebendig haltet: ihr beschreibt eure Arbeitsweise, und die Anwendung passt sich ihr an, nicht umgekehrt.", ca: "El que obre aquest enllaç: qui el segueixi crea el seu compte. Un compte personal, no un compte de biblioteca — és el que portarà la sol·licitud, rebrà les nostres respostes i, si la biblioteca hi entra, el mandat de coordinació. Després omple un formulari que descriu la vostra biblioteca i la manera com ja la feu viure: sou vosaltres qui descriviu el vostre funcionament, i l'aplicació s'hi adapta, no a l'inrevés.", eo: "Kion malfermas ĉi tiu ligilo: kiu sekvas ĝin kreas sian propran konton. Personan konton, ne bibliotekan konton — ĝi portas la peton, ricevas niajn respondojn kaj, se la biblioteko aliĝas, la kunordigan mandaton. Poste tiu persono plenigas formularon priskribantan vian bibliotekon kaj la manieron kiel vi jam vivigas ĝin: vi priskribas vian funkciadon, kaj la aplikaĵo adaptiĝas al ĝi, ne inverse.", nl: "Wat deze link opent: wie hem volgt, maakt zijn eigen account aan. Een persoonlijke account, geen bibliotheekaccount — die draagt de aanvraag, ontvangt onze antwoorden en, als de bibliotheek toetreedt, het coördinatiemandaat. Daarna vult die persoon een formulier in dat jullie bibliotheek beschrijft en de manier waarop jullie haar al laten leven: jullie beschrijven jullie werkwijze, en de toepassing past zich daaraan aan, niet andersom.", el: "Τι ανοίγει αυτός ο σύνδεσμος: όποιος τον ακολουθήσει δημιουργεί τον δικό του λογαριασμό. Έναν προσωπικό λογαριασμό, όχι λογαριασμό βιβλιοθήκης — αυτός κρατά το αίτημα, λαμβάνει τις απαντήσεις μας και, αν η βιβλιοθήκη ενταχθεί, την εντολή συντονισμού. Έπειτα συμπληρώνει μια φόρμα που περιγράφει τη βιβλιοθήκη σας και τον τρόπο με τον οποίο ήδη τη ζωντανεύετε: εσείς περιγράφετε τη λειτουργία σας, και η εφαρμογή προσαρμόζεται σε αυτήν, όχι το αντίστροφο." },
-  "invitation.examined": { "pt-BR": "Esse pedido é depois examinado coletivamente pela coordenação, que conversa com vocês antes de qualquer decisão. Nós convidamos vocês; não admitimos de antemão.", fr: "Cette demande est ensuite examinée collectivement par la coordination, qui en discute avec vous avant toute décision. Nous vous invitons ; nous ne vous admettons pas d'avance.", es: "Ese pedido es luego examinado colectivamente por la coordinación, que conversa con ustedes antes de cualquier decisión. Les invitamos; no les admitimos de antemano.", en: "That request is then examined collectively by the coordination, which talks it through with you before any decision. We are inviting you; we are not admitting you in advance.", it: "Quella richiesta viene poi esaminata collettivamente dal coordinamento, che ne parla con voi prima di ogni decisione. Vi invitiamo; non vi ammettiamo in anticipo.", de: "Dieser Antrag wird anschließend gemeinsam von der Koordination geprüft, die vor jeder Entscheidung mit euch spricht. Wir laden euch ein; wir nehmen euch nicht im Voraus auf.", ca: "Aquesta sol·licitud és després examinada col·lectivament per la coordinació, que en parla amb vosaltres abans de qualsevol decisió. Us convidem; no us admetem per endavant.", eo: "Tiu peto poste estas kolektive ekzamenata de la kunordigo, kiu priparolas ĝin kun vi antaŭ ĉia decido. Ni invitas vin; ni ne akceptas vin anticipe.", nl: "Die aanvraag wordt vervolgens collectief onderzocht door de coördinatie, die er met jullie over spreekt vóór enige beslissing. We nodigen jullie uit; we laten jullie niet op voorhand toe.", el: "Αυτό το αίτημα εξετάζεται στη συνέχεια συλλογικά από τον συντονισμό, ο οποίος το συζητά μαζί σας πριν από κάθε απόφαση. Σας προσκαλούμε· δεν σας δεχόμαστε εκ των προτέρων." },
-  "invitation.noPressure": { "pt-BR": "Nada é obrigatório. Não dar seguimento é uma resposta, e ela nos serve: o link vai expirar sozinho, sem cobrança. Se preferirem olhar primeiro, o aplicativo está aberto à consulta ({appUrl}), e vocês podem nos escrever em {contactEmail}.", fr: "Rien n'est impératif. Ne pas donner suite est une réponse, et elle nous convient : le lien expirera de lui-même, sans relance. Si vous préférez d'abord regarder, l'application est ouverte à la consultation ({appUrl}), et vous pouvez nous écrire à {contactEmail}.", es: "Nada es obligatorio. No dar seguimiento es una respuesta, y nos sirve: el enlace va a expirar solo, sin insistencia. Si prefieren mirar primero, la aplicación está abierta a la consulta ({appUrl}), y pueden escribirnos a {contactEmail}.", en: "Nothing here is binding. Not following up is an answer, and it suits us: the link will expire on its own, with no reminder. If you would rather look first, the application is open to browse ({appUrl}), and you can write to us at {contactEmail}.", it: "Niente è vincolante. Non dare seguito è una risposta, e ci va bene: il link scadrà da solo, senza solleciti. Se preferite prima guardare, l'applicazione è aperta alla consultazione ({appUrl}), e potete scriverci a {contactEmail}.", de: "Nichts davon ist verpflichtend. Nicht zu antworten ist eine Antwort, und sie ist uns recht: der Link läuft von selbst ab, ohne Erinnerung. Wenn ihr lieber zuerst schauen wollt, die Anwendung steht zum Stöbern offen ({appUrl}), und ihr könnt uns unter {contactEmail} schreiben.", ca: "Res no és obligatori. No donar-hi resposta és una resposta, i ens va bé: l'enllaç caducarà tot sol, sense insistència. Si preferiu mirar primer, l'aplicació és oberta a la consulta ({appUrl}), i ens podeu escriure a {contactEmail}.", eo: "Nenio estas deviga. Ne respondi estas respondo, kaj ĝi konvenas al ni: la ligilo mem eksvalidiĝos, sen memorigo. Se vi preferas unue rigardi, la aplikaĵo estas malferma al konsulto ({appUrl}), kaj vi povas skribi al ni ĉe {contactEmail}.", nl: "Niets is verplicht. Er geen gevolg aan geven is een antwoord, en dat is voor ons prima: de link verloopt vanzelf, zonder herinnering. Als jullie liever eerst kijken, de toepassing staat open om te bekijken ({appUrl}), en jullie kunnen ons schrijven op {contactEmail}.", el: "Τίποτα δεν είναι υποχρεωτικό. Το να μην απαντήσετε είναι μια απάντηση, και μας ταιριάζει: ο σύνδεσμος θα λήξει από μόνος του, χωρίς υπενθύμιση. Αν προτιμάτε να δείτε πρώτα, η εφαρμογή είναι ανοιχτή για περιήγηση ({appUrl}), και μπορείτε να μας γράψετε στο {contactEmail}." },
-  "invitation.signature": { "pt-BR": "Saudações libertárias,<br>A coordenação do AnarBib", fr: "Salutations libertaires,<br>La coordination d'AnarBib", es: "Saludos libertarios,<br>La coordinación de AnarBib", en: "Libertarian greetings,<br>The AnarBib coordination", it: "Saluti libertari,<br>Il coordinamento di AnarBib", de: "Libertäre Grüße,<br>Die Koordination von AnarBib", ca: "Salutacions llibertàries,<br>La coordinació d'AnarBib", eo: "Liberecanaj salutoj,<br>La kunordigo de AnarBib", nl: "Libertaire groeten,<br>De coördinatie van AnarBib", el: "Ελευθεριακοί χαιρετισμοί,<br>Ο συντονισμός του AnarBib" },
-  "invitation.fallback": { "pt-BR": "Se o botão não funcionar, copiem este link no navegador:", fr: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", es: "Si el botón no funciona, copien este enlace en el navegador:", en: "If the button does not work, copy this link into your browser:", it: "Se il pulsante non funziona, copiate questo link nel browser:", de: "Falls die Schaltfläche nicht funktioniert, kopiert diesen Link in euren Browser:", ca: "Si el botó no funciona, copieu aquest enllaç al navegador:", eo: "Se la butono ne funkcias, kopiu ĉi tiun ligilon en vian retumilon:", nl: "Als de knop niet werkt, kopieer deze link in jullie browser:", el: "Αν το κουμπί δεν λειτουργεί, αντιγράψτε αυτόν τον σύνδεσμο στον περιηγητή σας:" },
-  "invitation.accompanying": { "pt-BR": "Recado da coordenação:", fr: "Mot de la coordination :", es: "Mensaje de la coordinación:", en: "A word from the coordination:", it: "Messaggio del coordinamento:", de: "Ein Wort der Koordination:", ca: "Missatge de la coordinació:", eo: "Vorto de la kunordigo:", nl: "Bericht van de coördinatie:", el: "Μήνυμα από τον συντονισμό:" },
+  "invitation.subject": { "pt-BR": "{libraryName} — um convite para entrar na rede AnarBib", fr: "{libraryName} — une invitation à rejoindre le réseau AnarBib", es: "{libraryName} — una invitación a sumarse a la red AnarBib", en: "{libraryName} — an invitation to join the AnarBib network", it: "{libraryName} — un invito a entrare nella rete AnarBib", de: "{libraryName} — eine Einladung, dem AnarBib-Netzwerk beizutreten", ca: "{libraryName} — una invitació a unir-se a la xarxa AnarBib", eo: "{libraryName} — invito aliĝi al la reto AnarBib", nl: "{libraryName} — een uitnodiging om je bij het AnarBib-netwerk aan te sluiten", el: "{libraryName} — μια πρόσκληση να ενταχθείτε στο δίκτυο AnarBib", ro: "{libraryName} — o invitație de a vă alătura rețelei AnarBib" },
+  "invitation.title": { "pt-BR": "Um convite para entrar na rede", fr: "Une invitation à rejoindre le réseau", es: "Una invitación a sumarse a la red", en: "An invitation to join the network", it: "Un invito a entrare nella rete", de: "Eine Einladung, dem Netzwerk beizutreten", ca: "Una invitació a unir-se a la xarxa", eo: "Invito aliĝi al la reto", nl: "Een uitnodiging om je bij het netwerk aan te sluiten", el: "Μια πρόσκληση να ενταχθείτε στο δίκτυο", ro: "O invitație de a vă alătura rețelei" },
+  "invitation.greeting": { "pt-BR": "Olá, companheir@s,", fr: "Bonjour camarades,", es: "Hola, compañeres,", en: "Hello comrades,", it: "Ciao compagn*,", de: "Hallo Genoss*innen,", ca: "Hola, companyes i companys,", eo: "Saluton, gekamaradoj,", nl: "Dag kameraden,", el: "Γεια σας, σύντροφοι και συντρόφισσες,", ro: "Salut, tovarăși și tovarășe," },
+  "invitation.intro": { "pt-BR": "A coordenação do AnarBib — rede de bibliotecas libertárias, e sistema integrado para geri-las — convida {libraryName} a entrar na rede.", fr: "La coordination d'AnarBib — réseau de bibliothèques libertaires, et système intégré pour les gérer — invite {libraryName} à rejoindre le réseau.", es: "La coordinación de AnarBib — red de bibliotecas libertarias, y sistema integrado para gestionarlas — invita a {libraryName} a sumarse a la red.", en: "The AnarBib coordination — a network of libertarian libraries, and an integrated system to run them — invites {libraryName} to join the network.", it: "Il coordinamento di AnarBib — rete di biblioteche libertarie, e sistema integrato per gestirle — invita {libraryName} a entrare nella rete.", de: "Die Koordination von AnarBib — Netzwerk libertärer Bibliotheken und integriertes System zu ihrer Verwaltung — lädt {libraryName} ein, dem Netzwerk beizutreten.", ca: "La coordinació d'AnarBib — xarxa de biblioteques llibertàries, i sistema integrat per gestionar-les — convida {libraryName} a unir-se a la xarxa.", eo: "La kunordigo de AnarBib — reto de liberecanaj bibliotekoj, kaj integrita sistemo por administri ilin — invitas {libraryName} aliĝi al la reto.", nl: "De coördinatie van AnarBib — netwerk van libertaire bibliotheken, en geïntegreerd systeem om ze te beheren — nodigt {libraryName} uit om zich bij het netwerk aan te sluiten.", el: "Ο συντονισμός του AnarBib — δίκτυο ελευθεριακών βιβλιοθηκών και ολοκληρωμένο σύστημα για τη διαχείρισή τους — προσκαλεί τη {libraryName} να ενταχθεί στο δίκτυο.", ro: "Echipa de coordonare AnarBib — rețea de biblioteci libertare și sistem integrat pentru gestionarea lor — invită {libraryName} să se alăture rețelei." },
+  "invitation.cta": { "pt-BR": "Responder ao convite", fr: "Répondre à l'invitation", es: "Responder a la invitación", en: "Respond to the invitation", it: "Rispondere all'invito", de: "Auf die Einladung antworten", ca: "Respondre a la invitació", eo: "Respondi al la invito", nl: "Op de uitnodiging reageren", el: "Απάντησε στην πρόσκληση", ro: "Răspunde la invitație" },
+  "invitation.validity": { "pt-BR": "Link válido até {date}.", fr: "Lien valable jusqu'au {date}.", es: "Enlace válido hasta el {date}.", en: "Link valid until {date}.", it: "Link valido fino al {date}.", de: "Link gültig bis {date}.", ca: "Enllaç vàlid fins al {date}.", eo: "Ligilo valida ĝis {date}.", nl: "Link geldig tot {date}.", el: "Ο σύνδεσμος ισχύει έως {date}.", ro: "Link valabil până la {date}." },
+  "invitation.whatOpens": { "pt-BR": "O que esse link abre: quem o seguir cria a sua conta. Uma conta pessoal, não uma conta de biblioteca — é ela que vai carregar o pedido, receber as nossas respostas e, se a biblioteca entrar, o mandato de coordenação. Depois preenche um formulário que descreve a sua biblioteca e o modo como vocês já a fazem viver: são vocês que descrevem o funcionamento, e o aplicativo se adapta, não o contrário.", fr: "Ce que ce lien ouvre : la personne qui le suit crée son compte. Un compte personnel, pas un compte de bibliothèque — c'est lui qui portera la demande, recevra nos réponses et, si la bibliothèque entre, le mandat de coordination. Elle remplit ensuite un formulaire qui décrit votre bibliothèque et la façon dont vous la faites déjà vivre : c'est vous qui décrivez votre fonctionnement, l'application s'y adapte, et non l'inverse.", es: "Lo que abre este enlace: quien lo siga crea su cuenta. Una cuenta personal, no una cuenta de biblioteca — es la que va a llevar el pedido, recibir nuestras respuestas y, si la biblioteca entra, el mandato de coordinación. Luego completa un formulario que describe su biblioteca y la forma en que ustedes ya la hacen vivir: son ustedes quienes describen su funcionamiento, y la aplicación se adapta, no al revés.", en: "What this link opens: whoever follows it creates their own account. A personal account, not a library account — it carries the request, receives our replies and, if the library joins, the coordination mandate. They then fill in a form describing your library and the way you already make it live: you describe how you work, and the application adapts to it, not the other way round.", it: "Cosa apre questo link: chi lo segue crea il proprio account. Un account personale, non un account di biblioteca — è quello che porterà la richiesta, riceverà le nostre risposte e, se la biblioteca entra, il mandato di coordinamento. Poi compila un modulo che descrive la vostra biblioteca e il modo in cui la fate già vivere: siete voi a descrivere il vostro funzionamento, e l'applicazione vi si adatta, non il contrario.", de: "Was dieser Link öffnet: Wer ihm folgt, erstellt ein eigenes Konto. Ein persönliches Konto, kein Bibliothekskonto — es trägt den Antrag, empfängt unsere Antworten und, wenn die Bibliothek beitritt, das Koordinationsmandat. Danach füllt diese Person ein Formular aus, das eure Bibliothek und die Art beschreibt, wie ihr sie schon jetzt lebendig haltet: ihr beschreibt eure Arbeitsweise, und die Anwendung passt sich ihr an, nicht umgekehrt.", ca: "El que obre aquest enllaç: qui el segueixi crea el seu compte. Un compte personal, no un compte de biblioteca — és el que portarà la sol·licitud, rebrà les nostres respostes i, si la biblioteca hi entra, el mandat de coordinació. Després omple un formulari que descriu la vostra biblioteca i la manera com ja la feu viure: sou vosaltres qui descriviu el vostre funcionament, i l'aplicació s'hi adapta, no a l'inrevés.", eo: "Kion malfermas ĉi tiu ligilo: kiu sekvas ĝin kreas sian propran konton. Personan konton, ne bibliotekan konton — ĝi portas la peton, ricevas niajn respondojn kaj, se la biblioteko aliĝas, la kunordigan mandaton. Poste tiu persono plenigas formularon priskribantan vian bibliotekon kaj la manieron kiel vi jam vivigas ĝin: vi priskribas vian funkciadon, kaj la aplikaĵo adaptiĝas al ĝi, ne inverse.", nl: "Wat deze link opent: wie hem volgt, maakt zijn eigen account aan. Een persoonlijke account, geen bibliotheekaccount — die draagt de aanvraag, ontvangt onze antwoorden en, als de bibliotheek toetreedt, het coördinatiemandaat. Daarna vult die persoon een formulier in dat jullie bibliotheek beschrijft en de manier waarop jullie haar al laten leven: jullie beschrijven jullie werkwijze, en de toepassing past zich daaraan aan, niet andersom.", el: "Τι ανοίγει αυτός ο σύνδεσμος: όποιος τον ακολουθήσει δημιουργεί τον δικό του λογαριασμό. Έναν προσωπικό λογαριασμό, όχι λογαριασμό βιβλιοθήκης — αυτός κρατά το αίτημα, λαμβάνει τις απαντήσεις μας και, αν η βιβλιοθήκη ενταχθεί, την εντολή συντονισμού. Έπειτα συμπληρώνει μια φόρμα που περιγράφει τη βιβλιοθήκη σας και τον τρόπο με τον οποίο ήδη τη ζωντανεύετε: εσείς περιγράφετε τη λειτουργία σας, και η εφαρμογή προσαρμόζεται σε αυτήν, όχι το αντίστροφο.", ro: "Ce deschide acest link: persoana care îl urmează își creează contul. Un cont personal, nu un cont de bibliotecă — el va purta cererea, va primi răspunsurile noastre și, dacă biblioteca intră în rețea, mandatul de coordonare. Apoi completează un formular care descrie biblioteca voastră și felul în care o faceți deja să trăiască: voi descrieți cum funcționați, iar aplicația se adaptează, nu invers." },
+  "invitation.examined": { "pt-BR": "Esse pedido é depois examinado coletivamente pela coordenação, que conversa com vocês antes de qualquer decisão. Nós convidamos vocês; não admitimos de antemão.", fr: "Cette demande est ensuite examinée collectivement par la coordination, qui en discute avec vous avant toute décision. Nous vous invitons ; nous ne vous admettons pas d'avance.", es: "Ese pedido es luego examinado colectivamente por la coordinación, que conversa con ustedes antes de cualquier decisión. Les invitamos; no les admitimos de antemano.", en: "That request is then examined collectively by the coordination, which talks it through with you before any decision. We are inviting you; we are not admitting you in advance.", it: "Quella richiesta viene poi esaminata collettivamente dal coordinamento, che ne parla con voi prima di ogni decisione. Vi invitiamo; non vi ammettiamo in anticipo.", de: "Dieser Antrag wird anschließend gemeinsam von der Koordination geprüft, die vor jeder Entscheidung mit euch spricht. Wir laden euch ein; wir nehmen euch nicht im Voraus auf.", ca: "Aquesta sol·licitud és després examinada col·lectivament per la coordinació, que en parla amb vosaltres abans de qualsevol decisió. Us convidem; no us admetem per endavant.", eo: "Tiu peto poste estas kolektive ekzamenata de la kunordigo, kiu priparolas ĝin kun vi antaŭ ĉia decido. Ni invitas vin; ni ne akceptas vin anticipe.", nl: "Die aanvraag wordt vervolgens collectief onderzocht door de coördinatie, die er met jullie over spreekt vóór enige beslissing. We nodigen jullie uit; we laten jullie niet op voorhand toe.", el: "Αυτό το αίτημα εξετάζεται στη συνέχεια συλλογικά από τον συντονισμό, ο οποίος το συζητά μαζί σας πριν από κάθε απόφαση. Σας προσκαλούμε· δεν σας δεχόμαστε εκ των προτέρων.", ro: "Cererea este apoi examinată colectiv de echipa de coordonare, care o discută cu voi înainte de orice decizie. Vă invităm; nu vă admitem dinainte." },
+  "invitation.noPressure": { "pt-BR": "Nada é obrigatório. Não dar seguimento é uma resposta, e ela nos serve: o link vai expirar sozinho, sem cobrança. Se preferirem olhar primeiro, o aplicativo está aberto à consulta ({appUrl}), e vocês podem nos escrever em {contactEmail}.", fr: "Rien n'est impératif. Ne pas donner suite est une réponse, et elle nous convient : le lien expirera de lui-même, sans relance. Si vous préférez d'abord regarder, l'application est ouverte à la consultation ({appUrl}), et vous pouvez nous écrire à {contactEmail}.", es: "Nada es obligatorio. No dar seguimiento es una respuesta, y nos sirve: el enlace va a expirar solo, sin insistencia. Si prefieren mirar primero, la aplicación está abierta a la consulta ({appUrl}), y pueden escribirnos a {contactEmail}.", en: "Nothing here is binding. Not following up is an answer, and it suits us: the link will expire on its own, with no reminder. If you would rather look first, the application is open to browse ({appUrl}), and you can write to us at {contactEmail}.", it: "Niente è vincolante. Non dare seguito è una risposta, e ci va bene: il link scadrà da solo, senza solleciti. Se preferite prima guardare, l'applicazione è aperta alla consultazione ({appUrl}), e potete scriverci a {contactEmail}.", de: "Nichts davon ist verpflichtend. Nicht zu antworten ist eine Antwort, und sie ist uns recht: der Link läuft von selbst ab, ohne Erinnerung. Wenn ihr lieber zuerst schauen wollt, die Anwendung steht zum Stöbern offen ({appUrl}), und ihr könnt uns unter {contactEmail} schreiben.", ca: "Res no és obligatori. No donar-hi resposta és una resposta, i ens va bé: l'enllaç caducarà tot sol, sense insistència. Si preferiu mirar primer, l'aplicació és oberta a la consulta ({appUrl}), i ens podeu escriure a {contactEmail}.", eo: "Nenio estas deviga. Ne respondi estas respondo, kaj ĝi konvenas al ni: la ligilo mem eksvalidiĝos, sen memorigo. Se vi preferas unue rigardi, la aplikaĵo estas malferma al konsulto ({appUrl}), kaj vi povas skribi al ni ĉe {contactEmail}.", nl: "Niets is verplicht. Er geen gevolg aan geven is een antwoord, en dat is voor ons prima: de link verloopt vanzelf, zonder herinnering. Als jullie liever eerst kijken, de toepassing staat open om te bekijken ({appUrl}), en jullie kunnen ons schrijven op {contactEmail}.", el: "Τίποτα δεν είναι υποχρεωτικό. Το να μην απαντήσετε είναι μια απάντηση, και μας ταιριάζει: ο σύνδεσμος θα λήξει από μόνος του, χωρίς υπενθύμιση. Αν προτιμάτε να δείτε πρώτα, η εφαρμογή είναι ανοιχτή για περιήγηση ({appUrl}), και μπορείτε να μας γράψετε στο {contactEmail}.", ro: "Nimic nu e obligatoriu. Să nu dați curs este tot un răspuns, și ne convine: linkul va expira de la sine, fără niciun memento. Dacă preferați să vă uitați mai întâi, aplicația este deschisă pentru consultare ({appUrl}), iar adresa noastră de contact este {contactEmail}." },
+  "invitation.signature": { "pt-BR": "Saudações libertárias,<br>A coordenação do AnarBib", fr: "Salutations libertaires,<br>La coordination d'AnarBib", es: "Saludos libertarios,<br>La coordinación de AnarBib", en: "Libertarian greetings,<br>The AnarBib coordination", it: "Saluti libertari,<br>Il coordinamento di AnarBib", de: "Libertäre Grüße,<br>Die Koordination von AnarBib", ca: "Salutacions llibertàries,<br>La coordinació d'AnarBib", eo: "Liberecanaj salutoj,<br>La kunordigo de AnarBib", nl: "Libertaire groeten,<br>De coördinatie van AnarBib", el: "Ελευθεριακοί χαιρετισμοί,<br>Ο συντονισμός του AnarBib", ro: "Salutări libertare,<br>Echipa de coordonare AnarBib" },
+  "invitation.fallback": { "pt-BR": "Se o botão não funcionar, copiem este link no navegador:", fr: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", es: "Si el botón no funciona, copien este enlace en el navegador:", en: "If the button does not work, copy this link into your browser:", it: "Se il pulsante non funziona, copiate questo link nel browser:", de: "Falls die Schaltfläche nicht funktioniert, kopiert diesen Link in euren Browser:", ca: "Si el botó no funciona, copieu aquest enllaç al navegador:", eo: "Se la butono ne funkcias, kopiu ĉi tiun ligilon en vian retumilon:", nl: "Als de knop niet werkt, kopieer deze link in jullie browser:", el: "Αν το κουμπί δεν λειτουργεί, αντιγράψτε αυτόν τον σύνδεσμο στον περιηγητή σας:", ro: "Dacă butonul nu funcționează, copiați acest link în browserul vostru:" },
+  "invitation.accompanying": { "pt-BR": "Recado da coordenação:", fr: "Mot de la coordination :", es: "Mensaje de la coordinación:", en: "A word from the coordination:", it: "Messaggio del coordinamento:", de: "Ein Wort der Koordination:", ca: "Missatge de la coordinació:", eo: "Vorto de la kunordigo:", nl: "Bericht van de coördinatie:", el: "Μήνυμα από τον συντονισμό:", ro: "Un cuvânt de la echipa de coordonare:" },
 
   // ── Cycle de l'emprunt : rappels, relance, invitation à écrire ────────────
   //
@@ -8020,6 +8675,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Restas tri tagoj — {libraryName}",
     nl: "Nog drie dagen — {libraryName}",
     el: "Απομένουν τρεις μέρες — {libraryName}",
+    ro: "Încă trei zile — {libraryName}",
   },
   "loan.reminder.d3.intro": {
     "pt-BR": "O empréstimo de <b>{title}</b> vence em <b>{dueDate}</b>. Se ainda precisar do livro, dá para renovar pela sua conta; se já terminou, ele volta a ficar disponível para quem estiver esperando.",
@@ -8032,6 +8688,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "La prunto de <b>{title}</b> finiĝas je <b>{dueDate}</b>. Se vi ankoraŭ bezonas ĝin, vi povas renovigi el via konto; se vi finis, la libro denove disponeblas por tiu, kiu atendas ĝin.",
     nl: "Je lening van <b>{title}</b> loopt af op <b>{dueDate}</b>. Heb je het boek nog nodig, dan verleng je het vanuit je account; ben je klaar, dan is het weer beschikbaar voor wie erop wacht.",
     el: "Ο δανεισμός του <b>{title}</b> λήγει στις <b>{dueDate}</b>. Αν το χρειάζεσαι ακόμη, μπορείς να τον ανανεώσεις από τον λογαριασμό σου· αν τελείωσες, το βιβλίο ξαναγίνεται διαθέσιμο για όποια ή όποιον περιμένει.",
+    ro: "Împrumutul pentru <b>{title}</b> expiră pe <b>{dueDate}</b>. Dacă mai ai nevoie de carte, o poți prelungi din contul tău; dacă ai terminat-o, cartea redevine disponibilă pentru următoarea persoană.",
   },
   "loan.reminder.d3.cta": {
     "pt-BR": "Ver meus empréstimos",
@@ -8044,6 +8701,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Vidi miajn pruntojn",
     nl: "Mijn leningen",
     el: "Οι δανεισμοί μου",
+    ro: "Vezi împrumuturile mele",
   },
 
   "loan.reminder.d0.sub": {
@@ -8057,6 +8715,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "La redono estas hodiaŭ — {libraryName}",
     nl: "Vandaag terugbrengen — {libraryName}",
     el: "Η επιστροφή είναι σήμερα — {libraryName}",
+    ro: "Returnarea e azi — {libraryName}",
   },
   "loan.reminder.d0.intro": {
     "pt-BR": "<b>{title}</b> vence hoje. Renovar leva um minuto, e devolver também: a biblioteca funciona porque os livros circulam.",
@@ -8069,6 +8728,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "<b>{title}</b> finiĝas hodiaŭ. Renovigi daŭras unu minuton, kaj redoni ankaŭ: la biblioteko funkcias ĉar la libroj cirkulas.",
     nl: "<b>{title}</b> moet vandaag terug. Verlengen kost een minuut, terugbrengen ook: de bibliotheek werkt doordat boeken circuleren.",
     el: "Το <b>{title}</b> λήγει σήμερα. Η ανανέωση παίρνει ένα λεπτό, το ίδιο και η επιστροφή: η βιβλιοθήκη λειτουργεί επειδή τα βιβλία κυκλοφορούν.",
+    ro: "Termenul pentru <b>{title}</b> expiră azi. Prelungirea durează un minut, returnarea la fel: biblioteca merge pentru că circulă cărțile.",
   },
   "loan.reminder.d0.cta": {
     "pt-BR": "Renovar ou devolver",
@@ -8081,6 +8741,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Renovigi aŭ redoni",
     nl: "Verlengen of terugbrengen",
     el: "Ανανέωση ή επιστροφή",
+    ro: "Prelungește sau returnează",
   },
 
   "loan.overdue.d7.sub": {
@@ -8094,6 +8755,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "{title} estas ĉe vi ekde unu semajno tro",
     nl: "{title} is een week te lang bij jou",
     el: "Το {title} είναι μαζί σου μία εβδομάδα παραπάνω",
+    ro: "{title} stă la tine de o săptămână în plus",
   },
   "loan.overdue.d7.intro": {
     "pt-BR": "<b>{title}</b> deveria ter voltado em <b>{dueDate}</b>. Não é cobrança: é um lembrete de que alguém pode estar esperando por ele. Se houver qualquer dificuldade — o livro sumiu, a semana virou, a vida aconteceu — escreva para a biblioteca. A gente se organiza.",
@@ -8106,6 +8768,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "<b>{title}</b> devis reveni je <b>{dueDate}</b>. Tio ne estas monpostulo: estas memorigo, ke iu eble atendas ĝin. Se io malhelpis — la libro malaperis, la semajno forflugis, la vivo okazis — skribu al la biblioteko. Ni aranĝos.",
     nl: "<b>{title}</b> moest terug op <b>{dueDate}</b>. Dit is geen aanmaning: het is een herinnering dat iemand er misschien op wacht. Loopt er iets — het boek is zoek, de week vloog om, het leven kwam ertussen — schrijf dan naar de bibliotheek. We komen eruit.",
     el: "Το <b>{title}</b> έπρεπε να επιστραφεί στις <b>{dueDate}</b>. Δεν είναι όχληση: είναι μια υπενθύμιση ότι κάποια ή κάποιος μπορεί να το περιμένει. Αν προέκυψε κάτι — χάθηκε το βιβλίο, πέρασε η εβδομάδα, συνέβη η ζωή — γράψε στη βιβλιοθήκη. Θα τα βρούμε.",
+    ro: "<b>{title}</b> trebuia să revină pe <b>{dueDate}</b>. Nu e o somație de recuperare: e doar o amintire că poate cineva așteaptă să-i vină rândul. Dacă a intervenit ceva — cartea a dispărut, săptămâna a zburat, s-a amestecat viața — scrie bibliotecii. Găsim o soluție.",
   },
   "loan.overdue.d7.cta": {
     "pt-BR": "Ver meus empréstimos",
@@ -8118,6 +8781,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Vidi miajn pruntojn",
     nl: "Mijn leningen",
     el: "Οι δανεισμοί μου",
+    ro: "Vezi împrumuturile mele",
   },
 
   // Remplace l'ancien « Como vai a leitura ? », qui posait une question à
@@ -8135,6 +8799,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Noto pri {title}? — {libraryName}",
     nl: "Een notitie over {title}? — {libraryName}",
     el: "Μια σημείωση για το {title}; — {libraryName}",
+    ro: "O notă despre {title}? — {libraryName}",
   },
   "loan.note_invite.intro": {
     "pt-BR": "Você está na metade do empréstimo de <b>{title}</b>. Se o livro deu o que pensar, deixe uma <b>nota de leitura</b> no catálogo da rede: ela aparece na página da obra, sob o pseudônimo que você escolher, e serve a quem pegar o livro depois. Não é resenha nem obrigação — duas linhas já ajudam.",
@@ -8147,6 +8812,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Vi estas ĉe la mezo de via prunto de <b>{title}</b>. Se la libro pensigis vin, lasu <b>legonoton</b> en la katalogo de la reto: ĝi aperas sur la paĝo de la verko, sub la kaŝnomo, kiun vi elektas, kaj utilas al tiu, kiu pruntos ĝin poste. Ĝi estas nek recenzo nek devo — du linioj jam helpas.",
     nl: "Je bent halverwege je lening van <b>{title}</b>. Heeft het boek je aan het denken gezet, laat dan een <b>leesnotitie</b> achter in de catalogus van het netwerk: ze verschijnt op de pagina van het werk, onder het pseudoniem dat je kiest, en helpt wie het na jou leent. Geen recensie en geen plicht — twee regels zijn genoeg.",
     el: "Είσαι στα μισά του δανεισμού του <b>{title}</b>. Αν το βιβλίο σού έδωσε τροφή για σκέψη, άφησε μια <b>σημείωση ανάγνωσης</b> στον κατάλογο του δικτύου: εμφανίζεται στη σελίδα του έργου, με το ψευδώνυμο που θα διαλέξεις, και χρησιμεύει σε όποια ή όποιον το δανειστεί μετά. Δεν είναι κριτική ούτε υποχρέωση — δύο γραμμές αρκούν.",
+    ro: "Ești la jumătatea împrumutului pentru <b>{title}</b>. Dacă această carte te-a pus pe gânduri, lasă o <b>notă de lectură</b> în catalogul rețelei: apare pe pagina operei, sub pseudonimul ales de tine, și îi folosește persoanei care va împrumuta cartea după tine. Nu e nici recenzie, nici obligație — două rânduri ajung.",
   },
   "loan.note_invite.cta": {
     "pt-BR": "Escrever uma nota",
@@ -8159,6 +8825,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Skribi noton",
     nl: "Een notitie schrijven",
     el: "Γράψε μια σημείωση",
+    ro: "Scrie o notă",
   },
 };
 

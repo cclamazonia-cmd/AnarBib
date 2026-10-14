@@ -19,6 +19,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
@@ -105,7 +106,7 @@ describe('suppression d’un PEB — l’écran suit la base', () => {
     expect(del).toMatch(/t\(\{ id: 'biblioteca\.ill\.discardAfterDeparture' \}, \{ id: loanId \}\)/);
     const dossier = path.resolve(here, '..', 'i18n', 'locales');
     const locales = readdirSync(dossier).filter(f => f.endsWith('.json'));
-    expect(locales.length).toBe(10);
+    expect(locales.length).toBe(LOCALE_CODES.length);
     for (const f of locales) {
       const v = JSON.parse(readFileSync(path.join(dossier, f), 'utf8'))['biblioteca.ill.discardAfterDeparture'];
       expect(typeof v, f).toBe('string');

@@ -42,6 +42,9 @@ const MOTS_OUTILS = [
   ['ca', ['el', 'la', 'els', 'les', 'un', 'una', 'de', 'del', 'dels', 'a', 'al', 'als', 'en',
     'amb', 'per', 'sobre', 'entre', 'i', 'o', 'que']],
   ['eo', ['la', 'de', 'en', 'al', 'kun', 'por', 'kaj', 'aŭ', 'ke']],
+  // Roumain (14/10/2026) : les mêmes que private.conv_mots_outils côté base.
+  ['ro', ['a', 'al', 'ale', 'ai', 'ce', 'că', 'cu', 'de', 'despre', 'din', 'după', 'fără', 'în', 'între',
+    'la', 'o', 'pe', 'pentru', 'prin', 'sau', 'spre', 'sub', 'și', 'un', 'unei', 'unui', 'către']],
   // Allemand : la casse des substantifs EST l'orthographe (CONV-3).
   ['de', ['der', 'die', 'das', 'den', 'dem', 'des', 'ein', 'eine', 'einen', 'einem', 'eines',
     'und', 'oder', 'von', 'zu', 'zur', 'zum', 'in', 'im', 'an', 'am', 'auf', 'für', 'mit', 'als']],

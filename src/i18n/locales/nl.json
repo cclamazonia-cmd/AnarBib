@@ -7628,5 +7628,6 @@
   "twoFactor.guide.keepassxc.4": "Daarna kopieert Ctrl+T bij een geselecteerd item de code („TOTP kopiëren”); met de extensie KeePassXC-Browser vul je hem met één klik in het codeveld in.",
   "twoFactor.guide.other.1": "Zoek in je app naar „+”, „Toevoegen” of „QR-code scannen” en richt de camera op de QR-code hierboven. Op de telefoon zelf bespaart de link „{lien}” je het scannen.",
   "twoFactor.guide.other.2": "Zonder camera kies je handmatige invoer en plak je de sleutel; laat de standaardinstellingen staan (TOTP, zes cijfers, 30 seconden).",
-  "twoFactor.guide.other.3": "Typ hieronder de code van zes cijfers die de app toont."
+  "twoFactor.guide.other.3": "Typ hieronder de code van zes cijfers die de app toont.",
+  "catalogacao.bio.titleIn.ro": "Biografie in het Roemeens"
 }

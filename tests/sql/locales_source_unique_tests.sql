@@ -21,11 +21,11 @@ BEGIN;
 DO $$
 DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
-  c_attendu constant text[] := ARRAY['pt-BR','fr','es','en','it','de','ca','eo','nl','el'];
+  c_attendu constant text[] := ARRAY['pt-BR','fr','es','en','it','de','ca','eo','nl','el','ro'];   -- ro : 20261014192932
   r record; v_txt text; v_n int; v_b boolean; v_w bigint; v_e text;
 BEGIN
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T1 la source : dix codes dans l''ordre de l''app, IMMUTABLE, INVOKER, droits';
+  v_t := 'T1 la source : onze codes dans l''ordre de l''app (ro en onzième), IMMUTABLE, INVOKER, droits';
   BEGIN
     SELECT p.provolatile = 'i' AND NOT p.prosecdef AND p.proconfig IS NOT NULL INTO v_b
       FROM pg_proc p WHERE p.oid = 'public.fn_supported_locales()'::regprocedure;

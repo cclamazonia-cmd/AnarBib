@@ -13,6 +13,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { localizeError } from '@/lib/localizeError';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const DIR = path.resolve(__dirname, '../i18n/locales');
 const KEY = 'panel.apiError.tombo_pattern_not_configured';
@@ -30,7 +31,7 @@ describe('C23 — une bibliothèque sans série de tombos', () => {
 
   it('la clé existe dans les 10 locales et nomme l\'onglet réel de la numérotation', () => {
     const locales = readdirSync(DIR).filter((f) => f.endsWith('.json'));
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     for (const f of locales) {
       const j = JSON.parse(readFileSync(path.join(DIR, f), 'utf8'));
       expect(j[KEY], f).toBeTruthy();

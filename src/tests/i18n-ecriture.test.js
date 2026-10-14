@@ -170,6 +170,7 @@ const EL_SANS_GREC_LEGITIME = [
 // faire, et doit pouvoir se défendre.
 const IDENTIQUE_A_EN_LEGITIME = [
   'app.name',
+  'account.constitution.guidePath', // ro → /en/welcome/ tant que la vitrine n'a pas de pages /ro/ (lot 5)
   'book.isbn', 'book.meta.isbn', 'book.meta.issn', 'book.meta.cdd',
   'catalogacao.form.isbn', 'catalogacao.form.issn', 'catalogacao.form.cdd',
   'catalogacao.field.marcJson',
@@ -230,6 +231,10 @@ const FORMES_FAUTIVES = {
   nl: [],
   en: [],
   el: [],
+  // ro (14/10/2026) : formes qui n'existent pas sans leurs diacritiques. Restent
+  // dehors « sa », « in », « pana », « parola », qui sont aussi des mots.
+  ro: ['fara', 'dupa', 'catre', 'asa', 'intotdeauna', 'inainte', 'impreuna', 'fisa', 'fisier',
+       'fisiere', 'setari', 'sterge', 'adauga', 'inregistrare', 'cauta', 'salveaza', 'romana'],
 };
 
 // Clés dont la valeur DOIT rester sans diacritique : slugs, identifiants

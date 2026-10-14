@@ -12,6 +12,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -39,7 +40,7 @@ describe('la Lettre renvoie vers l\'application', () => {
 
   it('la page a son libellé pour chaque état, dans les dix locales, et sa route', () => {
     const locales = readdirSync(path.join(RACINE, 'src/i18n/locales')).filter((f) => f.endsWith('.json'));
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     for (const f of locales) {
       const j = JSON.parse(lire(`src/i18n/locales/${f}`));
       for (const k of ['title', 'cta', ...ETATS]) expect(j[`lettre.page.${k}`], `${f} ${k}`).toBeTruthy();

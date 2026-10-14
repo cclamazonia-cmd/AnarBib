@@ -26,6 +26,9 @@ import path from 'node:path';
 import { LOCALE_CODES } from '../i18n/locales.js';
 
 const LOCALES = LOCALE_CODES;
+// Le script du lot date d'avant le roumain (14/10/2026) : il porte les dix
+// premières langues. ro.json, lui, est vérifié par les tests ci-dessus.
+const LANGUES_DU_SCRIPT = LOCALE_CODES.filter((l) => l !== 'ro');
 const MIGRATION = '20261005064758_retraiter_exige_le_fichier.sql';
 const HINT = 'error.import.reparse_no_file';
 
@@ -92,10 +95,10 @@ describe('H30 — le script est la source de la clé', () => {
   it('le script porte la seule clé H30, dans les 10 langues', () => {
     const c = cles();
     expect(Object.keys(c)).toEqual([HINT]);
-    expect(Object.keys(c[HINT]).sort()).toEqual([...LOCALES].sort());
+    expect(Object.keys(c[HINT]).sort()).toEqual([...LANGUES_DU_SCRIPT].sort());
   });
 
-  it.each(LOCALES)('%s — la clé porte la valeur du script (le script a été joué)', (loc) => {
+  it.each(LANGUES_DU_SCRIPT)('%s — la clé porte la valeur du script (le script a été joué)', (loc) => {
     expect(lireLocale(loc)[HINT]).toBe(cles()[HINT][loc]);
   });
 });

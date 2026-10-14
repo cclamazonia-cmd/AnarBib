@@ -7628,5 +7628,6 @@
   "twoFactor.guide.keepassxc.4": "Poi, con la voce selezionata, Ctrl+T copia il codice («Copia TOTP»); con l'estensione KeePassXC-Browser, si compila con un clic nel campo del codice.",
   "twoFactor.guide.other.1": "Nella tua app, cerca «+», «Aggiungi» o «Scansiona codice QR» e inquadra il codice QR qui sopra. Sullo stesso telefono, il link «{lien}» evita la scansione.",
   "twoFactor.guide.other.2": "Senza fotocamera, scegli l'inserimento manuale e incolla la chiave; lascia le impostazioni predefinite (TOTP, sei cifre, 30 secondi).",
-  "twoFactor.guide.other.3": "Inserisci qui sotto il codice di sei cifre che l'app mostra."
+  "twoFactor.guide.other.3": "Inserisci qui sotto il codice di sei cifre che l'app mostra.",
+  "catalogacao.bio.titleIn.ro": "Biografia in rumeno"
 }

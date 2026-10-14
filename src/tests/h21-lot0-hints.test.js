@@ -58,6 +58,9 @@ import path from 'node:path';
 import { LOCALE_CODES } from '../i18n/locales.js';
 
 const LOCALES = LOCALE_CODES;
+// Le script du lot date d'avant le roumain (14/10/2026) : il porte les dix
+// premières langues. ro.json, lui, est vérifié par les tests ci-dessus.
+const LANGUES_DU_SCRIPT = LOCALE_CODES.filter((l) => l !== 'ro');
 const MIGRATION = '20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe.sql';
 
 const HINTS = [
@@ -141,10 +144,10 @@ describe('H21 lot 0 — le script est la source des clés du lot', () => {
   it('le script porte les neuf HINT et les quatre chaînes d\'écran, dans les 10 langues', () => {
     const c = cles();
     expect(Object.keys(c).sort()).toEqual([...HINTS, ...Object.keys(ECRAN)].sort());
-    for (const [cle, parLangue] of Object.entries(c)) expect(Object.keys(parLangue).sort(), cle).toEqual([...LOCALES].sort());
+    for (const [cle, parLangue] of Object.entries(c)) expect(Object.keys(parLangue).sort(), cle).toEqual([...LANGUES_DU_SCRIPT].sort());
   });
 
-  it.each(LOCALES)('%s — chaque clé du lot porte la valeur du script (le script a été joué)', (loc) => {
+  it.each(LANGUES_DU_SCRIPT)('%s — chaque clé du lot porte la valeur du script (le script a été joué)', (loc) => {
     const d = lireLocale(loc);
     const ecarts = Object.entries(cles()).filter(([cle, parLangue]) => d[cle] !== parLangue[loc]).map(([cle]) => cle);
     expect(ecarts).toEqual([]);

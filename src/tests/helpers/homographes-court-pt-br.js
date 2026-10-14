@@ -942,4 +942,14 @@ export const HOMOGRAPHE_COURT = {
     "OCR tesseract",
     "Zine / fanzine",
   ],
+  // ro (14/10/2026) : mots roumains qui s'écrivent comme en portugais, et
+  // exemples ou jetons laissés tels quels — relus un à un.
+  "ro": [
+    "← Anterior", "Anterior", "Ateneu", "AUTOR", "Data", "Data: {date}", "Digital, DVD, Blu-ray…",
+    "E-mail", "ETAPA 0", "ETAPA {n}", "Ex.: 154", "Ex.: 154.1, 154.2", "Ex.: 2453, 0000138, 289",
+    "Ex.: 59000", "Ex.: Casa 2 / Ap. 301", "Ex.: CIRA Marseille", "Exemplar", "Exemplar:",
+    "https://...", "Informal", "Local", "material", "OCR tesseract", "Online (link)", "ortogonal",
+    "Recto/verso", "Total: {count}", "ZIP code", "Zona {zone}", "aprox.",
+    "Anual", "Nota {num}", "vol. {v}",
+  ],
 };

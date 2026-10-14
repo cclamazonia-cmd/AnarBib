@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { apiQuery } from '@/lib/supabase';
 import GazetteContributeForm from './GazetteContributeForm';
-import { LOCALE_CODES } from '@/i18n/locales';
+import { LOCALE_CODES, localesDuSelecteur } from '@/i18n/locales';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GazetteTab — onglet « Gazette » de la page Fédération.
@@ -27,6 +27,7 @@ const GZ_LOCALES = LOCALE_CODES;
 export const LOCALE_NAMES = {
   'pt-BR': 'Português (BR)', fr: 'Français', es: 'Castellano', en: 'English',
   it: 'Italiano', de: 'Deutsch', el: 'Ελληνικά', ca: 'Català', eo: 'Esperanto', nl: 'Nederlands',
+  ro: 'Română',
 };
 
 // Chaînes UI propres à la gazette (libellés de rendu + bandeau de repli), traduites
@@ -57,6 +58,8 @@ export const UI = {
     pending: 'Komunuma traduko daŭras — montrante la francan enhavon.' },
   nl: { lang: 'Taal', pdf: 'PDF downloaden', page: 'Pagina', sources: 'Bronnen', tagline: 'De gazette van het netwerk',
     pending: 'Vertaling door de gemeenschap in uitvoering — de Franse inhoud wordt getoond.' },
+  ro: { lang: 'Limbă', pdf: 'Descarcă PDF-ul', page: 'Pagina', sources: 'Surse', tagline: 'Gazeta rețelei',
+    pending: 'Traducere comunitară în curs — este afișat conținutul în franceză.' },
 };
 
 // Emblème « Le Noyau » — SVG inline repris verbatim de la maquette.
@@ -227,7 +230,7 @@ const GZ_CSS = `
 // le modèle. Un bloc « colophon » venu du contenu peut manquer ou mentir ; ce
 // bloc-ci ne le peut pas.
 // {src} = nom de la langue source (endonyme, cf. LOCALE_NAMES) ; {who} = collectif relecteur.
-const PROV = {
+export const PROV = {
   fr: {
     t: 'Comment ce numéro a été fait',
     build: {
@@ -347,6 +350,18 @@ const PROV = {
     machine: 'Automatische vertaling uit {src}, niet nagelezen.',
     reviewed: 'Vertaling uit {src}, nagelezen door {who}.',
     human: 'De pagina « Leven van het netwerk » bestaat uit bijdragen die door collectieven zijn ingestuurd. Geen enkel nummer wordt gepubliceerd zonder menselijk besluit.',
+  },
+  ro: {
+    t: 'Cum a fost făcut acest număr',
+    build: {
+      assisted: 'Știri scurte redactate cu ajutorul unui model de limbaj, pornind de la fluxuri publice alese de membrii rețelei.',
+      revue: 'Revista presei: titluri și introduceri preluate așa cum le-au publicat sursele, fără rescriere, din fluxuri alese de membrii rețelei.',
+      manual: 'Știri scurte redactate de membrii rețelei, fără ajutor automat.',
+    },
+    original: 'Versiunea sursă: celelalte limbi sunt traduse din ea.',
+    machine: 'Traducere automată din {src}, nerevizuită.',
+    reviewed: 'Traducere din {src}, revizuită de {who}.',
+    human: 'Pagina „Viața rețelei” este alcătuită din contribuții trimise de colective. Niciun număr nu este publicat fără o decizie umană.',
   },
 };
 
@@ -587,7 +602,7 @@ export default function GazetteTab() {
       <div className="ab-gz-bar">
         <label htmlFor="ab-gz-locale">{ui.lang}</label>
         <select id="ab-gz-locale" value={loc} onChange={(e) => setLoc(e.target.value)}>
-          {GZ_LOCALES.map((l) => (
+          {localesDuSelecteur(loc).map(({ code: l }) => (
             <option key={l} value={l}>{LOCALE_NAMES[l]}{state.byLocale[l] ? '' : ' ·…'}</option>
           ))}
         </select>

@@ -17,6 +17,7 @@ import { LOCALE_CODES } from '@/i18n/locales';
 export const LOCALE_NAMES = {
   'pt-BR': 'Português (BR)', fr: 'Français', es: 'Castellano', en: 'English',
   it: 'Italiano', de: 'Deutsch', el: 'Ελληνικά', ca: 'Català', eo: 'Esperanto', nl: 'Nederlands',
+  ro: 'Română',
 };
 const LOC_ORDER = LOCALE_CODES;
 

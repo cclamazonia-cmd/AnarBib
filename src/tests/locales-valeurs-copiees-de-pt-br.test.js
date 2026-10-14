@@ -121,6 +121,9 @@ const copiee = (l, k) => {
 // entrée qui n'est plus identique.
 // ─────────────────────────────────────────────────────────────────────────────
 const HOMOGRAPHE_LEGITIME = {
+  ro: [
+    'account.reserve.placeholder', // exemple de références « Ex.: 2453, 0000123, 0002453 » (« Ex. » est aussi roumain)
+  ],
   ca: [
     'account.reserve.placeholder', // exemple de références « Ex.: 2453, 0000123, 0002453 »
     'banner.profile.template.C.name', // « perfil C — federada observadora » : catalan et portugais s'écrivent pareil

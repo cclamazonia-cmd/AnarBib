@@ -27,7 +27,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
-import { SUPPORTED_LOCALES } from '@/i18n';
+import { localesDuSelecteur } from '@/i18n/locales';
 import { Button } from '@/components/ui';
 
 const VIDE = { email: '', libraryName: '', mot: '', noteInterne: '' };
@@ -203,7 +203,7 @@ export default function InvitationsPanel() {
         <div style={{ marginBottom: 12 }}>
           <label style={ls}>{t({ id: 'rede.invitations.form.locale' })}</label>
           <select value={langue} onChange={e => setLangue(e.target.value)} style={fs}>
-            {SUPPORTED_LOCALES.map(l => <option key={l.code} value={l.code}>{l.label}</option>)}
+            {localesDuSelecteur(langue).map(l => <option key={l.code} value={l.code}>{l.label}</option>)}
           </select>
           <div style={hs}>{t({ id: 'rede.invitations.form.localeHint' })}</div>
         </div>

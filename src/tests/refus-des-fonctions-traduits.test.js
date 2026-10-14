@@ -17,6 +17,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { erreurDeFonction, EDGE_KEY_PREFIX } from '@/lib/edgeError';
 import { localizeError } from '@/lib/localizeError';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 // Liste fermée : une fonction de plus dont l'écran affiche le refus y entre.
@@ -47,7 +48,7 @@ describe('E24 — les refus des fonctions de la page Importations', () => {
   }
 
   it('chaque code émis a son libellé dans les dix locales', () => {
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     const codes = new Set(FONCTIONS.flatMap((f) => codesDe(source(f))));
     expect([...codes].sort()).toEqual(expect.arrayContaining(['already_attached', 'auth_required', 'forbidden', 'no_eligible_record', 'server_error']));
     for (const [f, j] of locales) for (const c of codes) expect(j[EDGE_KEY_PREFIX + c], `${f} ${c}`).toBeTruthy();

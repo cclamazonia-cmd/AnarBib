@@ -13,6 +13,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 vi.mock('@/lib/supabase', () => ({ supabase: {} }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null }) }));
@@ -45,7 +46,7 @@ describe('G16 — le vote des transitions', () => {
   });
 
   it('chaque bouton, chaque statut et la fin de carence ont leur libellé dans les dix locales', () => {
-    expect(locales).toHaveLength(10);
+    expect(locales).toHaveLength(LOCALE_CODES.length);
     for (const [f, j] of locales) {
       for (const c of VOTE_CHOICES) expect(j[`transitions.vote.${c.label}`], `${f} ${c.label}`).toBeTruthy();
       for (const s of HISTORY_STATUSES) expect(j[`transitions.status.${s}`], `${f} ${s}`).toBeTruthy();

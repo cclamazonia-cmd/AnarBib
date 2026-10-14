@@ -14,6 +14,7 @@ import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const rpc = vi.fn(async (nom) => (nom === 'fn_authority_list'
   ? { data: null, error: { code: '42501', hint: 'error.atelier.reserved', message: 'Atelier reservado a quem participa da rede (contribuinte, equipe ou administracao).' } }
@@ -52,7 +53,7 @@ describe('Atelier des autorités — réservé aux équipes (E36)', () => {
   it('les HINT des RPC de l’Atelier existent dans les dix locales', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     const cles = ['reserved', 'reservedStaff', 'notContributor', 'notStaff', 'notCoordenador', 'notUsingAuthority', 'notResolvedConsent', 'applyKindDeferred',
       'scissionAuthorOnly', 'scissionParts', 'scissionPartIncomplete', 'scissionBadType', 'scissionPartExists', 'scissionDuplicateParts',
       'splitTargetChanged', 'workNotFound', 'workKind', 'workLang', 'workTitle', 'workMergeTarget', 'workNotSame', 'workBook', 'workBookSame', 'workTomes', 'workPartBooks'].map((k) => `error.atelier.${k}`);

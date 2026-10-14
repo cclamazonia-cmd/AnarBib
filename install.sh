@@ -16,7 +16,7 @@
 #   ./install.sh --stop                # stop all containers
 #   ./install.sh -h | --help           # show this help
 #
-#   --lang: fr en pt es it de ca eo nl el
+#   --lang: fr en pt es it de ca eo nl el ro
 # =============================================================================
 
 set -euo pipefail
@@ -26,7 +26,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────────────────────
 _SYS_LANG="${LANG:-${LC_ALL:-${LC_MESSAGES:-}}}"
 case "${_SYS_LANG%%_*}" in
-  fr|pt|es|it|de|ca|eo|nl|el) LANG_CODE="${_SYS_LANG%%_*}" ;;
+  fr|pt|es|it|de|ca|eo|nl|el|ro) LANG_CODE="${_SYS_LANG%%_*}" ;;
   *)                          LANG_CODE="en" ;;
 esac
 
@@ -35,7 +35,7 @@ for _arg in "$@"; do
   case "$_arg" in --lang) _NEXT_IS_LANG=1 ;; *)
     if [ "${_NEXT_IS_LANG:-0}" = "1" ]; then
       case "$_arg" in
-        fr|en|pt|es|it|de|ca|eo|nl|el) LANG_CODE="$_arg" ;;
+        fr|en|pt|es|it|de|ca|eo|nl|el|ro) LANG_CODE="$_arg" ;;
       esac
       _NEXT_IS_LANG=0
     fi
@@ -61,6 +61,7 @@ t() {
     eo:err_no_git)     echo "Ekster git-deponejo. Rulu ĉi tiun skripton el la radiko de AnarBib." ;;
     nl:err_no_git)     echo "Niet in een git-depot. Voer dit script uit vanuit de hoofdmap van AnarBib." ;;
     el:err_no_git)     echo "Εκτός αποθετηρίου git. Εκτέλεσε αυτό το σενάριο από τη ρίζα του AnarBib." ;;
+    ro:err_no_git)     echo "Nu ești într-un depozit git. Rulează acest script din rădăcina AnarBib." ;;
 
     fr:err_no_domain)  echo "Domaine manquant pour --prod. Exemple : ./install.sh --prod api.anarbib.org" ;;
     en:err_no_domain)  echo "Missing domain for --prod. Example: ./install.sh --prod api.anarbib.org" ;;
@@ -72,6 +73,7 @@ t() {
     eo:err_no_domain)  echo "Mankas domajno por --prod. Ekzemplo: ./install.sh --prod api.anarbib.org" ;;
     nl:err_no_domain)  echo "Domein ontbreekt voor --prod. Voorbeeld: ./install.sh --prod api.anarbib.org" ;;
     el:err_no_domain)  echo "Λείπει ο τομέας για το --prod. Παράδειγμα: ./install.sh --prod api.anarbib.org" ;;
+    ro:err_no_domain)  echo "Lipsește domeniul pentru --prod. Exemplu: ./install.sh --prod api.anarbib.org" ;;
 
     fr:err_no_creds_file)  echo "Chemin manquant pour --creds-file. Exemple : ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
     en:err_no_creds_file)  echo "Missing path for --creds-file. Example: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
@@ -83,6 +85,7 @@ t() {
     eo:err_no_creds_file)  echo "Mankas vojo por --creds-file. Ekzemplo: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
     nl:err_no_creds_file)  echo "Pad ontbreekt voor --creds-file. Voorbeeld: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
     el:err_no_creds_file)  echo "Λείπει η διαδρομή για το --creds-file. Παράδειγμα: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
+    ro:err_no_creds_file)  echo "Lipsește calea pentru --creds-file. Exemplu: ./install.sh --creds-file /var/lib/anarbib/admin_credentials" ;;
 
     fr:err_unknown)    echo "Option inconnue : $2" ;;
     en:err_unknown)    echo "Unknown option: $2" ;;
@@ -94,6 +97,7 @@ t() {
     eo:err_unknown)    echo "Nekonata opcio: $2" ;;
     nl:err_unknown)    echo "Onbekende optie: $2" ;;
     el:err_unknown)    echo "Άγνωστη επιλογή: $2" ;;
+    ro:err_unknown)    echo "Opțiune necunoscută: $2" ;;
 
     fr:err_help_hint)  echo "  Utilisez ./install.sh --help pour voir les options disponibles." ;;
     en:err_help_hint)  echo "  Use ./install.sh --help to see available options." ;;
@@ -105,17 +109,19 @@ t() {
     eo:err_help_hint)  echo "  Uzu ./install.sh --help por vidi la disponeblajn opciojn." ;;
     nl:err_help_hint)  echo "  Gebruik ./install.sh --help om de beschikbare opties te zien." ;;
     el:err_help_hint)  echo "  Χρησιμοποίησε ./install.sh --help για τις διαθέσιμες επιλογές." ;;
+    ro:err_help_hint)  echo "  Folosește ./install.sh --help ca să vezi opțiunile disponibile." ;;
 
-    fr:err_lang)       echo "Langue non reconnue : '$2'. Valeurs acceptées : fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    en:err_lang)       echo "Unknown language: '$2'. Accepted values: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    pt:err_lang)       echo "Idioma não reconhecido: '$2'. Valores aceitos: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    es:err_lang)       echo "Idioma no reconocido: '$2'. Valores aceptados: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    it:err_lang)       echo "Lingua non riconosciuta: '$2'. Valori accettati: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    de:err_lang)       echo "Sprache nicht erkannt: '$2'. Zulässige Werte: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    ca:err_lang)       echo "Llengua no reconeguda: '$2'. Valors acceptats: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    eo:err_lang)       echo "Nekonata lingvo: '$2'. Akceptataj valoroj: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    nl:err_lang)       echo "Taal niet herkend: '$2'. Aanvaarde waarden: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
-    el:err_lang)       echo "Μη αναγνωρισμένη γλώσσα: '$2'. Αποδεκτές τιμές: fr, en, pt, es, it, de, ca, eo, nl, el" ;;
+    fr:err_lang)       echo "Langue non reconnue : '$2'. Valeurs acceptées : fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    en:err_lang)       echo "Unknown language: '$2'. Accepted values: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    pt:err_lang)       echo "Idioma não reconhecido: '$2'. Valores aceitos: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    es:err_lang)       echo "Idioma no reconocido: '$2'. Valores aceptados: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    it:err_lang)       echo "Lingua non riconosciuta: '$2'. Valori accettati: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    de:err_lang)       echo "Sprache nicht erkannt: '$2'. Zulässige Werte: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    ca:err_lang)       echo "Llengua no reconeguda: '$2'. Valors acceptats: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    eo:err_lang)       echo "Nekonata lingvo: '$2'. Akceptataj valoroj: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    nl:err_lang)       echo "Taal niet herkend: '$2'. Aanvaarde waarden: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    el:err_lang)       echo "Μη αναγνωρισμένη γλώσσα: '$2'. Αποδεκτές τιμές: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
+    ro:err_lang)       echo "Limbă necunoscută: '$2'. Valori acceptate: fr, en, pt, es, it, de, ca, eo, nl, el, ro" ;;
 
     # ── --stop action ────────────────────────────────────────────────────────
     fr:stop_title)     echo "Arrêt d'AnarBib (Frontend + Backend)" ;;
@@ -128,6 +134,7 @@ t() {
     eo:stop_title)     echo "Haltigo de AnarBib (Frontend + Backend)" ;;
     nl:stop_title)     echo "AnarBib wordt gestopt (Frontend + Backend)" ;;
     el:stop_title)     echo "Διακοπή του AnarBib (Frontend + Backend)" ;;
+    ro:stop_title)     echo "Oprirea AnarBib (Frontend + Backend)" ;;
 
     fr:stop_frontend)  echo "Serveur web frontend arrêté (PID $2)" ;;
     en:stop_frontend)  echo "Frontend web server stopped (PID $2)" ;;
@@ -139,6 +146,7 @@ t() {
     eo:stop_frontend)  echo "Frontend-retservilo haltigita (PID $2)" ;;
     nl:stop_frontend)  echo "Frontend-webserver gestopt (PID $2)" ;;
     el:stop_frontend)  echo "Ο διακομιστής ιστού frontend σταμάτησε (PID $2)" ;;
+    ro:stop_frontend)  echo "Serverul web frontend a fost oprit (PID $2)" ;;
 
     fr:stop_backend)   echo "Pile backend arrêtée." ;;
     en:stop_backend)   echo "Backend stack stopped." ;;
@@ -150,6 +158,7 @@ t() {
     eo:stop_backend)   echo "Backend-stako haltigita." ;;
     nl:stop_backend)   echo "Backend-stack gestopt." ;;
     el:stop_backend)   echo "Η στοίβα backend σταμάτησε." ;;
+    ro:stop_backend)   echo "Stiva backend a fost oprită." ;;
 
     # ── banner ───────────────────────────────────────────────────────────────
     fr:banner)         echo "AnarBib — Installateur centralisé tout-en-un" ;;
@@ -162,6 +171,7 @@ t() {
     eo:banner)         echo "AnarBib — Centralizita ĉio-en-unu instalilo" ;;
     nl:banner)         echo "AnarBib — Centrale alles-in-één installer" ;;
     el:banner)         echo "AnarBib — Κεντρικός εγκαταστάτης όλα-σε-ένα" ;;
+    ro:banner)         echo "AnarBib — Instalator centralizat tot-în-unu" ;;
 
     # ── step 1 ───────────────────────────────────────────────────────────────
     fr:step1)          echo "1/4 · Vérification des prérequis système" ;;
@@ -174,6 +184,7 @@ t() {
     eo:step1)          echo "1/4 · Kontrolo de la sistemaj antaŭkondiĉoj" ;;
     nl:step1)          echo "1/4 · Controle van de systeemvereisten" ;;
     el:step1)          echo "1/4 · Έλεγχος των προαπαιτούμενων του συστήματος" ;;
+    ro:step1)          echo "1/4 · Verificarea cerințelor de sistem" ;;
 
     fr:err_docker)     echo "Docker est introuvable. Installez Docker avant de continuer." ;;
     en:err_docker)     echo "Docker not found. Please install Docker before continuing." ;;
@@ -185,6 +196,7 @@ t() {
     eo:err_docker)     echo "Docker ne troviĝas. Instalu Docker antaŭ ol daŭrigi." ;;
     nl:err_docker)     echo "Docker niet gevonden. Installeer Docker voordat je verdergaat." ;;
     el:err_docker)     echo "Το Docker δεν βρέθηκε. Εγκατέστησέ το πριν συνεχίσεις." ;;
+    ro:err_docker)     echo "Docker nu a fost găsit. Instalează Docker înainte de a continua." ;;
 
     fr:ok_docker)      echo "Docker est présent ($2)" ;;
     en:ok_docker)      echo "Docker is ready ($2)" ;;
@@ -196,6 +208,7 @@ t() {
     eo:ok_docker)      echo "Docker ĉeestas ($2)" ;;
     nl:ok_docker)      echo "Docker is aanwezig ($2)" ;;
     el:ok_docker)      echo "Το Docker είναι παρόν ($2)" ;;
+    ro:ok_docker)      echo "Docker este prezent ($2)" ;;
 
     fr:err_compose)    echo "Le plugin 'docker compose' est introuvable." ;;
     en:err_compose)    echo "The 'docker compose' plugin is not found." ;;
@@ -207,6 +220,7 @@ t() {
     eo:err_compose)    echo "La kromaĵo 'docker compose' ne troviĝas." ;;
     nl:err_compose)    echo "De plugin 'docker compose' is niet gevonden." ;;
     el:err_compose)    echo "Το πρόσθετο 'docker compose' δεν βρέθηκε." ;;
+    ro:err_compose)    echo "Pluginul 'docker compose' nu a fost găsit." ;;
 
     fr:ok_compose)     echo "Docker Compose est prêt ($2)" ;;
     en:ok_compose)     echo "Docker Compose is ready ($2)" ;;
@@ -218,6 +232,7 @@ t() {
     eo:ok_compose)     echo "Docker Compose pretas ($2)" ;;
     nl:ok_compose)     echo "Docker Compose is klaar ($2)" ;;
     el:ok_compose)     echo "Το Docker Compose είναι έτοιμο ($2)" ;;
+    ro:ok_compose)     echo "Docker Compose este pregătit ($2)" ;;
 
     fr:err_daemon)     echo "Le démon Docker ne répond pas. Vérifiez que le service Docker est démarré." ;;
     en:err_daemon)     echo "Docker daemon not responding. Make sure the Docker service is running." ;;
@@ -229,6 +244,7 @@ t() {
     eo:err_daemon)     echo "La Docker-demono ne respondas. Kontrolu ke la servo Docker funkcias." ;;
     nl:err_daemon)     echo "De Docker-daemon antwoordt niet. Controleer of de Docker-dienst draait." ;;
     el:err_daemon)     echo "Ο δαίμονας Docker δεν αποκρίνεται. Έλεγξε ότι η υπηρεσία Docker τρέχει." ;;
+    ro:err_daemon)     echo "Demonul Docker nu răspunde. Verifică dacă serviciul Docker este pornit." ;;
 
     fr:ok_daemon)      echo "Démon Docker opérationnel" ;;
     en:ok_daemon)      echo "Docker daemon running" ;;
@@ -240,6 +256,7 @@ t() {
     eo:ok_daemon)      echo "Docker-demono funkcias" ;;
     nl:ok_daemon)      echo "Docker-daemon draait" ;;
     el:ok_daemon)      echo "Ο δαίμονας Docker λειτουργεί" ;;
+    ro:ok_daemon)      echo "Demonul Docker funcționează" ;;
 
     fr:err_node)       echo "Node.js / npm est introuvable. Installez Node.js pour faire tourner l'application." ;;
     en:err_node)       echo "Node.js / npm not found. Install Node.js to run the application." ;;
@@ -251,6 +268,7 @@ t() {
     eo:err_node)       echo "Node.js / npm ne troviĝas. Instalu Node.js por ruli la aplikaĵon." ;;
     nl:err_node)       echo "Node.js / npm niet gevonden. Installeer Node.js om de toepassing te draaien." ;;
     el:err_node)       echo "Το Node.js / npm δεν βρέθηκε. Εγκατέστησε το Node.js για να τρέξει η εφαρμογή." ;;
+    ro:err_node)       echo "Node.js / npm nu a fost găsit. Instalează Node.js ca să rulezi aplicația." ;;
 
     fr:ok_node)        echo "Node.js / npm est prêt ($2)" ;;
     en:ok_node)        echo "Node.js / npm ready ($2)" ;;
@@ -262,6 +280,7 @@ t() {
     eo:ok_node)        echo "Node.js / npm pretas ($2)" ;;
     nl:ok_node)        echo "Node.js / npm is klaar ($2)" ;;
     el:ok_node)        echo "Το Node.js / npm είναι έτοιμο ($2)" ;;
+    ro:ok_node)        echo "Node.js / npm este pregătit ($2)" ;;
 
     # ── step 2 ───────────────────────────────────────────────────────────────
     fr:step2)          echo "2/4 · Initialisation des environnements et génération des clés" ;;
@@ -274,6 +293,7 @@ t() {
     eo:step2)          echo "2/4 · Pretigo de la medioj kaj generado de la ŝlosiloj" ;;
     nl:step2)          echo "2/4 · Opzetten van de omgevingen en genereren van de sleutels" ;;
     el:step2)          echo "2/4 · Αρχικοποίηση των περιβαλλόντων και δημιουργία των κλειδιών" ;;
+    ro:step2)          echo "2/4 · Inițializarea mediilor și generarea cheilor" ;;
 
     fr:ok_env)         echo "Fichier deploy/.env créé depuis deploy/.env.example" ;;
     en:ok_env)         echo "File deploy/.env created from deploy/.env.example" ;;
@@ -285,6 +305,7 @@ t() {
     eo:ok_env)         echo "Dosiero deploy/.env kreita el deploy/.env.example" ;;
     nl:ok_env)         echo "Bestand deploy/.env aangemaakt vanuit deploy/.env.example" ;;
     el:ok_env)         echo "Το αρχείο deploy/.env δημιουργήθηκε από το deploy/.env.example" ;;
+    ro:ok_env)         echo "Fișierul deploy/.env a fost creat din deploy/.env.example" ;;
 
     fr:ok_fenv)        echo "Fichier deploy/functions.env créé depuis deploy/functions.env.example" ;;
     en:ok_fenv)        echo "File deploy/functions.env created from deploy/functions.env.example" ;;
@@ -296,6 +317,7 @@ t() {
     eo:ok_fenv)        echo "Dosiero deploy/functions.env kreita el deploy/functions.env.example" ;;
     nl:ok_fenv)        echo "Bestand deploy/functions.env aangemaakt vanuit deploy/functions.env.example" ;;
     el:ok_fenv)        echo "Το αρχείο deploy/functions.env δημιουργήθηκε από το deploy/functions.env.example" ;;
+    ro:ok_fenv)        echo "Fișierul deploy/functions.env a fost creat din deploy/functions.env.example" ;;
 
     fr:gen_keys)       echo "→ Génération automatique des clés JWT et mots de passe..." ;;
     en:gen_keys)       echo "→ Auto-generating JWT keys and passwords..." ;;
@@ -307,6 +329,7 @@ t() {
     eo:gen_keys)       echo "→ Aŭtomata generado de la JWT-ŝlosiloj kaj pasvortoj..." ;;
     nl:gen_keys)       echo "→ Automatisch genereren van de JWT-sleutels en wachtwoorden..." ;;
     el:gen_keys)       echo "→ Αυτόματη δημιουργία των κλειδιών JWT και των κωδικών..." ;;
+    ro:gen_keys)       echo "→ Generarea automată a cheilor JWT și a parolelor..." ;;
 
     fr:ok_keys)        echo "Clés et secrets configurés dans deploy/.env" ;;
     en:ok_keys)        echo "Keys and secrets configured in deploy/.env" ;;
@@ -318,6 +341,7 @@ t() {
     eo:ok_keys)        echo "Ŝlosiloj kaj sekretoj agorditaj en deploy/.env" ;;
     nl:ok_keys)        echo "Sleutels en geheimen ingesteld in deploy/.env" ;;
     el:ok_keys)        echo "Κλειδιά και μυστικά ρυθμίστηκαν στο deploy/.env" ;;
+    ro:ok_keys)        echo "Cheile și secretele au fost configurate în deploy/.env" ;;
 
     fr:ok_prod_domain) echo "Domaine de production configuré : https://$2" ;;
     en:ok_prod_domain) echo "Production domain configured: https://$2" ;;
@@ -329,6 +353,7 @@ t() {
     eo:ok_prod_domain) echo "Produkta domajno agordita: https://$2" ;;
     nl:ok_prod_domain) echo "Productiedomein ingesteld: https://$2" ;;
     el:ok_prod_domain) echo "Ο τομέας παραγωγής ρυθμίστηκε: https://$2" ;;
+    ro:ok_prod_domain) echo "Domeniu de producție configurat: https://$2" ;;
 
     # ── mail config ──────────────────────────────────────────────────────────
     fr:mail_title)     echo "📧 Configuration du service d'e-mail pour les notifications :" ;;
@@ -341,6 +366,7 @@ t() {
     eo:mail_title)     echo "📧 Agordo de la retpoŝta servo por la sciigoj:" ;;
     nl:mail_title)     echo "📧 Instelling van de e-maildienst voor de meldingen:" ;;
     el:mail_title)     echo "📧 Ρύθμιση της υπηρεσίας e-mail για τις ειδοποιήσεις:" ;;
+    ro:mail_title)     echo "📧 Configurarea serviciului de e-mail pentru notificări:" ;;
 
     fr:mail_opt1)      echo "   [1] Serveur SMTP standard (votre propre boîte mail)" ;;
     en:mail_opt1)      echo "   [1] Standard SMTP server (your own mailbox)" ;;
@@ -352,6 +378,7 @@ t() {
     eo:mail_opt1)      echo "   [1] Norma SMTP-servilo (via propra leterkesto)" ;;
     nl:mail_opt1)      echo "   [1] Standaard SMTP-server (je eigen mailbox)" ;;
     el:mail_opt1)      echo "   [1] Τυπικός διακομιστής SMTP (το δικό σου γραμματοκιβώτιο)" ;;
+    ro:mail_opt1)      echo "   [1] Server SMTP standard (propria ta căsuță de e-mail)" ;;
 
     fr:mail_opt2)      echo "   [2] Clé API Resend (service tiers clé en main)" ;;
     en:mail_opt2)      echo "   [2] Resend API key (third-party turnkey service)" ;;
@@ -363,6 +390,7 @@ t() {
     eo:mail_opt2)      echo "   [2] Resend API-ŝlosilo (ekstera pretsolvo)" ;;
     nl:mail_opt2)      echo "   [2] Resend API-sleutel (externe kant-en-klare dienst)" ;;
     el:mail_opt2)      echo "   [2] Κλειδί API Resend (εξωτερική έτοιμη υπηρεσία)" ;;
+    ro:mail_opt2)      echo "   [2] Cheie API Resend (serviciu terț, gata de folosit)" ;;
 
     fr:mail_opt3)      echo "   [3] Simulation locale (e-mails journalisés)" ;;
     en:mail_opt3)      echo "   [3] Local simulation (emails logged)" ;;
@@ -374,6 +402,7 @@ t() {
     eo:mail_opt3)      echo "   [3] Loka simulado (retleteroj protokolitaj)" ;;
     nl:mail_opt3)      echo "   [3] Lokale simulatie (e-mails gelogd)" ;;
     el:mail_opt3)      echo "   [3] Τοπική προσομοίωση (καταγραφή e-mail)" ;;
+    ro:mail_opt3)      echo "   [3] Simulare locală (e-mailuri jurnalizate)" ;;
 
     fr:mail_prompt)    printf "Votre choix [1/2/3] : " ;;
     en:mail_prompt)    printf "Your choice [1/2/3]: " ;;
@@ -385,6 +414,7 @@ t() {
     eo:mail_prompt)    printf "Via elekto [1/2/3]: " ;;
     nl:mail_prompt)    printf "Jouw keuze [1/2/3]: " ;;
     el:mail_prompt)    printf "Η επιλογή σου [1/2/3]: " ;;
+    ro:mail_prompt)    printf "Alegerea ta [1/2/3]: " ;;
     fr:mail_not_yet)   echo "Aucun transport choisi : aucun courriel ne partira, et chaque envoi échouera bruyamment, jamais en silence."
                        echo "   Relancez ./install.sh, ou remplissez deploy/functions.env (MAIL_TRANSPORT=smtp, resend ou mock)." ;;
     en:mail_not_yet)   echo "No transport chosen: no email will go out, and every send will fail loudly, never silently."
@@ -405,6 +435,8 @@ t() {
                        echo "   Start ./install.sh opnieuw, of vul deploy/functions.env in (MAIL_TRANSPORT=smtp, resend of mock)." ;;
     el:mail_not_yet)   echo "Δεν επιλέχθηκε μεταφορά: κανένα e-mail δεν θα φύγει, και κάθε αποστολή θα αποτύχει θορυβωδώς, ποτέ σιωπηλά."
                        echo "   Τρέξε ξανά το ./install.sh, ή συμπλήρωσε το deploy/functions.env (MAIL_TRANSPORT=smtp, resend ή mock)." ;;
+    ro:mail_not_yet)   echo "Niciun transport ales: niciun e-mail nu va pleca, iar fiecare trimitere va eșua zgomotos, niciodată în tăcere."
+                       echo "   Rulează din nou ./install.sh sau completează deploy/functions.env (MAIL_TRANSPORT=smtp, resend sau mock)." ;;
 
     fr:smtp_title)     echo "→ Configuration SMTP :" ;;
     en:smtp_title)     echo "→ SMTP configuration:" ;;
@@ -416,6 +448,7 @@ t() {
     eo:smtp_title)     echo "→ SMTP-agordo:" ;;
     nl:smtp_title)     echo "→ SMTP-instelling:" ;;
     el:smtp_title)     echo "→ Ρύθμιση SMTP:" ;;
+    ro:smtp_title)     echo "→ Configurare SMTP:" ;;
 
     fr:smtp_host)      printf "  Hôte SMTP (ex: mail.mon-domaine.org) : " ;;
     en:smtp_host)      printf "  SMTP host (e.g. mail.example.org): " ;;
@@ -427,6 +460,7 @@ t() {
     eo:smtp_host)      printf "  SMTP-gastiganto (ekz.: mail.mia-domajno.org): " ;;
     nl:smtp_host)      printf "  SMTP-host (bv.: mail.mijn-domein.org): " ;;
     el:smtp_host)      printf "  Διακομιστής SMTP (π.χ.: mail.example.org): " ;;
+    ro:smtp_host)      printf "  Gazdă SMTP (ex.: mail.domeniul-meu.org): " ;;
 
     fr:smtp_port)      printf "  Port SMTP (ex: 587 ou 465) [défaut: 587] : " ;;
     en:smtp_port)      printf "  SMTP port (e.g. 587 or 465) [default: 587]: " ;;
@@ -438,6 +472,7 @@ t() {
     eo:smtp_port)      printf "  SMTP-pordo (ekz.: 587 aŭ 465) [defaŭlte: 587]: " ;;
     nl:smtp_port)      printf "  SMTP-poort (bv.: 587 of 465) [standaard: 587]: " ;;
     el:smtp_port)      printf "  Θύρα SMTP (π.χ.: 587 ή 465) [προεπιλογή: 587]: " ;;
+    ro:smtp_port)      printf "  Port SMTP (ex.: 587 sau 465) [implicit: 587]: " ;;
 
     fr:smtp_user)      printf "  Utilisateur SMTP (votre adresse mail) : " ;;
     en:smtp_user)      printf "  SMTP user (your email address): " ;;
@@ -449,6 +484,7 @@ t() {
     eo:smtp_user)      printf "  SMTP-uzanto (via retpoŝta adreso): " ;;
     nl:smtp_user)      printf "  SMTP-gebruiker (je e-mailadres): " ;;
     el:smtp_user)      printf "  Χρήστης SMTP (η διεύθυνση e-mail σου): " ;;
+    ro:smtp_user)      printf "  Utilizator SMTP (adresa ta de e-mail): " ;;
 
     fr:smtp_pass)      printf "  Mot de passe SMTP : " ;;
     en:smtp_pass)      printf "  SMTP password: " ;;
@@ -460,6 +496,7 @@ t() {
     eo:smtp_pass)      printf "  SMTP-pasvorto: " ;;
     nl:smtp_pass)      printf "  SMTP-wachtwoord: " ;;
     el:smtp_pass)      printf "  Κωδικός SMTP: " ;;
+    ro:smtp_pass)      printf "  Parolă SMTP: " ;;
 
     fr:smtp_sender)    printf "  Adresse d'expédition (From) [défaut: %s] : " "$2" ;;
     en:smtp_sender)    printf "  Sender address (From) [default: %s]: " "$2" ;;
@@ -471,6 +508,7 @@ t() {
     eo:smtp_sender)    printf "  Sendanta adreso (From) [defaŭlte: %s]: " "$2" ;;
     nl:smtp_sender)    printf "  Afzenderadres (From) [standaard: %s]: " "$2" ;;
     el:smtp_sender)    printf "  Διεύθυνση αποστολής (From) [προεπιλογή: %s]: " "$2" ;;
+    ro:smtp_sender)    printf "  Adresa expeditorului (From) [implicit: %s]: " "$2" ;;
 
     fr:ok_smtp)        echo "Service SMTP configuré ($2)" ;;
     en:ok_smtp)        echo "SMTP service configured ($2)" ;;
@@ -482,6 +520,7 @@ t() {
     eo:ok_smtp)        echo "SMTP-servo agordita ($2)" ;;
     nl:ok_smtp)        echo "SMTP-dienst ingesteld ($2)" ;;
     el:ok_smtp)        echo "Η υπηρεσία SMTP ρυθμίστηκε ($2)" ;;
+    ro:ok_smtp)        echo "Serviciul SMTP a fost configurat ($2)" ;;
 
     fr:resend_title)   echo "→ Configuration API Resend :" ;;
     en:resend_title)   echo "→ Resend API configuration:" ;;
@@ -493,6 +532,7 @@ t() {
     eo:resend_title)   echo "→ Agordo de la Resend-API:" ;;
     nl:resend_title)   echo "→ Instelling Resend-API:" ;;
     el:resend_title)   echo "→ Ρύθμιση του API Resend:" ;;
+    ro:resend_title)   echo "→ Configurare API Resend:" ;;
 
     fr:resend_key)     printf "  Clé API Resend (ex: re_123456...) : " ;;
     en:resend_key)     printf "  Resend API key (e.g. re_123456...): " ;;
@@ -504,6 +544,7 @@ t() {
     eo:resend_key)     printf "  Resend API-ŝlosilo (ekz.: re_123456...): " ;;
     nl:resend_key)     printf "  Resend API-sleutel (bv.: re_123456...): " ;;
     el:resend_key)     printf "  Κλειδί API Resend (π.χ.: re_123456...): " ;;
+    ro:resend_key)     printf "  Cheie API Resend (ex.: re_123456...): " ;;
 
     fr:resend_sender)  printf "  Adresse d'expédition vérifiée sur Resend : " ;;
     en:resend_sender)  printf "  Verified sender address on Resend: " ;;
@@ -515,6 +556,7 @@ t() {
     eo:resend_sender)  printf "  Sendanta adreso kontrolita ĉe Resend: " ;;
     nl:resend_sender)  printf "  Bij Resend geverifieerd afzenderadres: " ;;
     el:resend_sender)  printf "  Επαληθευμένη διεύθυνση αποστολής στο Resend: " ;;
+    ro:resend_sender)  printf "  Adresa expeditorului verificată pe Resend: " ;;
 
     fr:ok_resend)      echo "Service Resend configuré ($2)" ;;
     en:ok_resend)      echo "Resend service configured ($2)" ;;
@@ -526,6 +568,7 @@ t() {
     eo:ok_resend)      echo "Resend-servo agordita ($2)" ;;
     nl:ok_resend)      echo "Resend-dienst ingesteld ($2)" ;;
     el:ok_resend)      echo "Η υπηρεσία Resend ρυθμίστηκε ($2)" ;;
+    ro:ok_resend)      echo "Serviciul Resend a fost configurat ($2)" ;;
 
     fr:ok_mock)        echo "Mode local activé (e-mails journalisés sans envoi externe)" ;;
     en:ok_mock)        echo "Local mode activated (emails logged, no external sending)" ;;
@@ -537,6 +580,7 @@ t() {
     eo:ok_mock)        echo "Loka reĝimo aktiva (retleteroj protokolitaj, sen ekstera sendo)" ;;
     nl:ok_mock)        echo "Lokale modus actief (e-mails gelogd, geen externe verzending)" ;;
     el:ok_mock)        echo "Τοπική λειτουργία ενεργή (καταγραφή e-mail, χωρίς εξωτερική αποστολή)" ;;
+    ro:ok_mock)        echo "Mod local activat (e-mailuri jurnalizate, fără trimitere externă)" ;;
 
     # ── library name (GOUV-19) ────────────────────────────────────────────────
     fr:lib_title)      echo "📚 Initialisation de votre première bibliothèque (GOUV-19) :" ;;
@@ -549,6 +593,7 @@ t() {
     eo:lib_title)      echo "📚 Pretigo de via unua biblioteko (GOUV-19):" ;;
     nl:lib_title)      echo "📚 Opzetten van je eerste bibliotheek (GOUV-19):" ;;
     el:lib_title)      echo "📚 Αρχικοποίηση της πρώτης σου βιβλιοθήκης (GOUV-19):" ;;
+    ro:lib_title)      echo "📚 Inițializarea primei tale biblioteci (GOUV-19):" ;;
 
     fr:lib_prompt)     printf "  Nom de votre bibliothèque [défaut: %s] : " "$2" ;;
     en:lib_prompt)     printf "  Library name [default: %s]: " "$2" ;;
@@ -560,6 +605,7 @@ t() {
     eo:lib_prompt)     printf "  Nomo de via biblioteko [defaŭlte: %s]: " "$2" ;;
     nl:lib_prompt)     printf "  Naam van je bibliotheek [standaard: %s]: " "$2" ;;
     el:lib_prompt)     printf "  Όνομα της βιβλιοθήκης σου [προεπιλογή: %s]: " "$2" ;;
+    ro:lib_prompt)     printf "  Numele bibliotecii tale [implicit: %s]: " "$2" ;;
 
     fr:ok_lib)         echo "Bibliothèque configurée : $2" ;;
     en:ok_lib)         echo "Library configured: $2" ;;
@@ -571,6 +617,7 @@ t() {
     eo:ok_lib)         echo "Biblioteko agordita: $2" ;;
     nl:ok_lib)         echo "Bibliotheek ingesteld: $2" ;;
     el:ok_lib)         echo "Η βιβλιοθήκη ρυθμίστηκε: $2" ;;
+    ro:ok_lib)         echo "Bibliotecă configurată: $2" ;;
 
     fr:admin_lib)      echo "  • Bibliothèque : $2" ;;
     en:admin_lib)      echo "  • Library      : $2" ;;
@@ -582,6 +629,7 @@ t() {
     eo:admin_lib)      echo "  • Biblioteko   : $2" ;;
     nl:admin_lib)      echo "  • Bibliotheek  : $2" ;;
     el:admin_lib)      echo "  • Βιβλιοθήκη   : $2" ;;
+    ro:admin_lib)      echo "  • Bibliotecă   : $2" ;;
 
     # ── admin email (GOUV-19) ────────────────────────────────────────────────
     fr:admin_email_title)  echo "👤 Compte d'administration initial :" ;;
@@ -594,6 +642,7 @@ t() {
     eo:admin_email_title)  echo "👤 Komenca administra konto:" ;;
     nl:admin_email_title)  echo "👤 Eerste beheerdersaccount:" ;;
     el:admin_email_title)  echo "👤 Αρχικός λογαριασμός διαχείρισης:" ;;
+    ro:admin_email_title)  echo "👤 Contul inițial de administrare:" ;;
 
     fr:admin_email_prompt) printf "  Courriel de l'administrateur [défaut: %s] : " "$2" ;;
     en:admin_email_prompt) printf "  Administrator email [default: %s]: " "$2" ;;
@@ -605,6 +654,7 @@ t() {
     eo:admin_email_prompt) printf "  Retpoŝto de la administranto [defaŭlte: %s]: " "$2" ;;
     nl:admin_email_prompt) printf "  E-mail van het beheer [standaard: %s]: " "$2" ;;
     el:admin_email_prompt) printf "  E-mail της διαχείρισης [προεπιλογή: %s]: " "$2" ;;
+    ro:admin_email_prompt) printf "  E-mailul persoanei care administrează [implicit: %s]: " "$2" ;;
 
     # ── rebuild confirmation ─────────────────────────────────────────────────
     fr:rebuild_warn)       echo "⚠️  Attention : cette opération va supprimer définitivement la base locale et ses données." ;;
@@ -617,6 +667,7 @@ t() {
     eo:rebuild_warn)       echo "⚠️  Atentu: ĉi tiu operacio definitive forigos la lokan datumbazon kaj ĝiajn datumojn." ;;
     nl:rebuild_warn)       echo "⚠️  Let op: deze handeling verwijdert de lokale database en haar gegevens definitief." ;;
     el:rebuild_warn)       echo "⚠️  Προσοχή: αυτή η ενέργεια θα διαγράψει οριστικά την τοπική βάση και τα δεδομένα της." ;;
+    ro:rebuild_warn)       echo "⚠️  Atenție: această operațiune va șterge definitiv baza de date locală și datele ei." ;;
 
     fr:confirm_prompt)     printf "  Continuer ? [o/N] : " ;;
     en:confirm_prompt)     printf "  Continue? [y/N]: " ;;
@@ -628,6 +679,7 @@ t() {
     eo:confirm_prompt)     printf "  Ĉu daŭrigi? [j/N]: " ;;
     nl:confirm_prompt)     printf "  Doorgaan? [j/N]: " ;;
     el:confirm_prompt)     printf "  Συνέχεια; [ν/Ο]: " ;;
+    ro:confirm_prompt)     printf "  Continui? [d/N]: " ;;
 
     fr:abort)              echo "Opération annulée." ;;
     en:abort)              echo "Operation aborted." ;;
@@ -639,6 +691,7 @@ t() {
     eo:abort)              echo "Operacio nuligita." ;;
     nl:abort)              echo "Handeling geannuleerd." ;;
     el:abort)              echo "Η ενέργεια ακυρώθηκε." ;;
+    ro:abort)              echo "Operațiune anulată." ;;
 
     # ── step 3 ───────────────────────────────────────────────────────────────
     fr:step3)          echo "3/4 · Configuration et compilation du frontend" ;;
@@ -651,6 +704,7 @@ t() {
     eo:step3)          echo "3/4 · Agordo kaj kompilado de la frontend" ;;
     nl:step3)          echo "3/4 · Instelling en bouw van de frontend" ;;
     el:step3)          echo "3/4 · Ρύθμιση και μεταγλώττιση του frontend" ;;
+    ro:step3)          echo "3/4 · Configurarea și compilarea frontendului" ;;
 
     fr:ok_envlocal)    echo "Fichier .env.local créé et relié à la passerelle locale ($2)" ;;
     en:ok_envlocal)    echo "File .env.local created and linked to local gateway ($2)" ;;
@@ -662,6 +716,7 @@ t() {
     eo:ok_envlocal)    echo "Dosiero .env.local kreita kaj ligita al la loka kluzo ($2)" ;;
     nl:ok_envlocal)    echo "Bestand .env.local aangemaakt en verbonden met de lokale gateway ($2)" ;;
     el:ok_envlocal)    echo "Το αρχείο .env.local δημιουργήθηκε και συνδέθηκε με την τοπική πύλη ($2)" ;;
+    ro:ok_envlocal)    echo "Fișierul .env.local a fost creat și legat la poarta locală ($2)" ;;
 
     fr:npm_install)    echo "→ Installation des dépendances JavaScript (npm ci)..." ;;
     en:npm_install)    echo "→ Installing JavaScript dependencies (npm ci)..." ;;
@@ -673,6 +728,7 @@ t() {
     eo:npm_install)    echo "→ Instalado de la JavaScript-dependaĵoj (npm ci)..." ;;
     nl:npm_install)    echo "→ Installatie van de JavaScript-afhankelijkheden (npm ci)..." ;;
     el:npm_install)    echo "→ Εγκατάσταση των εξαρτήσεων JavaScript (npm ci)..." ;;
+    ro:npm_install)    echo "→ Instalarea dependențelor JavaScript (npm ci)..." ;;
 
     fr:ok_deps)        echo "Dépendances frontend installées." ;;
     en:ok_deps)        echo "Frontend dependencies installed." ;;
@@ -684,6 +740,7 @@ t() {
     eo:ok_deps)        echo "Frontend-dependaĵoj instalitaj." ;;
     nl:ok_deps)        echo "Frontend-afhankelijkheden geïnstalleerd." ;;
     el:ok_deps)        echo "Οι εξαρτήσεις του frontend εγκαταστάθηκαν." ;;
+    ro:ok_deps)        echo "Dependențele frontendului au fost instalate." ;;
 
     fr:ok_deps_exist)  echo "Dépendances frontend déjà présentes (node_modules/)" ;;
     en:ok_deps_exist)  echo "Frontend dependencies already present (node_modules/)" ;;
@@ -695,6 +752,7 @@ t() {
     eo:ok_deps_exist)  echo "Frontend-dependaĵoj jam ĉeestas (node_modules/)" ;;
     nl:ok_deps_exist)  echo "Frontend-afhankelijkheden al aanwezig (node_modules/)" ;;
     el:ok_deps_exist)  echo "Οι εξαρτήσεις του frontend υπάρχουν ήδη (node_modules/)" ;;
+    ro:ok_deps_exist)  echo "Dependențele frontendului sunt deja prezente (node_modules/)" ;;
 
     fr:npm_build)      echo "→ Construction de l'application web pour Caddy (npm run build)..." ;;
     en:npm_build)      echo "→ Building web application for Caddy (npm run build)..." ;;
@@ -706,6 +764,7 @@ t() {
     eo:npm_build)      echo "→ Konstruado de la retaplikaĵo por Caddy (npm run build)..." ;;
     nl:npm_build)      echo "→ Bouw van de webtoepassing voor Caddy (npm run build)..." ;;
     el:npm_build)      echo "→ Κατασκευή της εφαρμογής ιστού για τον Caddy (npm run build)..." ;;
+    ro:npm_build)      echo "→ Construirea aplicației web pentru Caddy (npm run build)..." ;;
 
     fr:ok_build)       echo "Application web compilée dans dist/." ;;
     en:ok_build)       echo "Web application built in dist/." ;;
@@ -717,6 +776,7 @@ t() {
     eo:ok_build)       echo "Retaplikaĵo kompilita en dist/." ;;
     nl:ok_build)       echo "Webtoepassing gebouwd in dist/." ;;
     el:ok_build)       echo "Η εφαρμογή ιστού μεταγλωττίστηκε στο dist/." ;;
+    ro:ok_build)       echo "Aplicația web a fost compilată în dist/." ;;
 
     fr:ok_build_exist) echo "Application web déjà prête (dist/)" ;;
     en:ok_build_exist) echo "Web application already ready (dist/)" ;;
@@ -728,6 +788,7 @@ t() {
     eo:ok_build_exist) echo "Retaplikaĵo jam preta (dist/)" ;;
     nl:ok_build_exist) echo "Webtoepassing al klaar (dist/)" ;;
     el:ok_build_exist) echo "Η εφαρμογή ιστού είναι ήδη έτοιμη (dist/)" ;;
+    ro:ok_build_exist) echo "Aplicația web este deja pregătită (dist/)" ;;
 
     # ── step 4 ───────────────────────────────────────────────────────────────
     fr:step4)          echo "4/4 · Déploiement et démarrage de la pile complète (Docker)" ;;
@@ -740,6 +801,7 @@ t() {
     eo:step4)          echo "4/4 · Disponigo kaj lanĉo de la tuta stako (Docker)" ;;
     nl:step4)          echo "4/4 · Uitrol en start van de volledige stack (Docker)" ;;
     el:step4)          echo "4/4 · Ανάπτυξη και εκκίνηση ολόκληρης της στοίβας (Docker)" ;;
+    ro:step4)          echo "4/4 · Implementarea și pornirea stivei complete (Docker)" ;;
 
     fr:rebuild_clean)  echo "→ Nettoyage des conteneurs et volumes existants (--rebuild)..." ;;
     en:rebuild_clean)  echo "→ Cleaning existing containers and volumes (--rebuild)..." ;;
@@ -751,6 +813,7 @@ t() {
     eo:rebuild_clean)  echo "→ Purigo de la ekzistantaj ujoj kaj volumoj (--rebuild)..." ;;
     nl:rebuild_clean)  echo "→ Opruimen van de bestaande containers en volumes (--rebuild)..." ;;
     el:rebuild_clean)  echo "→ Καθαρισμός των υπαρχόντων container και τόμων (--rebuild)..." ;;
+    ro:rebuild_clean)  echo "→ Curățarea containerelor și a volumelor existente (--rebuild)..." ;;
 
     fr:db_existing)    echo "→ Base existante détectée ($2 tables). Démarrage des conteneurs et vérification des migrations..." ;;
     en:db_existing)    echo "→ Existing database detected ($2 tables). Starting containers and checking migrations..." ;;
@@ -762,6 +825,7 @@ t() {
     eo:db_existing)    echo "→ Ekzistanta datumbazo trovita ($2 tabeloj). Lanĉo de la ujoj kaj kontrolo de la migradoj..." ;;
     nl:db_existing)    echo "→ Bestaande database gevonden ($2 tabellen). Containers starten en migraties controleren..." ;;
     el:db_existing)    echo "→ Εντοπίστηκε υπάρχουσα βάση ($2 πίνακες). Εκκίνηση των container και έλεγχος των μεταναστεύσεων..." ;;
+    ro:db_existing)    echo "→ Bază de date existentă detectată ($2 tabele). Pornirea containerelor și verificarea migrărilor..." ;;
 
     fr:db_fresh)       echo "→ Base vierge détectée. Lancement de l'amorçage complet..." ;;
     en:db_fresh)       echo "→ Fresh database detected. Running full bootstrap..." ;;
@@ -773,6 +837,7 @@ t() {
     eo:db_fresh)       echo "→ Malplena datumbazo trovita. Lanĉo de la kompleta pretigo..." ;;
     nl:db_fresh)       echo "→ Lege database gevonden. Volledige eerste opzet wordt gestart..." ;;
     el:db_fresh)       echo "→ Εντοπίστηκε κενή βάση. Εκκίνηση της πλήρους αρχικοποίησης..." ;;
+    ro:db_fresh)       echo "→ Bază de date goală detectată. Lansarea inițializării complete..." ;;
 
     fr:health_title)   echo "Contrôle de santé global des services" ;;
     en:health_title)   echo "Global service health check" ;;
@@ -784,6 +849,7 @@ t() {
     eo:health_title)   echo "Ĝenerala sankontrolo de la servoj" ;;
     nl:health_title)   echo "Algemene gezondheidscontrole van de diensten" ;;
     el:health_title)   echo "Γενικός έλεγχος υγείας των υπηρεσιών" ;;
+    ro:health_title)   echo "Verificarea generală a stării serviciilor" ;;
 
     # ── final output ─────────────────────────────────────────────────────────
     fr:done_banner)    echo "✓ AnarBib est installé et prêt à être utilisé !" ;;
@@ -796,6 +862,7 @@ t() {
     eo:done_banner)    echo "✓ AnarBib estas instalita kaj preta por uzo!" ;;
     nl:done_banner)    echo "✓ AnarBib is geïnstalleerd en klaar voor gebruik!" ;;
     el:done_banner)    echo "✓ Το AnarBib εγκαταστάθηκε και είναι έτοιμο για χρήση!" ;;
+    ro:done_banner)    echo "✓ AnarBib este instalat și gata de folosit!" ;;
 
     fr:open_browser)   echo "  👉 Ouvrez votre navigateur sur :" ;;
     en:open_browser)   echo "  👉 Open your browser at:" ;;
@@ -807,6 +874,7 @@ t() {
     eo:open_browser)   echo "  👉 Malfermu vian retumilon ĉe:" ;;
     nl:open_browser)   echo "  👉 Open je browser op:" ;;
     el:open_browser)   echo "  👉 Άνοιξε τον περιηγητή σου στο:" ;;
+    ro:open_browser)   echo "  👉 Deschide navigatorul la:" ;;
 
     fr:url_local)      echo "     • Local       : http://localhost" ;;
     en:url_local)      echo "     • Local       : http://localhost" ;;
@@ -818,6 +886,7 @@ t() {
     eo:url_local)      echo "     • Loke         : http://localhost" ;;
     nl:url_local)      echo "     • Lokaal       : http://localhost" ;;
     el:url_local)      echo "     • Τοπικά       : http://localhost" ;;
+    ro:url_local)      echo "     • Local       : http://localhost" ;;
 
     fr:url_network)    echo "     • Réseau (IP) : http://$2" ;;
     en:url_network)    echo "     • Network (IP): http://$2" ;;
@@ -829,6 +898,7 @@ t() {
     eo:url_network)    echo "     • Reto (IP)    : http://$2" ;;
     nl:url_network)    echo "     • Netwerk (IP) : http://$2" ;;
     el:url_network)    echo "     • Δίκτυο (IP)  : http://$2" ;;
+    ro:url_network)    echo "     • Rețea (IP)  : http://$2" ;;
 
     fr:url_domain)     echo "     • Domaine     : tout nom de domaine ou alias DNS pointant vers cette machine" ;;
     en:url_domain)     echo "     • Domain      : any domain name or DNS alias pointing to this machine" ;;
@@ -840,6 +910,7 @@ t() {
     eo:url_domain)     echo "     • Domajno      : ajna domajna nomo aŭ DNS-kromnomo montranta al ĉi tiu maŝino" ;;
     nl:url_domain)     echo "     • Domein       : elke domeinnaam of DNS-alias die naar deze machine wijst" ;;
     el:url_domain)     echo "     • Τομέας       : οποιοδήποτε όνομα τομέα ή ψευδώνυμο DNS δείχνει σε αυτή τη μηχανή" ;;
+    ro:url_domain)     echo "     • Domeniu     : orice nume de domeniu sau alias DNS care indică spre această mașină" ;;
 
     fr:admin_title)    echo "👤 Compte d'administration initial créé (amorçage) :" ;;
     en:admin_title)    echo "👤 Initial admin account created (bootstrap):" ;;
@@ -851,6 +922,7 @@ t() {
     eo:admin_title)    echo "👤 Komenca administra konto kreita (pretigo):" ;;
     nl:admin_title)    echo "👤 Eerste beheerdersaccount aangemaakt (opzet):" ;;
     el:admin_title)    echo "👤 Ο αρχικός λογαριασμός διαχείρισης δημιουργήθηκε (αρχικοποίηση):" ;;
+    ro:admin_title)    echo "👤 Contul inițial de administrare a fost creat (inițializare):" ;;
 
     fr:admin_email)    echo "  • Courriel     : $2" ;;
     en:admin_email)    echo "  • Email        : $2" ;;
@@ -862,6 +934,7 @@ t() {
     eo:admin_email)    echo "  • Retpoŝto     : $2" ;;
     nl:admin_email)    echo "  • E-mail       : $2" ;;
     el:admin_email)    echo "  • E-mail       : $2" ;;
+    ro:admin_email)    echo "  • E-mail       : $2" ;;
 
     fr:admin_pass)     echo "  • Mot de passe : $2" ;;
     en:admin_pass)     echo "  • Password     : $2" ;;
@@ -873,6 +946,7 @@ t() {
     eo:admin_pass)     echo "  • Pasvorto     : $2" ;;
     nl:admin_pass)     echo "  • Wachtwoord   : $2" ;;
     el:admin_pass)     echo "  • Κωδικός      : $2" ;;
+    ro:admin_pass)     echo "  • Parolă       : $2" ;;
 
     fr:admin_pass_file)  echo "  • Mot de passe : écrit dans $2 (droits 0600, root) — non affiché ici. Supprimez ce fichier après la première connexion." ;;
     en:admin_pass_file)  echo "  • Password     : written to $2 (mode 0600, root) — not shown here. Delete that file after the first login." ;;
@@ -884,6 +958,7 @@ t() {
     eo:admin_pass_file)  echo "  • Pasvorto     : skribita en $2 (reĝimo 0600, root) — ne montrata ĉi tie. Forigu tiun dosieron post la unua ensaluto." ;;
     nl:admin_pass_file)  echo "  • Wachtwoord   : geschreven naar $2 (modus 0600, root) — hier niet getoond. Verwijder dat bestand na de eerste aanmelding." ;;
     el:admin_pass_file)  echo "  • Κωδικός      : γράφτηκε στο $2 (δικαιώματα 0600, root) — δεν εμφανίζεται εδώ. Διάγραψε αυτό το αρχείο μετά την πρώτη σύνδεση." ;;
+    ro:admin_pass_file)  echo "  • Parolă       : scrisă în $2 (drepturi 0600, root) — neafișată aici. Șterge acest fișier după prima conectare." ;;
 
     fr:admin_warn)     echo "  ⚠️  Notez bien ce mot de passe aléatoire : il ne sera plus réaffiché !" ;;
     en:admin_warn)     echo "  ⚠️  Save this random password: it will not be displayed again!" ;;
@@ -895,6 +970,7 @@ t() {
     eo:admin_warn)     echo "  ⚠️  Notu bone ĉi tiun hazardan pasvorton: ĝi ne plu estos montrata!" ;;
     nl:admin_warn)     echo "  ⚠️  Noteer dit willekeurige wachtwoord goed: het wordt niet opnieuw getoond!" ;;
     el:admin_warn)     echo "  ⚠️  Σημείωσε αυτόν τον τυχαίο κωδικό: δεν θα εμφανιστεί ξανά!" ;;
+    ro:admin_warn)     echo "  ⚠️  Notează-ți bine această parolă aleatorie: nu va mai fi afișată!" ;;
 
     fr:access_title)   echo "Points d'accès de votre installation :" ;;
     en:access_title)   echo "Access points for your installation:" ;;
@@ -906,6 +982,7 @@ t() {
     eo:access_title)   echo "Alirpunktoj de via instalaĵo:" ;;
     nl:access_title)   echo "Toegangspunten van je installatie:" ;;
     el:access_title)   echo "Σημεία πρόσβασης της εγκατάστασής σου:" ;;
+    ro:access_title)   echo "Punctele de acces ale instalării tale:" ;;
 
     fr:access_web)     echo "  • Application Web (Interface) : port 80 (ou port 5173 en mode npm run dev)" ;;
     en:access_web)     echo "  • Web Application (Interface)  : port 80 (or port 5173 in npm run dev mode)" ;;
@@ -917,6 +994,7 @@ t() {
     eo:access_web)     echo "  • Retaplikaĵo (interfaco)      : pordo 80 (aŭ pordo 5173 en reĝimo npm run dev)" ;;
     nl:access_web)     echo "  • Webtoepassing (interface)    : poort 80 (of poort 5173 in modus npm run dev)" ;;
     el:access_web)     echo "  • Εφαρμογή ιστού (διεπαφή)     : θύρα 80 (ή θύρα 5173 σε λειτουργία npm run dev)" ;;
+    ro:access_web)     echo "  • Aplicația web (interfață)     : portul 80 (sau portul 5173 în modul npm run dev)" ;;
 
     fr:access_api)     echo "  • Passerelle API (Caddy)       : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
     en:access_api)     echo "  • API Gateway (Caddy)          : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
@@ -928,6 +1006,7 @@ t() {
     eo:access_api)     echo "  • API-kluzo (Caddy)            : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
     nl:access_api)     echo "  • API-gateway (Caddy)          : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
     el:access_api)     echo "  • Πύλη API (Caddy)             : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
+    ro:access_api)     echo "  • Poarta API (Caddy)            : /rest/v1/, /auth/v1/, /storage/v1/, /functions/v1/" ;;
 
     fr:access_auth)    echo "  • Point de santé Auth          : /auth/v1/health" ;;
     en:access_auth)    echo "  • Auth health endpoint         : /auth/v1/health" ;;
@@ -939,6 +1018,7 @@ t() {
     eo:access_auth)    echo "  • Sanpunkto Auth               : /auth/v1/health" ;;
     nl:access_auth)    echo "  • Gezondheidspunt Auth         : /auth/v1/health" ;;
     el:access_auth)    echo "  • Σημείο υγείας Auth           : /auth/v1/health" ;;
+    ro:access_auth)    echo "  • Punct de stare Auth           : /auth/v1/health" ;;
 
     fr:access_rest)    echo "  • Point de santé API REST      : /rest/v1/" ;;
     en:access_rest)    echo "  • REST API health endpoint     : /rest/v1/" ;;
@@ -950,6 +1030,7 @@ t() {
     eo:access_rest)    echo "  • Sanpunkto REST-API           : /rest/v1/" ;;
     nl:access_rest)    echo "  • Gezondheidspunt REST-API     : /rest/v1/" ;;
     el:access_rest)    echo "  • Σημείο υγείας REST API       : /rest/v1/" ;;
+    ro:access_rest)    echo "  • Punct de stare API REST       : /rest/v1/" ;;
 
     fr:manage_title)   echo "Gestion de l'application :" ;;
     en:manage_title)   echo "Application management:" ;;
@@ -961,6 +1042,7 @@ t() {
     eo:manage_title)   echo "Administrado de la aplikaĵo:" ;;
     nl:manage_title)   echo "Beheer van de toepassing:" ;;
     el:manage_title)   echo "Διαχείριση της εφαρμογής:" ;;
+    ro:manage_title)   echo "Gestionarea aplicației:" ;;
 
     fr:manage_stop)    echo "  • Arrêter l'ensemble         : ./install.sh --stop" ;;
     en:manage_stop)    echo "  • Stop everything            : ./install.sh --stop" ;;
@@ -972,6 +1054,7 @@ t() {
     eo:manage_stop)    echo "  • Haltigi ĉion               : ./install.sh --stop" ;;
     nl:manage_stop)    echo "  • Alles stoppen              : ./install.sh --stop" ;;
     el:manage_stop)    echo "  • Διακοπή των πάντων         : ./install.sh --stop" ;;
+    ro:manage_stop)    echo "  • Oprește totul               : ./install.sh --stop" ;;
 
     fr:manage_rebuild) echo "  • Réinitialiser de zéro      : ./install.sh --rebuild" ;;
     en:manage_rebuild) echo "  • Reset from scratch         : ./install.sh --rebuild" ;;
@@ -983,6 +1066,7 @@ t() {
     eo:manage_rebuild) echo "  • Rekomenci de nulo          : ./install.sh --rebuild" ;;
     nl:manage_rebuild) echo "  • Vanaf nul opnieuw opzetten : ./install.sh --rebuild" ;;
     el:manage_rebuild) echo "  • Επανεκκίνηση από το μηδέν  : ./install.sh --rebuild" ;;
+    ro:manage_rebuild) echo "  • Reinițializează de la zero  : ./install.sh --rebuild" ;;
 
     fr:manage_health)  echo "  • Vérifier la santé          : ./deploy/deploy.sh --controle" ;;
     en:manage_health)  echo "  • Check health               : ./deploy/deploy.sh --controle" ;;
@@ -994,6 +1078,7 @@ t() {
     eo:manage_health)  echo "  • Kontroli la sanon          : ./deploy/deploy.sh --controle" ;;
     nl:manage_health)  echo "  • Gezondheid controleren     : ./deploy/deploy.sh --controle" ;;
     el:manage_health)  echo "  • Έλεγχος υγείας             : ./deploy/deploy.sh --controle" ;;
+    ro:manage_health)  echo "  • Verifică starea             : ./deploy/deploy.sh --controle" ;;
 
     fr:manage_update)  echo "  • Mettre à jour le code      : ./deploy/deploy.sh" ;;
     en:manage_update)  echo "  • Update code                : ./deploy/deploy.sh" ;;
@@ -1005,6 +1090,7 @@ t() {
     eo:manage_update)  echo "  • Ĝisdatigi la kodon         : ./deploy/deploy.sh" ;;
     nl:manage_update)  echo "  • Code bijwerken             : ./deploy/deploy.sh" ;;
     el:manage_update)  echo "  • Ενημέρωση του κώδικα       : ./deploy/deploy.sh" ;;
+    ro:manage_update)  echo "  • Actualizează codul          : ./deploy/deploy.sh" ;;
 
     *) echo "[$1]" ;;
   esac
@@ -1039,7 +1125,7 @@ while [ $# -gt 0 ]; do
     --lang)
       shift
       case "${1:-}" in
-        fr|en|pt|es|it|de|ca|eo|nl|el) LANG_CODE="$1" ;;
+        fr|en|pt|es|it|de|ca|eo|nl|el|ro) LANG_CODE="$1" ;;
         *) echo "✗ $(t err_lang "${1:-}")" >&2; exit 2 ;;
       esac
       ;;
@@ -1356,7 +1442,7 @@ if [ "$START" = "1" ]; then
       t confirm_prompt
       read -r REPONSE_REBUILD
       case "$REPONSE_REBUILD" in
-        [yYoOsSjJ]*|ν*|Ν*) ;;   # oui/yes/sim/sí/sì/ja/jes/ναι
+        [yYoOsSjJdD]*|ν*|Ν*) ;;   # oui/yes/sim/sí/sì/ja/jes/ναι/da
         *) echo "$(t abort)"; exit 0 ;;
       esac
     fi

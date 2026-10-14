@@ -31,6 +31,7 @@ vi.mock('@/pages/account/ContributorAccountPage', () => ({ default: () => <div>p
 
 import ContaRouter from '@/pages/account/ContaRouter';
 import ServiceIndisponible from '@/components/ServiceIndisponible';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -102,7 +103,7 @@ describe('AccountPage et les locales (source)', () => {
   it('les deux clés existent dans les dix locales, sans texte vide', () => {
     const dir = path.join(RACINE, 'src/i18n/locales');
     const fichiers = readdirSync(dir).filter((f) => f.endsWith('.json'));
-    expect(fichiers).toHaveLength(10);
+    expect(fichiers).toHaveLength(LOCALE_CODES.length);
     for (const f of fichiers) {
       const j = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
       for (const k of ['service.unavailable.title', 'service.unavailable.body', 'common.retry']) {
