@@ -10,8 +10,9 @@
 --   T3  les refus, tous IDENTIQUES (message et HINT
 --       error.edge.received_asset_not_found) : lecteur, adhésion inactive,
 --       coordination d'une autre bibliothèque, livre non détenu, fichier
---       inconnu, livre inconnu — et rien n'a été écrit ni verrouillé (xmax du
---       run inchangé) ;
+--       inconnu, livre inconnu — administration comprise depuis le 14/10
+--       (migration 20261014190433) — et rien n'a été écrit ni verrouillé
+--       (xmax du run inchangé) ;
 --   T4  la garde et fn_attach_received_asset_record disent la même chose,
 --       cas par cas (chaque attache réelle annulée dans une sous-transaction) ;
 --   T5  l'oracle « déjà attaché » de la RPC d'écriture est fermé : un fichier
@@ -172,6 +173,8 @@ BEGIN
         ('fichier inconnu',       v_coordA,  v_ra_inconnu, v_bookA),
         ('livre inconnu',         v_coordA,  v_raA,        v_book_inconnu),
         ('admin fichier inconnu', v_admin,   v_ra_inconnu, v_bookA),
+        ('admin livre inconnu',   v_admin,   v_raA,        v_book_inconnu),
+        ('admin livre NULL',      v_admin,   v_raA,        NULL::bigint),
         ('fichier NULL',          v_coordA,  NULL::bigint, v_bookA),
         ('livre NULL',            v_coordA,  v_raA,        NULL::bigint)) AS c(nom, sub, ra, book) LOOP
       v_g := pg_temp.attach_garde(v_rec.sub, v_rec.ra, v_rec.book);
@@ -200,7 +203,8 @@ BEGIN
         ('coordB fichier de A', v_coordB,  v_raA,        v_bookB),
         ('coordA livre de B',   v_coordA,  v_raA,        v_bookB),
         ('fichier inconnu',     v_coordA,  v_ra_inconnu, v_bookA),
-        ('livre inconnu',       v_coordA,  v_raA,        v_book_inconnu)) AS c(nom, sub, ra, book) LOOP
+        ('livre inconnu',       v_coordA,  v_raA,        v_book_inconnu),
+        ('admin livre inconnu', v_admin,   v_raA,        v_book_inconnu)) AS c(nom, sub, ra, book) LOOP
       v_g := split_part(pg_temp.attach_garde(v_rec.sub, v_rec.ra, v_rec.book), '|', 1);
       v_r := pg_temp.attach_ecrit(v_rec.sub, v_rec.ra, v_rec.book);
       IF v_g IS DISTINCT FROM split_part(v_r, '|', 1)

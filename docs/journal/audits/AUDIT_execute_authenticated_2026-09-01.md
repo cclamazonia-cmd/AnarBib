@@ -2118,8 +2118,12 @@ l'Edge Function (`supabase/functions/attach-received-asset/index.ts`).
 livre existe : la garde rend `true`, et l'Edge Function téléverse la copie
 avant que `fn_attach_received_asset_record` n'échoue sur la clé étrangère, puis
 l'efface. C'est un aller-retour inutile, réservé à l'administration et sans
-trace durable : ce n'est pas une faille. À reprendre seulement si l'on touche
-de nouveau cette garde.
+trace durable : ce n'est pas une faille. **Corrigée le même soir**
+(`20261014190433`) : la garde refuse un livre inconnu pour tout le monde,
+administration comprise, avant la règle (b), par le même refus
+« introuvable » ; la RPC d'écriture fait de même au lieu de buter sur la clé
+étrangère, pour que les deux restent d'accord (`attach_recu_garde_tests`, cas
+« admin livre inconnu » en T3 et T4).
 
 **Compte au 14/10, après le déploiement de `20261014181057`.** 0029 = **430**,
 tous justifiés (437 − 7 fermées, dont celle-ci reste ouverte et justifiée) ;
