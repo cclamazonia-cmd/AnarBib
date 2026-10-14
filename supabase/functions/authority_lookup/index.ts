@@ -5,7 +5,10 @@ import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dan
 import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
 const TIMEOUT_MS = 8000;
 const USER_AGENT = 'AnarBib authority-lookup/1.0 (contact: anarbib@riseup.net)';
-const WD_LANGUAGES = 'en|fr|pt|es|de|it|ca|eo|nl|el|ru|ja|zh|ar';
+// ro ajouté le 14/10/2026 (lot 2 du roumain, backlog E39) : les formes et
+// libellés roumains des autorités arrivent avec les autres, avant même que
+// l'app parle roumain.
+const WD_LANGUAGES = 'en|fr|pt|es|de|it|ca|eo|nl|el|ro|ru|ja|zh|ar';
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
