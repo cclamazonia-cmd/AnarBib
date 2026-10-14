@@ -29,6 +29,7 @@ import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb, cheminCapaNeuf, nomCapaNeuf, extensionCapa } from '@/lib/coverThumbs';
 import { messageRechercheCapas, accordEdition, parIsbn, etiquetteCandidate, ordonnerCandidates } from '@/lib/coverSources';
 import { volumesDifferents } from '@/lib/volumes';
+import { fichierSansMetadonnees } from '@/lib/imageMetadata';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import Modal from '@/components/ui/Modal';
@@ -591,13 +592,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
     setCoverUploading(true);
     try {
+      // Le bucket est public : la capa part sans EXIF (GPS, appareil…), XMP,
+      // IPTC ni commentaires — pixels inchangés (imageMetadata.js).
+      const fichier = await fichierSansMetadonnees(coverFile);
       const { error } = await supabase.storage
         .from('covers')
-        .upload(storagePath, coverFile, { upsert: false });
+        .upload(storagePath, fichier, { upsert: false });
       if (error) throw error;
       // Dérivé pour la grille du catalogue, produit depuis le fichier déjà en
       // mémoire (pas de retéléchargement). Best-effort : voir coverThumbs.js.
-      await writeCoverThumb(storagePath, coverFile);
+      await writeCoverThumb(storagePath, fichier);
       set('cover_object_path', storagePath);
       // Provenance de l'image qu'on vient d'envoyer : sans ça, elle héritait de
       // celle de la capa précédente (une candidate Open Library, par exemple).

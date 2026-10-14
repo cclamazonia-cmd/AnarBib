@@ -270,7 +270,9 @@ describe('BookDraftForm — une capa neuve a une adresse neuve (28/09/2026)', ()
     expect(FORM).toMatch(/cheminCapaNeuf\(stableKey, ext\)/);
     expect(FORM).toMatch(/cheminCapaNeuf\(stableKey, 'jpg'\)/);
     expect(FORM).toMatch(/action: 'store',[\s\S]{0,400}?nom: nomCapaNeuf\(\)/);
-    expect(FORM).toMatch(/\.upload\(storagePath, coverFile, \{ upsert: false \}\)/);
+    // Le fichier part sans ses métadonnées (14/10/2026, image-metadonnees.test.js).
+    expect(FORM).toMatch(/const fichier = await fichierSansMetadonnees\(coverFile\)/);
+    expect(FORM).toMatch(/\.upload\(storagePath, fichier, \{ upsert: false \}\)/);
     expect(FORM).toMatch(/\.upload\(storagePath, blob, \{ upsert: false, contentType: 'image\/jpeg' \}\)/);
   });
 });

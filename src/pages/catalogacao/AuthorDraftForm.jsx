@@ -16,6 +16,7 @@ import CountrySelect from '@/components/forms/CountrySelect';
 import NameEntryAssist from '@/components/catalog/NameEntryAssist';
 import { proposerPointAcces } from '@/lib/nameEntry';
 import { languageOptions } from '@/lib/languages';
+import { fichierSansMetadonnees } from '@/lib/imageMetadata';
 import { LOCALE_CODES } from '@/i18n/locales';
 
 // ── Authority types ───────────────────────────────────────
@@ -189,7 +190,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     const storagePath = `authors/${draftId}_${Date.now()}.${ext}`;
     try {
       setPhotoUploading(true);
-      const { error } = await supabase.storage.from('authors').upload(storagePath, photoFile, { upsert: true });
+      // Bucket public : pas d'EXIF (GPS, appareil…) ni XMP — pixels inchangés.
+      const fichier = await fichierSansMetadonnees(photoFile);
+      const { error } = await supabase.storage.from('authors').upload(storagePath, fichier, { upsert: true });
       if (error) throw error;
       set('photo_object_path', storagePath);
       setPhotoPreviewUrl('');

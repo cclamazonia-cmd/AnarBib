@@ -64,6 +64,7 @@ import { AdresseRefusee, fetchSortant, lireOctetsBornes } from '../_shared/core/
 import type { Candidate } from '../_shared/capas/sources.ts';
 import { envGet, fetchWithTimeout, normalizeIsbn } from '../_shared/capas/sources.ts';
 import { candidatesUniques, chercherCapas, runSource } from '../_shared/capas/recherche.ts';
+import { retirerMetadonnees } from '../_shared/capas/metadonnees.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -216,6 +217,9 @@ async function handleStore(body: Record<string, unknown>, authHeader: string) {
   const bytes = await lireOctetsBornes(imgRes, IMAGE_MAX_OCTETS);
   if (!bytes) throw new Error('Image too large.');
   if (bytes.byteLength === 0) throw new Error('Empty image.');
+  // Le bucket est public : l'image part sans EXIF (GPS, appareil…), XMP, IPTC
+  // ni commentaires, pixels inchanges (_shared/capas/metadonnees.ts).
+  const { octets: propres, retires: metadonneesRetirees } = retirerMetadonnees(bytes);
 
   const storagePath = `books/${key}/${nom}.${ext}`;
   const putUrl = `${base}/storage/v1/object/covers/${storagePath}`;
@@ -227,14 +231,14 @@ async function handleStore(body: Record<string, unknown>, authHeader: string) {
       ...(authHeader ? { Authorization: authHeader } : {}),
       ...(envGet('SUPABASE_ANON_KEY') ? { apikey: envGet('SUPABASE_ANON_KEY') as string } : {}),
     },
-    body: bytes,
+    body: propres,
   });
   if (!putRes.ok) {
     const detail = await putRes.text().catch(() => '');
     throw new Error(`Storage write HTTP ${putRes.status}${detail ? `: ${detail.slice(0, 200)}` : ''}`);
   }
 
-  return { ok: true, storagePath, source, license, contentType };
+  return { ok: true, storagePath, source, license, contentType, metadonneesRetirees };
 }
 
 async function handleSearch(body: Record<string, unknown>, authHeader: string) {
