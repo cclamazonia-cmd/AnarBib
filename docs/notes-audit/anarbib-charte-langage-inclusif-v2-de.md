@@ -36,6 +36,7 @@ künftigen Beiträge. Es richtet sich an Personen, die zu den Dateien
    - [Esperanto (eo)](#esperanto-eo)
    - [Niederländisch (nl)](#niederländisch-nl)
    - [Griechisch (el)](#griechisch-el)
+   - [Rumänisch (ro)](#rumänisch-ro)
 5. [Politische Referenzbegriffe](#politische-referenzbegriffe)
 6. [Verbotene Begriffe](#verbotene-begriffe)
 7. [Verfahren für künftige Ergänzungen](#verfahren-für-künftige-ergänzungen)
@@ -100,6 +101,7 @@ Asterisk mit dem Mediopunkt. Die in dieser Charta getroffenen Entscheidungen sin
 | `eo` | Infix `-in-` durch Bindestriche sichtbar gemacht + Pronomen `ri` | **Angenommen** |
 | `nl` | Neutrale Rollenformen | **Provisorisch** — von der Gemeinschaft zu validieren |
 | `el` | — | **Festzulegen** mit einer griechischsprachigen militanten Person |
+| `ro` | Zuerst epicoene Umformulierung, sonst Doppelform mit Schrägstrich (`cititor/cititoare`) | **Zu validieren** durch rumänischsprachiges Gegenlesen |
 
 ---
 
@@ -348,6 +350,54 @@ für das Duzen der Leser*in (Siezen für das Team). Akronym DSGVO → `ΓΚΠΔ`
 > Griechische ist **verfrüht**, solange keine hellenophonen militanten Kontaktpersonen
 > dem Projekt beigetreten sind.
 
+### Rumänisch (ro)
+
+**Status: KONVENTION, DURCH RUMÄNISCHSPRACHIGES GEGENLESEN ZU VALIDIEREN.**
+
+Auch das Rumänische hat **keinen typografischen Konsensmarker** für inklusive
+Schreibweise. AnarBib wendet dort zwei Regeln in dieser Reihenfolge an, bis eine
+militante Person mit Rumänisch als Muttersprache sie bestätigt oder korrigiert:
+
+1. **Zuerst epicoene Umformulierung** : Man benennt die Funktion, die Gruppe oder
+   die Person statt des Genus (`persoanele care citesc` „die Personen, die lesen",
+   `persoana care citește`, `echipa de coordonare` „das Koordinationsteam",
+   `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Sonst Doppelform mit Schrägstrich**, Maskulinum zuerst, beide Formen
+   ausgeschrieben:
+
+| Masculin | Féminin | Forme AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(à confirmer)* |
+
+**Plural** : `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Anrede** : Duzen ohne Ausnahme (`Introdu`, `Alege`, `Salvează`; Possessiva
+`tău`/`ta`); niemals `dumneavoastră`, `dvs.` und auch nicht die 2. Person Plural
+für eine einzelne Person. Der Plural bleibt möglich, wenn sich der Satz an eine
+Gruppe richtet (eine Versammlung, ein Team).
+
+**Sonderfälle** :
+
+- **Diakritika** : `ș ț` mit untergesetztem Komma (U+0219, U+021B; Großbuchstaben
+  U+0218, U+021A), niemals die Formen mit Cedille (U+015F, U+0163); **eine
+  CI-Prüfung kontrolliert das**. Immer `ă â î`.
+- **Anführungszeichen** : `„…”`, niemals `« … »`.
+- **`Genoss*in`** : `tovarăș/tovarășă` (Gebrauch in rumänischen anarchistischen
+  Kreisen) — **zu bestätigen**: Das Wort trägt noch eine Konnotation aus der
+  kommunistischen Zeit; erwogene Alternative `camarad/camaradă`.
+- **Akronym** DSGVO → `GDPR`.
+- **Verboten** : Mediopunkt `·`, Suffix `-x`.
+
+> ⚠️ Diese Konvention ist **nicht** endgültig. Sie muss durch das Gegenlesen einer
+> militanten Person mit Rumänisch als Muttersprache validiert werden, bevor sie
+> festgeschrieben wird. Bis dahin bei den epicoenen Formulierungen und den obigen
+> Doppelformen bleiben.
+
 ---
 
 ## Politische Referenzbegriffe
@@ -366,6 +416,7 @@ für das Duzen der Leser*in (Siezen für das Team). Akronym DSGVO → `ΓΚΠΔ`
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisoire)* | `kameraden` |
 | el | `σύντροφος` *(à confirmer)* | — |
+| ro | `tovarăș/tovarășă` *(à confirmer ; alternative `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Leser*in / Lecteur·rice
 
@@ -381,6 +432,7 @@ für das Duzen der Leser*in (Siezen für das Team). Akronym DSGVO → `ΓΚΠΔ`
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisoire)* |
 | el | `αναγνώστης/στρια` *(transitoire)* |
+| ro | `cititor/cititoare` *(épicène : `persoana care citește`)* |
 
 ### Bibliothekar*in / Bibliothécaire
 
@@ -396,6 +448,7 @@ für das Duzen der Leser*in (Siezen für das Team). Akronym DSGVO → `ΓΚΠΔ`
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisoire)* |
 | el | `βιβλιοθηκάριος` *(à confirmer)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Administrator*in / Administrateur·rice
 
@@ -411,6 +464,7 @@ für das Duzen der Leser*in (Siezen für das Team). Akronym DSGVO → `ΓΚΠΔ`
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisoire)* |
 | el | *(à définir)* |
+| ro | `administrator/administratoare` |
 
 ---
 

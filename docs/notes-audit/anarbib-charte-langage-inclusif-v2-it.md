@@ -36,6 +36,7 @@ generata in seguito.
    - [Esperanto (eo)](#esperanto-eo)
    - [Olandese (nl)](#olandese-nl)
    - [Greco (el)](#greco-el)
+   - [Rumeno (ro)](#rumeno-ro)
 5. [Termini politici di riferimento](#termini-politici-di-riferimento)
 6. [Termini proscritti](#termini-proscritti)
 7. [Procedura per le aggiunte future](#procedura-per-le-aggiunte-future)
@@ -99,6 +100,7 @@ questa carta sono la **forma ufficiale** di AnarBib per quella lingua.
 | `eo` | Infisso `-in-` visibilizzato con trattini + pronome `ri` | **Adottata** |
 | `nl` | Forme di ruolo neutre | **Provvisoria** — da validare in comunità |
 | `el` | — | **Da definire** con una persona parlante greca militante |
+| `ro` | Riformulazione epicena prima, altrimenti doppietto con slash (`cititor/cititoare`) | **Da far validare** dalla rilettura rumenofona |
 
 ---
 
@@ -349,6 +351,54 @@ GDPR → `ΓΚΠΔ`.
 > greco è **prematura** finché nessun/a relais ellenofono/a militant* si è unit* al
 > progetto.
 
+### Rumeno (ro)
+
+**Stato : CONVENZIONE DA FAR VALIDARE dalla rilettura rumenofona.**
+
+Neanche il rumeno ha un **marcatore tipografico inclusivo consensuale**.
+AnarBib vi applica due regole, in quest'ordine, in attesa che una persona
+militante di madrelingua rumena le confermi o le corregga :
+
+1. **Prima la riformulazione epicena** : si nomina la funzione, il gruppo o la
+   persona anziché il genere (`persoanele care citesc` « le persone che
+   leggono », `persoana care citește`, `echipa de coordonare` « l'équipe di
+   coordinamento », `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Altrimenti doppietto con slash**, maschile prima, entrambe le forme scritte
+   per intero :
+
+| Maschile | Femminile | Forma AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(da confermare)* |
+
+**Plurale** : `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Forma di indirizzo** : il tu senza eccezioni (`Introdu`, `Alege`, `Salvează` ;
+possessivi `tău`/`ta`) ; mai `dumneavoastră`, `dvs.`, né la 2ᵃ persona
+plurale per una sola persona. Il plurale resta possibile quando la frase si
+rivolge a un gruppo (un'assemblea, un'équipe).
+
+**Casi particolari** :
+
+- **Diacritici** : `ș ț` con virgola sottoscritta (U+0219, U+021B ; maiuscole
+  U+0218, U+021A), mai le forme con cediglia (U+015F, U+0163) ; **un controllo
+  della CI lo verifica**. Sempre `ă â î`.
+- **Virgolette** : `„…”`, mai `« … »`.
+- **`compagn*`** : `tovarăș/tovarășă` (uso degli ambienti anarchici rumeni) —
+  **da confermare** : la parola conserva una connotazione dell'epoca comunista ;
+  alternativa considerata `camarad/camaradă`.
+- **Sigla** GDPR → `GDPR` (invariata).
+- **Proscritti** : punto mediano `·`, suffisso `-x`.
+
+> ⚠️ Questa convenzione **non** è definitiva. Deve essere validata dalla
+> rilettura di una persona militante di madrelingua rumena prima di essere
+> cristallizzata. Nel frattempo, attenersi alle formule epicene e ai doppietti
+> qui sopra.
+
 ---
 
 ## Termini politici di riferimento
@@ -367,6 +417,7 @@ GDPR → `ΓΚΠΔ`.
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provvisorio)* | `kameraden` |
 | el | `σύντροφος` *(da confermare)* | — |
+| ro | `tovarăș/tovarășă` *(da confermare ; alternativa `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Lettore/trice
 
@@ -382,6 +433,7 @@ GDPR → `ΓΚΠΔ`.
 | eo | `legant-in-o` |
 | nl | `lezer` *(provvisorio)* |
 | el | `αναγνώστης/στρια` *(transitorio)* |
+| ro | `cititor/cititoare` *(epiceno : `persoana care citește`)* |
 
 ### Bibliotecari*
 
@@ -397,6 +449,7 @@ GDPR → `ΓΚΠΔ`.
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provvisorio)* |
 | el | `βιβλιοθηκάριος` *(da confermare)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Amministratore/trice
 
@@ -412,6 +465,7 @@ GDPR → `ΓΚΠΔ`.
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provvisorio)* |
 | el | *(da definire)* |
+| ro | `administrator/administratoare` |
 
 ---
 

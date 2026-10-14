@@ -21,6 +21,7 @@ import mtFr   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1.
 import mtCa   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-ca.md?raw';
 import mtDe   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-de.md?raw';
 import mtEl   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-el.md?raw';
+import mtRo   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-ro.md?raw';
 import mtEn   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-en.md?raw';
 import mtEo   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-eo.md?raw';
 import mtEs   from '../../../docs/notes-audit/anarbib-charte-relationnelle-v0.1-es.md?raw';
@@ -33,6 +34,7 @@ import liFr   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2
 import liCa   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-ca.md?raw';
 import liDe   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-de.md?raw';
 import liEl   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-el.md?raw';
+import liRo   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-ro.md?raw';
 import liEn   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-en.md?raw';
 import liEo   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-eo.md?raw';
 import liEs   from '../../../docs/notes-audit/anarbib-charte-langage-inclusif-v2-es.md?raw';
@@ -45,6 +47,7 @@ import maFr   from '../../../docs/manual.md?raw';
 import maCa   from '../../../docs/manual-ca.md?raw';
 import maDe   from '../../../docs/manual-de.md?raw';
 import maEl   from '../../../docs/manual-el.md?raw';
+import maRo   from '../../../docs/manual-ro.md?raw';
 import maEn   from '../../../docs/manual-en.md?raw';
 import maEo   from '../../../docs/manual-eo.md?raw';
 import maEs   from '../../../docs/manual-es.md?raw';
@@ -57,6 +60,7 @@ import coFr   from '../../../docs/cotation-et-cdd.md?raw';
 import coCa   from '../../../docs/cotation-et-cdd-ca.md?raw';
 import coDe   from '../../../docs/cotation-et-cdd-de.md?raw';
 import coEl   from '../../../docs/cotation-et-cdd-el.md?raw';
+import coRo   from '../../../docs/cotation-et-cdd-ro.md?raw';
 import coEn   from '../../../docs/cotation-et-cdd-en.md?raw';
 import coEo   from '../../../docs/cotation-et-cdd-eo.md?raw';
 import coEs   from '../../../docs/cotation-et-cdd-es.md?raw';
@@ -69,6 +73,7 @@ import cdFr   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2
 import cdCa   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-ca.md?raw';
 import cdDe   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-de.md?raw';
 import cdEl   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-el.md?raw';
+import cdRo   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-ro.md?raw';
 import cdEn   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-en.md?raw';
 import cdEo   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-eo.md?raw';
 import cdEs   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-es.md?raw';
@@ -81,6 +86,7 @@ import agSamFr from '../../../docs/journal/arbitrages/NOTE_AG_samizdats_2026-08-
 import gsCa   from '../../../docs/guides/guide-scan-qr-ca.md?raw';
 import gsDe   from '../../../docs/guides/guide-scan-qr-de.md?raw';
 import gsEl   from '../../../docs/guides/guide-scan-qr-el.md?raw';
+import gsRo   from '../../../docs/guides/guide-scan-qr-ro.md?raw';
 import gsEn   from '../../../docs/guides/guide-scan-qr-en.md?raw';
 import gsEo   from '../../../docs/guides/guide-scan-qr-eo.md?raw';
 import gsEs   from '../../../docs/guides/guide-scan-qr-es.md?raw';
@@ -93,6 +99,7 @@ import gsPtBR from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
 import giCa   from '../../../docs/guides/guide-indexar-assunto-ca.md?raw';
 import giDe   from '../../../docs/guides/guide-indexar-assunto-de.md?raw';
 import giEl   from '../../../docs/guides/guide-indexar-assunto-el.md?raw';
+import giRo   from '../../../docs/guides/guide-indexar-assunto-ro.md?raw';
 import giEn   from '../../../docs/guides/guide-indexar-assunto-en.md?raw';
 import giEo   from '../../../docs/guides/guide-indexar-assunto-eo.md?raw';
 import giEs   from '../../../docs/guides/guide-indexar-assunto-es.md?raw';
@@ -105,6 +112,7 @@ import giPtBR from '../../../docs/guides/guide-indexar-assunto-pt-BR.md?raw';
 import gtfCa   from '../../../docs/guides/guide-thesaurus-ficedl-ca.md?raw';
 import gtfDe   from '../../../docs/guides/guide-thesaurus-ficedl-de.md?raw';
 import gtfEl   from '../../../docs/guides/guide-thesaurus-ficedl-el.md?raw';
+import gtfRo   from '../../../docs/guides/guide-thesaurus-ficedl-ro.md?raw';
 import gtfEn   from '../../../docs/guides/guide-thesaurus-ficedl-en.md?raw';
 import gtfEo   from '../../../docs/guides/guide-thesaurus-ficedl-eo.md?raw';
 import gtfEs   from '../../../docs/guides/guide-thesaurus-ficedl-es.md?raw';
@@ -130,6 +138,7 @@ import gtfPtBR from '../../../docs/guides/guide-thesaurus-ficedl-pt-BR.md?raw';
 import gnuCa   from '../../../docs/guides/guide-digitalizar-ca.md?raw';
 import gnuDe   from '../../../docs/guides/guide-digitalizar-de.md?raw';
 import gnuEl   from '../../../docs/guides/guide-digitalizar-el.md?raw';
+import gnuRo   from '../../../docs/guides/guide-digitalizar-ro.md?raw';
 import gnuEn   from '../../../docs/guides/guide-digitalizar-en.md?raw';
 import gnuEo   from '../../../docs/guides/guide-digitalizar-eo.md?raw';
 import gnuEs   from '../../../docs/guides/guide-digitalizar-es.md?raw';
@@ -158,6 +167,7 @@ import gnuPtBR from '../../../docs/guides/guide-digitalizar-pt-BR.md?raw';
 import gccCa   from '../../../docs/guides/guide-conventions-catalografia-ca.md?raw';
 import gccDe   from '../../../docs/guides/guide-conventions-catalografia-de.md?raw';
 import gccEl   from '../../../docs/guides/guide-conventions-catalografia-el.md?raw';
+import gccRo   from '../../../docs/guides/guide-conventions-catalografia-ro.md?raw';
 import gccEn   from '../../../docs/guides/guide-conventions-catalografia-en.md?raw';
 import gccEo   from '../../../docs/guides/guide-conventions-catalografia-eo.md?raw';
 import gccEs   from '../../../docs/guides/guide-conventions-catalografia-es.md?raw';
@@ -170,6 +180,7 @@ import gccPtBR from '../../../docs/guides/guide-conventions-catalografia-pt-BR.m
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
 import gouvEl   from '../../../docs/governance/guide-gouvernance-el.md?raw';
+import gouvRo   from '../../../docs/governance/guide-gouvernance-ro.md?raw';
 import gouvEn   from '../../../docs/governance/guide-gouvernance-en.md?raw';
 import gouvEo   from '../../../docs/governance/guide-gouvernance-eo.md?raw';
 import gouvEs   from '../../../docs/governance/guide-gouvernance-es.md?raw';
@@ -180,57 +191,57 @@ import gouvPtBR from '../../../docs/governance/guide-gouvernance-pt-BR.md?raw';
 
 const MAIN_TENDUE_BY_LOCALE = {
   ca: mtCa, de: mtDe, el: mtEl, en: mtEn, eo: mtEo,
-  es: mtEs, fr: mtFr, it: mtIt, nl: mtNl, 'pt-BR': mtPtBR,
+  es: mtEs, fr: mtFr, it: mtIt, nl: mtNl, 'pt-BR': mtPtBR, ro: mtRo,
 };
 
 const LANGAGE_INCLUSIF_BY_LOCALE = {
   ca: liCa, de: liDe, el: liEl, en: liEn, eo: liEo,
-  es: liEs, fr: liFr, it: liIt, nl: liNl, 'pt-BR': liPtBR,
+  es: liEs, fr: liFr, it: liIt, nl: liNl, 'pt-BR': liPtBR, ro: liRo,
 };
 
 const MANUEL_BY_LOCALE = {
   ca: maCa, de: maDe, el: maEl, en: maEn, eo: maEo,
-  es: maEs, fr: maFr, it: maIt, nl: maNl, 'pt-BR': maPtBR,
+  es: maEs, fr: maFr, it: maIt, nl: maNl, 'pt-BR': maPtBR, ro: maRo,
 };
 
 const COTATION_BY_LOCALE = {
   ca: coCa, de: coDe, el: coEl, en: coEn, eo: coEo,
-  es: coEs, fr: coFr, it: coIt, nl: coNl, 'pt-BR': coPtBR,
+  es: coEs, fr: coFr, it: coIt, nl: coNl, 'pt-BR': coPtBR, ro: coRo,
 };
 
 const CADRAGE_BY_LOCALE = {
   ca: cdCa, de: cdDe, el: cdEl, en: cdEn, eo: cdEo,
-  es: cdEs, fr: cdFr, it: cdIt, nl: cdNl, 'pt-BR': cdPtBR,
+  es: cdEs, fr: cdFr, it: cdIt, nl: cdNl, 'pt-BR': cdPtBR, ro: cdRo,
 };
 
 const GOUVERNANCE_BY_LOCALE = {
   ca: gouvCa, de: gouvDe, el: gouvEl, en: gouvEn, eo: gouvEo,
-  es: gouvEs, fr: gouvFr, it: gouvIt, nl: gouvNl, 'pt-BR': gouvPtBR,
+  es: gouvEs, fr: gouvFr, it: gouvIt, nl: gouvNl, 'pt-BR': gouvPtBR, ro: gouvRo,
 };
 
 const GUIDE_INDEXAR_BY_LOCALE = {
   ca: giCa, de: giDe, el: giEl, en: giEn, eo: giEo,
-  es: giEs, fr: giFr, it: giIt, nl: giNl, 'pt-BR': giPtBR,
+  es: giEs, fr: giFr, it: giIt, nl: giNl, 'pt-BR': giPtBR, ro: giRo,
 };
 
 const THESAURUS_FICEDL_BY_LOCALE = {
   ca: gtfCa, de: gtfDe, el: gtfEl, en: gtfEn, eo: gtfEo,
-  es: gtfEs, fr: gtfFr, it: gtfIt, nl: gtfNl, 'pt-BR': gtfPtBR,
+  es: gtfEs, fr: gtfFr, it: gtfIt, nl: gtfNl, 'pt-BR': gtfPtBR, ro: gtfRo,
 };
 
 const GUIDE_SCAN_BY_LOCALE = {
   ca: gsCa, de: gsDe, el: gsEl, en: gsEn, eo: gsEo,
-  es: gsEs, fr: gsFr, it: gsIt, nl: gsNl, 'pt-BR': gsPtBR,
+  es: gsEs, fr: gsFr, it: gsIt, nl: gsNl, 'pt-BR': gsPtBR, ro: gsRo,
 };
 
 const GUIDE_NUMERISATION_BY_LOCALE = {
   ca: gnuCa, de: gnuDe, el: gnuEl, en: gnuEn, eo: gnuEo,
-  es: gnuEs, fr: gnuFr, it: gnuIt, nl: gnuNl, 'pt-BR': gnuPtBR,
+  es: gnuEs, fr: gnuFr, it: gnuIt, nl: gnuNl, 'pt-BR': gnuPtBR, ro: gnuRo,
 };
 
 const GUIDE_CONVENTIONS_BY_LOCALE = {
   ca: gccCa, de: gccDe, el: gccEl, en: gccEn, eo: gccEo,
-  es: gccEs, fr: gccFr, it: gccIt, nl: gccNl, 'pt-BR': gccPtBR,
+  es: gccEs, fr: gccFr, it: gccIt, nl: gccNl, 'pt-BR': gccPtBR, ro: gccRo,
 };
 
 // Une seule locale, à dessein : c'est un texte de délibération, appelé à être

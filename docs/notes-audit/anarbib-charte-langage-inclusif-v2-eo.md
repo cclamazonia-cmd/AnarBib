@@ -27,6 +27,7 @@
    - [Esperanto (eo)](#esperanto-eo)
    - [Nederlanda (nl)](#nederlanda-nl)
    - [Greka (el)](#greka-el)
+   - [Rumana (ro)](#rumana-ro)
 5. [Politikaj referenctermoj](#politikaj-referenctermoj)
 6. [Malpermesataj termoj](#malpermesataj-termoj)
 7. [Proceduro por estontaj aldonoj](#proceduro-por-estontaj-aldonoj)
@@ -71,6 +72,7 @@ Ene de lingvo, **ĉi tiuj konvencioj estas devigaj kaj ekskluzivaj** : dosiero `
 | `eo` | Infixo `-in-` videbligita per streketo + pronomo `ri` | **Adoptita** |
 | `nl` | Neŭtraj rolformoj | **Provizora** — por validigo en komunumo |
 | `el` | — | **Por difini** kun greka milita parolant-in-o |
+| `ro` | Unue epicena reformulado, alie dublaĵo kun oblikvo (`cititor/cititoare`) | **Por validigo** per rumanlingva relegado |
 
 ---
 
@@ -266,6 +268,37 @@ La mediana punkto `·` **ne** estas inkluziva markilo en itala : ĝi servas sole
 
 > ⚠️ Ĉia propono de sistema inkluziva tipografia markilo por la greka estas **trofruaj** dum neniu greka milita parolant-in-o aliĝis al la projekto.
 
+### Rumana (ro)
+
+**Statuso : KONVENCIO POR VALIDIGO per rumanlingva relegado.**
+
+Ankaŭ la rumana ne havas **konsensan inkluzivan tipografian markilon**. AnarBib aplikas al ĝi du regulojn, en ĉi tiu ordo, ĝis militanta persono kun la rumana kiel gepatra lingvo konfirmos aŭ korektos ilin :
+
+1. **Unue epicena reformulado** : oni nomas la funkcion, la grupon aŭ la personon prefere ol la genron (`persoanele care citesc` « la personoj kiuj legas », `persoana care citește`, `echipa de coordonare` « la kunordiga teamo », `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Alie dublaĵo kun oblikvo**, vira formo unue, ambaŭ formoj skribitaj plene :
+
+| Vira | Ina | Formo AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(konfirmenda)* |
+
+**Pluralo** : `cititori/cititoare`, `bibliotecari/bibliotecare`, `coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Alparolo** : 2-a singulara persono (tutoiement) sen escepto (`Introdu`, `Alege`, `Salvează` ; posedaj `tău`/`ta`) ; neniam `dumneavoastră`, `dvs.`, nek la 2-a plurala persono por unu sola persono. La pluralo restas ebla kiam la frazo sin turnas al grupo (asembleo, teamo).
+
+**Specialaj kazoj** :
+
+- **Diakritaĵoj** : `ș ț` kun subskribita komo (U+0219, U+021B ; majuskloj U+0218, U+021A), neniam la formoj kun cedilo (U+015F, U+0163) ; **KI-gardo kontrolas tion**. Ĉiam `ă â î`.
+- **Citiloj** : `„…”`, neniam `« … »`.
+- **`kamarad-in-o`** : `tovarăș/tovarășă` (uzo de la rumanaj anarkiismaj medioj) — **konfirmenda** : la vorto konservas konotacion de la komunisma epoko ; alternativo konsiderata `camarad/camaradă`.
+- **Siglo** RGPD → `GDPR`.
+- **Malpermesataj** : mediana punkto `·`, sufikso `-x`.
+
+> ⚠️ Ĉi tiu konvencio estas **ne** definitiva. Ĝi devas esti validigita per la relegado de militanta persono kun la rumana kiel gepatra lingvo antaŭ ol fiksiĝi. Dum atendo, resti ĉe la epicenaj formuloj kaj la ĉi-supraj dublaĵoj.
+
 ---
 
 ## Politikaj referenctermoj
@@ -284,6 +317,7 @@ La mediana punkto `·` **ne** estas inkluziva markilo en itala : ĝi servas sole
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisoire)* | `kameraden` |
 | el | `σύντροφος` *(à confirmer)* | — |
+| ro | `tovarăș/tovarășă` *(konfirmenda ; alternativo `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Legant-in-o
 
@@ -299,6 +333,7 @@ La mediana punkto `·` **ne** estas inkluziva markilo en itala : ĝi servas sole
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisoire)* |
 | el | `αναγνώστης/στρια` *(transitoire)* |
+| ro | `cititor/cititoare` *(epicena : `persoana care citește`)* |
 
 ### Bibliotekist-in-o
 
@@ -314,6 +349,7 @@ La mediana punkto `·` **ne** estas inkluziva markilo en itala : ĝi servas sole
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisoire)* |
 | el | `βιβλιοθηκάριος` *(à confirmer)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Administrant-in-o
 
@@ -329,6 +365,7 @@ La mediana punkto `·` **ne** estas inkluziva markilo en itala : ĝi servas sole
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisoire)* |
 | el | *(à définir)* |
+| ro | `administrator/administratoare` |
 
 ---
 

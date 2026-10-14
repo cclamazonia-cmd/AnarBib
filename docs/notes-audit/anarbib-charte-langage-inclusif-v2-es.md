@@ -36,6 +36,7 @@ generada en el futuro.
    - [Esperanto (eo)](#esperanto-eo)
    - [Neerlandés (nl)](#neerlandés-nl)
    - [Griego (el)](#griego-el)
+   - [Rumano (ro)](#rumano-ro)
 5. [Términos políticos de referencia](#términos-políticos-de-referencia)
 6. [Términos proscritos](#términos-proscritos)
 7. [Procedimiento para las incorporaciones futuras](#procedimiento-para-las-incorporaciones-futuras)
@@ -99,6 +100,7 @@ esta carta son la **forma oficial** de AnarBib para esa lengua.
 | `eo` | Infijo `-in-` visibilizado por guiones + pronombre `ri` | **Adoptada** |
 | `nl` | Formas de rol neutras | **Provisional** — a validar en comunidad |
 | `el` | — | **A definir** con une hablante griege militante |
+| `ro` | Reformulación epicena primero, si no doblete con barra (`cititor/cititoare`) | **A validar** por la revisión en rumano |
 
 ---
 
@@ -349,6 +351,53 @@ RGPD → `ΓΚΠΔ`.
 > griego es **prematura** mientras ningún relevo helenófono militante se haya
 > incorporado al proyecto.
 
+### Rumano (ro)
+
+**Estado: CONVENCIÓN PENDIENTE DE VALIDACIÓN por la revisión en rumano.**
+
+El rumano tampoco tiene un **marcador tipográfico inclusivo consensuado**.
+AnarBib aplica dos reglas, en este orden, hasta que una persona militante
+de lengua materna rumana las confirme o las corrija:
+
+1. **Primero, reformulación epicena**: se nombra la función, el grupo o la
+   persona en lugar del género (`persoanele care citesc` «las personas que
+   leen», `persoana care citește`, `echipa de coordonare` «el equipo de
+   coordinación», `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Si no, doblete con barra oblicua**, masculino primero, con ambas formas
+   escritas completas:
+
+| Masculino | Femenino | Forma AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(a confirmar)* |
+
+**Plural**: `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Tratamiento**: tuteo sin excepción (`Introdu`, `Alege`, `Salvează`;
+posesivos `tău`/`ta`); nunca `dumneavoastră`, `dvs.`, ni la 2.ª persona del
+plural para una sola persona. El plural sigue siendo posible cuando la frase
+se dirige a un grupo (una asamblea, un equipo).
+
+**Casos particulares**:
+
+- **Diacríticos**: `ș ț` con coma subscrita (U+0219, U+021B; mayúsculas
+  U+0218, U+021A), nunca las formas con cedilla (U+015F, U+0163); **una
+  comprobación de la CI lo verifica**. Siempre `ă â î`.
+- **Comillas**: `„…”`, nunca `« … »`.
+- **`camarade`**: `tovarăș/tovarășă` (uso de los ambientes anarquistas rumanos) —
+  **a confirmar**: la palabra conserva una connotación de la época comunista;
+  alternativa contemplada `camarad/camaradă`.
+- **Sigla** RGPD → `GDPR`.
+- **Proscrito**: punto mediano `·`, sufijo `-x`.
+
+> ⚠️ Esta convención **no** es definitiva. Debe ser validada por la revisión
+> de una persona militante de lengua materna rumana antes de quedar
+> establecida. Mientras tanto, atenerse a las fórmulas epicenas y a los dobletes anteriores.
+
 ---
 
 ## Términos políticos de referencia
@@ -367,6 +416,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisional)* | `kameraden` |
 | el | `σύντροφος` *(a confirmar)* | — |
+| ro | `tovarăș/tovarășă` *(a confirmar; alternativa `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Lectore / Lecteur·rice
 
@@ -382,6 +432,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisional)* |
 | el | `αναγνώστης/στρια` *(transitorio)* |
+| ro | `cititor/cititoare` *(epiceno: `persoana care citește`)* |
 
 ### Bibliotecarie
 
@@ -397,6 +448,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisional)* |
 | el | `βιβλιοθηκάριος` *(a confirmar)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Administradore
 
@@ -412,6 +464,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisional)* |
 | el | *(a definir)* |
+| ro | `administrator/administratoare` |
 
 ---
 

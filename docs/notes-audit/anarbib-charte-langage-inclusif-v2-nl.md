@@ -36,6 +36,7 @@ vertaling.
    - [Esperanto (eo)](#esperanto-eo)
    - [Nederlands (nl)](#nederlands-nl)
    - [Grieks (el)](#grieks-el)
+   - [Roemeens (ro)](#roemeens-ro)
 5. [Politieke referentiebegrippen](#politieke-referentiebegrippen)
 6. [Verboden termen](#verboden-termen)
 7. [Procedure voor toekomstige toevoegingen](#procedure-voor-toekomstige-toevoegingen)
@@ -98,6 +99,7 @@ die taal.
 | `eo` | Infix `-in-` zichtbaar gemaakt door koppeltekens + voornaamwoord `ri` | **Aangenomen** |
 | `nl` | Neutrale rolvormen | **Voorlopig** — te valideren in gemeenschap |
 | `el` | — | **Te bepalen** met een Griekssprekende militante medewerker |
+| `ro` | Eerst epicene herformulering, anders slash-doublet (`cititor/cititoare`) | **Te valideren** door Roemeenstalige nalezing |
 
 ---
 
@@ -346,6 +348,55 @@ voor tutoyering van de lezer (vousvoyering voor het team). Afkorting AVG → `Γ
 > is **voorbarig** zolang geen Griekssprekende militante medewerker bij het project is
 > aangesloten.
 
+### Roemeens (ro)
+
+**Status : CONVENTIE TE VALIDEREN door Roemeenstalige nalezing.**
+
+Ook het Roemeens heeft **geen consensuele inclusieve typografische markering**.
+AnarBib past er twee regels op toe, in deze volgorde, in afwachting dat een
+militante medewerker met Roemeens als moedertaal ze bevestigt of corrigeert :
+
+1. **Eerst epicene herformulering** : men noemt de functie, de groep of de
+   persoon in plaats van het gender (`persoanele care citesc` « de mensen die
+   lezen », `persoana care citește`, `echipa de coordonare` « het
+   coördinatieteam », `echipa bibliotecii`, `cine catalogează`,
+   `persoana responsabilă`).
+2. **Anders een slash-doublet**, mannelijke vorm eerst, beide vormen voluit
+   geschreven :
+
+| Masculin | Féminin | Forme AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(à confirmer)* |
+
+**Meervoud** : `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Aanspreekvorm** : tutoyering zonder uitzondering (`Introdu`, `Alege`,
+`Salvează` ; bezittelijke voornaamwoorden `tău`/`ta`) ; nooit `dumneavoastră`,
+`dvs.`, noch de 2de persoon meervoud voor één persoon. Het meervoud blijft
+mogelijk wanneer de zin zich tot een groep richt (een vergadering, een team).
+
+**Bijzondere gevallen** :
+
+- **Diakritische tekens** : `ș ț` met komma eronder (U+0219, U+021B ;
+  hoofdletters U+0218, U+021A), nooit de vormen met cedille (U+015F, U+0163) ;
+  **een CI-controle bewaakt dit**. Altijd `ă â î`.
+- **Aanhalingstekens** : `„…”`, nooit `« … »`.
+- **`kameraad`** : `tovarăș/tovarășă` (gebruik in Roemeense anarchistische
+  kringen) — **te bevestigen** : het woord draagt nog een connotatie uit het
+  communistische tijdperk ; overwogen alternatief `camarad/camaradă`.
+- **Afkorting** AVG → `GDPR`.
+- **Verboden** : middenpunt `·`, achtervoegsel `-x`.
+
+> ⚠️ Deze conventie is **niet** definitief. Ze moet worden gevalideerd door
+> nalezing van een militante medewerker met Roemeens als moedertaal vóór ze
+> wordt vastgelegd. Tot die tijd bij de epicene formuleringen en de
+> bovenstaande doubletten blijven.
+
 ---
 
 ## Politieke referentiebegrippen
@@ -364,6 +415,7 @@ voor tutoyering van de lezer (vousvoyering voor het team). Afkorting AVG → `Γ
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisoire)* | `kameraden` |
 | el | `σύντροφος` *(à confirmer)* | — |
+| ro | `tovarăș/tovarășă` *(à confirmer ; alternative `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Lezer
 
@@ -379,6 +431,7 @@ voor tutoyering van de lezer (vousvoyering voor het team). Afkorting AVG → `Γ
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisoire)* |
 | el | `αναγνώστης/στρια` *(transitoire)* |
+| ro | `cititor/cititoare` *(épicène : `persoana care citește`)* |
 
 ### Bibliothecaris
 
@@ -394,6 +447,7 @@ voor tutoyering van de lezer (vousvoyering voor het team). Afkorting AVG → `Γ
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisoire)* |
 | el | `βιβλιοθηκάριος` *(à confirmer)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Beheerder
 
@@ -409,6 +463,7 @@ voor tutoyering van de lezer (vousvoyering voor het team). Afkorting AVG → `Γ
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisoire)* |
 | el | *(à définir)* |
+| ro | `administrator/administratoare` |
 
 ---
 

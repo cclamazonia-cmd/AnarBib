@@ -15,7 +15,9 @@
  * section ne doit pas changer de registre au milieu d'un document. Les noms
  * de boutons sont ceux des locales (twoFactor.*, nav.account,
  * account.tab.profile, rede.tab.twoFactor, nav.network).
- * Le roumain (lot 4 de l'ajout de ro) reprendra cette section dans son manuel.
+ * Le roumain (lot 4 de l'ajout de ro, 14/10/2026) : manual-ro.md porte déjà les
+ * deux sections, traduites avec le manuel au tutoiement (DOC-I18N-5, D3) ; l'entrée
+ * ro de T les garde ici pour un rejeu.
  *
  * Idempotent : un manuel qui porte déjà le titre A n'est pas retouché.
  * =========================================================================== */
@@ -263,6 +265,11 @@ Por helpi personon, kiu perdis sian aparaton: unue kontrolu la identecon de la p
 Η καρτέλα **Έλεγχος δύο παραγόντων** της σελίδας **Δίκτυο**, μόνο για τη διαχείριση δικτύου, παραθέτει τους ενεργούς λογαριασμούς ομάδας και όσους επέλεξαν τον έλεγχο δύο παραγόντων, με τους ρόλους και τον αριθμό των συσκευών τους· όσοι δεν έχουν συσκευή εμφανίζονται πρώτοι. Δείχνει επίσης την ισχύουσα απαίτηση.
 
 Για να βοηθήσετε ένα άτομο που έχασε τη συσκευή του: επαληθεύστε πρώτα την ταυτότητά του με άλλο τρόπο (από κοντά, Matrix), κάντε κλικ στο **Αφαίρεση συσκευών**, συμπληρώστε την αιτιολογία (πώς επαληθεύτηκε η ταυτότητα) και κάντε κλικ στο **Αφαίρεση και αποσύνδεση**. Ο λογαριασμός αποσυνδέεται παντού και η αφαίρεση καταγράφεται. Η ενέργεια αυτή απαιτεί η δική σας σύνδεση να έχει περάσει από τον κωδικό.`,
+  },
+  ro: {
+    fichier: 'manual-ro.md',
+    A: "### Protejează-ți contul: autentificarea în doi pași\nDupă parolă, AnarBib îți poate cere un cod de șase cifre care se schimbă la fiecare 30 de secunde. Codul vine de la o aplicație de autentificare liberă, care funcționează offline: Aegis sau FreeOTP+ pe Android, FreeOTP sau 2FAS pe iPhone, KeePassXC pe calculator. Fără SMS, fără serviciu extern.\n\n**Obligatorie pentru echipe începând cu 1 ianuarie 2027** (administrarea rețelei, echipele de coordonare, bibliotecari/bibliotecare); opțională pentru conturile persoanelor care citesc.\n\nCa s-o activezi:\n1. Deschide **Contul meu → Date personale**. Sub schimbarea parolei, dă clic pe **Activează autentificarea în doi pași**.\n2. Dă un nume dispozitivului (de exemplu „Telefon”), apoi scanează codul QR cu aplicația. Fără cameră, introdu manual cheia afișată.\n3. Introdu **codul de șase cifre** afișat de aplicație și dă clic pe **Confirmă**.\n\nDe acum înainte, la fiecare conectare, AnarBib îți cere codul după parolă. Dacă ai înregistrat mai multe dispozitive, alege-l pe cel pe care îl ai la îndemână.\n\n- **Înregistrează un al doilea dispozitiv** (de exemplu KeePassXC pe lângă telefon): e singurul mod de a nu rămâne fără acces dacă pierzi unul.\n- **Ți-ai pierdut dispozitivul?** Contactează administrarea rețelei (Matrix sau anarbib@proton.me). După ce îți verifică identitatea pe altă cale, îți elimină dispozitivele; înregistrezi unul nou la următoarea conectare.\n- Ca să elimini un dispozitiv, dă clic pe **Elimină** lângă numele lui.\n- Un cont de echipă fără dispozitiv după 1 ianuarie 2027 va trebui să înregistreze unul la conectare înainte de a continua.\n- Nimeni de la AnarBib nu îți va cere vreodată codul sau codul QR.",
+    B: "### Autentificarea în doi pași a echipelor\nFila **Autentificare în doi pași** a paginii **Rețea**, rezervată administrării rețelei, listează conturile de echipă active și pe cele care au ales autentificarea în doi pași, cu rolurile lor și numărul lor de dispozitive; cele fără dispozitiv apar primele. Arată și cerința în vigoare.\n\nCa să ajuți o persoană care și-a pierdut dispozitivul: verifică mai întâi identitatea ei pe altă cale (față în față, Matrix), apoi dă clic pe **Elimină-i dispozitivele**, indică motivul (cum a fost verificată identitatea) și dă clic pe **Elimină și deconectează**. Contul este deconectat peste tot, iar eliminarea este înregistrată în jurnal. Gestul acesta cere ca propria ta sesiune să fi trecut prin cod.",
   },
 };
 

@@ -36,6 +36,7 @@ generada posteriorment.
    - [Esperanto (eo)](#esperanto-eo)
    - [Neerlandès (nl)](#neerlandès-nl)
    - [Grec (el)](#grec-el)
+   - [Romanès (ro)](#romanès-ro)
 5. [Termes polítics de referència](#termes-polítics-de-referència)
 6. [Termes proscrits](#termes-proscrits)
 7. [Procediment per a les addicions futures](#procediment-per-a-les-addicions-futures)
@@ -100,6 +101,7 @@ aquesta carta són la **forma oficial** d'AnarBib per a aquella llengua.
 | `eo` | Infix `-in-` visibilitzat per guions + pronom `ri` | **Adoptada** |
 | `nl` | Formes de rol neutres | **Provisional** — a validar en comunitat |
 | `el` | — | **A definir** amb una persona locutora grega militant |
+| `ro` | Reformulació epicena primer, si no doblet amb barra (`cititor/cititoare`) | **A validar** per la revisió en romanès |
 
 ---
 
@@ -350,6 +352,53 @@ RGPD → `ΓΚΠΔ`.
 > grec és **prematura** mentre cap interlocutor·a hel·lenòfon militant no s'hagi afegit
 > al projecte.
 
+### Romanès (ro)
+
+**Estatut : CONVENCIÓ PENDENT DE VALIDACIÓ per la revisió en romanès.**
+
+Tampoc el romanès no té cap **marcador tipogràfic inclusiu consensuat**.
+AnarBib hi aplica dues regles, en aquest ordre, fins que una persona
+militant de llengua materna romanesa les confirmi o les corregeixi:
+
+1. **Primer, reformulació epicena** : s'anomena la funció, el grup o la
+   persona en lloc del gènere (`persoanele care citesc` «les persones que
+   llegeixen», `persoana care citește`, `echipa de coordonare` «l'equip de
+   coordinació», `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Si no, doblet amb barra obliqua**, masculí primer, amb les dues formes
+   escrites senceres :
+
+| Masculí | Femení | Forma AnarBib |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(a confirmar)* |
+
+**Plural** : `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Tractament** : tuteig sense excepció (`Introdu`, `Alege`, `Salvează`;
+possessius `tău`/`ta`); mai `dumneavoastră`, `dvs.`, ni la 2ᵃ persona del
+plural per a una sola persona. El plural continua sent possible quan la frase
+s'adreça a un grup (una assemblea, un equip).
+
+**Casos particulars** :
+
+- **Diacrítics** : `ș ț` amb coma subscrita (U+0219, U+021B; majúscules
+  U+0218, U+021A), mai les formes amb trencada (U+015F, U+0163); **una
+  comprovació de la CI ho verifica**. Sempre `ă â î`.
+- **Cometes** : `„…”`, mai `« … »`.
+- **`camarade`** : `tovarăș/tovarășă` (ús dels ambients anarquistes romanesos) —
+  **a confirmar** : la paraula conserva una connotació de l'època comunista;
+  alternativa considerada `camarad/camaradă`.
+- **Sigla** RGPD → `GDPR`.
+- **Proscrit** : punt volat `·`, sufix `-x`.
+
+> ⚠️ Aquesta convenció **no** és definitiva. Ha de ser validada per la
+> revisió d'una persona militant de llengua materna romanesa abans de ser
+> fixada. Mentrestant, cal atenir-se a les fórmules epicenes i als doblets anteriors.
+
 ---
 
 ## Termes polítics de referència
@@ -368,6 +417,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisional)* | `kameraden` |
 | el | `σύντροφος` *(a confirmar)* | — |
+| ro | `tovarăș/tovarășă` *(a confirmar; alternativa `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Lecteur·rice
 
@@ -383,6 +433,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisional)* |
 | el | `αναγνώστης/στρια` *(transitori)* |
+| ro | `cititor/cititoare` *(epicè: `persoana care citește`)* |
 
 ### Bibliothécaire
 
@@ -398,6 +449,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisional)* |
 | el | `βιβλιοθηκάριος` *(a confirmar)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Administrateur·rice
 
@@ -413,6 +465,7 @@ RGPD → `ΓΚΠΔ`.
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisional)* |
 | el | *(a definir)* |
+| ro | `administrator/administratoare` |
 
 ---
 

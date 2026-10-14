@@ -36,6 +36,7 @@ generated thereafter.
    - [Esperanto (eo)](#esperanto-eo)
    - [Dutch (nl)](#dutch-nl)
    - [Greek (el)](#greek-el)
+   - [Romanian (ro)](#romanian-ro)
 5. [Reference political terms](#reference-political-terms)
 6. [Proscribed terms](#proscribed-terms)
 7. [Procedure for future additions](#procedure-for-future-additions)
@@ -99,6 +100,7 @@ this charter are the **official form** used by AnarBib for that language.
 | `eo` | Infix `-in-` made visible by hyphens + pronoun `ri` | **Adopted** |
 | `nl` | Neutral role forms | **Provisional** — to be validated by the community |
 | `el` | — | **To be defined** with a militant Greek-speaking contributor |
+| `ro` | Epicene rephrasing first, otherwise slash doublet (`cititor/cititoare`) | **To be validated** by Romanian-speaking review |
 
 ---
 
@@ -347,6 +349,53 @@ singular for addressing readers (formal address for the team). GDPR acronym → 
 > **premature** until a militant Hellenic-speaking contributor has joined
 > the project.
 
+### Romanian (ro)
+
+**Status: CONVENTION TO BE VALIDATED by Romanian-speaking review.**
+
+Romanian has **no consensual inclusive typographic marker** either.
+AnarBib applies two rules to it, in this order, until a militant contributor
+whose first language is Romanian confirms or corrects them:
+
+1. **Epicene rephrasing first**: name the role, the group or the person rather
+   than the gender (`persoanele care citesc` "the people who read",
+   `persoana care citește`, `echipa de coordonare` "the coordination team",
+   `echipa bibliotecii`, `cine catalogează`, `persoana responsabilă`).
+2. **Otherwise, a slash doublet**, masculine first, both forms written out
+   in full:
+
+| Masculine | Feminine | AnarBib form |
+|---|---|---|
+| cititor | cititoare | **cititor/cititoare** |
+| bibliotecar | bibliotecară | **bibliotecar/bibliotecară** |
+| autor | autoare | **autor/autoare** |
+| administrator | administratoare | **administrator/administratoare** |
+| coordonator | coordonatoare | **coordonator/coordonatoare** |
+| tovarăș | tovarășă | **tovarăș/tovarășă** *(to be confirmed)* |
+
+**Plural**: `cititori/cititoare`, `bibliotecari/bibliotecare`,
+`coordonatori/coordonatoare`, `tovarăși/tovarășe`.
+**Address**: 2nd person singular without exception (`Introdu`, `Alege`,
+`Salvează`; possessives `tău`/`ta`); never `dumneavoastră`, `dvs.`, nor the
+2nd person plural for a single person. The plural remains possible when the
+sentence addresses a group (an assembly, a team).
+
+**Special cases**:
+
+- **Diacritics**: `ș ț` with comma below (U+0219, U+021B; capitals
+  U+0218, U+021A), never the cedilla forms (U+015F, U+0163); **a CI check
+  verifies this**. Always `ă â î`.
+- **Quotation marks**: `„…”`, never `« … »`.
+- **`comrade`**: `tovarăș/tovarășă` (usage in Romanian anarchist circles) —
+  **to be confirmed**: the word still carries a connotation from the communist
+  era; alternative under consideration `camarad/camaradă`.
+- **Acronym** GDPR → `GDPR`.
+- **Proscribed**: middle dot `·`, suffix `-x`.
+
+> ⚠️ This convention is **not** definitive. It must be validated through review
+> by a militant contributor whose first language is Romanian before being fixed.
+> In the meantime, stick to the epicene phrasings and doublets above.
+
 ---
 
 ## Reference political terms
@@ -365,6 +414,7 @@ singular for addressing readers (formal address for the team). GDPR acronym → 
 | eo | `kamarad-in-o` | `kamarad-in-oj` |
 | nl | `kameraad` *(provisional)* | `kameraden` |
 | el | `σύντροφος` *(to be confirmed)* | — |
+| ro | `tovarăș/tovarășă` *(to be confirmed; alternative `camarad/camaradă`)* | `tovarăși/tovarășe` |
 
 ### Reader
 
@@ -380,6 +430,7 @@ singular for addressing readers (formal address for the team). GDPR acronym → 
 | eo | `legant-in-o` |
 | nl | `lezer` *(provisional)* |
 | el | `αναγνώστης/στρια` *(transitional)* |
+| ro | `cititor/cititoare` *(epicene: `persoana care citește`)* |
 
 ### Librarian
 
@@ -395,6 +446,7 @@ singular for addressing readers (formal address for the team). GDPR acronym → 
 | eo | `bibliotekist-in-o` |
 | nl | `bibliothecaris` *(provisional)* |
 | el | `βιβλιοθηκάριος` *(to be confirmed)* |
+| ro | `bibliotecar/bibliotecară` |
 
 ### Administrator
 
@@ -410,6 +462,7 @@ singular for addressing readers (formal address for the team). GDPR acronym → 
 | eo | `administrant-in-o` |
 | nl | `beheerder` *(provisional)* |
 | el | *(to be defined)* |
+| ro | `administrator/administratoare` |
 
 ---
 
