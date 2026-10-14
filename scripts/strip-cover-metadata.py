@@ -59,6 +59,8 @@ Options :
     --backup-dir D      dossier de sauvegarde
     --limit N           s'arrete apres N objets (mise au point)
     --workers N         telechargements paralleles (defaut 6)
+    --bucket B          autre bucket public d'images (ex. `authors`, photos
+                        d'auteurs — passe du 14/10/2026)
 
 Dependance : Pillow (pour la verification pixel a pixel et l'orientation).
 """
@@ -521,17 +523,21 @@ def analyse(raw):
 # ── Programme ────────────────────────────────────────────────────────────
 
 def main():
+    global BUCKET
     ap = argparse.ArgumentParser(description="Retire les metadonnees embarquees des capas.")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--paths-file")
     ap.add_argument("--backup-dir")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--bucket", default=BUCKET,
+                    help="bucket a traiter (defaut covers ; `authors` pour les photos d'auteurs)")
     args = ap.parse_args()
+    BUCKET = args.bucket
 
     base, write_key, list_key = resolve_config(args.dry_run)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-    backup = Path(args.backup_dir or Path.home() / "anarbib-backups" / f"covers-metadata-{stamp}")
+    backup = Path(args.backup_dir or Path.home() / "anarbib-backups" / f"{BUCKET}-metadata-{stamp}")
     backup.mkdir(parents=True, exist_ok=True)
 
     print(f"\n  Projet     : {base}")
