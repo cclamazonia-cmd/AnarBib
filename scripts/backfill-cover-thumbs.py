@@ -211,6 +211,9 @@ def make_thumb(raw):
     else:
         img = img.convert("RGB")
     img.thumbnail(THUMB_BOX, Image.LANCZOS)
+    # Pillow recopie `info["comment"]` de l'original dans le JPEG produit :
+    # 12 vignettes portaient ainsi le commentaire de leur capa (14/10/2026).
+    img.info = {}
     out = io.BytesIO()
     img.save(out, format="JPEG", quality=THUMB_QUALITY, optimize=True, progressive=True)
     return out.getvalue()
