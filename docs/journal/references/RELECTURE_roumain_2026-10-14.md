@@ -64,3 +64,31 @@ public, courriels, puis le reste.
   anglaise (`/en/welcome/`) tant que la vitrine n'a pas de pages `/ro/` (lot 5).
 - Les noms propres des collectifs, les sigles et les menus de PMB (en
   français) restent tels quels.
+
+## Données en base (migration `20261014202251`)
+
+Carte des bibliothèques (villes, pays, notes), sujets du thésaurus interne,
+tâches proposées aux équipes, et le thésaurus de la FICEDL — ce dernier en
+**proposition** à la source, affiché comme tel (`THES-FIC6`).
+
+| Source | Roumain choisi | Question |
+|---|---|---|
+| Rroms, gitans, tziganes… (thésaurus, mot388) | Rromi, gitani, țigani… | La source énumère les trois noms ; « țigani » est souvent ressenti comme péjoratif. |
+| bagne (mot39) | colonie penitenciară | « ocnă » écarté (mine de sel). |
+| communautés et milieux libres (mot50) | comunități și colonii libertare | « medii libere » n'existe pas. |
+| édition (mot103) | editare | « ediție » = l'édition d'un livre. |
+| mutualisme et mutuellisme (mot204) | mutualism și mutualitate | Deux mots roumains distincts ? |
+| nucléaire (mot212) | nuclear | Seul, pour couvrir énergie et armement. |
+| salariat (mot255) | muncă salariată | « salariat » = la personne. |
+| France : histoire : 1871 (La Commune) (mot338) | Franța: istorie: 1871 (Comuna) | — |
+| Doukhobors (mot444) | Duhobori | Forme roumaine à confirmer. |
+| anarcha-féminisme (sujets, notes) | Anarha-feminism, anarha-feminist | Ou « anarhofeminism » ? |
+| Makhnovtchina (sujet) | Mahnovșcina | Translittération. |
+| désherbage (tâches) | Epurarea colecției | Terme de bibliothéconomie roumain ? |
+| infokiosque (notes de la carte) | infokiosk | « infoshop » ? |
+| Vieille Taupe (glose) | Bătrâna Cârtiță | — |
+| València, Mexico, Katmandou | Valencia, Ciudad de México, Kathmandu | Usage roumain des noms de villes. |
+
+Forme des descripteurs : minuscules comme la source, deux-points collés
+(« economie: șomaj »), le même mot de domaine partout (44 domaines vérifiés),
+« (generalități) » pour « (généralités) ».

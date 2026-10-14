@@ -37,16 +37,15 @@ Le roumain est **servi et hors des sélecteurs** (D5) depuis le commit
 Rien n'est encore relu par une personne roumanophone. Xavier sollicitera
 lui-même Adrian (Anarhiva, Cluj-Napoca), en français : ne pas lui écrire.
 
-## Reste du lot 3 : les données en base
+## Données en base : faites (cc34a4c9, migration `20261014202251`)
 
-Elles retombent sur leur langue de repli d'ici là. Une migration de données
-par table, depuis la définition réelle des lignes en prod (lecture seule) :
-
-- la carte (≈ 187 libellés) ;
-- les sujets (≈ 39) ;
-- les tâches (≈ 21) ;
-- le thésaurus FICEDL (461 libellés). Il appartient à la FICEDL : demander à
-  Xavier si on le traduit, et qui le valide, avant d'y toucher.
+Carte (187 fiches), sujets (39), tâches suggérées et récurrentes (21) ont leur
+`ro`. Le thésaurus FICEDL a ses 461 descripteurs en **proposition**, dans
+`ficedl_thesaurus_terms.labels_proposes`, jamais dans `labels` (`THES-FIC6`) ;
+l'export pour la FICEDL (CSV et JSON, `mot_id`, URI, facette, fr, en, ro) est
+à envoyer par Xavier à Claude Hortical. Une fiche de carte créée ou retouchée
+après le 14/10 n'a pas de roumain tant que personne ne l'écrit (la fiche
+s'édite dans la langue d'affichage).
 
 ## Lots suivants
 
