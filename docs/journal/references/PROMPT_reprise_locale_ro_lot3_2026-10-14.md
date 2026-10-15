@@ -66,12 +66,15 @@ s'édite dans la langue d'affichage).
   `tuto2-ro.vtt` sur Kolektiva, puis `SUBTITLE_LANG.ro = 'ro'` dans
   `ReaderTutorialsCard.jsx`. À l'ouverture : couvertures des deux manuels
   (11 langues), et les six captures avec session en roumain.
-- **Lot 7** :
-  - relecture et corrections ;
-  - `listed: true` dans les deux sources ;
-  - annonce ;
-  - amendement de `DOC-I18N-1` (11 locales) ;
-  - clôture d'E39.
+- **Lot 7** : le roumain est **OUVERT** depuis le 15/10/2026 (`11c90c62`,
+  vitrine `b2e4aa5`, D5 amendée). Restent, dans l'ordre :
+  - couvertures à onze langues des deux manuels (demande dans
+    `E:\CCLA\BLMF\AnarBib\Manuels - Guides\Manual AnarBib\Couvertures 11 langues\`),
+    puis remplacement de la page 1 des PDF publiés (dépôt sans trou :
+    `_neuf_` puis bascule) ;
+  - six captures avec session en roumain (05, 08-11, 30 ; Xavier se connecte) ;
+  - **en dernier** : relecture d'Adrian (Anarhiva), corrections, annonce
+    (Gazette, Lettre, État du projet), clôture d'E39 au REGISTRE.
 
 ## Pièges vus pendant le lot 3
 
