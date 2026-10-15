@@ -18,6 +18,7 @@ import RunEncodingPanel from './RunEncodingPanel.jsx';
 import RunCoveragePanel from './RunCoveragePanel.jsx';
 import RunRetraitsPanel from './RunRetraitsPanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
+import CandidatsPdfPanel from './CandidatsPdfPanel.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
 import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, pagesDePromotion, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
@@ -280,7 +281,8 @@ export default function ImportacoesPage() {
   // #tab=export ouvre le sens export ; #tab=arquivo|busca|oai ouvre l'import sur
   // cette origine (liens profonds, meme convention que Catalogage — 05/09/2026).
   const initialHash = (typeof window !== 'undefined' ? window.location.hash : '').replace('#tab=', '');
-  const [sentido, setSentido] = useState(initialHash === 'export' ? 'export' : 'import');
+  // #tab=pdf ouvre la file des candidats PDF (NUMDIF D15, 15/10/2026).
+  const [sentido, setSentido] = useState(['export', 'pdf'].includes(initialHash) ? initialHash : 'import');
   // Origine d'ajout (fusion des 3 ex-circuits) : fichier / busca / oai.
   const [addMode, setAddMode] = useState(['arquivo', 'busca', 'oai'].includes(initialHash) ? initialHash : 'arquivo');
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -1635,6 +1637,11 @@ export default function ImportacoesPage() {
             <AppIcon className="ab-tabbar__icon" name="arrowUp" size="1em" />
             {t({ id: 'importacoes.sentido.export' })}
           </button>
+          <button className={`ab-tabbar__tab${sentido === 'pdf' ? ' active' : ''}`}
+            role="tab" aria-selected={sentido === 'pdf'} onClick={() => setSentido('pdf')}>
+            <AppIcon className="ab-tabbar__icon" name="document" size="1em" />
+            {t({ id: 'importacoes.sentido.pdf' })}
+          </button>
         </nav>
         <p className="imp-sentido__hint" style={{ margin: '0 0 16px' }}>
           {t({ id: 'importacoes.sentido.hint' })}
@@ -2428,6 +2435,9 @@ export default function ImportacoesPage() {
         {/* ════════════════════════════════════════════════ */}
         {/*  FACE EXPORT (placeholder — Lot 5)              */}
         {/* ════════════════════════════════════════════════ */}
+        {/* ── Candidats PDF (NUMDIF D15) : l'outil propose, la coordination décide ── */}
+        {sentido === 'pdf' && <CandidatsPdfPanel libraryId={libraryId} />}
+
         {sentido === 'export' && (
           <>
             <div className="imp-frontier imp-frontier--export">

@@ -5594,7 +5594,7 @@
       "id": "D15",
       "d": "D",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "front",
@@ -5633,7 +5633,11 @@
       "r": [
         "docs/specs/REGISTRE_decisions.md §47",
         "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
-      ]
+      ],
+      "verif": {
+        "fr": "15/10 — **livré** : onglet « Candidats PDF » de la page Importations (`#tab=pdf`, `src/pages/importacoes/CandidatsPdfPanel.jsx`, session « File de candidats PDF »). Chargement du fichier de l'outil D14 dans la file ; filtres À examiner / À verser / Rejetés / Versés ; pour chaque candidat, la notice (l'exemplaire détenu) à côté de ce que l'outil a lu sur la page de titre, l'extrait de cette page, les contrôles et avertissements de l'outil, les liens « Ouvrir le PDF » et « Ouvrir la page de la source » ; la décision : édition, cas de source (avec ce qu'il implique), page de la source, justification suggérée selon le cas (décès pour le domaine public, mention citée et page pour une licence libre, exemplaire et cote pour le restreint), « Valider : à verser » ouvert seulement à la même édition, « Rejeter » avec motif suggéré portant l'édition trouvée. 77 clés dans les onze locales. Tests `numdif-candidats-pdf-panel` (lecture du fichier, portes, onglet, locales) et `numdif-candidats-pdf-rendu` (validation Harper 1873 → « à verser », Harper 1874 non validable, rejet motivé). La portée (une autre bibliothèque ne voit rien) est tenue par la base, suite `numdif_file_candidats_tests` T5. **Reste** : voir l'écran en production sous un compte de coordination (Xavier).",
+        "pt": "15/10 — **entregue**: aba «Candidatos PDF» da página Importações (`#tab=pdf`). Ficha ao lado da folha de rosto lida pela ferramenta, decisão (edição, caso, justificativa sugerida, menção e página), validar só a mesma edição, rejeitar com motivo. 77 chaves nas onze locales; testes de leitura e de renderização. **Resta**: ver a tela em produção."
+      }
     },
     {
       "id": "D16",
