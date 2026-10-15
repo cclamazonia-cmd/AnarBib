@@ -72,7 +72,9 @@ s'édite dans la langue d'affichage).
     `E:\CCLA\BLMF\AnarBib\Manuels - Guides\Manual AnarBib\Couvertures 11 langues\`),
     puis remplacement de la page 1 des PDF publiés (dépôt sans trou :
     `_neuf_` puis bascule) ;
-  - six captures avec session en roumain (05, 08-11, 30 ; Xavier se connecte) ;
+  - ~~six captures avec session~~ FAIT le 15/10 (images remplacées dans les PDF
+    publiés : `_outils/lot6-ro/captures_ro_pdf.py` ; données de démo posées puis
+    retirées, liste dans `_outils/lot6-ro/donnees-captures-ro.txt`) ;
   - **en dernier** : relecture d'Adrian (Anarhiva), corrections, annonce
     (Gazette, Lettre, État du projet), clôture d'E39 au REGISTRE.
 
