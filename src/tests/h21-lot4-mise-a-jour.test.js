@@ -4,7 +4,7 @@
 //
 // Contrat d'API (commun avec la migration 20261006203239 et
 // tests/sql/h21_lot4_mise_a_jour_tests.sql) :
-//   * fn_import_preparer_mises_a_jour(p_run_id, p_row_ids ≤ 200) rend
+//   * fn_import_preparer_mises_a_jour(p_run_id, p_row_ids ≤ 100 depuis le 15/10, 200 avant) rend
 //     {run_id, batch_id, asked, prepared, skipped_rows, skipped:{raison: n},
 //     drafts:[{row_id, draft_id, book_id, applied}]} ;
 //   * fn_import_list_run_rows rend, après comparison_counts, update_applicable
@@ -29,7 +29,7 @@
 //     - le bouton « Préparer la mise à jour (N) » compte les seules lignes
 //       préparables de la sélection ; il n'envoie qu'elles ; le message dit les
 //       préparées (et le lot) et les ignorées par raison ; la liste est relue ;
-//     - par pages de 200 (450 lignes → 200, 200, 50) ;
+//     - par pages de 100 depuis le 15/10 (450 lignes → 100, 100, 100, 100, 50) ;
 //     - « administrador » (voit l'écran, ne décide pas) n'a pas le bouton ;
 //     - un refus de la base est traduit (HINT) ;
 //     - l'état d'une ligne préparée (brouillon prêt, publié, à la corbeille) ;
@@ -120,10 +120,11 @@ describe('Importations — estPreparable (les lignes que « Préparer la mise à
     expect(prep(ligne)).toBe(attendu);
   });
 
-  it('jamais d\'office : la RPC n\'est appelée que par le geste, par pages de 200', () => {
+  it('jamais d\'office : la RPC n\'est appelée que par le geste, par pages de 100 (pagesDePreparation)', () => {
     expect(IMPORTACOES.match(/rpc\('fn_import_preparer_mises_a_jour'/g)).toHaveLength(1);
     expect(IMPORTACOES).toMatch(/async function handlePrepareUpdates\(\) \{[\s\S]*?supabase\.rpc\('fn_import_preparer_mises_a_jour'/);
-    expect(IMPORTACOES).toContain('const PAGE_PREPARATION = 200;');
+    expect(IMPORTACOES).toMatch(/for \(const page of pagesDePreparation\(/);
+    expect(IMPORTACOES).not.toContain('PAGE_PREPARATION');
   });
 });
 
@@ -247,16 +248,16 @@ describe('Importations, page MONTÉE — « Préparer la mise à jour », état,
       .toBe('Aucune mise à jour préparée. Ignorées : 1 plus détenue par ta bibliothèque.');
   });
 
-  it('par pages de 200 : 450 lignes préparables → 200, 200, 50', async () => {
+  it('par pages de 100 : 450 lignes préparables → 100, 100, 100, 100, 50', async () => {
     banc.reponses.fn_import_list_run_rows = () => ({ data: Array.from({ length: 450 }, (_, i) => connue(i + 1)), error: null });
     banc.reponses.fn_import_preparer_mises_a_jour = (args) => ({ data: { run_id: 7, batch_id: 77, prepared: args.p_row_ids.length, skipped: {} }, error: null });
     await ouvrirLeRun('Titre 1');
     fireEvent.click(screen.getByRole('checkbox', { name: dire('importacoes.fila.selectAll') }));
     expect(bouton().textContent).toBe('Préparer la mise à jour (450)');
     fireEvent.click(bouton());
-    await waitFor(() => expect(banc.appels.filter(([n]) => n === 'fn_import_preparer_mises_a_jour')).toHaveLength(3));
+    await waitFor(() => expect(banc.appels.filter(([n]) => n === 'fn_import_preparer_mises_a_jour')).toHaveLength(5));
     const pages = banc.appels.filter(([n]) => n === 'fn_import_preparer_mises_a_jour').map(([, a]) => a.p_row_ids);
-    expect(pages.map((ids) => ids.length)).toEqual([200, 200, 50]);
+    expect(pages.map((ids) => ids.length)).toEqual([100, 100, 100, 100, 50]);
     expect(pages.flat()).toEqual(Array.from({ length: 450 }, (_, i) => i + 1));
     await screen.findByText((t) => t.startsWith('450 mises à jour préparées dans le lot n° 77'));
   });

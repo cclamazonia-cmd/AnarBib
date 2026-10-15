@@ -61,12 +61,25 @@ export function pagesParExemplaires(lignes, maxLignes = PLAFOND_LIGNES, maxExemp
 // sous la charge d'un second job (8 099 ms, sql-tests du 13/10) ; la note de
 // H33 le prévoyait : réduire la page, jamais le seuil. La base refuse au-delà
 // (error.import.promotion_page_too_large, error.import.promotion_page_too_many_items,
-// migration 20261014*_h33_la_promotion_par_pages_plus_petites). « Rapprocher »,
-// « Préparer » et le recalcul gardent PLAFOND_LIGNES / PLAFOND_EXEMPLAIRES.
+// migration 20261014*_h33_la_promotion_par_pages_plus_petites). « Rapprocher »
+// et le recalcul gardent PLAFOND_LIGNES / PLAFOND_EXEMPLAIRES.
 export const PLAFOND_PROMOTION_LIGNES = 100;
 export const PLAFOND_PROMOTION_EXEMPLAIRES = 2500;
 export function pagesDePromotion(lignes) {
   return pagesParExemplaires(lignes, PLAFOND_PROMOTION_LIGNES, PLAFOND_PROMOTION_EXEMPLAIRES);
+}
+
+// 15/10/2026 : « Préparer la mise à jour » suit la promotion — 100 lignes et
+// 2 500 exemplaires du fichier par appel. 200 x 25 prenaient 4,8 à 6,6 s au
+// banc chargé et ont dépassé les 8 s des appels de l'API quatre fois sous la
+// charge du runner (T18b de h21_lot6b) : la page se réduit, jamais le seuil.
+// La base refuse au-delà (error.import.update_page_too_large,
+// error.import.preparation_page_too_many_items, migration
+// 20261015211018_preparer_la_mise_a_jour_par_pages_plus_petites).
+export const PLAFOND_PREPARATION_LIGNES = 100;
+export const PLAFOND_PREPARATION_EXEMPLAIRES = 2500;
+export function pagesDePreparation(lignes) {
+  return pagesParExemplaires(lignes, PLAFOND_PREPARATION_LIGNES, PLAFOND_PREPARATION_EXEMPLAIRES);
 }
 
 // H33 (12/10/2026) : « Rapprocher » et « Promouvoir » vont aussi par pages

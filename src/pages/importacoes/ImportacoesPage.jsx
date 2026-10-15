@@ -20,7 +20,7 @@ import RunRetraitsPanel from './RunRetraitsPanel.jsx';
 import ExemplairesDuFichier from './ExemplairesDuFichier.jsx';
 import CandidatsPdfPanel from './CandidatsPdfPanel.jsx';
 import { resumeVerdicts } from '../../lib/importItemVerdicts.js';
-import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, pagesDePromotion, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
+import { exemplairesPreparables, partiesExemplaires, pagesParExemplaires, pagesDePromotion, pagesDePreparation, cumulerReponses, CHAMPS_EXEMPLAIRE } from '../../lib/importItemUpdates.js';
 import { REGISTRY } from '../catalogacao/fieldRegistry.js';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -136,7 +136,6 @@ function estPreparable(r) {
   const notice = r.proposed_book_held !== false && Number(r.update_applicable || 0) > 0 && !r.update_draft_id;
   return notice || Number(r.exemplaires_maj?.applicables || 0) > 0;
 }
-const PAGE_PREPARATION = 200;
 // L'ordre du message : ce qui demande une action d'abord.
 const RAISONS_IGNOREES = ['partagee', 'plus_detenue', 'sans_base', 'rien_a_appliquer', 'deja_preparee', 'rejetee',
   'pas_reconnue', 'hors_run', 'non_comparee'];
@@ -1019,9 +1018,10 @@ export default function ImportacoesPage() {
     // H21 lot 6b : la partie exemplaires (préparés, ignorés par raison)
     const ex = { prepares: 0, ignorees: {} };
     try {
-      // H21 lot 6b : pages de 200 lignes ET de 5 000 exemplaires du fichier au plus
+      // 15/10/2026 : pages de 100 lignes ET de 2 500 exemplaires du fichier au
+      // plus (pagesDePreparation ; 200 / 5 000 avant)
       const parId = new Map(filteredRunRows.map(r => [r.id, r]));
-      for (const page of pagesParExemplaires(ids.map(id => parId.get(id) || { id }), PAGE_PREPARATION)) {
+      for (const page of pagesDePreparation(ids.map(id => parId.get(id) || { id }))) {
         const { data, error } = await supabase.rpc('fn_import_preparer_mises_a_jour', {
           p_run_id: Number(selectedRunId),
           p_row_ids: page,

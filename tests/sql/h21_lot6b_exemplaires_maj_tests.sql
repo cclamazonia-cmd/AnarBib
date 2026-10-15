@@ -79,11 +79,15 @@
 -- T15 reprise des bases (idempotente) ; masquage des valeurs d'un exemplaire
 --     hors de vue.
 -- T16 structure et droits : table fermée, aides internes fermées, portes.
--- T18 mesure : une page de 200 lignes recalculée puis préparée (200
---     brouillons d'exemplaire), sous le jeton de la coordination, < 8 s
---     chacune (NOTICE H21L6B-MESURE) ; T18b : 200 lignes × 25 exemplaires
---     (5 000 brouillons), recalcul et préparation < 8 s chacun ; T18c : au-delà
---     de 5 000 exemplaires par appel, recalcul et préparation refusés (HINT).
+-- T18 mesure : une page de 200 lignes recalculée, puis préparée en deux pages
+--     de 100 (200 brouillons d'exemplaire), sous le jeton de la coordination,
+--     < 8 s chacune (NOTICE H21L6B-MESURE) ; T18b : 200 lignes × 25
+--     exemplaires, recalcul en une page (5 000), préparation en deux pages de
+--     100 lignes (2 × 2 500 brouillons), < 8 s chacune ; T18c : au-delà de
+--     5 000 exemplaires par appel, recalcul refusé ; au-delà de 2 500,
+--     préparation refusée (HINT propre). « Préparer » va par pages de 100
+--     lignes / 2 500 exemplaires depuis le 15/10/2026 (20261015211018) : 200 x 25
+--     en une page dépassait les 8 s sous la charge du runner.
 --     (T18 : la ligne 200 décrit l'exemplaire de la ligne 1 — un seul brouillon.)
 --
 -- Contre-épreuves : voir le rapport du lot (mutants hors dépôt, appliqués sur
@@ -961,8 +965,8 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T18 ─────────────────────────────────────────────────────────────
-  v_t := 'T18 mesure : une page de 200 lignes recalculee puis preparee (200 brouillons d''exemplaire), coordination, < 8 s chacune';
-  DECLARE v_rows bigint[]; v_ms2 numeric; v_h bigint;
+  v_t := 'T18 mesure : une page de 200 lignes recalculee, puis preparee en deux pages de 100 (200 brouillons d''exemplaire), coordination, < 8 s chacune';
+  DECLARE v_rows bigint[]; v_ms2 numeric; v_ms3 numeric; v_res3 jsonb; v_h bigint;
   BEGIN
     v_h := (SELECT e.holding_id FROM public.exemplares e WHERE e.id = e10);
     INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, shelf_location, source_item_code, source_item_id, import_source_id, import_run_id, circulation_policy)
@@ -987,22 +991,32 @@ BEGIN
     v_t0 := clock_timestamp();
     v_res := public.fn_import_recomparer(v_runM, v_rows);
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    -- « Préparer » va par pages de 100 lignes depuis le 15/10/2026
+    -- (20261015211018) ; la ligne 200, doublon de la ligne 1, est dans la
+    -- seconde page : « déjà préparée ».
     v_t0 := clock_timestamp();
-    v_res2 := public.fn_import_preparer_mises_a_jour(v_runM, v_rows);
+    v_res2 := public.fn_import_preparer_mises_a_jour(v_runM, v_rows[1:100]);
     v_ms2 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    v_t0 := clock_timestamp();
+    v_res3 := public.fn_import_preparer_mises_a_jour(v_runM, v_rows[101:200]);
+    v_ms3 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
-    RAISE NOTICE 'H21L6B-MESURE recalcul 200 lignes : % ms ; preparer 200 lignes (200 brouillons d''exemplaire) : % ms', round(v_ms), round(v_ms2);
-    IF (v_res->>'exemplaires_comparees')::int = 200 AND (v_res2->'exemplaires'->>'prepared')::int = 199
-       AND v_res2->'exemplaires'->'skipped' = '{"deja_preparee": 1}'::jsonb
-       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+    RAISE NOTICE 'H21L6B-MESURE recalcul 200 lignes : % ms ; preparer 2 x 100 lignes (200 brouillons d''exemplaire) : % ms et % ms', round(v_ms), round(v_ms2), round(v_ms3);
+    IF (v_res->>'exemplaires_comparees')::int = 200
+       AND (v_res2->'exemplaires'->>'prepared')::int = 100 AND v_res2->'exemplaires'->'skipped' = '{}'::jsonb
+       AND (v_res3->'exemplaires'->>'prepared')::int = 99 AND v_res3->'exemplaires'->'skipped' = '{"deja_preparee": 1}'::jsonb
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+       AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+       AND v_ms3 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_res2->'exemplaires' - 'drafts')::text, 'NULL'), 300)
-         ||' ; '||round(v_ms)||' ms / '||round(v_ms2)||' ms'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_res2->'exemplaires' - 'drafts')::text, 'NULL'), 150)
+         ||' puis '||left(coalesce((v_res3->'exemplaires' - 'drafts')::text, 'NULL'), 150)
+         ||' ; '||round(v_ms)||' ms / '||round(v_ms2)||' ms / '||round(v_ms3)||' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T18b ────────────────────────────────────────────────────────────
-  v_t := 'T18b mesure : 200 lignes x 25 exemplaires (5 000 brouillons), recalcul et preparation < 8 s chacun';
-  DECLARE v_runP bigint; v_rowsP bigint[]; v_hP bigint; v_ms2 numeric;
+  v_t := 'T18b mesure : 200 lignes x 25 exemplaires, recalcul en une page (5 000), preparation en deux pages de 100 lignes (2 x 2 500 brouillons), < 8 s chacune';
+  DECLARE v_runP bigint; v_rowsP bigint[]; v_hP bigint; v_ms2 numeric; v_ms3 numeric; v_res3 jsonb;
   BEGIN
     v_hP := (SELECT e.holding_id FROM public.exemplares e WHERE e.id = e9);
     INSERT INTO public.exemplares (bib_ref, tombo, library_id, holding_id, shelf_location, notes, source_item_code, source_item_id, import_source_id, import_run_id, circulation_policy)
@@ -1025,22 +1039,36 @@ BEGIN
     v_t0 := clock_timestamp();
     v_res := public.fn_import_recomparer(v_runP, v_rowsP);
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    -- « Préparer » par pages de 100 lignes / 2 500 exemplaires depuis le
+    -- 15/10/2026 (20261015211018) : 200 x 25 en une page dépassait les 8 s
+    -- sous la charge du runner (8 011 à 13 043 ms) ; le recalcul garde sa page
+    -- de 200 lignes / 5 000 exemplaires.
     v_t0 := clock_timestamp();
-    v_res2 := public.fn_import_preparer_mises_a_jour(v_runP, v_rowsP);
+    v_res2 := public.fn_import_preparer_mises_a_jour(v_runP, v_rowsP[1:100]);
     v_ms2 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    v_t0 := clock_timestamp();
+    v_res3 := public.fn_import_preparer_mises_a_jour(v_runP, v_rowsP[101:200]);
+    v_ms3 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
-    RAISE NOTICE 'H21L6B-MESURE 200 lignes x 25 exemplaires : recalcul % ms ; preparer % ms (% brouillons d''exemplaire)', round(v_ms), round(v_ms2), v_res2->'exemplaires'->'prepared';
-    IF (v_res2->'exemplaires'->>'prepared')::int = 5000 AND v_res2->'exemplaires'->'skipped' = '{}'::jsonb
-       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+    RAISE NOTICE 'H21L6B-MESURE 200 lignes x 25 exemplaires : recalcul % ms ; preparer 2 x 100 lignes : % ms et % ms (% + % brouillons d''exemplaire)',
+      round(v_ms), round(v_ms2), round(v_ms3), v_res2->'exemplaires'->'prepared', v_res3->'exemplaires'->'prepared';
+    IF (v_res2->'exemplaires'->>'prepared')::int = 2500 AND v_res2->'exemplaires'->'skipped' = '{}'::jsonb
+       AND (v_res3->'exemplaires'->>'prepared')::int = 2500 AND v_res3->'exemplaires'->'skipped' = '{}'::jsonb
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+       AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+       AND v_ms3 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1;
       v_failures := v_failures || (v_t || ' : ' || coalesce(((v_res2->'exemplaires') - 'drafts')::text, 'NULL')
-                                   || ' ; ' || round(v_ms)::text || ' ms / ' || round(v_ms2)::text || ' ms'); END IF;
+                                   || ' puis ' || coalesce(((v_res3->'exemplaires') - 'drafts')::text, 'NULL')
+                                   || ' ; ' || round(v_ms)::text || ' ms / ' || round(v_ms2)::text || ' ms / ' || round(v_ms3)::text || ' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T18c ────────────────────────────────────────────────────────────
-  v_t := 'T18c au-dela de 5 000 exemplaires du fichier par appel : recalcul et preparation refuses (HINT), rien d''ecrit';
-  DECLARE v_runQ bigint; v_rowQ bigint; v_h1 text; v_h2 text;
+  -- Depuis le 15/10/2026 (20261015211018) : la préparation refuse dès 2 501
+  -- exemplaires, avec son HINT ; le recalcul garde 5 000 et le sien.
+  v_t := 'T18c au-dela de 5 000 exemplaires par appel : recalcul refuse ; au-dela de 2 500 : preparation refusee (HINT propre), rien d''ecrit';
+  DECLARE v_runQ bigint; v_rowQ bigint; v_rowQ2 bigint; v_h1 text; v_h2 text; v_h3 text;
   BEGIN
     INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
     VALUES (v_src, v_lib, 'essai/l6b-plafond.iso', 'l6b-plafond.iso', 'marc_iso2709', 'ready_for_review') RETURNING id INTO v_runQ;
@@ -1050,17 +1078,27 @@ BEGIN
                                            FROM generate_series(1, 5001) i)),
             'known_record', 'pending', b1)
     RETURNING id INTO v_rowQ;
+    INSERT INTO ingest.partner_catalog_staging_rows (run_id, row_no, external_key, title, normalized_payload, match_status, editorial_decision, proposed_book_id)
+    VALUES (v_runQ, 2, 'L6B-PLAFOND-PREP', 'L6B Plafond preparation',
+            jsonb_build_object('items', (SELECT jsonb_agg(jsonb_build_object('source_item_code', 'L6BQ2-' || i, 'call_number', 'Q2 ' || i))
+                                           FROM generate_series(1, 2501) i)),
+            'known_record', 'pending', b1)
+    RETURNING id INTO v_rowQ2;
     EXECUTE 'SET LOCAL ROLE authenticated';
     BEGIN PERFORM public.fn_import_recomparer(v_runQ, ARRAY[v_rowQ]); v_h1 := 'accepte';
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_h1 = PG_EXCEPTION_HINT; END;
     BEGIN PERFORM public.fn_import_preparer_mises_a_jour(v_runQ, ARRAY[v_rowQ]); v_h2 := 'accepte';
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_h2 = PG_EXCEPTION_HINT; END;
+    BEGIN PERFORM public.fn_import_preparer_mises_a_jour(v_runQ, ARRAY[v_rowQ2]); v_h3 := 'accepte';
+    EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_h3 = PG_EXCEPTION_HINT; END;
     EXECUTE 'RESET ROLE';
-    IF v_h1 = 'error.import.update_page_too_many_items' AND v_h2 = 'error.import.update_page_too_many_items'
-       AND (SELECT exemplaires_comparaison IS NULL AND comparaison IS NULL FROM ingest.partner_catalog_staging_rows WHERE id = v_rowQ)
+    IF v_h1 = 'error.import.update_page_too_many_items'
+       AND v_h2 = 'error.import.preparation_page_too_many_items'
+       AND v_h3 = 'error.import.preparation_page_too_many_items'
+       AND (SELECT bool_and(exemplaires_comparaison IS NULL AND comparaison IS NULL) FROM ingest.partner_catalog_staging_rows WHERE id IN (v_rowQ, v_rowQ2))
        AND ingest.fn_h21_exemplaires_par_appel() = 5000
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||concat_ws(' / ', v_h1, v_h2)); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||concat_ws(' / ', v_h1, v_h2, v_h3)); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

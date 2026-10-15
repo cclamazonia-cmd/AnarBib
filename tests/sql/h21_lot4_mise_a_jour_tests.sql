@@ -116,7 +116,7 @@
 --     la préparation : deja_preparee) ; la notice 48 est en consultation : T3
 --     et T13 vérifient que la copie et la publication gardent
 --     circulation_default et loanable.
--- T18 performance : une page de 200 lignes préparées, sous le jeton de la
+-- T18 performance : 200 lignes préparées en deux pages de 100 (depuis le 15/10, 20261015211018), sous le jeton de la
 --     coordination, < 8 s (mesure émise : NOTICE H21L4-MESURE).
 --
 -- Contre-épreuves : voir le rapport du lot (mutants hors dépôt, appliqués sur
@@ -521,7 +521,7 @@ BEGIN
     VALUES (v_admin, v_lib, 'librarian', 'active', true);
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
     EXECUTE 'SET LOCAL ROLE authenticated';
-    BEGIN PERFORM public.fn_import_preparer_mises_a_jour(v_run2, (SELECT array_agg(g) FROM generate_series(1, 201) g)); v_e_page := 'accepte';
+    BEGIN PERFORM public.fn_import_preparer_mises_a_jour(v_run2, (SELECT array_agg(g) FROM generate_series(1, 101) g)); v_e_page := 'accepte';
     EXCEPTION WHEN OTHERS THEN v_e_page := SQLERRM; GET STACKED DIAGNOSTICS v_h_page = PG_EXCEPTION_HINT; END;
     v_adm := public.fn_import_preparer_mises_a_jour(v_run2, ARRAY[r60]);
     EXECUTE 'RESET ROLE';
@@ -1073,8 +1073,8 @@ BEGIN
   -- 200 lignes reconnues : notice, 2 responsabilités, détention, identifiant,
   -- base (la correspondance de la ligne d'origine) ; l'année changée dans le
   -- fichier ensuite. Une page de 200, sous le jeton de la coordination.
-  v_t := 'T18 performance : une page de 200 lignes preparees < 8 s';
-  DECLARE v_ids bigint[];
+  v_t := 'T18 performance : 200 lignes preparees en deux pages de 100, < 8 s chacune';
+  DECLARE v_ids bigint[]; v_ms2 numeric;
   BEGIN
     INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
     VALUES ('L4 banc de performance', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO v_srcP;
@@ -1122,16 +1122,26 @@ BEGIN
             public.book_contributors, public.book_subjects, public.book_holdings, public.book_drafts;
 
     SELECT array_agg(id ORDER BY id) INTO v_ids FROM ingest.partner_catalog_staging_rows WHERE run_id = v_runP;
+    -- « Préparer » va par pages de 100 lignes depuis le 15/10/2026
+    -- (20261015211018) : 200 lignes, deux pages, chacune < 8 s, dans le même
+    -- lot ouvert du run.
     EXECUTE 'SET LOCAL ROLE authenticated';
     v_t0 := clock_timestamp();
-    v_res := public.fn_import_preparer_mises_a_jour(v_runP, v_ids);
+    v_res := public.fn_import_preparer_mises_a_jour(v_runP, v_ids[1:100]);
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
+    v_t0 := clock_timestamp();
+    v_res2 := public.fn_import_preparer_mises_a_jour(v_runP, v_ids[101:200]);
+    v_ms2 := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
-    RAISE NOTICE 'H21L4-MESURE une page de 200 lignes préparées (comparaison recalculée, copie, patch, lien) : % ms', round(v_ms);
-    IF cardinality(v_ids) = 200 AND (v_res->>'prepared')::int = 200 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+    RAISE NOTICE 'H21L4-MESURE deux pages de 100 lignes préparées (comparaison recalculée, copie, patch, lien) : % ms et % ms', round(v_ms), round(v_ms2);
+    IF cardinality(v_ids) = 200 AND (v_res->>'prepared')::int = 100 AND (v_res2->>'prepared')::int = 100
+       AND v_res2->>'batch_id' = v_res->>'batch_id'
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
+       AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
        AND (SELECT count(*) FROM public.book_drafts WHERE batch_id = (v_res->>'batch_id')::bigint AND ano = '2030') = 200
     THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(left(v_res::text, 300), 'NULL')||' ; '||round(v_ms)||' ms'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(left(v_res::text, 150), 'NULL')||' puis '||coalesce(left(v_res2::text, 150), 'NULL')
+                                              ||' ; '||round(v_ms)||' ms / '||round(v_ms2)||' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
