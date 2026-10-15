@@ -161,6 +161,9 @@ export default function RedePage() {
           ...lib, ...commRow, ...svcRow,
           readers: s.readers_active || 0,
           staff: s.librarians_active || 0,
+          // Documents = notices tenues par la biblio (book_holdings), même
+          // source que le compteur « Documents » de BibliotecaPage.
+          documents: s.holdings_count || 0,
           exemplars: s.exemplars_count || 0,
           loansOpen: s.loans_open || 0,
           loansOverdue: s.loans_overdue || 0,
@@ -418,9 +421,9 @@ export default function RedePage() {
   const lr = (i) => ({ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 });
   const lw = { border:'1px solid rgba(255,255,255,.06)', borderRadius:8, overflow:'hidden' };
   const statCell = (v, l, warn) => (
-    <div style={{ textAlign:'center', padding:'8px 4px', borderRadius:6, background: warn ? 'rgba(220,38,38,.08)' : 'rgba(0,0,0,.15)' }}>
+    <div style={{ textAlign:'center', padding:'8px 2px', borderRadius:6, background: warn ? 'rgba(220,38,38,.08)' : 'rgba(0,0,0,.15)' }}>
       <div style={{ fontSize:'1.2rem', fontWeight:800, color: warn ? '#f87171' : 'inherit' }}>{v}</div>
-      <div style={{ fontSize:'.7rem', color:'var(--brand-muted)' }}>{l}</div>
+      <div style={{ fontSize:'.68rem', lineHeight:1.2, color:'var(--brand-muted)', overflowWrap:'break-word' }}>{l}</div>
     </div>
   );
 
@@ -506,9 +509,10 @@ export default function RedePage() {
                     {lib.allows_new_reservations && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.allowsReservations' })}</span>}
                     {!lib.allows_new_loans && <span className="cat-pill danger" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.noLoans' })}</span>}
                   </div>
-                  <div style={{ display:'grid', gridTemplateColumns: 'repeat(4,minmax(0, 1fr))', gap:4, marginBottom:8 }}>
+                  <div style={{ display:'grid', gridTemplateColumns: 'repeat(5,minmax(0, 1fr))', gap:4, marginBottom:8 }}>
                     {statCell(lib.readers, t({id:'rede.stats.readers'}))}
                     {statCell(lib.staff, t({id:'rede.stats.staff'}))}
+                    {statCell(lib.documents, t({id:'rede.stats.documents'}))}
                     {statCell(lib.exemplars, t({id:'rede.stats.exemplars'}))}
                     {statCell(lib.loansOpen, t({id:'rede.overview.loansOpenShort'}), lib.loansOpen > 0)}
                   </div>
