@@ -1,0 +1,31 @@
+{
+  "name": "AnarBib",
+  "slug": "default",
+  "version": "1.1.0",
+  "assets": {
+    "logo": "logo.svg",
+    "background": "bg.webp",
+    "favicon": "favicon.png"
+  },
+  "colors": {
+    "primary": "#A31414",
+    "secondary": "#111111",
+    "accent": "#F2EEE6",
+    "panelBg": "rgba(17,17,17,0.84)",
+    "panelBorder": "rgba(242,238,230,0.16)",
+    "text": "#F2EEE6",
+    "muted": "#D8D2C8",
+    "link": "#C61C1C",
+    "buttonText": "#F8F5EF",
+    "bgOverlay": "rgba(0,0,0,0.52)"
+  },
+  "layout": {
+    "radius": "20px",
+    "shadow": "0 12px 32px rgba(0,0,0,0.35)",
+    "heroMaxWidth": "1680px",
+    "containerMaxWidth": "1680px"
+  },
+  "meta": {
+    "titleSuffix": "AnarBib"
+  }
+}

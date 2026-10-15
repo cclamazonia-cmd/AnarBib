@@ -7,17 +7,20 @@
 #
 # Séquence :
 #   1. Mise à jour du code (git pull --ff-only, sauf --sans-pull)
-#   2. Application des migrations SQL en attente (apply-pending-migrations.sh)
+#   2. Application des migrations SQL en attente (apply-pending-migrations.sh),
+#      puis triggers de profil sur auth.users (auth-triggers.sh, 16/10/2026)
 #   3. Rafraîchissement des vues matérialisées (refresh-matviews.sh)
 #   4. Rechargement des Edge Functions (redémarrage du conteneur functions)
+#   4 bis. Ressources du réseau : manuels et thème `default` (ressources-reseau.sh)
 #   5. Reconstruction du front servi par Caddy, si le code a changé (21/09/2026)
 #   6. Contrôle de santé des services
 #
 # Usage :
 #   deploy/deploy.sh                  # mise à jour complète standard
 #   deploy/deploy.sh --sans-pull      # applique sans faire git pull
-#   deploy/deploy.sh --migrations     # migrations seules
+#   deploy/deploy.sh --migrations     # migrations seules (triggers de profil compris)
 #   deploy/deploy.sh --fonctions      # fonctions seules
+#   deploy/deploy.sh --ressources     # manuels et thème du réseau seuls
 #   deploy/deploy.sh --front          # front seul (reconstruit même si rien n'a changé)
 #   deploy/deploy.sh --controle       # contrôles de santé seuls
 # =============================================================================
@@ -34,6 +37,7 @@ DEPLOY_DIR="$RACINE/deploy"
 PULL=1
 MIGRATIONS=1
 FONCTIONS=1
+RESSOURCES=1
 FRONT=1
 FRONT_FORCE=0
 CONTROLE=1
@@ -42,11 +46,12 @@ choix_explicite=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --sans-pull)  PULL=0 ;;
-    --migrations) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; MIGRATIONS=1 ;;
-    --fonctions)  [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FONCTIONS=1 ;;
-    --front)      [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FRONT=1; FRONT_FORCE=1 ;;
-    --controle)   [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; CONTROLE=1 ;;
-    -h|--help)    sed -n '2,22p' "$0"; exit 0 ;;
+    --migrations) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; MIGRATIONS=1 ;;
+    --fonctions)  [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FONCTIONS=1 ;;
+    --ressources) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; RESSOURCES=1 ;;
+    --front)      [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FRONT=1; FRONT_FORCE=1 ;;
+    --controle)   [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; CONTROLE=1 ;;
+    -h|--help)    sed -n '2,25p' "$0"; exit 0 ;;
 
     *) echo "✗ Option inconnue : $1" >&2; exit 2 ;;
   esac
@@ -79,7 +84,16 @@ fi
 if [ "$MIGRATIONS" = "1" ]; then
   dire "Migrations SQL incrémentales"
   docker compose exec -T db sh /scripts/apply-pending-migrations.sh
-  
+
+  # Triggers de profil sur auth.users (16/10/2026). Aucune migration ne les pose
+  # (la CI en serait cassée, voir le script) : bootstrap.sh et install.sh les
+  # posaient, pas ce script — or c'est lui que lance la mise à jour automatique
+  # d'une instance (le minuteur de l'ISO du camarade). Idempotent.
+  if ! docker compose exec -T db sh /scripts/auth-triggers.sh; then
+    echo "⚠ Triggers de profil non posés : la création de compte répondra PUBLIC_ID_NOT_READY."
+    TRIGGERS_KO=1
+  fi
+
   # Rafraîchissement des vues matérialisées si nécessaire
   docker compose exec -T db sh /scripts/refresh-matviews.sh >/dev/null 2>&1 || true
 fi
@@ -91,6 +105,16 @@ if [ "$FONCTIONS" = "1" ]; then
   # Un simple redémarrage recharge le cache Deno et le routeur main.
   docker compose restart functions >/dev/null
   echo "✓ Conteneur functions rechargé."
+fi
+
+# 4 bis. Ressources du réseau (16/10/2026) — manuels et thème `default`, depuis
+# la release Codeberg épinglée dans deploy/ressources-reseau.json. Ne verse que
+# ce qui a changé ; un échec (pas de réseau) n'arrête pas la mise à jour.
+if [ "$RESSOURCES" = "1" ]; then
+  dire "Ressources du réseau (manuels, thème default)"
+  if ! bash "$DEPLOY_DIR/scripts/ressources-reseau.sh"; then
+    RESSOURCES_KO=1
+  fi
 fi
 
 # 5. Front
@@ -152,6 +176,8 @@ fi
 # 6. Contrôle de santé
 SANTE_OK=1
 [ "${FRONT_KO:-0}" = "1" ] && SANTE_OK=0
+[ "${TRIGGERS_KO:-0}" = "1" ] && SANTE_OK=0
+[ "${RESSOURCES_KO:-0}" = "1" ] && SANTE_OK=0
 if [ "$CONTROLE" = "1" ]; then
   dire "Contrôle de santé de la pile"
   

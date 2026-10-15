@@ -392,6 +392,21 @@ else
 fi
 
 # -----------------------------------------------------------------------------
+# 8 bis. Ressources du réseau — manuels et thème `default` (16/10/2026)
+# -----------------------------------------------------------------------------
+# Le bouton « Manuel » et le thème lisent library-ui-assets/manuals/… et
+# library-ui-assets/themes/default/… dans le Storage de CETTE instance. Ils
+# viennent d'une release Codeberg épinglée (deploy/ressources-reseau.json),
+# jamais du Storage de la prod. Sans réseau, l'étape avertit et la pile tourne
+# quand même : le thème retombe sur theme-base.css, les manuels manquent.
+etape "8 bis · Ressources du réseau (manuels, thème default)"
+if [ "${ECHEC_PLAFONDS:-0}" = "1" ]; then
+  echo "⚠ Sautée : les buckets ne sont pas en place (étape 8)."
+elif ! bash scripts/ressources-reseau.sh; then
+  echo "  L'instance tourne sans elles ; deploy/deploy.sh --ressources les reprendra."
+fi
+
+# -----------------------------------------------------------------------------
 # Vérification
 # -----------------------------------------------------------------------------
 if [ "$VERIFIER" = "0" ]; then

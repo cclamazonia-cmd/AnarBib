@@ -1474,6 +1474,10 @@ if [ "$START" = "1" ]; then
       # Les triggers de profil sur auth.users ne viennent d'aucune migration :
       # une instance installée avant le 15/10/2026 ne les a pas (PR #34).
       docker compose exec -T db sh /scripts/auth-triggers.sh
+      # Manuels et thème `default` du réseau, depuis la release Codeberg épinglée
+      # (une instance neuve les reçoit par bootstrap.sh, étape 8 bis). Non
+      # bloquant : sans réseau, le script le dit et l'instance tourne sans eux.
+      bash scripts/ressources-reseau.sh || true
     else
       echo "$(t db_fresh)"
       ./bootstrap.sh --depuis-le-depot --sel-jetable

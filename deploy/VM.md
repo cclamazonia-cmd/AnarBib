@@ -75,6 +75,7 @@ carte), c'est la valeur de `.env.example`.
 | Quoi | Taille | Comment |
 |---|---|---|
 | Le fond de carte (`map-tiles`, un fichier PMTiles) | 18 Go (z12) à 36 Go (z13) | `scripts/maptiles/README.md` : `extraire-planet.sh` depuis le planet Protomaps, puis `televerser-tus.mjs` vers le bucket `map-tiles` de l'instance. Sans lui, les cartes sont vides mais tout le reste marche |
+| Les manuels et le thème `default` du réseau | ≈ 65 Mo | seuls, par `deploy/scripts/ressources-reseau.sh` (bootstrap, install, chaque `deploy.sh`) depuis la release Codeberg épinglée dans `deploy/ressources-reseau.json`. **Ne pas poser de `themes/default/manifest.json` à la main** : un manifeste clair sur l'application sombre rend l'interface illisible (ticket #35) |
 | Les fichiers des buckets d'une sauvegarde | ≈ 450 Mo | `deploy/ops/anarbib-storage-restore.py --source <sauvegarde storage> --deploy deploy/` **après** la base (le lien est `storage.objects.version`) |
 
 ## 6. Exposer, sauvegarder, mettre à jour, restaurer

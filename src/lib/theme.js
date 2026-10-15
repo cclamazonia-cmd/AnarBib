@@ -214,6 +214,20 @@ async function applyManifest(manifest) {
   // if (manifest.fonts?.accent) await installFont(manifest.fonts.accent, '--brand-font-accent');
 }
 
+// Un fichier nommé par un manifeste peut être RELATIF (« bg.webp ») : il se lit
+// alors à côté du manifeste, dans le Storage de l'instance qui le sert. C'est
+// ce qui rend le thème `default` du réseau portable (16/10/2026) : la copie
+// semée sur une instance auto-hébergée par deploy/scripts/ressources-reseau.sh
+// ne pointe vers aucun autre serveur, alors que celui de la prod écrit des
+// adresses absolues vers son propre projet. Absolu, racine (`/img/…`), data: et
+// blob: passent tels quels.
+export function resolveThemeAsset(value, slug) {
+  if (typeof value !== 'string' || value.trim() === '') return value;
+  const v = value.trim();
+  if (/^(https?:|data:|blob:)/i.test(v) || v.startsWith('/')) return v;
+  return publicAssetUrl(`themes/${slug}/${v.replace(/^\.\//, '')}`);
+}
+
 async function fetchManifest(themeSlug) {
   const slug = String(themeSlug || 'default').trim().toLowerCase() || 'default';
   const url = publicAssetUrl(`themes/${slug}/manifest.json`);
@@ -221,6 +235,11 @@ async function fetchManifest(themeSlug) {
   if (!res.ok) throw new Error(`Theme manifest not found: ${slug}`);
   const manifest = await res.json();
   manifest.__resolvedSlug = slug;
+  if (manifest.assets && typeof manifest.assets === 'object') {
+    for (const k of Object.keys(manifest.assets)) {
+      manifest.assets[k] = resolveThemeAsset(manifest.assets[k], slug);
+    }
+  }
   return manifest;
 }
 

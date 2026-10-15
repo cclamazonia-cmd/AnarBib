@@ -1,0 +1,56 @@
+{
+  "_lisez_moi": "Ressources du réseau qu'une instance auto-hébergée garde dans SON Storage, au même chemin que la prod : les trois manuels (src/lib/docLinks.js) et le thème `default`. Source : une release Codeberg du dépôt, jamais le Storage de la prod. Semées par deploy/scripts/ressources-reseau.sh (bootstrap.sh, install.sh, deploy.sh). Republier un manuel = PDF linéarisé (qpdf --linearize), nouvelle release, puis ce fichier mis à jour (release + sha256) : le prochain deploy.sh de chaque instance le reçoit. Garde : src/tests/selfhost-ressources-reseau.test.js.",
+  "depot": "https://codeberg.org/AnarBib/anarbib",
+  "release": "ressources-reseau-2026-10-16",
+  "objets": [
+    {
+      "fichier": "Manual_do_AnarBib.pdf",
+      "bucket": "library-ui-assets",
+      "chemin": "manuals/network/published/Manual_do_AnarBib.pdf",
+      "type": "application/pdf",
+      "sha256": "1160e8749285bb7d5a3a8ca1f7643148e779642fce07425647d25552aead2b54"
+    },
+    {
+      "fichier": "Manual_Leitor-a-e.pdf",
+      "bucket": "library-ui-assets",
+      "chemin": "manuals/network/published/Manual Leitor-a-e.pdf",
+      "type": "application/pdf",
+      "sha256": "b260b1bd9b515c62ce69d474ee91c2d521e4e477a9252423f4014b69f44511e7"
+    },
+    {
+      "fichier": "Guia_de_governanca_AnarBib.pdf",
+      "bucket": "library-ui-assets",
+      "chemin": "manuals/network/published/Guia_de_governanca_AnarBib.pdf",
+      "type": "application/pdf",
+      "sha256": "60a675e0086e13f0aff9a8669a4c2cea025ce7a4847416c955bf4d5312e6d752"
+    },
+    {
+      "fichier": "theme-default-manifest.json",
+      "bucket": "library-ui-assets",
+      "chemin": "themes/default/manifest.json",
+      "type": "application/json",
+      "sha256": "11c01733827a2078600c79307a376282429831cd9bbd2cc73847223e9d9a2a06"
+    },
+    {
+      "fichier": "theme-default-bg.webp",
+      "bucket": "library-ui-assets",
+      "chemin": "themes/default/bg.webp",
+      "type": "image/webp",
+      "sha256": "75d64db13f663b6e54786302206a066f95450aee0ce60f2db3f8b9c8705095fe"
+    },
+    {
+      "fichier": "theme-default-logo.svg",
+      "bucket": "library-ui-assets",
+      "chemin": "themes/default/logo.svg",
+      "type": "image/svg+xml",
+      "sha256": "9494cc99a586b83fea7f77fd8296c94d4f2de618147d7f6c2f76ecee6479fcd6"
+    },
+    {
+      "fichier": "theme-default-favicon.png",
+      "bucket": "library-ui-assets",
+      "chemin": "themes/default/favicon.png",
+      "type": "image/png",
+      "sha256": "9da212678753558f91eae3897940fef49e6e3de506ba40f67fea9fac70528cb2"
+    }
+  ]
+}

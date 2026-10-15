@@ -106,6 +106,9 @@ deploy/functions.env
 deploy/functions.env.local
 deploy/functions.env.bak.*
 deploy/.initial_admin_creds
+# État et cache de deploy/scripts/ressources-reseau.sh (manuels, thème default)
+deploy/.ressources-reseau.etat
+deploy/.ressources-cache/
 # NOTE 2026-08-18 : genkeys.mjs etait ignore par erreur. Il ne contient AUCUN
 # secret — il en genere, et les ecrit dans .env sans jamais les afficher. Sans
 # lui, on ne peut pas reconstruire l'installation depuis le depot, ce qui est
