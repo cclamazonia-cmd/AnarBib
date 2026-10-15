@@ -1180,7 +1180,7 @@ BEGIN
     RAISE NOTICE 'H21L5-MESURE la même page recalculée (N gardé, 600 divergences tenues) : % ms',
       round(extract(epoch FROM clock_timestamp() - v_t0) * 1000);
     IF cardinality(v_ids) = 200 AND (v_res->>'compared_rows')::int = 200 AND (v_res->'divergences'->>'posees')::int = 600
-       AND (v_res2->'divergences'->>'mises_a_jour')::int = 600 AND v_ms < 8000
+       AND (v_res2->'divergences'->>'mises_a_jour')::int = 600 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_res->>'divergences', 'NULL')||' ; '||round(v_ms)||' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;

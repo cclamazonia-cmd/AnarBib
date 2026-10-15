@@ -165,6 +165,34 @@ if [ -n "$non_classees" ]; then
 fi
 echo "filet BG2 OK : $(wc -l < /tmp/bg2-real.txt) tables, toutes classées"
 
+# ---- budget de temps des mesures, à la charge de la machine ---------------
+# Les suites de mesure (H21, H33, H34) exigent « < 8 s » par appel : c'est le
+# statement_timeout du rôle authenticated en production, et le seuil a attrapé
+# de vraies régressions (×7, ×10). Mais un seuil ABSOLU mesuré sur le poste du
+# runner, partagé avec les autres sessions, rougit sur la seule charge : le
+# 15/10 au soir, quatre runs sql-tests d'affilée sur T18b de h21_lot6b et T12
+# de h34 (8 011, 10 576, 13 043 ms ; page à 8 596 ms) pour un code inchangé
+# depuis le dernier vert, sous une charge moyenne de ~15 sur 8 cœurs (vitest de
+# sessions parallèles, Postgres de banc, pile locale) — la mesure de référence
+# de 200 lignes passait de 622 à 1 826 ms dans le même temps.
+# D'où : juste avant chaque suite qui lit `anarbib.budget_ms`, on lit la charge
+# (la plus haute de 1 et 5 min, rapportée au nombre de cœurs) et on pose
+# 8 000 ms × ce facteur, borné à [1, 3]. Machine calme : 8 s, inchangé. Plafond
+# 24 s : une régression d'un ordre de grandeur rougit toujours. La charge côté
+# Windows ne se voit pas d'ici (seule celle de la VM WSL) : si un rouge de
+# mesure revenait avec un facteur 1, c'est là qu'il faut regarder. Hors de ce
+# script, la variable est absente et les suites retombent sur 8 000.
+budget_mesures() { # → « budget_ms facteur charge cœurs »
+  local cpus; cpus="$(nproc 2>/dev/null || echo 1)"
+  if [ -r /proc/loadavg ]; then
+    awk -v cpus="$cpus" '{ l = ($1 > $2) ? $1 : $2; f = l / cpus;
+      if (f < 1) f = 1; if (f > 3) f = 3;
+      printf "%d %.2f %.1f %d\n", 8000 * f, f, l, cpus }' /proc/loadavg
+  else
+    echo "8000 1.00 ? $cpus"
+  fi
+}
+
 # ---- exécution des suites (allowlist du manifeste) ------------------------
 rc=0; ran=0
 while IFS= read -r line; do
@@ -182,7 +210,13 @@ while IFS= read -r line; do
   # dit désormais le code de psql, celui de grep, le nombre de lignes « OK : » et la
   # taille de la sortie — de quoi nommer le maillon si un rouge revenait.
   out_f="$(mktemp)"
-  PT -v ON_ERROR_STOP=0 -f "$suite" > "$out_f" 2>&1; rc_psql=$?
+  suite_pgoptions="${PGOPTIONS:-}"
+  if grep -q 'anarbib.budget_ms' "$suite"; then
+    read -r b_ms b_f b_l b_c < <(budget_mesures)
+    echo "⏱ budget des mesures : ${b_ms} ms (8 000 ms × ${b_f} — charge ${b_l} sur ${b_c} cœurs)"
+    suite_pgoptions="${suite_pgoptions} -c anarbib.budget_ms=${b_ms}"
+  fi
+  PGOPTIONS="$suite_pgoptions" PT -v ON_ERROR_STOP=0 -f "$suite" > "$out_f" 2>&1; rc_psql=$?
   bilan="$(grep -E '(OK|ECHEC) :' "$out_f" | tail -1)"
   n_ok="$(grep -cE ' OK : [0-9]+/[0-9]+' "$out_f")"; rc_grep=$?
   if [ "${n_ok:-0}" -gt 0 ]; then

@@ -1007,7 +1007,7 @@ BEGIN
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
     RAISE NOTICE 'H21L6A-MESURE Rapprocher une ligne de 300 exemplaires (300 constats, 300 brouillons) : % ms', round(v_ms);
-    IF (v_res->>'created_items')::int = 300 AND v_ms < 8000
+    IF (v_res->>'created_items')::int = 300 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_res - 'run')::text, 'NULL'), 200)||' ; '||round(v_ms)||' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;

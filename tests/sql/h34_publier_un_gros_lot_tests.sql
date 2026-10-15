@@ -235,7 +235,7 @@ BEGIN
     IF v_b = 25 AND v_x = 60 AND v_pages = 2
        AND (SELECT count(*) FROM public.exemplar_drafts WHERE batch_id = v_lot AND status = 'published') = 560
        AND (SELECT status FROM public.catalog_batches WHERE id = v_lot) = 'published'
-       AND v_max < 8000
+       AND v_max < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_pages||' page(s), '||trim(v_d)||' ms ; '||coalesce(v_res::text, 'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -708,7 +708,7 @@ BEGIN
     RAISE NOTICE 'H34-MESURE lot 2 : 203 notices / 2 061 exemplaires en % pages : % ms (la plus longue % ms) ; états :%',
       v_pages, trim(v_d), v_max, v_etats;
     IF v_pages <> 6 THEN v_e := v_e || ' pages(' || v_pages || ')'; END IF;
-    IF v_max >= 8000 THEN v_e := v_e || ' page-lente(' || v_max || ')'; END IF;
+    IF v_max >= coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) THEN v_e := v_e || ' page-lente(' || v_max || ')'; END IF;
     IF v_etats <> ' publishing publishing publishing publishing publishing published' THEN v_e := v_e || ' etats(' || v_etats || ')'; END IF;
     IF v_sep <> 0 THEN v_e := v_e || ' notice-separee(' || v_sep || ')'; END IF;
     IF v_books <> 203 OR v_ex <> 2061 THEN v_e := v_e || ' comptes(' || v_books || '/' || v_ex || ')'; END IF;

@@ -787,7 +787,7 @@ BEGIN
       round(v_max), round(v_somme), round(v_ms3);
     IF cardinality(v_ids) = 2000 AND v_tot = 2000 AND (v_res->>'compared_rows')::int = 2000
        AND (v_res->'counts'->>'inchange')::int = 2000 * 24 - 200 AND (v_res->'counts'->>'local_seul')::int = 200
-       AND v_max < 8000   -- le run entier (v_ms3) est mesuré, pas exigé : l'écran calcule par pages
+       AND v_max < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)   -- le run entier (v_ms3) est mesuré, pas exigé : l'écran calcule par pages
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : comparees='||v_tot||' rendu='||left(coalesce(v_res::text,'∅'), 200)
          ||' ; page max '||round(v_max)||' ms, total '||round(v_somme)||' ms, run entier '||round(v_ms3)||' ms'); END IF;

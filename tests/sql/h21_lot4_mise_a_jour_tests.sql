@@ -1128,7 +1128,7 @@ BEGIN
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
     RAISE NOTICE 'H21L4-MESURE une page de 200 lignes préparées (comparaison recalculée, copie, patch, lien) : % ms', round(v_ms);
-    IF cardinality(v_ids) = 200 AND (v_res->>'prepared')::int = 200 AND v_ms < 8000
+    IF cardinality(v_ids) = 200 AND (v_res->>'prepared')::int = 200 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
        AND (SELECT count(*) FROM public.book_drafts WHERE batch_id = (v_res->>'batch_id')::bigint AND ano = '2030') = 200
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(left(v_res::text, 300), 'NULL')||' ; '||round(v_ms)||' ms'); END IF;

@@ -994,7 +994,7 @@ BEGIN
     RAISE NOTICE 'H21L6B-MESURE recalcul 200 lignes : % ms ; preparer 200 lignes (200 brouillons d''exemplaire) : % ms', round(v_ms), round(v_ms2);
     IF (v_res->>'exemplaires_comparees')::int = 200 AND (v_res2->'exemplaires'->>'prepared')::int = 199
        AND v_res2->'exemplaires'->'skipped' = '{"deja_preparee": 1}'::jsonb
-       AND v_ms < 8000 AND v_ms2 < 8000
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||left(coalesce((v_res2->'exemplaires' - 'drafts')::text, 'NULL'), 300)
          ||' ; '||round(v_ms)||' ms / '||round(v_ms2)||' ms'); END IF;
@@ -1031,7 +1031,7 @@ BEGIN
     EXECUTE 'RESET ROLE';
     RAISE NOTICE 'H21L6B-MESURE 200 lignes x 25 exemplaires : recalcul % ms ; preparer % ms (% brouillons d''exemplaire)', round(v_ms), round(v_ms2), v_res2->'exemplaires'->'prepared';
     IF (v_res2->'exemplaires'->>'prepared')::int = 5000 AND v_res2->'exemplaires'->'skipped' = '{}'::jsonb
-       AND v_ms < 8000 AND v_ms2 < 8000
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1;
       v_failures := v_failures || (v_t || ' : ' || coalesce(((v_res2->'exemplaires') - 'drafts')::text, 'NULL')

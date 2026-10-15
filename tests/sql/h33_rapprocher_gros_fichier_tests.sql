@@ -534,7 +534,7 @@ BEGIN
     RAISE NOTICE 'H33-MESURE Rapprocher 200 lignes x 25 exemplaires neufs : % ms ; page suivante : % ms', round(v_ms), round(v_ms2);
     IF (v_res2->>'created_items')::int = 5000 AND (v_res->>'created_items')::int = 5000
        AND (v_res->>'created_exemplar_drafts')::int = 200 AND (v_res->'verdicts'->>'nouveau')::int = 5000
-       AND v_ms < 8000 AND v_ms2 < 8000
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms puis '||round(v_ms2)||' ms ; '
                                               ||left(coalesce((v_res - 'run')::text, 'NULL'), 200)); END IF;
@@ -563,7 +563,7 @@ BEGIN
     v_ms := extract(epoch FROM clock_timestamp() - v_t0) * 1000;
     EXECUTE 'RESET ROLE';
     RAISE NOTICE 'H33-MESURE Promouvoir 100 lignes nouvelles x 25 exemplaires (une page pleine) : % ms', round(v_ms);
-    IF (v_res->>'items_created')::int = 2500 AND v_ms < 8000
+    IF (v_res->>'items_created')::int = 2500 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms ; items='||coalesce(v_res->>'items_created', '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN EXECUTE 'RESET ROLE'; v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -623,7 +623,7 @@ BEGIN
     v_nrec := (SELECT count(*) FROM ingest.partner_catalog_staging_rows WHERE run_id = v_runm
                  AND (exemplaires_comparaison->>'deja_la')::int = 25);
     RAISE NOTICE 'H33-MESURE recalcul 200 lignes x 25 (5 000 constats) : % ms ; constat des retraits (5 000 retires reapparus) : % ms', round(v_ms), round(v_ms2);
-    IF v_nrec = 200 AND (v_res2->'counts'->>'retire_reapparu')::int = 5000 AND v_ms < 8000 AND v_ms2 < 8000
+    IF v_nrec = 200 AND (v_res2->'counts'->>'retire_reapparu')::int = 5000 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||round(v_ms)||' ms / '||round(v_ms2)||' ms ; deja_la x25 '||v_nrec
                                               ||' ; '||left(coalesce((v_res2 - 'items')::text, 'NULL'), 300)); END IF;

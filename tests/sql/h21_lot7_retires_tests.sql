@@ -1466,7 +1466,7 @@ BEGIN
       round(v_ms), round(v_ms2), v_p->'retraits', v_p->'reste';
     IF (v_b->'counts'->>'disparu')::int = 5001 AND jsonb_array_length(v_b->'items') = 200
        AND (v_p->>'retraits')::int = 1000 AND (v_p->>'reste')::int = 4001 AND (v_p2->>'retraits')::int = 1000 AND (v_p2->>'reste')::int = 3001
-       AND v_ms < 8000 AND v_ms2 < 8000
+       AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000) AND v_ms2 < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1;
       v_failures := v_failures || (v_t || ' : ' || coalesce((v_b - 'items')::text, 'NULL') || ' ; ' || coalesce(v_p::text, 'NULL')
