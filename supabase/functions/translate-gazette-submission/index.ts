@@ -1,6 +1,6 @@
 // CHEMIN DÉPÔT : supabase/functions/translate-gazette-submission/index.ts
 //
-// Traduit les contributions Gazette (brèves réseau) dans les 10 locales, pour que chaque
+// Traduit les contributions Gazette (brèves réseau) dans toutes les locales servies, pour que chaque
 // membre puisse relire/valider une brève dans sa langue avant de l'accepter.
 // Écrit gazette_submissions.title_i18n / body_i18n ; i18n_status : pending → done | error.
 //
@@ -48,8 +48,8 @@ async function translateOne(row: any) {
   const src = row.locale || "fr";
   const system =
     `Tu traduis une brève de gazette anarchiste (registre militant, sobre) depuis la locale "${src}" ` +
-    `vers CHACUNE des 10 locales: ${LOCALES.join(", ")}. Ne traduis pas les noms propres. ` +
-    `Rends UNIQUEMENT un JSON: { "<locale>": { "title": "...", "body": "..." }, ... } avec les 10 locales.`;
+    `vers CHACUNE des ${LOCALES.length} locales: ${LOCALES.join(", ")}. Ne traduis pas les noms propres. ` +
+    `Rends UNIQUEMENT un JSON: { "<locale>": { "title": "...", "body": "..." }, ... } avec les ${LOCALES.length} locales.`;
   const user = JSON.stringify({ title: row.title, body: row.body, source_locale: src });
   const out = parseJson(await claude(system, user));
   const title_i18n: Record<string,string> = {}, body_i18n: Record<string,string> = {};

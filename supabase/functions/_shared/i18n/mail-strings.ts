@@ -484,17 +484,17 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ro: "Ciorna Gazetei nr. {number} așteaptă recitirea"
   },
   "gazette.draft.ready_for_review.intro": {
-    "pt-BR": "O rascunho mensal da Gazeta (n.º {number}) está pronto. Revise as 10 locales, corrija se necessário e publique pelo painel da rede. Nada é publicado automaticamente.",
-    fr: "Le brouillon mensuel de la Gazette (n°{number}) est prêt. Relis les 10 locales, corrige si besoin, puis publie-le depuis le panneau réseau. Rien n'est publié automatiquement.",
-    es: "El borrador mensual de la Gaceta (n.º {number}) está listo. Revisa las 10 locales, corrige si hace falta y publícalo desde el panel de la red. Nada se publica automáticamente.",
-    en: "The monthly Gazette draft (no. {number}) is ready. Review the 10 locales, correct if needed, then publish it from the network panel. Nothing is published automatically.",
-    it: "La bozza mensile della Gazzetta (n. {number}) è pronta. Rivedi le 10 lingue, correggi se serve, poi pubblicala dal pannello della rete. Niente viene pubblicato automaticamente.",
-    de: "Der monatliche Gazette-Entwurf (Nr. {number}) ist fertig. Prüfe die 10 Sprachen, korrigiere bei Bedarf und veröffentliche ihn über das Netzwerk-Panel. Es wird nichts automatisch veröffentlicht.",
-    ca: "L'esborrany mensual de la Gaseta (núm. {number}) està a punt. Revisa les 10 locales, corregeix si cal i publica'l des del tauler de la xarxa. No es publica res automàticament.",
-    eo: "La monata malneto de la Gazeto (n-ro {number}) estas preta. Reviziu la 10 lingvojn, korektu se necese, poste publikigu ĝin el la reta panelo. Nenio estas publikigita aŭtomate.",
-    nl: "Het maandelijkse concept van de Gazette (nr. {number}) is klaar. Bekijk de 10 talen, corrigeer indien nodig en publiceer het via het netwerkpaneel. Er wordt niets automatisch gepubliceerd.",
-    el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε τις 10 γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα.",
-    ro: "Ciorna lunară a Gazetei (nr. {number}) este gata. Recitește cele 10 limbi, corectează dacă e nevoie, apoi public-o din panoul rețelei. Nimic nu se publică automat."
+    "pt-BR": "O rascunho mensal da Gazeta (n.º {number}) está pronto. Revise todas as línguas, corrija se necessário e publique pelo painel da rede. Nada é publicado automaticamente.",
+    fr: "Le brouillon mensuel de la Gazette (n°{number}) est prêt. Relis toutes les langues, corrige si besoin, puis publie-le depuis le panneau réseau. Rien n'est publié automatiquement.",
+    es: "El borrador mensual de la Gaceta (n.º {number}) está listo. Revisa todas las lenguas, corrige si hace falta y publícalo desde el panel de la red. Nada se publica automáticamente.",
+    en: "The monthly Gazette draft (no. {number}) is ready. Review every language, correct if needed, then publish it from the network panel. Nothing is published automatically.",
+    it: "La bozza mensile della Gazzetta (n. {number}) è pronta. Rivedi tutte le lingue, correggi se serve, poi pubblicala dal pannello della rete. Niente viene pubblicato automaticamente.",
+    de: "Der monatliche Gazette-Entwurf (Nr. {number}) ist fertig. Prüfe alle Sprachen, korrigiere bei Bedarf und veröffentliche ihn über das Netzwerk-Panel. Es wird nichts automatisch veröffentlicht.",
+    ca: "L'esborrany mensual de la Gaseta (núm. {number}) està a punt. Revisa totes les llengües, corregeix si cal i publica'l des del tauler de la xarxa. No es publica res automàticament.",
+    eo: "La monata malneto de la Gazeto (n-ro {number}) estas preta. Reviziu ĉiujn lingvojn, korektu se necese, poste publikigu ĝin el la reta panelo. Nenio estas publikigita aŭtomate.",
+    nl: "Het maandelijkse concept van de Gazette (nr. {number}) is klaar. Bekijk alle talen, corrigeer indien nodig en publiceer het via het netwerkpaneel. Er wordt niets automatisch gepubliceerd.",
+    el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε όλες τις γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα.",
+    ro: "Ciorna lunară a Gazetei (nr. {number}) este gata. Recitește toate limbile, corectează dacă e nevoie, apoi public-o din panoul rețelei. Nimic nu se publică automat."
   },
   "gazette.issue.published.sub": {
     "pt-BR": "A Gazeta n.º {number} foi publicada!",
