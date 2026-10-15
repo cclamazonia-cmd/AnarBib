@@ -27,8 +27,12 @@
 // =============================================================================
 
 import { loadVendorScript } from '@/lib/loadVendorScript';
+import { resolveSupabaseUrl } from '@/lib/supabaseUrl';
 
-const SUPABASE_URL =(import.meta.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
+// Par le résolveur, jamais la variable brute : sur une pile auto-hébergée elle
+// vaut 'auto', et `auto/storage/v1/…` tombait sur index.html — carte blanche
+// (ticket #36 du camarade, 15/10/2026).
+const SUPABASE_URL = (resolveSupabaseUrl() || '').replace(/\/+$/, '');
 
 /** Adresse du fichier PMTiles. Par défaut : bucket public `map-tiles` du projet. */
 export const MAPTILES_URL = import.meta.env.VITE_MAPTILES_URL

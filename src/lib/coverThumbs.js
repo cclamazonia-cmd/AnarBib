@@ -23,6 +23,8 @@
  * stock deja en place.
  */
 
+import { resolveSupabaseUrl } from './supabaseUrl';
+
 export const COVER_BUCKET = 'covers';
 
 // ── L'adresse d'une capa neuve ──────────────────────────────────────────
@@ -83,9 +85,11 @@ const THUMB_SUFFIX = '.thumb.jpg';
 // Base et client resolus a l'appel, pas au chargement du module : `npm test`
 // tourne SANS VITE_SUPABASE_URL (la CI ne le fournit qu'a l'etape build, cf.
 // .forgejo/workflows/ci.yml), et `./supabase` leve a l'import si la variable
-// manque. Un import statique ici rendrait ce module intestable.
+// manque. Un import statique ici rendrait ce module intestable. L'adresse passe
+// par `./supabaseUrl` (sans effet de bord) : la variable brute vaut 'auto' sur
+// une pile auto-hebergee (ticket #36, 15/10/2026).
 function storagePublicBase() {
-  return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public`;
+  return `${resolveSupabaseUrl()}/storage/v1/object/public`;
 }
 
 async function client() {

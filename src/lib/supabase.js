@@ -1,19 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { anarbibStorage } from './staffStorage';
+import { resolveSupabaseUrl } from './supabaseUrl';
 
-// Résolution dynamique de l'URL Supabase / Passerelle API :
-// Si VITE_SUPABASE_URL='auto' (mode auto-hébergé avec Caddy servant le front et l'API sur la même origine),
-// l'URL est résolue dynamiquement sur window.location.origin.
-// Si une URL explicite est fournie (ex: http://127.0.0.1:54321 pour supabase start, ou https://*.supabase.co en cloud),
-// elle est STRICTEMENT respectée pour ne pas casser le flux de dev Supabase CLI standard.
-export function resolveSupabaseUrl(explicitUrl = import.meta.env.VITE_SUPABASE_URL) {
-  if (explicitUrl === 'auto') {
-    return typeof window !== 'undefined' && window.location?.origin
-      ? window.location.origin
-      : 'http://localhost';
-  }
-  return explicitUrl;
-}
+// Résolution dynamique de l'URL Supabase / Passerelle API : 'auto' = l'origine
+// de la page (pile auto-hébergée). Le résolveur vit dans ./supabaseUrl, sans
+// effet de bord, pour que les modules testables sans variables (mapTiles,
+// coverThumbs) l'importent au lieu de relire la variable (ticket #36, 15/10/2026).
+export { resolveSupabaseUrl };
 
 export const SUPABASE_URL = resolveSupabaseUrl();
 export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
