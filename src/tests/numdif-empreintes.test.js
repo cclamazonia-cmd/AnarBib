@@ -2,6 +2,11 @@
 // NUMDIF D16 (15/10/2026) — les empreintes incrémentales du versement
 // (supabase/functions/deposit-digital-candidate/empreintes.ts) donnent les
 // mêmes SHA-256 et SHA-1 que node:crypto, quel que soit le découpage du flux.
+// Depuis le 16/10 elles SONT node:crypto (natives : le JS pur dépassait les 2 s
+// de CPU d'un appel au-delà de ~45 Mo) ; ce test garde l'interface (update
+// enchaînable, hex), l'algorithme de chaque classe (vecteurs connus) et le
+// découpage. L'égalité dans l'Edge Runtime lui-même a été mesurée au banc
+// (image edge-runtime, voir l'en-tête de empreintes.ts).
 // Session : File de candidats PDF.
 // =====================================================================
 import { describe, it, expect } from 'vitest';

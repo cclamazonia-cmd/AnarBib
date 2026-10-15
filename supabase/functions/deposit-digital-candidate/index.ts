@@ -23,7 +23,8 @@
 //      PRIVÉE (pdf-restrito, numdif-staging/…) — jamais tout le fichier en
 //      mémoire, jusqu'à 500 Mo (limite des seaux) ; un refus de la source
 //      (401/403/429/503, Cloudflare) arrête ce candidat, sans contournement ;
-//   3. EMPREINTES calculées au passage (empreintes.ts) : SHA-256, et SHA-1
+//   3. EMPREINTES calculées au passage (empreintes.ts, natives depuis le 16/10 :
+//      en JS pur, un PDF de plus de ~45 Mo dépassait les 2 s de CPU) : SHA-256, et SHA-1
 //      pour une source MediaWiki qui ne donne que lui ; comparée à celle figée
 //      à la validation — SHA-256 s'il est connu, sinon SHA-1, et le SHA-256 se
 //      calcule à ce premier téléchargement. Différente : le fichier de la zone
@@ -41,6 +42,7 @@ import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
 import { doubleFacteurManquant } from '../_shared/core/double-facteur.ts';
 import { Sha1, Sha256 } from './empreintes.ts';
+import { sanitize } from './nom.ts';
 
 const MAX_OCTETS = 500 * 1024 * 1024;        // file_size_limit de pdf-restrito et anarbib-pdf-public
 const MAX_PAR_APPEL = 25;
@@ -60,11 +62,6 @@ function json(body: unknown, status = 200) {
 }
 function refus(code: string, error: string, status: number, extra: Record<string, unknown> = {}) {
   return json({ error, code, ok: false, ...extra }, status);
-}
-function sanitize(name: string) {
-  const base = String(name || 'candidat').replace(/\.pdf$/i, '').normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^\w.\-]+/g, '_').replace(/_+/g, '_').slice(0, 100) || 'candidat';
-  return `${base}.pdf`;
 }
 
 type Issue = { id: number; ok: boolean; code?: string; error?: string; hint?: string | null;
