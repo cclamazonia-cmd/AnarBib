@@ -280,6 +280,19 @@ sql "alter database postgres set anarbib.functions_base_url = '$URL_FONCTIONS'" 
 echo "✓ anarbib.functions_base_url = $URL_FONCTIONS (les fonctions sont appelées sur $URL_FONCTIONS/functions/v1/…)."
 
 # -----------------------------------------------------------------------------
+# 5 ter. Les triggers de profil sur auth.users — APRÈS les migrations (15/10/2026)
+# -----------------------------------------------------------------------------
+# Les fonctions sont dans le socle, les triggers ne sont dans aucune migration
+# (la CI en serait cassée, voir deploy/scripts/auth-triggers.sh). Sans eux, un
+# compte créé dans auth.users n'a pas de profil et `register` répond
+# PUBLIC_ID_NOT_READY — constaté sur la VM d'essai (PR #34). Dans les deux
+# modes : un dump `supabase db dump` n'emporte pas les triggers du schéma auth.
+# Ici et pas dans 01-roles.sh : ce script-là est rejoué à l'étape 2, avant les
+# migrations, quand les fonctions n'existent pas encore.
+etape "5 ter · Triggers de profil sur auth.users"
+docker compose exec -T db sh /scripts/auth-triggers.sh
+
+# -----------------------------------------------------------------------------
 # 6. Les vues matérialisées
 # -----------------------------------------------------------------------------
 etape "6/8 · Rafraîchissement des vues matérialisées"

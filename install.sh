@@ -1471,6 +1471,9 @@ if [ "$START" = "1" ]; then
       echo "$(t db_existing "$NB_TABLES")"
       docker compose up -d
       docker compose exec -T db sh /scripts/apply-pending-migrations.sh
+      # Les triggers de profil sur auth.users ne viennent d'aucune migration :
+      # une instance installée avant le 15/10/2026 ne les a pas (PR #34).
+      docker compose exec -T db sh /scripts/auth-triggers.sh
     else
       echo "$(t db_fresh)"
       ./bootstrap.sh --depuis-le-depot --sel-jetable

@@ -59,11 +59,14 @@ n'est pas celle de la sauvegarde (`<bucket>/<nom>` d'un côté,
 `<s3>/<tenant>/<bucket>/<nom>/<version>` de l'autre — un `rsync` direct était
 faux). D'où la doctrine d'ordre, désormais dans `bootstrap.sh` : base seule →
 rôles → GoTrue **et** Storage → schéma + données → vues → et seulement ensuite
-les services qui *lisent* le schéma. Le script compte **huit étapes plus deux
+les services qui *lisent* le schéma. Le script compte **huit étapes plus trois
 « bis »** — la « 5 bis » pose l'adresse des Edge Functions de cette instance
 (`anarbib.functions_base_url`, I20 du 07/09/2026 : sans elle, les dépêches
-partiraient vers le projet cloud du mainteneur), la « 7 bis » attend un fait,
-jamais un délai — et une vérification finale.
+partiraient vers le projet cloud du mainteneur), la « 5 ter » pose les deux
+triggers de profil sur `auth.users` (`scripts/auth-triggers.sh`, 15/10/2026 :
+aucune migration ne les porte, et sans eux `register` répond
+`PUBLIC_ID_NOT_READY` — diagnostic du camarade ASR2026, PR #34), la « 7 bis »
+attend un fait, jamais un délai — et une vérification finale.
 
 **Première reconstruction extérieure (06–15/09/2026, A2).** La pile a été
 rebâtie par quelqu'un d'autre que le mainteneur : un camarade de l'ASR (compte

@@ -88,6 +88,12 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Asset statique same-origin : stale-while-revalidate.
+  // Réseau en échec ET cache vide : répondre `undefined` fait lever à
+  // respondWith « Failed to convert value to 'Response' » et casse la page
+  // (vu sur la VM d'essai, /criar-conta, PR #34). On rend alors une réponse
+  // d'erreur réseau, que la page traite comme un fetch raté ordinaire.
+  // (`network` est une promesse, donc toujours vraie : le repli se joue dans
+  // le catch, pas après le `||`.)
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     const cached = await cache.match(req);
@@ -96,7 +102,7 @@ self.addEventListener('fetch', (event) => {
         cache.put(req, res.clone());
       }
       return res;
-    }).catch(() => cached);
+    }).catch(() => cached || Response.error());
     return cached || network;
   })());
 });

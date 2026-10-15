@@ -93,6 +93,18 @@ if (!secret || secret.length < 32) {
 poser('ANON_KEY', jwt('anon', secret));
 poser('SERVICE_ROLE_KEY', jwt('service_role', secret));
 
+// --- 3 bis. secret anti-robot Altcha pour functions.env -------------------
+const FENV = 'functions.env';
+if (fs.existsSync(FENV)) {
+  let ftxt = fs.readFileSync(FENV, 'utf8');
+  const m = ftxt.match(/^ALTCHA_HMAC_SECRET=(.*)$/m);
+  if (m && m[1].trim() === '') {
+    ftxt = ftxt.replace(/^ALTCHA_HMAC_SECRET=.*$/m, `ALTCHA_HMAC_SECRET=${alea(48)}`);
+    fs.writeFileSync(FENV, ftxt);
+    rempli.push('ALTCHA_HMAC_SECRET (functions.env)');
+  }
+}
+
 // --- 4. mode local (répétition sur votre machine) --------------------------
 
 if (LOCAL) {
