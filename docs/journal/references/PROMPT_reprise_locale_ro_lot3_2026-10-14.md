@@ -75,7 +75,7 @@ s'édite dans la langue d'affichage).
     retirées, liste dans `_outils/lot6-ro/donnees-captures-ro.txt`) ;
   - ~~annonce~~ FAITE le 15/10 au soir (D5 re-amendée) : État du projet et
     Pourquoi adhérer (vitrine `041b06f`), brève Fractale n°06 (`33a2763b`) ; la
-    Lettre n°1 est un brouillon de fondation que Xavier doit terminer ;
+    Lettre n°1 est partie le 15/10 à 23 h 33 (onze langues) ;
   - **en dernier** : relecture d'Adrian (Anarhiva), corrections, clôture d'E39.
 
 ## Pièges vus pendant le lot 3
