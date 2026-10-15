@@ -43,7 +43,7 @@ export const COMPLETE_BLOCKS = {
   nl:      [631, 636, 646, 659, 663, 673, 692, 700, 711, 718],
   el:      [724, 729, 740, 753, 757, 767, 787, 795, 806, 814],
   eo:      [820, 825, 834, 846, 849, 858, 875, 883, 894, 900],
-  ro:      null,   // bloc roumain à venir en fin de recueil (DOC-I18N-5, D7) : repli pt-BR
+  ro:      [906, 911, 920, 932, 935, 944, 961, 969, 980, 986],   // v5-2 du 15/10/2026 : bloc roumain en fin de recueil (D7)
 };
 
 // Manuel de la·du lecteur·rice — page de titre de chaque langue et décalage
@@ -53,7 +53,7 @@ export const COMPLETE_BLOCKS = {
 // …, ca, nl, el, eo (l'ancien PDF avait eo avant nl et el).
 export const READER_START = {
   'pt-BR': 3, fr: 22, de: 41, en: 60, es: 79, it: 98, ca: 117, nl: 136, el: 155, eo: 174,
-  ro: null,
+  ro: 193,   // v5 du 15/10/2026 : section roumaine en fin de recueil (D7), rien n'a bougé avant
 };
 export const READER_SECTIONS = {
   start: 0,        // « Le manuel complet existe pour… » — la porte d'entrée
@@ -75,12 +75,13 @@ export const READER_SECTIONS = {
 export const READER_SECTION_EXCEPTIONS = {
   el: { myLibraries: 11, card: 12, reserve: 14 },
   eo: { notes: 15 },
+  ro: { notes: 15 },
 };
 
 // Guide de gouvernance — page de titre de chaque langue.
 export const GOVERNANCE_START = {
   fr: 2, 'pt-BR': 85, es: 140, it: 195, en: 250, de: 304, ca: 363, eo: 417, nl: 470, el: 527,
-  ro: null,
+  ro: 587,   // v1.4 du 15/10/2026 : bloc roumain en fin de recueil (D7), avec son propre sommaire
 };
 
 const FALLBACK_LOCALE = 'pt-BR';
