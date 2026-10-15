@@ -116,7 +116,7 @@ AnarBib effectue **cinq traitements** distincts. Chacun est documenté ci-dessou
 
 | Champ | Valeur |
 |---|---|
-| **Finalité** | Informer de la vie de la fédération (assemblées à venir, nouveaux cercles, parution de la gazette « Rizoma ») les membres qui l'ont **explicitement demandé** |
+| **Finalité** | Informer de la vie de la fédération (assemblées à venir, nouveaux cercles, parution de la gazette « Fractale ») les membres qui l'ont **explicitement demandé** |
 | **Base légale** | **Consentement** (art. 6.1.a) — **distinct** du transactionnel (§2.4, art. 6.1.b). Conforme à l'**article 4 de la Charte AnarBib** (« aucune communication commerciale, aucune newsletter non sollicitée ») |
 | **Recueil du consentement** | **Double opt-in** : case **décochée par défaut** dans `/conta` → e-mail de confirmation → abonnement validé **au clic**. Preuve horodatée (`profiles.consent_lettre_at`). Le consentement transactionnel (`consent_email`) ne vaut **pas** consentement à la Lettre |
 | **Personnes concernées** | Comptes abonnés (lecteur·rices incluses) ayant **confirmé** leur abonnement |

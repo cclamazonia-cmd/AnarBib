@@ -372,7 +372,7 @@ eniras), la **kaŭcio** se via domo praktikas ĝin, la **kontribuoj**, la **lego
 ## 7. Tagoj 20 ĝis 30 — La federacio
 
 La paĝo **Federação** havas ok langetojn: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, la gazeto **Rizoma**, **Carta/Boletim**, **Apoio mútuo** kaj **Comuns**.
+**Assembleias**, la gazeto **Fractale**, **Carta/Boletim**, **Apoio mútuo** kaj **Comuns**.
 
 Tio estas la parto de la programo kiu ne estas SIGB. Ĝi ekzistas ĉar la projekto ne volas
 esti « SaaS por bibliotekoj »: eniri en AnarBib estas eniri en komunan politikan projekton,

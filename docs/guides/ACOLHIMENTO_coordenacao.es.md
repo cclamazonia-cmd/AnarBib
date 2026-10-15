@@ -377,7 +377,7 @@ donde deciden quién entra), la **fianza** si en su casa la practican, las
 ## 7. Días 20 a 30 — La federación
 
 La página **Federação** tiene ocho pestañas: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, la gaceta **Rizoma**, **Carta/Boletim**, **Apoio mútuo** y **Comuns**.
+**Assembleias**, la gaceta **Fractale**, **Carta/Boletim**, **Apoio mútuo** y **Comuns**.
 
 Es la parte del software que no es un SIGB. Existe porque el proyecto no quiere ser un
 « SaaS para bibliotecas »: entrar en AnarBib es entrar en un proyecto político común, y una

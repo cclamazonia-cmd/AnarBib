@@ -376,7 +376,7 @@ vocês decidem quem entra), a **caução** se a sua casa a pratica, as **contrib
 ## 7. Dias 20 a 30 — A federação
 
 A página **Federação** tem oito abas: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, a gazeta **Rizoma**, **Carta/Boletim**, **Apoio mútuo** e **Comuns**.
+**Assembleias**, a gazeta **Fractale**, **Carta/Boletim**, **Apoio mútuo** e **Comuns**.
 
 É a parte do software que não é um SIGB. Ela existe porque o projeto não quer ser um
 « SaaS para bibliotecas »: entrar no AnarBib é entrar num projeto político comum, e uma

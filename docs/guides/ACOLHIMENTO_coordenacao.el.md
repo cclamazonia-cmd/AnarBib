@@ -388,7 +388,7 @@
 ## 7. Ημέρες 20 έως 30 — Η ομοσπονδία
 
 Η σελίδα **Federação** έχει οκτώ καρτέλες: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, την εφημερίδα **Rizoma**, **Carta/Boletim**, **Apoio mútuo** και
+**Assembleias**, την εφημερίδα **Fractale**, **Carta/Boletim**, **Apoio mútuo** και
 **Comuns**.
 
 Είναι το κομμάτι του λογισμικού που δεν είναι σύστημα διαχείρισης βιβλιοθήκης. Υπάρχει

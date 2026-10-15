@@ -376,7 +376,7 @@ les **notes de lectura**, els **esdeveniments**.
 ## 7. Dies 20 a 30 — La federació
 
 La pàgina **Federação** té vuit pestanyes: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, la gaseta **Rizoma**, **Carta/Boletim**, **Apoio mútuo** i **Comuns**.
+**Assembleias**, la gaseta **Fractale**, **Carta/Boletim**, **Apoio mútuo** i **Comuns**.
 
 És la part del programari que no és un SIGB. Existeix perquè el projecte no vol ser un
 « SaaS per a biblioteques »: entrar a AnarBib és entrar en un projecte polític comú, i una

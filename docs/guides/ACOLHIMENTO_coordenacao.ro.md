@@ -381,7 +381,7 @@ Alături de acestea, în `/painel`: **validările** înregistrărilor de cititor
 ## 7. Zilele 20–30 — Federația
 
 Pagina **Federação** are opt file: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, gazeta **Rizoma**, **Carta/Boletim**, **Apoio mútuo** și **Comuns**.
+**Assembleias**, gazeta **Fractale**, **Carta/Boletim**, **Apoio mútuo** și **Comuns**.
 
 E partea programului care nu este un sistem integrat de gestiune a bibliotecii. Există pentru că proiectul nu vrea
 să fie un „SaaS pentru biblioteci”: a intra în AnarBib înseamnă a intra într-un proiect

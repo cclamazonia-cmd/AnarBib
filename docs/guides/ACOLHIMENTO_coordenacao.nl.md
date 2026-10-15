@@ -387,7 +387,7 @@ beslissen jullie wie binnenkomt), de **waarborg** als jullie huis die hanteert, 
 ## 7. Dag 20 tot 30 — De federatie
 
 De pagina **Federação** heeft acht tabbladen: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, het blad **Rizoma**, **Carta/Boletim**, **Apoio mútuo** en **Comuns**.
+**Assembleias**, het blad **Fractale**, **Carta/Boletim**, **Apoio mútuo** en **Comuns**.
 
 Dat is het deel van de software dat geen SIGB is. Het bestaat omdat het project geen “SaaS
 voor bibliotheken” wil zijn: in AnarBib binnenkomen is binnenkomen in een gemeenschappelijk

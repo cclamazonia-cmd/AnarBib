@@ -389,7 +389,7 @@ die **Lesenotizen**, die **Veranstaltungen**.
 ## 7. Tage 20 bis 30 — Die Föderation
 
 Die Seite **Federação** hat acht Reiter: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, die Zeitung **Rizoma**, **Carta/Boletim**, **Apoio mútuo** und **Comuns**.
+**Assembleias**, die Zeitung **Fractale**, **Carta/Boletim**, **Apoio mútuo** und **Comuns**.
 
 Das ist der Teil der Software, der kein SIGB ist. Er existiert, weil das Projekt kein
 „SaaS für Bibliotheken" sein will: in AnarBib einzutreten heißt, in ein gemeinsames

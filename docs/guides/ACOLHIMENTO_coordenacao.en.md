@@ -371,7 +371,7 @@ you decide who comes in), the **deposit** if your house practises it, the
 ## 7. Days 20 to 30 — The federation
 
 The **Federação** page has eight tabs: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, the gazette **Rizoma**, **Carta/Boletim**, **Apoio mútuo** and **Comuns**.
+**Assembleias**, the gazette **Fractale**, **Carta/Boletim**, **Apoio mútuo** and **Comuns**.
 
 This is the part of the software that is not an ILS. It exists because the project does not
 want to be a “SaaS for libraries”: entering AnarBib means entering a shared political

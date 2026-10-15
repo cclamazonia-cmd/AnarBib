@@ -383,7 +383,7 @@ Quatre flux, et le painel les organise :
 ## 7. Jours 20 à 30 — La fédération
 
 La page **Federação** a huit onglets : **Início**, **Círculos**, **Diretório**,
-**Assembleias**, la gazette **Rizoma**, **Carta/Boletim**, **Apoio mútuo** et **Comuns**.
+**Assembleias**, la gazette **Fractale**, **Carta/Boletim**, **Apoio mútuo** et **Comuns**.
 
 C'est la partie du logiciel qui n'est pas un SIGB. Elle existe parce que le projet ne veut
 pas être un « SaaS pour bibliothèques » : entrer dans AnarBib, c'est entrer dans un projet

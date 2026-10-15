@@ -381,7 +381,7 @@ decidete chi entra), la **cauzione** se la vostra casa la pratica, i **contribut
 ## 7. Giorni da 20 a 30 — La federazione
 
 La pagina **Federação** ha otto schede: **Início**, **Círculos**, **Diretório**,
-**Assembleias**, la gazzetta **Rizoma**, **Carta/Boletim**, **Apoio mútuo** e **Comuns**.
+**Assembleias**, la gazzetta **Fractale**, **Carta/Boletim**, **Apoio mútuo** e **Comuns**.
 
 È la parte del software che non è un SIGB. Esiste perché il progetto non vuole essere un
 « SaaS per biblioteche »: entrare in AnarBib è entrare in un progetto politico comune, e

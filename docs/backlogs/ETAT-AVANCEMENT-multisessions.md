@@ -232,7 +232,7 @@ Légende : ✅ livré & déployé · 🟢 livré, reliquat mineur · 🟠 en cou
 | **Événements de bibliothèque** | ✅ | `library_events` **vérifiée en prod** ; avis in-app, opt-out lecteur, deep-link (05/07) | — |
 | **#BG2 — sauvegarde hors-fournisseur** | ✅ | 3 flux restic chiffrés hors-site ; pseudonymisation `BG2-14` ; `backup_heartbeats` **vérifiée en prod** ; garde-fou CI « table non classée » (20/08) | `§BG2` + `§BG2 (suite)` |
 | **Supervision du service public** | ✅ | `service_health_probes` / `service_health_incidents` **vérifiées en prod** ; cron `anarbib-health-probe` **actif, toutes les 5 min** (vérifié) ; EF `health-probe` déployée | — *(pas encore de carte au REGISTRE)* |
-| **Gazette Rizoma — automatisation** | ✅ | 3 crons **actifs vérifiés** : `anarbib-gazette-monthly-start` (15 du mois 06:00), `-reconcile-tick` (5 min), `-translate-submissions` (10 min) | §29 `GAZ` |
+| **Gazette Fractale — automatisation** | ✅ | 3 crons **actifs vérifiés** : `anarbib-gazette-monthly-start` (15 du mois 06:00), `-reconcile-tick` (5 min), `-translate-submissions` (10 min) | §29 `GAZ` |
 | **Lettre de la fédération** | ✅ | opt-in `/conta` + case au signup, compose/envoi staff, numéros | §29 `GAZ` |
 | **Récapitulatifs inter-bibliothèques** | ✅ | EF `notify-network-weekly-report` + `notify-cross-library-digest` déployées ; crons **actifs vérifiés** (lundi 08:15 / 08:30) ; mode simulation (17/08) | §6 `NOTIF` |
 | **Notes de lecture** | ✅ | `book_reading_notes` + `book_reading_note_reports` (modération) **vérifiées en prod** ; Lots 1→5 des 02 au 04/08 | `CADRAGE_notes_de_lecture` (01/08) |
