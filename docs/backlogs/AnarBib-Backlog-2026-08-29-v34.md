@@ -593,6 +593,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D17** | Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier | `P2` | À vérifier |
 | **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | En cours |
 | **D19** | Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice | `P2` | Ouvert |
+| **D20** | Candidats d'une source partenaire aux droits déclarés par lot : proposition en masse depuis les sorties du convertisseur, validation par lot (NUMDIF-6), versement par lots avec reprise et empreinte calculée au premier téléchargement — premier cas Anarchief.org, 1 635 fichiers, 16,5 Go, après publication des 1 019 notices | `P2` | Ouvert |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
