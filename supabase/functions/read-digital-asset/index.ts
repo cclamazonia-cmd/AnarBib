@@ -124,27 +124,40 @@ Deno.serve(async (req)=>{
       accessUrl = sourceUrl;
       accessMode = "external_url";
     }
-    // ── Provenance : ne jamais exposer l'URL source d'un document RESTREINT
-    //    servi depuis le stockage. ──────────────────────────────────────────
+    // ── Provenance : ne jamais exposer l'URL du FICHIER d'un document
+    //    RESTREINT servi depuis le stockage ; montrer la PAGE de la source. ──
     // `source_url` a deux roles distincts dans cette fonction :
     //   * pour une ressource purement EXTERNE, c'est le chemin de lecture
     //     (accessMode = 'external_url') — il doit rester expose ;
     //   * pour une ressource servie depuis le STOCKAGE, l'acces passe par une
     //     URL signee a duree limitee, et source_url n'est plus que de la
-    //     provenance.
+    //     provenance : l'adresse du fichier trouve ailleurs.
     //
     // Dans ce second cas, si la ressource n'est pas publique, renvoyer
-    // source_url revient a livrer une copie permanente et non revocable du
-    // document — souvent un lien de telechargement direct (MEGA, Drive…) avec
-    // sa cle. Cela defait exactement ce que la restriction protege : le PDF
-    // servi est filigrane au nom du lecteur, l'original ne l'est pas.
+    // source_url revient a livrer une copie permanente du document — souvent
+    // un lien de telechargement direct (MEGA, /wp-content/uploads/…pdf) avec
+    // sa cle. Cela defait ce que la restriction protege. Ce n'est PAS un
+    // filigrane : celui-ci n'est qu'une couche d'ecran du lecteur
+    // (ReaderPage.jsx, .ab-reader-watermark), et l'URL signee livre le fichier
+    // brut. Ce que protege le masquage, c'est la REVOCABILITE (l'URL signee
+    // expire, la ressource peut etre retiree) et l'ATTRIBUTION (elle n'est
+    // servie qu'a un compte identifie, membre d'une bibliotheque detentrice).
     // Constate le 2026-08-20 sur la ressource 61 (bucket pdf-restrito) : la
     // page lecteur affichait le nom de la source mais pointait vers le fichier.
     //
-    // Le masquage est fait ICI, cote serveur, et non dans l'interface : masquer
-    // a l'ecran laisserait le lien dans la reponse de l'API.
+    // NUMDIF-3 (REGISTRE §47, 15/10/2026) : qui peut lire la copie voit aussi
+    // la copie d'origine, par sa PAGE (source_page_url : fiche Archive.org,
+    // article, page du site), jamais par son fichier. Le lien credite qui a
+    // numerise et survit a notre copie.
+    //
+    // Le choix est fait cote serveur, et non dans l'interface : masquer a
+    // l'ecran laisserait le lien dans la reponse de l'API. La RPC
+    // get_accessible_digital_asset_by_id_v2, elle-meme exposee, applique deja
+    // la meme regle (migration 20261015180042) ; on la rejoue ici par
+    // prudence.
     const estPublic = String(row.access_scope || "") === "publico";
     const provenanceExposable = accessMode !== "storage_signed" || estPublic;
+    const sourcePageUrl = row.access_granted && row.source_page_url ? String(row.source_page_url) : null;
 
     return json({
       ok: true,
@@ -158,6 +171,7 @@ Deno.serve(async (req)=>{
         language_code: row.language_code,
         source_name: row.source_name,
         source_url: provenanceExposable ? row.source_url : null,
+        source_page_url: sourcePageUrl,
         attribution_text: row.attribution_text,
         rights_status: row.rights_status,
         label: row.label,

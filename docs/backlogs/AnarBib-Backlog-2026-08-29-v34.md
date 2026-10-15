@@ -590,8 +590,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D14** | Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre | `P2` | À vérifier |
 | **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | À vérifier |
 | **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | Ouvert |
-| **D17** | Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier | `P2` | Ouvert |
-| **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | Ouvert |
+| **D17** | Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier | `P2` | À vérifier |
+| **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | En cours |
 | **D19** | Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice | `P2` | Ouvert |
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
@@ -748,11 +748,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### D17 — Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, langue maternelle
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, langue maternelle
 
 **État.** Décision `NUMDIF-3` (15/10), option *(b)* du cadrage. `read-digital-asset` masque aujourd'hui `source_url` pour toute ressource restreinte servie depuis le stockage (incident de la ressource 61, 20/08). Son commentaire dit que le PDF servi est filigrané ; c'est inexact : le filigrane est une couche CSS du lecteur (`ReaderPage.jsx`, `.ab-reader-watermark`), l'URL signée livre le fichier brut.
 
-*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une colonne pour l'URL de la **page** de la source (`source_page_url`, sur `book_digital_resources` et sa jumelle brouillon), déduite pour Archive.org (`…/details/<identifiant>`), saisie sinon. `read-digital-asset` la renvoie quand l'accès est accordé et ne renvoie jamais l'URL du fichier d'une ressource restreinte ; la fiche et le lecteur affichent « aussi en ligne : *source* ». Corriger le commentaire sur le filigrane : ce que protège le masquage est la révocabilité et l'attribution. Toutes les locales servies.
 
@@ -769,11 +769,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### D18 — Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
+`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : bibliothéconomie
 
 **État.** Mesuré le 15/10 : la ressource 62 (Ferrua, Le Maquis) porte `bibliographic_match_validated = false` et aucun `rights_status` — non conforme à `NUMDIF-1`. Les six autres sont `sob_direitos` ; cinq URL sources sur sept désignent un fichier (we.riseup.net `/assets/`, pdfcoffee `/qdownload/`, deux `/wp-content/uploads/`, un fichier `dn….archive.org`).
 
-*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Pour chacune : vérifier l'édition sur la page de titre ; trancher le cas de source (`NUMDIF-2`) ; trouver l'URL de la page qui présente le fichier (pour `D17`). La ressource 62 est mise en conformité ou retirée, par décision de la bibliothèque détentrice.
 

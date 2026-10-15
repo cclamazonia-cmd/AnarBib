@@ -4,6 +4,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { sourceLabel } from '@/lib/sourcePage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell } from '@/components/layout';
@@ -554,7 +555,15 @@ export default function ReaderPage() {
         <h1>{bookTitle || t({id:'reader.brand'})}</h1>
         {assetMeta && (
           <div className="ab-reader-meta">
-            {assetMeta.source_name && (
+            {/* D17 (NUMDIF-3) : la page de la copie d'origine, jamais son fichier.
+                read-digital-asset ne la rend qu'à qui peut lire la copie. */}
+            {assetMeta.source_page_url ? (
+              <Pill>{t({id:'book.digital.alsoOnline'},{name: (
+                <a href={assetMeta.source_page_url} target="_blank" rel="noopener noreferrer">
+                  {sourceLabel(assetMeta.source_name, assetMeta.source_page_url)}
+                </a>
+              )})}</Pill>
+            ) : assetMeta.source_name && (
               <Pill>{t({id:'reader.source'},{name: assetMeta.source_url
                 ? <a href={assetMeta.source_url} target="_blank" rel="noopener noreferrer">{assetMeta.source_name}</a>
                 : assetMeta.source_name})}</Pill>

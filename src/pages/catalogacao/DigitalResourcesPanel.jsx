@@ -24,6 +24,7 @@ import { useIntl } from 'react-intl';
 import { useConfirm } from '@/contexts/ConfirmContext';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { archiveOrgPage } from '@/lib/sourcePage';
 
 const DROITS = ['dominio_publico', 'licenca_livre', 'cessao_autoral', 'sob_direitos'];
 // Seau [public, réservé] par famille de fichier.
@@ -80,7 +81,7 @@ export function justificationRequise(droits, acces) {
 
 const VIDE = {
   id: '', kind: '', rights_status: '', rights_justification: '', access_scope: '',
-  storage_bucket: '', storage_path: '', mime_type: '', source_url: '', source_name: '',
+  storage_bucket: '', storage_path: '', mime_type: '', source_url: '', source_page_url: '', source_name: '',
   attribution_text: '', language_code: '', label: '', notes: '', is_primary: false,
   bibliographic_match_validated: true,
 };
@@ -119,7 +120,8 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
       rights_justification: r.rights_justification || '',
       access_scope: r.access_scope || '',
       storage_bucket: r.storage_bucket || '', storage_path: r.storage_path || '', mime_type: r.mime_type || '',
-      source_url: r.source_url || '', source_name: r.source_name || '', attribution_text: r.attribution_text || '',
+      source_url: r.source_url || '', source_page_url: r.source_page_url || '',
+      source_name: r.source_name || '', attribution_text: r.attribution_text || '',
       language_code: r.language_code || '', label: r.label || '', notes: r.notes || '',
       is_primary: !!r.is_primary, bibliographic_match_validated: r.bibliographic_match_validated !== false,
     });
@@ -198,6 +200,10 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
     }
     if (df.kind === 'file' && !df.storage_path) { setMsg({ text: t({ id: 'catalogacao.dep.err.file' }), kind: 'error' }); return; }
     if (df.kind === 'link' && !/^https?:\/\//i.test(df.source_url.trim())) { setMsg({ text: t({ id: 'catalogacao.dep.err.link' }), kind: 'error' }); return; }
+    // D17 (NUMDIF-3) : la page qui présente le fichier. Pour Archive.org elle
+    // se déduit du fichier quand personne ne l'a saisie.
+    const pageSource = df.source_page_url.trim() || archiveOrgPage(df.source_url) || '';
+    if (pageSource && !/^https?:\/\//i.test(pageSource)) { setMsg({ text: t({ id: 'catalogacao.dep.err.sourcePage' }), kind: 'error' }); return; }
 
     setSaving(true);
     try {
@@ -225,6 +231,7 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
         language_code: df.language_code || null,
         source_name: df.source_name || null,
         source_url: df.source_url.trim() || null,
+        source_page_url: pageSource || null,
         attribution_text: df.attribution_text || null,
         rights_status: df.rights_status,
         rights_justification: df.rights_justification.trim() || null,
@@ -435,6 +442,12 @@ export default function DigitalResourcesPanel({ draftId, ownerLibraryId, resourc
                     <input type="url" value={df.source_url} onChange={(e) => set('source_url', e.target.value)} placeholder="https://archive.org/…" style={champ} />
                   </div>
                 )}
+                <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+                  <label>{t({ id: 'catalogacao.dep.sourcePage' })}</label>
+                  <input type="url" value={df.source_page_url} onChange={(e) => set('source_page_url', e.target.value)}
+                    placeholder={archiveOrgPage(df.source_url) || 'https://…'} style={champ} />
+                  <div className="cat-dep__note">{t({ id: 'catalogacao.dep.sourcePage.hint' })}</div>
+                </div>
                 <div className="cat-field">
                   <label>{t({ id: 'catalogacao.digital.sourceName' })}</label>
                   <input type="text" value={df.source_name} onChange={(e) => set('source_name', e.target.value)} placeholder="Internet Archive" style={champ} />

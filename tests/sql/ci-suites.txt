@@ -740,6 +740,10 @@ tests/sql/acces_numerique_catalogue_tests.sql
 # Le dépôt numérique part des droits (05/10/2026) : réglage de bibliothèque,
 # cohérence droits/accès/espace, publication sans recréation.
 tests/sql/depot_numerique_droits_tests.sql
+# D17 (15/10/2026, NUMDIF-3) : qui lit la copie restreinte reçoit la page de la
+# source, jamais le fichier ; anon et autre bibliothèque : rien ; la reprise et
+# la publication font suivre la page ; liste fermée des fonctions qui rendent source_url.
+tests/sql/d17_page_de_la_source_tests.sql
 # C10 (05/10/2026) : la colonne de revue de digital_assets s'appelle review_state ;
 # confirmation, liste des vérifiés, compte et export des fonds la lisent.
 tests/sql/c10_etat_de_revue_tests.sql

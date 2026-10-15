@@ -590,8 +590,8 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D14** | Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto | `P2` | A verificar |
 | **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | A verificar |
 | **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | Aberto |
-| **D17** | Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo | `P2` | Aberto |
-| **D18** | Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem | `P2` | Aberto |
+| **D17** | Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo | `P2` | A verificar |
+| **D18** | Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem | `P2` | Em curso |
 | **D19** | Tornar observável um PDF restrito cujo livro não tem mais biblioteca detentora | `P2` | Aberto |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
@@ -748,11 +748,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### D17 — Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, língua materna
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, língua materna
 
 **Estado.** Decisão `NUMDIF-3`, opção (b). `read-digital-asset` esconde hoje `source_url` de todo recurso restrito; o comentário sobre marca d'água é inexato.
 
-*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Coluna `source_page_url`; `read-digital-asset` a devolve quando o acesso é concedido, nunca a URL do arquivo de um recurso restrito; ficha e leitor mostram «também online». Corrigir o comentário.
 
@@ -769,11 +769,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### D18 — Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem
 
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : biblioteconomia
+`P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : biblioteconomia
 
 **Estado.** Medido em 15/10: o recurso 62 tem `bibliographic_match_validated = false` e nenhum `rights_status`; cinco URL de sete apontam para arquivo.
 
-*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Para cada um: verificar a edição, decidir o caso de origem, achar a página. O recurso 62 é regularizado ou retirado.
 

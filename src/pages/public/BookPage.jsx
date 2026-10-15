@@ -5,6 +5,7 @@ import { roleLabel } from '@/lib/roleLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { sourceLabel } from '@/lib/sourcePage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -21,6 +22,16 @@ const COVER_BASE = `${SUPABASE_URL}/storage/v1/object/public/covers/`;
 const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/`;
 
 // Material type labels are resolved via i18n inside the component
+
+// D17 (NUMDIF-3) : la source d'une ressource lisible, telle que le portier du
+// lectorat la rend — la page de la copie d'origine, jamais le fichier d'une
+// copie restreinte. null si la ressource n'est pas lisible par la session.
+async function pageDeLaSource(assetId) {
+  try {
+    const { data } = await supabase.rpc('get_accessible_digital_asset_by_id_v2', { p_asset_id: assetId });
+    return (Array.isArray(data) ? data[0] : data) || null;
+  } catch { return null; }
+}
 
 function parseJson(v) { if (!v) return null; if (typeof v === 'object') return v; try { return JSON.parse(v); } catch { return null; } }
 
@@ -223,6 +234,10 @@ export default function BookPage() {
                 label: row.label,
               });
               publicAccessFound = true;
+              if (row.asset_id) {
+                const p = await pageDeLaSource(row.asset_id);
+                if (p?.source_page_url) setDigitalAccess((d) => ({ ...d, sourcePageUrl: p.source_page_url }));
+              }
             }
           } catch {}
 
@@ -265,6 +280,18 @@ export default function BookPage() {
                   assetId: r2.asset_id,
                   reserved: reserve,
                 });
+                // D17 (NUMDIF-3) : la source de la copie restreinte, par sa
+                // page. La RPC ne rend jamais l'adresse du fichier d'une copie
+                // restreinte, et ne rend rien à qui ne peut pas la lire.
+                const p = await pageDeLaSource(r2.asset_id);
+                if (p) {
+                  setDigitalAccess((d) => ({
+                    ...d,
+                    sourceName: p.source_name,
+                    sourcePageUrl: p.source_page_url,
+                    rights: p.rights_status,
+                  }));
+                }
               }
             } catch {}
           }
@@ -611,8 +638,19 @@ export default function BookPage() {
               )}
             </div>
 
-            {/* Attribution source */}
-            {digitalAccess?.sourceName && (
+            {/* Attribution source. D17 (NUMDIF-3) : quand la page de la copie
+                d'origine est connue, c'est elle qu'on montre (« aussi en
+                ligne »), jamais le fichier. */}
+            {digitalAccess?.sourcePageUrl ? (
+              <div className="ab-livro-digital-source">
+                {t({ id: 'book.digital.alsoOnline' }, { name: (
+                  <a href={digitalAccess.sourcePageUrl} target="_blank" rel="noopener noreferrer">
+                    {sourceLabel(digitalAccess.sourceName, digitalAccess.sourcePageUrl)}
+                  </a>
+                ) })}
+                {digitalAccess.rights && <span> — {t({ id: `catalogacao.digital.rights.${digitalAccess.rights}`, defaultMessage: digitalAccess.rights })}</span>}
+              </div>
+            ) : digitalAccess?.sourceName && (
               <div className="ab-livro-digital-source">
                 {t({ id: 'book.digital.source' })}: {digitalAccess.sourceUrl
                   ? <a href={digitalAccess.sourceUrl} target="_blank" rel="noopener noreferrer">{digitalAccess.sourceName}</a>

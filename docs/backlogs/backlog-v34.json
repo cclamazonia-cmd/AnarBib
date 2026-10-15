@@ -5691,7 +5691,7 @@
       "id": "D17",
       "d": "D",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql",
@@ -5735,16 +5735,22 @@
         "supabase/functions/read-digital-asset/index.ts",
         "src/pages/public/ReaderPage.jsx"
       ],
-      "verif": {
-        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
-        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
-      }
+      "verif": [
+        {
+          "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+          "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+        },
+        {
+          "fr": "**15/10 — livré, à déployer** (migration `20261015180042_d17_le_lien_va_a_la_page_de_la_source`). `source_page_url` sur `book_digital_resources` et `book_draft_digital_resources` (garde `^https?://`), suivie par la reprise et la publication ; huit ressources Archive.org publiées et deux brouillons reçoivent `https://archive.org/details/<identifiant>`, dont la restreinte 74. **Le masquage ne tenait que dans la fonction Edge** : `get_accessible_digital_asset_by_id_v2`, exposée à PostgREST, rendait `source_url` à tout membre de la détentrice ; elle rend désormais la page et ne rend plus le fichier d'une ressource restreinte servie depuis le stockage (une restreinte sans fichier stocké garde son adresse : c'est son chemin de lecture). `read-digital-asset` renvoie `source_page_url` quand l'accès est accordé ; son commentaire dit enfin ce que protège le masquage (révocabilité, attribution — le filigrane n'est qu'une couche d'écran). Fiche et lecteur : « aussi en ligne : *source* » vers la page ; panneau de catalogage : champ « page qui présente ce fichier », déduit pour Archive.org ; 11 locales. Suite `d17_page_de_la_source_tests` (9/9 : membre = page sans fichier, anon et autre bibliothèque = rien, ni par la RPC ni par la table, liste fermée des fonctions qui rendent `source_url`) ; les 201 suites SQL, `npm test`, lint et build verts. **Reste** : après déploiement, contrôle sous un compte membre de BLMF sur la 74, et les pages des autres restreintes (`D18`).",
+          "pt": "**15/10 — entregue, a implantar** (migração `20261015180042`). Coluna `source_page_url` (publicado e rascunho), seguida pela retomada e pela publicação; oito recursos Archive.org e dois rascunhos recebem a página `archive.org/details/…`. A RPC `get_accessible_digital_asset_by_id_v2`, exposta, devolvia `source_url` aos membros: agora devolve a página e nunca o arquivo de um recurso restrito armazenado. Ficha e leitor mostram «também on-line»; campo no painel; 11 locales. Suíte `d17_page_de_la_source_tests` 9/9; 201 suítes, testes, lint e build verdes. Resta: controle após implantação e `D18`."
+        }
+      ]
     },
     {
       "id": "D18",
       "d": "D",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "S",
       "sk": [
         "biblio"
@@ -5783,10 +5789,16 @@
         "docs/specs/REGISTRE_decisions.md §47",
         "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
       ],
-      "verif": {
-        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
-        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
-      }
+      "verif": [
+        {
+          "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+          "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+        },
+        {
+          "fr": "**15/10 — classement proposé, non appliqué** : `docs/journal/audits/AUDIT_ressources_restreintes_numdif_2026-10-15.md`. 74 reçoit sa page par la migration de `D17` ; pages trouvées et vérifiées pour 70 (dokumen.pub, déjà une page), 72 (pdfcoffee, page au lieu de `/qdownload/`), 73 (article anarquista.net du 30/04/2013), 76 (liste « Livros e textos digitais » du blog d'Évora) ; aucune page publique pour 62 (blog hors ligne) ni 66 (asset riseup sans page publique). SQL préparé pour les quatre, à jouer après déploiement sur accord des détentrices. **La 62 est signalée à BTL** (`bibliographic_match_validated = false`, aucun `rights_status`), non corrigée. Questions ouvertes : afficher les agrégateurs (70, 72) ? Reste aussi la vérification des pages de titre (`NUMDIF-1`).",
+          "pt": "**15/10 — classificação proposta, não aplicada** (`AUDIT_ressources_restreintes_numdif_2026-10-15.md`). 74 recebe a página pela migração de D17; páginas achadas para 70, 72, 73, 76; nenhuma para 62 e 66. SQL preparado, a aplicar após implantação com acordo das detentoras. O recurso 62 é sinalizado à BTL, não corrigido."
+        }
+      ]
     },
     {
       "id": "D19",
