@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Διακοπή μετά το τρέχον αρχείο",
   "importacoes.pdfCandidates.batch.progress": "Παρτίδα σε εξέλιξη: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}…",
   "importacoes.pdfCandidates.batch.done": "Η παρτίδα ολοκληρώθηκε: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Η παρτίδα σταμάτησε: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}. Ξαναξεκίνησέ την για να συνεχίσεις· ό,τι κατατέθηκε δεν ξαναπερνά."
+  "importacoes.pdfCandidates.batch.stopped": "Η παρτίδα σταμάτησε: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}. Ξαναξεκίνησέ την για να συνεχίσεις· ό,τι κατατέθηκε δεν ξαναπερνά.",
+  "notif.restrictedOrphan.title": "Ένα περιορισμένο PDF δεν έχει πια βιβλιοθήκη που το κατέχει",
+  "notif.restrictedOrphan.body": "Η τελευταία κατοχή αυτού του βιβλίου μόλις χάθηκε: το περιορισμένο PDF του δεν ανοίγει πια για κανέναν. Σύνδεσε ένα αντίτυπο ή αποφάσισε να αποσύρεις τον πόρο."
 }

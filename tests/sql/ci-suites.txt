@@ -818,3 +818,7 @@ tests/sql/numdif_versement_tests.sql
 # Source numérique sans exemplaire (15/10/2026, décision Xavier ; migration 20261015192644) : une source d'import dont meta.sans_exemplaire = true
 # ne reçoit pas d'exemplaire automatique à la publication (holding seule) ; IMP-25 inchangé pour les autres ; les exemplaires importés (H19) passent avant.
 tests/sql/source_numerique_sans_exemplaire_tests.sql
+# NUMDIF D19 (15/10/2026, décision du 20/08, DOC-SILENCE-1) : un PDF restreint dont le livre perd sa dernière détention se signale — notification à la
+# coordination de la bibliothèque qui la perd et à l'administration du réseau ; contrôle fn_restricted_resources_without_holder (administration seule) ;
+# rien d'interdit, la ressource reste active ; une détentrice qui reste ou un PDF public : aucun avis.
+tests/sql/restreint_sans_detentrice_tests.sql

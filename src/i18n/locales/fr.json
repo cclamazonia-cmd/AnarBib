@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Arrêter après le fichier en cours",
   "importacoes.pdfCandidates.batch.progress": "Lot en cours : {done} versé(s), {failed} refusé(s) sur {total}…",
   "importacoes.pdfCandidates.batch.done": "Lot terminé : {done} versé(s), {failed} refusé(s) sur {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Lot arrêté : {done} versé(s), {failed} refusé(s) sur {total}. Relance-le pour reprendre ; ce qui est versé ne repasse pas."
+  "importacoes.pdfCandidates.batch.stopped": "Lot arrêté : {done} versé(s), {failed} refusé(s) sur {total}. Relance-le pour reprendre ; ce qui est versé ne repasse pas.",
+  "notif.restrictedOrphan.title": "Un PDF restreint n’a plus de bibliothèque détentrice",
+  "notif.restrictedOrphan.body": "La dernière détention de ce livre vient de disparaître : son PDF restreint ne s’ouvre plus pour personne. Rattache un exemplaire, ou décide de retirer la ressource."
 }

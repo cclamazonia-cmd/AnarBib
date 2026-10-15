@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Oprește după fișierul în curs",
   "importacoes.pdfCandidates.batch.progress": "Lot în curs: {done} depuși, {failed} refuzați din {total}…",
   "importacoes.pdfCandidates.batch.done": "Lot încheiat: {done} depuși, {failed} refuzați din {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată."
+  "importacoes.pdfCandidates.batch.stopped": "Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată.",
+  "notif.restrictedOrphan.title": "Un PDF restricționat nu mai are bibliotecă deținătoare",
+  "notif.restrictedOrphan.body": "Ultima deținere a acestei cărți tocmai a dispărut: PDF-ul ei restricționat nu se mai deschide pentru nimeni. Leagă un exemplar sau hotărăște să retragi resursa."
 }

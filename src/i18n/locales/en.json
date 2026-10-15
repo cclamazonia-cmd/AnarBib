@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Stop after the current file",
   "importacoes.pdfCandidates.batch.progress": "Batch running: {done} deposited, {failed} refused out of {total}…",
   "importacoes.pdfCandidates.batch.done": "Batch finished: {done} deposited, {failed} refused out of {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Batch stopped: {done} deposited, {failed} refused out of {total}. Launch it again to resume; what is deposited does not go through twice."
+  "importacoes.pdfCandidates.batch.stopped": "Batch stopped: {done} deposited, {failed} refused out of {total}. Launch it again to resume; what is deposited does not go through twice.",
+  "notif.restrictedOrphan.title": "A restricted PDF no longer has a holding library",
+  "notif.restrictedOrphan.body": "The last holding of this book has just disappeared: its restricted PDF no longer opens for anyone. Attach a copy, or decide to withdraw the resource."
 }

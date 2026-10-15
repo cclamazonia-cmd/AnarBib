@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Detener tras el archivo en curso",
   "importacoes.pdfCandidates.batch.progress": "Lote en curso: {done} subido(s), {failed} rechazado(s) de {total}…",
   "importacoes.pdfCandidates.batch.done": "Lote terminado: {done} subido(s), {failed} rechazado(s) de {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Lote detenido: {done} subido(s), {failed} rechazado(s) de {total}. Relánzalo para retomar; lo subido no vuelve a pasar."
+  "importacoes.pdfCandidates.batch.stopped": "Lote detenido: {done} subido(s), {failed} rechazado(s) de {total}. Relánzalo para retomar; lo subido no vuelve a pasar.",
+  "notif.restrictedOrphan.title": "Un PDF restringido ya no tiene biblioteca que lo tenga",
+  "notif.restrictedOrphan.body": "La última tenencia de este libro acaba de desaparecer: su PDF restringido ya no se abre para nadie. Vincula un ejemplar, o decide retirar el recurso."
 }

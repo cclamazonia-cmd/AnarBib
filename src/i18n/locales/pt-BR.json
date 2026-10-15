@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Parar depois do arquivo em curso",
   "importacoes.pdfCandidates.batch.progress": "Lote em curso: {done} enviado(s), {failed} recusado(s) de {total}…",
   "importacoes.pdfCandidates.batch.done": "Lote concluído: {done} enviado(s), {failed} recusado(s) de {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Lote parado: {done} enviado(s), {failed} recusado(s) de {total}. Relance-o para retomar; o que foi enviado não passa de novo."
+  "importacoes.pdfCandidates.batch.stopped": "Lote parado: {done} enviado(s), {failed} recusado(s) de {total}. Relance-o para retomar; o que foi enviado não passa de novo.",
+  "notif.restrictedOrphan.title": "Um PDF restrito não tem mais biblioteca detentora",
+  "notif.restrictedOrphan.body": "A última posse deste livro acaba de desaparecer: o PDF restrito dele não abre mais para ninguém. Vincule um exemplar, ou decida retirar o recurso."
 }

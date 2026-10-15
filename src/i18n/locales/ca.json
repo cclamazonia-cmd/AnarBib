@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Aturar després del fitxer en curs",
   "importacoes.pdfCandidates.batch.progress": "Lot en curs: {done} dipositat(s), {failed} rebutjat(s) de {total}…",
   "importacoes.pdfCandidates.batch.done": "Lot acabat: {done} dipositat(s), {failed} rebutjat(s) de {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Lot aturat: {done} dipositat(s), {failed} rebutjat(s) de {total}. Torna’l a llançar per reprendre; el que s’ha dipositat no torna a passar."
+  "importacoes.pdfCandidates.batch.stopped": "Lot aturat: {done} dipositat(s), {failed} rebutjat(s) de {total}. Torna’l a llançar per reprendre; el que s’ha dipositat no torna a passar.",
+  "notif.restrictedOrphan.title": "Un PDF restringit ja no té cap biblioteca que el tingui",
+  "notif.restrictedOrphan.body": "L’última tinença d’aquest llibre acaba de desaparèixer: el seu PDF restringit ja no s’obre per a ningú. Vincula un exemplar, o decideix retirar el recurs."
 }

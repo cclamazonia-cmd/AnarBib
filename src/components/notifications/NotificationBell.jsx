@@ -34,6 +34,10 @@ function resolveRoute(n) {
     // prévenue va à l'onglet de sa page Bibliothèque ; le fil s'y ouvre.
     case 'correspondance':
       return '/biblioteca#tab=correspondance';
+    // PDF restreint sans bibliothèque détentrice (NUMDIF D19, 15/10/2026) : la
+    // fiche du livre, où se voit la ressource devenue illisible.
+    case 'restricted_without_holder':
+      return n.link_id ? `/livro/${n.link_id}` : null;
     default:
       return null;
   }

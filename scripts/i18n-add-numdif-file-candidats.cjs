@@ -2,7 +2,8 @@
  * i18n-add-numdif-file-candidats.cjs — NUMDIF D13/D15/D16 (15/10/2026) : la
  * file de candidats PDF (REGISTRE §47). Les HINT error.digital_candidate.* de
  * la migration 20261015172008 (D13) ; l'écran de validation (D15) et le
- * versement (D16) ajoutent leurs clés ici au fil des lots.
+ * versement (D16) et le signal « restreint sans détentrice » (D19) ajoutent
+ * leurs clés ici au fil des lots.
  * Session : File de candidats PDF.
  * Tutoiement ; pt-BR au « você » ; el au singulier. Onze locales.
  * Idempotent : une clé déjà posée n'est réécrite que si sa valeur a changé ici.
@@ -522,6 +523,28 @@ const D16 = {
     'Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată.'],
 };
 Object.assign(D15, D16);
+
+// ── D19 : un PDF restreint sans bibliothèque détentrice se signale ────────
+const D19 = {
+  'notif.restrictedOrphan.title': [
+    'Un PDF restreint n’a plus de bibliothèque détentrice', 'Um PDF restrito não tem mais biblioteca detentora', 'A restricted PDF no longer has a holding library',
+    'Un PDF restringido ya no tiene biblioteca que lo tenga', 'Un PDF restringit ja no té cap biblioteca que el tingui', 'Un PDF riservato non ha più una biblioteca che lo possiede',
+    'Ein eingeschränktes PDF hat keine besitzende Bibliothek mehr', 'Een beperkte pdf heeft geen bibliotheek meer die hem bezit', 'Limigita PDF ne plu havas posedantan bibliotekon',
+    'Ένα περιορισμένο PDF δεν έχει πια βιβλιοθήκη που το κατέχει', 'Un PDF restricționat nu mai are bibliotecă deținătoare'],
+  'notif.restrictedOrphan.body': [
+    'La dernière détention de ce livre vient de disparaître : son PDF restreint ne s’ouvre plus pour personne. Rattache un exemplaire, ou décide de retirer la ressource.',
+    'A última posse deste livro acaba de desaparecer: o PDF restrito dele não abre mais para ninguém. Vincule um exemplar, ou decida retirar o recurso.',
+    'The last holding of this book has just disappeared: its restricted PDF no longer opens for anyone. Attach a copy, or decide to withdraw the resource.',
+    'La última tenencia de este libro acaba de desaparecer: su PDF restringido ya no se abre para nadie. Vincula un ejemplar, o decide retirar el recurso.',
+    'L’última tinença d’aquest llibre acaba de desaparèixer: el seu PDF restringit ja no s’obre per a ningú. Vincula un exemplar, o decideix retirar el recurs.',
+    'L’ultimo possesso di questo libro è appena scomparso: il suo PDF riservato non si apre più per nessuno. Collega un esemplare, o decidi di ritirare la risorsa.',
+    'Der letzte Bestand dieses Buches ist gerade verschwunden: Sein eingeschränktes PDF öffnet sich für niemanden mehr. Verknüpfe ein Exemplar oder entscheide, die Ressource zurückzuziehen.',
+    'Het laatste bezit van dit boek is net verdwenen: de beperkte pdf opent voor niemand meer. Koppel een exemplaar, of beslis de bron in te trekken.',
+    'La lasta posedo de ĉi tiu libro ĵus malaperis: ĝia limigita PDF ne plu malfermiĝas por iu ajn. Ligu ekzempleron, aŭ decidu retiri la rimedon.',
+    'Η τελευταία κατοχή αυτού του βιβλίου μόλις χάθηκε: το περιορισμένο PDF του δεν ανοίγει πια για κανέναν. Σύνδεσε ένα αντίτυπο ή αποφάσισε να αποσύρεις τον πόρο.',
+    'Ultima deținere a acestei cărți tocmai a dispărut: PDF-ul ei restricționat nu se mai deschide pentru nimeni. Leagă un exemplar sau hotărăște să retragi resursa.'],
+};
+Object.assign(D15, D19);
 
 for (const [cle, vals] of Object.entries(D15)) {
   if (vals.length !== ORDRE.length) throw new Error(`${cle} : ${vals.length} valeurs pour ${ORDRE.length} locales`);

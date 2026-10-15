@@ -7751,5 +7751,7 @@
   "importacoes.pdfCandidates.batch.stop": "Stoppen na het huidige bestand",
   "importacoes.pdfCandidates.batch.progress": "Partij bezig: {done} opgeslagen, {failed} geweigerd van {total}…",
   "importacoes.pdfCandidates.batch.done": "Partij klaar: {done} opgeslagen, {failed} geweigerd van {total}.",
-  "importacoes.pdfCandidates.batch.stopped": "Partij gestopt: {done} opgeslagen, {failed} geweigerd van {total}. Start haar opnieuw om verder te gaan; wat opgeslagen is, komt niet nog eens."
+  "importacoes.pdfCandidates.batch.stopped": "Partij gestopt: {done} opgeslagen, {failed} geweigerd van {total}. Start haar opnieuw om verder te gaan; wat opgeslagen is, komt niet nog eens.",
+  "notif.restrictedOrphan.title": "Een beperkte pdf heeft geen bibliotheek meer die hem bezit",
+  "notif.restrictedOrphan.body": "Het laatste bezit van dit boek is net verdwenen: de beperkte pdf opent voor niemand meer. Koppel een exemplaar, of beslis de bron in te trekken."
 }
