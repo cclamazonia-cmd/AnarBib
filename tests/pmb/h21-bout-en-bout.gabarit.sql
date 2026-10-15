@@ -1229,7 +1229,7 @@ BEGIN
       RAISE NOTICE 'H21L8-MESURE-CONSTAT 5000 codes neufs, source de 5000 exemplaires : % ms (nouveau : %)', v_ms, v_n;
       RAISE EXCEPTION 'sentinelle';
     EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'sentinelle' THEN RAISE; END IF; END;
-    IF v_n = 5000 AND v_ms < 8000
+    IF v_n = 5000 AND v_ms < coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000)
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||coalesce(v_ms::text, '∅')||' ms, nouveau '||coalesce(v_n::text, '∅')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
@@ -1239,7 +1239,7 @@ BEGIN
   BEGIN
     RAISE NOTICE 'H21L8-MESURE %', array_to_string(v_mesures, ' ; ');
     IF cardinality(v_mesures) = 5
-       AND NOT EXISTS (SELECT 1 FROM unnest(v_mesures) m WHERE substring(m FROM ' ([0-9]+) ms$')::int >= 8000)
+       AND NOT EXISTS (SELECT 1 FROM unnest(v_mesures) m WHERE substring(m FROM ' ([0-9]+) ms$')::int >= coalesce(nullif(current_setting('anarbib.budget_ms', true), '')::int, 8000))
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||array_to_string(v_mesures, ' ; ')); END IF;
   END;
