@@ -59,11 +59,13 @@ s'édite dans la langue d'affichage).
   générateurs (guide, confidentialité, comptes, auto-hébergement), et ajouter `ro`
   à la détection de la langue du navigateur dans `index.html`. Défaut connu : les
   pages engendrées de l'auto-hébergement n'ont pas d'`og:locale` (toutes langues).
-- **Lot 6** :
-  - bloc roumain en fin de chaque recueil PDF (D7), puis les entrées `ro` de
-    `COMPLETE_BLOCKS`, `READER_START` et `GOVERNANCE_START` dans
-    `src/lib/docLinks.js` ;
-  - sous-titres des tutoriels (`SUBTITLE_LANG.ro`).
+- **Lot 6 : FAIT** (15/10, `a67b3405`). Recueils publiés avec le roumain en fin ;
+  outils et sources sur E: (`Manual AnarBib v5/_outils/lot6-ro/`, un bloc de
+  langue se refait avec `ajouter_section_ro.py` + export Word + composition
+  sur les pages publiées). Reste à Xavier : déposer `tuto1-ro.vtt` et
+  `tuto2-ro.vtt` sur Kolektiva, puis `SUBTITLE_LANG.ro = 'ro'` dans
+  `ReaderTutorialsCard.jsx`. À l'ouverture : couvertures des deux manuels
+  (11 langues), et les six captures avec session en roumain.
 - **Lot 7** :
   - relecture et corrections ;
   - `listed: true` dans les deux sources ;

@@ -135,3 +135,24 @@ langues). Ordre proposé : accueil `/ro/`, `/ro/aderare/`, `/ro/proiect/`,
 Les pages adressées à une bibliothèque (« Adhérer », « Pourquoi adhérer »,
 l'encadré des candidates de « État du projet ») sont au « voi » ; le reste
 tutoie.
+
+## Recueils PDF et sous-titres (lot 6, `a67b3405`)
+
+Bloc roumain en fin de chaque recueil : manuel complet (p. 902-987), manuel
+lecteur·rice (p. 193-211), guide de gouvernance (p. 587-644) ; sous-titres des
+deux tutoriels (fichiers à déposer sur Kolektiva).
+
+| Source | Roumain choisi | Question |
+|---|---|---|
+| MARQUE POLITIQUE (encadré) | AMPRENTĂ POLITICĂ | « marcă » écarté (sens commercial). |
+| ASTUCE / CONSEIL | PONT / SFAT | Deux étiquettes distinctes. |
+| Manuel du·de la lecteur·rice | Manualul pentru cititori/cititoare | — |
+| le lecteur (l'outil de lecture) | vizualizator | Pour ne pas confondre avec la personne. |
+| compa / les compas | tovarășe/tovarășă, tovarășii/tovarășele | Cf. partie « Vocabulaire ». |
+
+Écarts de la source française que la traduction a corrigés en suivant
+l'écran : le mot à taper pour vider l'historique est EFFACER (et non
+SUPPRIMER) → GOLIRE ; le libellé ancien ou au « vous » d'un bouton → la valeur
+actuelle de ro.json. Restés fidèles à la source, à corriger dans toutes les
+langues : la gazette s'appelle encore « Rizoma » (FrⒶctale depuis le 16/09),
+la visio cite Jitsi (la règle est Framatalk).
