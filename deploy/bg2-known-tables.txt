@@ -199,6 +199,7 @@ loan_cycle_notifications
 deploiement_ecarts_acquittes
 ingest.book_import_baselines
 ingest.book_import_divergences
+ingest.digital_candidates
 ingest.exemplar_import_baselines
 ingest.import_profiles
 ingest.oai_harvest_state

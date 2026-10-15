@@ -803,3 +803,7 @@ tests/sql/attach_recu_garde_tests.sql
 # Les locales ont une source en base (13/10/2026, DOC-I18N-4) : public.fn_supported_locales(), lue par huit contraintes CHECK et huit fonctions ;
 # 'xx' refusé sur chaque table sous authenticated, anon fermé, les huit fonctions sans copie de la liste.
 tests/sql/locales_source_unique_tests.sql
+# NUMDIF D13 (15/10/2026, REGISTRE §47 NUMDIF-1, 2, 5) : la file de candidats PDF (ingest.digital_candidates) est fermée — RLS sans politique, aucun
+# droit API ; la coordination de la bibliothèque détentrice propose, voit, valide (même édition seulement, justification, mention + page pour un cas
+# public sous licence) ou rejette avec motif (édition trouvée gardée) ; une autre bibliothèque, un librarian, anon : rien ; l'administration voit tout.
+tests/sql/numdif_file_candidats_tests.sql

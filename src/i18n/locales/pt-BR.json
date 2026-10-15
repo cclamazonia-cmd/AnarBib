@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "No seu aplicativo, procure «+», «Adicionar» ou «Escanear código QR» e aponte para o código QR acima. No próprio celular, o link «{lien}» dispensa o escaneamento.",
   "twoFactor.guide.other.2": "Sem câmera, escolha a digitação manual e cole a chave; mantenha os ajustes padrão (TOTP, seis dígitos, 30 segundos).",
   "twoFactor.guide.other.3": "Digite abaixo o código de seis dígitos que o aplicativo mostra.",
-  "catalogacao.bio.titleIn.ro": "Biografia em romeno"
+  "catalogacao.bio.titleIn.ro": "Biografia em romeno",
+  "error.digital_candidate.coord_only": "Só a coordenação da biblioteca detentora (ou a administração da rede) cuida da sua fila de candidatos PDF.",
+  "error.digital_candidate.bad_payload": "O arquivo de candidatos está mal formado: ele deve conter uma lista de candidatos.",
+  "error.digital_candidate.page_too_large": "No máximo 200 candidatos de cada vez: divida o arquivo.",
+  "error.digital_candidate.bad_decision": "Decisão desconhecida: escolha «validar» ou «rejeitar».",
+  "error.digital_candidate.not_found": "Candidato não encontrado: talvez tenha sido retirado, ou pertença a outra biblioteca.",
+  "error.digital_candidate.not_holding": "A sua biblioteca não possui mais esta ficha: ela não pode mais decidir sobre este candidato nem enviá-lo.",
+  "error.digital_candidate.bad_page_url": "O endereço da página deve começar por http:// ou https://.",
+  "error.digital_candidate.already_decided": "Este candidato já foi decidido: recarregue a fila.",
+  "error.digital_candidate.same_edition_only": "Só se valida o arquivo da mesma edição que o exemplar possuído (editora, local, ano, tradução). Rejeite-o: a edição encontrada fica registrada.",
+  "error.digital_candidate.case_required": "Escolha o caso de origem: ele define o estatuto de direitos e o acesso.",
+  "error.digital_candidate.justification_required": "Escreva a justificativa do envio.",
+  "error.digital_candidate.mention_required": "Para uma licença livre, cite a menção impressa na edição e a página onde ela aparece.",
+  "error.digital_candidate.reason_required": "Escreva o motivo da rejeição.",
+  "error.digital_candidate.no_fingerprint": "Este candidato não tem impressão SHA-256: rode de novo a ferramenta de busca para baixá-lo antes de validar."
 }

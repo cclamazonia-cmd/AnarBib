@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "En via aplikaĵo, serĉu „+“, „Aldoni“ aŭ „Skani QR-kodon“ kaj celu la supran QR-kodon. En la telefono mem, la ligilo „{lien}“ ŝparas la skanadon.",
   "twoFactor.guide.other.2": "Sen fotilo, elektu permanan enigon kaj algluu la ŝlosilon; lasu la defaŭltajn agordojn (TOTP, ses ciferoj, 30 sekundoj).",
   "twoFactor.guide.other.3": "Tajpu sube la sesciferan kodon, kiun la aplikaĵo montras.",
-  "catalogacao.bio.titleIn.ro": "Biografio en la rumana"
+  "catalogacao.bio.titleIn.ro": "Biografio en la rumana",
+  "error.digital_candidate.coord_only": "Nur la kunordigo de la posedanta biblioteko (aŭ la administrado de la reto) mastrumas ĝian vicon de PDF-kandidatoj.",
+  "error.digital_candidate.bad_payload": "La dosiero de kandidatoj estas misformita: ĝi devas enhavi liston de kandidatoj.",
+  "error.digital_candidate.page_too_large": "Maksimume 200 kandidatoj samtempe: dividu la dosieron.",
+  "error.digital_candidate.bad_decision": "Nekonata decido: elektu «validigi» aŭ «malakcepti».",
+  "error.digital_candidate.not_found": "Kandidato ne trovita: eble ĝi estis forigita, aŭ ĝi apartenas al alia biblioteko.",
+  "error.digital_candidate.not_holding": "Via biblioteko ne plu havas ĉi tiun slipon: ĝi ne plu povas decidi pri ĉi tiu kandidato nek deponi ĝin.",
+  "error.digital_candidate.bad_page_url": "La adreso de la paĝo devas komenciĝi per http:// aŭ https://.",
+  "error.digital_candidate.already_decided": "Pri ĉi tiu kandidato jam estis decidite: reŝargu la vicon.",
+  "error.digital_candidate.same_edition_only": "Oni validigas nur la dosieron de la sama eldono kiel la posedata ekzemplero (eldonejo, loko, jaro, traduko). Malakceptu ĝin: la trovita eldono restas notita.",
+  "error.digital_candidate.case_required": "Elektu la fontan kazon: ĝi fiksas la rajtostaton kaj la aliron.",
+  "error.digital_candidate.justification_required": "Skribu la pravigon de la deponado.",
+  "error.digital_candidate.mention_required": "Por libera permesilo, citu la mencion presitan en la eldono kaj la paĝon, kie ĝi troviĝas.",
+  "error.digital_candidate.reason_required": "Skribu la kialon de la malakcepto.",
+  "error.digital_candidate.no_fingerprint": "Ĉi tiu kandidato ne havas SHA-256-fingrospuron: relanĉu la serĉilon por elŝuti ĝin antaŭ ol validigi."
 }

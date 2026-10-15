@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "En tu aplicación, busca «+», «Añadir» o «Escanear código QR» y apunta al código QR de arriba. En el propio móvil, el enlace «{lien}» evita escanear.",
   "twoFactor.guide.other.2": "Sin cámara, elige la introducción manual y pega la clave; deja los ajustes predeterminados (TOTP, seis cifras, 30 segundos).",
   "twoFactor.guide.other.3": "Escribe abajo el código de seis cifras que muestra la aplicación.",
-  "catalogacao.bio.titleIn.ro": "Biografía en rumano"
+  "catalogacao.bio.titleIn.ro": "Biografía en rumano",
+  "error.digital_candidate.coord_only": "Solo la coordinación de la biblioteca que tiene el ejemplar (o la administración de la red) gestiona su cola de candidatos PDF.",
+  "error.digital_candidate.bad_payload": "El archivo de candidatos está mal formado: debe contener una lista de candidatos.",
+  "error.digital_candidate.page_too_large": "Como máximo 200 candidatos a la vez: divide el archivo.",
+  "error.digital_candidate.bad_decision": "Decisión desconocida: elige «validar» o «rechazar».",
+  "error.digital_candidate.not_found": "Candidato no encontrado: quizá se retiró, o pertenece a otra biblioteca.",
+  "error.digital_candidate.not_holding": "Tu biblioteca ya no tiene esta ficha: ya no puede decidir sobre este candidato ni subirlo.",
+  "error.digital_candidate.bad_page_url": "La dirección de la página debe empezar por http:// o https://.",
+  "error.digital_candidate.already_decided": "Este candidato ya fue decidido: vuelve a cargar la cola.",
+  "error.digital_candidate.same_edition_only": "Solo se valida el archivo de la misma edición que el ejemplar que se tiene (editorial, lugar, año, traducción). Recházalo: la edición encontrada queda anotada.",
+  "error.digital_candidate.case_required": "Elige el caso de origen: fija el estatus de derechos y el acceso.",
+  "error.digital_candidate.justification_required": "Escribe la justificación de la subida.",
+  "error.digital_candidate.mention_required": "Para una licencia libre, cita la mención impresa en la edición y la página donde figura.",
+  "error.digital_candidate.reason_required": "Escribe el motivo del rechazo.",
+  "error.digital_candidate.no_fingerprint": "Este candidato no tiene huella SHA-256: vuelve a lanzar la herramienta de búsqueda para descargarlo antes de validar."
 }

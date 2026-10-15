@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "Nella tua app, cerca «+», «Aggiungi» o «Scansiona codice QR» e inquadra il codice QR qui sopra. Sullo stesso telefono, il link «{lien}» evita la scansione.",
   "twoFactor.guide.other.2": "Senza fotocamera, scegli l'inserimento manuale e incolla la chiave; lascia le impostazioni predefinite (TOTP, sei cifre, 30 secondi).",
   "twoFactor.guide.other.3": "Inserisci qui sotto il codice di sei cifre che l'app mostra.",
-  "catalogacao.bio.titleIn.ro": "Biografia in rumeno"
+  "catalogacao.bio.titleIn.ro": "Biografia in rumeno",
+  "error.digital_candidate.coord_only": "Solo il coordinamento della biblioteca che possiede l’esemplare (o l’amministrazione della rete) gestisce la sua coda di candidati PDF.",
+  "error.digital_candidate.bad_payload": "Il file dei candidati non è valido: deve contenere un elenco di candidati.",
+  "error.digital_candidate.page_too_large": "Al massimo 200 candidati alla volta: dividi il file.",
+  "error.digital_candidate.bad_decision": "Decisione sconosciuta: scegli «convalida» o «rifiuta».",
+  "error.digital_candidate.not_found": "Candidato non trovato: forse è stato ritirato, o appartiene a un’altra biblioteca.",
+  "error.digital_candidate.not_holding": "La tua biblioteca non possiede più questa scheda: non può più decidere su questo candidato né depositarlo.",
+  "error.digital_candidate.bad_page_url": "L’indirizzo della pagina deve iniziare con http:// o https://.",
+  "error.digital_candidate.already_decided": "Questo candidato è già stato deciso: ricarica la coda.",
+  "error.digital_candidate.same_edition_only": "Si convalida solo il file della stessa edizione dell’esemplare posseduto (editore, luogo, anno, traduzione). Rifiutalo: l’edizione trovata resta annotata.",
+  "error.digital_candidate.case_required": "Scegli il caso di origine: stabilisce lo stato dei diritti e l’accesso.",
+  "error.digital_candidate.justification_required": "Scrivi la motivazione del deposito.",
+  "error.digital_candidate.mention_required": "Per una licenza libera, cita la dicitura stampata nell’edizione e la pagina in cui compare.",
+  "error.digital_candidate.reason_required": "Scrivi il motivo del rifiuto.",
+  "error.digital_candidate.no_fingerprint": "Questo candidato non ha un’impronta SHA-256: rilancia lo strumento di ricerca per scaricarlo prima di convalidare."
 }

@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "A la teva aplicació, busca «+», «Afegeix» o «Escaneja un codi QR» i apunta al codi QR de més amunt. Al mateix mòbil, l'enllaç «{lien}» estalvia l'escaneig.",
   "twoFactor.guide.other.2": "Sense càmera, tria la introducció manual i enganxa la clau; deixa els ajustos per defecte (TOTP, sis xifres, 30 segons).",
   "twoFactor.guide.other.3": "Escriu a sota el codi de sis xifres que mostra l'aplicació.",
-  "catalogacao.bio.titleIn.ro": "Biografia en romanès"
+  "catalogacao.bio.titleIn.ro": "Biografia en romanès",
+  "error.digital_candidate.coord_only": "Només la coordinació de la biblioteca que té l’exemplar (o l’administració de la xarxa) gestiona la seva cua de candidats PDF.",
+  "error.digital_candidate.bad_payload": "El fitxer de candidats està mal format: ha de contenir una llista de candidats.",
+  "error.digital_candidate.page_too_large": "Com a màxim 200 candidats alhora: divideix el fitxer.",
+  "error.digital_candidate.bad_decision": "Decisió desconeguda: tria «validar» o «rebutjar».",
+  "error.digital_candidate.not_found": "No s’ha trobat el candidat: potser s’ha retirat, o pertany a una altra biblioteca.",
+  "error.digital_candidate.not_holding": "La teva biblioteca ja no té aquesta fitxa: ja no pot decidir sobre aquest candidat ni dipositar-lo.",
+  "error.digital_candidate.bad_page_url": "L’adreça de la pàgina ha de començar per http:// o https://.",
+  "error.digital_candidate.already_decided": "Aquest candidat ja s’ha decidit: torna a carregar la cua.",
+  "error.digital_candidate.same_edition_only": "Només es valida el fitxer de la mateixa edició que l’exemplar que es té (editorial, lloc, any, traducció). Rebutja’l: l’edició trobada queda anotada.",
+  "error.digital_candidate.case_required": "Tria el cas d’origen: fixa l’estatus de drets i l’accés.",
+  "error.digital_candidate.justification_required": "Escriu la justificació del dipòsit.",
+  "error.digital_candidate.mention_required": "Per a una llicència lliure, cita la menció impresa a l’edició i la pàgina on figura.",
+  "error.digital_candidate.reason_required": "Escriu el motiu del rebuig.",
+  "error.digital_candidate.no_fingerprint": "Aquest candidat no té empremta SHA-256: torna a executar l’eina de cerca per baixar-lo abans de validar."
 }

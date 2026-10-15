@@ -587,7 +587,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
-| **D13** | Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora | `P2` | Aberto |
+| **D13** | Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora | `P2` | A verificar |
 | **D14** | Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto | `P2` | Aberto |
 | **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | Aberto |
 | **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | Aberto |
@@ -685,11 +685,11 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 #### D13 — Uma fila de candidatos PDF por ficha, validada pela coordenação da biblioteca detentora
 
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
+`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
 **Estado.** Decisão `NUMDIF-5`. Hoje nada guarda o rastro de um PDF achado fora; `book_draft_digital_resources` exige o arquivo já armazenado e um rascunho de ficha.
 
-*Verificado : 15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`.*
+*Verificado : 15/10 — **entregue** (migração `20261015172008`). `ingest.digital_candidates` com RLS sem política; três portas DEFINER (propor, listar, decidir), restritas à coordenação da biblioteca do candidato (detentora) e à administração da rede; validar exige mesma edição, caso, justificativa, impressão SHA-256 e, para licença livre, a menção citada com página; a rejeição guarda o motivo e a edição achada. Quarto caso `domaine_public` (fora do NUMDIF-2). Suíte 12/12 local. **Resta**: pipeline verde.*
 
 **O que é.** Tabela `ingest.digital_candidates` com RLS; campos: ficha, URL do arquivo, URL da página, edição constatada, veredito, caso de origem, SHA-256, motivo de rejeição, quem validou.
 

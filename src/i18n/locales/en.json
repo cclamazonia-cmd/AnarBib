@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "In your app, look for “+”, “Add” or “Scan QR code” and point the camera at the QR code above. On the phone itself, the “{lien}” link saves you the scan.",
   "twoFactor.guide.other.2": "No camera: choose manual entry and paste the key; keep the default settings (TOTP, six digits, 30 seconds).",
   "twoFactor.guide.other.3": "Enter below the six-digit code the app shows.",
-  "catalogacao.bio.titleIn.ro": "Biography in Romanian"
+  "catalogacao.bio.titleIn.ro": "Biography in Romanian",
+  "error.digital_candidate.coord_only": "Only the coordination of the holding library (or the network administration) manages its PDF candidate queue.",
+  "error.digital_candidate.bad_payload": "The candidate file is malformed: it must contain a list of candidates.",
+  "error.digital_candidate.page_too_large": "At most 200 candidates at a time: split the file.",
+  "error.digital_candidate.bad_decision": "Unknown decision: choose “validate” or “reject”.",
+  "error.digital_candidate.not_found": "Candidate not found: it may have been removed, or it belongs to another library.",
+  "error.digital_candidate.not_holding": "Your library no longer holds this record: it can no longer decide on this candidate or deposit it.",
+  "error.digital_candidate.bad_page_url": "The page address must start with http:// or https://.",
+  "error.digital_candidate.already_decided": "This candidate has already been decided: reload the queue.",
+  "error.digital_candidate.same_edition_only": "Only a file of the same edition as the held copy can be validated (publisher, place, year, translation). Reject it: the edition found stays on record.",
+  "error.digital_candidate.case_required": "Choose the source case: it sets the rights status and the access.",
+  "error.digital_candidate.justification_required": "Write the justification for the deposit.",
+  "error.digital_candidate.mention_required": "For a free licence, quote the notice printed in the edition and the page where it appears.",
+  "error.digital_candidate.reason_required": "Write the reason for the rejection.",
+  "error.digital_candidate.no_fingerprint": "This candidate has no SHA-256 fingerprint: run the search tool again to download it before validating."
 }

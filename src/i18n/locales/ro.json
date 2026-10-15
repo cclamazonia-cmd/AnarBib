@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "În aplicația ta, caută „+”, „Adaugă” sau „Scanează un cod QR”, apoi îndreaptă camera spre codul QR de mai sus. Chiar pe telefon, linkul „{lien}” te scutește de scanare.",
   "twoFactor.guide.other.2": "Fără cameră, alege introducerea manuală și lipește cheia; păstrează setările implicite (TOTP, șase cifre, 30 de secunde).",
   "twoFactor.guide.other.3": "Introdu mai jos codul de șase cifre afișat de aplicație.",
-  "catalogacao.bio.titleIn.ro": "Biografie în limba română"
+  "catalogacao.bio.titleIn.ro": "Biografie în limba română",
+  "error.digital_candidate.coord_only": "Doar echipa de coordonare a bibliotecii care deține exemplarul (sau administrarea rețelei) își gestionează coada de candidați PDF.",
+  "error.digital_candidate.bad_payload": "Fișierul de candidați este greșit format: trebuie să conțină o listă de candidați.",
+  "error.digital_candidate.page_too_large": "Cel mult 200 de candidați odată: împarte fișierul.",
+  "error.digital_candidate.bad_decision": "Decizie necunoscută: alege „validează” sau „respinge”.",
+  "error.digital_candidate.not_found": "Candidat negăsit: poate a fost retras sau aparține altei biblioteci.",
+  "error.digital_candidate.not_holding": "Biblioteca ta nu mai deține această fișă: nu mai poate decide asupra acestui candidat și nici nu-l mai poate depune.",
+  "error.digital_candidate.bad_page_url": "Adresa paginii trebuie să înceapă cu http:// sau https://.",
+  "error.digital_candidate.already_decided": "Pentru acest candidat s-a decis deja: reîncarcă coada.",
+  "error.digital_candidate.same_edition_only": "Se validează doar fișierul aceleiași ediții ca exemplarul deținut (editură, loc, an, traducere). Respinge-l: ediția găsită rămâne notată.",
+  "error.digital_candidate.case_required": "Alege cazul sursei: el stabilește statutul drepturilor și accesul.",
+  "error.digital_candidate.justification_required": "Scrie justificarea depunerii.",
+  "error.digital_candidate.mention_required": "Pentru o licență liberă, citează mențiunea tipărită în ediție și pagina unde apare.",
+  "error.digital_candidate.reason_required": "Scrie motivul respingerii.",
+  "error.digital_candidate.no_fingerprint": "Acest candidat nu are amprentă SHA-256: relansează instrumentul de căutare ca să-l descarci înainte de validare."
 }

@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "Zoek in je app naar „+”, „Toevoegen” of „QR-code scannen” en richt de camera op de QR-code hierboven. Op de telefoon zelf bespaart de link „{lien}” je het scannen.",
   "twoFactor.guide.other.2": "Zonder camera kies je handmatige invoer en plak je de sleutel; laat de standaardinstellingen staan (TOTP, zes cijfers, 30 seconden).",
   "twoFactor.guide.other.3": "Typ hieronder de code van zes cijfers die de app toont.",
-  "catalogacao.bio.titleIn.ro": "Biografie in het Roemeens"
+  "catalogacao.bio.titleIn.ro": "Biografie in het Roemeens",
+  "error.digital_candidate.coord_only": "Alleen de coördinatie van de bibliotheek die het exemplaar bezit (of het netwerkbeheer) beheert haar wachtrij van pdf-kandidaten.",
+  "error.digital_candidate.bad_payload": "Het kandidatenbestand is ongeldig: het moet een lijst van kandidaten bevatten.",
+  "error.digital_candidate.page_too_large": "Maximaal 200 kandidaten tegelijk: splits het bestand.",
+  "error.digital_candidate.bad_decision": "Onbekende beslissing: kies ‘bevestigen’ of ‘afwijzen’.",
+  "error.digital_candidate.not_found": "Kandidaat niet gevonden: misschien is hij verwijderd, of hoort hij bij een andere bibliotheek.",
+  "error.digital_candidate.not_holding": "Je bibliotheek bezit dit record niet meer: ze kan niet meer over deze kandidaat beslissen of hem opslaan.",
+  "error.digital_candidate.bad_page_url": "Het adres van de pagina moet beginnen met http:// of https://.",
+  "error.digital_candidate.already_decided": "Over deze kandidaat is al beslist: laad de wachtrij opnieuw.",
+  "error.digital_candidate.same_edition_only": "Alleen het bestand van dezelfde uitgave als het aanwezige exemplaar wordt bevestigd (uitgever, plaats, jaar, vertaling). Wijs het af: de gevonden uitgave blijft genoteerd.",
+  "error.digital_candidate.case_required": "Kies het bronscenario: het bepaalt de rechtenstatus en de toegang.",
+  "error.digital_candidate.justification_required": "Schrijf de rechtvaardiging van de opslag.",
+  "error.digital_candidate.mention_required": "Citeer bij een vrije licentie de vermelding die in de uitgave gedrukt staat, en de pagina waar ze staat.",
+  "error.digital_candidate.reason_required": "Schrijf de reden van de afwijzing.",
+  "error.digital_candidate.no_fingerprint": "Deze kandidaat heeft geen SHA-256-vingerafdruk: start de zoektool opnieuw om hem te downloaden voor je bevestigt."
 }

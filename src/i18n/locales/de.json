@@ -7630,5 +7630,19 @@
   "twoFactor.guide.other.1": "Such in deiner App nach „+“, „Hinzufügen“ oder „QR-Code scannen“ und richte die Kamera auf den QR-Code oben. Auf dem Telefon selbst erspart dir der Link „{lien}“ das Scannen.",
   "twoFactor.guide.other.2": "Ohne Kamera wählst du die manuelle Eingabe und fügst den Schlüssel ein; lass die Standardeinstellungen (TOTP, sechs Ziffern, 30 Sekunden).",
   "twoFactor.guide.other.3": "Gib unten den sechsstelligen Code ein, den die App anzeigt.",
-  "catalogacao.bio.titleIn.ro": "Biografie auf Rumänisch"
+  "catalogacao.bio.titleIn.ro": "Biografie auf Rumänisch",
+  "error.digital_candidate.coord_only": "Nur die Koordination der besitzenden Bibliothek (oder die Netzwerkverwaltung) verwaltet ihre Warteschlange von PDF-Kandidaten.",
+  "error.digital_candidate.bad_payload": "Die Kandidatendatei ist fehlerhaft: Sie muss eine Liste von Kandidaten enthalten.",
+  "error.digital_candidate.page_too_large": "Höchstens 200 Kandidaten auf einmal: Teile die Datei auf.",
+  "error.digital_candidate.bad_decision": "Unbekannte Entscheidung: Wähle „bestätigen“ oder „ablehnen“.",
+  "error.digital_candidate.not_found": "Kandidat nicht gefunden: Er wurde vielleicht entfernt oder gehört einer anderen Bibliothek.",
+  "error.digital_candidate.not_holding": "Deine Bibliothek besitzt diesen Eintrag nicht mehr: Sie kann über diesen Kandidaten nicht mehr entscheiden und ihn nicht mehr ablegen.",
+  "error.digital_candidate.bad_page_url": "Die Adresse der Seite muss mit http:// oder https:// beginnen.",
+  "error.digital_candidate.already_decided": "Über diesen Kandidaten wurde schon entschieden: Lade die Warteschlange neu.",
+  "error.digital_candidate.same_edition_only": "Bestätigt wird nur die Datei derselben Ausgabe wie das vorhandene Exemplar (Verlag, Ort, Jahr, Übersetzung). Lehne sie ab: Die gefundene Ausgabe bleibt vermerkt.",
+  "error.digital_candidate.case_required": "Wähle den Quellenfall: Er legt den Rechtestatus und den Zugang fest.",
+  "error.digital_candidate.justification_required": "Schreib die Begründung für die Ablage.",
+  "error.digital_candidate.mention_required": "Bei einer freien Lizenz zitiere den in der Ausgabe gedruckten Vermerk und die Seite, auf der er steht.",
+  "error.digital_candidate.reason_required": "Schreib den Grund für die Ablehnung.",
+  "error.digital_candidate.no_fingerprint": "Dieser Kandidat hat keinen SHA-256-Fingerabdruck: Starte das Suchwerkzeug erneut, um ihn vor der Bestätigung herunterzuladen."
 }

@@ -587,7 +587,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
-| **D13** | Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice | `P2` | Ouvert |
+| **D13** | Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice | `P2` | À vérifier |
 | **D14** | Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre | `P2` | Ouvert |
 | **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | Ouvert |
 | **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | Ouvert |
@@ -685,11 +685,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### D13 — Une file de candidats PDF par notice, que valide la coordination de la bibliothèque détentrice
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
+`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
 
 **État.** Décision `NUMDIF-5` (15/10). Aujourd'hui, rien ne garde la trace d'un PDF trouvé ailleurs : la recherche du 14/10 (Guérin, Grave, Reclus) a vécu dans une session, ses rejets avec elle. `book_draft_digital_resources` ne convient pas : il exige que le fichier existe déjà dans le stockage (`private.fn_objet_stocke_existe`) et vit attaché à un brouillon de notice, alors qu'un candidat existe avant tout fichier et sans brouillon.
 
-*Vérifié : 15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
+*Vérifié : 15/10 — **livré** (migration `20261015172008_numdif_file_de_candidats_pdf`, session « File de candidats PDF »). `ingest.digital_candidates` au régime INGEST-RLS (RLS sans politique, aucun droit API) ; trois portes DEFINER — `fn_digital_candidates_propose`, `fn_digital_candidates_list`, `fn_digital_candidate_decide` — tenues à la coordination de LA bibliothèque du candidat (détentrice de la notice à chaque geste) et à l'administration du réseau ; valider exige la même édition, un cas, une justification, l'empreinte, et pour un cas public sous licence la mention citée avec sa page ; un rejet garde son motif et l'édition trouvée. Un quatrième cas, `domaine_public` (hors NUMDIF-2, qui ne traite que des œuvres sous droits), couvre les Reclus. Suite `numdif_file_candidats_tests` 12/12 en local, gardes `ingest_ferme`, `grants_herites`, `fk_sans_index`, `aides_definer_fermees` vertes. **Reste** : pipeline vert en production. — Mesure initiale (15/10) : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).*
 
 **Ce que c'est.** Une table `ingest.digital_candidates` fermée par RLS (lecture et écriture : coordination de la bibliothèque détentrice, administration du réseau), au gabarit `_TEMPLATE.sql`. Champs : notice, URL du fichier, URL de la page (`NUMDIF-3`), édition constatée (éditeur, lieu, année, traduction, ISBN), verdict (même édition, autre édition, texte ressaisi — `NUMDIF-1`), cas de source (`NUMDIF-2`), empreinte SHA-256, taille, motif de rejet, qui a validé et quand. Écritures par RPC (`DOC-RPC-3`).
 

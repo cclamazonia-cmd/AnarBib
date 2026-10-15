@@ -5537,7 +5537,7 @@
       "id": "D13",
       "d": "D",
       "p": "P2",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql"
@@ -5577,8 +5577,8 @@
         "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
       ],
       "verif": {
-        "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
-        "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
+        "fr": "15/10 — **livré** (migration `20261015172008_numdif_file_de_candidats_pdf`, session « File de candidats PDF »). `ingest.digital_candidates` au régime INGEST-RLS (RLS sans politique, aucun droit API) ; trois portes DEFINER — `fn_digital_candidates_propose`, `fn_digital_candidates_list`, `fn_digital_candidate_decide` — tenues à la coordination de LA bibliothèque du candidat (détentrice de la notice à chaque geste) et à l'administration du réseau ; valider exige la même édition, un cas, une justification, l'empreinte, et pour un cas public sous licence la mention citée avec sa page ; un rejet garde son motif et l'édition trouvée. Un quatrième cas, `domaine_public` (hors NUMDIF-2, qui ne traite que des œuvres sous droits), couvre les Reclus. Suite `numdif_file_candidats_tests` 12/12 en local, gardes `ingest_ferme`, `grants_herites`, `fk_sans_index`, `aides_definer_fermees` vertes. **Reste** : pipeline vert en production. — Mesure initiale (15/10) : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
+        "pt": "15/10 — **entregue** (migração `20261015172008`). `ingest.digital_candidates` com RLS sem política; três portas DEFINER (propor, listar, decidir), restritas à coordenação da biblioteca do candidato (detentora) e à administração da rede; validar exige mesma edição, caso, justificativa, impressão SHA-256 e, para licença livre, a menção citada com página; a rejeição guarda o motivo e a edição achada. Quarto caso `domaine_public` (fora do NUMDIF-2). Suíte 12/12 local. **Resta**: pipeline verde."
       }
     },
     {
