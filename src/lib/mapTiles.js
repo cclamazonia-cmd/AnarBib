@@ -38,11 +38,41 @@ const SUPABASE_URL = (resolveSupabaseUrl() || '').replace(/\/+$/, '');
 export const MAPTILES_URL = import.meta.env.VITE_MAPTILES_URL
   || `${SUPABASE_URL}/storage/v1/object/public/map-tiles/planet-z13.pmtiles`;
 
-/** Zoom maximal contenu dans le fichier (au-delà : overzoom côté client). */
+/** Zoom maximal du fichier de la production (repli si l'en-tête ne se lit pas ; au-delà : overzoom). */
 export const MAPTILES_MAX_DATA_ZOOM = 13;
 
 /** Zoom maximal offert à l'utilisatrice (identique à l'ancien réglage OSM). */
 export const MAPTILES_MAX_ZOOM = 18;
+
+/**
+ * Zoom maximal réellement contenu dans le fichier, lu dans son EN-TÊTE (16/10/2026).
+ *
+ * Une instance auto-hébergée extrait le fond au zoom qu'elle peut porter
+ * (deploy/scripts/fond-de-carte.sh : z10 = 3,7 Go, z11 = 7,9 Go, z12 = 18 Go).
+ * Avec `maxDataZoom` figé à 13, le greffon demanderait au fichier des tuiles qu'il
+ * n'a pas : carte vide aux zooms 12-13 sur un extrait z11. Lu dans l'en-tête, il
+ * agrandit ce qu'il a. PMTiles v3 : 127 octets, « PMTiles » + version 3, l'octet
+ * 101 porte le zoom maximal. Une seule petite lecture par carte affichée.
+ *
+ * Toute réponse qui n'est pas une plage (200 = le serveur enverrait le fichier
+ * ENTIER, 36 Go) est abandonnée sans lire le corps. Repli : MAPTILES_MAX_DATA_ZOOM.
+ */
+export async function lireZoomMaxCarte(url = MAPTILES_URL, fetcher = globalThis.fetch?.bind(globalThis)) {
+  if (!fetcher) return MAPTILES_MAX_DATA_ZOOM;
+  const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  try {
+    const r = await fetcher(url, { headers: { Range: 'bytes=0-126' }, cache: 'no-store', signal: ctrl?.signal });
+    if (r.status !== 206) { ctrl?.abort(); return MAPTILES_MAX_DATA_ZOOM; }
+    const b = new Uint8Array(await r.arrayBuffer());
+    if (b.length < 102 || String.fromCharCode(...b.slice(0, 7)) !== 'PMTiles' || b[7] !== 3) {
+      return MAPTILES_MAX_DATA_ZOOM;
+    }
+    const z = b[101];
+    return z <= MAPTILES_MAX_ZOOM ? z : MAPTILES_MAX_DATA_ZOOM;
+  } catch {
+    return MAPTILES_MAX_DATA_ZOOM;
+  }
+}
 
 // Langues d'étiquettes présentes dans le fond Protomaps v4 (name:xx). Le catalan et
 // l'espéranto n'y sont pas : on laisse alors les noms locaux (pas de repli vers une
@@ -97,6 +127,7 @@ export function lireCarteSansCache(win = window, urlCarte = MAPTILES_URL) {
 export async function addBasemap(map, { locale, attribution } = {}) {
   await loadVendorScript('/vendor/leaflet/protomaps-leaflet.js', 'protomapsL');
   lireCarteSansCache();
+  const maxDataZoom = await lireZoomMaxCarte();
   // ⚠️ La dist 4.0.1 vendorisée lit `theme` (le README en ligne, plus récent, dit
   // `flavor`). Sans thème reconnu : zéro règle de peinture, tuiles transparentes —
   // vécu en production le 08/09/2026 à 01 h 30, sans la moindre erreur console.
@@ -104,7 +135,7 @@ export async function addBasemap(map, { locale, attribution } = {}) {
     url: MAPTILES_URL,
     theme: 'light',
     lang: basemapLang(locale),
-    maxDataZoom: MAPTILES_MAX_DATA_ZOOM,
+    maxDataZoom,
     maxZoom: MAPTILES_MAX_ZOOM,
     attribution: attribution === undefined ? '&copy; OpenStreetMap' : attribution,
   });

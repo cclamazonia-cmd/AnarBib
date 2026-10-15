@@ -36,6 +36,19 @@ Au-delà du zoom contenu, Leaflet **agrandit** les tuiles vectorielles (overzoom
 jusqu'au zoom 18) : ce qui existe reste net, rien de plus n'apparaît. Mesurer
 avant de télécharger : `pmtiles extract … --dry-run` lit seulement l'index.
 
+## Sur une instance auto-hébergée (16/10/2026)
+
+`deploy/scripts/fond-de-carte.sh` enveloppe la recette ci-dessous pour une
+instance : adresse et clé lues dans `deploy/.env` (sans elles,
+`televerser-tus.mjs` enverrait vers la production), zoom au choix
+(`--zoom 11` pour 7,9 Go), contrôle 206 et zoom de l'en-tête, puis
+`VITE_MAPTILES_URL` dans `.env.local` et front reconstruit si le zoom n'est pas
+13. Le front lit le zoom maximal dans l'en-tête du fichier
+(`lireZoomMaxCarte`, `src/lib/mapTiles.js`) : un extrait z11 est agrandi
+au-delà de 11 au lieu de rester blanc. Décision de Xavier (15/10/2026, ticket
+#36 du camarade ASR2026) : chaque instance a son fichier, jamais de relais vers
+le Storage de la production. Garde : `src/tests/selfhost-fond-de-carte.test.js`.
+
 ## Licence et attribution
 
 Fond « Protomaps Basemap », **ODbL** (produit dérivé d'OpenStreetMap) + Natural
