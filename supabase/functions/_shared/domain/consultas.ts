@@ -38,7 +38,7 @@
 // =============================================================================
 
 import type { LibraryNotificationContext, NotifyPayload } from "../core/types.ts";
-import { APP_BASE_URL, LIBRARIAN_PHONE } from "../core/env.ts";
+import { APP_BASE_URL } from "../core/env.ts";
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
 import {
@@ -54,7 +54,7 @@ import {
   localConsultationEnabled
 } from "../context/policies.ts";
 import { getConsultaV2Bundle, getConsultaWorkflowBundle } from "../data/consultas.ts";
-import { footerPadrao, renderEmail } from "../mail/layout.ts";
+import { footerPadrao, renderEmail, telephoneBibliotheque } from "../mail/layout.ts";
 import {
   adminTarget,
   safeSendEmail,
@@ -191,8 +191,8 @@ export async function handleConsultaCriadaV2(recordId: number) {
     introHtml:
       `<p style="margin:0 0 10px;">${tMail(locale, "con.created.intro")}</p>` +
       `<p style="margin:0 0 10px;">${tMail(locale, "con.created.hint")}</p>` +
-      (LIBRARIAN_PHONE
-        ? `<p style="margin:0;">${label(locale, "contact")}: <b>${esc(LIBRARIAN_PHONE)}</b>.</p>`
+      (telephoneBibliotheque(ctx)
+        ? `<p style="margin:0;">${label(locale, "contact")}: <b>${esc(telephoneBibliotheque(ctx))}</b>.</p>`
         : ""),
     details: [
       ...(tits ? [{ label: label(locale, "items"), value: tits }] : []),

@@ -89,9 +89,18 @@ describe("le pied de page d'exploitation ne renvoie pas l'opératrice à elle-m�
     expect(fr).toContain('acquitter');
   });
 
-  it('le pied lectrice, lui, garde son téléphone — les deux publics coexistent', () => {
+  // 16/10/2026 : le téléphone est celui de LA bibliothèque (public_phone du contexte),
+  // jamais la variable globale LIBRARIAN_PHONE — posée ici exprès, elle ne doit plus sortir.
+  const BIBLIO_CTX = { ...NETWORK_CTX, library_id: 'lib-a', library_short_name: 'BTL', public_phone: '+55 11 0000-0000' };
+
+  it('le pied lectrice garde le téléphone DE SA BIBLIOTHÈQUE ; le réseau n’en a pas, le global jamais', () => {
     const { footerPadrao } = chargerLayout();
-    expect(footerPadrao(NETWORK_CTX, 'fr')).toContain('+00 000');
+    const biblio = footerPadrao(BIBLIO_CTX, 'fr');
+    expect(biblio).toContain('+55 11 0000-0000');
+    expect(biblio).not.toContain('+00 000');
+    expect(footerPadrao(NETWORK_CTX, 'fr')).not.toContain('+00 000');
+    expect(footerPadrao(NETWORK_CTX, 'fr')).not.toContain('Téléphone');
+    expect(footerPadrao({ ...BIBLIO_CTX, public_phone: null }, 'fr')).not.toContain('Téléphone');
   });
 
   it('la VERSION TEXTE suit : footerTextLines remplace téléphone et règlement', () => {
@@ -111,16 +120,25 @@ describe("le pied de page d'exploitation ne renvoie pas l'opératrice à elle-m�
     expect(text).toContain('backup_heartbeats');
   });
 
-  it("sans footerTextLines, la version texte garde l'ancien pied — rien ne change pour les 14 autres fonctions", () => {
+  it("sans footerTextLines, la version texte porte le téléphone de la bibliothèque, comme le HTML", () => {
     const { renderEmail } = chargerLayout();
-    const { text } = renderEmail({
+    const courriel = (context) => renderEmail({
       title: 'Un courriel lectrice ordinaire',
       introHtml: '<p>Bonjour.</p>',
       footerHtml: '',
-      context: NETWORK_CTX,
+      context,
       locale: 'fr',
-    });
-    expect(text).toContain('Téléphone: +00 000 000 000');
+    }).text;
+    expect(courriel(BIBLIO_CTX)).toContain('Téléphone: +55 11 0000-0000');
+    expect(courriel(BIBLIO_CTX)).not.toContain('+00 000');
+    expect(courriel(NETWORK_CTX)).not.toContain('Téléphone');
+  });
+
+  it('la ligne finale ne répète pas « AnarBib » : un courriel réseau dit qu’il vient du réseau', () => {
+    const { renderEmail } = chargerLayout();
+    const { html, text } = renderEmail({ title: 'T', introHtml: '<p>x</p>', footerHtml: '', context: NETWORK_CTX, locale: 'fr' });
+    expect(text.trim().split('\n').pop()).toBe('Message automatique du réseau AnarBib.');
+    expect(html).not.toContain('AnarBib — AnarBib');
   });
 
   it('les dix locales répondent, sans fuite du portugais', () => {

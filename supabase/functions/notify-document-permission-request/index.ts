@@ -53,10 +53,7 @@ const FOOTER_TEXT = firstEnv([
 const MANUAL_URL = firstEnv([
   "ANARBIB_MANUAL_URL"
 ], "");
-const LIBRARIAN_PHONE = firstEnv([
-  "LIBRARIAN_PHONE",
-  "ANARBIB_LIBRARIAN_PHONE"
-], "");
+// LIBRARIAN_PHONE n'est plus lu (16/10/2026) : numéro personnel global.
 const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
     persistSession: false,
@@ -276,7 +273,6 @@ function stripHtml(value) {
 function footerHtml() {
   const parts = [];
   if (MANUAL_URL) parts.push(`Manual / regimento da rede: <a href="${esc(MANUAL_URL)}" style="color:#fff;text-decoration:underline;">abrir</a>`);
-  if (LIBRARIAN_PHONE) parts.push(`Contato rápido: <b>${esc(LIBRARIAN_PHONE)}</b>`);
   parts.push(esc(FOOTER_TEXT));
   return parts.join("<br>");
 }

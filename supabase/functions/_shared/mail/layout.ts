@@ -1,4 +1,3 @@
-import { LIBRARIAN_PHONE } from "../core/env.ts";
 import { publicStorageUrl, resolveMailRouting } from "../context/library-mail-routing.ts";
 import { esc } from "../shared/format.ts";
 import { tMail } from "../i18n/mail-strings.ts";
@@ -18,6 +17,12 @@ import { tMail } from "../i18n/mail-strings.ts";
 // annonce par la vue de contexte (regulation_bucket + regulation_path). Une
 // biblio sans reglement n a pas de ligne — pas une ligne vide, pas un lien
 // mort : rien, ce qui est exact.
+// Le téléphone d'un courriel (16/10/2026) : celui de LA bibliothèque, publié par
+// elle (library_public_contact.public_phone, porté par le contexte) — jamais un
+// numéro global, et aucun pour un courriel du réseau (contexte sans bibliothèque).
+export function telephoneBibliotheque(ctx) {
+  return ctx?.library_id ? String(ctx?.public_phone || "").trim() : "";
+}
 export function regulationUrl(ctx) {
   return publicStorageUrl(ctx?.regulation_bucket, ctx?.regulation_path);
 }
@@ -25,9 +30,12 @@ export function footerPadrao(ctx, locale = null) {
   const p = [];
   const reg = regulationUrl(ctx);
   if (reg) p.push(`${esc(tMail(locale, "layout.regimentoLabel"))}: <a href="${esc(reg)}" style="color:#fff;text-decoration:underline;">${esc(tMail(locale, "layout.regimentoOpen"))}</a>`);
-  if (LIBRARIAN_PHONE) p.push(`${esc(tMail(locale, "layout.phoneLabel"))}: <b>${esc(LIBRARIAN_PHONE)}</b>`);
-  if (ctx?.footer_local) p.push(String(ctx.footer_local).trim());
-  else p.push(tMail(locale, "layout.footerContact"));
+  const tel = telephoneBibliotheque(ctx);
+  if (tel) p.push(`${esc(tMail(locale, "layout.phoneLabel"))}: <b>${esc(tel)}</b>`);
+  // Le pied propre (footer_local) ne s'imprime plus ICI : il est déjà dans la ligne
+  // finale de renderEmail (16/10/2026, il paraissait deux fois). « Contacte la
+  // bibliothèque » n'a de sens que s'il y a une bibliothèque.
+  if (ctx?.library_id) p.push(tMail(locale, "layout.footerContact"));
   return p.join("<br>");
 }
 // F2 (01/09/2026). Les alertes d'exploitation — sonde en échec, sauvegarde
@@ -71,7 +79,15 @@ export function renderEmail(opts) {
   const nlogo = r.networkLogoUrl ? `<img src="${esc(r.networkLogoUrl)}" alt="AnarBib" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const llib = r.libraryLogoUrl && r.libraryLogoUrl !== r.networkLogoUrl ? `<img src="${esc(r.libraryLogoUrl)}" alt="${esc(r.brandName)}" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const autoNoticeText = esc(tMail(locale, "layout.autoNotice"));
-  const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(opts.title)}</title></head><body style="margin:0;background:#0f0f10;color:#ffffff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;"><div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${pre}</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" width="640" cellspacing="0" cellpadding="0" style="border-collapse:collapse;max-width:640px;width:100%;"><tr><td style="background:rgba(27,27,27,0.94);color:#ffffff;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;"><div style="padding:18px 18px 14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:12px;min-width:0;">${nlogo}<div><div style="font-size:18px;font-weight:800;line-height:1.2;">${esc(r.brandName)}</div><div style="font-size:13px;color:#cfcfcf;line-height:1.2;">${autoNoticeText}</div></div></div>${llib ? `<div style="display:flex;align-items:center;justify-content:flex-end;">${llib}</div>` : ""}</div><div style="height:3px;background:#c00000;"></div><div style="padding:18px;"><h1 style="margin:0 0 12px;font-size:20px;line-height:1.25;">${esc(opts.title)}</h1>${gr}${ab}<div style="font-size:16px;line-height:1.55;color:#f2f2f2;">${opts.introHtml}</div>${det}<div style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#cfcfcf;">${ft}</div></div></td></tr><tr><td style="padding:12px 6px 0;color:#9c9c9c;font-size:12px;line-height:1.4;text-align:center;">${esc(r.subjectTag)}${opts.libreDiffusionLabel ? ` — ${esc(opts.libreDiffusionLabel)}` : ""} — ${esc(r.footerText || tMail(locale, "layout.footerText"))}</td></tr></table></td></tr></table></body></html>`;
+  // Ligne finale : tag, mention de libre diffusion, pied — sans répéter le tag quand
+  // le pied le contient déjà (« AnarBib — Message automatique du réseau AnarBib »).
+  const piedFinal = r.footerText || tMail(locale, "layout.footerText");
+  const ligneFinale = [
+    piedFinal.toLowerCase().includes(String(r.subjectTag || "").toLowerCase()) && r.subjectTag ? null : r.subjectTag,
+    opts.libreDiffusionLabel || null,
+    piedFinal,
+  ].filter(Boolean).join(" — ");
+  const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(opts.title)}</title></head><body style="margin:0;background:#0f0f10;color:#ffffff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;"><div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${pre}</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" width="640" cellspacing="0" cellpadding="0" style="border-collapse:collapse;max-width:640px;width:100%;"><tr><td style="background:rgba(27,27,27,0.94);color:#ffffff;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;"><div style="padding:18px 18px 14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:12px;min-width:0;">${nlogo}<div><div style="font-size:18px;font-weight:800;line-height:1.2;">${esc(r.brandName)}</div><div style="font-size:13px;color:#cfcfcf;line-height:1.2;">${autoNoticeText}</div></div></div>${llib ? `<div style="display:flex;align-items:center;justify-content:flex-end;">${llib}</div>` : ""}</div><div style="height:3px;background:#c00000;"></div><div style="padding:18px;"><h1 style="margin:0 0 12px;font-size:20px;line-height:1.25;">${esc(opts.title)}</h1>${gr}${ab}<div style="font-size:16px;line-height:1.55;color:#f2f2f2;">${opts.introHtml}</div>${det}<div style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#cfcfcf;">${ft}</div></div></td></tr><tr><td style="padding:12px 6px 0;color:#9c9c9c;font-size:12px;line-height:1.4;text-align:center;">${esc(ligneFinale)}</td></tr></table></td></tr></table></body></html>`;
   const tl = [
     `${r.brandName} (${r.subjectTag})`,
     opts.title,
@@ -95,9 +111,10 @@ export function renderEmail(opts) {
   } else {
     const regTxt = regulationUrl(opts.context);
     if (regTxt) tl.push(`${tMail(locale, "layout.regimentoLabel")}: ${regTxt}`);
-    if (LIBRARIAN_PHONE) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${LIBRARIAN_PHONE}`);
+    const telTxt = telephoneBibliotheque(opts.context);
+    if (telTxt) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${telTxt}`);
   }
-  tl.push(tMail(locale, "layout.footerText"));
+  tl.push(ligneFinale);
   return {
     html,
     text: tl.join("\n")

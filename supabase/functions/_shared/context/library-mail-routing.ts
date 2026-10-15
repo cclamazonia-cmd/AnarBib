@@ -81,9 +81,13 @@ export function resolveMailRouting(ctx, locale = null) {
   const sigForLocale = locale && sigI18n ? String(sigI18n[locale] || "").trim() : "";
   const sigFallback = String(ctx?.signature_short || "").trim();
   const sig = sigForLocale || sigFallback;
-  if (sig) fp.push(sig);
+  // Chaque élément UNE fois (16/10/2026) : la signature qui répète la marque ou le
+  // tag d'objet (« AnarBib ») ne s'ajoute pas ; sans pied propre, la phrase dit d'où
+  // vient le courriel — la bibliothèque, ou le réseau quand il n'y a pas de bibliothèque.
+  const memeQue = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+  if (sig && !memeQue(sig, subjectTag(ctx)) && !memeQue(sig, brandName(ctx))) fp.push(sig);
   if (ctx?.footer_local) fp.push(String(ctx.footer_local).trim());
-  if (!fp.length) fp.push(tMail(locale, "layout.footerText"));
+  if (!fp.length) fp.push(tMail(locale, ctx?.library_id ? "layout.footerText" : "layout.footerTextNetwork"));
   const nlu = String(LOGO_URL || "").trim();
   const llu = libLogo(ctx);
   return {

@@ -15,7 +15,11 @@ export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || "no-reply@example.or
 export const SENDER_NAME = Deno.env.get("SENDER_NAME") || "AnarBib";
 export const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || Deno.env.get("LIBRARY_ADMIN_EMAIL") || Deno.env.get("ANARBIB_ADMIN_EMAIL") || Deno.env.get("NETWORK_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL_NOTIFY_EVENT") || Deno.env.get("BLMF_ADMIN_EMAIL") || "").trim();
 export const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || Deno.env.get("LIBRARY_ADMIN_NAME") || Deno.env.get("ANARBIB_ADMIN_NAME") || Deno.env.get("NETWORK_ADMIN_NAME") || Deno.env.get("BLMF_ADMIN_NAME") || "").trim();
-export const LIBRARIAN_PHONE = Deno.env.get("LIBRARIAN_PHONE") || Deno.env.get("ANARBIB_LIBRARIAN_PHONE") || Deno.env.get("NETWORK_LIBRARIAN_PHONE") || "";
+// LIBRARIAN_PHONE (et ses alias ANARBIB_/NETWORK_) n'est plus lu (16/10/2026) : un
+// téléphone GLOBAL s'imprimait dans les courriels de TOUTES les bibliothèques — le
+// portable de l'admin de la BLMF chez les lectrices de la BTL. Le téléphone d'un
+// courriel est celui de LA bibliothèque (library_public_contact.public_phone, lu
+// avec le contexte) ; un courriel du réseau n'en porte pas.
 export const BRAND_NAME = Deno.env.get("BRAND_NAME") || Deno.env.get("LIBRARY_BRAND_NAME") || Deno.env.get("ANARBIB_BRAND_NAME") || Deno.env.get("NETWORK_BRAND_NAME") || Deno.env.get("BLMF_BRAND_NAME") || "AnarBib";
 export const FOOTER_TEXT = Deno.env.get("FOOTER_TEXT") || Deno.env.get("LIBRARY_FOOTER_TEXT") || Deno.env.get("ANARBIB_FOOTER_TEXT") || Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("BLMF_FOOTER_TEXT") || null;
 export const LOGO_URL = Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "";

@@ -108,8 +108,14 @@ describe('la signature de pied de page suit la langue du message', () => {
 
   it('une biblio sans signature retombe sur le pied de page par défaut', () => {
     const { resolveMailRouting } = charger();
-    const sansRien = { library_short_name: 'BTL', channel_active: true };
+    const sansRien = { library_id: 'lib-btl', library_short_name: 'BTL', channel_active: true };
     expect(resolveMailRouting(sansRien, 'fr').footerText).toBe('[layout.footerText]');
+  });
+
+  it('sans bibliothèque (courriel du réseau), la phrase dit « réseau » ; la signature qui répète la marque ne s’ajoute pas', () => {
+    const { resolveMailRouting } = charger();
+    expect(resolveMailRouting({ channel_active: true }, 'fr').footerText).toBe('[layout.footerTextNetwork]');
+    expect(resolveMailRouting({ channel_active: true, signature_short: 'AnarBib' }, 'fr').footerText).toBe('[layout.footerTextNetwork]');
   });
 
   it('accepte une locale sans que la biblio ait de table i18n', () => {

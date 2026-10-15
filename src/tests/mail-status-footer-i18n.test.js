@@ -105,11 +105,15 @@ describe('F21 — Absence de portugais dans les courriels traduits', () => {
     expect(fb.signature_short).toBe('Coordination BLM');
   });
 
-  it('FOOTER_TEXT personnalisé est préservé dans footer_local', () => {
+  // 16/10/2026 : la devise GLOBALE n'est plus lue — sept langues sur onze, et elle
+  // doublait la marque. Seul le pied propre d'une bibliothèque (vue de contexte) compte.
+  it('FOOTER_TEXT global n’entre plus dans footer_local', () => {
     const { ef } = monter({ env: { FOOTER_TEXT: 'Pied de page militant personnalisé' } });
     const libContext = ef.charger('_shared/context/library-notification-context.ts');
     const fb = libContext.fallbackLibraryNotificationContext('lib-custom');
-    expect(fb.footer_local).toBe('Pied de page militant personnalisé');
+    expect(fb.footer_local).toBeNull();
+    const n = libContext.normalizeLibraryNotificationContext({ footer_local: 'Pied propre de la biblio' }, 'lib-custom');
+    expect(n.footer_local).toBe('Pied propre de la biblio');
   });
 
   it('wf.stage.cancelada_leitor applique l\'écriture inclusive en de, it et ca', () => {

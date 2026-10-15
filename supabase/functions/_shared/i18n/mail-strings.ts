@@ -1188,6 +1188,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Αυτόματο μήνυμα από τη βιβλιοθήκη. Απάντησε μόνο αν το πεδίο απάντησης υποδεικνύει τοπική επαφή.",
     ro: "Mesaj automat de la bibliotecă. Răspunde doar dacă adresa de răspuns indică un contact local."
   },
+  // Pied d'un courriel du RÉSEAU (sans bibliothèque) — 16/10/2026.
+  "layout.footerTextNetwork": {
+    "pt-BR": "Mensagem automática da rede AnarBib.",
+    fr: "Message automatique du réseau AnarBib.",
+    es: "Mensaje automático de la red AnarBib.",
+    en: "Automatic message from the AnarBib network.",
+    it: "Messaggio automatico della rete AnarBib.",
+    de: "Automatische Nachricht des AnarBib-Netzwerks.",
+    ca: "Missatge automàtic de la xarxa AnarBib.",
+    eo: "Aŭtomata mesaĝo de la reto AnarBib.",
+    nl: "Automatisch bericht van het AnarBib-netwerk.",
+    el: "Αυτόματο μήνυμα του δικτύου AnarBib.",
+    ro: "Mesaj automat al rețelei AnarBib."
+  },
 
   // ===== Labels (l.*) =======================================================
   "l.book": {

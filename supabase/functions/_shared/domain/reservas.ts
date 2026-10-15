@@ -1,9 +1,8 @@
-import { LIBRARIAN_PHONE } from "../core/env.ts";
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
 import { reservationAdminCopyEnabled, reservationCreatedEnabled, reservationStatusEnabled, reservationWorkflowEnabled } from "../context/policies.ts";
 import { getReservaV2Bundle, getReservaWorkflowBundle, getReservaCancelamentoBibliotecaMotivo, getEmprestimoDueDateFromReserva } from "../data/reservas.ts";
-import { footerPadrao, renderEmail } from "../mail/layout.ts";
+import { footerPadrao, renderEmail, telephoneBibliotheque } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
 import { adminDisplayName, esc, firstNameOnly, formatDateBR, formatDateTimeInZone, fullName, isValidEmail, joinTitles, DEFAULT_NOTIFICATION_TIMEZONE } from "../shared/format.ts";
 import { normalizeReservaStatusChangeEvent, normalizeReservaWorkflowEvent, pickupReplyLabel, workflowStageFromEvent, workflowStageLabel } from "../shared/events.ts";
@@ -33,7 +32,7 @@ export async function handleReservaCriadaV2(recordId) {
     preheader: tMail(locale, "res.created.pre"),
     title: tMail(locale, "res.created.sub"),
     greeting: greeting(locale, user?.name),
-    introHtml: `<p style="margin:0 0 10px;">${tMail(locale, "res.created.intro")}</p><p style="margin:0 0 10px;">${tMail(locale, "res.created.hint")}</p>${LIBRARIAN_PHONE ? `<p style="margin:0;">${label(locale, "contact")}: <b>${esc(LIBRARIAN_PHONE)}</b>.</p>` : ""}`,
+    introHtml: `<p style="margin:0 0 10px;">${tMail(locale, "res.created.intro")}</p><p style="margin:0 0 10px;">${tMail(locale, "res.created.hint")}</p>${telephoneBibliotheque(ctx) ? `<p style="margin:0;">${label(locale, "contact")}: <b>${esc(telephoneBibliotheque(ctx))}</b>.</p>` : ""}`,
     details: [
       ...tits ? [
         {

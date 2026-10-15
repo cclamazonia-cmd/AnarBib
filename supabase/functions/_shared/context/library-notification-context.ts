@@ -1,4 +1,4 @@
-import { ADMIN_EMAIL, ADMIN_NAME, BRAND_NAME, FOOTER_TEXT, LOGO_URL, SENDER_EMAIL, SENDER_NAME, supabaseAdmin } from "../core/env.ts";
+import { ADMIN_EMAIL, ADMIN_NAME, BRAND_NAME, LOGO_URL, SENDER_EMAIL, SENDER_NAME, supabaseAdmin } from "../core/env.ts";
 function asBool(v, f) {
   return typeof v === "boolean" ? v : f;
 }
@@ -12,7 +12,11 @@ export function fallbackLibraryNotificationContext(libraryId) {
     reply_to_name: ADMIN_NAME || SENDER_NAME,
     reply_to_email: ADMIN_EMAIL || null,
     signature_short: ADMIN_NAME || null,
-    footer_local: FOOTER_TEXT || null,
+    // La devise globale (FOOTER_TEXT et alias) n'est plus lue (16/10/2026) : sept langues
+    // sur onze, et elle doublait la marque (« AnarBib — AnarBib — AnarBib / … »). Seul
+    // le pied PROPRE à une bibliothèque (vue de contexte) s'imprime.
+    footer_local: null,
+    public_phone: null,
     use_library_name_as_sender: true,
     use_library_logo: true,
     logo_url: LOGO_URL || null,
@@ -65,6 +69,7 @@ export function normalizeLibraryNotificationContext(input, libraryId) {
     reply_to_email: String(r.reply_to_email || b.reply_to_email || "").trim() || null,
     signature_short: String(r.signature_short || b.signature_short || "").trim() || null,
     footer_local: String(r.footer_local || b.footer_local || "").trim() || null,
+    public_phone: String(r.public_phone || "").trim() || null,
     use_library_name_as_sender: asBool(r.use_library_name_as_sender, true),
     use_library_logo: asBool(r.use_library_logo, true),
     logo_url: String(r.logo_url || b.logo_url || "").trim() || null,
@@ -108,7 +113,14 @@ export async function resolveLibraryNotificationContext(libraryId) {
   try {
     const { data, error } = await supabaseAdmin.from("v_library_notification_context").select("*").eq("library_id", n).maybeSingle();
     if (error) throw error;
-    return normalizeLibraryNotificationContext(data || null, n);
+    // Le téléphone PUBLIC de la bibliothèque (16/10/2026), s'il est renseigné — jamais
+    // un numéro global. Une lecture ratée = pas de téléphone, pas un courriel perdu.
+    let public_phone = null;
+    try {
+      const { data: c } = await supabaseAdmin.from("library_public_contact").select("public_phone").eq("library_id", n).maybeSingle();
+      public_phone = String(c?.public_phone || "").trim() || null;
+    } catch { public_phone = null; }
+    return normalizeLibraryNotificationContext({ ...(data || {}), public_phone }, n);
   } catch (e) {
     console.warn("resolveLibraryNotificationContext fallback:", e);
     return fallbackLibraryNotificationContext(n);
