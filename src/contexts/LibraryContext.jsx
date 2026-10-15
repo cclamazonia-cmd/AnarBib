@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useTheme } from '@/lib/theme';
 import { appliquerReglage } from './libraryPatch';
+import { niveauDuJeton } from '@/lib/doubleFacteur';
 
 const STORAGE_KEY = 'anarbib.libraryContext';
 
@@ -88,7 +89,12 @@ function computeHasStaffAccess(effectiveRole) {
 }
 
 export function LibraryProvider({ children }) {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
+  // B42 (15/10/2026) : le code TOTP fait passer la MEME session de aal1 a aal2,
+  // sans changer user.id. Les adhesions lues en aal1 ont recu 403 AAL2_REQUIRED
+  // (fonction d'avant-requete) : sans cette dependance, le contexte restait sur
+  // « AnarBib » sans bibliotheque jusqu'au rechargement.
+  const niveau = niveauDuJeton(session?.access_token);
   const [ctx, setCtx] = useState(() => readFromUrl() || readFromSession() || DEFAULT_CONTEXT);
   const [libraries, setLibraries] = useState([]);
   const [isNetworkAdmin, setIsNetworkAdmin] = useState(false);
@@ -271,7 +277,7 @@ export function LibraryProvider({ children }) {
         setResolvedFor(user.id);
       }
     })();
-  }, [user?.id, authLoading]);
+  }, [user?.id, authLoading, niveau]);
 
   const setLibrary = useCallback((slug) => {
     const membership = libraries.find(m => m.libraries?.slug === slug);
