@@ -3294,6 +3294,14 @@
           "fr": "**Clos le 15/10** (REGISTRE §47 NUMDIF-1, 2, 5 ; migration `20261015172008`, commit `883d03b8`). La file `ingest.digital_candidates` existe, fermée à `anon` et aux autres bibliothèques (régime INGEST-RLS, trois portes DEFINER tenues à la coordination de la bibliothèque du candidat et à l'administration du réseau) ; un candidat rejeté garde son motif et l'édition trouvée ; valider exige la même édition, un cas, une justification, l'empreinte, et pour une licence libre la mention citée avec sa page. Quatrième cas `domaine_public`, hors NUMDIF-2. Suite `numdif_file_candidats_tests` 12/12 en CI ; app, backend, acquittement verts à 20 h 12. La suite est **D14** (l'outil), **D15** (l'écran), **D16** (le versement).",
           "pt": "**Fechado em 15/10** (migração `20261015172008`, `883d03b8`). A fila `ingest.digital_candidates` existe, fechada a `anon` e às outras bibliotecas; uma rejeição guarda o motivo e a edição achada. Suíte 12/12 na CI. Continua em D14, D15, D16."
         }
+      ],
+      [
+        "D19",
+        "2026-10-15",
+        {
+          "fr": "**Clos le 15/10** (migration `20261015202816`, commit `217e4425`, session « File de candidats PDF »). Un PDF restreint dont le livre perd sa dernière détention apparaît au contrôle `fn_restricted_resources_without_holder()` (administration du réseau) et la coordination de la bibliothèque qui perd la détention en est avisée, avec l'administration du réseau (déclencheur AFTER DELETE sur `book_holdings`, notification `notif.restrictedOrphan.*` dans les onze locales, lien vers la fiche) ; rien n'est interdit. Suite `restreint_sans_detentrice_tests` 5/5 ; app, sql-tests, backend, acquittement verts à 23 h 39 ; en production : 0 ressource restreinte sans détentrice. Livré avant le premier lot versé par D16, comme demandé.",
+          "pt": "**Fechado em 15/10** (migração `20261015202816`, `217e4425`). Um PDF restrito sem detentora aparece no controle e a coordenação é avisada; nada é proibido. Suíte 5/5; CI verde; em produção: 0."
+        }
       ]
     ]
   },
@@ -5687,7 +5695,7 @@
         "supabase/functions/read-digital-asset/index.ts"
       ],
       "verif": {
-        "fr": "15/10 — **livré** (migration `20261015182432_numdif_versement_cote_serveur`, fonction `deposit-digital-candidate`, session « File de candidats PDF »). **Par lots, avec reprise** (consigne de Xavier du 15/10) : l'onglet « Candidats PDF » offre « Verser le lot » (et « Verser côté serveur » candidat par candidat) ; la fonction prend une liste, traite les candidats un par un et rend ce qu'elle n'a pas eu le temps de commencer ; l'écran relance avec le reste, par paquets de cinq ; l'état vit en base (versé, ou refus noté), un lot arrêté ou interrompu se reprend en le relançant, les refus n'y rentrent que si on le demande. Pour chaque candidat : double authentification, garde sous le jeton (`fn_digital_candidate_deposit_garde` : coordination de la bibliothèque du candidat ou administration du réseau, bibliothèque encore détentrice, candidat validé), téléchargement de l'URL validée côté serveur en **flux** vers une zone **privée** (`pdf-restrito/numdif-staging/…`, jusqu'à 500 Mo, la limite des seaux ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement), empreintes calculées au passage (`empreintes.ts`, vérifié contre `node:crypto`), comparées à celle de la validation : SHA-256, ou **SHA-1 seul pour une source MediaWiki** (Anarchief), le SHA-256 étant alors calculé et retenu à ce premier téléchargement ; empreinte différente : zone effacée, refus dit à l'écran (`fingerprint_mismatch`) et noté sur le candidat ; puis passage au seau que fixe le cas (`anarbib-pdf-public` ou `pdf-restrito`) au chemin `books/<book_id>/<horodatage ms>_<nom>.pdf` — un fichier non vérifié n'est jamais public —, et enregistrement à la clé de service seule (`ingest.fn_digital_candidate_deposit_record`, fermée à authenticated : les bibliothécaires écrivent dans ces seaux), qui revérifie tout et crée la ressource avec les champs des ressources 77 et 78 ; deux adresses au gabarit de D17 : `source_url` = le fichier (provenance, jamais rendu pour une ressource restreinte), `source_page_url` = la page (NUMDIF-3). Capacité (Xavier, 15/10) : 35 Go utilisés, 52 avec Anarchief, dans le palier. Suites `numdif_versement_tests` (8, dont la source à SHA-1 seul) et `documents_numeriques_tests` (T1/T2) vertes en local ; tests `numdif-versement-fonction` (ordre des gestes, lot et reprise), `numdif-empreintes`. **Reste** : un premier versement réel, puis un premier lot (Anarchief) ; le téléversement en flux vers Storage n'est éprouvé qu'en production.",
+        "fr": "15/10 — **livré** (migration `20261015182432_numdif_versement_cote_serveur`, fonction `deposit-digital-candidate`, session « File de candidats PDF »). **Par lots, avec reprise** (consigne de Xavier du 15/10) : l'onglet « Candidats PDF » offre « Verser le lot » (et « Verser côté serveur » candidat par candidat) ; la fonction prend une liste, traite les candidats un par un et rend ce qu'elle n'a pas eu le temps de commencer ; l'écran relance avec le reste, par paquets de cinq ; l'état vit en base (versé, ou refus noté), un lot arrêté ou interrompu se reprend en le relançant, les refus n'y rentrent que si on le demande. Pour chaque candidat : double authentification, garde sous le jeton (`fn_digital_candidate_deposit_garde` : coordination de la bibliothèque du candidat ou administration du réseau, bibliothèque encore détentrice, candidat validé), téléchargement de l'URL validée côté serveur en **flux** vers une zone **privée** (`pdf-restrito/numdif-staging/…`, jusqu'à 500 Mo, la limite des seaux ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement), empreintes calculées au passage (`empreintes.ts`, vérifié contre `node:crypto`), comparées à celle de la validation : SHA-256, ou **SHA-1 seul pour une source MediaWiki** (Anarchief), le SHA-256 étant alors calculé et retenu à ce premier téléchargement ; empreinte différente : zone effacée, refus dit à l'écran (`fingerprint_mismatch`) et noté sur le candidat ; puis passage au seau que fixe le cas (`anarbib-pdf-public` ou `pdf-restrito`) au chemin `books/<book_id>/<horodatage ms>_<nom>.pdf` — un fichier non vérifié n'est jamais public —, et enregistrement à la clé de service seule (`ingest.fn_digital_candidate_deposit_record`, fermée à authenticated : les bibliothécaires écrivent dans ces seaux), qui revérifie tout et crée la ressource avec les champs des ressources 77 et 78 ; deux adresses au gabarit de D17 : `source_url` = le fichier (provenance, jamais rendu pour une ressource restreinte), `source_page_url` = la page (NUMDIF-3). Capacité (Xavier, 15/10) : 35 Go utilisés, 52 avec Anarchief, dans le palier. Suites `numdif_versement_tests` (8, dont la source à SHA-1 seul) et `documents_numeriques_tests` (T1/T2) vertes en local ; tests `numdif-versement-fonction` (ordre des gestes, lot et reprise), `numdif-empreintes`. **Déployé et vérifié le 15/10 à 22 h 26** (`2387ab3a`) : app, backend, acquittement verts ; migration inscrite, fonction `deposit-digital-candidate` active (v1) ; T1/T2 de `documents_numeriques_tests` rejoués en production (0 restreint en seau public, aucun seau restreint public). **Reste** : un premier versement réel, puis un premier lot (Anarchief) ; le téléversement en flux vers Storage n'est éprouvé qu'en production.",
         "pt": "15/10 — **entregue**: migração `20261015182432`, função `deposit-digital-candidate`. **Por lotes, com retomada**: a função recebe uma lista e devolve o que falta; o estado fica na base. Download pelo servidor em fluxo para uma zona privada (até 500 MB), SHA-256 ou **só SHA-1 (MediaWiki)** com o SHA-256 calculado no primeiro download; recusa dita e anotada; balde do caso; registro só pela chave de serviço. **Resta**: um primeiro envio real e um primeiro lote."
       }
     },
@@ -5803,52 +5811,6 @@
           "pt": "**15/10 — classificação proposta, não aplicada** (`AUDIT_ressources_restreintes_numdif_2026-10-15.md`). 74 recebe a página pela migração de D17; páginas achadas para 70, 72, 73, 76; nenhuma para 62 e 66. SQL preparado, a aplicar após implantação com acordo das detentoras. O recurso 62 é sinalizado à BTL, não corrigido."
         }
       ]
-    },
-    {
-      "id": "D19",
-      "d": "D",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Rendre observable un PDF restreint dont le livre n'a plus de bibliothèque détentrice",
-        "pt": "Tornar observável um PDF restrito cujo livro não tem mais biblioteca detentora"
-      },
-      "v": {
-        "fr": "Point ouvert de la décision du 20/08 (« Poser le garde-fou restreint sans détenteur ») : retirer le dernier exemplaire rend un PDF restreint illisible pour tout le monde, sans erreur ni alerte — la ressource reste `active`. La file de candidats (`D13` à `D16`) en multipliera les cas.",
-        "pt": "Ponto aberto da decisão de 20/08: retirar o último exemplar torna um PDF restrito ilegível para todos, sem alerta."
-      },
-      "w": {
-        "fr": "Le rendre visible plutôt que l'interdire (une bibliothèque peut retirer un exemplaire abîmé sans vouloir fermer l'accès numérique) : une vue ou un contrôle qui liste les ressources restreintes sans détenteur, et un signal à la coordination concernée (`DOC-SILENCE-1`).",
-        "pt": "Torná-lo visível em vez de proibir: lista dos recursos restritos sem detentor e sinal à coordenação."
-      },
-      "y": {
-        "fr": "Une panne muette de plus, que la nouvelle file rendrait fréquente.",
-        "pt": "Mais uma pane muda, que a nova fila tornaria frequente."
-      },
-      "f": {
-        "fr": [
-          "Un PDF restreint dont on retire le dernier exemplaire apparaît dans le contrôle et la coordination en est avisée (suite SQL)."
-        ],
-        "pt": [
-          "Um PDF restrito sem último exemplar aparece no controle e a coordenação é avisada."
-        ]
-      },
-      "dep": {
-        "fr": "À livrer avant le premier lot versé par `D16`.",
-        "pt": "Antes do primeiro lote enviado por `D16`."
-      },
-      "r": [
-        "docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md",
-        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
-      ],
-      "verif": {
-        "fr": "15/10 — **livré** (migration `20261015202816_restreint_sans_detentrice_observable`, session « File de candidats PDF »). Retirer le dernier exemplaire ne supprime pas la détention (le fonds reste à zéro) ; la ligne `book_holdings` disparaît au ménage des fonds vides, à la fusion, au transfert, à la mise au rebut — le déclencheur `trg_book_holdings_restreint_sans_detentrice` (AFTER DELETE) regarde là, quel que soit le chemin : si le livre n'a plus aucune détentrice et porte une ressource restreinte active, une notification va à la coordination de la bibliothèque qui perd la détention et à l'administration du réseau (`notif.restrictedOrphan.*`, onze locales, lien vers la fiche). Le contrôle `fn_restricted_resources_without_holder()` liste ces ressources (administration du réseau ; vide pour tout autre compte). Rien n'est interdit : la ressource reste active (décision du 20/08). Mesure du 15/10 en production : **0** ressource restreinte active sans détentrice. Suite `restreint_sans_detentrice_tests` 5/5 en local. **Reste** : le pipeline vert, avant le premier lot versé par D16.",
-        "pt": "15/10 — **entregue** (migração `20261015202816`). Gatilho AFTER DELETE em `book_holdings`: livro sem detentora com recurso restrito ativo → notificação à coordenação que perde a posse e à administração da rede; controle `fn_restricted_resources_without_holder()` (administração). Nada é proibido. Medido em 15/10: 0. Suíte 5/5."
-      }
     },
     {
       "id": "C26",
