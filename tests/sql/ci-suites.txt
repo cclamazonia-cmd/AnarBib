@@ -815,3 +815,6 @@ tests/sql/numdif_file_candidats_tests.sql
 # refus noté sur le candidat, enregistrement à la clé de service seule (empreinte, seau du cas, chemin books/<notice>/, objet présent, portée de la
 # personne) ; ressource restreinte (pdf-restrito, sob_direitos, la page en source) ou publique (licenca_livre, mention et page), candidat versé.
 tests/sql/numdif_versement_tests.sql
+# Source numérique sans exemplaire (15/10/2026, décision Xavier ; migration 20261015192644) : une source d'import dont meta.sans_exemplaire = true
+# ne reçoit pas d'exemplaire automatique à la publication (holding seule) ; IMP-25 inchangé pour les autres ; les exemplaires importés (H19) passent avant.
+tests/sql/source_numerique_sans_exemplaire_tests.sql
