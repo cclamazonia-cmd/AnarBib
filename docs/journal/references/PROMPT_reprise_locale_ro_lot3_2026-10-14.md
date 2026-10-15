@@ -68,10 +68,8 @@ s'édite dans la langue d'affichage).
   (11 langues), et les six captures avec session en roumain.
 - **Lot 7** : le roumain est **OUVERT** depuis le 15/10/2026 (`11c90c62`,
   vitrine `b2e4aa5`, D5 amendée). Restent, dans l'ordre :
-  - couvertures à onze langues des deux manuels (demande dans
-    `E:\CCLA\BLMF\AnarBib\Manuels - Guides\Manual AnarBib\Couvertures 11 langues\`),
-    puis remplacement de la page 1 des PDF publiés (dépôt sans trou :
-    `_neuf_` puis bascule) ;
+  - ~~couvertures à onze langues~~ FAIT le 15/10 (Cowork ; page 1 remplacée :
+    complet v5-5, lecteur·rice v5-3) ;
   - ~~six captures avec session~~ FAIT le 15/10 (images remplacées dans les PDF
     publiés : `_outils/lot6-ro/captures_ro_pdf.py` ; données de démo posées puis
     retirées, liste dans `_outils/lot6-ro/donnees-captures-ro.txt`) ;
