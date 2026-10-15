@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-15** · 55 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-15** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -18,7 +18,7 @@
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 9
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 8
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-15.** **44 itens de 55** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D14, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-15.** **43 itens de 54** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -587,7 +587,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
-| **D14** | Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto | `P2` | A verificar |
 | **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | A verificar |
 | **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | A verificar |
 | **D17** | Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo | `P2` | A verificar |
@@ -680,27 +679,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Bloqueado pelo parecer de DIRA, CIRA e FICEDL (`ARCH-4`). Um inventário real de DIRA (**G15**).
 
 *Remissões : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
-
-#### D14 — Uma ferramenta que busca os PDF de uma ficha e lê a edição real na folha de rosto
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : biblioteconomia, administração de sistemas
-
-**Estado.** O método de 14/10, feito à mão: Archive.org, download, `pdftotext` nas primeiras páginas. Gallica, HathiTrust e BDH recusam automatos.
-
-*Verificado : 15/10 — **entregue**: `scripts/numdif_recherche_pdf.mjs`. Archive.org, empréstimo controlado excluído, SHA-256, `pdftotext`, veredito e caso propostos; sem contornar proteções. Receita: fichas 86 e 96 → «mesma edição», arquivos idênticos (SHA-256) aos recursos 77 e 78; Harper 1874 → «outra edição»; 16 fichas Guérin → 0 «mesma edição». **Resta**: os PDF Anarres e RyR por `--url`.*
-
-**O que é.** Script em `scripts/` que escreve na fila `D13`: busca, exclusão do empréstimo controlado, extração da folha de rosto, proposta de veredito e de caso. Sem contornar proteções.
-
-**Por que importa.** É o que torna a busca repetível em 2 564 fichas em vez de 17.
-
-**O que conta como terminado.**
-
-- Repetido nas 17 fichas Guérin: 0 «mesma edição».
-- Repetido nas fichas 86 e 96: os dois scans Harper como «mesma edição».
-
-**Dependências.** `D13`.
-
-*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
 
 #### D15 — Uma tela para validar ou rejeitar os candidatos, com o PDF aberto
 
@@ -1954,6 +1932,7 @@ CI verde. |
 | F19 | 2026-10-15 | **Fechado em 15/10, sobre uma semana de registos limpos após a correção de `register`.** Levantamento por `query_logs` (`function_logs`, 24 h por consulta) de 08/10 a 15/10: **11 731 linhas, 0 endereço completo**; as sondas de saúde e os catorze avisos de segurança de B42 (13/10) aparecem todos como «inicial…@domínio» (`masquerAdresse`); as três linhas de `register` de 05/10 não voltaram. Lição: a rede global sobre `console` não vale no executor Edge de produção; só a regra «mascarar na fonte, em cada linha que cita um destinatário» protege (guarda `journal-sans-adresse`). Decisão de Xavier de 12/10, confirmada em 14/10. |
 | D13 | 2026-10-15 | **Fechado em 15/10** (migração `20261015172008`, `883d03b8`). A fila `ingest.digital_candidates` existe, fechada a `anon` e às outras bibliotecas; uma rejeição guarda o motivo e a edição achada. Suíte 12/12 na CI. Continua em D14, D15, D16. |
 | D19 | 2026-10-15 | **Fechado em 15/10** (migração `20261015202816`, `217e4425`). Um PDF restrito sem detentora aparece no controle e a coordenação é avisada; nada é proibido. Suíte 5/5; CI verde; em produção: 0. |
+| D14 | 2026-10-16 | **Fechado em 16/10**. Receita: 86 e 96 → «mesma edição» (SHA-256 idênticos aos recursos 77 e 78); Guérin → 0 «mesma edição»; os três PDF conhecidos (Anarres, Proyección, RyR) achados pela ferramenta → «outra edição» com a edição achada; empréstimo controlado excluído. Teste com 14 casos. |
 
 ---
 
@@ -1985,4 +1964,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 55 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

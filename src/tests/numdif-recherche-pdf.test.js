@@ -99,6 +99,20 @@ describe('NUMDIF-2 — le cas se lit dans l’édition, et le doute tranche vers
     expect(r.proposed_mention_page).toBe('1');
   });
 
+  it('la vraie page de copyright d’Anarres (césures, « © Anarres ») : mention trouvée, éditeur lu, pas d’année inventée', () => {
+    // pdftotext du fichier archive.org guerin-d.-el-anarquismo, p. 3 (recette du 15/10)
+    const copyright = '© Anarres\n   Corrientes 4790\n   Buenos Aires / Argentina\n   Tel: 4857-1248\n\nISBN: 987-20875-0-4\n\n'
+      + 'La reproducción de este libro, a través de medios ópti-\ncos, electrónicos, químicos, fotográficos o de fotoco-\n'
+      + 'pias son permitidos y alentados por los editores.\n\nQueda hecho el depósito que marca la ley 11.723\nImpreso en Argentina / Printed in Argentina';
+    const r = proposer(ALTAMIRA, ['EL ANARQUISMO', 'DANIEL GUÉRIN\n\nEL ANARQUISMO', copyright, remplissage], {});
+    expect(r.proposed_verdict).toBe('autre_edition');
+    expect(r.proposed_case).toBe('diffusion_autorisee');
+    expect(r.proposed_mention).toMatch(/medios ópticos, electrónicos/);
+    expect(r.proposed_mention_page).toBe('3');
+    expect(r.found.found_publisher).toBe('Anarres');
+    expect(r.found.found_year).toBeNull();
+  });
+
   it('« Copyleft » imprimé : anti_copyright', () => {
     const r = proposer(ALTAMIRA, [`EL ANARQUISMO\nAltamira\nBuenos Aires 1992\nCopyleft: se permite la libre reproducción.\n${remplissage}`, remplissage], {});
     expect(r.proposed_case).toBe('anti_copyright');

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-15** · 55 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-15** · 54 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,7 +18,7 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 9
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 8
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 2
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 13 octobre 2026 au soir** (`88a962ee`, mesuré à 22 h 56) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 12/10 au soir, `91b7e803`). **478 appliquées en production, 479 numérotées au dépôt** : la dernière (`20261013194812`, les locales ont une source en base, session voisine) est dans la file de CI à l'heure du relevé. Ce qui a bougé et pourquoi : **la base** — +6 migrations et +9 fonctions, toutes de la session voisine, pour **B42** (la double authentification exigée côté serveur et sur Storage, 48 politiques Storage, deux tables `private`), la recherche du catalogage et les locales en base ; les avis de sécurité à 499 (+4 portes B42 à l'audit, +2 tables fermées), les index « inutilisés » à 362 ; **le catalogue** — inchangé à l'unité près : aucune notice, autorité, œuvre ni exemplaire créé, fusionné ou retiré, quatre notices modifiées par le catalogage de Xavier, trois reprises publiées ; **le réseau** — identique à la veille, 5 + 1, 19 + 4, 9 / 21 / 22 / 0, et un premier enrôlement TOTP commencé à 23 h, pas encore vérifié ; **le dépôt** — +41 commits, +25 fichiers, +50 clés, +136 tests JS, +4 suites SQL. **La journée** : B42 en trois lots et annoncé aux équipes, **B43 et B44 clos** (le second à 23 h, les sept relais vers des services tiers exigent une vraie session), Storage remonté après sa panne de montage, la recherche manuelle du catalogage enrichie (DBNL, DNB, BN Brasil), les locales à source unique ; de mon côté, la sonde FICEDL a écrit son premier courriel réel — le site flotte — et a été corrigée (un passage par jour), **la course du filtre de bibliothèque au catalogue** vue par Xavier a été corrigée le soir même, et le test « par pages » de H34 ne rougit plus la file. **Le compte** : 51 items (B42 et E39 — la locale roumaine à reprendre — entrés, B43 sorti ; B44, né et clos le même jour, n'y entre que par sa clôture) et 249 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : H34 (voisine, à vérifier), F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), B42 (l'échéance annoncée) ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16, I32 ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL, plus pressant qu'hier), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-15.** **44 items sur 55** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D14, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-15.** **43 items sur 54** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -587,7 +587,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
-| **D14** | Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre | `P2` | À vérifier |
 | **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | À vérifier |
 | **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | À vérifier |
 | **D17** | Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier | `P2` | À vérifier |
@@ -680,27 +679,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Bloqué par l'avis de DIRA, du CIRA et du FICEDL sur la décision (`ARCH-4`). Un inventaire réel de DIRA (**G15**) pour éprouver l'import.
 
 *Renvois : `docs/specs/REGISTRE_decisions.md` · `Réponse à DIRA du 26/09/2026`*
-
-#### D14 — Un outil qui cherche les PDF d'une notice et lit l'édition réelle sur la page de titre
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, administration système
-
-**État.** La méthode du 14/10, faite à la main : Archive.org (API `advancedsearch` et `metadata`), téléchargement, `pdftotext` sur les premières pages, comparaison avec la notice. Elle a montré que les métadonnées des sources se trompent (année, langue) et que seule la page de titre fait foi. Gallica, HathiTrust et la Biblioteca Digital Hispánica refusent les automates (Cloudflare) ; Google Books refuse les requêtes anonymes.
-
-*Vérifié : 15/10 — **livré** : `scripts/numdif_recherche_pdf.mjs` (session « File de candidats PDF »), lancé à la main. Archive.org (`advancedsearch` puis `metadata`, l'année de la notice en première requête) ; prêt contrôlé exclu (`access-restricted-item`, fichiers `private`) et signalé ; téléchargement, SHA-256, `pdftotext` sur les 14 premières et les 3 dernières pages ; l'avertissement de Google Books et les mentions de numériseur retirés ; concordance lue sur la page de titre et les seules lignes d'impressum (©, ISBN, dépôt légal, achevé d'imprimer) ; verdict NUMDIF-1 et cas NUMDIF-2 proposés, avec la mention et sa page ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement. Le SHA-1 est calculé avec le SHA-256. Sortie : un fichier JSON que la coordination charge dans la file (D15), ou `--submit` avec le jeton de session d'une coordination. **Recette du 15/10** : notices 86 et 96 → « même édition » (Harper 1873, 1872), fichiers identiques au SHA-256 près aux ressources 77 et 78 ; le scan Harper **1874** de la 86 → « autre édition » ; les 16 notices Guérin trouvées par l'auteur (la 17e reste à identifier) → **0 « même édition »**, 243 et 1949 en prêt contrôlé (non téléchargées), 1870 → « autre édition — © editorial Proyección ». Test `src/tests/numdif-recherche-pdf.test.js` (13 cas, dont Anarres « alentada por los editores » → diffusion autorisée, p. 1). **Reste** : rejouer les deux autres PDF connus du 14/10 (Anarres, RyR), absents d'Archive.org, par `--url` dès que leurs adresses sont retrouvées.*
-
-**Ce que c'est.** Un script dans `scripts/`, lancé à la main, qui écrit dans la file `D13` : recherche par notice, exclusion du prêt contrôlé (fichiers `private`), téléchargement, extraction de la page de titre et du copyright, proposition de verdict (`NUMDIF-1`) et de cas (`NUMDIF-2`). Aucun contournement de protection (`NUMDIF-5`).
-
-**Pourquoi ça compte.** C'est ce qui rend la recherche répétable sur 2 564 notices au lieu de 17.
-
-**Ce qui compte comme fini.**
-
-- Rejoué sur les 17 notices Guérin : 0 « même édition », les trois PDF connus classés « autre édition » avec l'édition trouvée.
-- Rejoué sur les notices 86 et 96 : les deux scans Harper classés « même édition ».
-
-**Dépendances.** `D13`.
-
-*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
 
 #### D15 — Un écran pour valider ou rejeter les candidats, PDF ouvert
 
@@ -1964,6 +1942,7 @@ CI verte : lint et suite unitaire. |
 | F19 | 2026-10-15 | **Clos le 15/10, sur une semaine de journaux propres après le correctif de `register`.** Relevé par `query_logs` (source `function_logs`, une requête par tranche de 24 h, détection d'une adresse complète par expression régulière) du 08/10 00 h 00 UTC au 15/10 en soirée : 08/10 1 480 lignes, 09/10 1 650, 10/10 1 552, 11/10 1 496, 12/10 1 266, 13/10 1 656, 14/10 1 606, 15/10 1 025 — **11 731 lignes, 0 adresse complète**. Et ce n'est pas une semaine sans envois : les sondes de santé quotidiennes et les quatorze avis de sécurité de l'annonce B42 du 13/10 sont tous journalisés « initiale…@domaine », la forme de `masquerAdresse` ; les trois lignes de `register` du 05/10 (« routing », « request ») n'ont reparu sous aucune forme. Le chemin : relevé par F1 le 30/09, masque à la source et filet `console.*` le 30/09 (`4158504a`), une semaine relue le 08/10 — trois fuites de `register`, qui journalisait des objets entiers hors du filet —, corrigé à la source le 08/10 (`ce792be4`), nouvelle semaine relue le 14 et le 15. Leçon tenue : le filet global posé sur `console` ne tient pas dans l'exécuteur Edge de production ; seule la règle « masquer à la source, sur chaque ligne qui cite un destinataire » protège, et c'est elle que la garde `journal-sans-adresse` tient. Décision de Xavier du 12/10 : clôture seule si la semaine est propre ; confirmée le 14/10 (« clos-le demain comme prévu »). |
 | D13 | 2026-10-15 | **Clos le 15/10** (REGISTRE §47 NUMDIF-1, 2, 5 ; migration `20261015172008`, commit `883d03b8`). La file `ingest.digital_candidates` existe, fermée à `anon` et aux autres bibliothèques (régime INGEST-RLS, trois portes DEFINER tenues à la coordination de la bibliothèque du candidat et à l'administration du réseau) ; un candidat rejeté garde son motif et l'édition trouvée ; valider exige la même édition, un cas, une justification, l'empreinte, et pour une licence libre la mention citée avec sa page. Quatrième cas `domaine_public`, hors NUMDIF-2. Suite `numdif_file_candidats_tests` 12/12 en CI ; app, backend, acquittement verts à 20 h 12. La suite est **D14** (l'outil), **D15** (l'écran), **D16** (le versement). |
 | D19 | 2026-10-15 | **Clos le 15/10** (migration `20261015202816`, commit `217e4425`, session « File de candidats PDF »). Un PDF restreint dont le livre perd sa dernière détention apparaît au contrôle `fn_restricted_resources_without_holder()` (administration du réseau) et la coordination de la bibliothèque qui perd la détention en est avisée, avec l'administration du réseau (déclencheur AFTER DELETE sur `book_holdings`, notification `notif.restrictedOrphan.*` dans les onze locales, lien vers la fiche) ; rien n'est interdit. Suite `restreint_sans_detentrice_tests` 5/5 ; app, sql-tests, backend, acquittement verts à 23 h 39 ; en production : 0 ressource restreinte sans détentrice. Livré avant le premier lot versé par D16, comme demandé. |
+| D14 | 2026-10-16 | **Clos le 16/10** (outil `scripts/numdif_recherche_pdf.mjs`, commits `bcd5ce97` et suivant, session « File de candidats PDF »). Recette tenue : notices 86 et 96 (Reclus, Harper 1873 et 1872) → « même édition », fichiers identiques au SHA-256 près aux ressources 77 et 78 ; le scan Harper 1874 de la 86 → « autre édition » ; les notices Guérin → **0 « même édition »** (16 au catalogue : la 2681 du 14/10, « Proudhon: Textos Escolhidos », a disparu depuis, sans doute fondue dans la 1841) ; les trois PDF connus du 14/10, trouvés par l'outil seul sur Archive.org, → « autre édition » avec l'édition trouvée : 2195 Anarres (cas « diffusion autorisée », mention « permitidos y alentados por los editores », p. 3), 1870 Editorial Proyección, 152 RyR 2011 ; les éditions exactes de 243 et 1949, en prêt contrôlé, sont signalées et jamais téléchargées. Recette corrigée en route : l'auteur cherché aussi dans le titre (ces trois PDF n'ont pas de `creator`), un repli sur deux mots du titre (« classes » pour « clases » dans la notice 152), une mention coupée par une césure, la ligne « © … » comme éditeur, une année retenue seulement si l'impressum ou la page de titre la porte, un chemin trop long sous Windows qui passait pour « sans couche texte ». Test `numdif-recherche-pdf` (14 cas, dont la vraie page de copyright d'Anarres). Limite connue : la ligne « éditeur trouvé » peut citer une phrase voisine (biographie) ; la coordination juge sur l'extrait de la page de titre (D15). |
 
 ---
 
@@ -1995,4 +1974,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 55 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 54 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

@@ -151,6 +151,11 @@ function pdftotext(fichier, premiere, derniere) {
   const r = spawnSync('pdftotext', ['-f', String(premiere), '-l', String(derniere), '-enc', 'UTF-8', '-layout', fichier, '-'],
     { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   if (r.error) throw r.error;
+  // Un fichier illisible n'est pas une page vide : « sans couche texte » serait
+  // un faux constat (vu le 15/10 : chemin de plus de 260 caractères sous Windows).
+  if (r.status !== 0 && !(r.stdout || '').trim()) {
+    throw new Error(`pdftotext n'a pas pu lire le fichier : ${(r.stderr || '').trim().slice(0, 200)}`);
+  }
   // une page par saut de page ; le dernier élément est vide
   return (r.stdout || '').split('\f').slice(0, Math.max(0, derniere - premiere + 1));
 }
@@ -260,8 +265,13 @@ export function proposer(notice, pagesBrutes, { premierePage = 1, dernieresPages
   // lignes courtes : « The press, that select tool… » d'un chapitre n'en est pas une
   const voisines = pages.slice(Math.max(0, meilleure - 1), Math.max(0, meilleure) + 2).join('\n')
     .split('\n').map((l) => l.replace(/\s+/g, ' ').trim()).filter((l) => l && l.length <= 80);
-  const ligneEditeur = [...lignesZone.filter((l) => l.length <= 100), ...voisines].find((l) => RE_EDITEUR.test(l));
-  const lignesImpressum = lignes.filter((l) => RE_IMPRESSUM.test(l));
+  // Dans l'ordre : la page de titre et l'impressum ; la ligne « © … » de la page de
+  // copyright (« © Anarres », sans le mot « éditions ») ; enfin les lignes voisines,
+  // où se glisse parfois une biographie (« famosa librería y editorial »).
+  const ligneEditeur = lignesZone.filter((l) => l.length <= 100).find((l) => RE_EDITEUR.test(l))
+    || lignes.find((l) => /^©\s*\p{L}/u.test(l) && l.length <= 80)?.replace(/^©\s*/, '')
+    || voisines.find((l) => RE_EDITEUR.test(l));
+  const lignesImpressum = lignes.filter((l) => RE_IMPRESSUM_STRICT.test(l));
   const anneesImpressum = annees(lignesImpressum.join(' '));
   const frequente = (xs) => xs.sort((a, b) => xs.filter((y) => y === b).length - xs.filter((y) => y === a).length)[0];
   res.found = {
@@ -269,7 +279,8 @@ export function proposer(notice, pagesBrutes, { premierePage = 1, dernieresPages
     found_publisher: editeur || ligneEditeur?.slice(0, 200) || null,
     found_place: lieu || null,
     found_year: anneeOk ? String(anneesNotice.find((y) => anneesPdf.includes(y)))
-      : (anneesImpressum.length ? String(Math.max(...anneesImpressum)) : (anneesPdf.length ? String(frequente([...anneesPdf])) : null)),
+      : (anneesImpressum.length ? String(Math.max(...anneesImpressum))
+        : (annees(pages[Math.max(0, meilleure)] || '').length ? String(frequente(annees(pages[Math.max(0, meilleure)]))) : null)),
     found_translator: (texteDebut.match(RE_TRAD) || [])[0]?.replace(/\s+/g, ' ').trim().slice(0, 200) || null,
     found_isbn: isbnsPdf[0] || null,
   };
@@ -292,7 +303,9 @@ export function proposer(notice, pagesBrutes, { premierePage = 1, dernieresPages
   if (res.proposed_verdict === 'meme_edition' && !notice.local_publicacao) notes.avertissements.push('lieu_absent_de_la_notice');
 
   // NUMDIF-2 — le cas proposé, et la mention avec sa page
-  for (const { n, t } of toutes) {
+  for (const { n, t: brut } of toutes) {
+    // la mention se cherche sur le texte recousu : césures (« ópti-/cos ») et fins de ligne
+    const t = String(brut).replace(/(\p{L})-\n\s*(\p{L})/gu, '$1$2').replace(/\s*\n\s*/g, ' ');
     for (const re of RE_LIBRE) {
       const m = re.exec(t);
       if (!m) continue;
@@ -370,7 +383,15 @@ function requeteArchive(notice) {
     // l'année de la notice d'abord : un titre court (« The Earth ») rend des
     // centaines de volumes voisins, et la bonne édition passe au-delà des 50
     annee: an ? `${avec || `${titre} AND mediatype:(texts)`} AND year:(${an})` : null,
-    avec, sans: `${titre} AND mediatype:(texts)`,
+    avec,
+    // l'auteur nommé dans le TITRE, pas dans les métadonnées (« Guérin, D. - El
+    // anarquismo », vu le 15/10 : trois PDF du 14/10 n'avaient pas de creator)
+    nomTitre: nom ? `${titre} AND title:(${nom}) AND mediatype:(texts)` : null,
+    // repli : un mot du titre mal écrit dans la notice (« classes » pour « clases »,
+    // notice 152) suffit à tout faire échouer ; les deux plus longs, et l'auteur
+    court: nom && mots.length > 2
+      ? `title:(${mots[0]}) AND title:(${mots[1]}) AND (creator:(${nom}) OR title:(${nom})) AND mediatype:(texts)` : null,
+    sans: `${titre} AND mediatype:(texts)`,
   };
 }
 // Les métadonnées de la source ne PROUVENT rien (NUMDIF-1) ; elles servent
@@ -404,13 +425,13 @@ export function pertinentSansAuteur(notice, doc) {
   return enTrop.length <= 1;
 }
 async function chercherArchive(notice, rapport) {
-  const { annee, avec, sans } = requeteArchive(notice);
+  const { annee, avec, nomTitre, court, sans } = requeteArchive(notice);
   const fl = ['identifier', 'title', 'creator', 'date', 'publisher', 'language'].map((f) => `fl[]=${f}`).join('&');
   const trouves = [];
   const vus = new Set();
-  for (const q of [annee, avec, sans].filter(Boolean)) {
+  for (const q of [annee, avec, nomTitre, court, sans].filter(Boolean)) {
     // la requête sans auteur ne sert que si les autres n'ont rien rendu
-    if (q === sans && trouves.length) break;
+    if ((q === court || q === sans) && trouves.length) break;
     const d = await json(`https://archive.org/advancedsearch.php?q=${encodeURIComponent(q)}&${fl}&rows=50&page=1&output=json`);
     await attendre(600);
     const docs = d?.response?.docs || [];
@@ -453,7 +474,9 @@ async function fichiersArchive(id, rapport) {
 
 async function telecharger(url, dossier, nom, maxOctets) {
   mkdirSync(dossier, { recursive: true });
-  const chemin = join(dossier, nom.replace(/[^\w.\-]+/g, '_').slice(0, 150) || 'candidat.pdf');
+  // nom court : sous Windows, un chemin de plus de 260 caractères ne s'ouvre plus
+  const court = nom.replace(/\.pdf$/i, '').replace(/[^\w.\-]+/g, '_').slice(0, 60);
+  const chemin = join(dossier, `${court || 'candidat'}.pdf`);
   const r = await obtenir(url);
   const longueur = Number(r.headers.get('content-length')) || null;
   if (longueur && longueur > maxOctets) throw new Error(`fichier trop lourd (${Math.round(longueur / 1e6)} Mo)`);
