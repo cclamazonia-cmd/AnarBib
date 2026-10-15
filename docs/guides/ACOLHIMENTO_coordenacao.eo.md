@@ -78,7 +78,7 @@ pridiskutado estas unuflanke kaj la funkciado aliflanke.
 
 La paĝo **Federação** kaj la publikaj paĝoj — katalogo, Verko, Periodaĵo, Temo,
 Bibliotekoj, Kartografio, Tezaŭro FICEDL — kompletigas la tuton. La vojoj ne estas
-tradukitaj: ili estas la samaj en la dek lingvoj.
+tradukitaj: ili estas la samaj en ĉiuj lingvoj.
 
 > **Vi neniam eniras la konton de alia persono.** Ĉio kion la teamo devas fari por
 > leganto troviĝas en la painel. Se vi kaptis vin volanta « eniri kiel » iu, tio kion vi
@@ -423,10 +423,10 @@ skedon.
 
 **Postulas duan legadon, ĉar tio ne reireblas aŭ multe kostas:**
 
-- **Forigi** konton — kaj atentu: en la portugala, la programo distingas **APAGAR**
-  (malplenigi la historion) kaj **EXCLUIR** (forigi la konton), per du malsamaj
-  konfirmvortoj. En la naŭ aliaj lingvoj ambaŭ falas sur la saman vorton — en Esperanto,
-  **FORIGI**. Legu la tutan frazon antaŭ ol tajpi, ne nur la petitan vorton.
+- **Forigi** konton — kaj atentu: la programo distingas du agojn, per du malsamaj
+  konfirmvortoj: en Esperanto **FORIGI** (forigi la konton) kaj **VIŜI** (malplenigi la
+  historion); en la portugala, **EXCLUIR** kaj **APAGAR**. Legu la tutan frazon antaŭ ol
+  tajpi, ne nur la petitan vorton.
 - Forviŝi historion — la datumoj ne revenas.
 - La profiltransiroj markitaj kiel neinversigeblaj en la langeto Transiroj.
 - Publikigi en la reton kolekton kiun la kolektivo ne decidis publikigi.
@@ -474,7 +474,7 @@ sin silenti.
 
 ---
 
-*Ĉi tiu gvidilo ekzistas en dek lingvoj: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Ĝi
+*Ĉi tiu gvidilo ekzistas en ĉiuj lingvoj de la reto: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Ĝi
 priskribas la staton de la programo en septembro 2026 kaj estos korektita kiam la programo
 ŝanĝiĝos — se ekrano ne respondas al tio kio estas skribita ĉi tie, estas la gvidilo kiu
 malpravas, kaj diri tion estas kontribuo.*

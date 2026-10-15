@@ -81,7 +81,7 @@ de administrador. Acá, la deliberación queda de un lado y la operación del ot
 
 La página **Federação** y las páginas públicas — catálogo, Obra, Publicación periódica,
 Materia, Bibliotecas, Cartografía, Tesauro FICEDL — completan el conjunto. Las rutas no se
-traducen: son las mismas en los diez idiomas.
+traducen: son las mismas en todos los idiomas.
 
 > **Nunca entrás en la cuenta de otra persona.** Todo lo que el equipo necesita hacer por
 > une lectore está en el painel. Si te sorprendiste queriendo « entrar como » alguien, lo
@@ -428,11 +428,10 @@ una ficha.
 
 **Pide una segunda lectura, porque no vuelve atrás o cuesta caro:**
 
-- **Eliminar** una cuenta — y atención, en portugués el software distingue **APAGAR**
-  (vaciar el historial) de **EXCLUIR** (suprimir la cuenta), con dos palabras de
-  confirmación diferentes. En los otros nueve idiomas las dos caen en la misma palabra: en
-  español, los dos gestos caen en **ELIMINAR**. Leé la frase entera antes de escribir, no
-  solo la palabra pedida.
+- **Eliminar** una cuenta — y atención, el software distingue dos gestos, con dos palabras
+  de confirmación diferentes: en español **ELIMINAR** (suprimir la cuenta) y **BORRAR**
+  (vaciar el historial); en portugués, **EXCLUIR** y **APAGAR**. Leé la frase entera antes
+  de escribir, no solo la palabra pedida.
 - Borrar un historial — los datos no vuelven.
 - Las transiciones de perfil marcadas como irreversibles en la pestaña Transiciones.
 - Publicar en red un acervo que el colectivo todavía no decidió publicar.
@@ -478,7 +477,7 @@ une sole mantenedore — es su principal fragilidad, y se dice en vez de esconde
 
 ---
 
-*Esta guía existe en diez idiomas: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Describe el
+*Esta guía existe en todos los idiomas de la red: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Describe el
 estado del software en septiembre de 2026 y será corregida cuando el software cambie — si
 una pantalla no corresponde a lo que está escrito acá, es la guía la que está equivocada, y
 decirlo es una contribución.*

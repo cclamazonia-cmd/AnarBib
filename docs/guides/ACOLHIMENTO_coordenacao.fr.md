@@ -80,7 +80,7 @@ d'administrateur. Ici, la délibération est d'un côté et l'opération de l'au
 
 La page **Federação** et les pages publiques — catalogue, Œuvre, Périodique, Sujet,
 Bibliothèques, Cartographie, Thésaurus FICEDL — complètent l'ensemble. Les routes ne sont
-pas traduites : elles sont les mêmes dans les dix langues.
+pas traduites : elles sont les mêmes dans toutes les langues.
 
 > **Tu n'entres jamais dans le compte de quelqu'un d'autre.** Tout ce que l'équipe doit
 > faire pour un·e lecteur·rice se trouve dans le painel. Si tu t'es surpris·e à vouloir
@@ -436,9 +436,9 @@ corriger une fiche.
 
 **Demande une deuxième lecture, parce que cela ne revient pas en arrière ou coûte cher :**
 
-- **Supprimer** un compte — et attention : en portugais, le logiciel distingue **APAGAR**
-  (vider l'historique) et **EXCLUIR** (supprimer le compte), avec deux mots de
-  confirmation différents. Dans les neuf autres langues, les deux tombent sur le même mot.
+- **Supprimer** un compte — et attention : le logiciel distingue deux gestes, avec deux
+  mots de confirmation différents : en français **SUPPRIMER** (supprimer le compte) et
+  **EFFACER** (vider l'historique) ; en portugais, **EXCLUIR** et **APAGAR**.
   Lis la phrase entière avant de taper, pas seulement le mot demandé.
 - Effacer un historique — les données ne reviennent pas.
 - Les transitions de profil marquées irréversibles dans l'onglet Transitions.
@@ -489,7 +489,7 @@ au lieu de se taire.
 
 ---
 
-*Ce guide existe en dix langues : pt-BR, fr, es, en, it, de, ca, eo, nl, el. Il décrit
+*Ce guide existe dans toutes les langues du réseau : pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Il décrit
 l'état du logiciel en septembre 2026 et sera corrigé quand le logiciel changera — si un
 écran ne correspond pas à ce qui est écrit ici, c'est le guide qui a tort, et le dire est
 une contribution.*

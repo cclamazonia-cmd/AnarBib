@@ -79,7 +79,7 @@ deliberation is on one side and operation on the other.
 
 The **Federação** page and the public pages — catalogue, Work, Periodical, Subject,
 Libraries, Cartography, FICEDL Thesaurus — complete the set. The routes are not
-translated: they are the same in the ten languages.
+translated: they are the same in all languages.
 
 > **You never enter someone else's account.** Everything the team has to do for a reader
 > is in the painel. If you have caught yourself wanting to “log in as” someone, what you
@@ -423,10 +423,10 @@ correcting a record.
 
 **Calls for a second reading, because it does not come back or costs dearly:**
 
-- **Deleting** an account — and beware: in Portuguese the software distinguishes **APAGAR**
-  (emptying the history) from **EXCLUIR** (removing the account), with two different
-  confirmation words. In the nine other languages the two fall on the same word — in
-  English, **DELETE**. Read the whole sentence before typing, not just the word asked for.
+- **Deleting** an account — and beware: the software distinguishes two actions, with two
+  different confirmation words: in English **DELETE** (removing the account) and **ERASE**
+  (emptying the history); in Portuguese, **EXCLUIR** and **APAGAR**. Read the whole
+  sentence before typing, not just the word asked for.
 - Erasing a history — the data does not come back.
 - The profile transitions marked irreversible in the Transitions tab.
 - Publishing to the network a collection the collective has not decided to publish.
@@ -473,7 +473,7 @@ kept quiet.
 
 ---
 
-*This guide exists in ten languages: pt-BR, fr, es, en, it, de, ca, eo, nl, el. It
+*This guide exists in all the languages of the network: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. It
 describes the state of the software in September 2026 and will be corrected when the
 software changes — if a screen does not match what is written here, it is the guide that
 is wrong, and saying so is a contribution.*

@@ -80,7 +80,7 @@ administrador. Aqui, a deliberação fica de um lado e a operação do outro.
 
 A página **Federação** e as páginas públicas — catálogo, Obra, Periódico, Assunto,
 Bibliotecas, Cartografia, Tesauro FICEDL — completam o conjunto. As rotas não são
-traduzidas: elas são as mesmas nos dez idiomas.
+traduzidas: elas são as mesmas em todos os idiomas.
 
 > **Você nunca entra na conta de outra pessoa.** Tudo o que a equipe precisa fazer por
 > um(a/e) leitor(a/e) está no painel. Se você se pegou querendo « entrar como » alguém,
@@ -425,10 +425,9 @@ desativar o salto colegial, passar de `observer` a `federated`, corrigir uma fic
 
 **Pede uma segunda leitura, porque não volta atrás ou custa caro:**
 
-- **Excluir** uma conta — e atenção, em português o software distingue **APAGAR** (esvaziar
-  o histórico) de **EXCLUIR** (suprimir a conta), com duas palavras de confirmação
-  diferentes. Nos outros nove idiomas as duas caem na mesma palavra. Leia a frase inteira
-  antes de digitar, não só a palavra pedida.
+- **Excluir** uma conta — e atenção, o software distingue dois gestos, com duas palavras
+  de confirmação diferentes: **EXCLUIR** (suprimir a conta) e **APAGAR** (esvaziar o
+  histórico). Leia a frase inteira antes de digitar, não só a palavra pedida.
 - Apagar um histórico — os dados não voltam.
 - As transições de perfil marcadas como irreversíveis na aba Transições.
 - Publicar em rede um acervo que o coletivo ainda não decidiu publicar.
@@ -474,7 +473,7 @@ esconder.
 
 ---
 
-*Este guia existe em dez idiomas: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Ele descreve
+*Este guia existe em todos os idiomas da rede: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Ele descreve
 o estado do software em setembro de 2026 e será corrigido quando o software mudar — se
 uma tela não corresponder ao que está escrito aqui, é o guia que está errado, e dizer
 isso é uma contribuição.*

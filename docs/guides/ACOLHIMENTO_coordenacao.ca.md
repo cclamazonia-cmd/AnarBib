@@ -81,7 +81,7 @@ d'administrador. Aquí, la deliberació queda d'un costat i l'operació de l'alt
 
 La pàgina **Federação** i les pàgines públiques — catàleg, Obra, Publicació periòdica,
 Matèria, Biblioteques, Cartografia, Tesaurus FICEDL — completen el conjunt. Les rutes no es
-tradueixen: són les mateixes en les deu llengües.
+tradueixen: són les mateixes en totes les llengües.
 
 > **Mai no entres al compte d'una altra persona.** Tot allò que l'equip ha de fer per
 > un-a-e lector-a-e és al painel. Si t'has sorprès volent « entrar com a » algú, allò que
@@ -427,10 +427,10 @@ corregir una fitxa.
 
 **Demana una segona lectura, perquè no torna enrere o costa car:**
 
-- **Eliminar** un compte — i atenció, en portuguès el programari distingeix **APAGAR**
-  (buidar l'historial) d'**EXCLUIR** (suprimir el compte), amb dues paraules de confirmació
-  diferents. En les altres nou llengües les dues cauen sobre la mateixa paraula: en català,
-  **ELIMINAR**. Llegeix la frase sencera abans d'escriure, no només la paraula demanada.
+- **Eliminar** un compte — i atenció, el programari distingeix dos gestos, amb dues paraules
+  de confirmació diferents: en català **SUPRIMIR** (suprimir el compte) i **ELIMINA**
+  (buidar l'historial); en portuguès, **EXCLUIR** i **APAGAR**. Llegeix la frase sencera
+  abans d'escriure, no només la paraula demanada.
 - Esborrar un historial — les dades no tornen.
 - Les transicions de perfil marcades com a irreversibles a la pestanya Transicions.
 - Publicar en xarxa un fons que el col·lectiu encara no ha decidit publicar.
@@ -478,7 +478,7 @@ d'amagar-se.
 
 ---
 
-*Aquesta guia existeix en deu llengües: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Descriu
+*Aquesta guia existeix en totes les llengües de la xarxa: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Descriu
 l'estat del programari el setembre de 2026 i serà corregida quan el programari canviï — si
 una pantalla no correspon al que hi ha escrit aquí, és la guia que s'equivoca, i dir-ho és
 una contribució.*

@@ -80,7 +80,7 @@ amministratore. Qui, la deliberazione sta da una parte e l'operatività dall'alt
 
 La pagina **Federação** e le pagine pubbliche — catalogo, Opera, Periodico, Soggetto,
 Biblioteche, Cartografia, Thesaurus FICEDL — completano l'insieme. Le rotte non sono
-tradotte: sono le stesse nelle dieci lingue.
+tradotte: sono le stesse in tutte le lingue.
 
 > **Non entri mai nell'account di qualcun altro.** Tutto ciò che l'équipe deve fare per
 > un* lettor* si trova nel painel. Se ti sei sorpres* a voler « entrare come » qualcuno,
@@ -434,11 +434,10 @@ correggere una scheda.
 
 **Chiede una seconda lettura, perché non torna indietro o costa caro:**
 
-- **Eliminare** un account — e attenzione: in portoghese il software distingue **APAGAR**
-  (svuotare lo storico) da **EXCLUIR** (sopprimere l'account), con due parole di conferma
-  diverse. Nelle altre nove lingue le due cadono sulla stessa parola: in italiano
-  entrambi i gesti cadono su **ELIMINA**. Leggi la frase intera prima di digitare, non
-  solo la parola richiesta.
+- **Eliminare** un account — e attenzione: il software distingue due gesti, con due parole
+  di conferma diverse: in italiano **ELIMINA** (sopprimere l'account) e **CANCELLA**
+  (svuotare lo storico); in portoghese, **EXCLUIR** e **APAGAR**. Leggi la frase intera
+  prima di digitare, non solo la parola richiesta.
 - Cancellare uno storico — i dati non tornano.
 - Le transizioni di profilo marcate come irreversibili nella scheda Transizioni.
 - Pubblicare in rete un fondo che il collettivo non ha deciso di pubblicare.
@@ -486,7 +485,7 @@ ha un* sol* manutentor* — è la sua principale fragilità, e si dice invece di
 
 ---
 
-*Questa guida esiste in dieci lingue: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Descrive
+*Questa guida esiste in tutte le lingue della rete: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Descrive
 lo stato del software a settembre 2026 e sarà corretta quando il software cambierà — se
 una schermata non corrisponde a ciò che è scritto qui, è la guida ad avere torto, e dirlo
 è una contribuzione.*

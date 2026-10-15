@@ -79,7 +79,7 @@ deliberarea e de o parte și operarea de cealaltă.
 
 Pagina **Federação** și paginile publice — catalog, Operă, Periodic, Subiect,
 Biblioteci, Cartografia rețelei, Tezaurul FICEDL — completează ansamblul. Rutele nu sunt
-traduse: sunt aceleași în toate cele zece limbi.
+traduse: sunt aceleași în toate limbile.
 
 > **Nu intri niciodată în contul altcuiva.** Tot ce trebuie să facă echipa pentru un
 > cititor/o cititoare se află în `/painel`. Dacă te surprinzi vrând să „intri ca”
@@ -433,11 +433,10 @@ să corectezi o fișă.
 
 **Cere o a doua citire, pentru că nu se mai poate anula sau costă scump:**
 
-- **Ștergerea** unui cont — și atenție: în portugheză, programul deosebește **APAGAR**
-  (golirea istoricului) de **EXCLUIR** (ștergerea contului), cu două cuvinte de
-  confirmare diferite. În celelalte nouă limbi, cele două cad pe același cuvânt — în
-  română însă cuvintele diferă: **GOLIRE** pentru istoric și **ELIMINARE** pentru cont.
-  Citește toată fraza înainte să tastezi, nu doar cuvântul cerut.
+- **Ștergerea** unui cont — și atenție: programul deosebește două gesturi, cu două cuvinte
+  de confirmare diferite: în română **ELIMINARE** (ștergerea contului) și **GOLIRE**
+  (golirea istoricului); în portugheză, **EXCLUIR** și **APAGAR**. Citește toată fraza
+  înainte să tastezi, nu doar cuvântul cerut.
 - Ștergerea unui istoric — datele nu se mai întorc.
 - Tranzițiile de profil marcate ca ireversibile în fila Tranziții.
 - Publicarea în rețea a unui fond pe care colectivul n-a hotărât să-l publice.
@@ -487,7 +486,7 @@ azi o singură persoană care îl întreține — e principala lui fragilitate, 
 
 ---
 
-*Acest ghid există în zece limbi: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Descrie
+*Acest ghid există în toate limbile rețelei: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Descrie
 starea programului în septembrie 2026 și va fi corectat când programul se va schimba — dacă un
 ecran nu corespunde cu ce scrie aici, ghidul greșește, iar a spune asta este
 o contribuție.*

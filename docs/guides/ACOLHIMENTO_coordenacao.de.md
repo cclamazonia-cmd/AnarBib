@@ -81,7 +81,7 @@ endet. Hier ist die Beratung auf der einen Seite und der Betrieb auf der anderen
 
 Die Seite **Federação** und die öffentlichen Seiten — Katalog, Werk, Zeitschrift,
 Schlagwort, Bibliotheken, Kartografie, FICEDL-Thesaurus — vervollständigen das Ganze. Die
-Routen werden nicht übersetzt: sie sind in allen zehn Sprachen dieselben.
+Routen werden nicht übersetzt: sie sind in allen Sprachen dieselben.
 
 > **Du gehst nie in das Konto einer anderen Person.** Alles, was das Team für eine
 > Leser*in tun muss, findet sich im Painel. Wenn du dich dabei ertappst, dich „anmelden
@@ -443,11 +443,10 @@ Vorschlag ablaufen lassen, den kollegialen Sprung aktivieren und deaktivieren, v
 
 **Verlangt ein zweites Lesen, weil es nicht rückgängig zu machen ist oder teuer kommt:**
 
-- **Ein Konto löschen** — und Achtung: auf Portugiesisch unterscheidet die Software
-  **APAGAR** (den Verlauf leeren) und **EXCLUIR** (das Konto entfernen), mit zwei
-  verschiedenen Bestätigungswörtern. In den neun anderen Sprachen fallen beide auf dasselbe
-  Wort — auf Deutsch auf **LÖSCHEN**. Lies den ganzen Satz, bevor du tippst, nicht nur das
-  verlangte Wort.
+- **Ein Konto löschen** — und Achtung: die Software unterscheidet zwei Vorgänge, mit zwei
+  verschiedenen Bestätigungswörtern: auf Deutsch **LÖSCHEN** (das Konto entfernen) und
+  **LEEREN** (den Verlauf leeren); auf Portugiesisch **EXCLUIR** und **APAGAR**. Lies den
+  ganzen Satz, bevor du tippst, nicht nur das verlangte Wort.
 - Einen Verlauf löschen — die Daten kommen nicht zurück.
 - Die Profilübergänge, die im Reiter Übergänge als unumkehrbar markiert sind.
 - Einen Bestand im Netz veröffentlichen, den das Kollektiv nicht zu veröffentlichen
@@ -498,7 +497,7 @@ verschwiegen.
 
 ---
 
-*Diesen Leitfaden gibt es in zehn Sprachen: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Er
+*Diesen Leitfaden gibt es in allen Sprachen des Netzwerks: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Er
 beschreibt den Stand der Software im September 2026 und wird korrigiert, wenn sich die
 Software ändert — wenn ein Bildschirm nicht dem entspricht, was hier steht, dann irrt der
 Leitfaden, und das zu sagen ist ein Beitrag.*

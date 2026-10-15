@@ -53,13 +53,12 @@ s'édite dans la langue d'affichage).
   français : les « dix langues » écrites DANS les documents des Communs (D6),
   et les boutons cités qui n'existent plus (voir la fin de
   `RELECTURE_roumain_2026-10-14.md`).
-- **Lot 5, vitrine** (`anarbib/pages`) :
-  - une ligne dans `tools/locales.json` et les slugs `ro` ;
-  - 17 pages `/ro/` ;
-  - `node tools/pose-selecteur.cjs` ;
-  - ensuite, remettre `account.constitution.guidePath` et `approved.guidePath`
-    sur la page roumaine (app et `mail-strings.ts`), et retirer l'exception
-    d'`IDENTIQUE_A_EN_LEGITIME`.
+- **Lot 5, vitrine : FAIT** (15/10 ; anarbib/pages `997070f` puis `3809dce`, app
+  `5dccf68f`). Ouvrir le roumain sur la vitrine (lot 7) : retirer `"listed": false`
+  de `tools/locales.json`, `node tools/pose-selecteur.cjs`, relancer les quatre
+  générateurs (guide, confidentialité, comptes, auto-hébergement), et ajouter `ro`
+  à la détection de la langue du navigateur dans `index.html`. Défaut connu : les
+  pages engendrées de l'auto-hébergement n'ont pas d'`og:locale` (toutes langues).
 - **Lot 6** :
   - bloc roumain en fin de chaque recueil PDF (D7), puis les entrées `ro` de
     `COMPLETE_BLOCKS`, `READER_START` et `GOVERNANCE_START` dans

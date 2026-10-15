@@ -80,7 +80,7 @@ beheerder. Hier staat de beraadslaging aan de ene kant en de uitvoering aan de a
 
 De pagina **Federação** en de publieke pagina's — catalogus, Werk, Tijdschrift, Onderwerp,
 Bibliotheken, Cartografie, FICEDL-thesaurus — maken het geheel af. De routes worden niet
-vertaald: ze zijn dezelfde in de tien talen.
+vertaald: ze zijn dezelfde in alle talen.
 
 > **Je stapt nooit in het account van iemand anders.** Alles wat het team voor een lezer
 > moet doen, staat in het painel. Betrap je jezelf erop dat je “als iemand wil inloggen”,
@@ -440,11 +440,10 @@ een beschrijving verbeteren.
 
 **Vraagt een tweede lezing, omdat het niet terug te draaien is of duur uitvalt:**
 
-- Een account **opheffen** — en let op: in het Portugees onderscheidt de software
-  **APAGAR** (de geschiedenis leegmaken) van **EXCLUIR** (het account opheffen), met twee
-  verschillende bevestigingswoorden. In de negen andere talen vallen de twee op hetzelfde
-  woord — in het Nederlands is dat **VERWIJDEREN**. Lees de hele zin vóór je typt, niet
-  alleen het gevraagde woord.
+- Een account **opheffen** — en let op: de software onderscheidt twee handelingen, met twee
+  verschillende bevestigingswoorden: in het Nederlands **VERWIJDEREN** (het account
+  opheffen) en **WISSEN** (de geschiedenis leegmaken); in het Portugees **EXCLUIR** en
+  **APAGAR**. Lees de hele zin vóór je typt, niet alleen het gevraagde woord.
 - Een geschiedenis wissen — de gegevens komen niet terug.
 - De profielovergangen die in het tabblad Overgangen als onomkeerbaar gemarkeerd staan.
 - Een collectie in het netwerk publiceren die het collectief niet beslist heeft te
@@ -493,7 +492,7 @@ kwetsbaarheid, en ze wordt uitgesproken in plaats van verzwegen.
 
 ---
 
-*Deze gids bestaat in tien talen: pt-BR, fr, es, en, it, de, ca, eo, nl, el. Hij beschrijft
+*Deze gids bestaat in alle talen van het netwerk: pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro. Hij beschrijft
 de staat van de software in september 2026 en zal gecorrigeerd worden wanneer de software
 verandert — als een scherm niet overeenkomt met wat hier staat, is het de gids die
 ongelijk heeft, en dat zeggen is een bijdrage.*

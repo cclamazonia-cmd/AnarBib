@@ -114,3 +114,24 @@ suivis sans les corriger : ils disent encore « dix langues » à plusieurs
 endroits (D6), et plusieurs boutons cités n'existent plus sous ce nom
 (« Je passe la main », « Inviter dans l'équipe », « Compte actif (restreint) »,
 les anciens libellés portugais de l'indexation).
+
+## Vitrine (lot 5, anarbib/pages `997070f`)
+
+Les 17 pages de `anarbib.org/ro/` (joignables, absentes du sélecteur des autres
+langues). Ordre proposé : accueil `/ro/`, `/ro/aderare/`, `/ro/proiect/`,
+`/ro/bun-venit/` (le guide d'accueil), puis le reste.
+
+| Source | Roumain choisi | Question |
+|---|---|---|
+| bibliothèques marraines, marrainage | biblioteci-nașe, nășie | Image juste ? |
+| SIGB | sistem integrat de bibliotecă (SIIB) | Cf. partie « Documents ». |
+| Charte minimale (menu) | Carta minimă | — |
+| Guide d'accueil des coordinations (pied de page) | Ghid de primire pentru echipele de coordonare | — |
+| Créer un compte contributeur (bouton) | Creează un cont de contribuție | Le texte dit « cont de contribuitor/contribuitoare ». |
+| anarchistes noir·es | persoanele anarhiste de culoare | Usage roumain ? |
+| tracts | manifeste | — |
+| Bibliothèques ayant ouvert leur catalogue : n | Biblioteci cu catalogul deschis: {n} | Forme « libellé: n » pour éviter l'accord en « de ». |
+
+Les pages adressées à une bibliothèque (« Adhérer », « Pourquoi adhérer »,
+l'encadré des candidates de « État du projet ») sont au « voi » ; le reste
+tutoie.
