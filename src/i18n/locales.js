@@ -35,8 +35,8 @@
 //                (titleCase.js ; l'anglais a le title case, l'allemand garde
 //                ses substantifs) ;
 //   listed     — la langue figure dans les sélecteurs. Toutes y sont au
-//                13/10 ; le champ prépare une langue « livrée mais hors du
-//                sélecteur » le temps de sa relecture, si ce choix est retenu.
+//                15/10/2026 ; le champ sert à livrer une langue sans l'offrir
+//                encore (le roumain l'a été du 14 au 15/10).
 
 export const LOCALES = [
   { code: 'pt-BR', label: 'Português', siteCode: 'pt', phraseCase: true, listed: true },
@@ -49,9 +49,9 @@ export const LOCALES = [
   { code: 'eo', label: 'Esperanto', siteCode: 'eo', phraseCase: true, listed: true },
   { code: 'nl', label: 'Nederlands', siteCode: 'nl', phraseCase: true, listed: true },
   { code: 'el', label: 'Ελληνικά', siteCode: 'el', phraseCase: true, listed: true },
-  // Le roumain (DOC-I18N-5, 14/10/2026) : livré en entier, hors des sélecteurs
-  // jusqu'à sa relecture par une personne roumanophone (D5).
-  { code: 'ro', label: 'Română', siteCode: 'ro', phraseCase: true, listed: false },
+  // Le roumain (DOC-I18N-5) : livré le 14/10/2026, ouvert dans les sélecteurs le
+  // 15/10 (D5 amendée) ; la relecture roumanophone vient en dernier, elle ne bloque rien.
+  { code: 'ro', label: 'Română', siteCode: 'ro', phraseCase: true, listed: true },
 ];
 
 export const DEFAULT_LOCALE = 'pt-BR';

@@ -26,11 +26,11 @@ const TUTORIALS = [
 ];
 
 // Locale de l'app → code de piste de sous-titres PeerTube (cf. captions Kolektiva :
-// pt-BR exporté en « pt », es en « es-419 », les 8 autres identiques).
+// pt-BR exporté en « pt », es en « es-419 », les autres identiques).
 export const SUBTITLE_LANG = {
   'pt-BR': 'pt', en: 'en', fr: 'fr', es: 'es-419', de: 'de',
   it: 'it', ca: 'ca', el: 'el', eo: 'eo', nl: 'nl',
-  ro: null,   // pas encore de sous-titres roumains sur Kolektiva (lot 6) : piste par défaut
+  ro: 'ro',   // pistes roumaines déposées sur Kolektiva le 15/10/2026 (lot 6)
 };
 
 // Construit l'URL d'embed Kolektiva.
