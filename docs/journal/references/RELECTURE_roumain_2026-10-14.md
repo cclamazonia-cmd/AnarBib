@@ -153,6 +153,8 @@ deux tutoriels (fichiers à déposer sur Kolektiva).
 Écarts de la source française que la traduction a corrigés en suivant
 l'écran : le mot à taper pour vider l'historique est EFFACER (et non
 SUPPRIMER) → GOLIRE ; le libellé ancien ou au « vous » d'un bouton → la valeur
-actuelle de ro.json. Restés fidèles à la source, à corriger dans toutes les
-langues : la gazette s'appelle encore « Rizoma » (FrⒶctale depuis le 16/09),
-la visio cite Jitsi (la règle est Framatalk).
+actuelle de ro.json. Corrigés le 15/10/2026 dans les onze langues des deux manuels
+(94 phrases, PDF republiés, pages publiées reprises sauf celles touchées) :
+la gazette s'appelle « Fractale » (et plus « Rizoma »), la visio des
+assemblées est Framatalk (et plus « Jitsi hébergé par Autistici »), et le mot
+à taper pour vider l'historique est celui de l'écran dans chaque langue.
