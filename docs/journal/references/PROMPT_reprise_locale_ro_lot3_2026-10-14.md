@@ -73,8 +73,10 @@ s'édite dans la langue d'affichage).
   - ~~six captures avec session~~ FAIT le 15/10 (images remplacées dans les PDF
     publiés : `_outils/lot6-ro/captures_ro_pdf.py` ; données de démo posées puis
     retirées, liste dans `_outils/lot6-ro/donnees-captures-ro.txt`) ;
-  - **en dernier** : relecture d'Adrian (Anarhiva), corrections, annonce
-    (Gazette, Lettre, État du projet), clôture d'E39 au REGISTRE.
+  - ~~annonce~~ FAITE le 15/10 au soir (D5 re-amendée) : État du projet et
+    Pourquoi adhérer (vitrine `041b06f`), brève Fractale n°06 (`33a2763b`) ; la
+    Lettre n°1 est un brouillon de fondation que Xavier doit terminer ;
+  - **en dernier** : relecture d'Adrian (Anarhiva), corrections, clôture d'E39.
 
 ## Pièges vus pendant le lot 3
 
