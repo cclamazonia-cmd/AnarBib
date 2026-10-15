@@ -56,6 +56,13 @@ MANIFEST="${SQL_SUITES_MANIFEST:-tests/sql/ci-suites.txt}"
 KNOWN="deploy/bg2-known-tables.txt"
 
 fail() { echo "ÉCHEC : $*" >&2; exit 1; }
+# Fichiers de travail dans un dossier PROPRE à ce lancement (15/10/2026) : en
+# chemins fixes sous /tmp, deux sessions qui jouaient leurs suites en même
+# temps sur la machine de Xavier s'écrasaient migs.sorted — l'une appliquait
+# la liste de migrations de l'autre (« No such file or directory »). En CI
+# chaque job a son conteneur ; en local, non.
+TMPD="$(mktemp -d)" || fail "mktemp -d"
+trap 'rm -rf "$TMPD"' EXIT
 command -v psql >/dev/null 2>&1 || fail "psql introuvable (installer postgresql-client)"
 [ -f "$AUTHSTUB" ] || fail "stub auth absent : $AUTHSTUB"
 [ -f "$VAULTSTUB" ] || fail "stub vault absent : $VAULTSTUB"
@@ -69,8 +76,8 @@ PT()     { psql -h "$PGHOST" -d "$TEST_DB" "$@"; }
 
 apply() { # label fichier  (sur $TEST_DB, ON_ERROR_STOP=1)
   local label="$1" f="$2"
-  if ! PT -v ON_ERROR_STOP=1 -q -f "$f" > "/tmp/${label}.log" 2>&1; then
-    echo "---- $label : 25 dernières lignes ----"; tail -25 "/tmp/${label}.log"
+  if ! PT -v ON_ERROR_STOP=1 -q -f "$f" > "$TMPD/${label}.log" 2>&1; then
+    echo "---- $label : 25 dernières lignes ----"; tail -25 "$TMPD/${label}.log"
     fail "application de $f"
   fi
 }
@@ -107,11 +114,11 @@ shopt -s nullglob
 migs=(supabase/migrations/[0-9]*.sql)
 shopt -u nullglob
 [ "${#migs[@]}" -gt 0 ] || fail "aucune migration trouvée"
-printf '%s\n' "${migs[@]}" | LC_ALL=C sort > /tmp/migs.sorted
+printf '%s\n' "${migs[@]}" | LC_ALL=C sort > "$TMPD/migs.sorted"
 n=0
 while IFS= read -r m; do
   n=$((n+1)); apply "mig_$(printf '%03d' "$n")" "$m"
-done < /tmp/migs.sorted
+done < "$TMPD/migs.sorted"
 echo "${n} migration(s) appliquée(s) (baseline + forward)"
 apply seed "$SEED"; echo "seed appliqué"
 echo "::endgroup::"
@@ -144,14 +151,14 @@ bg2_normaliser() {
 }
 echo "::group::filet BG2 (classement des tables pour la sauvegarde)"
 [ -f "$KNOWN" ] || fail "classement des tables absent : $KNOWN"
-PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > /tmp/bg2-real.txt
-[ -s /tmp/bg2-real.txt ] || fail "filet BG2 : aucune table lue dans le schéma reconstruit"
-bg2_normaliser < "$KNOWN" > /tmp/bg2-known.txt
-non_classees="$(comm -23 /tmp/bg2-real.txt /tmp/bg2-known.txt)"
+PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > "$TMPD/bg2-real.txt"
+[ -s "$TMPD/bg2-real.txt" ] || fail "filet BG2 : aucune table lue dans le schéma reconstruit"
+bg2_normaliser < "$KNOWN" > "$TMPD/bg2-known.txt"
+non_classees="$(comm -23 "$TMPD/bg2-real.txt" "$TMPD/bg2-known.txt")"
 # Sens NON bloquant : une table classée mais absente du schéma reconstruit
 # n'empêche aucune sauvegarde (le filet de anarbib-bg2.sh ne teste pas ce sens
 # sur KNOWN, seulement sur la denylist). Simple signalement.
-orphelines="$(comm -13 /tmp/bg2-real.txt /tmp/bg2-known.txt)"
+orphelines="$(comm -13 "$TMPD/bg2-real.txt" "$TMPD/bg2-known.txt")"
 [ -z "$orphelines" ] || { echo "::warning::classées mais absentes du schéma reconstruit :"
   printf '%s\n' "$orphelines" | sed 's/^/    - /'; }
 echo "::endgroup::"
@@ -163,7 +170,7 @@ if [ -n "$non_classees" ]; then
   echo "    ajoute-les AUSSI à bg2-denylist.txt (côté ~/anarbib-ops/)."
   fail "filet BG2 : classe les nouvelles tables avant de fusionner."
 fi
-echo "filet BG2 OK : $(wc -l < /tmp/bg2-real.txt) tables, toutes classées"
+echo "filet BG2 OK : $(wc -l < "$TMPD/bg2-real.txt") tables, toutes classées"
 
 # ---- budget de temps des mesures, à la charge de la machine ---------------
 # Les suites de mesure (H21, H33, H34) exigent « < 8 s » par appel : c'est le

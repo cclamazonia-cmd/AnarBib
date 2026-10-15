@@ -94,8 +94,8 @@ describe('BG2-13 — ingest au flux long (source)', () => {
     expect(sql).toContain("n.nspname in ('public', 'ingest', 'private', 'api')");
     expect(sql).toContain("when n.nspname = 'public' then c.relname else n.nspname || '.' || c.relname");
     expect(fonction(SCRIPT, 'real_tables')).toContain('"$(bg2_sql_tables)" | bg2_normaliser');
-    expect(CI).toContain('PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > /tmp/bg2-real.txt');
-    expect(CI).toContain('bg2_normaliser < "$KNOWN" > /tmp/bg2-known.txt');
+    expect(CI).toContain('PT -At -c "$(bg2_sql_tables)" | bg2_normaliser > "$TMPD/bg2-real.txt"');
+    expect(CI).toContain('bg2_normaliser < "$KNOWN" > "$TMPD/bg2-known.txt"');
     expect(CI).not.toMatch(/nspname = 'public' and c\.relkind = 'r'/);
   });
 
