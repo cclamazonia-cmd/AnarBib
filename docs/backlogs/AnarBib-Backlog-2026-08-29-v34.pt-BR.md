@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-15** · 58 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-15** · 57 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 11
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 3
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-15.** **43 itens de 58** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-15.** **42 itens de 57** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **15** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1033,7 +1033,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F19** | Os registros das funções contêm os endereços em claro | `P1` | A verificar |
 | **F25** | Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber | `P1` | A verificar |
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
@@ -1056,26 +1055,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas.
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F19 — Os registros das funções contêm os endereços em claro
-
-`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte.
-
-**Por que importa.** Vazamento contínuo de dados pessoais.
-
-**O que conta como terminado.**
-
-- Nenhum endereço completo nos registros após a correção.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
 #### F25 — Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber
 
@@ -2015,6 +1994,7 @@ CI verde. |
 | B45 | 2026-10-13 | **Fechado em 13/10, medido em produção.** Continuação de B44. *(1)* Endereços de saída: `cover_lookup` (`pdf`, `store`, miniaturas de og:image) e `fetch-url-metadata` passam por `_shared/core/adresse-sortante.ts` — faixas não públicas IPv4/IPv6, nomes locais e de um só rótulo recusados, nome resolvido (todas as respostas públicas), cada redirecionamento verificado de novo, leitura limitada; falha fechada. Testado no edge-runtime v1.77.1 com DNS real. Fica fora de alcance o rebinding DNS entre verificação e conexão. *(2)* `geocode` conta por conta (`geocode_user`, SHA-256 do `sub`), não mais por IP; migração `20261013211232`. Commit `090e0350`, verificado às 23h55. Caminho com sessão confirmado por Xavier em 14/10 (capa e metadados respondem). |
 | H2 | 2026-10-14 | **Fechado em 14/10: o e-mail partiu.** Xavier enviou à fonte o ponto longo prometido em 19/09: cronologia do site (de 3 de setembro a 13 de outubro, oscila), a sonda diária, a cópia de 3 de setembro oferecida, as respostas de 7 de setembro, a releitura de Ludwig, **as sete questões na forma revista**, cada uma com uma resposta por omissão, e quatro anomalias verificadas no instantâneo. Enquadramento de Xavier: as respostas pedem-se à pessoa que mantém o site, não à «federação». **A continuação é H3**: a exportação completa segue a resposta à questão dos grupos SPIP, e será entregue à fonte para ficar ao lado das páginas de onde sai. |
 | Um nome de editora colado é a mesma editora; Venezuela (Uzcátegui, 2010) reunida numa ficha (DEDUP-16) | 2026-10-14 | **Encerrado em 14/10** (REGISTRO `DEDUP-16`, `a6468842`). Relatado por Xavier na revisão das capas: BTL-TL-000005 e BTL-TL-000012, mesma obra, mesmo título, mesmo ano, nunca propostas. Causa: «…/LaMalatesta Editorial» contra «La Malatesta», uma palavra colada tomada por outra editora. Migração `20261013235651`: `fn_editeur_coeur` separa a palavra colada na maiúscula interna antes da normalização; T9 (9/9). Migração `20261013235652`, com acordo escrito: 17 → 10, os dois exemplares BTL sob a ficha mantida; etiqueta de BTL-TL-EX-000012 a refazer. |
+| F19 | 2026-10-15 | **Fechado em 15/10, sobre uma semana de registos limpos após a correção de `register`.** Levantamento por `query_logs` (`function_logs`, 24 h por consulta) de 08/10 a 15/10: **11 731 linhas, 0 endereço completo**; as sondas de saúde e os catorze avisos de segurança de B42 (13/10) aparecem todos como «inicial…@domínio» (`masquerAdresse`); as três linhas de `register` de 05/10 não voltaram. Lição: a rede global sobre `console` não vale no executor Edge de produção; só a regra «mascarar na fonte, em cada linha que cita um destinatário» protege (guarda `journal-sans-adresse`). Decisão de Xavier de 12/10, confirmada em 14/10. |
 
 ---
 
@@ -2046,4 +2026,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 58 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 57 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

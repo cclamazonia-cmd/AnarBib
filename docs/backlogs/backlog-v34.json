@@ -3278,6 +3278,14 @@
           "fr": "**Clos le 14/10** (REGISTRE `DEDUP-16`, commit `a6468842`). Relevé par Xavier le 13/10 dans la revue des capas : BTL-TL-000005 et BTL-TL-000012, même œuvre, même titre, même année, jamais proposées. Cause : « …/LaMalatesta Editorial » contre « La Malatesta », un mot collé pris pour un autre éditeur, donc deux éditions, donc paire masquée par l'œuvre — la même famille que DEDUP-14. Migration `20261013235651` : `fn_editeur_coeur` coupe un mot collé à sa majuscule interne avant la normalisation, règle inchangée pour le reste ; `editions_distinctes_tests` T9 (9/9), mutant rouge. Migration `20261013235652`, sur accord écrit et sous son identité : 17 → 10, les deux exemplaires BTL sous la notice gardée, étiquette de BTL-TL-EX-000012 à refaire (cote BTL-TL-000005).",
           "pt": "**Encerrado em 14/10** (REGISTRO `DEDUP-16`, `a6468842`). Relatado por Xavier na revisão das capas: BTL-TL-000005 e BTL-TL-000012, mesma obra, mesmo título, mesmo ano, nunca propostas. Causa: «…/LaMalatesta Editorial» contra «La Malatesta», uma palavra colada tomada por outra editora. Migração `20261013235651`: `fn_editeur_coeur` separa a palavra colada na maiúscula interna antes da normalização; T9 (9/9). Migração `20261013235652`, com acordo escrito: 17 → 10, os dois exemplares BTL sob a ficha mantida; etiqueta de BTL-TL-EX-000012 a refazer."
         }
+      ],
+      [
+        "F19",
+        "2026-10-15",
+        {
+          "fr": "**Clos le 15/10, sur une semaine de journaux propres après le correctif de `register`.** Relevé par `query_logs` (source `function_logs`, une requête par tranche de 24 h, détection d'une adresse complète par expression régulière) du 08/10 00 h 00 UTC au 15/10 en soirée : 08/10 1 480 lignes, 09/10 1 650, 10/10 1 552, 11/10 1 496, 12/10 1 266, 13/10 1 656, 14/10 1 606, 15/10 1 025 — **11 731 lignes, 0 adresse complète**. Et ce n'est pas une semaine sans envois : les sondes de santé quotidiennes et les quatorze avis de sécurité de l'annonce B42 du 13/10 sont tous journalisés « initiale…@domaine », la forme de `masquerAdresse` ; les trois lignes de `register` du 05/10 (« routing », « request ») n'ont reparu sous aucune forme. Le chemin : relevé par F1 le 30/09, masque à la source et filet `console.*` le 30/09 (`4158504a`), une semaine relue le 08/10 — trois fuites de `register`, qui journalisait des objets entiers hors du filet —, corrigé à la source le 08/10 (`ce792be4`), nouvelle semaine relue le 14 et le 15. Leçon tenue : le filet global posé sur `console` ne tient pas dans l'exécuteur Edge de production ; seule la règle « masquer à la source, sur chaque ligne qui cite un destinataire » protège, et c'est elle que la garde `journal-sans-adresse` tient. Décision de Xavier du 12/10 : clôture seule si la semaine est propre ; confirmée le 14/10 (« clos-le demain comme prévu »).",
+          "pt": "**Fechado em 15/10, sobre uma semana de registos limpos após a correção de `register`.** Levantamento por `query_logs` (`function_logs`, 24 h por consulta) de 08/10 a 15/10: **11 731 linhas, 0 endereço completo**; as sondas de saúde e os catorze avisos de segurança de B42 (13/10) aparecem todos como «inicial…@domínio» (`masquerAdresse`); as três linhas de `register` de 05/10 não voltaram. Lição: a rede global sobre `console` não vale no executor Edge de produção; só a regra «mascarar na fonte, em cada linha que cita um destinatário» protege (guarda `journal-sans-adresse`). Decisão de Xavier de 12/10, confirmada em 14/10."
+        }
       ]
     ]
   },
@@ -4985,65 +4993,6 @@
         {
           "fr": "**12/10 — la part technique est déjà là, le constat du 07/09 est périmé** : `_shared/mail/smtp.ts` (transport SMTP générique, STARTTLS obligatoire, durci les 20-21/09, `eaaed599`) et l'aiguillage par variable dans `email.ts` (`MAIL_TRANSPORT=smtp|resend|mock`, ou `SMTP_HOST` présent) ; `sendViaBrevo` a disparu le 29/09 (`57a4aafc`), il n'en restait qu'un commentaire, retiré (`1f846c09`). Les variables sont dans `deploy/functions.env.example` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`). **Reste, et c'est tout** : demander un relais militant (ARN, Nodo50, bida.im…) — K5 —, poser ses cinq variables en secrets des fonctions et basculer `MAIL_TRANSPORT`. Rien à coder.",
           "pt": "**12/10 — a parte técnica já existe**: `smtp.ts` (transporte SMTP genérico, STARTTLS obrigatório, 20-21/09) e o comutador `MAIL_TRANSPORT` em `email.ts`; `sendViaBrevo` desapareceu a 29/09, restava um comentário, retirado (`1f846c09`). **Resta**: pedir um relé militante (K5), pôr as cinco variáveis e comutar. Nada a codar."
-        }
-      ]
-    },
-    {
-      "id": "F19",
-      "d": "F",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Les journaux des fonctions contiennent les adresses des destinataires en clair",
-        "pt": "Os registros das funções contêm os endereços em claro"
-      },
-      "v": {
-        "fr": "Relevé par la carte F1 (30/09). Les journaux des fonctions Edge portent des lignes « [user_mail] sent to <adresse> » et « [admin_copy] sent to <adresse> » depuis au moins le 04/08 : toute personne qui consulte les journaux lit les adresses des lectrices et du staff.",
-        "pt": "Achado pelo mapa F1. Os registros das Edge Functions trazem « sent to <endereço> » desde pelo menos 04/08."
-      },
-      "w": {
-        "fr": "Masquer l'adresse dans tous les journaux d'envoi (domaine seul, ou empreinte courte), à la source commune (`_shared/transport/email.ts` et les gestionnaires qui journalisent eux-mêmes) ; un test de source refuse un `console.log` qui imprime une adresse.",
-        "pt": "Mascarar o endereço em todos os registros de envio, na fonte comum; teste de fonte."
-      },
-      "y": {
-        "fr": "Une fuite de données personnelles continue, dans un outil que plusieurs personnes peuvent lire.",
-        "pt": "Vazamento contínuo de dados pessoais."
-      },
-      "f": {
-        "fr": [
-          "Plus aucune adresse complète dans les journaux d'envoi (relevé sur une semaine de journaux après le correctif)."
-        ],
-        "pt": [
-          "Nenhum endereço completo nos registros após a correção."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md"
-      ],
-      "verif": [
-        {
-          "fr": "**30/09** — livré et déployé (`4158504a`, CI verte, les 55 fonctions redéployées le 30/09 à 22 h 01 ; puis de nouveau le 01/10 avec F17). `masquerAdresse` à la source (transport, notificateurs) et un filet sur `console.*` installé au chargement sous Deno ; banc `journal-sans-adresse` (les 55 fonctions atteignent le masque) ; éprouvé sous Deno 2.7. **Reste le critère** : une semaine de journaux d'envoi sans adresse complète — à relever le 08/10.",
-          "pt": "**30/09** — entregue e implantado (`4158504a`). Falta o critério: uma semana de registros sem endereço completo (08/10)."
-        },
-        {
-          "fr": "**08/10 — relevé d'une semaine de journaux (01 → 08/10, `function_logs`, 10 400 lignes)** : zéro adresse complète sur six jours ; **trois lignes le 05/10 à 13 h 22**, toutes de `register` (« routing », « welcome email request », « admin internal email request » : `admin_recipients` et `to` écrits en clair, un compte créé ce jour-là). Le filet de `console.*` et `masquerAdresse` à la source ne couvrent donc pas `register`, qui journalise des objets entiers. **Le critère n'est pas tenu** ; à corriger dans `register/index.ts` (masquer ou retirer ces trois journaux), puis relever une nouvelle semaine.",
-          "pt": "**08/10 — uma semana de diários lida**: zero endereço em seis dias; **três linhas em 05/10**, todas de `register` (objetos inteiros no diário). Critério não cumprido; corrigir `register/index.ts` e reler uma semana."
-        },
-        {
-          "fr": "**08/10 — corrigé à la source dans `register`** (`ce792be4`, CI verte, fonctions redéployées) : les deux journaux d'objets (« routing » — `admin_recipients`, `effective_library_internal_recipients`, `channel_admin_email`, `configured_contact_email` — et « request » — `to`) passent par `masquerAdresses(JSON.stringify(…))` AVANT `console.log`. *Ce que les trois lignes du 05/10 apprennent* : elles sont au format de `Deno.inspect` (objets dépliés sur plusieurs lignes), pas au JSON du filet — **le filet global posé sur `console` par `deps.ts` ne tient pas dans l'exécuteur Edge de production**, qui journalise par sa propre console ; il reste utile au banc et sous Deno local, mais seule la règle « masquer à la source, sur chaque ligne qui cite un destinataire » protège vraiment, et c'est elle que la garde `journal-sans-adresse` (T « toute ligne console.* qui cite un destinataire ») doit tenir. **Reste le critère** : une nouvelle semaine de journaux sans adresse, à relire vers le 15/10 (`query_logs`, source `function_logs`, 24 h par requête, sept requêtes).",
-          "pt": "**08/10 — corrigido na fonte em `register`** (`ce792be4`): os dois diários de objetos passam por `masquerAdresses(JSON.stringify(…))` antes do `console.log`. Lição: a rede global sobre `console` não se mantém no executor Edge de produção; só o mascaramento na fonte protege. **Resta** uma nova semana de diários sem endereço, por volta de 15/10."
-        },
-        {
-          "fr": "**12/10 — décision de Xavier : je relis la semaine de journaux le 15/10 et je clos seul si elle est propre** (`query_logs`, source `function_logs`, 24 h par requête, sept requêtes, aucune adresse complète).",
-          "pt": "**12/10 — decisão de Xavier: releio a semana de registos a 15/10 e fecho sozinho se estiver limpa.**"
         }
       ]
     },

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-15** · 58 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-15** · 57 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 11
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 3
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 2
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 8
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 13 octobre 2026 au soir** (`88a962ee`, mesuré à 22 h 56) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 12/10 au soir, `91b7e803`). **478 appliquées en production, 479 numérotées au dépôt** : la dernière (`20261013194812`, les locales ont une source en base, session voisine) est dans la file de CI à l'heure du relevé. Ce qui a bougé et pourquoi : **la base** — +6 migrations et +9 fonctions, toutes de la session voisine, pour **B42** (la double authentification exigée côté serveur et sur Storage, 48 politiques Storage, deux tables `private`), la recherche du catalogage et les locales en base ; les avis de sécurité à 499 (+4 portes B42 à l'audit, +2 tables fermées), les index « inutilisés » à 362 ; **le catalogue** — inchangé à l'unité près : aucune notice, autorité, œuvre ni exemplaire créé, fusionné ou retiré, quatre notices modifiées par le catalogage de Xavier, trois reprises publiées ; **le réseau** — identique à la veille, 5 + 1, 19 + 4, 9 / 21 / 22 / 0, et un premier enrôlement TOTP commencé à 23 h, pas encore vérifié ; **le dépôt** — +41 commits, +25 fichiers, +50 clés, +136 tests JS, +4 suites SQL. **La journée** : B42 en trois lots et annoncé aux équipes, **B43 et B44 clos** (le second à 23 h, les sept relais vers des services tiers exigent une vraie session), Storage remonté après sa panne de montage, la recherche manuelle du catalogage enrichie (DBNL, DNB, BN Brasil), les locales à source unique ; de mon côté, la sonde FICEDL a écrit son premier courriel réel — le site flotte — et a été corrigée (un passage par jour), **la course du filtre de bibliothèque au catalogue** vue par Xavier a été corrigée le soir même, et le test « par pages » de H34 ne rougit plus la file. **Le compte** : 51 items (B42 et E39 — la locale roumaine à reprendre — entrés, B43 sorti ; B44, né et clos le même jour, n'y entre que par sa clôture) et 249 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : H34 (voisine, à vérifier), F19 (journaux, le 15/10, seul), F25 (l'épreuve réelle, de jour), H15, H16, H21, H28 (DIRA, par choix de Xavier), B42 (l'échéance annoncée) ; *les décisions* : A1, C4 (« Aplicar » après le 16/10), C16, I32 ; *sans code* : A1, A3, G8 (la liste NORLA), H2 (le courriel à la FICEDL, plus pressant qu'hier), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-15.** **43 items sur 58** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F19, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-15.** **42 items sur 57** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D13, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **15** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1033,7 +1033,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
-| **F19** | Les journaux des fonctions contiennent les adresses des destinataires en clair | `P1` | À vérifier |
 | **F25** | Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache | `P1` | À vérifier |
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
@@ -1056,26 +1055,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après **K5** (relais demandé à Bologne). Pas avant **I2** : changer de transport et d'hébergeur la même semaine, c'est deux inconnues.
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F19 — Les journaux des fonctions contiennent les adresses des destinataires en clair
-
-`P1` Prioritaire · État : **À vérifier** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
-
-**État.** Relevé par la carte F1 (30/09). Les journaux des fonctions Edge portent des lignes « [user_mail] sent to <adresse> » et « [admin_copy] sent to <adresse> » depuis au moins le 04/08 : toute personne qui consulte les journaux lit les adresses des lectrices et du staff.
-
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Masquer l'adresse dans tous les journaux d'envoi (domaine seul, ou empreinte courte), à la source commune (`_shared/transport/email.ts` et les gestionnaires qui journalisent eux-mêmes) ; un test de source refuse un `console.log` qui imprime une adresse.
-
-**Pourquoi ça compte.** Une fuite de données personnelles continue, dans un outil que plusieurs personnes peuvent lire.
-
-**Ce qui compte comme fini.**
-
-- Plus aucune adresse complète dans les journaux d'envoi (relevé sur une semaine de journaux après le correctif).
-
-**Dépendances.** Aucune.
-
-*Renvois : `docs/journal/audits/CARTE_chaine_courriel_2026-09-30.md`*
 
 #### F25 — Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache
 
@@ -2025,6 +2004,7 @@ CI verte : lint et suite unitaire. |
 | B45 | 2026-10-13 | **Clos le 13/10, mesuré en production.** Suite de B44 (`dbe8dc28`), les deux restes signalés hors périmètre. *(1)* **Adresses sortantes.** `cover_lookup` (`pdf`, `store`, aperçus d’une og:image) et `fetch-url-metadata` vont chercher des adresses données par le navigateur ou trouvées dans une page tierce : `fetch-url-metadata` n’avait aucune garde, `cover_lookup` ne vérifiait que le NOM écrit — une redirection (`redirect: 'follow'`), un nom public résolu en adresse privée (localtest.me → 127.0.0.1 ; `kong`, `db` sur la pile Docker), une IPv6 qui embarque une IPv4 (`[::ffff:7f00:1]`) passaient. Module partagé `_shared/core/adresse-sortante.ts` : plages non publiques IPv4/IPv6 complètes (CGNAT, lien local, NAT64, 6to4 compris), noms locaux et d’une seule étiquette refusés, nom résolu (A et AAAA, toutes les adresses publiques), redirections suivies à la main et revérifiées (cinq au plus), lecture bornée (aperçu 120 ko, image 15 Mo, PDF 30 Mo, page 2 Mo) ; échec fermé (nom qui ne se résout pas, pas de résolveur). Éprouvé dans edge-runtime v1.77.1 (l’image de la pile), DNS et redirections réels, aussi depuis le réseau Docker de la pile : Open Library et la redirection http→https de Codeberg passent ; localtest.me, 127.0.0.1.nip.io, `kong`, `supabase_kong_anarbib`, 169.254.169.254 et `[::ffff:7f00:1]` sont refusés. Reste hors de portée : la re-résolution entre la vérification et la connexion de fetch (rebinding DNS à TTL nul). *(2)* **`geocode` compte par compte** : kind `geocode_user`, clé = SHA-256 du `sub` du jeton, lu seulement après la garde de session (`sujetDuJeton`) ; le compteur par IP faisait partager 40 géocodages par heure à tout le local d’une bibliothèque, et `x-forwarded-for` se choisit. Migration `20261013211232` : `geocode_ip` sort de la liste fermée (aucune ligne en prod), `geocode_user` y entre ; suite SQL alignée. Commit `090e0350` ; bancs `src/tests/adresse-sortante.test.js` (dont la liste fermée : tout kind écrit par `freiner()` figure dans la dernière contrainte, que la suite SQL écrit exactement) et `cover-lookup-banc` (faux DNS, nom piège, redirection vers le réseau interne). Vérifié à 23 h 55 : tag `deployed-functions` = `090e0350`, migration appliquée, contrainte = `ip, email, geocode_user, carto_ip, gazette_ip, gazette_email, gazette_prefill, bug_ip`, `geocode` version 424 avec le compteur par compte ; les sept fonctions gardées répondent toujours 401 `auth_required` sans session. **Chemin avec session confirmé par Xavier le 14/10** : capa et métadonnées répondent correctement depuis le catalogage, connecté (couvre B44 et B45). `geocode` reste sans effet tant que `NOMINATIM_URL` n’est pas posé. |
 | H2 | 2026-10-14 | **Clos le 14/10 : le courriel est parti.** Xavier a envoyé à la source (fil « Le racleur, comme promis à Bologne ») le point long promis le 19/09 : la chronologie du site du 3 septembre au 13 octobre (il flotte), la sonde quotidienne, la copie du 3 septembre offerte, les réponses du 7 septembre, la relecture de Ludwig, **les sept questions dans leur forme révisée** — groupes de mots-clés SPIP ou convention d'affichage ; un fichier à deux schémas ou deux ; les liens vers les six catalogues ; l'astérisque ; le grec romanisé ; la licence ; la régénération — chacune avec une réponse par défaut qu'un oui, un non ou un silence suffit à régler, et quatre anomalies revérifiées dans l'instantané (316 fiches à deux « catalogue du CCL » vers deux sites, 308 à double lien du *Monde libertaire*, mot228 dans deux facettes, mot303). Cadrage de Xavier : les réponses se demandent à la personne qui tient le site, pas à « la fédération ». Le chemin : note du 28/08 (huit questions), réponses partielles du 07/09, courriel prêt le 16/09 jamais parti, site à terre du 05/10 au 12/10, sonde (12/10) et premier courriel réel (13/10), envoi le 14/10. **La suite est H3** : l'export complet suit la réponse à la question des groupes SPIP (les six autres ont leur défaut), et il sera remis à la source pour être posé à côté des pages dont il sort. |
 | Un nom d'éditeur collé est le même éditeur ; Venezuela (Uzcátegui, 2010) réunie en une notice (DEDUP-16) | 2026-10-14 | **Clos le 14/10** (REGISTRE `DEDUP-16`, commit `a6468842`). Relevé par Xavier le 13/10 dans la revue des capas : BTL-TL-000005 et BTL-TL-000012, même œuvre, même titre, même année, jamais proposées. Cause : « …/LaMalatesta Editorial » contre « La Malatesta », un mot collé pris pour un autre éditeur, donc deux éditions, donc paire masquée par l'œuvre — la même famille que DEDUP-14. Migration `20261013235651` : `fn_editeur_coeur` coupe un mot collé à sa majuscule interne avant la normalisation, règle inchangée pour le reste ; `editions_distinctes_tests` T9 (9/9), mutant rouge. Migration `20261013235652`, sur accord écrit et sous son identité : 17 → 10, les deux exemplaires BTL sous la notice gardée, étiquette de BTL-TL-EX-000012 à refaire (cote BTL-TL-000005). |
+| F19 | 2026-10-15 | **Clos le 15/10, sur une semaine de journaux propres après le correctif de `register`.** Relevé par `query_logs` (source `function_logs`, une requête par tranche de 24 h, détection d'une adresse complète par expression régulière) du 08/10 00 h 00 UTC au 15/10 en soirée : 08/10 1 480 lignes, 09/10 1 650, 10/10 1 552, 11/10 1 496, 12/10 1 266, 13/10 1 656, 14/10 1 606, 15/10 1 025 — **11 731 lignes, 0 adresse complète**. Et ce n'est pas une semaine sans envois : les sondes de santé quotidiennes et les quatorze avis de sécurité de l'annonce B42 du 13/10 sont tous journalisés « initiale…@domaine », la forme de `masquerAdresse` ; les trois lignes de `register` du 05/10 (« routing », « request ») n'ont reparu sous aucune forme. Le chemin : relevé par F1 le 30/09, masque à la source et filet `console.*` le 30/09 (`4158504a`), une semaine relue le 08/10 — trois fuites de `register`, qui journalisait des objets entiers hors du filet —, corrigé à la source le 08/10 (`ce792be4`), nouvelle semaine relue le 14 et le 15. Leçon tenue : le filet global posé sur `console` ne tient pas dans l'exécuteur Edge de production ; seule la règle « masquer à la source, sur chaque ligne qui cite un destinataire » protège, et c'est elle que la garde `journal-sans-adresse` tient. Décision de Xavier du 12/10 : clôture seule si la semaine est propre ; confirmée le 14/10 (« clos-le demain comme prévu »). |
 
 ---
 
@@ -2056,4 +2036,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 58 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-15. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 57 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-13 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `88a962ee` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
