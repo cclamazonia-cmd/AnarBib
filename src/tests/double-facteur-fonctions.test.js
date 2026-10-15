@@ -67,6 +67,19 @@ describe('les Edge Functions à la clé de service', () => {
     expect(src.slice(garde, premierService)).toContain("return refus('aal2_required'");
   });
 
+  // NUMDIF D16 (15/10/2026) : même ordre que attach-received-asset — double
+  // authentification, garde sous le jeton, et seulement ensuite la clé de service.
+  it('deposit-digital-candidate : double authentification et garde avant la clé de service', () => {
+    const src = source('deposit-digital-candidate');
+    const df = src.indexOf('await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)');
+    const garde = src.indexOf("await userClient.rpc('fn_digital_candidate_deposit_garde'");
+    const cle = src.indexOf('createClient(supabaseUrl, serviceKey');
+    expect(df).toBeGreaterThan(-1);
+    expect(garde).toBeGreaterThan(df);
+    expect(cle).toBeGreaterThan(garde);
+    expect(src.slice(df, garde)).toContain("return refus('aal2_required'");
+  });
+
   // Audit du 13/10 : la première requête part sous le jeton de l'appelant, donc
   // la fonction d'avant-requête la refuse avant tout geste à la clé de service.
   const COUVERTES = [

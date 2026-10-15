@@ -381,6 +381,148 @@ const D15 = {
   [P + 'loading']: ['Chargement des candidats…', 'Carregando os candidatos…', 'Loading candidates…', 'Cargando los candidatos…', 'Carregant els candidats…', 'Caricamento dei candidati…', 'Kandidaten werden geladen…', 'Kandidaten laden…', 'Ŝargante la kandidatojn…', 'Φόρτωση υποψηφίων…', 'Se încarcă candidații…'],
   [P + 'empty']: ['Aucun candidat ici.', 'Nenhum candidato aqui.', 'No candidates here.', 'Ningún candidato aquí.', 'Cap candidat aquí.', 'Nessun candidato qui.', 'Hier gibt es keine Kandidaten.', 'Hier zijn geen kandidaten.', 'Neniu kandidato ĉi tie.', 'Κανένας υποψήφιος εδώ.', 'Niciun candidat aici.'],
 };
+// ── D16 : le versement côté serveur ─────────────────────────────────────
+const D16 = {
+  [P + 'deposit.hint']: [
+    'Validé : à verser. Le serveur télécharge lui-même le fichier, vérifie qu’il est bien celui qui a été examiné (empreinte SHA-256), puis le verse dans le bon seau.',
+    'Validado: a enviar. O servidor baixa ele mesmo o arquivo, verifica que é o que foi examinado (impressão SHA-256) e o envia ao balde certo.',
+    'Validated: to deposit. The server downloads the file itself, checks it is the one that was examined (SHA-256 fingerprint), then deposits it in the right bucket.',
+    'Validado: por subir. El servidor descarga él mismo el archivo, comprueba que es el que se examinó (huella SHA-256) y lo sube al depósito correcto.',
+    'Validat: per dipositar. El servidor baixa ell mateix el fitxer, comprova que és el que es va examinar (empremta SHA-256) i el diposita al dipòsit correcte.',
+    'Convalidato: da depositare. Il server scarica da sé il file, verifica che sia quello esaminato (impronta SHA-256) e lo deposita nel contenitore giusto.',
+    'Bestätigt: abzulegen. Der Server lädt die Datei selbst herunter, prüft, dass es die geprüfte ist (SHA-256-Fingerabdruck), und legt sie im richtigen Speicher ab.',
+    'Bevestigd: op te slaan. De server downloadt het bestand zelf, controleert dat het het bekeken bestand is (SHA-256-vingerafdruk) en slaat het op in de juiste opslag.',
+    'Validigita: deponenda. La servilo mem elŝutas la dosieron, kontrolas, ke ĝi estas la ekzamenita (SHA-256-fingrospuro), kaj deponas ĝin en la ĝustan deponejon.',
+    'Επικυρώθηκε: προς κατάθεση. Ο διακομιστής κατεβάζει ο ίδιος το αρχείο, ελέγχει ότι είναι αυτό που εξετάστηκε (αποτύπωμα SHA-256) και το καταθέτει στον σωστό χώρο.',
+    'Validat: de depus. Serverul descarcă singur fișierul, verifică dacă este cel examinat (amprentă SHA-256) și îl depune în spațiul potrivit.'],
+  [P + 'deposit.button']: ['Verser côté serveur', 'Enviar pelo servidor', 'Deposit server-side', 'Subir desde el servidor', 'Dipositar des del servidor', 'Deposita dal server', 'Serverseitig ablegen', 'Opslaan via de server', 'Deponi per la servilo', 'Κατάθεση από τον διακομιστή', 'Depune prin server'],
+  [P + 'deposit.running']: ['Versement en cours…', 'Envio em andamento…', 'Depositing…', 'Subida en curso…', 'Dipòsit en curs…', 'Deposito in corso…', 'Ablage läuft…', 'Bezig met opslaan…', 'Deponado okazas…', 'Κατάθεση σε εξέλιξη…', 'Depunere în curs…'],
+  [P + 'deposit.done']: [
+    'Versé : ressource n° {id} ({scope}).', 'Enviado: recurso n.º {id} ({scope}).', 'Deposited: resource no. {id} ({scope}).',
+    'Subido: recurso n.º {id} ({scope}).', 'Dipositat: recurs núm. {id} ({scope}).', 'Depositato: risorsa n. {id} ({scope}).',
+    'Abgelegt: Ressource Nr. {id} ({scope}).', 'Opgeslagen: bron nr. {id} ({scope}).', 'Deponita: rimedo n-ro {id} ({scope}).',
+    'Κατατέθηκε: πόρος αρ. {id} ({scope}).', 'Depus: resursa nr. {id} ({scope}).'],
+  [P + 'deposit.lastError']: [
+    'Dernier versement refusé : {error}', 'Último envio recusado: {error}', 'Last deposit refused: {error}', 'Última subida rechazada: {error}',
+    'Últim dipòsit rebutjat: {error}', 'Ultimo deposito rifiutato: {error}', 'Letzte Ablage abgelehnt: {error}', 'Laatste opslag geweigerd: {error}',
+    'Lasta deponado rifuzita: {error}', 'Η τελευταία κατάθεση απορρίφθηκε: {error}', 'Ultima depunere refuzată: {error}'],
+  'error.digital_candidate.already_deposited': [
+    'Ce candidat est déjà versé : sa ressource existe.', 'Este candidato já foi enviado: o recurso dele existe.', 'This candidate is already deposited: its resource exists.',
+    'Este candidato ya se subió: su recurso existe.', 'Aquest candidat ja s’ha dipositat: el seu recurs existeix.', 'Questo candidato è già depositato: la sua risorsa esiste.',
+    'Dieser Kandidat ist schon abgelegt: Seine Ressource existiert.', 'Deze kandidaat is al opgeslagen: zijn bron bestaat.', 'Ĉi tiu kandidato jam estas deponita: ĝia rimedo ekzistas.',
+    'Αυτός ο υποψήφιος έχει ήδη κατατεθεί: ο πόρος του υπάρχει.', 'Acest candidat este deja depus: resursa lui există.'],
+  'error.digital_candidate.not_validated': [
+    'Seul un candidat validé se verse.', 'Só um candidato validado se envia.', 'Only a validated candidate can be deposited.',
+    'Solo se sube un candidato validado.', 'Només es diposita un candidat validat.', 'Si deposita solo un candidato convalidato.',
+    'Nur ein bestätigter Kandidat wird abgelegt.', 'Alleen een bevestigde kandidaat wordt opgeslagen.', 'Nur validigita kandidato estas deponebla.',
+    'Κατατίθεται μόνο επικυρωμένος υποψήφιος.', 'Se depune doar un candidat validat.'],
+  'error.digital_candidate.fingerprint_mismatch': [
+    'Le fichier téléchargé n’est plus celui qui a été validé (empreinte SHA-256 différente) : rien n’a été versé. Rejette le candidat ou relance l’outil de recherche.',
+    'O arquivo baixado não é mais o que foi validado (impressão SHA-256 diferente): nada foi enviado. Rejeite o candidato ou rode de novo a ferramenta de busca.',
+    'The downloaded file is no longer the one that was validated (different SHA-256 fingerprint): nothing was deposited. Reject the candidate or run the search tool again.',
+    'El archivo descargado ya no es el que se validó (huella SHA-256 distinta): no se subió nada. Rechaza el candidato o vuelve a lanzar la herramienta de búsqueda.',
+    'El fitxer baixat ja no és el que es va validar (empremta SHA-256 diferent): no s’ha dipositat res. Rebutja el candidat o torna a executar l’eina de cerca.',
+    'Il file scaricato non è più quello convalidato (impronta SHA-256 diversa): non è stato depositato nulla. Rifiuta il candidato o rilancia lo strumento di ricerca.',
+    'Die heruntergeladene Datei ist nicht mehr die bestätigte (anderer SHA-256-Fingerabdruck): Nichts wurde abgelegt. Lehne den Kandidaten ab oder starte das Suchwerkzeug erneut.',
+    'Het gedownloade bestand is niet meer het bevestigde (andere SHA-256-vingerafdruk): er is niets opgeslagen. Wijs de kandidaat af of start de zoektool opnieuw.',
+    'La elŝutita dosiero ne plu estas la validigita (alia SHA-256-fingrospuro): nenio estis deponita. Malakceptu la kandidaton aŭ relanĉu la serĉilon.',
+    'Το αρχείο που κατέβηκε δεν είναι πια αυτό που επικυρώθηκε (διαφορετικό αποτύπωμα SHA-256): δεν κατατέθηκε τίποτα. Απόρριψε τον υποψήφιο ή ξανατρέξε το εργαλείο αναζήτησης.',
+    'Fișierul descărcat nu mai este cel validat (amprentă SHA-256 diferită): nu s-a depus nimic. Respinge candidatul sau relansează instrumentul de căutare.'],
+  'error.digital_candidate.wrong_bucket': [
+    'Le seau ne correspond pas au cas de source : rien n’a été enregistré.', 'O balde não corresponde ao caso de origem: nada foi registrado.', 'The bucket does not match the source case: nothing was recorded.',
+    'El depósito no corresponde al caso de origen: no se registró nada.', 'El dipòsit no correspon al cas d’origen: no s’ha registrat res.', 'Il contenitore non corrisponde al caso di origine: non è stato registrato nulla.',
+    'Der Speicher passt nicht zum Quellenfall: Nichts wurde eingetragen.', 'De opslag past niet bij het bronscenario: er is niets geregistreerd.', 'La deponejo ne kongruas kun la fonta kazo: nenio estis registrita.',
+    'Ο χώρος δεν αντιστοιχεί στην περίπτωση πηγής: δεν καταχωρίστηκε τίποτα.', 'Spațiul nu corespunde cazului sursei: nu s-a înregistrat nimic.'],
+  'error.digital_candidate.bad_path': [
+    'Chemin de stockage invalide : un PDF de notice se range sous books/<notice>/.', 'Caminho de armazenamento inválido: um PDF de ficha se guarda em books/<ficha>/.', 'Invalid storage path: a record PDF goes under books/<record>/.',
+    'Ruta de almacenamiento no válida: un PDF de ficha se guarda en books/<ficha>/.', 'Camí d’emmagatzematge no vàlid: un PDF de fitxa es desa a books/<fitxa>/.', 'Percorso di archiviazione non valido: un PDF di scheda va in books/<scheda>/.',
+    'Ungültiger Speicherpfad: Ein PDF eines Eintrags liegt unter books/<Eintrag>/.', 'Ongeldig opslagpad: een pdf van een record hoort onder books/<record>/.', 'Nevalida konserva vojo: PDF de slipo iras sub books/<slipo>/.',
+    'Μη έγκυρη διαδρομή αποθήκευσης: ένα PDF εγγραφής μπαίνει στο books/<εγγραφή>/.', 'Cale de stocare nevalidă: un PDF de fișă se pune în books/<fișă>/.'],
+  'error.digital_candidate.object_missing': [
+    'Le fichier n’est pas dans le stockage : rien n’a été enregistré.', 'O arquivo não está no armazenamento: nada foi registrado.', 'The file is not in storage: nothing was recorded.',
+    'El archivo no está en el almacenamiento: no se registró nada.', 'El fitxer no és a l’emmagatzematge: no s’ha registrat res.', 'Il file non è nell’archivio: non è stato registrato nulla.',
+    'Die Datei ist nicht im Speicher: Nichts wurde eingetragen.', 'Het bestand staat niet in de opslag: er is niets geregistreerd.', 'La dosiero ne estas en la konservejo: nenio estis registrita.',
+    'Το αρχείο δεν βρίσκεται στον χώρο αποθήκευσης: δεν καταχωρίστηκε τίποτα.', 'Fișierul nu este în spațiul de stocare: nu s-a înregistrat nimic.'],
+  'error.edge.candidate_not_found': [
+    'Candidat PDF introuvable : il a peut-être été retiré, ou il appartient à une autre bibliothèque.', 'Candidato PDF não encontrado: talvez tenha sido retirado, ou pertença a outra biblioteca.', 'PDF candidate not found: it may have been removed, or it belongs to another library.',
+    'Candidato PDF no encontrado: quizá se retiró, o pertenece a otra biblioteca.', 'No s’ha trobat el candidat PDF: potser s’ha retirat, o pertany a una altra biblioteca.', 'Candidato PDF non trovato: forse è stato ritirato, o appartiene a un’altra biblioteca.',
+    'PDF-Kandidat nicht gefunden: Er wurde vielleicht entfernt oder gehört einer anderen Bibliothek.', 'Pdf-kandidaat niet gevonden: misschien is hij verwijderd, of hoort hij bij een andere bibliotheek.', 'PDF-kandidato ne trovita: eble ĝi estis forigita, aŭ ĝi apartenas al alia biblioteko.',
+    'Ο υποψήφιος PDF δεν βρέθηκε: ίσως αφαιρέθηκε ή ανήκει σε άλλη βιβλιοθήκη.', 'Candidat PDF negăsit: poate a fost retras sau aparține altei biblioteci.'],
+  'error.edge.source_unreachable': [
+    'La source ne répond pas : réessaie plus tard ; rien n’a été versé.', 'A fonte não responde: tente mais tarde; nada foi enviado.', 'The source does not respond: try again later; nothing was deposited.',
+    'La fuente no responde: inténtalo más tarde; no se subió nada.', 'La font no respon: torna-ho a provar més tard; no s’ha dipositat res.', 'La fonte non risponde: riprova più tardi; non è stato depositato nulla.',
+    'Die Quelle antwortet nicht: Versuch es später erneut; nichts wurde abgelegt.', 'De bron reageert niet: probeer het later opnieuw; er is niets opgeslagen.', 'La fonto ne respondas: reprovu poste; nenio estis deponita.',
+    'Η πηγή δεν απαντά: δοκίμασε αργότερα· δεν κατατέθηκε τίποτα.', 'Sursa nu răspunde: încearcă mai târziu; nu s-a depus nimic.'],
+  'error.edge.source_refused': [
+    'La source refuse le téléchargement par un automate : on ne contourne pas cette protection. Le fichier se verse à la main, ou pas.', 'A fonte recusa o download por um automato: não se contorna essa proteção. O arquivo se envia à mão, ou não.', 'The source refuses download by an automated client: this protection is not bypassed. The file is deposited by hand, or not at all.',
+    'La fuente rechaza la descarga por un automatismo: no se esquiva esa protección. El archivo se sube a mano, o no se sube.', 'La font rebutja la baixada per un automatisme: no s’esquiva aquesta protecció. El fitxer es diposita a mà, o no.', 'La fonte rifiuta lo scaricamento automatico: questa protezione non si aggira. Il file si deposita a mano, oppure no.',
+    'Die Quelle verweigert den automatischen Download: Diese Sperre wird nicht umgangen. Die Datei wird von Hand abgelegt oder gar nicht.', 'De bron weigert een geautomatiseerde download: die bescherming omzeilen we niet. Het bestand wordt met de hand opgeslagen, of niet.', 'La fonto rifuzas aŭtomatan elŝuton: oni ne ĉirkaŭiras tiun protekton. La dosiero estas deponata permane, aŭ ne.',
+    'Η πηγή αρνείται τη λήψη από αυτόματο πρόγραμμα: αυτή η προστασία δεν παρακάμπτεται. Το αρχείο κατατίθεται με το χέρι, ή καθόλου.', 'Sursa refuză descărcarea automată: această protecție nu se ocolește. Fișierul se depune de mână, sau deloc.'],
+  'error.edge.file_too_large': [
+    'Fichier trop lourd pour un versement par le serveur (150 Mo au plus) : rien n’a été versé.', 'Arquivo pesado demais para um envio pelo servidor (150 MB no máximo): nada foi enviado.', 'File too large for a server-side deposit (150 MB at most): nothing was deposited.',
+    'Archivo demasiado pesado para una subida desde el servidor (150 MB como máximo): no se subió nada.', 'Fitxer massa pesat per a un dipòsit des del servidor (150 MB com a màxim): no s’ha dipositat res.', 'File troppo pesante per un deposito dal server (al massimo 150 MB): non è stato depositato nulla.',
+    'Datei zu groß für eine serverseitige Ablage (höchstens 150 MB): Nichts wurde abgelegt.', 'Bestand te groot om via de server op te slaan (maximaal 150 MB): er is niets opgeslagen.', 'Dosiero tro peza por deponado per la servilo (maksimume 150 MB): nenio estis deponita.',
+    'Το αρχείο είναι πολύ μεγάλο για κατάθεση από τον διακομιστή (έως 150 MB): δεν κατατέθηκε τίποτα.', 'Fișier prea mare pentru o depunere prin server (cel mult 150 MB): nu s-a depus nimic.'],
+  'error.edge.not_a_pdf': [
+    'La source ne rend pas un PDF (page web, protection ?) : rien n’a été versé.', 'A fonte não devolve um PDF (página web, proteção?): nada foi enviado.', 'The source does not return a PDF (web page, protection?): nothing was deposited.',
+    'La fuente no devuelve un PDF (página web, ¿protección?): no se subió nada.', 'La font no torna un PDF (pàgina web, protecció?): no s’ha dipositat res.', 'La fonte non restituisce un PDF (pagina web, protezione?): non è stato depositato nulla.',
+    'Die Quelle liefert kein PDF (Webseite, Sperre?): Nichts wurde abgelegt.', 'De bron geeft geen pdf terug (webpagina, bescherming?): er is niets opgeslagen.', 'La fonto ne redonas PDF (retpaĝo, protekto?): nenio estis deponita.',
+    'Η πηγή δεν επιστρέφει PDF (ιστοσελίδα, προστασία;): δεν κατατέθηκε τίποτα.', 'Sursa nu întoarce un PDF (pagină web, protecție?): nu s-a depus nimic.'],
+  'error.edge.fingerprint_mismatch': [
+    'Le fichier téléchargé n’est plus celui qui a été validé : rien n’a été versé.', 'O arquivo baixado não é mais o que foi validado: nada foi enviado.', 'The downloaded file is no longer the one that was validated: nothing was deposited.',
+    'El archivo descargado ya no es el que se validó: no se subió nada.', 'El fitxer baixat ja no és el que es va validar: no s’ha dipositat res.', 'Il file scaricato non è più quello convalidato: non è stato depositato nulla.',
+    'Die heruntergeladene Datei ist nicht mehr die bestätigte: Nichts wurde abgelegt.', 'Het gedownloade bestand is niet meer het bevestigde: er is niets opgeslagen.', 'La elŝutita dosiero ne plu estas la validigita: nenio estis deponita.',
+    'Το αρχείο που κατέβηκε δεν είναι πια αυτό που επικυρώθηκε: δεν κατατέθηκε τίποτα.', 'Fișierul descărcat nu mai este cel validat: nu s-a depus nimic.'],
+  'error.edge.deposit_refused': [
+    'La base a refusé d’enregistrer le versement : le fichier déposé a été retiré.', 'A base recusou registrar o envio: o arquivo depositado foi retirado.', 'The database refused to record the deposit: the stored file was removed.',
+    'La base rechazó registrar la subida: se retiró el archivo depositado.', 'La base ha rebutjat registrar el dipòsit: s’ha retirat el fitxer desat.', 'La base ha rifiutato di registrare il deposito: il file salvato è stato rimosso.',
+    'Die Datenbank hat die Ablage nicht eingetragen: Die gespeicherte Datei wurde entfernt.', 'De database weigerde de opslag te registreren: het opgeslagen bestand is verwijderd.', 'La datumbazo rifuzis registri la deponadon: la konservita dosiero estis forigita.',
+    'Η βάση αρνήθηκε να καταχωρίσει την κατάθεση: το αποθηκευμένο αρχείο αφαιρέθηκε.', 'Baza a refuzat să înregistreze depunerea: fișierul stocat a fost retras.'],
+  // par lots, avec reprise ; une source MediaWiki ne donne que le SHA-1 (consignes du 15/10)
+  [P + 'file.metaSha1']: [
+    '{size} Mo · {pages} pages · empreinte SHA-1 {sha} (le SHA-256 se calcule au versement)',
+    '{size} MB · {pages} páginas · impressão SHA-1 {sha} (o SHA-256 se calcula no envio)',
+    '{size} MB · {pages} pages · SHA-1 fingerprint {sha} (SHA-256 is computed at deposit)',
+    '{size} MB · {pages} páginas · huella SHA-1 {sha} (el SHA-256 se calcula al subir)',
+    '{size} MB · {pages} pàgines · empremta SHA-1 {sha} (el SHA-256 es calcula en dipositar)',
+    '{size} MB · {pages} pagine · impronta SHA-1 {sha} (lo SHA-256 si calcola al deposito)',
+    '{size} MB · {pages} Seiten · SHA-1-Fingerabdruck {sha} (SHA-256 wird bei der Ablage berechnet)',
+    '{size} MB · {pages} pagina’s · SHA-1-vingerafdruk {sha} (SHA-256 wordt bij opslag berekend)',
+    '{size} MB · {pages} paĝoj · SHA-1-fingrospuro {sha} (SHA-256 kalkuliĝas ĉe la deponado)',
+    '{size} MB · {pages} σελίδες · αποτύπωμα SHA-1 {sha} (το SHA-256 υπολογίζεται στην κατάθεση)',
+    '{size} MB · {pages} pagini · amprentă SHA-1 {sha} (SHA-256 se calculează la depunere)'],
+  [P + 'batch.hint']: [
+    'Les candidats à verser partent un par un, côté serveur. Un refus n’arrête pas le lot ; un lot arrêté ou interrompu se reprend en le relançant : rien de versé ne repasse.',
+    'Os candidatos a enviar partem um a um, pelo servidor. Uma recusa não interrompe o lote; um lote parado ou interrompido se retoma relançando-o: nada já enviado passa de novo.',
+    'Candidates to deposit go one by one, server-side. A refusal does not stop the batch; a stopped or interrupted batch resumes when you launch it again: nothing already deposited goes through twice.',
+    'Los candidatos por subir salen uno a uno, desde el servidor. Un rechazo no detiene el lote; un lote detenido o interrumpido se retoma al relanzarlo: nada ya subido vuelve a pasar.',
+    'Els candidats per dipositar surten un per un, des del servidor. Un rebuig no atura el lot; un lot aturat o interromput es reprèn tornant-lo a llançar: res del que ja s’ha dipositat no torna a passar.',
+    'I candidati da depositare partono uno alla volta, dal server. Un rifiuto non ferma il lotto; un lotto fermato o interrotto riprende rilanciandolo: niente di già depositato ripassa.',
+    'Die abzulegenden Kandidaten gehen einzeln, serverseitig. Eine Ablehnung hält den Stapel nicht an; ein angehaltener oder unterbrochener Stapel geht weiter, wenn du ihn neu startest: Bereits Abgelegtes läuft nicht noch einmal.',
+    'De op te slaan kandidaten gaan één voor één, via de server. Een weigering stopt de partij niet; een gestopte of onderbroken partij gaat verder als je haar opnieuw start: wat al is opgeslagen, komt niet nog eens.',
+    'La deponendaj kandidatoj iras unu post la alia, per la servilo. Rifuzo ne haltigas la aron; haltigita aŭ interrompita aro daŭras, kiam vi relanĉas ĝin: nenio jam deponita trairas denove.',
+    'Οι υποψήφιοι προς κατάθεση φεύγουν ένας ένας, από τον διακομιστή. Μια απόρριψη δεν σταματά την παρτίδα· μια παρτίδα που σταμάτησε ή διακόπηκε συνεχίζεται όταν την ξαναξεκινήσεις: ό,τι έχει ήδη κατατεθεί δεν ξαναπερνά.',
+    'Candidații de depus pleacă unul câte unul, prin server. O refuzare nu oprește lotul; un lot oprit sau întrerupt se reia relansându-l: nimic deja depus nu mai trece o dată.'],
+  [P + 'batch.button']: ['Verser le lot ({n} à verser)', 'Enviar o lote ({n} a enviar)', 'Deposit the batch ({n} to deposit)', 'Subir el lote ({n} por subir)', 'Dipositar el lot ({n} per dipositar)', 'Deposita il lotto ({n} da depositare)', 'Stapel ablegen ({n} abzulegen)', 'Partij opslaan ({n} op te slaan)', 'Deponi la aron ({n} deponendaj)', 'Κατάθεση παρτίδας ({n} προς κατάθεση)', 'Depune lotul ({n} de depus)'],
+  [P + 'batch.retryFailed']: ['Reprendre aussi les candidats déjà refusés', 'Retomar também os candidatos já recusados', 'Also retry candidates already refused', 'Retomar también los candidatos ya rechazados', 'Reprendre també els candidats ja rebutjats', 'Riprendere anche i candidati già rifiutati', 'Auch bereits abgelehnte Kandidaten erneut versuchen', 'Ook al geweigerde kandidaten opnieuw proberen', 'Reprovi ankaŭ la jam rifuzitajn kandidatojn', 'Επανάληψη και για υποψηφίους που ήδη απορρίφθηκαν', 'Reia și candidații deja refuzați'],
+  [P + 'batch.stop']: ['Arrêter après le fichier en cours', 'Parar depois do arquivo em curso', 'Stop after the current file', 'Detener tras el archivo en curso', 'Aturar després del fitxer en curs', 'Fermati dopo il file in corso', 'Nach der aktuellen Datei anhalten', 'Stoppen na het huidige bestand', 'Halti post la nuna dosiero', 'Διακοπή μετά το τρέχον αρχείο', 'Oprește după fișierul în curs'],
+  [P + 'batch.progress']: ['Lot en cours : {done} versé(s), {failed} refusé(s) sur {total}…', 'Lote em curso: {done} enviado(s), {failed} recusado(s) de {total}…', 'Batch running: {done} deposited, {failed} refused out of {total}…', 'Lote en curso: {done} subido(s), {failed} rechazado(s) de {total}…', 'Lot en curs: {done} dipositat(s), {failed} rebutjat(s) de {total}…', 'Lotto in corso: {done} depositati, {failed} rifiutati su {total}…', 'Stapel läuft: {done} abgelegt, {failed} abgelehnt von {total}…', 'Partij bezig: {done} opgeslagen, {failed} geweigerd van {total}…', 'Aro okazas: {done} deponitaj, {failed} rifuzitaj el {total}…', 'Παρτίδα σε εξέλιξη: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}…', 'Lot în curs: {done} depuși, {failed} refuzați din {total}…'],
+  [P + 'batch.done']: ['Lot terminé : {done} versé(s), {failed} refusé(s) sur {total}.', 'Lote concluído: {done} enviado(s), {failed} recusado(s) de {total}.', 'Batch finished: {done} deposited, {failed} refused out of {total}.', 'Lote terminado: {done} subido(s), {failed} rechazado(s) de {total}.', 'Lot acabat: {done} dipositat(s), {failed} rebutjat(s) de {total}.', 'Lotto finito: {done} depositati, {failed} rifiutati su {total}.', 'Stapel fertig: {done} abgelegt, {failed} abgelehnt von {total}.', 'Partij klaar: {done} opgeslagen, {failed} geweigerd van {total}.', 'Aro finita: {done} deponitaj, {failed} rifuzitaj el {total}.', 'Η παρτίδα ολοκληρώθηκε: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}.', 'Lot încheiat: {done} depuși, {failed} refuzați din {total}.'],
+  [P + 'batch.stopped']: [
+    'Lot arrêté : {done} versé(s), {failed} refusé(s) sur {total}. Relance-le pour reprendre ; ce qui est versé ne repasse pas.',
+    'Lote parado: {done} enviado(s), {failed} recusado(s) de {total}. Relance-o para retomar; o que foi enviado não passa de novo.',
+    'Batch stopped: {done} deposited, {failed} refused out of {total}. Launch it again to resume; what is deposited does not go through twice.',
+    'Lote detenido: {done} subido(s), {failed} rechazado(s) de {total}. Relánzalo para retomar; lo subido no vuelve a pasar.',
+    'Lot aturat: {done} dipositat(s), {failed} rebutjat(s) de {total}. Torna’l a llançar per reprendre; el que s’ha dipositat no torna a passar.',
+    'Lotto fermato: {done} depositati, {failed} rifiutati su {total}. Rilancialo per riprendere; ciò che è depositato non ripassa.',
+    'Stapel angehalten: {done} abgelegt, {failed} abgelehnt von {total}. Starte ihn neu, um weiterzumachen; Abgelegtes läuft nicht noch einmal.',
+    'Partij gestopt: {done} opgeslagen, {failed} geweigerd van {total}. Start haar opnieuw om verder te gaan; wat opgeslagen is, komt niet nog eens.',
+    'Aro haltigita: {done} deponitaj, {failed} rifuzitaj el {total}. Relanĉu ĝin por daŭrigi; la deponitaĵoj ne trairas denove.',
+    'Η παρτίδα σταμάτησε: {done} κατατέθηκαν, {failed} απορρίφθηκαν από {total}. Ξαναξεκίνησέ την για να συνεχίσεις· ό,τι κατατέθηκε δεν ξαναπερνά.',
+    'Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată.'],
+};
+Object.assign(D15, D16);
+
 for (const [cle, vals] of Object.entries(D15)) {
   if (vals.length !== ORDRE.length) throw new Error(`${cle} : ${vals.length} valeurs pour ${ORDRE.length} locales`);
   KEYS[cle] = Object.fromEntries(ORDRE.map((l, i) => [l, vals[i]]));

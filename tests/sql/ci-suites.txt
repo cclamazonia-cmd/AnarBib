@@ -811,3 +811,7 @@ tests/sql/locales_source_unique_tests.sql
 # droit API ; la coordination de la bibliothèque détentrice propose, voit, valide (même édition seulement, justification, mention + page pour un cas
 # public sous licence) ou rejette avec motif (édition trouvée gardée) ; une autre bibliothèque, un librarian, anon : rien ; l'administration voit tout.
 tests/sql/numdif_file_candidats_tests.sql
+# NUMDIF D16 (15/10/2026, REGISTRE §47 NUMDIF-4) : le versement côté serveur — garde sous le jeton (anon, autre bibliothèque, non validé refusés),
+# refus noté sur le candidat, enregistrement à la clé de service seule (empreinte, seau du cas, chemin books/<notice>/, objet présent, portée de la
+# personne) ; ressource restreinte (pdf-restrito, sob_direitos, la page en source) ou publique (licenca_livre, mention et page), candidat versé.
+tests/sql/numdif_versement_tests.sql

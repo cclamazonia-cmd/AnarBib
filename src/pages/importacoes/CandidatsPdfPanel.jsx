@@ -15,10 +15,11 @@
 // le fichier de l'outil), fn_digital_candidate_decide. La portée est tenue par
 // la base : une autre bibliothèque ne voit rien.
 // ─────────────────────────────────────────────────────────────────────────────
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { supabase, SUPABASE_URL } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { erreurDeFonction } from '@/lib/edgeError';
 
 const PAGE = 20;
 export const STATUTS = ['propose', 'valide', 'rejete', 'verse'];
@@ -185,6 +186,139 @@ function Decision({ c, t, onDone }) {
   );
 }
 
+// NUMDIF D16 : le versement se fait côté serveur (deposit-digital-candidate),
+// avec le jeton de la coordination ; la fonction télécharge l'URL validée,
+// compare l'empreinte et refuse si elle diffère — le refus se dit ici, et il
+// reste noté sur le candidat (deposit_error).
+export async function appelerVersement(ids) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/deposit-digital-candidate`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${session?.access_token}`,
+      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(ids.length === 1 ? { candidate_id: ids[0] } : { candidate_ids: ids }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok || out?.ok !== true) throw erreurDeFonction(out, res.status);
+  return out;
+}
+
+// Par lots, avec reprise (consigne du 15/10) : les candidats « à verser »
+// partent par paquets de LOT ; la fonction rend ce qu'elle n'a pas eu le temps
+// de commencer (`remaining`), qui repart en tête. L'état vit en base : un lot
+// arrêté ou interrompu se reprend en le relançant, rien de versé ne repasse ;
+// les candidats déjà refusés n'y rentrent que si on le demande.
+const LOT = 5;
+export async function versementParLots(ids, appeler, { arrete = () => false, progres = () => {} } = {}) {
+  const file = [...ids];
+  const bilan = { total: ids.length, done: 0, failed: 0, arrete: false };
+  while (file.length) {
+    if (arrete()) { bilan.arrete = true; break; }
+    const paquet = file.splice(0, LOT);
+    const out = await appeler(paquet);
+    const resultats = Array.isArray(out?.results) ? out.results : [{ id: paquet[0], ok: true }];
+    for (const r of resultats) { if (r.ok) bilan.done += 1; else bilan.failed += 1; }
+    if (Array.isArray(out?.remaining) && out.remaining.length) file.unshift(...out.remaining);
+    progres({ ...bilan });
+  }
+  return bilan;
+}
+
+function VerserLeLot({ t, n, onFin }) {
+  const [etat, setEtat] = useState(null);
+  const [reprendreRefus, setReprendreRefus] = useState(false);
+  const [erreur, setErreur] = useState('');
+  const arret = useRef(false);
+  const lancer = async () => {
+    arret.current = false; setErreur('');
+    try {
+      const ids = [];
+      for (let off = 0; ; off += 200) {
+        const { data, error } = await supabase.rpc('fn_digital_candidates_list', {
+          p_library_id: null, p_status: 'valide', p_book_id: null, p_limit: 200, p_offset: off,
+        });
+        if (error) throw error;
+        const cs = Array.isArray(data?.candidates) ? data.candidates : [];
+        ids.push(...cs.filter((c) => c.holding !== false && (reprendreRefus || !c.deposit_error)).map((c) => c.id));
+        if (cs.length < 200) break;
+      }
+      setEtat({ total: ids.length, done: 0, failed: 0, enCours: true });
+      const bilan = await versementParLots(ids, appelerVersement, {
+        arrete: () => arret.current, progres: (b) => setEtat({ ...b, enCours: true }),
+      });
+      setEtat({ ...bilan, enCours: false });
+      onFin?.();
+    } catch (e) {
+      setErreur(localizeError(e, t));
+      setEtat((x) => (x ? { ...x, enCours: false, arrete: true } : x));
+    }
+  };
+  const enCours = Boolean(etat?.enCours);
+  return (
+    <div data-testid="pdf-candidates-batch" style={{ margin: '0 0 12px', padding: 10, border: '1px solid rgba(255,255,255,.08)', borderRadius: 6 }}>
+      <p style={{ ...muted, margin: '0 0 6px' }}>{t({ id: 'importacoes.pdfCandidates.batch.hint' })}</p>
+      <label style={{ ...muted, display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+        <input type="checkbox" checked={reprendreRefus} disabled={enCours} onChange={(e) => setReprendreRefus(e.target.checked)} />
+        {t({ id: 'importacoes.pdfCandidates.batch.retryFailed' })}
+      </label>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+        <button type="button" className="cat-btn primary" data-testid="pdf-candidates-batch-start" disabled={enCours || !n} onClick={lancer}>
+          {t({ id: 'importacoes.pdfCandidates.batch.button' }, { n })}
+        </button>
+        {enCours && (
+          <button type="button" className="cat-btn secondary" onClick={() => { arret.current = true; }}>
+            {t({ id: 'importacoes.pdfCandidates.batch.stop' })}
+          </button>
+        )}
+      </div>
+      {etat && (
+        <div role="status" data-testid="pdf-candidates-batch-state" style={{ fontSize: '.85rem', marginTop: 6 }}>
+          {t({ id: etat.enCours ? 'importacoes.pdfCandidates.batch.progress'
+            : etat.arrete ? 'importacoes.pdfCandidates.batch.stopped' : 'importacoes.pdfCandidates.batch.done' },
+          { done: etat.done, failed: etat.failed, total: etat.total })}
+        </div>
+      )}
+      {erreur && <div className="cat-message error" role="alert" style={{ margin: '8px 0' }}>{erreur}</div>}
+    </div>
+  );
+}
+
+function Verser({ c, t, onDone }) {
+  const [occupe, setOccupe] = useState(false);
+  const [erreur, setErreur] = useState('');
+  const verser = async () => {
+    setOccupe(true); setErreur('');
+    try {
+      const out = await appelerVersement([c.id]);
+      onDone?.(t({ id: 'importacoes.pdfCandidates.deposit.done' }, {
+        id: out.resource_id ?? '?',
+        scope: t({ id: out.access_scope === 'conta_ativa' ? 'importacoes.pdfCandidates.dest.restricted' : 'importacoes.pdfCandidates.dest.public' }),
+      }));
+    } catch (e) {
+      setErreur(localizeError(e, t));
+    } finally {
+      setOccupe(false);
+    }
+  };
+  return (
+    <div data-testid="pdf-candidate-deposit" style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+      <p style={{ ...muted, margin: '0 0 6px' }}>{t({ id: 'importacoes.pdfCandidates.deposit.hint' })}</p>
+      {c.deposit_error && (
+        <div data-testid="pdf-candidate-deposit-error" style={{ ...muted, color: 'var(--brand-warning, #eab308)', marginBottom: 6 }}>
+          {t({ id: 'importacoes.pdfCandidates.deposit.lastError' }, { error: c.deposit_error })}
+        </div>
+      )}
+      {erreur && <div className="cat-message error" role="alert" style={{ margin: '8px 0' }}>{erreur}</div>}
+      <button type="button" className="cat-btn primary" data-testid="pdf-candidate-deposit-button" disabled={occupe} onClick={verser}>
+        {occupe ? t({ id: 'importacoes.pdfCandidates.deposit.running' }) : t({ id: 'importacoes.pdfCandidates.deposit.button' })}
+      </button>
+    </div>
+  );
+}
+
 function Candidat({ c, ouvert, onToggle, onDone, t, formatDate }) {
   const b = c.book || {};
   const notes = c.tool_notes || {};
@@ -243,9 +377,10 @@ function Candidat({ c, ouvert, onToggle, onDone, t, formatDate }) {
               <Ligne label={t({ id: 'importacoes.pdfCandidates.field.translator' })} value={c.found_translator} />
               <Ligne label={t({ id: 'importacoes.pdfCandidates.field.isbn' })} value={c.found_isbn} />
               <div style={{ ...muted, marginTop: 6 }}>
-                {t({ id: 'importacoes.pdfCandidates.file.meta' }, {
+                {t({ id: !c.sha256 && c.sha1 ? 'importacoes.pdfCandidates.file.metaSha1' : 'importacoes.pdfCandidates.file.meta' }, {
                   size: c.file_size_bytes ? (c.file_size_bytes / 1e6).toFixed(1) : '?',
-                  pages: c.page_count || '?', sha: c.sha256 ? `${c.sha256.slice(0, 12)}…` : '—',
+                  pages: c.page_count || '?',
+                  sha: c.sha256 ? `${c.sha256.slice(0, 12)}…` : c.sha1 ? `${c.sha1.slice(0, 12)}…` : '—',
                 })}
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6 }}>
@@ -300,6 +435,7 @@ function Candidat({ c, ouvert, onToggle, onDone, t, formatDate }) {
               {c.justification && c.status !== 'rejete' && <div style={muted}>{c.justification}</div>}
             </div>
           )}
+          {c.status === 'valide' && c.holding !== false && <Verser c={c} t={t} onDone={onDone} />}
           {(c.status === 'propose' || c.status === 'valide') && c.holding !== false && <Decision c={c} t={t} onDone={onDone} />}
         </div>
       )}
@@ -381,6 +517,10 @@ export default function CandidatsPdfPanel({ libraryId }) {
             <button type="button" onClick={() => setMsg({ text: '', kind: '' })} aria-label="×"
               style={{ marginLeft: 'auto', background: 'none', border: 0, color: 'inherit', cursor: 'pointer' }}>×</button>
           </div>
+        )}
+
+        {statut === 'valide' && (
+          <VerserLeLot t={t} n={Number(etat.counts?.valide || 0)} onFin={() => { setPage(0); charger(); }} />
         )}
 
         <nav className="ab-tabbar" role="tablist" aria-label={t({ id: 'importacoes.pdfCandidates.statusFilter' })} style={{ marginBottom: 10 }}>

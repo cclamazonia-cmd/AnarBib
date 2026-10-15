@@ -469,9 +469,11 @@ async function telecharger(url, dossier, nom, maxOctets) {
   const tete = Buffer.alloc(5);
   const fd = openSync(chemin, 'r'); readSync(fd, tete, 0, 5, 0); closeSync(fd);
   if (tete.toString('latin1') !== '%PDF-') throw new Error('la réponse n\'est pas un PDF (page HTML, protection ?)');
-  const hash = createHash('sha256');
-  await pipeline(createReadStream(chemin), hash);
-  return { chemin, sha256: hash.digest('hex'), taille: statSync(chemin).size };
+  // SHA-256 (ce que compare le versement) et SHA-1 (ce que donne MediaWiki)
+  const h256 = createHash('sha256');
+  const h1 = createHash('sha1');
+  for await (const morceau of createReadStream(chemin)) { h256.update(morceau); h1.update(morceau); }
+  return { chemin, sha256: h256.digest('hex'), sha1: h1.digest('hex'), taille: statSync(chemin).size };
 }
 
 async function examiner(notice, source, args) {
@@ -506,7 +508,7 @@ async function examiner(notice, source, args) {
     title_page_text: p.title_page_text, title_page_number: p.title_page_number,
     proposed_verdict: p.proposed_verdict, proposed_case: p.proposed_case,
     proposed_mention: p.proposed_mention, proposed_mention_page: p.proposed_mention_page,
-    tool_notes: p.tool_notes, sha256: fichier.sha256, file_size_bytes: fichier.taille,
+    tool_notes: p.tool_notes, sha256: fichier.sha256, sha1: fichier.sha1, file_size_bytes: fichier.taille,
     page_count: infos.pages, original_filename: basename(fichier.chemin),
   };
 }

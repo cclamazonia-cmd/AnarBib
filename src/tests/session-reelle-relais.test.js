@@ -45,6 +45,8 @@ const JETON_APPELANT = {
   'export-fonds-bundle': "userClient.rpc('fn_export_fonds_records'",
   'deposit-fonds-direct': "userClient.rpc('fn_export_fonds_records'",
   'attach-received-asset': 'await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)',
+  // NUMDIF D16 (15/10/2026) : double authentification, puis la garde sous le jeton.
+  'deposit-digital-candidate': 'await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)',
   'revoke-digital-asset': "userClient.rpc('fn_revoke_digital_asset_record'",
   'notify-library-invitation': 'await asCaller.rpc(',
 };
