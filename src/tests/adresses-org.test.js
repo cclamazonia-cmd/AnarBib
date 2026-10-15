@@ -11,7 +11,8 @@
 // Ce qui reste en .org l'est pour une raison technique, et chaque adresse est
 // nommée ci-dessous — liste FERMÉE, à justifier pour l'allonger :
 //   - anarbib@anarbib.org  expéditeur Resend (le domaine d'envoi authentifié) ;
-//   - fede@anarbib.org     boîte éditoriale de la gazette et de la cartographie ;
+//   - fede@anarbib.org     repli de OAI_ADMIN_EMAIL (moisson OAI) — n'a PAS de boîte (OVH, 28/08) ;
+//                          la gazette et la carte écrivent aux admins + boîte depuis le 15/10/2026 ;
 //   - admin@anarbib.org / admins@anarbib.org  alertes d'exploitation (OPS) ;
 //   - <exemple>@anarbib.org  exemples de saisie d'un champ, pas un contact.
 // ═══════════════════════════════════════════════════════════

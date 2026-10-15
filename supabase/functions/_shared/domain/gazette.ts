@@ -9,8 +9,13 @@
 // biblio (les notifications éditoriales/réseau ne sont pas opt-out par biblio).
 //
 // Events traités (Étape A) :
-//   - gazette.contribution.received   → fede@anarbib.org (boîte éditoriale fixe)
-//   - gazette.draft.ready_for_review  → network_staff (fan-out, chacun·e sa locale)
+//   - gazette.contribution.received   → admins réseau + boîte collective (network-admins.ts)
+//   - gazette.draft.ready_for_review  → admins réseau + boîte collective (network-admins.ts)
+//   Avant le 15/10/2026 : la brève reçue partait vers fede@anarbib.org — une adresse
+//   SANS boîte (relevé OVH du 28/08) —, et l'avis de brouillon aux seules personnes
+//   (network_staff). Ce sont des avis de TRAVAIL, pas de la gouvernance entre
+//   personnes : ils vont aussi à la boîte du réseau (décision de Xavier, 15/10). Le
+//   champ `to` que le déclencheur SQL écrit encore dans le payload est ignoré.
 //   - gazette.issue.published         → 1 destinataire par ligne (fan-out SQL)
 // GAZ-7 (15/09/2026) — la décision est dite à la personne qui a écrit :
 //   - gazette.contribution.rejected   → contributor_email, dans SA locale : le motif
@@ -27,14 +32,14 @@
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
-import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
+import { safeSendEmail } from "../transport/email.ts";
+import { destinatairesAdminsReseau } from "../context/network-admins.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
 import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { tMail, greeting, formatDateLocale } from "../i18n/mail-strings.ts";
 
 const OUTBOX = "gazette_submission_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
-const EDITORIAL_FALLBACK = "fede@anarbib.org";
 
 function esc(s) {
   return String(s ?? "")
@@ -58,19 +63,6 @@ async function markOutboxSkipped(id, reason) {
 // F12 (25/09/2026) : `verdictOuMessage` est le verdict (refusés compris) ou un message d'erreur.
 async function markOutboxFailed(id, verdictOuMessage) {
   await supabaseAdmin.from(OUTBOX).update(champsEchec(verdictOuMessage)).eq("id", id);
-}
-
-// network_staff = network_administrators status='active', joints aux profiles
-// (email + preferred_language). Même source que team.ts loadAdministradores.
-async function loadNetworkStaff() {
-  const { data: members, error: e1 } = await supabaseAdmin
-    .from("network_administrators").select("user_id").eq("status", "active");
-  if (e1 || !members || members.length === 0) return [];
-  const userIds = Array.from(new Set(members.map((m) => m.user_id)));
-  const { data: profiles, error: e2 } = await supabaseAdmin
-    .from("profiles").select("id,email,first_name,last_name,preferred_language").in("id", userIds);
-  if (e2 || !profiles) return [];
-  return profiles;
 }
 
 export async function handleGazetteEvent(recordId) {
@@ -113,13 +105,11 @@ export async function handleGazetteEvent(recordId) {
   }
 }
 
-// gazette.contribution.received → boîte éditoriale fixe (fede@anarbib.org).
-// Mail dans la langue de travail réseau (ctx.default_locale, repli fr).
+// gazette.contribution.received → admins réseau (chacun·e dans sa langue) + la
+// boîte collective (en pt-BR), via network-admins.ts.
 async function handleContributionReceived(payload, ctx) {
-  const to = String(payload.to || EDITORIAL_FALLBACK).trim();
-  // Enrobage dans la langue de la contribution (choix : la notif éditoriale suit
-  // la locale de l'auteur·rice) ; repli sur la langue de base réseau si absente.
-  const locale = String(payload.locale || "").trim() || ctx?.default_locale || "pt-BR";
+  const dests = await destinatairesAdminsReseau(supabaseAdmin);
+  if (dests.length === 0) return { recipients_count: 0, reason: "no_network_admin_recipient" };
   const rubric = String(payload.rubric || "—");
   const title = String(payload.title || "");
   const excerpt = String(payload.excerpt || "");
@@ -128,28 +118,30 @@ async function handleContributionReceived(payload, ctx) {
   const collPart = String(payload.contributor_collective || "").trim();
   const author = [namePart, collPart].filter(Boolean).join(" · ") || "—";
 
-  const sub = tMail(locale, "gazette.contribution.received.sub");
-  let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.received.intro", { rubric, title, author }))}</p>`;
-  // GAZ-7 : une reprise se présente comme telle — le staff relit une v2, pas un inconnu.
-  if (payload.parent_submission_id) {
-    introHtml += `<p><b>${esc(tMail(locale, "gazette.contribution.received.resubmitted"))}</b></p>`;
+  const results = [];
+  for (const d of dests) {
+    const locale = d.locale;
+    const sub = tMail(locale, "gazette.contribution.received.sub");
+    let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.received.intro", { rubric, title, author }))}</p>`;
+    // GAZ-7 : une reprise se présente comme telle — le staff relit une v2, pas un inconnu.
+    if (payload.parent_submission_id) {
+      introHtml += `<p><b>${esc(tMail(locale, "gazette.contribution.received.resubmitted"))}</b></p>`;
+    }
+    if (excerpt) introHtml += `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444">${esc(excerpt)}</blockquote>`;
+    if (link) introHtml += `<p><a href="${esc(link)}">${esc(link)}</a></p>`;
+    introHtml += `<p><a href="${APP_URL}/rede">${APP_URL}/rede</a></p>`;
+    const { html, text } = renderEmail({
+      locale,
+      preheader: sub,
+      title: sub,
+      introHtml,
+      details: [],
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx,
+    });
+    results.push(await safeSendEmail({ email: d.email, name: d.name || "Gazette AnarBib" }, sub, html, text, "gazette_contribution", ctx));
   }
-  if (excerpt) introHtml += `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444">${esc(excerpt)}</blockquote>`;
-  if (link) introHtml += `<p><a href="${esc(link)}">${esc(link)}</a></p>`;
-  introHtml += `<p><a href="${APP_URL}/rede">${APP_URL}/rede</a></p>`;
-
-  const { html, text } = renderEmail({
-    locale,
-    preheader: sub,
-    title: sub,
-    introHtml,
-    details: [],
-    footerHtml: footerPadrao(ctx, locale),
-    context: ctx,
-  });
-  const target = { email: to, name: "Gazette AnarBib" };
-  const result = await safeSendEmail(target, sub, html, text, "gazette_contribution", ctx);
-  return { recipients_count: 1, result };
+  return { recipients_count: results.length, results };
 }
 
 // gazette.contribution.rejected → la personne qui a écrit, dans sa locale : le
@@ -226,17 +218,16 @@ async function handleContributionAccepted(payload, ctx) {
   return { recipients_count: 1, result };
 }
 
-// gazette.draft.ready_for_review → fan-out network_staff, chacun·e dans sa locale.
+// gazette.draft.ready_for_review → admins réseau (chacun·e dans sa langue) + la
+// boîte collective (en pt-BR), via network-admins.ts.
 async function handleDraftReady(payload, ctx) {
   const number = String(payload.issue_number ?? "");
-  const staff = await loadNetworkStaff();
-  if (staff.length === 0) return { recipients_count: 0, reason: "no_network_staff" };
+  const dests = await destinatairesAdminsReseau(supabaseAdmin);
+  if (dests.length === 0) return { recipients_count: 0, reason: "no_network_admin_recipient" };
 
   const results = [];
-  for (const person of staff) {
-    const locale = person.preferred_language || null;
-    const target = userTargetFromProfile(person);
-    if (!target) continue;
+  for (const d of dests) {
+    const locale = d.locale;
     const sub = tMail(locale, "gazette.draft.ready_for_review.sub", { number });
     const introHtml =
       `<p>${esc(tMail(locale, "gazette.draft.ready_for_review.intro", { number }))}</p>`
@@ -245,13 +236,13 @@ async function handleDraftReady(payload, ctx) {
       locale,
       preheader: sub,
       title: sub,
-      greeting: greeting(locale, person.first_name || undefined),
+      greeting: greeting(locale, d.name || undefined),
       introHtml,
       details: [],
       footerHtml: footerPadrao(ctx, locale),
       context: ctx,
     });
-    results.push(await safeSendEmail(target, sub, html, text, "gazette_draft_review", ctx));
+    results.push(await safeSendEmail({ email: d.email, name: d.name }, sub, html, text, "gazette_draft_review", ctx));
   }
   return { recipients_count: results.length, results };
 }

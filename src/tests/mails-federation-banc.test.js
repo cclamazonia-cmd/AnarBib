@@ -21,15 +21,16 @@ const eq = (chaine, nom) => chaine.find((c) => c.op === 'eq' && c.args[0] === no
 describe('domain/cartography — une auto-déclaration à modérer', () => {
   const LIGNE = { id: 3, status: 'queued', event: 'cartography.submission_received', payload: { name: 'Ateneu Llibertari', city: 'Barcelona', country: 'ES', categorie: 'ateneu', site_url: 'https://ateneu.exemple.test' } };
   function monter({ env = {}, ligne = LIGNE, resend } = {}) {
-    const ef = monterEF({ env, resend, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
+    // 15/10/2026 : l'alerte va aux admins réseau + boîte collective (network-admins.ts), plus à fede@ (sans boîte).
+    const ef = monterEF({ env: { NETWORK_ADMIN_CC: 'admins@exemplo.test', ...env }, resend, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
     return { ef, handle: ef.charger('_shared/domain/cartography.ts').handleCartographyEvent, etat: () => ef.ecrits.filter((e) => e.table === 'cartography_submission_notification_outbox').map((e) => e.donnees.status) };
   }
 
-  it('la boîte éditoriale reçoit la fiche et le lien de modération ; la file passe à « sent »', async () => {
+  it('la boîte du réseau reçoit la fiche et le lien de modération ; la file passe à « sent »', async () => {
     const { ef, handle, etat } = monter();
     const r = await handle(3);
     expect(r).toMatchObject({ ok: true, recipients_count: 1 });
-    const m = mailA(ef.envois, 'fede@anarbib.org');
+    const m = mailA(ef.envois, 'admins@exemplo.test');
     expect(m.html).toContain('Ateneu Llibertari');
     expect(liens(m.html)).toEqual(expect.arrayContaining(['https://ateneu.exemple.test', 'https://app.anarbib.org/cartografia/moderacao']));
     expect(etat()).toEqual(['sent']);
@@ -51,7 +52,7 @@ describe('domain/cartography — une auto-déclaration à modérer', () => {
     expect(ef.envois).toHaveLength(0);
     expect(etat()).toEqual(['failed']);
     const d = ef.ecrits.find((e) => e.table === 'cartography_submission_notification_outbox').donnees;
-    expect(d.last_error).toContain('fede@anarbib.org');
+    expect(d.last_error).toContain('admins@exemplo.test');
     expect(d.last_error).toContain('500');
     expect(d.sent_at).toBeUndefined();
     // 24/09/2026 (F7 / DOC-SILENCE-1) : le transport partagé note l'échec pour la
@@ -59,7 +60,7 @@ describe('domain/cartography — une auto-déclaration à modérer', () => {
     const note = ef.ecrits.find((e) => e.table === 'mail_transport_failures');
     expect(note).toBeTruthy();
     expect(note.donnees.error).toContain('500');
-    expect(note.donnees.error).not.toContain('fede@anarbib.org');
+    expect(note.donnees.error).not.toContain('admins@exemplo.test');
   });
 });
 
@@ -160,7 +161,7 @@ describe('mails de la fédération — les liens vers l\'application suivent APP
 
   it('cartographie : le lien de modération', async () => {
     const ligne = { id: 3, status: 'queued', event: 'cartography.submission_received', payload: { name: 'Ateneu' } };
-    const ef = monterEF({ env: ENV, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
+    const ef = monterEF({ env: { ...ENV, NETWORK_ADMIN_CC: 'admins@exemplo.test' }, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
     await ef.charger('_shared/domain/cartography.ts').handleCartographyEvent(3);
     expect(liens(ef.envois[0].html)).toContain('https://app.anarbib.is/cartografia/moderacao');
     expect(sansCanonique(ef.envois)).toEqual([]);

@@ -138,7 +138,7 @@ async function traiter(req: Request): Promise<Response> {
     if (stopEmail) return stopEmail;
   }
 
-  // --- Insertion (le trigger enfile la notif → fede@anarbib.org, qui dit si c'est une reprise) ---
+  // --- Insertion (le trigger enfile la notif → admins réseau + boîte, qui dit si c'est une reprise) ---
   const { data, error } = await sb.from("gazette_submissions").insert({
     rubric, locale, title, body,
     link: p.link ? String(p.link).slice(0, 500) : null,

@@ -34,7 +34,10 @@
 // boîte reçoit une copie EN PLUS. Et tout ne mérite pas la boîte : les courriels
 // de gouvernance ENTRE admins (cooptation, retrait collectif, votes, motifs
 // parfois nominatifs — `_shared/domain/network.ts`), la facilitation d'assemblée,
-// l'éditorial de la gazette et de l'atelier restent adressés aux personnes.
+// l'atelier des autorités restent adressés aux personnes. Les AVIS DE TRAVAIL de la
+// gazette (brève reçue, brouillon à relire) et de la carte (lieu à modérer) passent
+// ici depuis le 15/10/2026 (décision de Xavier) : le brouillon n°5 n'était arrivé que
+// sur une boîte personnelle, et les brèves partaient vers une adresse sans boîte.
 // L'INSTITUTIONNEL et la SUPERVISION passent ici : demandes de bibliothèques,
 // permissions documentaires, gel global d'un·e membre, rapport hebdo du réseau,
 // récapitulatif inter-bibliothèques, alertes de santé. La garde

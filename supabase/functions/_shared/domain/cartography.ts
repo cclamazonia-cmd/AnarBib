@@ -2,24 +2,26 @@
 // domain/cartography.ts — Handler des events cartography.* (auto-déclaration carte)
 // ============================================================================
 // Lit la ligne cartography_submission_notification_outbox par recordId (BIGINT),
-// rend un e-mail d'alerte à la boîte éditoriale réseau (fede@anarbib.org) et pose
+// rend un e-mail d'alerte aux admins réseau et à la boîte collective (network-admins.ts) et pose
 // le statut outbox (sent / skipped / failed). Même architecture que domain/gazette.ts.
 // Contexte RÉSEAU (pas de biblio) → ctx = resolve(null). Alerte interne de
 // coordination : corps en français (langue de travail), données brutes language-neutres.
 //
 // Events traités :
-//   - cartography.submission_received → fede@anarbib.org (à modérer sur /cartografia/moderacao)
+//   - cartography.submission_received → admins réseau + boîte collective (à modérer sur
+//     /cartografia/moderacao). Avant le 15/10/2026 : fede@anarbib.org, adresse SANS boîte
+//     (relevé OVH du 28/08) ; le champ `to` du payload SQL est désormais ignoré.
 // ============================================================================
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
+import { destinatairesAdminsReseau } from "../context/network-admins.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
 import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 
 const OUTBOX = "cartography_submission_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
-const EDITORIAL_FALLBACK = "fede@anarbib.org";
 
 function esc(s) {
   return String(s ?? "")
@@ -59,8 +61,9 @@ export async function handleCartographyEvent(recordId) {
       return { ok: true, ignored: true, reason: "unknown_cartography_event", event };
     }
 
-    const to = String(payload.to || EDITORIAL_FALLBACK).trim();
+    // Alerte interne : corps en français (langue de travail), quel que soit le destinataire.
     const locale = ctx?.default_locale || "pt-BR";
+    const dests = await destinatairesAdminsReseau(supabaseAdmin);
     const name = String(payload.name || "—");
     const place = [payload.city, payload.country].filter(Boolean).join(", ");
     const cat = String(payload.categorie || "—");
@@ -85,16 +88,18 @@ export async function handleCartographyEvent(recordId) {
       footerHtml: footerPadrao(ctx, locale),
       context: ctx,
     });
-    const target = { email: to, name: "Cartographie AnarBib" };
-    const result = await safeSendEmail(target, sub, html, text, "cartography_submission", ctx);
+    const results = [];
+    for (const d of dests) {
+      results.push(await safeSendEmail({ email: d.email, name: d.name || "Cartographie AnarBib" }, sub, html, text, "cartography_submission", ctx));
+    }
     // DOC-SILENCE-1 (21/09/2026) : le statut de la ligne se lit sur le RÉSULTAT des
     // envois (outbox-verdict.ts), plus sur le seul nombre de destinataires — un
     // envoi refusé par le transport passait pour « sent ».
-    const verdict = verdictEnvois({ recipients_count: 1, result });
+    const verdict = verdictEnvois({ recipients_count: results.length, results });
     if (verdict.status === "skipped") await markOutboxSkipped(outbox.id, verdict.detail);
     else if (verdict.status === "failed") await markOutboxFailed(outbox.id, verdict);
     else await markOutboxSent(outbox.id);
-    return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: 1, result };
+    return { ok: verdict.status !== "failed", event, outbox_status: verdict.status, recipients_count: results.length, results };
   } catch (err) {
     await markOutboxFailed(outbox.id, String(err?.message || err));
     throw err;

@@ -28,12 +28,14 @@ const STRINGS_CODE = cjs(STRINGS);
 const APPURL_CODE = cjs(new URL('../../supabase/functions/_shared/core/app-url.ts', import.meta.url));
 
 const VERDICT_CODE = cjs(new URL('../../supabase/functions/_shared/domain/outbox-verdict.ts', import.meta.url));
+const ADMINS_CODE = cjs(new URL('../../supabase/functions/_shared/context/network-admins.ts', import.meta.url));
 
 const JETON = 'c'.repeat(64);
 
 // `transport(cible)` : ce que rend safeSendEmail pour ce destinataire ; par défaut
 // l'envoi part. Un résultat `ok:false` n'est PAS compté dans `envois`.
-function monter(outbox, env = {}, transport = () => ({ ok: true })) {
+// `tables` : lignes rendues pour d'autres tables (network_administrators, profiles…).
+function monter(outbox, env = {}, transport = () => ({ ok: true }), tables = {}) {
   const envois = [];
   const rendus = [];
   const ecrits = [];
@@ -58,6 +60,7 @@ function monter(outbox, env = {}, transport = () => ({ ok: true })) {
       const [, id] = chaine.find((c) => c.op === 'eq')?.args ?? [];
       return { data: outbox.find((o) => o.id === id) ?? null, error: null };
     }
+    if (tables[nom]) return { data: tables[nom], error: null };
     return { data: [], error: null };
   };
 
@@ -70,6 +73,7 @@ function monter(outbox, env = {}, transport = () => ({ ok: true })) {
     if (spec.endsWith('core/env.ts')) return { supabaseAdmin: { from: table } };
     if (spec.endsWith('core/app-url.ts')) return evaluer(APPURL_CODE);
     if (spec.endsWith('outbox-verdict.ts')) return evaluer(VERDICT_CODE);
+    if (spec.endsWith('context/network-admins.ts')) return evaluer(ADMINS_CODE);
     if (spec.endsWith('mail/layout.ts')) {
       return {
         renderEmail: (opts) => { rendus.push(opts); return { html: opts.introHtml, text: '' }; },
@@ -201,17 +205,56 @@ describe('gazette.contribution.received — l’avis au réseau d’une reprise 
   });
 
   it('avec parent_submission_id : la ligne « reprise » est dans le corps', async () => {
-    const traiter = monter([recu({ parent_submission_id: 'sub-1' })]);
+    // 15/10/2026 : le `to: fede@` du déclencheur est ignoré (adresse sans boîte) ;
+    // l'avis va aux admins actif·ves, chacun·e dans sa langue (ici le français), et à la boîte.
+    const admin = { network_administrators: [{ user_id: 'u-l' }], profiles: [{ id: 'u-l', email: 'admin@exemplo.test', first_name: 'Lucía', preferred_language: 'fr' }] };
+    const traiter = monter([recu({ parent_submission_id: 'sub-1' })], {}, undefined, admin);
     const r = await traiter(3);
     expect(r.envois).toHaveLength(1);
-    expect(r.envois[0].email).toBe('fede@anarbib.org');
+    expect(r.envois[0].email).toBe('admin@exemplo.test');
     expect(r.envois[0].html).toContain("Reprise d'une brève rejetée précédemment");
   });
 
   it('sans parent : rien de plus qu’avant', async () => {
-    const traiter = monter([recu()]);
+    const traiter = monter([recu()], { NETWORK_ADMIN_CC: 'admins@exemplo.test' });
     const r = await traiter(3);
     expect(r.envois[0].html).not.toContain('Reprise');
+  });
+});
+
+describe('avis de travail de la gazette — les admins dans leur langue ET la boîte du réseau (15/10/2026)', () => {
+  const ADMIN = { network_administrators: [{ user_id: 'u-x' }], profiles: [{ id: 'u-x', email: 'xavier@exemplo.test', first_name: 'Xavier', preferred_language: 'fr' }] };
+  const brouillon = { id: 7, status: 'queued', event: 'gazette.draft.ready_for_review', payload: { issue_number: 5, to_role: 'network_staff' } };
+  const recu = { id: 8, status: 'queued', event: 'gazette.contribution.received', payload: { to: 'fede@anarbib.org', locale: 'es', rubric: 'reseau', title: 'Una breve', excerpt: 'Texto.' } };
+
+  it('brouillon prêt : l’admin en français ET la boîte collective en pt-BR — le n°5 n’était arrivé que chez l’admin', async () => {
+    const r = await monter([brouillon], { NETWORK_ADMIN_CC: 'admins@exemplo.test' }, undefined, ADMIN)(7);
+    expect(r.envois.map((e) => e.email).sort()).toEqual(['admins@exemplo.test', 'xavier@exemplo.test']);
+    const fr = r.envois.find((e) => e.email === 'xavier@exemplo.test');
+    const boite = r.envois.find((e) => e.email === 'admins@exemplo.test');
+    expect(fr.sujet).toBe('Brouillon de la Gazette n°5 à relire');
+    expect(boite.sujet).not.toBe(fr.sujet);
+    expect(boite.sujet).toContain('5');
+    expect(r.statutOutbox.status).toBe('sent');
+  });
+
+  it('sans NETWORK_ADMIN_CC, la boîte de HEALTH_ALERT_CC sert de repli ; plusieurs adresses possibles', async () => {
+    const r = await monter([brouillon], { HEALTH_ALERT_CC: 'admins@exemplo.test, autre@exemplo.test' })(7);
+    expect(r.envois.map((e) => e.email).sort()).toEqual(['admins@exemplo.test', 'autre@exemplo.test']);
+  });
+
+  it('brève reçue : jamais vers fede@ (adresse sans boîte), l’admin et la boîte la reçoivent', async () => {
+    const r = await monter([recu], { NETWORK_ADMIN_CC: 'admins@exemplo.test' }, undefined, ADMIN)(8);
+    const a = r.envois.map((e) => e.email);
+    expect(a).not.toContain('fede@anarbib.org');
+    expect(a.sort()).toEqual(['admins@exemplo.test', 'xavier@exemplo.test']);
+    expect(r.envois.every((e) => e.html.includes('Una breve'))).toBe(true);
+  });
+
+  it('ni admin ni boîte : la ligne est « skipped », jamais « sent »', async () => {
+    const r = await monter([brouillon])(7);
+    expect(r.envois).toHaveLength(0);
+    expect(r.statutOutbox.status).toBe('skipped');
   });
 });
 

@@ -17,7 +17,7 @@
 //      séparateurs, repli NETWORK_ADMIN_CC → HEALTH_ALERT_CC, extras) ;
 //   2. deux LISTES FERMÉES : les fonctions INSTITUTIONNELLES passent par le
 //      module, et seuls les modules de GOUVERNANCE lisent encore la table en
-//      direct (cooptation, retrait collectif, assemblée, gazette, atelier,
+//      direct (cooptation, retrait collectif, assemblée, atelier,
 //      profil de bibliothèque — adressés à des personnes, jamais à la boîte).
 //      Une fonction neuve qui recopie l'ancienne recette rougit ici ;
 //   3. le rendu réel de trois fonctions converties, sur les vrais modules
@@ -149,7 +149,6 @@ const LISENT_LA_TABLE_EN_DIRECT = [
   '_shared/context/network-admins.ts',      // le module lui-même
   '_shared/domain/assembleia.ts',           // facilitation d'assemblée
   '_shared/domain/authority.ts',            // coordination de l'atelier des autorités
-  '_shared/domain/gazette.ts',              // comité éditorial
   '_shared/domain/library_profile.ts',      // profil de bibliothèque (staff + admins)
   '_shared/domain/network.ts',              // cooptation, retrait collectif, digest d'évaluation
   '_shared/domain/team.ts',                 // escalade « dernière coordination »
@@ -158,6 +157,8 @@ const LISENT_LA_TABLE_EN_DIRECT = [
 // INSTITUTIONNEL et SUPERVISION : passent par le module (admins + boîte).
 const PASSENT_PAR_LE_MODULE = [
   '_shared/domain/membership-restriction.ts',
+  '_shared/domain/gazette.ts',              // 15/10/2026 : brève reçue, brouillon à relire (avis de travail)
+  '_shared/domain/cartography.ts',          // 15/10/2026 : lieu à modérer sur la carte
   'notify-security-notice/index.ts',        // B42 (13/10/2026) : annonce aux équipes, network_admins: true
   'health-probe/index.ts',
   'notify-cross-library-digest/index.ts',
@@ -184,8 +185,8 @@ describe('network-admins — les deux listes fermées', () => {
   });
 
   it('la liste des lecteurs directs ne s\'allonge que par une entrée nommée ici', () => {
-    expect(LISENT_LA_TABLE_EN_DIRECT).toHaveLength(7);
-    expect(PASSENT_PAR_LE_MODULE).toHaveLength(7); // 13/10 : + notify-security-notice (B42)
+    expect(LISENT_LA_TABLE_EN_DIRECT).toHaveLength(6); // 15/10 : − gazette (avis de travail → module)
+    expect(PASSENT_PAR_LE_MODULE).toHaveLength(9); // 13/10 : + notify-security-notice (B42) ; 15/10 : + gazette, cartography
   });
 
   it('la boîte n\'est jamais écrite en dur : le module lit une variable, et health-probe garde la sienne', () => {

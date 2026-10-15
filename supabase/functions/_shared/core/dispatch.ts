@@ -45,10 +45,10 @@ async function dispatchInterne(event, recordId, payload) {
   if (event.startsWith("authority.")) return await handleAuthorityEvent(recordId);
   // Events gazette.* (notifications Gazette) - handler dedie, lit
   // gazette_submission_notification_outbox par recordId. contribution.received
-  // -> fede@anarbib.org ; draft.ready_for_review -> network_staff (fan-out).
+  // et draft.ready_for_review -> admins reseau + boite collective (network-admins.ts).
   if (event.startsWith("gazette.")) return await handleGazetteEvent(recordId);
   // Events cartography.* (auto-déclaration carte, MAP-J) - handler dedie, lit
-  // cartography_submission_notification_outbox par recordId. submission_received -> fede@anarbib.org.
+  // cartography_submission_notification_outbox par recordId. submission_received -> admins reseau + boite.
   if (event.startsWith("cartography.")) return await handleCartographyEvent(recordId);
   // Events bug_report.* (« Signaler un problème », E14, 24/09/2026) - handler dédié, lit
   // bug_report_notification_outbox par recordId. received -> admins réseau (+ accusé de réception).
