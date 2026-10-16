@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-16** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-16** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -18,7 +18,7 @@
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 8
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 7
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 16 de outubro de 2026 de manhã** (`db194b77`, 08h31 UTC) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 13/10, `88a962ee`). **496 migrações aplicadas = 496 no repositório**, CI em dia. O que mudou: **o banco** — +18 migrações e +12 funções (NUMDIF, fonte digital sem exemplar, romeno, B42), três tabelas de importação apagadas e sete ajudas públicas fechadas (`anon` 29 → 22), avisos de segurança 489, índices «não usados» 341; **o catálogo** — **+1 000 fichas: Anarchief.org publicou o seu fundo, 1 002 fichas sem exemplar e 1 455 PDF**, duas fusões DEDUP-16; **1 466 fichas sem assunto**; **duas anomalias**: a fusão deixa a canónica sem obra (`1841`, `2178`) e uma obra órfã (`1228`); **a rede** — idêntica, B42 ligada em 14/10, os dois administradores com segundo fator, a FICEDL responde; **o repositório** — +80 commits, +29 ficheiros, **onze locales**, +280 testes JS (3 034), +5 suítes SQL (205). **A conta**: 54 itens e 256 fechos. **O que falta fechar** — *num facto por vir*: **F25** (cron de 17/10), **B36** (28/10), **D3** (Solidaires, antes de 26/10), H34, D15–D18, H15, H16, H21, H28, B42; *decisões*: **A1**, **G20**, C4, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-16.** **43 itens de 54** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-16.** **42 itens de 53** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -589,7 +589,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
 | **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | A verificar |
 | **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | A verificar |
-| **D17** | Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo | `P2` | A verificar |
 | **D18** | Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem | `P2` | Em curso |
 
 #### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
@@ -723,34 +722,13 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts`*
 
-#### D17 — Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo
-
-`P2` Corrente · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, Deno / TypeScript, React / JavaScript, língua materna
-
-**Estado.** Decisão `NUMDIF-3`, opção (b). `read-digital-asset` esconde hoje `source_url` de todo recurso restrito; o comentário sobre marca d'água é inexato.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Coluna `source_page_url`; `read-digital-asset` a devolve quando o acesso é concedido, nunca a URL do arquivo de um recurso restrito; ficha e leitor mostram «também online». Corrigir o comentário.
-
-**Por que importa.** O link credita quem digitalizou; a página em vez do arquivo evita distribuir links de download permanentes.
-
-**O que conta como terminado.**
-
-- Conta membro: a página, não o arquivo; `anon` e outra biblioteca: nada.
-- A resposta da API não contém a URL do arquivo de nenhum recurso restrito.
-
-**Dependências.** `D18` para classificar os sete links existentes.
-
-*Remissões : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts` · `src/pages/public/ReaderPage.jsx`*
-
 #### D18 — Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem
 
 `P2` Corrente · Estado : **Em curso** · Carga : uma noite · O que exige : biblioteconomia
 
 **Estado.** Medido em 15/10: o recurso 62 tem `bibliographic_match_validated = false` e nenhum `rights_status`; cinco URL de sete apontam para arquivo.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Para cada um: verificar a edição, decidir o caso de origem, achar a página. O recurso 62 é regularizado ou retirado.
 
@@ -1933,6 +1911,7 @@ CI verde. |
 | D13 | 2026-10-15 | **Fechado em 15/10** (migração `20261015172008`, `883d03b8`). A fila `ingest.digital_candidates` existe, fechada a `anon` e às outras bibliotecas; uma rejeição guarda o motivo e a edição achada. Suíte 12/12 na CI. Continua em D14, D15, D16. |
 | D19 | 2026-10-15 | **Fechado em 15/10** (migração `20261015202816`, `217e4425`). Um PDF restrito sem detentora aparece no controle e a coordenação é avisada; nada é proibido. Suíte 5/5; CI verde; em produção: 0. |
 | D14 | 2026-10-16 | **Fechado em 16/10**. Receita: 86 e 96 → «mesma edição» (SHA-256 idênticos aos recursos 77 e 78); Guérin → 0 «mesma edição»; os três PDF conhecidos (Anarres, Proyección, RyR) achados pela ferramenta → «outra edição» com a edição achada; empréstimo controlado excluído. Teste com 14 casos. |
+| D17 | 2026-10-16 | **Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`. |
 
 ---
 
@@ -1964,4 +1943,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

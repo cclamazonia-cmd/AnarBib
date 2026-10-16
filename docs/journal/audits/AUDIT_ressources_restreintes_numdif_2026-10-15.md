@@ -45,10 +45,10 @@ recherche web, sans contourner aucune protection.
 | **70** | *El Congreso confederal de Zaragoza, 1936*, livre 1077 (BTL) | `dokumen.pub/el-congreso-confederal-de-zaragoza-1936-8431704462.html` | la même adresse | haute | C'est déjà une page de présentation (titre, description, lien de téléchargement distinct vers `/download/…`). `source_name` vide → l'écran affichera « dokumen.pub ». |
 | **72** | *A Anarquia perante os tribunais* (Gori), livre 232 (BTL) | `pdfcoffee.com/qdownload/…-pdf-free.html` (**téléchargement**) | `https://pdfcoffee.com/a-anarquia-perante-os-tribunais-pdf-free.html` | haute | Page chargée (titre, extrait, bouton de téléchargement). Le nom « Eduardo Medeiros » qui y figure est celui de la personne qui a déposé le fichier, pas l'auteur. `source_name` vide → « pdfcoffee.com ». |
 | **73** | *Ajuda mútua* (Kropotkine), livre 2513 (BTL, MLEG) | `anarquista.net/wp-content/uploads/2013/04/…pdf` (**fichier**) | `https://www.anarquista.net/ajuda-mutua-um-fator-de-evolucao-de-piotr-kropotkin-livro/` | haute | Article du 30/04/2013 qui présente le livre et pointe vers ce PDF (trad. Waldyr Azevedo Jr., A Senhora Editora, 2009). |
-| **74** | *El Apoyo mutuo* (Kropotkine), livre 2384 (BLMF) | `dn720005.ca.archive.org/0/items/…/….pdf` (**fichier**) | `https://archive.org/details/kropotkin-piotr.-el-apoyo-mutuo.-un-factor-de-evolucion-ocr-2020` | haute | **Posée par la migration `20261015180042`** (déduite du fichier). Item librement téléchargeable, pas en prêt contrôlé ; licence affichée CC BY-ND 4.0. |
+| **74** | *El Apoyo mutuo* (Kropotkine), livre 2384 (BLMF) | `dn720005.ca.archive.org/0/items/…/….pdf` (**fichier**) | `https://archive.org/details/kropotkin-piotr.-el-apoyo-mutuo.-un-factor-de-evolucion-ocr-2020` | haute | **Posée par la migration `20261015180042`** (déduite du fichier). Item librement téléchargeable, pas en prêt contrôlé ; licence affichée CC BY-ND 4.0. **Édition à vérifier** : la notice décrit Pepitas de calabaza, Logroño, **2019** ; le fichier d'Archive.org porte « [2020] » dans son nom (question 3). Vue par un compte membre de BLMF le 16/10 : « aussi en ligne » s'affiche. |
 | **76** | *Sociedade sem Escolas* (Illich), livre 2703 (MLEG) | `colectivolibertarioevora.wordpress.com/wp-content/uploads/2013/11/…pdf` (**fichier**) | `https://colectivolibertarioevora.wordpress.com/livros-digitais/` | moyenne-haute | Page « Livros e textos digitais » : à la rubrique Ivan Illich, le lien pointe exactement vers ce PDF. C'est une liste, pas un article dédié (aucun article dédié trouvé). |
 
-### Deux questions pour la coordination
+### Trois questions pour la coordination
 
 1. **Les agrégateurs.** dokumen.pub (70) et pdfcoffee (72) sont des sites qui
    republient des PDF déposés par des tiers, sans éditeur identifiable. `NUMDIF-3`
@@ -58,6 +58,13 @@ recherche web, sans contourner aucune protection.
 2. **Les noms manquants.** 66, 70 et 72 n'ont pas de `source_name`. L'écran
    affiche à défaut l'hôte de la page (`dokumen.pub`, `pdfcoffee.com`). Saisir un
    nom au catalogage reste possible.
+3. **L'édition de la 74** (relevé du 16/10). La notice 2384 décrit *El apoyo
+   mutuo : un factor de evolución*, Pepitas de calabaza, Logroño, **2019** ; le
+   PDF versé vient d'un item Archive.org nommé « … [ocr] [2020] ». Réimpression
+   de la même édition, ou autre édition ? Seule la page de titre (et l'achevé
+   d'imprimer) du PDF le dit (`NUMDIF-1`) : à vérifier par BLMF. Autre édition ⇒
+   la ressource n'a plus vocation à être active, rejet tracé avec l'édition
+   trouvée.
 
 ## La ressource 62 — à signaler à BTL, pas à corriger
 
@@ -115,8 +122,11 @@ se joue une fois, à la main, par la coordination ou à sa demande.
 
 ## Après
 
-- Contrôle sous un compte membre de BTL : la fiche du livre 1077 montre « aussi en
+- ✅ **16/10 — contrôle fait par Xavier sous un compte membre de BLMF** sur le
+  livre 2384 (ressource 74) : la fiche montre « aussi en ligne : Internet
+  Archive » vers la page `archive.org/details/…`. `D17` est vérifié en production.
+- Contrôle sous un compte membre de BTL, une fois le SQL ci-dessus joué : la fiche du livre 1077 montre « aussi en
   ligne : dokumen.pub », et la réponse de `read-digital-asset` porte
   `source_page_url` mais `source_url: null`.
-- `D18` reste ouvert jusqu'à la décision sur la 62 et la vérification des pages
+- `D18` reste ouvert jusqu'à la décision sur la 62, l'édition de la 74 et la vérification des pages
   de titre.

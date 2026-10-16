@@ -3310,6 +3310,14 @@
           "fr": "**Clos le 16/10** (outil `scripts/numdif_recherche_pdf.mjs`, commits `bcd5ce97` et suivant, session « File de candidats PDF »). Recette tenue : notices 86 et 96 (Reclus, Harper 1873 et 1872) → « même édition », fichiers identiques au SHA-256 près aux ressources 77 et 78 ; le scan Harper 1874 de la 86 → « autre édition » ; les notices Guérin → **0 « même édition »** (16 au catalogue : la 2681 du 14/10, « Proudhon: Textos Escolhidos », a disparu depuis, sans doute fondue dans la 1841) ; les trois PDF connus du 14/10, trouvés par l'outil seul sur Archive.org, → « autre édition » avec l'édition trouvée : 2195 Anarres (cas « diffusion autorisée », mention « permitidos y alentados por los editores », p. 3), 1870 Editorial Proyección, 152 RyR 2011 ; les éditions exactes de 243 et 1949, en prêt contrôlé, sont signalées et jamais téléchargées. Recette corrigée en route : l'auteur cherché aussi dans le titre (ces trois PDF n'ont pas de `creator`), un repli sur deux mots du titre (« classes » pour « clases » dans la notice 152), une mention coupée par une césure, la ligne « © … » comme éditeur, une année retenue seulement si l'impressum ou la page de titre la porte, un chemin trop long sous Windows qui passait pour « sans couche texte ». Test `numdif-recherche-pdf` (14 cas, dont la vraie page de copyright d'Anarres). Limite connue : la ligne « éditeur trouvé » peut citer une phrase voisine (biographie) ; la coordination juge sur l'extrait de la page de titre (D15).",
           "pt": "**Fechado em 16/10**. Receita: 86 e 96 → «mesma edição» (SHA-256 idênticos aos recursos 77 e 78); Guérin → 0 «mesma edição»; os três PDF conhecidos (Anarres, Proyección, RyR) achados pela ferramenta → «outra edição» com a edição achada; empréstimo controlado excluído. Teste com 14 casos."
         }
+      ],
+      [
+        "D17",
+        "2026-10-16",
+        {
+          "fr": "**Clos le 16/10** (REGISTRE §47 NUMDIF-3 ; migration `20261015180042`, commit `faa76c17`, session « D17 lien vers la page source »). `source_page_url` sur `book_digital_resources` et sa jumelle brouillon, suivie par la reprise et la publication ; huit ressources Archive.org publiées et deux brouillons ont reçu leur page `archive.org/details/…`. `get_accessible_digital_asset_by_id_v2` — exposée à PostgREST, elle rendait `source_url` aux membres : le masquage ne tenait que dans la fonction Edge — rend la page et jamais le fichier d'une ressource restreinte servie depuis le stockage ; `read-digital-asset` aussi, commentaire corrigé (révocabilité et attribution, pas de filigrane incrusté). Fiche, lecteur (« aussi en ligne ») et panneau de catalogage ; onze langues. Critères tenus : suite `d17_page_de_la_source_tests` 9/9 en CI (membre = page sans fichier ; anon et autre bibliothèque = rien, ni par la RPC ni par la table ; liste fermée des fonctions de session qui rendent `source_url`) ; en production, fiche publique du livre 86 et, le 16/10, **contrôle de Xavier sous un compte membre de BLMF** sur le livre 2384 (ressource 74). Les pages des autres restreintes relèvent de `D18`.",
+          "pt": "**Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`."
+        }
       ]
     ]
   },
@@ -5659,65 +5667,6 @@
       }
     },
     {
-      "id": "D17",
-      "d": "D",
-      "p": "P2",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "sql",
-        "deno",
-        "front",
-        "langue"
-      ],
-      "t": {
-        "fr": "Qui lit la copie restreinte voit le lien vers la page de la copie d'origine, jamais vers le fichier",
-        "pt": "Quem lê a cópia restrita vê o link para a página da cópia de origem, nunca para o arquivo"
-      },
-      "v": {
-        "fr": "Décision `NUMDIF-3` (15/10), option *(b)* du cadrage. `read-digital-asset` masque aujourd'hui `source_url` pour toute ressource restreinte servie depuis le stockage (incident de la ressource 61, 20/08). Son commentaire dit que le PDF servi est filigrané ; c'est inexact : le filigrane est une couche CSS du lecteur (`ReaderPage.jsx`, `.ab-reader-watermark`), l'URL signée livre le fichier brut.",
-        "pt": "Decisão `NUMDIF-3`, opção (b). `read-digital-asset` esconde hoje `source_url` de todo recurso restrito; o comentário sobre marca d'água é inexato."
-      },
-      "w": {
-        "fr": "Une colonne pour l'URL de la **page** de la source (`source_page_url`, sur `book_digital_resources` et sa jumelle brouillon), déduite pour Archive.org (`…/details/<identifiant>`), saisie sinon. `read-digital-asset` la renvoie quand l'accès est accordé et ne renvoie jamais l'URL du fichier d'une ressource restreinte ; la fiche et le lecteur affichent « aussi en ligne : *source* ». Corriger le commentaire sur le filigrane : ce que protège le masquage est la révocabilité et l'attribution. Toutes les locales servies.",
-        "pt": "Coluna `source_page_url`; `read-digital-asset` a devolve quando o acesso é concedido, nunca a URL do arquivo de um recurso restrito; ficha e leitor mostram «também online». Corrigir o comentário."
-      },
-      "y": {
-        "fr": "Le lien crédite qui a numérisé et survit à notre copie ; la page plutôt que le fichier évite de distribuer des liens de téléchargement permanents, non révocables et non attribués.",
-        "pt": "O link credita quem digitalizou; a página em vez do arquivo evita distribuir links de download permanentes."
-      },
-      "f": {
-        "fr": [
-          "Sous un compte membre, la ressource restreinte renvoie la page et pas le fichier ; sous `anon` et sous un compte d'une autre bibliothèque, rien.",
-          "La réponse de l'API ne contient l'URL du fichier pour aucune ressource restreinte (suite SQL ou test de la fonction)."
-        ],
-        "pt": [
-          "Conta membro: a página, não o arquivo; `anon` e outra biblioteca: nada.",
-          "A resposta da API não contém a URL do arquivo de nenhum recurso restrito."
-        ]
-      },
-      "dep": {
-        "fr": "`D18` pour classer les sept liens existants.",
-        "pt": "`D18` para classificar os sete links existentes."
-      },
-      "r": [
-        "docs/specs/REGISTRE_decisions.md §47",
-        "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md",
-        "supabase/functions/read-digital-asset/index.ts",
-        "src/pages/public/ReaderPage.jsx"
-      ],
-      "verif": [
-        {
-          "fr": "15/10 — mesuré en production : 7 ressources restreintes actives, toutes avec une URL source dont 5 désignent un fichier ; 8 objets dans `pdf-restrito` (0,09 Go), 54 dans `anarbib-pdf-public` (0,68 Go).",
-          "pt": "15/10 — medido em produção: 7 recursos restritos ativos, todos com URL de origem (5 apontam para arquivo); 8 objetos em `pdf-restrito`, 54 em `anarbib-pdf-public`."
-        },
-        {
-          "fr": "**15/10 — livré, à déployer** (migration `20261015180042_d17_le_lien_va_a_la_page_de_la_source`). `source_page_url` sur `book_digital_resources` et `book_draft_digital_resources` (garde `^https?://`), suivie par la reprise et la publication ; huit ressources Archive.org publiées et deux brouillons reçoivent `https://archive.org/details/<identifiant>`, dont la restreinte 74. **Le masquage ne tenait que dans la fonction Edge** : `get_accessible_digital_asset_by_id_v2`, exposée à PostgREST, rendait `source_url` à tout membre de la détentrice ; elle rend désormais la page et ne rend plus le fichier d'une ressource restreinte servie depuis le stockage (une restreinte sans fichier stocké garde son adresse : c'est son chemin de lecture). `read-digital-asset` renvoie `source_page_url` quand l'accès est accordé ; son commentaire dit enfin ce que protège le masquage (révocabilité, attribution — le filigrane n'est qu'une couche d'écran). Fiche et lecteur : « aussi en ligne : *source* » vers la page ; panneau de catalogage : champ « page qui présente ce fichier », déduit pour Archive.org ; 11 locales. Suite `d17_page_de_la_source_tests` (9/9 : membre = page sans fichier, anon et autre bibliothèque = rien, ni par la RPC ni par la table, liste fermée des fonctions qui rendent `source_url`) ; les 201 suites SQL, `npm test`, lint et build verts. **Reste** : après déploiement, contrôle sous un compte membre de BLMF sur la 74, et les pages des autres restreintes (`D18`).",
-          "pt": "**15/10 — entregue, a implantar** (migração `20261015180042`). Coluna `source_page_url` (publicado e rascunho), seguida pela retomada e pela publicação; oito recursos Archive.org e dois rascunhos recebem a página `archive.org/details/…`. A RPC `get_accessible_digital_asset_by_id_v2`, exposta, devolvia `source_url` aos membros: agora devolve a página e nunca o arquivo de um recurso restrito armazenado. Ficha e leitor mostram «também on-line»; campo no painel; 11 locales. Suíte `d17_page_de_la_source_tests` 9/9; 201 suítes, testes, lint e build verdes. Resta: controle após implantação e `D18`."
-        }
-      ]
-    },
-    {
       "id": "D18",
       "d": "D",
       "p": "P2",
@@ -5768,6 +5717,10 @@
         {
           "fr": "**15/10 — classement proposé, non appliqué** : `docs/journal/audits/AUDIT_ressources_restreintes_numdif_2026-10-15.md`. 74 reçoit sa page par la migration de `D17` ; pages trouvées et vérifiées pour 70 (dokumen.pub, déjà une page), 72 (pdfcoffee, page au lieu de `/qdownload/`), 73 (article anarquista.net du 30/04/2013), 76 (liste « Livros e textos digitais » du blog d'Évora) ; aucune page publique pour 62 (blog hors ligne) ni 66 (asset riseup sans page publique). SQL préparé pour les quatre, à jouer après déploiement sur accord des détentrices. **La 62 est signalée à BTL** (`bibliographic_match_validated = false`, aucun `rights_status`), non corrigée. Questions ouvertes : afficher les agrégateurs (70, 72) ? Reste aussi la vérification des pages de titre (`NUMDIF-1`).",
           "pt": "**15/10 — classificação proposta, não aplicada** (`AUDIT_ressources_restreintes_numdif_2026-10-15.md`). 74 recebe a página pela migração de D17; páginas achadas para 70, 72, 73, 76; nenhuma para 62 e 66. SQL preparado, a aplicar após implantação com acordo das detentoras. O recurso 62 é sinalizado à BTL, não corrigido."
+        },
+        {
+          "fr": "**16/10 — l'édition de la 74 est à vérifier** : la notice 2384 décrit *El apoyo mutuo*, Pepitas de calabaza, Logroño, **2019** ; le PDF versé vient d'un item Archive.org nommé « … [ocr] [2020] ». Réimpression de la même édition ou autre édition : la page de titre du PDF le dira (`NUMDIF-1`), à BLMF de trancher. Ajouté au classement (`AUDIT_ressources_restreintes_numdif_2026-10-15.md`, question 3).",
+          "pt": "**16/10 — a edição do recurso 74 deve ser verificada**: a notícia 2384 descreve Pepitas de calabaza 2019; o PDF vem de um item Archive.org « [ocr] [2020] ». A página de rosto decide (`NUMDIF-1`); cabe à BLMF."
         }
       ]
     },
