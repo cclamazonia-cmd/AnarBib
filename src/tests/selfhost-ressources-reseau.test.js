@@ -124,6 +124,8 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
 
     const reparateur = lire('deploy/scripts/reparer-objet-storage-plat.sh');
     expect(reparateur).toMatch(/from storage\.objects/);
+    expect(reparateur).toMatch(/set version = gen_random_uuid\(\)::text/);
+    expect(reparateur).toMatch(/rollback_db_version/);
     expect(reparateur).toMatch(/\[ -f "\$legacy" \] \|\| exit 0/);
     expect(reparateur).toMatch(/mv "\$temporary" "\$legacy\/\$ANARBIB_OBJECT_VERSION"/);
     expect(reparateur).toMatch(/trap rollback EXIT HUP INT TERM/);

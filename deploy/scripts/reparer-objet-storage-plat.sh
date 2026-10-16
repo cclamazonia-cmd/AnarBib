@@ -25,25 +25,74 @@ for part in "${path_parts[@]}"; do
 done
 
 cd "$DEPLOY_DIR"
-VERSION=$(
+
+has_flat_file=$(
+  docker compose exec -T \
+    -e "ANARBIB_OBJECT_BUCKET=$BUCKET" \
+    -e "ANARBIB_OBJECT_NAME=$OBJECT_NAME" \
+    storage sh -eu -c '
+      root="${FILE_STORAGE_BACKEND_PATH:?}/${GLOBAL_S3_BUCKET:?}/${TENANT_ID:?}"
+      legacy="$root/$ANARBIB_OBJECT_BUCKET/$ANARBIB_OBJECT_NAME"
+      if [ -f "$legacy" ]; then
+        printf yes
+      fi
+    '
+)
+
+[[ "$has_flat_file" == yes ]] || exit 0
+
+db_row=$(
   printf '%s\n' \
-    "select version from storage.objects" \
+    "select id::text || '|' || coalesce(version, '') from storage.objects" \
     "where bucket_id = :'bucket' and name = :'object_name'" \
     "limit 1;" \
   | docker compose exec -T db psql \
       -U supabase_admin -d postgres -X -A -t -v ON_ERROR_STOP=1 \
       -v "bucket=$BUCKET" -v "object_name=$OBJECT_NAME"
 )
-VERSION=${VERSION//$'\r'/}
-VERSION=${VERSION//$'\n'/}
+db_row=${db_row//$'\r'/}
+db_row=${db_row//$'\n'/}
 
 # Sans ligne en base, Storage choisira lui-même la version lors du premier
 # envoi. Il n'existe donc aucune destination fiable à fabriquer ici.
-[[ -n "$VERSION" ]] || exit 0
+[[ -n "$db_row" ]] || exit 0
+
+OBJECT_ID=${db_row%%|*}
+VERSION=${db_row#*|}
+GENERATED_VERSION=0
+
+if [[ -z "$VERSION" ]]; then
+  VERSION=$(
+    printf '%s\n' \
+      "update storage.objects" \
+      "set version = gen_random_uuid()::text" \
+      "where id = :'object_id'::uuid and (version is null or version = '')" \
+      "returning version;" \
+    | docker compose exec -T db psql \
+        -U supabase_admin -d postgres -X -A -t -v ON_ERROR_STOP=1 \
+        -v "object_id=$OBJECT_ID"
+  )
+  VERSION=${VERSION//$'\r'/}
+  VERSION=${VERSION//$'\n'/}
+  GENERATED_VERSION=1
+fi
+
 [[ "$VERSION" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]] \
   || die "version d'objet invalide"
 
-result=$(
+rollback_db_version() {
+  if [[ "$GENERATED_VERSION" == "1" ]]; then
+    printf '%s\n' \
+      "update storage.objects" \
+      "set version = null" \
+      "where id = :'object_id'::uuid and version = :'version';" \
+    | docker compose exec -T db psql \
+        -U supabase_admin -d postgres -X -A -t -v ON_ERROR_STOP=1 \
+        -v "object_id=$OBJECT_ID" -v "version=$VERSION" >/dev/null 2>&1 || true
+  fi
+}
+
+if ! result=$(
   docker compose exec -T \
     -e "ANARBIB_OBJECT_BUCKET=$BUCKET" \
     -e "ANARBIB_OBJECT_NAME=$OBJECT_NAME" \
@@ -68,8 +117,14 @@ result=$(
       trap - EXIT HUP INT TERM
       printf repaired
     '
-)
+); then
+  rollback_db_version
+  exit 1
+fi
 
 if [[ "$result" == repaired ]]; then
   printf 'Disposition Storage héritée transposée : %s/%s\n' "$BUCKET" "$OBJECT_NAME"
+else
+  rollback_db_version
 fi
+
