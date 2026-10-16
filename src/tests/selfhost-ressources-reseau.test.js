@@ -104,6 +104,16 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
     expect(relecture).toBeGreaterThan(depot);
   });
 
+  it('reconstruit l’état local depuis un objet déjà conforme avant tout nouvel envoi', () => {
+    const inspection = script.indexOf('servi_actuel=');
+    const conforme = script.indexOf('[ "$servi_actuel" = "$sha" ]');
+    const depot = script.indexOf('-X POST');
+    expect(inspection).toBeGreaterThan(0);
+    expect(conforme).toBeGreaterThan(inspection);
+    expect(depot).toBeGreaterThan(conforme);
+    expect(script).toMatch(/memoriser_etat "\$cle_etat" "\$sha"/);
+  });
+
   it('ne lit que la release du dépôt, jamais la prod', () => {
     expect(script).toMatch(/releases\/download/);
     expect(script).not.toMatch(/supabase\.co/);

@@ -78,6 +78,13 @@ BASE="$(printf '%s\n' "$LIGNES" | head -1)"
 
 encoder() { node -e 'process.stdout.write(process.argv[1].split("/").map(encodeURIComponent).join("/"))' "$1"; }
 
+memoriser_etat() {
+  local cle=$1 empreinte=$2
+  grep -vF "$cle	" "$ETAT" > "$ETAT.tmp" || true
+  printf '%s\t%s\n' "$cle" "$empreinte" >> "$ETAT.tmp"
+  mv "$ETAT.tmp" "$ETAT"
+}
+
 KO=0; VERSES=0; DEJA=0
 while IFS=$'\t' read -r fichier bucket chemin type sha; do
   [ -n "$fichier" ] || continue
@@ -87,6 +94,17 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   if [ "$FORCE" = "0" ] && grep -qxF "$cle_etat	$sha" "$ETAT"; then
     code="$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" || echo 000)"
     if [ "$code" = "200" ] || [ "$code" = "206" ]; then
+      DEJA=$((DEJA + 1)); continue
+    fi
+  fi
+
+  # L'état local peut manquer après une restauration ou sur une installation
+  # antérieure à ce script. L'objet servi reste la source de vérité : s'il a
+  # déjà l'empreinte attendue, reconstruire l'état sans tenter de l'écraser.
+  if [ "$FORCE" = "0" ]; then
+    servi_actuel="$(scurl -fsS "$url_objet" 2>/dev/null | sha256sum | cut -d' ' -f1 || true)"
+    if [ "$servi_actuel" = "$sha" ]; then
+      memoriser_etat "$cle_etat" "$sha"
       DEJA=$((DEJA + 1)); continue
     fi
   fi
@@ -116,9 +134,7 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   if [ "$servi" != "$sha" ]; then
     echo "✗ $chemin : l'objet servi n'a pas l'empreinte attendue ($servi)"; KO=1; continue
   fi
-  grep -vF "$cle_etat	" "$ETAT" > "$ETAT.tmp" || true
-  printf '%s\t%s\n' "$cle_etat" "$sha" >> "$ETAT.tmp"
-  mv "$ETAT.tmp" "$ETAT"
+  memoriser_etat "$cle_etat" "$sha"
   echo "✓ $chemin"
   VERSES=$((VERSES + 1))
 done < <(printf '%s\n' "$LIGNES" | tail -n +2)
