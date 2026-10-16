@@ -122,6 +122,16 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
     rm -f "$local_f"; KO=1; continue
   fi
 
+  # Certaines anciennes restaurations ont copié le blob directement sous
+  # <bucket>/<nom>, alors que Storage attend <bucket>/<nom>/<version>. Dans ce
+  # cas un upsert échoue avec ENOTDIR. Transposer uniquement ce format hérité,
+  # à partir de la version qui fait foi dans storage.objects.
+  if ! bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin"; then
+    echo "✗ $chemin : disposition Storage héritée impossible à réparer"
+    KO=1
+    continue
+  fi
+
   code="$(scurl -s -o /dev/null -w '%{http_code}' -X POST \
       -H "Authorization: Bearer $CLE" -H "apikey: $CLE" \
       -H "x-upsert: true" -H "Content-Type: $type" -H "Cache-Control: no-cache" \

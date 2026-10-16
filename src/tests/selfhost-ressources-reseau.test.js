@@ -114,6 +114,19 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
     expect(script).toMatch(/memoriser_etat "\$cle_etat" "\$sha"/);
   });
 
+  it('répare une disposition Storage plate avant de remplacer un objet différent', () => {
+    const reparation = script.indexOf('reparer-objet-storage-plat.sh');
+    const depot = script.indexOf('-X POST');
+    expect(reparation).toBeGreaterThan(0);
+    expect(depot).toBeGreaterThan(reparation);
+
+    const reparateur = lire('deploy/scripts/reparer-objet-storage-plat.sh');
+    expect(reparateur).toMatch(/from storage\.objects/);
+    expect(reparateur).toMatch(/\[ -f "\$legacy" \] \|\| exit 0/);
+    expect(reparateur).toMatch(/mv "\$temporary" "\$legacy\/\$ANARBIB_OBJECT_VERSION"/);
+    expect(reparateur).toMatch(/trap rollback EXIT HUP INT TERM/);
+  });
+
   it('ne lit que la release du dépôt, jamais la prod', () => {
     expect(script).toMatch(/releases\/download/);
     expect(script).not.toMatch(/supabase\.co/);
