@@ -116,9 +116,11 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
 
   it('répare une disposition Storage plate avant de remplacer un objet différent', () => {
     const reparation = script.indexOf('reparer-objet-storage-plat.sh');
+    const verification = script.indexOf('objet transposé illisible');
     const depot = script.indexOf('-X POST');
     expect(reparation).toBeGreaterThan(0);
-    expect(depot).toBeGreaterThan(reparation);
+    expect(verification).toBeGreaterThan(reparation);
+    expect(depot).toBeGreaterThan(verification);
 
     const reparateur = lire('deploy/scripts/reparer-objet-storage-plat.sh');
     expect(reparateur).toMatch(/from storage\.objects/);

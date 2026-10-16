@@ -126,10 +126,19 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   # <bucket>/<nom>, alors que Storage attend <bucket>/<nom>/<version>. Dans ce
   # cas un upsert échoue avec ENOTDIR. Transposer uniquement ce format hérité,
   # à partir de la version qui fait foi dans storage.objects.
-  if ! bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin"; then
+  if ! reparation=$(bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin"); then
     echo "✗ $chemin : disposition Storage héritée impossible à réparer"
     KO=1
     continue
+  fi
+  if [ -n "$reparation" ]; then
+    printf '%s\n' "$reparation"
+    code_lecture=$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" || echo 000)
+    if [ "$code_lecture" != "200" ] && [ "$code_lecture" != "206" ]; then
+      echo "✗ $chemin : objet transposé illisible (HTTP $code_lecture), remplacement annulé"
+      KO=1
+      continue
+    fi
   fi
 
   code="$(scurl -s -o /dev/null -w '%{http_code}' -X POST \
