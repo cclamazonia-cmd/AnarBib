@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-15** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-16** · 54 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -10,7 +10,7 @@
 
 - [Por que uma reescrita](#por-que-uma-reescrita)
 - [Modo de usar](#modo-de-usar)
-- [O estado real em 13 de outubro de 2026](#o-estado-real-em-13-de-outubro-de-2026)
+- [O estado real em 16 de outubro de 2026](#o-estado-real-em-16-de-outubro-de-2026)
 - [Desvios levantados entre o real e o escrito](#desvios-levantados-entre-o-real-e-o-escrito)
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
@@ -60,60 +60,60 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ---
 
-## O estado real em 13 de outubro de 2026
+## O estado real em 16 de outubro de 2026
 
-**Levantamento de 13 de outubro de 2026 à noite** (`88a962ee`, 22h56) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 12/10, `91b7e803`). **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. O que mudou: **o banco** — +6 migrações e +9 funções, todas da sessão vizinha, para **B42**, a busca da catalogação e as locales; avisos de segurança em 499, índices «não usados» em 362; **o catálogo** — sem mudança à unidade, quatro fichas modificadas por Xavier; **a rede** — idêntica à véspera, um primeiro registo TOTP começado às 23h, ainda não verificado; **o repositório** — +41 commits, +25 ficheiros, +50 chaves, +136 testes JS, +4 suítes SQL. **O dia**: B42 em três lotes, **B43 e B44 fechados**, Storage reposto, a busca manual enriquecida, locales com fonte única; a sonda FICEDL corrigida após o primeiro e-mail real, **a corrida do filtro de biblioteca** corrigida à noite, o teste de H34 já não avermelha a fila. **A conta**: 51 itens (B42 e E39 entrados, B43 saído) e 249 fechos. **O que falta fechar** — *num facto por vir*: H34, F19, F25, H15, H16, H21, H28, B42; *decisões*: A1, C4, C16, I32; *sem código*: A1, A3, G8, H2, K1, K2, K3.
+**Levantamento de 16 de outubro de 2026 de manhã** (`db194b77`, 08h31 UTC) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 13/10, `88a962ee`). **496 migrações aplicadas = 496 no repositório**, CI em dia. O que mudou: **o banco** — +18 migrações e +12 funções (NUMDIF, fonte digital sem exemplar, romeno, B42), três tabelas de importação apagadas e sete ajudas públicas fechadas (`anon` 29 → 22), avisos de segurança 489, índices «não usados» 341; **o catálogo** — **+1 000 fichas: Anarchief.org publicou o seu fundo, 1 002 fichas sem exemplar e 1 455 PDF**, duas fusões DEDUP-16; **1 466 fichas sem assunto**; **duas anomalias**: a fusão deixa a canónica sem obra (`1841`, `2178`) e uma obra órfã (`1228`); **a rede** — idêntica, B42 ligada em 14/10, os dois administradores com segundo fator, a FICEDL responde; **o repositório** — +80 commits, +29 ficheiros, **onze locales**, +280 testes JS (3 034), +5 suítes SQL (205). **A conta**: 54 itens e 256 fechos. **O que falta fechar** — *num facto por vir*: **F25** (cron de 17/10), **B36** (28/10), **D3** (Solidaires, antes de 26/10), H34, D15–D18, H15, H16, H21, H28, B42; *decisões*: **A1**, **G20**, C4, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-15.** **43 itens de 54** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-16.** **43 itens de 54** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D17, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
 | | | |
 |---|---:|---|
-| Tabelas `public` | **202** | todas com RLS, 314 policies; sem mudança desde 12/10. **48 políticas em `storage.objects`** (47 na véspera): B42 lote 3 pôs uma por migração. |
-| Tabelas `ingest` | **13** | todas com RLS; só uma tem policy, as outras 12 não (aviso 0008). Sem mudança desde 09/10. |
+| Tabelas `public` | **199** | todas com RLS, 314 policies; **−3 desde 13/10**: as tabelas de importação históricas `import_blmf_*` e `import_terra_livre_rows` foram apagadas. 48 políticas em `storage.objects`, sem mudança. |
+| Tabelas `ingest` | **14** | todas com RLS; só uma tem policy, **13 não** (aviso 0008). **+1 desde 13/10**: a fila de candidatos PDF de NUMDIF. |
 | Views `api` | **68** | sem mudança; 67 em `security_invoker`, uma sem a opção (`library_email_identity`). |
-| Funções aplicativas | **1 136** | `public` 781 · `api` 206 · `ingest` 113 · `private` 36. Das quais **846 SECURITY DEFINER** (841 na véspera). **+9 desde 12/10 à noite**, por seis migrações da sessão vizinha: B42 lotes 2 e 3, a busca de documentos da catalogação, a guarda de `attach-received-asset`, os direitos do Storage, `fn_supported_locales()`. |
-| Migrações aplicadas | **478** | **478 aplicadas, 479 no repositório**: a última (locales com fonte na base, vizinha) está na fila da CI. Todas pela CI. **+6 desde 12/10**, todas de 13/10 e da sessão vizinha: busca da catalogação, direitos do Storage, B42 ×2, guarda de `attach-received-asset`, locales na base. |
-| Jobs `pg_cron` | **43** | ativos, nenhum inativo; sem mudança desde 09/10. |
-| Avisos de segurança | **499** | 0 ERROR · **437** WARN sobre as DEFINER expostas a `authenticated` (0029; 433 na véspera: **+4**, as portas de B42), **29** sobre as expostas a `anon` (sem mudança), **1** `search_path` (0011, intencional), **32** INFO «RLS sem policy» (0008; **+2 tabelas `private`** de B42, fechadas de propósito). |
-| Avisos de desempenho | **388** | **362** «índice não usado» (363 na véspera), **17** chaves estrangeiras sem índice, **8** tabelas sem chave primária (refugo conhecido), **1** sobre as conexões do Auth. B36 relê os índices em 28/10. |
+| Funções aplicativas | **1 148** | `public` 789 · `api` 206 · `ingest` 117 · `private` 36. Das quais **855 SECURITY DEFINER** (846 em 13/10). **+12 desde 13/10**, por dezoito migrações, quase todas da sessão vizinha: NUMDIF, a fonte «digital, sem exemplar», os números de inventário por biblioteca, o romeno na base, H33 por páginas, B42 exigida; **sete ajudas abertas ao público sem chamador foram fechadas**. |
+| Migrações aplicadas | **496** | **496 aplicadas = 496 no repositório**, CI em dia da cabeça (`db194b77`), `deployed-functions` no mesmo commit. Todas pela CI. **+18 desde 13/10**: locales na base, geocodificação, H33 por páginas, B42, DEDUP-16 ×2, sete ajudas fechadas, tabelas de importação apagadas, romeno ×2, números de inventário, NUMDIF ×3, fonte digital sem exemplar, restrito sem detentora, «Preparar a atualização» por páginas. |
+| Jobs `pg_cron` | **43** | ativos, nenhum inativo; sem mudança desde 09/10. O que conta esta semana: `anarbib-authority-resolve-due-daily` (03h45 UTC) resolverá de uma vez as catorze propostas de C4 vencidas esta noite — a prova real de F25, em 17/10 de madrugada. |
+| Avisos de segurança | **489** | 0 ERROR · **436** WARN sobre as DEFINER expostas a `authenticated` (0029), **22** sobre as expostas a `anon` (0028; **29 → 22**: sete ajudas fechadas em 14/10), **1** `search_path` (0011, intencional), **30** INFO «RLS sem policy» (0008: `ingest` 13, `private` 2, `public` 15). |
+| Avisos de desempenho | **365** | **341** «índice não usado» (362 em 13/10), **17** chaves estrangeiras sem índice, **6** tabelas sem chave primária (`conv_backup` ×6), **1** sobre as conexões do Auth. B36 relê os índices em 28/10; ponto de 14/10: 7 dos 22 redundantes a zero, índices das vistas materializadas quase sem leitor. |
 | Esquemas de refugo | **1** | `conv_backup`, sete tabelas; sem mudança. |
 
 ### Funções Edge
 
 | | | |
 |---|---:|---|
-| Pastas no repositório | **52** | + `_shared`; sem mudança desde 05/10; nenhuma função acrescentada nem retirada, mas **vinte pastas tocadas no dia** pela auditoria B42 e pelas locales em `_shared/i18n`. Marcador `deployed-functions` em `dbe8dc28` (13/10, 23h00, B44). |
-| Declarações `verify_jwt` | **38** | em `supabase/config.toml`; sem mudança. |
+| Pastas no repositório | **53** | + `_shared`; **+1 desde 13/10**: `deposit-digital-candidate` (NUMDIF, D16). Quinze pastas tocadas desde 13/10. Marcador `deployed-functions` em `db194b77`, a cabeça da branch no levantamento. |
+| Declarações `verify_jwt` | **38** | em `supabase/config.toml`; sem mudança. Lembrete de B43/B44: esta declaração não prova uma sessão. |
 
 ### Catálogo
 
 | | | |
 |---|---:|---|
-| Fichas | **2 566** | 2 762 exemplares, **2 348 obras**, **1 497 autoridades**, **2 659 fundos, nenhum vazio**. **Nenhuma ficha criada, fundida nem apagada desde 12/10** ; nenhum exemplar tocado; **nenhuma obra sem ficha**. Quatro fichas modificadas no dia (a catalogação de Xavier). |
-| Rascunhos de catalogação | **2 463** | `draft` 1 842, `published` 620, `cancelled` 1 (2 460 na véspera: **+3 retomadas fora de lote**). **Quatro lotes**, sem mudança; 349 fora de lote. Nenhum rascunho de reimportação: a DIRA não reimportou. |
-| Indexação de assunto | **2 102 / 2 566** | fichas com pelo menos um assunto — **464 sem nenhum**; sem mudança. Item C27. |
-| Tesauro FICEDL | **621** | descritores de 03/09 (H13), 110 ligações; sem mudança. **O site da FICEDL oscila** (200, 503, 503, 200 no mesmo dia): a sonda escreveu o seu primeiro e-mail real; corrigida à noite, uma passagem por dia por construção. |
-| Periódicos | **4** | títulos, 5 fichas ligadas; sem mudança. |
+| Fichas | **3 566** | **+1 000 desde 13/10 (2 566)**: **+1 002, Anarchief.org** — lotes 67 (50) e 68 (952), importados e publicados em 15/10, **sem exemplar** (fonte «digital, sem exemplar»); **−2 fusões** (DEDUP-16). 2 762 exemplares, **3 349 obras**, 1 497 autoridades, **3 660 fundos dos quais 1 002 vazios, todos de Anarchief.org** (intencional). 1 518 recursos digitais (+1 488). **Duas anomalias**: duas fichas sem obra (`1841`, `2178`) e uma obra sem ficha (`1228`): **a fusão de fichas deixa a canónica sem `work_id`** quando a obra vinha do duplicado — a corrigir (acordo de Xavier). |
+| Rascunhos de catalogação | **3 488** | `draft` 1 842, `published` **1 645** (**+1 025**, dos quais 1 002 de Anarchief), `cancelled` 1. **Seis lotes**: MLEG 8, BLMF 57 e 66, **Solidaires 63 (1 673 `draft`, nada desde 15/09 — D3)**, **Anarchief 67 e 68 (publicados em 15/10)**; 372 fora de lote. Nenhum rascunho de reimportação: a DIRA não reimportou. |
+| Indexação de assunto | **2 100 / 3 566** | fichas com pelo menos um assunto — **1 466 sem nenhum** (464 em 13/10: **nenhuma das 1 002 fichas de Anarchief.org tem assunto**). Item C27. |
+| Tesauro FICEDL | **621** | descritores de 03/09 (H13), 110 ligações; sem mudança. **A sonda vê o site de pé** (último passo 16/10 08h18 UTC, 200). **H2 fechado**: o e-mail das sete questões partiu em 14/10; a continuação é H3. |
+| Periódicos | **4** | títulos (todos `ativo`), 5 fichas ligadas; sem mudança. Os doze títulos de Solidaires não existem: a importação não trouxe as colunas «revista» e «número»; a ligação far-se-á no formulário ou em massa a pedido (D3). |
 
 ### Rede
 
 | | | |
 |---|---:|---|
-| Bibliotecas | **5 + 1** | **por consulta** (22h56): **5 reais, todas ativas, e 1 de formação**, `blmf-teste`. Sem mudança desde 12/10. Correspondência: um fio, duas mensagens; as dezasseis propostas do Ateliê continuam `open`. **B42**: a dupla autenticação está entregue, facultativa em Minha conta, exigida no servidor e no Storage no prazo anunciado às equipas em 13/10 (14/14). |
-| Contas | **19 + 4** | **19 contas reais, 17 confirmadas, e 4 de formação**; 23 em `auth.users`, 21 confirmadas. Filiações **17 + 9**. Exemplares **2 757 + 5**. Sem mudança. **Nenhum segundo fator verificado ainda**: um só fator TOTP, `unverified`, criado às 23h00 — um registo começado à hora do levantamento. |
-| Administrador(a/e)s da rede | **2** | ativas (Xavier e o camarada ASR2026); A1 espera uma terceira. |
-| Circulação viva | **9 / 21 / 22 / 0** | empréstimos / reservas / consultas / PEB **não arquivados**, **todos em bibliotecas reais, 0 em formação**. Todos «encerrado»; nenhum empréstimo criado desde 12/10. Nenhuma falha de transporte. |
+| Bibliotecas | **5 + 1** | **por consulta** (08h31 UTC): **5 reais, todas ativas** — anarchief.org tem agora um fundo publicado de 1 002 fichas — **e 1 de formação**. Correspondência: um fio, duas mensagens. **As dezasseis propostas do Ateliê continuam `open`, sem objeção: catorze vencem esta noite**. **B42 ligada em 14/10 às 02h11** em modo `facteurs`; o modo `equipes` em 01/01/2027. |
+| Contas | **19 + 4** | **19 contas reais, 17 confirmadas, e 4 de formação**; 23 em `auth.users`, 21 confirmadas. Filiações **17 + 9**. Exemplares **2 757 + 5**. **Dois segundos fatores TOTP verificados** (13/10: os dois administradores da rede). |
+| Administrador(a/e)s da rede | **2** | ativas (Xavier e o camarada ASR2026), ambas com segundo fator; A1 espera uma terceira. |
+| Circulação viva | **9 / 21 / 22 / 0** | empréstimos / reservas / consultas / PEB **não arquivados**, **todos em bibliotecas reais, 0 em formação**. Todos «encerrado»; nenhum empréstimo desde 13/10. **Nenhuma falha de transporte, nenhum incidente.** F19 fechado. |
 
 ### Repositório
 
 | | | |
 |---|---:|---|
-| Commits | **3 393** | +41 desde 12/10 (`91b7e803`), no espelho nu. Um dia a duas sessões: a vizinha — **B42** em três lotes, **B43** (fechado), **B44** (fechado), Storage reposto, a busca manual da catalogação, a busca de documentos como o OPAC, as locales com fonte única; eu — a sonda FICEDL corrigida, **a corrida do filtro de biblioteca no catálogo** (vista por Xavier, corrigida à noite), os prazos do teste de H34, o levantamento. |
-| Arquivos `src/` | **626** | +25 desde 12/10: oito telas e ajudas (duplo fator, locales, busca manual) e dezassete ficheiros de teste; 228 ficheiros de teste. **Acima de 60 Ko, fora das locales**: `ImportacoesPage` 164 Ko, `BookDraftForm` 133, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, `QueuePanel` 62. |
-| Chaves i18n | **7 605** | paridade estrita nas dez locales (7 605 cada). +50 desde 12/10: B42, a busca manual. **As dez locales têm agora uma fonte única**, guardada por `DOC-I18N-4`. |
-| Testes | **2 754 + 200** | **2 754 testes JS** (226 ficheiros, 3 pulados; rodados inteiros em 13/10 às 22h59 sobre `88a962ee`: tudo verde; **+136**) e **200 suítes SQL** (**+4**). Um falso vermelho: «Aproximar 420 linhas» (H34) ultrapassava os 30 s sob carga; os quatro casos «por páginas» têm dois minutos desde `a263ce85`. |
+| Commits | **3 471** | +80 desde 13/10 (`88a962ee`), no espelho nu. A vizinha: **Anarchief.org** (1 002 fichas publicadas, 1 455 PDF), **a cadeia NUMDIF** (D13, D14, D19 fechados), **o romeno, décima primeira língua** (E39, aberto nos seletores em 15/10), B42 ligada, H33 por páginas, auto-alojamento, DEDUP-16. Eu: **H2 fechado** (e-mail à FICEDL partiu em 14/10), **F19 fechado**, o levantamento de 13/10, os pontos F25, B36, D3. |
+| Arquivos `src/` | **655** | +29 desde 13/10: dez fora dos testes (`ro.json`, três fontes DejaVu para os PDF, `CandidatsPdfPanel`…) e dezanove testes; 249 ficheiros em `src/tests`. **Acima de 60 Ko, fora de locales e fontes**: `ImportacoesPage` 165, `BookDraftForm` 133, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, `QueuePanel` 62. |
+| Chaves i18n | **7 756** | paridade estrita em **onze locales** (7 756 cada): **o romeno é a décima primeira** (E39). +151 desde 13/10. |
+| Testes | **3 034 + 205** | **3 034 testes JS** (245 ficheiros, 3 pulados; rodados inteiros em 16/10 às 08h31 UTC sobre `db194b77`: tudo verde; **+280**) e **205 suítes SQL** (**+5**). As medidas «< 8 s» seguem agora a carga do posto. |
 | Marcadores de dívida | **22** | pelo método fixo — **4 falsos** («TODOS»). **18 reais, 6 em `src/`**; sem mudança. Nenhum é tarefa aberta. |
 
 ---
@@ -1964,4 +1964,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-15. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-13 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `88a962ee`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 54 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
