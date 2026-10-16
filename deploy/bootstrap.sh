@@ -465,7 +465,14 @@ fi
 # apparaissaient à la fois « en trop » (concaténées) et « manquantes ».
 # Un contrôle rouge par construction s'apprend vite à ignorer — c'est-à-dire
 # qu'il ne contrôle plus rien.
-SANS_POLICY_ATTENDUES="ingest.import_profiles
+SANS_POLICY_ATTENDUES="ingest.book_import_divergences
+ingest.digital_candidates
+ingest.exemplar_import_baselines
+public.bug_reports
+public.bug_report_notification_outbox
+public.cover_proposals
+public.tombos_attribues
+ingest.import_profiles
 ingest.oai_harvest_state
 ingest.partner_catalog_import_dispatch_log
 ingest.partner_catalog_import_files
