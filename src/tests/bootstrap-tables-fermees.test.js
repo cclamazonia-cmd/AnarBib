@@ -8,6 +8,7 @@ const reference = bootstrap.match(/SANS_POLICY_ATTENDUES="([\s\S]*?)"\n\nSANS_PO
 describe('contrôle des tables fermées du bootstrap', () => {
   it.each([
     'ingest.book_import_divergences',
+    'ingest.digital_candidates',
     'ingest.exemplar_import_baselines',
     'public.bug_reports',
     'public.bug_report_notification_outbox',
