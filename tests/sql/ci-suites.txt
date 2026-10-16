@@ -825,3 +825,7 @@ tests/sql/source_numerique_sans_exemplaire_tests.sql
 # coordination de la bibliothèque qui la perd et à l'administration du réseau ; contrôle fn_restricted_resources_without_holder (administration seule) ;
 # rien d'interdit, la ressource reste active ; une détentrice qui reste ou un PDF public : aucun avis.
 tests/sql/restreint_sans_detentrice_tests.sql
+# Réseau (16/10/2026, décision de Xavier, option 2) : les cartes de la page Réseau comptent aussi les bibliothèques privées —
+# fn_rede_library_counters (DEFINER, administration du réseau seule) rend les compteurs de api.library_circulation_stats
+# hors RLS ; la vue sous le jeton de l'administration rend 0 pour une privée (Anarchief.Org, 1 002 notices) ; non-admin = 42501.
+tests/sql/rede_compteurs_tests.sql

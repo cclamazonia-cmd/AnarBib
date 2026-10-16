@@ -146,12 +146,25 @@ export default function RedePage() {
       // Perf (12/06/2026) : fix N+1 — au lieu d'une requête par biblio (boucle),
       // on tire TOUTES les stats en UNE requête (.in('library_id', [...])) puis on
       // indexe par library_id côté client.
+      // Les compteurs passent par fn_rede_library_counters (16/10/2026) : la vue
+      // est security_invoker, et sous la RLS de l'administration une
+      // bibliothèque PRIVÉE dont on n'est pas membre comptait 0 document
+      // (Anarchief.Org, 1 002 notices). La fonction rend les mêmes colonnes,
+      // pour toutes les bibliothèques, à l'administration du réseau seule ;
+      // repli sur la vue si elle refuse (compte non administrateur sur /rede).
       const libIds = (libs || []).map(l => l.id);
-      const { data: allStats } = libIds.length
-        ? await supabase
+      let allStats = [];
+      if (libIds.length) {
+        const { data: counters, error: countersErr } = await supabase.rpc('fn_rede_library_counters');
+        if (!countersErr && Array.isArray(counters)) {
+          allStats = counters;
+        } else {
+          const { data: viewStats } = await supabase
             .schema('api').from('library_circulation_stats')
-            .select('*').in('library_id', libIds)
-        : { data: [] };
+            .select('*').in('library_id', libIds);
+          allStats = viewStats || [];
+        }
+      }
       const statsByLib = new Map((allStats || []).map(s => [s.library_id, s]));
       const enriched = (libs || []).map(lib => {
         const commRow = (commons || []).find(c => c.library_id === lib.id);
