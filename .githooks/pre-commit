@@ -1,2 +1,31 @@
 #!/bin/sh
+# .githooks/pre-commit — lance la vérification doctrine SQL (pre-commit.ps1).
+#
+# Depuis WSL (16/10/2026). powershell.exe est un processus Windows : le `git`
+# qu'appelle pre-commit.ps1 est le git WINDOWS, qui ne lit pas un dépôt WSL
+# tel quel — dans un worktree, `.git` renvoie à un chemin Linux. Il répondait
+# « unknown option `cached' » et le commit passait sans vérification. On lui
+# donne donc le dépôt en chemins Windows (\\wsl.localhost\…) : GIT_DIR,
+# GIT_WORK_TREE, et l'index DU COMMIT EN COURS (un `git commit -- <chemins>`
+# travaille sur un index temporaire), plus safe.directory (le propriétaire
+# Linux n'est pas l'utilisateur Windows). Les variables passent à Windows par
+# WSLENV. Tout est calculé AVANT d'exporter : un GIT_DIR en chemin Windows
+# rendrait le git Linux de ce script aveugle.
+# Sans SQL ni tests/sql/ stagé, on sort tout de suite, comme le fait
+# pre-commit.ps1 — sans payer les deux secondes de démarrage de PowerShell.
+# Depuis le checkout Windows (Git Bash), rien ne change : dernière ligne.
+if command -v wslpath >/dev/null 2>&1; then
+  git diff --cached --name-only --diff-filter=AM | grep -qE '\.sql$|^tests/sql/' || exit 0
+  idx="${GIT_INDEX_FILE:-$(git rev-parse --git-path index)}"
+  case "$idx" in /*) ;; *) idx="$PWD/$idx" ;; esac
+  w_dir="$(wslpath -w "$(git rev-parse --absolute-git-dir)")" || exit 1
+  w_top="$(wslpath -w "$(git rev-parse --show-toplevel)")" || exit 1
+  w_idx="$(wslpath -w "$idx")" || exit 1
+  w_ps1="$(wslpath -w "$(cd "$(dirname "$0")" && pwd)/pre-commit.ps1")" || exit 1
+  GIT_DIR="$w_dir"; GIT_WORK_TREE="$w_top"; GIT_INDEX_FILE="$w_idx"
+  GIT_CONFIG_COUNT=1; GIT_CONFIG_KEY_0=safe.directory; GIT_CONFIG_VALUE_0='*'
+  WSLENV="${WSLENV:+$WSLENV:}GIT_DIR:GIT_WORK_TREE:GIT_INDEX_FILE:GIT_CONFIG_COUNT:GIT_CONFIG_KEY_0:GIT_CONFIG_VALUE_0"
+  export GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_CONFIG_COUNT GIT_CONFIG_KEY_0 GIT_CONFIG_VALUE_0 WSLENV
+  exec powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$w_ps1"
+fi
 exec powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(dirname "$0")/pre-commit.ps1"
