@@ -98,7 +98,7 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   url_objet="$STORAGE_URL/object/public/$bucket/$(encoder "$chemin")"
 
   if [ "$FORCE" = "0" ] && grep -qxF "$cle_etat	$sha" "$ETAT"; then
-    code="$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" || echo 000)"
+    code="$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" </dev/null || echo 000)"
     if [ "$code" = "200" ] || [ "$code" = "206" ]; then
       DEJA=$((DEJA + 1)); continue
     fi
@@ -108,7 +108,7 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   # antérieure à ce script. L'objet servi reste la source de vérité : s'il a
   # déjà l'empreinte attendue, reconstruire l'état sans tenter de l'écraser.
   if [ "$FORCE" = "0" ]; then
-    servi_actuel="$(scurl -fsS "$url_objet" 2>/dev/null | sha256sum | cut -d' ' -f1 || true)"
+    servi_actuel="$(scurl -fsS "$url_objet" </dev/null 2>/dev/null | sha256sum | cut -d' ' -f1 || true)"
     if [ "$servi_actuel" = "$sha" ]; then
       memoriser_etat "$cle_etat" "$sha"
       DEJA=$((DEJA + 1)); continue
@@ -117,7 +117,7 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
 
   local_f="$CACHE/$fichier"
   if [ ! -f "$local_f" ] || [ "$(sha256sum "$local_f" | cut -d' ' -f1)" != "$sha" ]; then
-    if ! curl -fsSL --retry 3 --max-time 900 -o "$local_f.part" "$BASE$fichier"; then
+    if ! curl -fsSL --retry 3 --max-time 900 -o "$local_f.part" "$BASE$fichier" </dev/null; then
       echo "✗ $fichier : téléchargement impossible ($BASE$fichier)"; rm -f "$local_f.part"; KO=1; continue
     fi
     mv "$local_f.part" "$local_f"
@@ -133,14 +133,14 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   # cas un upsert échoue avec ENOTDIR. Transposer uniquement ce format hérité,
   # à partir de la version qui fait foi dans storage.objects.
   if [ "$STORAGE_HORS_COMPOSE" = "0" ]; then
-    if ! reparation=$(bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin"); then
+    if ! reparation=$(bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin" </dev/null); then
       echo "✗ $chemin : disposition Storage héritée impossible à réparer"
       KO=1
       continue
     fi
     if [ -n "$reparation" ]; then
       printf '%s\n' "$reparation"
-      code_lecture=$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" || echo 000)
+      code_lecture=$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" </dev/null || echo 000)
       if [ "$code_lecture" != "200" ] && [ "$code_lecture" != "206" ]; then
         echo "Avertissement : $chemin reste illisible après transposition (HTTP $code_lecture) ; remplacement par l'API poursuivi."
       fi
@@ -155,7 +155,7 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
     echo "✗ $chemin : dépôt refusé (HTTP $code)"; KO=1; continue
   fi
 
-  servi="$(scurl -s "$url_objet" | sha256sum | cut -d' ' -f1)"
+  servi="$(scurl -s "$url_objet" </dev/null | sha256sum | cut -d' ' -f1)"
   if [ "$servi" != "$sha" ]; then
     echo "✗ $chemin : l'objet servi n'a pas l'empreinte attendue ($servi)"; KO=1; continue
   fi

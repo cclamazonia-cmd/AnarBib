@@ -36,7 +36,7 @@ has_flat_file=$(
       if [ -f "$legacy" ]; then
         printf yes
       fi
-    '
+    ' </dev/null
 )
 
 [[ "$has_flat_file" == yes ]] || exit 0
@@ -69,7 +69,7 @@ if [[ -z "$VERSION" ]]; then
       "where id = :'object_id'::uuid and (version is null or version = '')" \
       "returning version;" \
     | docker compose exec -T db psql \
-        -U supabase_admin -d postgres -X -A -t -v ON_ERROR_STOP=1 \
+        -U supabase_admin -d postgres -X -q -A -t -v ON_ERROR_STOP=1 \
         -v "object_id=$OBJECT_ID"
   )
   VERSION=${VERSION//$'\r'/}
@@ -87,7 +87,7 @@ rollback_db_version() {
       "set version = null" \
       "where id = :'object_id'::uuid and version = :'version';" \
     | docker compose exec -T db psql \
-        -U supabase_admin -d postgres -X -A -t -v ON_ERROR_STOP=1 \
+        -U supabase_admin -d postgres -X -q -A -t -v ON_ERROR_STOP=1 \
         -v "object_id=$OBJECT_ID" -v "version=$VERSION" >/dev/null 2>&1 || true
   fi
 }
@@ -116,7 +116,7 @@ if ! result=$(
       mv "$temporary" "$legacy/$ANARBIB_OBJECT_VERSION"
       trap - EXIT HUP INT TERM
       printf repaired
-    '
+    ' </dev/null
 ); then
   rollback_db_version
   exit 1
