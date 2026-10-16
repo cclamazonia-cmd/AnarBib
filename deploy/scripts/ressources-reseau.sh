@@ -42,8 +42,10 @@ FORCE=0
 [ "${1:-}" = "--force" ] && FORCE=1
 
 STORAGE_URL="${ANARBIB_STORAGE_URL:-http://storage:5000}"
+STORAGE_HORS_COMPOSE=0
 if [ "${ANARBIB_STORAGE_EXEC+defini}" = "defini" ]; then
   EXEC="$ANARBIB_STORAGE_EXEC"
+  STORAGE_HORS_COMPOSE=1
 else
   EXEC="docker compose exec -T caddy"
 fi
@@ -62,6 +64,10 @@ done
 cd "$DEPLOY_DIR"
 mkdir -p "$CACHE"
 touch "$ETAT"
+
+if [ "$STORAGE_HORS_COMPOSE" = "1" ]; then
+  echo "Réparation de la disposition Storage ignorée : exécution hors Compose."
+fi
 
 # curl côté Storage : dans le conteneur caddy (réseau interne de la pile), ou sur l'hôte.
 # shellcheck disable=SC2086
@@ -120,6 +126,25 @@ while IFS=$'\t' read -r fichier bucket chemin type sha; do
   if [ "$recu" != "$sha" ]; then
     echo "✗ $fichier : empreinte $recu ≠ $sha attendue — rien n'est versé."
     rm -f "$local_f"; KO=1; continue
+  fi
+
+  # Certaines anciennes restaurations ont copié le blob directement sous
+  # <bucket>/<nom>, alors que Storage attend <bucket>/<nom>/<version>. Dans ce
+  # cas un upsert échoue avec ENOTDIR. Transposer uniquement ce format hérité,
+  # à partir de la version qui fait foi dans storage.objects.
+  if [ "$STORAGE_HORS_COMPOSE" = "0" ]; then
+    if ! reparation=$(bash "$DEPLOY_DIR/scripts/reparer-objet-storage-plat.sh" "$bucket" "$chemin"); then
+      echo "✗ $chemin : disposition Storage héritée impossible à réparer"
+      KO=1
+      continue
+    fi
+    if [ -n "$reparation" ]; then
+      printf '%s\n' "$reparation"
+      code_lecture=$(scurl -s -o /dev/null -w '%{http_code}' -r 0-0 "$url_objet" || echo 000)
+      if [ "$code_lecture" != "200" ] && [ "$code_lecture" != "206" ]; then
+        echo "Avertissement : $chemin reste illisible après transposition (HTTP $code_lecture) ; remplacement par l'API poursuivi."
+      fi
+    fi
   fi
 
   code="$(scurl -s -o /dev/null -w '%{http_code}' -X POST \
