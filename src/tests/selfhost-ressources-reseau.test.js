@@ -116,7 +116,7 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
 
   it('répare une disposition Storage plate avant de remplacer un objet différent', () => {
     const reparation = script.indexOf('reparer-objet-storage-plat.sh');
-    const verification = script.indexOf('objet transposé illisible');
+    const verification = script.indexOf('reste illisible après transposition');
     const depot = script.indexOf('-X POST');
     expect(reparation).toBeGreaterThan(0);
     expect(verification).toBeGreaterThan(reparation);
@@ -127,6 +127,27 @@ describe('deploy/scripts/ressources-reseau.sh et ses appelants', () => {
     expect(reparateur).toMatch(/\[ -f "\$legacy" \] \|\| exit 0/);
     expect(reparateur).toMatch(/mv "\$temporary" "\$legacy\/\$ANARBIB_OBJECT_VERSION"/);
     expect(reparateur).toMatch(/trap rollback EXIT HUP INT TERM/);
+  });
+
+  it('poursuit le remplacement si l’objet transposé reste temporairement illisible', () => {
+    const avertissement = script.indexOf('reste illisible après transposition');
+    const depot = script.indexOf('-X POST');
+    const bloc = script.slice(avertissement, depot);
+    expect(avertissement).toBeGreaterThan(0);
+    expect(depot).toBeGreaterThan(avertissement);
+    expect(bloc).not.toMatch(/KO=1|continue|exit 1/);
+    expect(bloc).toMatch(/remplacement par l'API poursuivi/);
+  });
+
+  it('saute la réparation physique avec un exécuteur Storage hors Compose', () => {
+    const detection = script.indexOf('STORAGE_HORS_COMPOSE=1');
+    const information = script.indexOf('exécution hors Compose');
+    const condition = script.indexOf('if [ "$STORAGE_HORS_COMPOSE" = "0" ]');
+    const reparation = script.indexOf('reparer-objet-storage-plat.sh');
+    expect(detection).toBeGreaterThan(0);
+    expect(information).toBeGreaterThan(detection);
+    expect(condition).toBeGreaterThan(information);
+    expect(reparation).toBeGreaterThan(condition);
   });
 
   it('ne lit que la release du dépôt, jamais la prod', () => {
