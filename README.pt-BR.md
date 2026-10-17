@@ -68,6 +68,8 @@ O AnarBib é um aplicativo web (React e Vite) apoiado no Supabase (PostgreSQL e 
 O instalador fala os idiomas do projeto; os detalhes estão em [`deploy/README.md`](deploy/README.md).
 Os manuais e o tema da rede são instalados junto com o resto. O mapa de fundo é uma etapa à parte, porque é pesado (de 4 a 36 GB conforme o zoom): [`deploy/scripts/fond-de-carte.sh`](deploy/scripts/fond-de-carte.sh) primeiro mede, depois extrai e instala quando isso é pedido. Sem ele, o mapa da rede mostra só os seus pontos.
 
+**Sem Docker, numa máquina dedicada**: uma imagem Debian 13 pronta para uso, mantida por um companheiro e considerada pronta para produção pelo autor, instala o sistema e depois o AnarBib sozinha, numa VM, num VPS ou num servidor ([última versão](https://codeberg.org/ASR2026/anarbib-debian-iso/releases/latest), [instruções em espanhol](https://codeberg.org/ASR2026/anarbib-debian-iso/src/branch/main/README.es.md)). Ela é instalada no primeiro disco da máquina, após confirmação, e a instância obtida segue o ramo `main`: as atualizações, automáticas ou manuais, chegam no dia em que são publicadas.
+
 **Rodar os testes**:
 
 ```bash
