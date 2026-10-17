@@ -944,6 +944,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
   async function detachWork() {
     const bid = f('published_book_id'); if (!bid) return;
+    // 17/10/2026 : « Détacher » sort l'édition de son groupe — elle reçoit une œuvre à elle. Il
+    // demande confirmation : trois notices s'étaient retrouvées sans œuvre (dont un double-clic,
+    // le bouton prenant la place de « Créer l'œuvre »).
+    if (!(await confirmer({ message: t({ id: 'catalogacao.work.detachConfirm' }, { title: work?.uniform_title || '' }), confirmLabel: t({ id: 'catalogacao.work.detach' }), tone: 'danger' }))) return;
     setWorkBusy(true);
     try {
       const { error } = await supabase.rpc('detach_book_from_work', { p_book_id: Number(bid) });
@@ -2160,9 +2164,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 {work ? (
                   <>
                     <span style={{ fontSize: '.82rem' }}>{work.uniform_title} · {t({ id: 'catalogacao.work.editions' }, { count: work.count })}</span>
-                    <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={detachWork} disabled={workBusy}>
-                      {t({ id: 'catalogacao.work.detach' })}
-                    </button>
+                    {/* Seule édition de son œuvre : rien à détacher (17/10/2026). */}
+                    {work.count > 1 && (
+                      <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={detachWork} disabled={workBusy}>
+                        {t({ id: 'catalogacao.work.detach' })}
+                      </button>
+                    )}
                   </>
                 ) : (
                   <>

@@ -3,6 +3,8 @@
 -- Date    : 2026-09-04  ·  Chantier OPAC par oeuvre
 -- Ref     : 20260904130000 (work_not_same, merge_works, fn_work_prune_if_empty,
 --           suggest_split_works, mark_works_not_same, search_works_for_link)
+--           20261017215038_une_notice_garde_toujours_une_oeuvre (17/10/2026 : detach donne une oeuvre a elle,
+--           une notice supprimee range l'oeuvre qu'elle laisse vide — T6, T9)
 --
 -- Ce que le 04/09 a montre : group_books_as_editions laissait des oeuvres
 -- vides derriere lui, et rien ne proposait de rapprocher deux oeuvres du
@@ -16,7 +18,7 @@ DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   v_staff uuid := '11111111-1111-1111-1111-111111111111';
   v_author bigint; v_w1 bigint; v_w2 bigint; v_w3 bigint; v_b1 bigint; v_b2 bigint; v_b3 bigint;
-  v_n int; v_id bigint; v_txt text; v_txt2 text;
+  v_n int; v_id bigint; v_txt text; v_txt2 text; v_d1 bigint; v_d2 bigint; v_wx bigint; v_bx bigint; v_by bigint;
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM public.user_library_memberships WHERE user_id = v_staff AND status = 'active') THEN
     RAISE EXCEPTION 'OEUVRES-RATTACHEMENT : le coordenador du seed est absent, la suite ne peut pas simuler le staff';
@@ -96,16 +98,23 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T6 detach garde l''oeuvre tant qu''une notice y reste, la supprime sinon';
+  -- 17/10/2026 : detach ne vide plus work_id. Il sort l'edition de son groupe avec une
+  -- oeuvre a elle ; la seule edition d'une oeuvre n'est pas touchee (trois notices de la
+  -- production s'etaient retrouvees sans oeuvre).
+  v_t := 'T6 detach donne une oeuvre a elle a l''edition sortie ; la seule edition reste';
   BEGIN
     PERFORM public.detach_book_from_work(v_b1);
-    IF EXISTS (SELECT 1 FROM public.works WHERE id = v_w1)
-       AND (SELECT work_id FROM public.books WHERE id = v_b1) IS NULL THEN
-      PERFORM public.detach_book_from_work(v_b2);
-      PERFORM public.detach_book_from_work(v_b3);
-      IF NOT EXISTS (SELECT 1 FROM public.works WHERE id = v_w1) THEN v_passed := v_passed+1;
-      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : l''oeuvre vide survit'); END IF;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : l''oeuvre a disparu trop tot'); END IF;
+    SELECT work_id INTO v_d1 FROM public.books WHERE id = v_b1;
+    PERFORM public.detach_book_from_work(v_b2);
+    SELECT work_id INTO v_d2 FROM public.books WHERE id = v_b2;
+    PERFORM public.detach_book_from_work(v_b3);
+    IF v_d1 IS NOT NULL AND v_d2 IS NOT NULL AND v_d1 <> v_w1 AND v_d2 <> v_w1 AND v_d1 <> v_d2
+       AND (SELECT work_id FROM public.books WHERE id = v_b3) = v_w1
+       AND EXISTS (SELECT 1 FROM public.works WHERE id = v_w1)
+       AND (SELECT uniform_title FROM public.works WHERE id = v_d1) = 'Zzdesobediencia civil'
+       AND NOT EXISTS (SELECT 1 FROM public.books WHERE id IN (v_b1, v_b2, v_b3) AND work_id IS NULL)
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : b1='||coalesce(v_d1::text,'NULL')||' b2='||coalesce(v_d2::text,'NULL')||' w1='||v_w1); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
@@ -121,6 +130,21 @@ BEGIN
        AND (SELECT count(*) FROM public.books WHERE work_id = v_id) = 2
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : cible='||coalesce(v_id::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- 17/10/2026 : la fusion 1841 <- 2681 avait laisse l'oeuvre du doublon sans notice.
+  v_t := 'T9 supprimer une notice range l''oeuvre qu''elle laisse vide, pas une oeuvre encore tenue';
+  BEGIN
+    INSERT INTO public.works (uniform_title, sort_title, primary_author_id) VALUES ('Zzorpheline', 'zzorpheline', v_author) RETURNING id INTO v_wx;
+    INSERT INTO public.books (titulo, autor, idioma, ano, work_id) VALUES ('Zzorpheline', 'ZZTHOREAU, Henry David', 'pt-BR', '1990', v_wx) RETURNING id INTO v_bx;
+    INSERT INTO public.books (titulo, autor, idioma, ano, work_id) VALUES ('Zzorpheline', 'ZZTHOREAU, Henry David', 'es', '1991', v_wx) RETURNING id INTO v_by;
+    DELETE FROM public.books WHERE id = v_bx;
+    IF EXISTS (SELECT 1 FROM public.works WHERE id = v_wx) THEN
+      DELETE FROM public.books WHERE id = v_by;
+      IF NOT EXISTS (SELECT 1 FROM public.works WHERE id = v_wx) THEN v_passed := v_passed+1;
+      ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : l''oeuvre vide survit a sa derniere notice'); END IF;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : l''oeuvre a disparu alors qu''une notice la tenait'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   PERFORM set_config('request.jwt.claims', NULL, true);
@@ -166,6 +190,7 @@ BEGIN
 
   -- ── Nettoyage ─────────────────────────────────────────────────────
   DELETE FROM public.books WHERE id IN (v_b1, v_b2, v_b3);
+  DELETE FROM public.works w WHERE w.id IN (v_d1, v_d2) AND NOT EXISTS (SELECT 1 FROM public.books b WHERE b.work_id = w.id);
   DELETE FROM public.works WHERE primary_author_id = v_author;
   DELETE FROM public.authors WHERE id = v_author;
 

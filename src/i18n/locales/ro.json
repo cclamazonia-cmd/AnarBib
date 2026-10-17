@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Biblioteca mea (implicit)",
   "catalogacao.work.created": "Operă creată.",
   "catalogacao.work.detached": "Detașat de operă.",
+  "catalogacao.work.detachConfirm": "Scoți această ediție din opera „{title}”? Va primi o operă proprie; celelalte ediții rămân grupate.",
   "catalogacao.work.grouped": "Grupate ca ediții ale aceleiași opere.",
   "catalogacao.dedup.sameWork": "Aceeași operă",
   "catalogacao.dedup.sameWorkHint": "Grupează ca ediții ale aceleiași opere (nu e duplicat).",

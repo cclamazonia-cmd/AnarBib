@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Η βιβλιοθήκη μου (προεπιλογή)",
   "catalogacao.work.created": "Το έργο δημιουργήθηκε.",
   "catalogacao.work.detached": "Αποσυνδέθηκε από το έργο.",
+  "catalogacao.work.detachConfirm": "Αφαίρεση αυτής της έκδοσης από το έργο «{title}»; Θα αποκτήσει δικό της έργο· οι άλλες εκδόσεις μένουν ομαδοποιημένες.",
   "catalogacao.work.grouped": "Ομαδοποιήθηκε ως εκδόσεις του ίδιου έργου.",
   "catalogacao.dedup.sameWork": "Ίδιο έργο",
   "catalogacao.dedup.sameWorkHint": "Ομαδοποίηση ως εκδόσεις του ίδιου έργου (όχι διπλότυπο).",

@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Mia biblioteko (defaŭlte)",
   "catalogacao.work.created": "Verko kreita.",
   "catalogacao.work.detached": "Malligita de la verko.",
+  "catalogacao.work.detachConfirm": "Ĉu eltiri ĉi tiun eldonon el la verko «{title}»? Ĝi ricevos propran verkon; la aliaj eldonoj restas grupigitaj.",
   "catalogacao.work.grouped": "Grupigita kiel eldonoj de la sama verko.",
   "catalogacao.dedup.sameWork": "Sama verko",
   "catalogacao.dedup.sameWorkHint": "Grupigi kiel eldonojn de la sama verko (ne duplikato).",

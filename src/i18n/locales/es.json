@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Mi biblioteca (por defecto)",
   "catalogacao.work.created": "Obra creada.",
   "catalogacao.work.detached": "Desvinculado de la obra.",
+  "catalogacao.work.detachConfirm": "¿Sacar esta edición de la obra «{title}»? Recibirá una obra propia; las demás ediciones siguen agrupadas.",
   "catalogacao.work.grouped": "Agrupado como ediciones de la misma obra.",
   "catalogacao.dedup.sameWork": "Misma obra",
   "catalogacao.dedup.sameWorkHint": "Agrupar como ediciones de la misma obra (no es duplicado).",

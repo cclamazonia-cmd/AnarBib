@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Mijn bibliotheek (standaard)",
   "catalogacao.work.created": "Werk aangemaakt.",
   "catalogacao.work.detached": "Losgekoppeld van werk.",
+  "catalogacao.work.detachConfirm": "Deze uitgave uit het werk ‘{title}’ halen? Ze krijgt een eigen werk; de andere uitgaven blijven gegroepeerd.",
   "catalogacao.work.grouped": "Gegroepeerd als edities van hetzelfde werk.",
   "catalogacao.dedup.sameWork": "Zelfde werk",
   "catalogacao.dedup.sameWorkHint": "Groeperen als edities van hetzelfde werk (geen duplicaat).",

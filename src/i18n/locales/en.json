@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "My library (default)",
   "catalogacao.work.created": "Work created.",
   "catalogacao.work.detached": "Detached from work.",
+  "catalogacao.work.detachConfirm": "Take this edition out of the work “{title}”? It will get a work of its own; the other editions stay grouped.",
   "catalogacao.work.grouped": "Grouped as editions of the same work.",
   "catalogacao.dedup.sameWork": "Same work",
   "catalogacao.dedup.sameWorkHint": "Group as editions of the same work (not a duplicate).",

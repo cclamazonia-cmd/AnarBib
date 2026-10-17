@@ -5655,6 +5655,7 @@
   "catalogacao.publish.copiesLibraryDefault": "Meine Bibliothek (Standard)",
   "catalogacao.work.created": "Werk angelegt.",
   "catalogacao.work.detached": "Vom Werk gelöst.",
+  "catalogacao.work.detachConfirm": "Diese Ausgabe aus dem Werk „{title}“ lösen? Sie erhält ein eigenes Werk; die übrigen Ausgaben bleiben gruppiert.",
   "catalogacao.work.grouped": "Als Ausgaben desselben Werks gruppiert.",
   "catalogacao.dedup.sameWork": "Selbes Werk",
   "catalogacao.dedup.sameWorkHint": "Als Ausgaben desselben Werks gruppieren (kein Duplikat).",
