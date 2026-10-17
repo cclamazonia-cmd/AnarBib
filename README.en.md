@@ -66,6 +66,7 @@ AnarBib is a web application (React and Vite) backed by Supabase (PostgreSQL and
 ```
 
 The installer speaks the project's languages; the details are in [`deploy/README.md`](deploy/README.md).
+The network's manuals and theme are installed along with everything else. The base map is a separate step, because it is large (4 to 36 GB depending on the zoom level): [`deploy/scripts/fond-de-carte.sh`](deploy/scripts/fond-de-carte.sh) measures first, then extracts and installs it when asked to. Without it, the network map only shows its points.
 
 **Run the tests**:
 
