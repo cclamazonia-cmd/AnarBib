@@ -39,17 +39,55 @@ import { masquerAdresse } from "../core/journal-masque.ts";
 //     une attente croissante avec un aléa (RESEND_RETRY_BASE_MS, défaut 400 :
 //     0,4 s, 0,8 s, 1,6 s) ; un autre 4xx (clé tournée, domaine suspendu,
 //     adresse refusée) n'est pas rejoué, il ne changerait pas.
-// Des isolats en parallèle ne se voient pas : le rejeu couvre ce que la cadence
-// ne peut pas. Un échec après rejeu reste noté dans mail_transport_failures.
+// Un échec après rejeu reste noté dans mail_transport_failures.
+//
+// ─── Une cadence commune à tous les isolats (F25, 17/10/2026) ──────────────
+// L'épreuve réelle du 17/10 (le cron de résolution a résolu quatorze
+// propositions d'un coup : quatorze isolats en parallèle, 72 courriels) a fait
+// répondre 429 à Resend 82 fois — tous rattrapés par le rejeu, l'un au dernier
+// essai. Des isolats en parallèle ne se voient pas : chacun cadençait à huit
+// par seconde. Désormais chaque envoi (rejeu compris) réserve son créneau en
+// base, `public.fn_mail_cadence_creneau('resend', intervalle)`, une ligne par
+// canal verrouillée à la réservation : la cadence est celle du réseau entier.
+// Si la réservation échoue (pile sans la migration, base injoignable), le
+// transport retombe sur sa cadence locale et le dit une fois par isolat ;
+// RESEND_CADENCE_COMMUNE=off la coupe (banc). Une attente est plafonnée à
+// 30 s : au-delà, on envoie quand même — le rejeu reste le filet.
 // RESEND_API_URL ne sert qu'au banc (un faux Resend) : absent en production.
 const dormir = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 function entierEnv(nom: string, defaut: number): number {
   const v = parseInt((Deno.env.get(nom) || "").trim(), 10);
   return Number.isFinite(v) && v >= 0 ? v : defaut;
 }
+const ATTENTE_COMMUNE_MAX_MS = 30000;
+let repliSignale = false;
+async function attenteCommune(intervalle: number): Promise<number | null> {
+  if ((Deno.env.get("RESEND_CADENCE_COMMUNE") || "").trim().toLowerCase() === "off") return null;
+  let raison = "";
+  try {
+    const { data, error } = await supabaseAdmin.rpc("fn_mail_cadence_creneau", { p_canal: "resend", p_intervalle_ms: intervalle });
+    if (!error) {
+      const n = Number(data);
+      if (Number.isFinite(n) && n >= 0) return Math.min(n, ATTENTE_COMMUNE_MAX_MS);
+      raison = "réponse inattendue";
+    } else raison = String(error.message || error);
+  } catch (e) {
+    raison = String((e as Error)?.message ?? e);
+  }
+  if (!repliSignale) {
+    repliSignale = true;
+    console.warn(`[transport] cadence commune indisponible (${raison.slice(0, 120)}) : cadence de l'isolat seule`);
+  }
+  return null;
+}
 let prochainCreneau = 0;
 async function cadencer(): Promise<void> {
   const intervalle = entierEnv("RESEND_MIN_INTERVAL_MS", 125);
+  const commune = await attenteCommune(intervalle);
+  if (commune !== null) {
+    if (commune > 0) await dormir(commune);
+    return;
+  }
   const maintenant = Date.now();
   const creneau = Math.max(maintenant, prochainCreneau);
   prochainCreneau = creneau + intervalle;

@@ -829,3 +829,7 @@ tests/sql/restreint_sans_detentrice_tests.sql
 # fn_rede_library_counters (DEFINER, administration du réseau seule) rend les compteurs de api.library_circulation_stats
 # hors RLS ; la vue sous le jeton de l'administration rend 0 pour une privée (Anarchief.Org, 1 002 notices) ; non-admin = 42501.
 tests/sql/rede_compteurs_tests.sql
+# F25 (17/10/2026) : une cadence commune à tous les isolats pour les envois Resend — l'épreuve réelle du 17/10
+# (quatorze propositions résolues d'un coup) a fait 82 réponses 429 rattrapées par le rejeu, l'une au dernier essai.
+# public.fn_mail_cadence_creneau réserve le créneau en base (private.mail_cadence, une ligne par canal).
+tests/sql/f25_cadence_commune_tests.sql

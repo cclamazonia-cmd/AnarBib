@@ -21,7 +21,7 @@ const racine = (p) => new URL(`../../supabase/functions/_shared/${p}`, import.me
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const RACINE = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '../..');
 
-function monter(env = {}) {
+function monter(env = {}, base = null) {
   const notes = [];
   const fakeEnv = { RESEND_API_KEY: 're_test', RESEND_MIN_INTERVAL_MS: '20', RESEND_RETRY_BASE_MS: '5', RESEND_API_URL: 'http://resend.test/emails', ...env };
   const stubs = {
@@ -29,7 +29,7 @@ function monter(env = {}) {
     '../mail/inline-images.ts': { inlineLogosInHtml: async (h) => h },
     '../shared/format.ts': { firstNameOnly: (s) => s, fullName: (p) => p?.name || '', isValidEmail: (e) => /^[^@\s]+@[^@\s]+$/.test(e) },
     '../mail/smtp.ts': { sendViaSmtp: async () => '', resolveTimeout: () => 1000 },
-    '../core/env.ts': { supabaseAdmin: { from: () => ({ insert: async (row) => { notes.push(row); return { error: null }; } }) } },
+    '../core/env.ts': { supabaseAdmin: { from: () => ({ insert: async (row) => { notes.push(row); return { error: null }; } }), ...(base ? { rpc: base.rpc } : {}) } },
     './restriction.ts': { dejaServi: () => false },
     '../core/journal-masque.ts': { masquerAdresse: (s) => s },
   };
@@ -53,6 +53,23 @@ function fauxResend(reponses) {
   return appels;
 }
 const opts = (label = 'user_mail') => ({ toEmail: 'lectrice@exemple.invalid', subject: 'Essai', html: '<p>x</p>', text: 'x', label });
+
+// Une fausse base qui tient le créneau commun comme public.fn_mail_cadence_creneau (F25, 17/10) :
+// une ligne par canal, le prochain créneau libre, les millisecondes à attendre en retour.
+function baseCommune({ erreur = null } = {}) {
+  const prochains = {}; const appels = [];
+  return {
+    appels,
+    rpc: async (nom, args) => {
+      appels.push({ nom, ...args });
+      if (erreur) return { data: null, error: { message: erreur } };
+      const maintenant = Date.now();
+      const creneau = Math.max(prochains[args.p_canal] ?? 0, maintenant);
+      prochains[args.p_canal] = creneau + args.p_intervalle_ms;
+      return { data: creneau - maintenant, error: null };
+    },
+  };
+}
 
 const fetchOriginal = globalThis.fetch;
 beforeEach(() => { globalThis.fetch = fetchOriginal; });
@@ -115,6 +132,53 @@ describe('transport Resend — rejeu et cadence (F25)', () => {
     // début, avec 2 ms de tolérance pour la granularité de l'horloge.
     for (let i = 0; i < t.length; i++) expect(t[i] - debut, `envoi ${i}`).toBeGreaterThanOrEqual(i * 20 - 2);
     expect(Date.now() - debut).toBeGreaterThanOrEqual(9 * 20 - 2);
+  });
+
+  it('cadence commune (17/10) : deux isolats qui envoient ensemble ne partent jamais plus vite que l’intervalle du réseau', async () => {
+    const base = baseCommune();
+    const isolatA = monter({ RESEND_MIN_INTERVAL_MS: '20' }, base);
+    const isolatB = monter({ RESEND_MIN_INTERVAL_MS: '20' }, base);
+    const appels = fauxResend([]);
+    const debut = Date.now();
+    await Promise.all([
+      ...Array.from({ length: 6 }, () => isolatA.sendEmail(opts())),
+      ...Array.from({ length: 6 }, () => isolatB.sendEmail(opts())),
+    ]);
+    expect(appels).toHaveLength(12);
+    expect(base.appels).toHaveLength(12);
+    expect(base.appels.every((a) => a.nom === 'fn_mail_cadence_creneau' && a.p_canal === 'resend' && a.p_intervalle_ms === 20)).toBe(true);
+    // Avec la seule cadence de l'isolat, A et B partiraient deux par deux ; la cadence commune
+    // aligne les douze envois sur un seul fil : le i-ème ne part jamais avant début + i × 20 ms.
+    const t = appels.map((a) => a.t).sort((x, y) => x - y);
+    for (let i = 0; i < t.length; i++) expect(t[i] - debut, `envoi ${i}`).toBeGreaterThanOrEqual(i * 20 - 2);
+  });
+
+  it('cadence commune : un rejeu réserve aussi son créneau', async () => {
+    const base = baseCommune();
+    const { sendEmail } = monter({}, base);
+    const appels = fauxResend([{ status: 429 }]);
+    await expect(sendEmail(opts())).resolves.toBe('{"id":"ok"}');
+    expect(appels).toHaveLength(2);
+    expect(base.appels).toHaveLength(2);
+  });
+
+  it('cadence commune indisponible : le courriel part quand même, cadencé dans l’isolat', async () => {
+    const base = baseCommune({ erreur: 'Could not find the function public.fn_mail_cadence_creneau' });
+    const { sendEmail } = monter({ RESEND_MIN_INTERVAL_MS: '20' }, base);
+    const appels = fauxResend([]);
+    const debut = Date.now();
+    await Promise.all(Array.from({ length: 4 }, () => sendEmail(opts())));
+    expect(appels).toHaveLength(4);
+    const t = appels.map((a) => a.t).sort((x, y) => x - y);
+    for (let i = 0; i < t.length; i++) expect(t[i] - debut, `envoi ${i}`).toBeGreaterThanOrEqual(i * 20 - 2);
+  });
+
+  it('RESEND_CADENCE_COMMUNE=off : la base n’est pas consultée', async () => {
+    const base = baseCommune();
+    const { sendEmail } = monter({ RESEND_CADENCE_COMMUNE: 'off' }, base);
+    fauxResend([]);
+    await sendEmail(opts());
+    expect(base.appels).toHaveLength(0);
   });
 
   it('les appelants qui comptent les envois ne comptent plus un échec (source)', () => {
