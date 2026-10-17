@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-16",
+    "maj": "2026-10-17",
     "releve": {
       "date": "2026-10-16",
       "commit": "db194b77"
@@ -6068,6 +6068,10 @@
         {
           "fr": "**12/10 — décision de Xavier : provoquer l'épreuve réelle** — quatorze propositions versées d'un coup dans l'Atelier, et zéro 429 dans `mail_transport_failures`. À faire de jour (les propositions notifient des personnes réelles ; pas un soir), sur un lot de propositions utiles — les seize de C4 en attente d'« Aplicar » sont les candidates naturelles. **Règle actée le même soir** : un item livré dont le critère réel dépend d'un usage réel se clôt sur le banc, l'épreuve réelle versée à l'item qui l'attend — sauf quand Xavier choisit d'attendre (H15, H16, H21, H28 : DIRA).",
           "pt": "**12/10 — decisão de Xavier: provocar a prova real** — catorze propostas de uma vez no Ateliê, zero 429. De dia, com propostas úteis (as dezasseis de C4). **Regra**: um item entregue cujo critério real depende do uso real fecha-se no banco, a prova real passa ao item que a espera."
+        },
+        {
+          "fr": "**17/10 — l'épreuve réelle a eu lieu, seule, et elle est passée de justesse.** À 03 h 45 UTC, le cron `anarbib-authority-resolve-due-daily` a résolu par consentement les **quatorze propositions de C4** d'un coup (`resolved_at` identique) ; quatorze événements `authority.proposal_resolved_consent`, traités en parallèle par `notify-event` : **72 courriels, la même rafale que le 09/10**. Résultat : **72 envoyés, 0 perdu** — `mail_transport_failures` vide, outbox 14 `sent` sans erreur ni seconde tentative, aucun incident de santé, et Xavier a reçu ses courriels « acceptée, délai passé ». **Mais Resend a répondu 429 à 82 reprises** : 59 envois rejoués une fois, 22 deux fois, **un troisième rejeu, le dernier avant l'échec**. Le critère posé le 12/10 (zéro 429 dans `mail_transport_failures`) est tenu ; la marge, elle, tient à un rejeu. La cause est celle que la fiche annonçait : la cadence de huit envois par seconde vaut **par isolat**, et quatorze isolats en parallèle la multiplient ; le rejeu absorbe ce que la cadence ne règle pas. Une rafale de vingt propositions, ou une annonce à toutes les équipes, pourrait perdre des courriels. Le remède, s'il est voulu : une cadence commune à tous les isolats (une file côté `notify-event`, ou un jeton partagé en base). Clôture : décision de Xavier.",
+          "pt": "**17/10 — a prova real aconteceu sozinha e passou à justa.** Às 03h45 UTC o cron resolveu as **catorze propostas de C4** de uma vez: **72 e-mails, a mesma rajada de 09/10**. Resultado: **72 enviados, 0 perdido** (`mail_transport_failures` vazio, outbox 14 `sent`, nenhum incidente). **Mas a Resend respondeu 429 82 vezes**: 59 envios repetidos uma vez, 22 duas vezes, **um à terceira e última tentativa**. O critério de 12/10 está cumprido; a margem é de uma tentativa. Causa: a cadência de 8/s vale **por isolado**, e catorze isolados em paralelo multiplicam-na. Remédio possível: uma cadência comum a todos os isolados. Fecho: decisão de Xavier."
         }
       ]
     },

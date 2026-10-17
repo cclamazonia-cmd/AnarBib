@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-16** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-17** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 16 de outubro de 2026 de manhã** (`db194b77`, 08h31 UTC) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 13/10, `88a962ee`). **496 migrações aplicadas = 496 no repositório**, CI em dia. O que mudou: **o banco** — +18 migrações e +12 funções (NUMDIF, fonte digital sem exemplar, romeno, B42), três tabelas de importação apagadas e sete ajudas públicas fechadas (`anon` 29 → 22), avisos de segurança 489, índices «não usados» 341; **o catálogo** — **+1 000 fichas: Anarchief.org publicou o seu fundo, 1 002 fichas sem exemplar e 1 455 PDF**, duas fusões DEDUP-16; **1 466 fichas sem assunto**; **duas anomalias**: a fusão deixa a canónica sem obra (`1841`, `2178`) e uma obra órfã (`1228`); **a rede** — idêntica, B42 ligada em 14/10, os dois administradores com segundo fator, a FICEDL responde; **o repositório** — +80 commits, +29 ficheiros, **onze locales**, +280 testes JS (3 034), +5 suítes SQL (205). **A conta**: 54 itens e 256 fechos. **O que falta fechar** — *num facto por vir*: **F25** (cron de 17/10), **B36** (28/10), **D3** (Solidaires, antes de 26/10), H34, D15–D18, H15, H16, H21, H28, B42; *decisões*: **A1**, **G20**, C4, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-16.** **42 itens de 53** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-17.** **42 itens de 53** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -975,7 +975,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23).
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso.
 
@@ -1943,4 +1943,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-16. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-17. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
