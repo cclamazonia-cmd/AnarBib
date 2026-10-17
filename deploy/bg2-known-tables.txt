@@ -215,3 +215,6 @@ ingest.partner_catalog_staging_rows
 # et le journal des retraits de facteurs par l'administration du réseau (uuid des comptes + motif).
 private.double_facteur_journal
 private.double_facteur_reglage
+# F25 (17/10/2026) : le prochain créneau d'envoi Resend par canal, commun à tous les isolats.
+# Une ligne technique (canal + horodatage), aucune donnée personnelle.
+private.mail_cadence
