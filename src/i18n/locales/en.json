@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Editor (ed.)",
   "catalogacao.role.outro": "Other",
   "catalogacao.role.prefaciador": "Preface",
+  "catalogacao.role.introdutor": "Introduction",
+  "catalogacao.role.prologuista": "Foreword",
   "catalogacao.role.tradutor": "Translator",
   "catalogacao.saved": "Data saved.",
   "catalogacao.saving": "Saving…",

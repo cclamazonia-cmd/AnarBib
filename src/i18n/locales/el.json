@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Επιμέλεια (επιμ.)",
   "catalogacao.role.outro": "Άλλο",
   "catalogacao.role.prefaciador": "Πρόλογος",
+  "catalogacao.role.introdutor": "Εισαγωγή",
+  "catalogacao.role.prologuista": "Προλογικό σημείωμα",
   "catalogacao.role.tradutor": "Μεταφραστής/τρια",
   "catalogacao.saved": "Τα δεδομένα αποθηκεύτηκαν.",
   "catalogacao.saving": "Αποθήκευση…",

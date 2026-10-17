@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Redactie (red.)",
   "catalogacao.role.outro": "Andere",
   "catalogacao.role.prefaciador": "Voorwoord",
+  "catalogacao.role.introdutor": "Inleiding",
+  "catalogacao.role.prologuista": "Woord vooraf",
   "catalogacao.role.tradutor": "Vertaler",
   "catalogacao.saved": "Gegevens opgeslagen.",
   "catalogacao.saving": "Bezig met opslaan…",

@@ -79,6 +79,14 @@ describe('les petites fonctions', () => {
     expect(inferContributorRole('Éditeur scientifique')).toBe('organizador');
     expect(inferContributorRole('edited by')).toBe('organizador');
     expect(ROLE_KEYS_TEXT).not.toContain('editor');
+    // 17/10/2026 : introduction et avant-propos ne sont plus des préfaces
+    expect(inferContributorRole('Introdução')).toBe('introdutor');
+    expect(inferContributorRole('Writer of introduction')).toBe('introdutor');
+    expect(inferContributorRole('Avant-propos')).toBe('prologuista');
+    expect(inferContributorRole('Foreword')).toBe('prologuista');
+    expect(inferContributorRole('Préface')).toBe('prefaciador');
+    expect(inferContributorRole('Postface')).toBe('prefaciador');
+    expect(ROLE_KEYS_TEXT).toEqual(expect.arrayContaining(['prefaciador', 'introdutor', 'prologuista']));
   });
   it('identifiant VIAF', () => {
     expect(parseViafId('http://viaf.org/viaf/12345678')).toBe('12345678');

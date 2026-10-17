@@ -2654,6 +2654,8 @@
   "catalogacao.role.organizador": "Direction (dir.)",
   "catalogacao.role.outro": "Autre",
   "catalogacao.role.prefaciador": "Préface",
+  "catalogacao.role.introdutor": "Introduction",
+  "catalogacao.role.prologuista": "Avant-propos",
   "catalogacao.role.tradutor": "Traducteur·rice",
   "catalogacao.saved": "Données enregistrées.",
   "catalogacao.saving": "Enregistrement…",

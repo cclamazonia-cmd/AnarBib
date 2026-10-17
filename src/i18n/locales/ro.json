@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Ediție îngrijită (ed.)",
   "catalogacao.role.outro": "Alt rol",
   "catalogacao.role.prefaciador": "Prefață",
+  "catalogacao.role.introdutor": "Introducere",
+  "catalogacao.role.prologuista": "Cuvânt înainte",
   "catalogacao.role.tradutor": "Traducător/traducătoare",
   "catalogacao.saved": "Date salvate.",
   "catalogacao.saving": "Se salvează…",

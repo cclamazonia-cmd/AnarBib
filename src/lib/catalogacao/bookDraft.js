@@ -22,7 +22,10 @@ export const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'materi
 // « editor » n'est plus proposé (17/10/2026) : c'était « organizador » sous un
 // autre nom — même code MARC21 (edt), et « edited by » dit « sous la direction
 // de ». Les lignes qui le portent encore restent lisibles (garde du menu).
-export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','outro'];
+// « introdutor » (introduction) et « prologuista » (avant-propos) rejoignent
+// « prefaciador » le 17/10/2026 : trois textes liminaires distincts, comme
+// les distinguent les codes MARC21 win, wfw et wpr.
+export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','introdutor','prologuista','coordenador','outro'];
 export const ROLE_KEYS_AUDIOVISUAL = ['autor','realizador','roteirista','ator','interprete','compositor','narrador','produtor','tradutor','organizacao','coautor','outro'];
 export const ROLE_KEYS_AUDIO = ['autor','interprete','compositor','narrador','locutor','produtor','tradutor','organizacao','coautor','outro'];
 export function roleKeysForMaterial(materialType) {
@@ -60,7 +63,9 @@ export function inferContributorRole(marcRole = '') {
   if (/edit|dir/.test(r)) return 'organizador';
   if (/coord/.test(r)) return 'coordenador';
   if (/org|compil/.test(r)) return 'organizador';
-  if (/pref|postf|introd/.test(r)) return 'prefaciador';
+  if (/introd|einleit|inleid|enkonduk/.test(r)) return 'introdutor';
+  if (/avant-?propos|forew|apresenta|geleitwort|premessa|woord vooraf|antauvort/.test(r)) return 'prologuista';
+  if (/pref|postf/.test(r)) return 'prefaciador';
   if (/coaut/.test(r)) return 'coautor';
   return 'autor';
 }

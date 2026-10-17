@@ -222,11 +222,22 @@ Deno.test('Revue H23 : langue en ISO 639-2 (101, 041, 008), traduction en ind1, 
   assertEquals([l041.ind1, l041.subfields[0].value], ['1', 'por']);
   assertEquals(m.fields.find((f) => f.tag === '008').value.slice(35, 38), 'por');
   assertEquals(enregistrement({ ...r, contributors: [] }, OPTS).fields.find((f) => f.tag === '101').ind1, '0');
-  // chaque code de la table se relit en son rôle (sauf « editor » en MARC21)
+  // chaque code de la table se relit en son rôle (sauf « editor » en MARC21,
+  // et introduction / avant-propos en UNIMARC, qui les écrit en 080 comme la
+  // préface : ils s'y relisent « prefaciador »)
   for (const d of DIALECTES) for (const role of ROLES_ANARBIB) {
     if (d === 'marc21' && role === 'editor') continue;
+    if (d === 'unimarc' && (role === 'introdutor' || role === 'prologuista')) {
+      assertEquals(roleDepuisCode(d, CODE_ROLE[d][role]), 'prefaciador', `${d} ${role}`);
+      continue;
+    }
     assertEquals(roleDepuisCode(d, CODE_ROLE[d][role]), role, `${d} ${role}`);
   }
+  // 17/10/2026 : MARC21 distingue les trois textes liminaires (win, wfw, wpr)
+  assertEquals(['win', 'wfw', 'wpr'].map((c) => roleDepuisCode('marc21', c)), ['introdutor', 'prologuista', 'prefaciador']);
+  assertEquals(roleDepuisCode('marc21', 'aui'), 'prefaciador');   // ancien code, encore lu
+  assertEquals(roleDepuisCode('marc21', null, 'Writer of foreword'), 'prologuista');
+  assertEquals(roleDepuisCode('marc21', null, 'introduction'), 'introdutor');
 });
 
 Deno.test('Revue H23 : congrès à qualificatifs manquants, dates MARC21, 245 sans vedette, 130, 856 selon sa provenance', () => {

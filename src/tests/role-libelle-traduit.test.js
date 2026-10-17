@@ -26,7 +26,8 @@ describe('rôle de contributeur : libellé traduit, jamais le code brut', () => 
 
   it('tous les codes de rôle en usage ont leur libellé dans les dix locales', () => {
     // Codes relevés en prod le 08/10/2026 (book_contributors.role).
-    const codes = ['autor', 'organizacao', 'organizador', 'tradutor', 'coordenador', 'prefaciador', 'outro', 'ator', 'coautor', 'realizador', 'editor', 'ilustrador'];
+    // + introdutor, prologuista : proposés au menu depuis le 17/10/2026.
+    const codes = ['autor', 'organizacao', 'organizador', 'tradutor', 'coordenador', 'prefaciador', 'introdutor', 'prologuista', 'outro', 'ator', 'coautor', 'realizador', 'editor', 'ilustrador'];
     for (const loc of LOCALE_CODES) {
       const j = JSON.parse(read(`src/i18n/locales/${loc}.json`));
       for (const c of codes) expect(j[`catalogacao.role.${c}`], `${loc} ${c}`).toBeTruthy();

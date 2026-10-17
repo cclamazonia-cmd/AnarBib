@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Direcció (dir.)",
   "catalogacao.role.outro": "Altre",
   "catalogacao.role.prefaciador": "Pròleg",
+  "catalogacao.role.introdutor": "Introducció",
+  "catalogacao.role.prologuista": "Presentació",
   "catalogacao.role.tradutor": "Traductor-a-e",
   "catalogacao.saved": "Dades desades.",
   "catalogacao.saving": "Desant…",

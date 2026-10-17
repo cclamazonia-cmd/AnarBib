@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Curatela (a cura di)",
   "catalogacao.role.outro": "Altro",
   "catalogacao.role.prefaciador": "Prefazione",
+  "catalogacao.role.introdutor": "Introduzione",
+  "catalogacao.role.prologuista": "Premessa",
   "catalogacao.role.tradutor": "Traduttore/trice",
   "catalogacao.saved": "Dati salvati.",
   "catalogacao.saving": "Salvataggio…",

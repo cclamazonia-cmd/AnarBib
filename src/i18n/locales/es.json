@@ -2648,6 +2648,8 @@
   "catalogacao.role.organizador": "Dirección (dir.)",
   "catalogacao.role.outro": "Otro",
   "catalogacao.role.prefaciador": "Prefacio",
+  "catalogacao.role.introdutor": "Introducción",
+  "catalogacao.role.prologuista": "Prólogo",
   "catalogacao.role.tradutor": "Traductore",
   "catalogacao.saved": "Datos guardados.",
   "catalogacao.saving": "Guardando…",
