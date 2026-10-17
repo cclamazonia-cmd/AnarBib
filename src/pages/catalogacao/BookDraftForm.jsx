@@ -1262,6 +1262,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // repartait sans le chemin du fichier qu'on venait d'envoyer.
       const envoye = coverFile ? await uploadCover() : null;
       const isUpdate = !!f('id');
+      // 18/10/2026 : le texte d'auteur part recomposé depuis les contributeurs, DANS cet envoi.
+      // Il ne l'était qu'après (syncAutorFromContributors, plus bas) : le brouillon gardait le
+      // texte d'avant, la publication le recopiait sur la notice — « Casamento Indissolúvel… »,
+      // passée à Wilhelm Reich, restait trouvée par « Auteur : kropotkin ».
+      const autorDesContributeurs = contributors
+        .filter((c) => (c.name || '').trim())
+        .map((c) => c.name.trim())
+        .join(' ; ');
       const payload = {
         ...(isUpdate ? { id: Number(f('id')) } : {}),
         published_book_id: f('published_book_id') ? Number(f('published_book_id')) : null,
@@ -1276,7 +1284,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         bib_ref: f('bib_ref') || null,
         titulo: f('titulo').trim(),
         subtitulo: f('subtitulo') || null,
-        autor: f('autor') || null,
+        autor: autorDesContributeurs || f('autor') || null,
         edicao: f('edicao') || null,
         local_publicacao: f('local_publicacao') || null,
         editora: f('editora') || null,
