@@ -3318,6 +3318,14 @@
           "fr": "**Clos le 16/10** (REGISTRE §47 NUMDIF-3 ; migration `20261015180042`, commit `faa76c17`, session « D17 lien vers la page source »). `source_page_url` sur `book_digital_resources` et sa jumelle brouillon, suivie par la reprise et la publication ; huit ressources Archive.org publiées et deux brouillons ont reçu leur page `archive.org/details/…`. `get_accessible_digital_asset_by_id_v2` — exposée à PostgREST, elle rendait `source_url` aux membres : le masquage ne tenait que dans la fonction Edge — rend la page et jamais le fichier d'une ressource restreinte servie depuis le stockage ; `read-digital-asset` aussi, commentaire corrigé (révocabilité et attribution, pas de filigrane incrusté). Fiche, lecteur (« aussi en ligne ») et panneau de catalogage ; onze langues. Critères tenus : suite `d17_page_de_la_source_tests` 9/9 en CI (membre = page sans fichier ; anon et autre bibliothèque = rien, ni par la RPC ni par la table ; liste fermée des fonctions de session qui rendent `source_url`) ; en production, fiche publique du livre 86 et, le 16/10, **contrôle de Xavier sous un compte membre de BLMF** sur le livre 2384 (ressource 74). Les pages des autres restreintes relèvent de `D18`.",
           "pt": "**Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`."
         }
+      ],
+      [
+        "F25",
+        "2026-10-17",
+        {
+          "fr": "**Clos le 17/10 sur décision de Xavier, après l'épreuve réelle et son correctif.** Le chemin : le 09/10, quatorze propositions de l'Atelier versées d'un coup font 72 envois en deux secondes, **58 perdus** (Resend refuse au-delà de dix par seconde), et les appelants comptaient l'échec comme un envoi ; le soir même (`6b03ebe4`), le transport partagé rejoue un 429, un 5xx ou une connexion rompue trois fois, cadence ses envois à huit par seconde, et les appelants comptent juste. **Le 17/10 à 03 h 45 UTC, l'épreuve réelle arrive seule** : le cron de résolution résout les quatorze propositions de C4 d'un coup, quatorze isolats en parallèle, 72 courriels — **72 envoyés, 0 perdu**, mais **82 réponses 429 rattrapées par le rejeu**, dont une au troisième et dernier essai : la cadence valait par isolat. **Correctif du 17/10 (`a24b669e`)** : une cadence commune à tous les isolats — `private.mail_cadence` (le prochain créneau libre, une ligne par canal) et `public.fn_mail_cadence_creneau` (réserve le créneau en verrouillant la ligne, rend l'attente en millisecondes ; DEFINER, `search_path` vide, `service_role` seul) ; chaque envoi Resend, rejeu compris, réserve son créneau en base ; repli sur la cadence de l'isolat si la réservation échoue, dit une fois par isolat. Bancs : `f25_cadence_commune_tests` (5 cas : créneaux enchaînés, pas d'accumulation, canaux indépendants, bornes, droits) et quatre cas de plus dans `mail-transport-rejeu-cadence` (deux isolats alignés sur un seul fil, rejeu, repli, désactivation). Deux retouches en chemin : la table classée pour la sauvegarde (`af866530`, le filet BG2 du job SQL l'exigeait) et le banc de `register`, qui comparait la liste exacte des appels de base et voyait désormais la réservation du transport (`bdad9b36`). **Vérifié en production à 23 h 27 (Paris)** : 501 migrations appliquées pour 501 au dépôt, celle de F25 par la CI (`created_by` vide), fonction DEFINER fermée à `anon` et `authenticated`, ouverte au seul `service_role`, table sous RLS, marqueur `deployed-functions` sur `bdad9b36`. La ligne `resend` naîtra au premier envoi ; les deux dernières propositions de C4, résolues le 18/10 à 03 h 45, en seront le premier passage.",
+          "pt": "**Fechado em 17/10 por decisão de Xavier, depois da prova real e da sua correção.** Em 09/10, 72 envios em dois segundos, **58 perdidos**; nessa noite (`6b03ebe4`) o transporte repete um 429 e cadencia a 8/s. **Em 17/10 às 03h45 UTC a prova real chega sozinha**: catorze propostas resolvidas de uma vez, 72 e-mails, **0 perdido**, mas **82 respostas 429** apanhadas pela repetição, uma à última tentativa: a cadência valia por isolado. **Correção de 17/10 (`a24b669e`)**: uma cadência comum a todos os isolados (`private.mail_cadence`, `public.fn_mail_cadence_creneau`, service_role só); cada envio reserva o seu horário na base; recurso à cadência local se a reserva falhar. Dois retoques: a tabela classificada para a cópia de segurança (`af866530`) e o banco de `register` (`bdad9b36`). **Verificado em produção às 23 h 27 (Paris)**: 501 migrações = 501, aplicada pela CI, função fechada a `anon` e `authenticated`, `deployed-functions` em `bdad9b36`."
+        }
       ]
     ]
   },
@@ -6011,69 +6019,6 @@
         "fr": "Une CI verte ne prouve pas que le front est en ligne : une correction paraît livrée alors que l'écran sert l'ancienne version, et une migration qui change la forme d'une réponse peut casser un front resté en arrière — en silence.",
         "pt": "Uma CI verde não prova que o front está no ar: uma correção parece entregue enquanto a tela serve a versão antiga, e uma migração que muda a forma de uma resposta pode quebrar um front atrasado — em silêncio."
       }
-    },
-    {
-      "id": "F25",
-      "d": "F",
-      "p": "P1",
-      "s": "a-verifier",
-      "e": "M",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache",
-        "pt": "Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber"
-      },
-      "v": {
-        "fr": "**Constaté le 09/10 à 21 h 49** : quatorze propositions ouvertes d'un coup dans l'Atelier (C4) ont déclenché quatorze événements `authority.proposal_opened`, traités en parallèle par `notify-event`, 72 courriels en deux secondes — Resend n'en accepte que dix par seconde (HTTP 429 `rate_limit_exceeded`) : **58 courriels perdus**, 14 passés. Le transport partagé (`_shared/transport/email.ts`, F7) ne rejoue pas un 429 et ne cadence rien ; `safeSendEmail` avale l'échec et `authority.ts` compte `sent++` quand même (la réponse disait « 72 envoyés »). La sonde de santé l'a vu (incident 23, `echecs_recents (58)`, courriel d'alerte à 21 h 50) : le dispositif de F15 a fait son travail, pas le transport. Tout événement qui s'adresse à beaucoup de personnes à la fois (un fil de l'Atelier, une annonce aux coordinations, un rappel groupé) peut reproduire la perte.",
-        "pt": "**09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23)."
-      },
-      "w": {
-        "fr": "Dans `_shared/transport/email.ts` : rejouer un 429 (et un 5xx) avec attente croissante, trois fois, en lisant `retry-after` ; cadencer les envois d'un même appel (au plus huit par seconde) ; rendre un résultat vrai (`ok: false` compté comme tel par les appelants : `authority.ts`, les autres domaines qui font `sent++`). Banc du transport : un faux Resend qui répond 429 deux fois puis 200 → un seul courriel, livré ; 72 destinataires → aucun 429 émis. Puis relire la sonde : l'incident 23 s'est refermé seul.",
-        "pt": "No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso."
-      },
-      "y": {
-        "fr": "Une personne qui ne reçoit pas le courriel ne sait pas qu'une proposition l'attend, qu'une réservation est prête, qu'un mot de passe a été demandé — et le système, lui, a dit « envoyé ». C'est la promesse de F7 (un seul envoi de mail) qui n'est tenue qu'à moitié.",
-        "pt": "Quem não recebe o e-mail não sabe que algo a espera — e o sistema disse « enviado »."
-      },
-      "f": {
-        "fr": [
-          "Un 429 de Resend est rejoué et le courriel finit par partir (banc).",
-          "Soixante-douze destinataires en un appel ne produisent aucun 429 (banc).",
-          "Un échec de transport est compté comme un échec par tous les appelants (`sent` vrai)."
-        ],
-        "pt": [
-          "Um 429 é repetido e o e-mail parte (bancada).",
-          "72 destinatários num só chamado: nenhum 429.",
-          "Um fracasso de transporte é contado como fracasso por todos os chamadores."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune. Les 58 courriels du 09/10 ne seront pas renvoyés : les propositions restent visibles dans l'Atelier jusqu'au 16/10.",
-        "pt": "Nenhuma. Os 58 e-mails de 09/10 não serão reenviados: as propostas ficam no Ateliê até 16/10."
-      },
-      "r": [
-        "clôture F7",
-        "F15",
-        "C4",
-        "supabase/functions/_shared/transport/email.ts",
-        "supabase/functions/_shared/domain/authority.ts"
-      ],
-      "verif": [
-        {
-          "fr": "**09/10 — livré, déployé et vérifié à 22 h 29** (`6b03ebe4`). `_shared/transport/email.ts` : cadence par isolat (huit envois Resend par seconde au plus), rejeu d'un 429, d'un 5xx ou d'une connexion rompue jusqu'à trois fois après `Retry-After` (plafonné à 10 s) ou une attente croissante (0,4 s, 0,8 s, 1,6 s, avec un aléa), un autre 4xx n'est pas rejoué, l'échec après rejeu reste noté pour la sonde ; `authority.ts` et `partnership.ts` ne comptent plus un échec comme un envoi. Banc `mail-transport-rejeu-cadence` (6 cas, faux Resend horodaté) ; les 38 bancs qui passent par le transport restent verts avec des délais réduits. Critères 1 et 2 tenus au banc, critère 3 tenu pour les trois compteurs trouvés (`sent++`) — les autres domaines lisaient déjà `ok`. **Reste** : la prochaine action en masse réelle (une série de propositions, une convocation) sans aucun 429 dans `mail_transport_failures` ; d'ici là, les actions en masse se font par petits lots espacés. L'incident 23 s'est refermé seul.",
-          "pt": "**09/10 — entregue e verificado às 22 h 29** (`6b03ebe4`). Transporte: cadência (oito por segundo), repetição de 429/5xx/conexão rompida até três vezes (Retry-After ou espera crescente), fracasso após repetição anotado ; `sent` só conta sucessos. Bancada 6 casos. Resta uma ação em massa real sem 429."
-        },
-        {
-          "fr": "**12/10 — décision de Xavier : provoquer l'épreuve réelle** — quatorze propositions versées d'un coup dans l'Atelier, et zéro 429 dans `mail_transport_failures`. À faire de jour (les propositions notifient des personnes réelles ; pas un soir), sur un lot de propositions utiles — les seize de C4 en attente d'« Aplicar » sont les candidates naturelles. **Règle actée le même soir** : un item livré dont le critère réel dépend d'un usage réel se clôt sur le banc, l'épreuve réelle versée à l'item qui l'attend — sauf quand Xavier choisit d'attendre (H15, H16, H21, H28 : DIRA).",
-          "pt": "**12/10 — decisão de Xavier: provocar a prova real** — catorze propostas de uma vez no Ateliê, zero 429. De dia, com propostas úteis (as dezasseis de C4). **Regra**: um item entregue cujo critério real depende do uso real fecha-se no banco, a prova real passa ao item que a espera."
-        },
-        {
-          "fr": "**17/10 — l'épreuve réelle a eu lieu, seule, et elle est passée de justesse.** À 03 h 45 UTC, le cron `anarbib-authority-resolve-due-daily` a résolu par consentement les **quatorze propositions de C4** d'un coup (`resolved_at` identique) ; quatorze événements `authority.proposal_resolved_consent`, traités en parallèle par `notify-event` : **72 courriels, la même rafale que le 09/10**. Résultat : **72 envoyés, 0 perdu** — `mail_transport_failures` vide, outbox 14 `sent` sans erreur ni seconde tentative, aucun incident de santé, et Xavier a reçu ses courriels « acceptée, délai passé ». **Mais Resend a répondu 429 à 82 reprises** : 59 envois rejoués une fois, 22 deux fois, **un troisième rejeu, le dernier avant l'échec**. Le critère posé le 12/10 (zéro 429 dans `mail_transport_failures`) est tenu ; la marge, elle, tient à un rejeu. La cause est celle que la fiche annonçait : la cadence de huit envois par seconde vaut **par isolat**, et quatorze isolats en parallèle la multiplient ; le rejeu absorbe ce que la cadence ne règle pas. Une rafale de vingt propositions, ou une annonce à toutes les équipes, pourrait perdre des courriels. Le remède, s'il est voulu : une cadence commune à tous les isolats (une file côté `notify-event`, ou un jeton partagé en base). Clôture : décision de Xavier.",
-          "pt": "**17/10 — a prova real aconteceu sozinha e passou à justa.** Às 03h45 UTC o cron resolveu as **catorze propostas de C4** de uma vez: **72 e-mails, a mesma rajada de 09/10**. Resultado: **72 enviados, 0 perdido** (`mail_transport_failures` vazio, outbox 14 `sent`, nenhum incidente). **Mas a Resend respondeu 429 82 vezes**: 59 envios repetidos uma vez, 22 duas vezes, **um à terceira e última tentativa**. O critério de 12/10 está cumprido; a margem é de uma tentativa. Causa: a cadência de 8/s vale **por isolado**, e catorze isolados em paralelo multiplicam-na. Remédio possível: uma cadência comum a todos os isolados. Fecho: decisão de Xavier."
-        }
-      ]
     },
     {
       "id": "B41",

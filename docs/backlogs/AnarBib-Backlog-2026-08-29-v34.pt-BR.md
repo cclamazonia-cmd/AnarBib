@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-17** · 53 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-17** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 7
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 16 de outubro de 2026 de manhã** (`db194b77`, 08h31 UTC) — produção só em leitura, repositório recontado; **todas as linhas remedidas** (anterior: 13/10, `88a962ee`). **496 migrações aplicadas = 496 no repositório**, CI em dia. O que mudou: **o banco** — +18 migrações e +12 funções (NUMDIF, fonte digital sem exemplar, romeno, B42), três tabelas de importação apagadas e sete ajudas públicas fechadas (`anon` 29 → 22), avisos de segurança 489, índices «não usados» 341; **o catálogo** — **+1 000 fichas: Anarchief.org publicou o seu fundo, 1 002 fichas sem exemplar e 1 455 PDF**, duas fusões DEDUP-16; **1 466 fichas sem assunto**; **duas anomalias**: a fusão deixa a canónica sem obra (`1841`, `2178`) e uma obra órfã (`1228`); **a rede** — idêntica, B42 ligada em 14/10, os dois administradores com segundo fator, a FICEDL responde; **o repositório** — +80 commits, +29 ficheiros, **onze locales**, +280 testes JS (3 034), +5 suítes SQL (205). **A conta**: 54 itens e 256 fechos. **O que falta fechar** — *num facto por vir*: **F25** (cron de 17/10), **B36** (28/10), **D3** (Solidaires, antes de 26/10), H34, D15–D18, H15, H16, H21, H28, B42; *decisões*: **A1**, **G20**, C4, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-17.** **42 itens de 53** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-17.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -946,7 +946,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F25** | Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber | `P1` | A verificar |
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
 
@@ -968,28 +967,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas.
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F25 — Envios em rajada ultrapassam o limite do Resend: e-mails se perdem sem ninguém saber
-
-`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** **09/10, 21h49**: catorze propostas abertas de uma vez no Ateliê dispararam 72 e-mails em dois segundos; o Resend aceita dez por segundo (HTTP 429): **58 e-mails perdidos**. O transporte compartilhado não repete um 429 nem cadencia; `sent++` conta o fracasso como sucesso. A sonda de saúde viu (incidente 23).
-
-*Verificado : [object Object],[object Object],[object Object]*
-
-**O que é.** No transporte: repetir 429 e 5xx com espera crescente, cadenciar (oito por segundo), devolver um resultado verdadeiro contado pelos chamadores. Bancada com um Resend falso.
-
-**Por que importa.** Quem não recebe o e-mail não sabe que algo a espera — e o sistema disse « enviado ».
-
-**O que conta como terminado.**
-
-- Um 429 é repetido e o e-mail parte (bancada).
-- 72 destinatários num só chamado: nenhum 429.
-- Um fracasso de transporte é contado como fracasso por todos os chamadores.
-
-**Dependências.** Nenhuma. Os 58 e-mails de 09/10 não serão reenviados: as propostas ficam no Ateliê até 16/10.
-
-*Remissões : `clôture F7` · `F15` · `C4` · `supabase/functions/_shared/transport/email.ts` · `supabase/functions/_shared/domain/authority.ts`*
 
 ---
 
@@ -1912,6 +1889,7 @@ CI verde. |
 | D19 | 2026-10-15 | **Fechado em 15/10** (migração `20261015202816`, `217e4425`). Um PDF restrito sem detentora aparece no controle e a coordenação é avisada; nada é proibido. Suíte 5/5; CI verde; em produção: 0. |
 | D14 | 2026-10-16 | **Fechado em 16/10**. Receita: 86 e 96 → «mesma edição» (SHA-256 idênticos aos recursos 77 e 78); Guérin → 0 «mesma edição»; os três PDF conhecidos (Anarres, Proyección, RyR) achados pela ferramenta → «outra edição» com a edição achada; empréstimo controlado excluído. Teste com 14 casos. |
 | D17 | 2026-10-16 | **Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`. |
+| F25 | 2026-10-17 | **Fechado em 17/10 por decisão de Xavier, depois da prova real e da sua correção.** Em 09/10, 72 envios em dois segundos, **58 perdidos**; nessa noite (`6b03ebe4`) o transporte repete um 429 e cadencia a 8/s. **Em 17/10 às 03h45 UTC a prova real chega sozinha**: catorze propostas resolvidas de uma vez, 72 e-mails, **0 perdido**, mas **82 respostas 429** apanhadas pela repetição, uma à última tentativa: a cadência valia por isolado. **Correção de 17/10 (`a24b669e`)**: uma cadência comum a todos os isolados (`private.mail_cadence`, `public.fn_mail_cadence_creneau`, service_role só); cada envio reserva o seu horário na base; recurso à cadência local se a reserva falhar. Dois retoques: a tabela classificada para a cópia de segurança (`af866530`) e o banco de `register` (`bdad9b36`). **Verificado em produção às 23 h 27 (Paris)**: 501 migrações = 501, aplicada pela CI, função fechada a `anon` e `authenticated`, `deployed-functions` em `bdad9b36`. |
 
 ---
 
@@ -1943,4 +1921,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-17. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 53 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-17. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-16 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `db194b77`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

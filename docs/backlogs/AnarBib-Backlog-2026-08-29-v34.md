@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-17** · 53 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-17** · 52 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -20,7 +20,7 @@
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 7
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 7
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 2
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 6
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 8
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 16 octobre 2026 au matin** (`db194b77`, mesuré à 08 h 31 UTC) — production interrogée en lecture seule et dépôt recompté ; **toutes les lignes ont été remesurées** (précédent relevé : le 13/10 au soir, `88a962ee`). **496 migrations appliquées = 496 au dépôt**, le marqueur `deployed-functions` sur la tête de branche : la CI est à jour. Ce qui a bougé et pourquoi : **la base** — +18 migrations et +12 fonctions (NUMDIF, la source numérique sans exemplaire, le roumain, les numéros d'inventaire, B42 exigée, les pages plus petites de H33), trois tables d'import historiques supprimées et sept aides publiques sans appelant fermées (avis `anon` 29 → 22), avis de sécurité 489, index « inutilisés » 341 ; **le catalogue** — **+1 000 notices : Anarchief.org a publié son fonds, 1 002 notices sans exemplaire et 1 455 PDF**, deux fusions DEDUP-16, 32 notices modifiées ; **1 466 notices sans sujet** (aucune d'Anarchief n'en a) ; **deux anomalies** : la fusion de notices laisse la canonique sans œuvre (`1841`, `2178`) et une œuvre orpheline (`1228`) ; **le réseau** — identique (5 + 1, 19 + 4, 9 / 21 / 22 / 0), B42 allumée le 14/10 en mode `facteurs`, les deux administrateurs ont leur second facteur, la FICEDL répond, aucun échec mail ni incident ; **le dépôt** — +80 commits, +29 fichiers, **onze locales** (+151 clés), +280 tests JS (3 034), +5 suites SQL (205). **Le compte** : 54 items (entrés : E39 le 13, D13 à D19 et G20 le 15 ; sortis : B43, B44, B45, H2, F19, D13, D14, D19) et 256 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **F25** (le cron du 17/10 à 03 h 45 UTC résout quatorze propositions d'un coup : relever les échecs de transport, clore si zéro), **B36** (les index, le 28/10), **D3** (Solidaires, un début de révision avant le 26/10 — la coordination est prévenue depuis la visio du 14, la balle est chez elle), H34 (voisine), D15, D16, D17, D18 (voisine, livrés, à vérifier), H15, H16, H21, H28 (DIRA, par choix de Xavier), B42 (`equipes` le 01/01/2027) ; *les décisions* : **A1** (une troisième administration : Solidaires ou la BTL), **G20** (les trois questions NUMDIF à l'AG), C4 (« Aplicar » après le 16/10), C16, I32 ; *sans code* : A3, G8 (la liste NORLA), **H3** (l'export FICEDL suit la réponse de Claude sur les groupes SPIP), K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-17.** **42 items sur 53** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, F25, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-17.** **41 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -946,7 +946,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
-| **F25** | Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache | `P1` | À vérifier |
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
 
@@ -968,28 +967,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Après **K5** (relais demandé à Bologne). Pas avant **I2** : changer de transport et d'hébergeur la même semaine, c'est deux inconnues.
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F25 — Les envois en rafale dépassent la limite de Resend : des courriels se perdent sans que personne le sache
-
-`P1` Prioritaire · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
-
-**État.** **Constaté le 09/10 à 21 h 49** : quatorze propositions ouvertes d'un coup dans l'Atelier (C4) ont déclenché quatorze événements `authority.proposal_opened`, traités en parallèle par `notify-event`, 72 courriels en deux secondes — Resend n'en accepte que dix par seconde (HTTP 429 `rate_limit_exceeded`) : **58 courriels perdus**, 14 passés. Le transport partagé (`_shared/transport/email.ts`, F7) ne rejoue pas un 429 et ne cadence rien ; `safeSendEmail` avale l'échec et `authority.ts` compte `sent++` quand même (la réponse disait « 72 envoyés »). La sonde de santé l'a vu (incident 23, `echecs_recents (58)`, courriel d'alerte à 21 h 50) : le dispositif de F15 a fait son travail, pas le transport. Tout événement qui s'adresse à beaucoup de personnes à la fois (un fil de l'Atelier, une annonce aux coordinations, un rappel groupé) peut reproduire la perte.
-
-*Vérifié : [object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Dans `_shared/transport/email.ts` : rejouer un 429 (et un 5xx) avec attente croissante, trois fois, en lisant `retry-after` ; cadencer les envois d'un même appel (au plus huit par seconde) ; rendre un résultat vrai (`ok: false` compté comme tel par les appelants : `authority.ts`, les autres domaines qui font `sent++`). Banc du transport : un faux Resend qui répond 429 deux fois puis 200 → un seul courriel, livré ; 72 destinataires → aucun 429 émis. Puis relire la sonde : l'incident 23 s'est refermé seul.
-
-**Pourquoi ça compte.** Une personne qui ne reçoit pas le courriel ne sait pas qu'une proposition l'attend, qu'une réservation est prête, qu'un mot de passe a été demandé — et le système, lui, a dit « envoyé ». C'est la promesse de F7 (un seul envoi de mail) qui n'est tenue qu'à moitié.
-
-**Ce qui compte comme fini.**
-
-- Un 429 de Resend est rejoué et le courriel finit par partir (banc).
-- Soixante-douze destinataires en un appel ne produisent aucun 429 (banc).
-- Un échec de transport est compté comme un échec par tous les appelants (`sent` vrai).
-
-**Dépendances.** Aucune. Les 58 courriels du 09/10 ne seront pas renvoyés : les propositions restent visibles dans l'Atelier jusqu'au 16/10.
-
-*Renvois : `clôture F7` · `F15` · `C4` · `supabase/functions/_shared/transport/email.ts` · `supabase/functions/_shared/domain/authority.ts`*
 
 ---
 
@@ -1922,6 +1899,7 @@ CI verte : lint et suite unitaire. |
 | D19 | 2026-10-15 | **Clos le 15/10** (migration `20261015202816`, commit `217e4425`, session « File de candidats PDF »). Un PDF restreint dont le livre perd sa dernière détention apparaît au contrôle `fn_restricted_resources_without_holder()` (administration du réseau) et la coordination de la bibliothèque qui perd la détention en est avisée, avec l'administration du réseau (déclencheur AFTER DELETE sur `book_holdings`, notification `notif.restrictedOrphan.*` dans les onze locales, lien vers la fiche) ; rien n'est interdit. Suite `restreint_sans_detentrice_tests` 5/5 ; app, sql-tests, backend, acquittement verts à 23 h 39 ; en production : 0 ressource restreinte sans détentrice. Livré avant le premier lot versé par D16, comme demandé. |
 | D14 | 2026-10-16 | **Clos le 16/10** (outil `scripts/numdif_recherche_pdf.mjs`, commits `bcd5ce97` et suivant, session « File de candidats PDF »). Recette tenue : notices 86 et 96 (Reclus, Harper 1873 et 1872) → « même édition », fichiers identiques au SHA-256 près aux ressources 77 et 78 ; le scan Harper 1874 de la 86 → « autre édition » ; les notices Guérin → **0 « même édition »** (16 au catalogue : la 2681 du 14/10, « Proudhon: Textos Escolhidos », a disparu depuis, sans doute fondue dans la 1841) ; les trois PDF connus du 14/10, trouvés par l'outil seul sur Archive.org, → « autre édition » avec l'édition trouvée : 2195 Anarres (cas « diffusion autorisée », mention « permitidos y alentados por los editores », p. 3), 1870 Editorial Proyección, 152 RyR 2011 ; les éditions exactes de 243 et 1949, en prêt contrôlé, sont signalées et jamais téléchargées. Recette corrigée en route : l'auteur cherché aussi dans le titre (ces trois PDF n'ont pas de `creator`), un repli sur deux mots du titre (« classes » pour « clases » dans la notice 152), une mention coupée par une césure, la ligne « © … » comme éditeur, une année retenue seulement si l'impressum ou la page de titre la porte, un chemin trop long sous Windows qui passait pour « sans couche texte ». Test `numdif-recherche-pdf` (14 cas, dont la vraie page de copyright d'Anarres). Limite connue : la ligne « éditeur trouvé » peut citer une phrase voisine (biographie) ; la coordination juge sur l'extrait de la page de titre (D15). |
 | D17 | 2026-10-16 | **Clos le 16/10** (REGISTRE §47 NUMDIF-3 ; migration `20261015180042`, commit `faa76c17`, session « D17 lien vers la page source »). `source_page_url` sur `book_digital_resources` et sa jumelle brouillon, suivie par la reprise et la publication ; huit ressources Archive.org publiées et deux brouillons ont reçu leur page `archive.org/details/…`. `get_accessible_digital_asset_by_id_v2` — exposée à PostgREST, elle rendait `source_url` aux membres : le masquage ne tenait que dans la fonction Edge — rend la page et jamais le fichier d'une ressource restreinte servie depuis le stockage ; `read-digital-asset` aussi, commentaire corrigé (révocabilité et attribution, pas de filigrane incrusté). Fiche, lecteur (« aussi en ligne ») et panneau de catalogage ; onze langues. Critères tenus : suite `d17_page_de_la_source_tests` 9/9 en CI (membre = page sans fichier ; anon et autre bibliothèque = rien, ni par la RPC ni par la table ; liste fermée des fonctions de session qui rendent `source_url`) ; en production, fiche publique du livre 86 et, le 16/10, **contrôle de Xavier sous un compte membre de BLMF** sur le livre 2384 (ressource 74). Les pages des autres restreintes relèvent de `D18`. |
+| F25 | 2026-10-17 | **Clos le 17/10 sur décision de Xavier, après l'épreuve réelle et son correctif.** Le chemin : le 09/10, quatorze propositions de l'Atelier versées d'un coup font 72 envois en deux secondes, **58 perdus** (Resend refuse au-delà de dix par seconde), et les appelants comptaient l'échec comme un envoi ; le soir même (`6b03ebe4`), le transport partagé rejoue un 429, un 5xx ou une connexion rompue trois fois, cadence ses envois à huit par seconde, et les appelants comptent juste. **Le 17/10 à 03 h 45 UTC, l'épreuve réelle arrive seule** : le cron de résolution résout les quatorze propositions de C4 d'un coup, quatorze isolats en parallèle, 72 courriels — **72 envoyés, 0 perdu**, mais **82 réponses 429 rattrapées par le rejeu**, dont une au troisième et dernier essai : la cadence valait par isolat. **Correctif du 17/10 (`a24b669e`)** : une cadence commune à tous les isolats — `private.mail_cadence` (le prochain créneau libre, une ligne par canal) et `public.fn_mail_cadence_creneau` (réserve le créneau en verrouillant la ligne, rend l'attente en millisecondes ; DEFINER, `search_path` vide, `service_role` seul) ; chaque envoi Resend, rejeu compris, réserve son créneau en base ; repli sur la cadence de l'isolat si la réservation échoue, dit une fois par isolat. Bancs : `f25_cadence_commune_tests` (5 cas : créneaux enchaînés, pas d'accumulation, canaux indépendants, bornes, droits) et quatre cas de plus dans `mail-transport-rejeu-cadence` (deux isolats alignés sur un seul fil, rejeu, repli, désactivation). Deux retouches en chemin : la table classée pour la sauvegarde (`af866530`, le filet BG2 du job SQL l'exigeait) et le banc de `register`, qui comparait la liste exacte des appels de base et voyait désormais la réservation du transport (`bdad9b36`). **Vérifié en production à 23 h 27 (Paris)** : 501 migrations appliquées pour 501 au dépôt, celle de F25 par la CI (`created_by` vide), fonction DEFINER fermée à `anon` et `authenticated`, ouverte au seul `service_role`, table sous RLS, marqueur `deployed-functions` sur `bdad9b36`. La ligne `resend` naîtra au premier envoi ; les deux dernières propositions de C4, résolues le 18/10 à 03 h 45, en seront le premier passage. |
 
 ---
 
@@ -1953,4 +1931,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-17. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 53 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `db194b77` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-17. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 52 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-16 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `db194b77` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
