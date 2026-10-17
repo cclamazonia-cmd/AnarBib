@@ -74,7 +74,10 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL } = {}) {
     const r = await ef.appeler(new Request('http://ef.local/', {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...CORPS, ...corps }),
     }));
-    return { ...r, ecrits: [...ef.ecrits], rpcs: [...ef.rpcs], envois: [...ef.envois], comptes: [...comptes] };
+    // F25 (17/10/2026) : le transport réserve un créneau d'envoi en base avant chaque courriel
+    // (fn_mail_cadence_creneau) ; ce banc juge les appels de register, pas ceux du transport.
+    const rpcs = ef.rpcs.filter((x) => x.nom !== 'fn_mail_cadence_creneau');
+    return { ...r, ecrits: [...ef.ecrits], rpcs, envois: [...ef.envois], comptes: [...comptes] };
   }
   return { inscrire, tMail };
 }
