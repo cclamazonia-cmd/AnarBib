@@ -11,7 +11,8 @@
 //      candidates, publication la lisent) et lui est passée avec son setter ;
 //   3. le panneau ne touche ni le formulaire ni l'état du brouillon : il
 //      prévient par onDirty, câblé sur la règle « saved/ready → dirty » ;
-//   4. le sélecteur d'autorité (état, recherche, liaison) a suivi le panneau.
+//   4. le sélecteur d'autorité (état, recherche, liaison) a suivi le panneau ;
+//   5. (refonte du 17/10/2026) l'ajout passe par un seul champ à autocomplétion.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -51,21 +52,38 @@ describe('panneau des contributeurs (E6 lot 4) — réellement monté', () => {
   });
 
   it('a emporté la gestion des lignes et le sélecteur d’autorité', () => {
-    for (const gone of ['addContributor', 'removeContributor', 'updateContributor', 'togglePrimary', 'searchAuthorForRow', 'linkAuthorToRow', 'unlinkAuthorFromRow', 'authorSearch']) {
+    for (const gone of ['addEntry', 'removeContributor', 'updateContributor', 'togglePrimary', 'linkAuthorToRow', 'unlinkAuthorFromRow']) {
       expect(form.includes(gone), `${gone} encore dans BookDraftForm`).toBe(false);
       expect(panel.includes(gone), `${gone} absent de ContributorsPanel`).toBe(true);
     }
-    expect(panel).toMatch(/const \[authorSearch, setAuthorSearch\] = useState\(/);
     expect(panel).toMatch(/supabase\.rpc\('search_authors_by_name'/);
+  });
+
+  // Refonte du 17/10/2026 : un seul champ d'ajout à autocomplétion.
+  it('ajoute par un seul champ : autorités à la frappe, nom libre en dernier recours', () => {
+    expect(panel).toMatch(/role="combobox"/);
+    expect(panel).toMatch(/catalogacao\.contributor\.addFree/);
+    // plus de bouton par rôle (doublon du menu de chaque ligne), plus de « Lier » à part
+    for (const gone of ['addAuthor', 'addCoauthor', 'addCollective', 'addTranslator', 'searchAuthorForRow', 'authlink.needName']) {
+      expect(panel.includes(gone), `${gone} encore dans ContributorsPanel`).toBe(false);
+    }
+    // le rôle se déduit de la position : 1re entrée auteur·rice, les suivantes coauteur·rice
+    expect(panel).toMatch(/role: kept\.length \? 'coautor' : 'autor'/);
+    // l'entrée principale se marque d'une étoile, plus d'un bouton radio
+    expect(panel).toMatch(/<AppIcon name="star"/);
+    expect(panel.includes('type="radio"')).toBe(false);
+    // une ligne non liée cherche d'elle-même son autorité et propose la liaison
+    expect(panel).toMatch(/catalogacao\.authlink\.suggest/);
   });
 
   it('ne touche ni le formulaire ni l’état du brouillon', () => {
     for (const forbidden of ['setDraftState', 'draftState', 'setForm(', 'setMany(', "set('autor'"]) {
       expect(panel.includes(forbidden), `${forbidden} dans ContributorsPanel`).toBe(false);
     }
-    // cinq gestes qui rendent le brouillon à enregistrer : ajout, retrait,
-    // modification, liaison, déliaison — chacun prévient le parent
-    expect((panel.match(/onDirty\(\);/g) || []).length).toBe(5);
+    // six gestes qui rendent le brouillon à enregistrer : ajout, retrait,
+    // modification, choix de la principale, liaison, déliaison — chacun
+    // prévient le parent
+    expect((panel.match(/onDirty\(\);/g) || []).length).toBe(6);
     // le champ « autor » synthétisé est lu par prop, en lecture seule
     expect(panel).toMatch(/value=\{autor\} readOnly/);
   });

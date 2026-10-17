@@ -11,8 +11,10 @@ describe('rôle de contributeur : libellé traduit, jamais le code brut', () => 
   const fr = JSON.parse(read('src/i18n/locales/fr.json'));
   const intl = { messages: fr, formatMessage: ({ id }) => fr[id] };
 
-  it('« organizador » devient « Compilateur·rice » en français', () => {
-    expect(roleLabel('organizador', intl)).toBe('Compilateur·rice');
+  // 17/10/2026 : « organizador » est la direction (« sous la direction de »,
+  // MARC21 edt) — « Compilateur·rice » le disait mal.
+  it('« organizador » devient « Direction (dir.) » en français', () => {
+    expect(roleLabel('organizador', intl)).toBe('Direction (dir.)');
     expect(roleLabel('tradutor', intl)).toBe('Traducteur·rice');
   });
 

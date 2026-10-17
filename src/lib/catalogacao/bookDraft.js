@@ -19,7 +19,10 @@ export const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'materi
 // Rôles proposés selon le TYPE DE DOCUMENT (menu déroulant conditionné).
 // Écrits & assimilés (défaut) : jeu historique. Audiovisuel / audio : rôles
 // dédiés (réalisateur·rice, interprète, acteur·rice, compositeur·rice, etc.).
-export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
+// « editor » n'est plus proposé (17/10/2026) : c'était « organizador » sous un
+// autre nom — même code MARC21 (edt), et « edited by » dit « sous la direction
+// de ». Les lignes qui le portent encore restent lisibles (garde du menu).
+export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','outro'];
 export const ROLE_KEYS_AUDIOVISUAL = ['autor','realizador','roteirista','ator','interprete','compositor','narrador','produtor','tradutor','organizacao','coautor','outro'];
 export const ROLE_KEYS_AUDIO = ['autor','interprete','compositor','narrador','locutor','produtor','tradutor','organizacao','coautor','outro'];
 export function roleKeysForMaterial(materialType) {
@@ -52,7 +55,9 @@ export function inferContributorRole(marcRole = '') {
   const r = (marcRole || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   if (/trad|translat/.test(r)) return 'tradutor';
   if (/illust|ilustr/.test(r)) return 'ilustrador';
-  if (/edit|dir/.test(r)) return 'editor';
+  // « dir. », « éd. », « edited by » : la direction, comme à l'import MARC
+  // (_shared/marc/correspondance.ts), et non plus « editor ».
+  if (/edit|dir/.test(r)) return 'organizador';
   if (/coord/.test(r)) return 'coordenador';
   if (/org|compil/.test(r)) return 'organizador';
   if (/pref|postf|introd/.test(r)) return 'prefaciador';

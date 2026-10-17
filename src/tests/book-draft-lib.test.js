@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import {
   construireZonesIsbd, buildShelfLabel, normalizeBnToCandidate, roleKeysForMaterial,
-  inferContributorRole, parseViafId, EMPTY_FORM, SERIAL_TYPES,
+  inferContributorRole, parseViafId, EMPTY_FORM, SERIAL_TYPES, ROLE_KEYS_TEXT,
 } from '../lib/catalogacao/bookDraft.js';
 
 const t = ({ id }) => `‹${id}›`;
@@ -73,6 +73,12 @@ describe('les petites fonctions', () => {
   it('rôle MARC', () => {
     expect(inferContributorRole('Tradução')).toBe('tradutor');
     expect(inferContributorRole('')).toBe('autor');
+    // 17/10/2026 : la direction (« dir. », « éd. », « edited by ») est
+    // « organizador », comme à l'import MARC — plus « editor », retiré du menu
+    expect(inferContributorRole('dir.')).toBe('organizador');
+    expect(inferContributorRole('Éditeur scientifique')).toBe('organizador');
+    expect(inferContributorRole('edited by')).toBe('organizador');
+    expect(ROLE_KEYS_TEXT).not.toContain('editor');
   });
   it('identifiant VIAF', () => {
     expect(parseViafId('http://viaf.org/viaf/12345678')).toBe('12345678');
