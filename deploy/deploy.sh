@@ -6,7 +6,10 @@
 # de manière 100 % autonome, HORS de toute forge ou intégration continue.
 #
 # Séquence :
-#   1. Mise à jour du code (git pull --ff-only, sauf --sans-pull)
+#   1. Mise à jour du code, selon le canal suivi (sauf --sans-pull) :
+#      branche → git pull --ff-only ; version → dernière version vAAAA.MM[.N]
+#      (deploy/scripts/version.sh, 17/10/2026). Si le code a changé, le script
+#      se relance sur sa nouvelle version avant d'aller plus loin.
 #   2. Application des migrations SQL en attente (apply-pending-migrations.sh),
 #      puis triggers de profil sur auth.users (auth-triggers.sh, 16/10/2026)
 #   3. Rafraîchissement des vues matérialisées (refresh-matviews.sh)
@@ -23,6 +26,8 @@
 #   deploy/deploy.sh --ressources     # manuels et thème du réseau seuls
 #   deploy/deploy.sh --front          # front seul (reconstruit même si rien n'a changé)
 #   deploy/deploy.sh --controle       # contrôles de santé seuls
+#   deploy/deploy.sh --version derniere      # passer aux versions stables (ou --version v2026.10)
+#   deploy/deploy.sh --branche main          # revenir à la branche main
 # =============================================================================
 
 set -euo pipefail
@@ -42,21 +47,28 @@ FRONT=1
 FRONT_FORCE=0
 CONTROLE=1
 choix_explicite=0
+CIBLE=""
+RELANCE=()   # options à repasser au script quand il se relance sur son nouveau code
 
 while [ $# -gt 0 ]; do
   case "$1" in
+    --version)    [ -n "${2:-}" ] || { echo "✗ --version attend derniere ou vAAAA.MM" >&2; exit 2; }; CIBLE="$2"; shift; shift; continue ;;
+    --branche)    [ -n "${2:-}" ] || { echo "✗ --branche attend un nom (main)" >&2; exit 2; }; CIBLE="branche:$2"; shift; shift; continue ;;
     --sans-pull)  PULL=0 ;;
     --migrations) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; MIGRATIONS=1 ;;
     --fonctions)  [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FONCTIONS=1 ;;
     --ressources) [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; RESSOURCES=1 ;;
     --front)      [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; FRONT=1; FRONT_FORCE=1 ;;
     --controle)   [ "$choix_explicite" = "0" ] && { PULL=0; MIGRATIONS=0; FONCTIONS=0; RESSOURCES=0; FRONT=0; CONTROLE=0; choix_explicite=1; }; CONTROLE=1 ;;
-    -h|--help)    sed -n '2,25p' "$0"; exit 0 ;;
+    -h|--help)    sed -n '2,30p' "$0"; exit 0 ;;
 
     *) echo "✗ Option inconnue : $1" >&2; exit 2 ;;
   esac
+  RELANCE+=("$1")
   shift
 done
+# Changer de canal suppose de toucher au code, quelles que soient les autres options.
+if [ -n "$CIBLE" ]; then PULL=1; fi
 
 dire() { printf '\n\033[1m── %s\033[0m\n' "$*"; }
 
@@ -68,16 +80,28 @@ if ! docker compose ps --services --filter "status=running" | grep -q "db"; then
   exit 1
 fi
 
-# 2. Mise à jour du code git
+# 2. Mise à jour du code git, selon le canal (17/10/2026)
+#
+# Une copie posée sur une version (tag vAAAA.MM, HEAD détaché) passe à la
+# dernière version ; une copie sur une branche la tire comme avant. Jusqu'ici ce
+# bloc faisait `git pull origin $(git rev-parse --abbrev-ref HEAD)`, c'est-à-dire
+# `git pull origin HEAD` sur une version : échec.
+#
+# Si le code a changé, ce script se RELANCE sur sa nouvelle version (exec) :
+# bash lit un script au fil de l'exécution, et continuer après un pull ou un
+# checkout qui l'a réécrit exécuterait un mélange de l'ancien et du nouveau.
 if [ "$PULL" = "1" ]; then
   dire "Mise à jour du dépôt Git"
-  BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-  echo "→ Branche courante : $BRANCH"
-  git pull --ff-only origin "$BRANCH" || {
-    echo "✗ Échec du git pull --ff-only. Vérifier l'état de la copie de travail." >&2
-    exit 1
-  }
-  echo "✓ Code à jour : $(git log -1 --oneline --no-decorate)"
+  # shellcheck source=scripts/version.sh
+  . "$DEPLOY_DIR/scripts/version.sh"
+  AVANT="$(git rev-parse HEAD)"
+  mettre_a_jour_code "$CIBLE" || exit 1
+  APRES="$(git rev-parse HEAD)"
+  echo "✓ Code à jour : $(git log -1 --oneline --no-decorate)$( [ -n "$(version_courante)" ] && echo " — version $(version_courante)")"
+  if [ "$AVANT" != "$APRES" ] && [ -z "${ANARBIB_DEPLOY_RELANCE:-}" ]; then
+    echo "→ Relance du script sur le nouveau code"
+    ANARBIB_DEPLOY_RELANCE=1 exec bash "$RACINE/deploy/deploy.sh" --sans-pull "${RELANCE[@]}"
+  fi
 fi
 
 # 3. Migrations SQL

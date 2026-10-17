@@ -70,6 +70,19 @@ repose aussi depuis le 16/10, c'est lui que lance la mise à jour automatique),
 la « 7 bis » attend un fait, jamais un délai, la « 8 bis » sème les ressources
 du réseau — et une vérification finale.
 
+**Versions stables (17/10/2026).** Une version `vAAAA.MM` (`vAAAA.MM.N` pour un
+correctif) est publiée environ chaque mois, toujours sur un commit déjà déployé
+et vérifié en production (`scripts/versions/publier-version.sh`). Une instance
+suit l'un de deux canaux : sur une branche, `deploy.sh` la tire comme avant
+(chaque push arrive) ; posée sur une version, `deploy.sh` passe à la dernière
+version publiée et à rien d'autre. Pour y entrer : `deploy/deploy.sh --version
+derniere` ; pour revenir à `main` : `deploy/deploy.sh --branche main`. Rien ne
+fait changer une instance de canal sans qu'on le demande — c'est aussi la
+convention de l'ISO du camarade. Logique : `scripts/version.sh` ; garde :
+`src/tests/versions-instance.test.js`. À chaque version, le miroir de l'ISO
+(`codeberg.org/AnarBib/anarbib-debian-iso`) est recopié
+(`scripts/miroirs/miroir-iso.sh`).
+
 **Ressources du réseau (16/10/2026).** Le bouton « Manuel » (`src/lib/docLinks.js`)
 et le thème `default` (`src/lib/theme.js`) lisent le bucket `library-ui-assets`
 de l'instance elle-même. `scripts/ressources-reseau.sh` y verse les trois
