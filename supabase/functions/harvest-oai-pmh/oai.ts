@@ -280,9 +280,14 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
 
   // dc:identifier est un fourre-tout : ISBN, ISSN, URL, cote… On trie par
   // forme plutot que par position, la position ne voulant rien dire.
+  // Une adresse (http, https) ou un identifiant OAI (oai:) n'est JAMAIS un ISBN
+  // ni un ISSN, quel que soit son nombre de chiffres : l'heuristique ci-dessous
+  // comptait 10 ou 13 « chiffres » dans « https://…/lire/1234567890 » et en
+  // faisait l'ISBN de la notice (etape 4 du cadrage federalisme, 18/10/2026).
   let isbn: string | null = null;
   let issn: string | null = null;
   for (const id of allTexts(xml, 'identifier')) {
+    if (/^(https?:\/\/|oai:)/i.test(id)) continue;
     const bare = id.replace(/^(ISBN|ISSN)\s*:?\s*/i, '');
     const digits = bare.replace(/[^0-9Xx]/g, '');
     if (!isbn && (/^ISBN/i.test(id) || digits.length === 10 || digits.length === 13)) isbn = bare;

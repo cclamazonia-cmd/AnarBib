@@ -513,6 +513,49 @@ describe("T11 — un run qui n'est pas un moissonnage est refusé", () => {
   });
 });
 
+// ── Étape 4 du cadrage fédéralisme ASB ↔ AnarBib (18/10/2026) ────────────
+// Un entrepôt Dublin Core range dans dc:identifier tout ce qui identifie la
+// notice : l'adresse de sa page, son identifiant OAI, parfois un ISBN. Chez
+// AnarcosyndicalismeBOOK, les deux premiers sont toujours là.
+const recDcIdentifiants = (oaiId, identifiants, { createurs = ['MALATESTA, Errico'], contributeurs = [] } = {}) =>
+  `<record><header><identifier>${oaiId}</identifier><datestamp>2026-10-18</datestamp></header><metadata>` +
+  `<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">` +
+  `<dc:title>Entre paysans</dc:title>` +
+  createurs.map((c) => `<dc:creator>${c}</dc:creator>`).join('') +
+  contributeurs.map((c) => `<dc:contributor>${c}</dc:contributor>`).join('') +
+  identifiants.map((i) => `<dc:identifier>${i}</dc:identifier>`).join('') +
+  `</oai_dc:dc></metadata></record>`;
+const etatDc = () => etatNeuf({
+  source: { id: 23, oai_endpoint_url: 'https://entrepot.invalid/oai', oai_metadata_prefix: 'oai_dc', oai_set: null, partner_name: 'Entrepot de test' },
+});
+
+describe("T17 — une adresse ou un identifiant OAI n'est jamais pris pour un ISBN", () => {
+  // dc:identifier se triait par le nombre de chiffres : 10 ou 13 = ISBN. Une URL
+  // qui en compte autant (un slug daté, un numéro de texte) devenait l'ISBN de
+  // la notice, et le rapprochement par ISBN la collait à un autre livre.
+  // Attention en écrivant ces cas : l'heuristique compte aussi les « x » (la clé
+  // de contrôle X d'un ISBN-10). Une URL qui contient « texte » n'a donc pas le
+  // nombre de « chiffres » qu'on croit — le premier jet de ce test passait sur
+  // le code fautif pour cette raison.
+  it.each([
+    ['URL à 10 chiffres', 'https://asb.invalid/lire/1234567890'],
+    ['URL à 13 chiffres', 'http://asb.invalid/lire/a-1936-123456789'],
+    ['identifiant OAI à 13 chiffres', 'oai:asb.invalid:t:1234567890123'],
+  ])('%s → aucun ISBN', async (_nom, identifiant) => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', [identifiant])])])();
+    const l = lignesInserees(r.ecrits)[0];
+    expect(l.isbn).toBeNull();
+    expect(l.issn).toBeNull();
+  });
+
+  it("un vrai ISBN à côté d'une URL reste l'ISBN", async () => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', [
+      'https://asb.invalid/lire/1234567890', 'ISBN:9788575591234',
+    ])])])();
+    expect(lignesInserees(r.ecrits)[0].isbn).toBe('9788575591234');
+  });
+});
+
 describe('T15 — une notice MARC qui ne porte que des mots-clés est gardée (H27)', () => {
   it('001 + 653 seulement → une ligne, mots-clés dans normalized_payload.keywords', async () => {
     const seulMotsCles = `<record><header><identifier>oai:x:653</identifier><datestamp>2026-08-01</datestamp></header><metadata>` +
