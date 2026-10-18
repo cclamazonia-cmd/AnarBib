@@ -472,3 +472,22 @@ describe('revue de presse : le pivot multilingue est rendu en français avant le
     expect(job.donnees.step_error).toContain("cursor_locale='en'");
   });
 });
+
+// 18/10/2026 : le roumain manquait à MASTHEAD_I18N — le n°05 en roumain est sorti
+// avec le bandeau et le sous-titre français (repli silencieux). Une locale servie
+// sans bandeau rougit désormais ici, comme sans page « Vie du réseau ».
+describe('gazette-monthly-build — toutes les locales servies ont leur bandeau et leur page Réseau', () => {
+  const src = readFileSync(SRC, 'utf8');
+  const bloc = (debut) => {
+    const i = src.indexOf(debut);
+    return src.slice(i, src.indexOf('};', i));
+  };
+  it('MASTHEAD_I18N couvre LOCALE_CODES', () => {
+    const b = bloc('const MASTHEAD_I18N');
+    for (const l of LOCALE_CODES) expect(b, l).toMatch(new RegExp('"' + l + '"\\s*:'));
+  });
+  it('la page « Vie du réseau » couvre LOCALE_CODES', () => {
+    const b = bloc('const F: Record<string, { sec: string; intro: string; cta: string; ctp: string }>');
+    for (const l of LOCALE_CODES) expect(b, l).toMatch(new RegExp('"' + l + '"\\s*:'));
+  });
+});

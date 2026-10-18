@@ -801,6 +801,9 @@ const MASTHEAD_I18N: Record<string, { left: string; right: string; numPrefix: st
   "ca":    { left: "Xarxa lliure — autogestionada",          right: "Difusió lliure ✳ Copieu-Compartiu",         numPrefix: "Núm. ",  tagline: "La gaseta de la xarxa" },
   "eo":    { left: "Libera reto — memmastrumata",            right: "Libera disvastigo ✳ Kopiu-Kunhavigu",       numPrefix: "N-ro ",  tagline: "La gazeto de la reto" },
   "nl":    { left: "Vrij netwerk — zelfbeheerd",             right: "Vrije verspreiding ✳ Kopieer-Deel",         numPrefix: "Nr. ",   tagline: "De gazette van het netwerk" },
+  // Le roumain manquait (18/10/2026) : le n°05 en roumain est sorti avec le bandeau
+  // et le sous-titre français, repli de la ligne ci-dessous.
+  "ro":    { left: "Rețea liberă — autogestionată",          right: "Difuzare liberă ✳ Copiați-Distribuiți",     numPrefix: "Nr. ",   tagline: "Gazeta rețelei" },
 };
 function buildMasthead(locale: string, number: number, coverDate: string) {
   const m = MASTHEAD_I18N[locale] ?? MASTHEAD_I18N["fr"];
