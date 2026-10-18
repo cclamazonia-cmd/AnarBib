@@ -158,3 +158,20 @@ actuelle de ro.json. Corrigés le 15/10/2026 dans les onze langues des deux manu
 la gazette s'appelle « Fractale » (et plus « Rizoma »), la visio des
 assemblées est Framatalk (et plus « Jitsi hébergé par Autistici »), et le mot
 à taper pour vider l'historique est celui de l'écran dans chaque langue.
+
+## Biographies des fiches d'autorité (18/10/2026)
+
+89 biographies d'auteur·ices existent en roumain : 88 traduites le 18/10
+(statut « draft », note « Traduction automatique (Claude) depuis fr|pt-BR,
+18/10/2026 — à relire »), depuis la version française quand elle existe,
+sinon depuis le portugais. Elles se relisent fiche par fiche dans le
+catalogage (widget « Biographie » de la fiche d'autorité) ; la relecture
+passe le statut à « reviewed ». Requête de la liste :
+`select author_id, length(biography) from author_translations where lang='ro' and status='draft' order by author_id;`
+
+| Source | Roumain choisi | Question |
+|---|---|---|
+| anarchiste / libertaire | anarhist·ă / libertar·ă | — |
+| « Entre paysans » (Malatesta) | „Fra contadini” („Între țărani”) | Titre d'origine + traduction. |
+| Organisation internationale du travail (OIT) | Organizația Internațională a Muncii (OIM) | Sigle roumain. |
+| métiers à la con (Graeber) | „slujbe de rahat” | Registre familier voulu par la source. |
