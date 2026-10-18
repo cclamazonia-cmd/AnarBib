@@ -45,7 +45,7 @@ describe('panneau de révision de la fiche (E6 lot 5) — réellement monté', (
     expect(props).toMatch(/isbdData=\{isbdData\} zoneLabels=\{ZONE_LABELS\}/);
     expect(props).toMatch(/materialLabel=\{MATERIAL_TYPES\.find\(m => m\.value === materialType\)\?\.label \|\| materialType\}/);
     expect(form).toContain('const ZONE_LABELS = {');
-    expect(form).toContain('const isbdData = paquetIsbd(form, t, ZONE_LABELS);');
+    expect(form).toContain("const isbdData = paquetIsbd({ ...form, autor: autorIsbd || f('autor') }, t, ZONE_LABELS);");
     // plus de préparation manuelle ni d'état ISBD à part
     for (const gone of ['function prepareIsbd', 'function clearIsbd', 'setIsbdEnabled', 'setIsbdData', 'onPrepareIsbd', 'onClearIsbd']) {
       expect(form.includes(gone), `${gone} encore dans BookDraftForm`).toBe(false);
@@ -55,7 +55,9 @@ describe('panneau de révision de la fiche (E6 lot 5) — réellement monté', (
 
   it('chaque enregistrement du brouillon écrit le paquet ISBD dans marc_json', () => {
     const save = form.slice(form.indexOf('async function handleSave'), form.indexOf('async function handlePublish'));
-    expect(save).toMatch(/anarbib_isbd: paquetIsbd\(form, t, ZONE_LABELS, marcLu\.anarbib_isbd\)\.data/);
+    // la zone 1 nomme le même auteur que la charge utile (3ed61cab)
+    expect(save).toContain("anarbib_isbd: paquetIsbd({ ...form, autor: autorDesContributeurs || f('autor') }, t, ZONE_LABELS, marcLu.anarbib_isbd).data");
+    expect(save.indexOf('const autorDesContributeurs')).toBeLessThan(save.indexOf('const marcLu'));
     expect(save).toMatch(/marc_json: marc,/);
   });
 

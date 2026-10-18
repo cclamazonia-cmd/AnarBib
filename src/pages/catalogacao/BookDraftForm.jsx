@@ -1104,8 +1104,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // 18/10/2026 : plus de bouton « Préparer / Effacer l'ISBD ». L'aperçu du
   // panneau de révision suit la fiche en direct ; handleSave écrit le paquet
   // dans marc_json.anarbib_isbd à chaque enregistrement (paquetIsbd garde la
-  // date tant que la description n'a pas changé).
-  const isbdData = paquetIsbd(form, t, ZONE_LABELS);
+  // date tant que la description n'a pas changé). Comme à l'envoi, la zone 1
+  // nomme les contributeurs nommés (dans l'ordre, « ; »), à défaut le texte d'auteur.
+  const autorIsbd = contributors.filter((c) => (c.name || '').trim()).map((c) => c.name.trim()).join(' ; ');
+  const isbdData = paquetIsbd({ ...form, autor: autorIsbd || f('autor') }, t, ZONE_LABELS);
 
   // ═══════════════════════════════════════════════════════
   // Duplicate detection (ISBN + title/author)
@@ -1221,12 +1223,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // `f()` lit l'état de CE rendu, d'avant l'envoi — la charge utile
       // repartait sans le chemin du fichier qu'on venait d'envoyer.
       const envoye = coverFile ? await uploadCover() : null;
-      // ISBD recalculé à chaque enregistrement (18/10/2026) : le paquet suit la
-      // fiche sans clic ; sa date ne bouge que si une zone a changé.
-      const marcLu = f('marc_json') ? JSON.parse(f('marc_json')) : {};
-      const marc = marcLu && typeof marcLu === 'object' && !Array.isArray(marcLu)
-        ? { ...marcLu, anarbib_isbd: paquetIsbd(form, t, ZONE_LABELS, marcLu.anarbib_isbd).data }
-        : marcLu;
       const isUpdate = !!f('id');
       // 18/10/2026 : le texte d'auteur part recomposé depuis les contributeurs, DANS cet envoi.
       // Il ne l'était qu'après (syncAutorFromContributors, plus bas) : le brouillon gardait le
@@ -1236,6 +1232,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         .filter((c) => (c.name || '').trim())
         .map((c) => c.name.trim())
         .join(' ; ');
+      // ISBD recalculé à chaque enregistrement (18/10/2026) : le paquet suit la
+      // fiche sans clic ; sa date ne bouge que si une zone a changé. La zone 1
+      // nomme le même auteur que la charge utile.
+      const marcLu = f('marc_json') ? JSON.parse(f('marc_json')) : {};
+      const marc = marcLu && typeof marcLu === 'object' && !Array.isArray(marcLu)
+        ? { ...marcLu, anarbib_isbd: paquetIsbd({ ...form, autor: autorDesContributeurs || f('autor') }, t, ZONE_LABELS, marcLu.anarbib_isbd).data }
+        : marcLu;
       const payload = {
         ...(isUpdate ? { id: Number(f('id')) } : {}),
         published_book_id: f('published_book_id') ? Number(f('published_book_id')) : null,

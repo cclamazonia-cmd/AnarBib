@@ -133,7 +133,7 @@ describe('le formulaire passe par le module', () => {
   it('BookDraftForm importe le module et ne redéfinit plus ses fonctions', () => {
     const src = readFileSync('src/pages/catalogacao/BookDraftForm.jsx', 'utf8');
     expect(src).toContain("from '@/lib/catalogacao/bookDraft'");
-    expect(src).toContain('paquetIsbd(form, t, ZONE_LABELS)');
+    expect(src).toContain("paquetIsbd({ ...form, autor: autorIsbd || f('autor') }, t, ZONE_LABELS)");
     for (const nom of ['function buildIsbdZone0', 'function normalizeBnToCandidate', 'function buildShelfLabel', 'const EMPTY_FORM']) {
       expect(src.includes(nom), nom).toBe(false);
     }
