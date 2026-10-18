@@ -1,0 +1,19 @@
+[Unit]
+Description=AnarBib #BG2 — declencheur flux lourd (hebdomadaire dimanche 21:30 Europe/Paris)
+
+[Timer]
+# Meme logique d'horaire que les trois autres (cf. anarbib-backup-storage.timer) :
+# fuseau nomme, tir en soiree, machine eveillee.
+#
+# 21:30, APRES storage (21:00) : les tirs passent un par un derriere le verrou
+# d'anarbib-bg2.sh, et storage ne dure plus que quelques minutes depuis la
+# synchronisation incrementale. Lourd ferme la marche parce qu'il est le seul a
+# pouvoir durer : rien d'autre ne tire apres lui le dimanche, sauf le prune du
+# 1er du mois (22:30), qui renonce au bout de 45 min d'attente et repasse le
+# mois suivant.
+OnCalendar=Sun *-*-* 21:30:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

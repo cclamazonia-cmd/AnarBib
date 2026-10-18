@@ -25,11 +25,16 @@
 #            (ingest depuis le 05/10/2026 : BG2-13, decision de Xavier)
 #   court    30 tables PII + auth.users/identities/mfa_factors  retention 7 j
 #            (ALLOWLIST stricte)
-#   storage  les 16 buckets Storage (resync systematique)       retention 7/4/6
+#   storage  les buckets LEGERS (images, gabarits, reglements)   retention 7/4/6
+#            -> Herbes Folles, comme long et court
+#   lourd    les buckets LOURDS (PDF, EPUB, fond de carte)       retention 7/4/6
+#            -> depot restic LOCAL, sur un autre disque du poste (18/10/2026)
+#   storage et lourd : synchronisation INCREMENTALE depuis le 18/10/2026
+#   (seuls les objets nouveaux ou modifies sont telecharges, cf. synchro_bucket)
 #
 # Sous-commandes :
 #   check                    Prerequis + FILET (aucune ecriture, aucun envoi).
-#   backup long|court|storage|all
+#   backup long|court|storage|lourd|all
 #   restore-test             Test reel en sequence auth -> long -> court (Docker jetable).
 #
 set -euo pipefail
@@ -56,7 +61,33 @@ KNOWN="$OPS_DIR/bg2-known-tables.txt"           # TOUTES les tables classees (fi
 # ces memes schemas (bg2_sql_tables) : les deux listes vont ensemble.
 LONG_SCHEMAS=(public ingest private api)
 WORK="$OPS_DIR/.work"                           # dumps base temporaires
-STORAGE_WORK="$OPS_DIR/.storage-work"           # miroir local des buckets (resync a chaque fois)
+STORAGE_WORK="$OPS_DIR/.storage-work"           # miroir local des buckets legers (flux storage)
+
+# --- FLUX LOURD (18/10/2026) -------------------------------------------------
+# Le 18/10, le tir storage a ete tue par sa borne d'une heure : il retelechargeait
+# a chaque fois TOUS les buckets, et anarbib-pdf-public etait passe de presque
+# rien a 16 Go en une semaine (versement des PDF, D13-D16). Le depot SFTP des
+# Herbes Folles, lui, n'a que 14 Go libres sur un /data partage : ni ces PDF ni
+# le fond de carte n'y tiennent. Decision de Xavier : les buckets lourds partent
+# dans un depot restic LOCAL, sur un disque physique distinct de celui de WSL,
+# en attendant une place hors site suffisante. Ce depot protege contre la perte
+# de Supabase, PAS contre la perte du poste : il ne remplace pas un tiers.
+#
+# Deux disques, deux roles : le MIROIR (derniere version, fichiers en clair) sur
+# D:, le DEPOT restic (historique 7/4/6, chiffre) sur E:. Une panne d'un disque
+# laisse l'autre. WSL (ext4.vhdx) vit sur C: et n'a que ~100 Go de marge
+# physique : 50 Go de miroir n'y ont pas leur place.
+#
+# Le chemin du depot se termine par `anarbib-lourd`, comme les depots distants
+# (anarbib-<flux>) : le controle de fraicheur et ses tests en tirent le nom du flux.
+LOURD_WORK="${BG2_LOURD_WORK:-/mnt/d/anarbib-sauvegardes/miroir-lourd}"
+LOURD_REPO="${BG2_LOURD_REPO:-/mnt/e/anarbib-sauvegardes/anarbib-lourd}"
+
+# Telechargements simultanes de la synchronisation. Chaque appel a `supabase
+# storage cp` coute ~8 s fixes (la CLI va chercher les cles du projet a chaque
+# fois) : en serie, mille PDF nouveaux feraient plus de deux heures d'attente
+# pure. Six a la fois ramenent ce cout a une vingtaine de minutes.
+SYNCHRO_PARALLELE="${BG2_SYNCHRO_PARALLELE:-6}"
 
 PGHOST="aws-1-sa-east-1.pooler.supabase.com"
 PGPORT="5432"; PGDB="postgres"; PGUSER="postgres.uflwmikiyjfnikiphtcp"
@@ -71,15 +102,23 @@ export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-$HOME/.config/restic-anarbi
 # Auth : tables a inclure dans le flux court (les 3 tables d'identite durable)
 AUTH_TABLES=(auth.users auth.identities auth.mfa_factors)
 
-# map-tiles (fond de carte PMTiles, 18 Go, 07/09/2026) est EXCLU volontairement :
-# reconstructible en 30 min depuis Protomaps (scripts/maptiles/README.md), il
-# triplerait le depot restic. Ne pas l ajouter ici.
-# Buckets Storage (ordre indifferent ; les vides donnent 0 fichier)
-BUCKETS=(pdf-restrito library-ui-assets anarbib-pdf-public authors covers
+# Buckets Storage, en deux flux (ordre indifferent ; les vides donnent 0 fichier).
+# TOUT bucket doit figurer dans l'une des deux listes : un bucket neuf qui n'y
+# est pas n'est sauvegarde par personne (le tir le signale, cf. buckets_orphelins).
+#
+# storage : les buckets LEGERS -> Herbes Folles.
+BUCKETS=(library-ui-assets authors covers
   library-regimentos-private library-regimentos-public catalogos_parceiros_raw
   anarbib-media-public anarbib-media-restricted library-privacy-public
-  anarbib-carte-rede partner-catalog-deposits network-map
-  anarbib-epub-public anarbib-epub-restricted)
+  anarbib-carte-rede partner-catalog-deposits network-map)
+# lourd : les buckets LOURDS -> depot local.
+# map-tiles (fond de carte PMTiles, 33 Go) y entre le 18/10/2026, sur decision
+# de Xavier : « si on peut le sauvegarder, on le sauvegarde ». Il en etait EXCLU
+# depuis le 07/09 parce qu'il triplait le depot distant ; sur un disque local la
+# place n'est plus un argument, et le reconstruire depuis Protomaps demande
+# l'outillage de scripts/maptiles/ et une extraction planetaire, longue.
+BUCKETS_LOURDS=(pdf-restrito anarbib-pdf-public anarbib-epub-public
+  anarbib-epub-restricted map-tiles)
 
 # Temoins pour les controles anti-fuite
 PII_CANARIES='profiles|loan_deposits|emprestimos_v2|reservas_v2|membership_payments|reader_card_tokens|user_library_memberships'
@@ -119,7 +158,11 @@ cleanup_work() {
 # TUE a laisse. Il sert aussi la relance du controle de fraicheur : un tir
 # relance pendant un autre attend son tour au lieu de le percuter.
 # L'attente (BG2_ATTENTE_MAX, 45 min) tient sous TimeoutStartSec (1 h) des
-# services : storage dure ~20 min, long ~5, court ~2.
+# services : long dure ~7 min, court ~2, storage quelques minutes depuis la
+# synchronisation incrementale (18/10). Seul lourd peut durer — jusqu'a 3 h, sa
+# borne, quand une grosse fournee de PDF arrive : il tire le dimanche a 21:30,
+# apres les trois autres, et seul le prune du 1er du mois (22:30) peut alors
+# attendre derriere lui et renoncer. Il repasse le mois suivant.
 prendre_le_verrou() {
   local attente="${BG2_ATTENTE_MAX:-2700}"
   require flock
@@ -480,30 +523,213 @@ backup_court() {
   info "Flux court termine. (dump clair — comptes — efface)"
 }
 
+# ------------------- SYNCHRONISATION DES BUCKETS (18/10/2026) -------------------
+# Jusqu'au 18/10, chaque tir PURGEAIT le miroir puis retelechargeait tout
+# (`supabase storage cp -r`). Ca tenait en 13 min le 04/10, 24 min le 11/10 —
+# et plus du tout le 18/10, quand 18 Go de PDF sont arrives en une semaine : tir
+# tue par sa borne au bout d'une heure, sans un octet envoye.
+#
+# Desormais on compare. La liste des objets vient de la base (storage.objects :
+# nom, taille, eTag), le miroir garde un MANIFESTE de ce qu'il tient, et seuls
+# les objets nouveaux ou modifies sont telecharges. Un objet disparu de Storage
+# disparait du miroir — l'instantane restic du jour reflete l'etat du jour ; les
+# precedents gardent l'objet, selon la retention.
+#
+# Pourquoi la base et pas `supabase storage ls` : la CLI ne donne que des noms.
+# Sans taille ni eTag, on ne saurait pas qu'un objet a ete remplace.
+#
+# Un objet n'est tenu pour present que si son fichier a la taille annoncee. On
+# telecharge dans `<objet>.bg2-part` puis on renomme : un tir tue en route ne
+# laisse jamais un fichier tronque sous le vrai nom (et le tir suivant reprend
+# la ou celui-ci s'est arrete, au lieu de tout recommencer). Ce renommage
+# protege aussi un fichier lie en dur : le miroir de map-tiles a ete amorce
+# ainsi, et ecrire en place aurait abime l'original.
+#
+# Amorcage : sans manifeste (premier tir, miroir existant), un fichier deja la
+# avec la bonne taille est adopte tel quel. Le manifeste ecrit ensuite porte
+# l'eTag, et c'est lui qui fait foi aux tirs suivants.
+#
+# Le garde-fou du 02/07 (« purge avant resync -> evite le nesting $b/$b ») n'a
+# plus d'objet : la copie se fait objet par objet, vers un chemin de fichier
+# explicite, jamais vers un dossier qui existe deja.
+telecharger_objet() {   # appele par xargs : $1 nom de l'objet, $2 taille attendue
+  local n="$1" t="$2" f="$BG2_SYNC_DEST/$1"
+  local part="$f.bg2-part"
+  if ! mkdir -p -- "$(dirname -- "$f")" 2>/dev/null; then
+    printf 'KO\t%s\tdossier impossible a creer\n' "$n"; return 0
+  fi
+  if ( cd "$SUPABASE_REPO" && supabase storage cp --linked --experimental \
+         "ss:///$BG2_SYNC_BUCKET/$n" "$part" ) >> "$BG2_SYNC_JOURNAL" 2>&1 \
+     && [ "$(stat -c %s -- "$part" 2>/dev/null)" = "$t" ]; then
+    if mv -f -- "$part" "$f"; then printf 'OK\t%s\n' "$n"
+    else printf 'KO\t%s\trenommage impossible\n' "$n"; fi
+  else
+    rm -f -- "$part"
+    printf 'KO\t%s\ttelechargement en echec ou taille inattendue\n' "$n"
+  fi
+  return 0
+}
+
+# synchro_bucket <bucket> <racine du miroir>
+# Rend 0 si le miroir du bucket est complet, 1 sinon (objets en echec, liste
+# illisible). Ne meurt jamais : un bucket en defaut ne doit pas priver les
+# autres de leur sauvegarde. C'est l'appelant qui juge, une fois restic passe.
+synchro_bucket() {
+  local b="$1" racine="$2"
+  local dest="$racine/$b" mans="$racine/.manifestes" journaux="$racine/.journaux"
+  local man="$mans/$b.tsv" distant prendre resultats
+  mkdir -p "$dest" "$mans" "$journaux"
+  distant="$(mktemp "$mans/.distant-$b.XXXXXX")"
+  prendre="$(mktemp "$mans/.a-prendre-$b.XXXXXX")"
+  resultats="$(mktemp "$mans/.resultats-$b.XXXXXX")"
+  export BG2_SYNC_BUCKET="$b" BG2_SYNC_DEST="$dest" BG2_SYNC_JOURNAL="$journaux/$b.txt"
+  : > "$BG2_SYNC_JOURNAL"
+
+  if ! psql "$PGCONN" -X -q -t -A -F $'\t' -v ON_ERROR_STOP=1 -c \
+       "select name, coalesce(metadata->>'size', '-1'), coalesce(metadata->>'eTag', '')
+          from storage.objects where bucket_id = '$b' order by name" > "$distant"; then
+    echo "    !!  $b — liste des objets illisible en base : miroir laisse tel quel"
+    rm -f "$distant" "$prendre" "$resultats"; return 1
+  fi
+
+  local -A connu=() present=()
+  local n t e x f taille total=0 garde=0 suppr=0 echecs=0 malformes=0
+  if [ -f "$man" ]; then
+    while IFS=$'\t' read -r n t e; do [ -n "$n" ] && connu["$n"]="$t"$'\t'"$e"; done < "$man"
+  fi
+
+  while IFS=$'\t' read -r n t e x; do
+    [ -n "$n" ] || continue
+    # Un nom portant une tabulation decalerait les colonnes : on le refuse
+    # plutot que de le mal lire (aucun le 18/10).
+    if [ -n "${x:-}" ] || [[ ! "$t" =~ ^-?[0-9]+$ ]]; then malformes=$((malformes + 1)); continue; fi
+    total=$((total + 1)); present["$n"]=1
+    taille="$(stat -c %s -- "$dest/$n" 2>/dev/null || echo absent)"
+    if [ "$taille" = "$t" ] \
+       && { [ "${connu[$n]-}" = "$t"$'\t'"$e" ] || [ -z "${connu[$n]+x}" ]; }; then
+      garde=$((garde + 1))
+    else
+      printf '%s\0%s\0' "$n" "$t" >> "$prendre"
+    fi
+  done < "$distant"
+
+  if [ -s "$prendre" ]; then
+    export -f telecharger_objet
+    export SUPABASE_REPO
+    xargs -0 -n 2 -P "$SYNCHRO_PARALLELE" bash -c 'telecharger_objet "$@"' _ \
+      < "$prendre" > "$resultats" || true
+  fi
+
+  # Ce qui n'existe plus dans Storage n'existe plus dans le miroir — et les
+  # `.bg2-part` d'un tir tue, qui ne sont pas des objets, partent avec.
+  while IFS= read -r -d '' f; do
+    if [ -z "${present[${f#"$dest"/}]+x}" ]; then rm -f -- "$f"; suppr=$((suppr + 1)); fi
+  done < <(find "$dest" -type f -print0)
+  find "$dest" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+
+  # Le manifeste ne retient que ce qui est REELLEMENT la, a la bonne taille.
+  : > "$man.tmp"
+  while IFS=$'\t' read -r n t e x; do
+    [ -n "$n" ] && [ -z "${x:-}" ] && [ -n "${present[$n]+x}" ] || continue
+    if [ "$(stat -c %s -- "$dest/$n" 2>/dev/null || echo absent)" = "$t" ]; then
+      printf '%s\t%s\t%s\n' "$n" "$t" "$e" >> "$man.tmp"
+    else
+      echecs=$((echecs + 1))
+    fi
+  done < "$distant"
+  mv -f "$man.tmp" "$man"
+
+  local pris; pris="$(grep -c '^OK' "$resultats" || true)"
+  if [ "$echecs" -eq 0 ] && [ "$malformes" -eq 0 ]; then
+    echo "    OK  $b : $total objets — $pris telecharges, $garde deja la, $suppr retires"
+  else
+    echo "    !!  $b : $total objets — $pris telecharges, $garde deja la, $suppr retires, $echecs EN ECHEC, $malformes nom(s) illisible(s)"
+    grep '^KO' "$resultats" | cut -f2,3 | head -5 | sed 's/^/          /'
+    echo "          detail : $BG2_SYNC_JOURNAL"
+  fi
+  rm -f "$distant" "$prendre" "$resultats"
+  [ "$echecs" -eq 0 ] && [ "$malformes" -eq 0 ]
+}
+
+# Un bucket qui n'est dans AUCUNE des deux listes n'est sauvegarde par
+# personne. Meme logique que le filet des tables, mais sans bloquer : le tir
+# sauvegarde ce qu'il connait, puis refuse de se dire complet.
+buckets_orphelins() {
+  local connus b
+  connus="$(printf '%s\n' "${BUCKETS[@]}" "${BUCKETS_LOURDS[@]}" | LC_ALL=C sort -u)"
+  comm -23 <(psql "$PGCONN" -X -t -A -c "select id from storage.buckets order by 1" | LC_ALL=C sort -u) \
+           <(printf '%s\n' "$connus") || true
+}
+
+# synchro_flux <racine> <bucket>... ; pose SYNCHRO_ECHECS (buckets en defaut).
+synchro_flux() {
+  local racine="$1" b; shift
+  mkdir -p "$racine"; chmod 700 "$racine"
+  SYNCHRO_ECHECS=0
+  info "Synchronisation incrementale de $# buckets vers $racine ($SYNCHRO_PARALLELE telechargements a la fois)"
+  for b in "$@"; do
+    synchro_bucket "$b" "$racine" || SYNCHRO_ECHECS=$((SYNCHRO_ECHECS + 1))
+  done
+  info "Miroir : $(du -sh "$racine" 2>/dev/null | cut -f1)"
+}
+
 # -------------------------- BACKUP STORAGE -----------------------------
 backup_storage() {
   preflight; require supabase
   heartbeat storage started
   export RESTIC_REPOSITORY="$RESTIC_BASE/anarbib-storage"
-  mkdir -p "$STORAGE_WORK"; chmod 700 "$STORAGE_WORK"
+  synchro_flux "$STORAGE_WORK" "${BUCKETS[@]}"
+  local orphelins; orphelins="$(buckets_orphelins)"
 
-  info "STORAGE : resync systematique des ${#BUCKETS[@]} buckets (peut prendre 1-2 min)"
-  local b
-  for b in "${BUCKETS[@]}"; do
-    rm -rf "$STORAGE_WORK/$b"   # BG2 (02/07): purge avant resync -> evite le nesting $b/$b
-    ( cd "$SUPABASE_REPO" && supabase storage cp --linked --experimental -r \
-        "ss:///$b" "$STORAGE_WORK/$b" ) > "$STORAGE_WORK/.log-$b.txt" 2>&1 \
-      && echo "    OK  $b ($(find "$STORAGE_WORK/$b" -type f 2>/dev/null | wc -l))" \
-      || echo "    !!  $b — voir $STORAGE_WORK/.log-$b.txt"
-  done
-  info "Resync terminee : $(du -sh "$STORAGE_WORK" | cut -f1), $(find "$STORAGE_WORK" -type f -not -name '.log-*' | wc -l) fichiers"
-
+  # Les dossiers des buckets, nommement, et non tout $STORAGE_WORK : le miroir
+  # a porte les buckets lourds jusqu'au 18/10, et ses manifestes et journaux
+  # n'ont rien a faire dans la sauvegarde.
+  local chemins=() b
+  for b in "${BUCKETS[@]}"; do chemins+=("$STORAGE_WORK/$b"); done
   unlock_stale
-  restic backup "$STORAGE_WORK" --tag flux-storage --tag bg2
+  restic backup "${chemins[@]}" --tag flux-storage --tag bg2
   restic forget --tag flux-storage --group-by tags \
     --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+
+  # Juge APRES restic : ce qui a pu etre recupere est sauvegarde, mais un
+  # miroir incomplet ne merite pas de temoin d'arrivee. Sans lui, la sonde
+  # ouvre un incident ; OnFailure= ecrit .last-failure.
+  [ -z "$orphelins" ] || die "bucket(s) dans AUCUN flux, donc sauvegarde(s) par personne : $(echo $orphelins) — a ranger dans BUCKETS ou BUCKETS_LOURDS (anarbib-bg2.sh)"
+  [ "$SYNCHRO_ECHECS" -eq 0 ] || die "$SYNCHRO_ECHECS bucket(s) incomplet(s) : sauvegarde faite avec ce qui est la, mais INCOMPLETE (voir ci-dessus)"
   heartbeat storage ok "$(snapshot_id_de flux-storage)"
   info "Flux storage termine. (miroir local conserve, chmod 700)"
+}
+
+# --------------------------- BACKUP LOURD ------------------------------
+# Meme mecanique que storage, vers le depot LOCAL (voir LOURD_REPO en tete).
+# Le depot n'est JAMAIS cree par le tir : un chemin qui aurait change en
+# silence (lettre de disque, montage) ouvrirait un depot neuf et vide, et le
+# temoin dirait « sauvegarde faite » sur une lignee sans passe. Il s'initialise
+# a la main, une fois — deploy/ops/README.md, section « flux lourd ».
+backup_lourd() {
+  preflight; require supabase
+  [ -d "$(dirname "$LOURD_WORK")" ] \
+    || die "disque du miroir lourd absent : $(dirname "$LOURD_WORK") — D: est-il monte dans WSL ?"
+  [ -f "$LOURD_REPO/config" ] \
+    || die "depot restic lourd introuvable : $LOURD_REPO — E: est-il monte ? le depot initialise ? (README, « flux lourd »)"
+  heartbeat lourd started
+  export RESTIC_REPOSITORY="$LOURD_REPO"
+  synchro_flux "$LOURD_WORK" "${BUCKETS_LOURDS[@]}"
+
+  local chemins=() b
+  for b in "${BUCKETS_LOURDS[@]}"; do chemins+=("$LOURD_WORK/$b"); done
+  unlock_stale
+  # --ignore-inode / --ignore-ctime : le miroir vit sur un disque Windows monte
+  # en 9p, ou ni l'inode ni le ctime ne sont stables d'un montage a l'autre.
+  # Sans eux, restic relirait les 50 Go a chaque tir ; avec, il s'en tient a la
+  # taille et a la date de modification, que la synchronisation ne touche que
+  # pour les objets reellement retelecharges.
+  restic backup "${chemins[@]}" --ignore-inode --ignore-ctime --tag flux-lourd --tag bg2
+  restic forget --tag flux-lourd --group-by tags \
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+  [ "$SYNCHRO_ECHECS" -eq 0 ] || die "$SYNCHRO_ECHECS bucket(s) lourd(s) incomplet(s) : sauvegarde faite avec ce qui est la, mais INCOMPLETE (voir ci-dessus)"
+  heartbeat lourd ok "$(snapshot_id_de flux-lourd)"
+  info "Flux lourd termine. (miroir sur $LOURD_WORK, depot sur $LOURD_REPO)"
 }
 
 # -------------------------- RESTORE-TEST -------------------------------
@@ -736,7 +962,14 @@ prune_repos() {
     unlock_stale
     restic prune || die "prune echoue sur $repo"
   done
-  info "=== Prune des trois depots termine. ==="
+  # Le depot local du flux lourd (18/10/2026). Absent (disque non monte) : on
+  # le dit et on s'arrete en erreur, apres avoir traite les trois autres.
+  [ -f "$LOURD_REPO/config" ] || die "depot lourd introuvable ($LOURD_REPO) : non prune — les trois depots distants, eux, le sont"
+  export RESTIC_REPOSITORY="$LOURD_REPO"
+  info "Prune de anarbib-lourd (local)..."
+  unlock_stale
+  restic prune || die "prune echoue sur anarbib-lourd"
+  info "=== Prune des quatre depots termine. ==="
 }
 
 # ------------------------------ MAIN -----------------------------------
@@ -750,10 +983,11 @@ case "${1:-}" in
       long)    backup_long ;;
       court)   backup_court ;;
       storage) backup_storage ;;
-      all)     backup_long; backup_court; backup_storage; info "=== Les trois flux sont sauvegardes. ===" ;;
-      *) echo "Usage: $0 backup {long|court|storage|all}" >&2; exit 2 ;;
+      lourd)   backup_lourd ;;
+      all)     backup_long; backup_court; backup_storage; backup_lourd; info "=== Les quatre flux sont sauvegardes. ===" ;;
+      *) echo "Usage: $0 backup {long|court|storage|lourd|all}" >&2; exit 2 ;;
     esac ;;
   prune)        prune_repos ;;
   restore-test) cmd_restore_test ;;
-  *) echo "Usage: $0 {check | backup long|court|storage|all | prune | restore-test}" >&2; exit 2 ;;
+  *) echo "Usage: $0 {check | backup long|court|storage|lourd|all | prune | restore-test}" >&2; exit 2 ;;
 esac

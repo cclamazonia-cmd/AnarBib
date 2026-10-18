@@ -1,5 +1,5 @@
 [Unit]
-Description=AnarBib #BG2 — prune mensuel des trois depots restic
+Description=AnarBib #BG2 — prune mensuel des quatre depots restic (trois distants, lourd local)
 Documentation=file:%h/anarbib/docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
 OnFailure=anarbib-backup-failure@%n.service
 

@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-19** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-18** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-19.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-18.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1351,7 +1351,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso).
 
@@ -1921,4 +1921,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-18. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -26,7 +26,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 
 | Fichier | Rôle |
 |---|---|
-| `anarbib-bg2.sh` | Les trois flux restic (`court`, `long`, `storage`), le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
+| `anarbib-bg2.sh` | Les quatre flux restic (`court`, `long`, `storage` chez Herbes Folles ; `lourd` en local, depuis le 18/10), la synchronisation incrémentale des buckets, le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
 | `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte`, **relance** un tir tué ou un flux en retard (depuis le 30/09) |
 | `RUNNER.md` | **Le runner d'intégration continue** : savoir s'il tourne, le remettre en route, l'installer sur une autre machine (A3) |
@@ -36,7 +36,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `anarbib-copie-froide.sh` | La réplique hors ligne des trois dépôts restic sur un disque qu'on débranche, et sa vérification intégrale (lecture seule côté distant) |
 | `anarbib-mirror-refresh.sh` | Le rafraîchissement du miroir Git `anarbib-mirror.git`, avec le garde-fou anti-réécriture d'historique |
 | `anarbib-exploitation-suit.sh` | Le checkout d'exploitation `~/anarbib` suit `main` en avance rapide seulement — appelé en fin de tir du miroir (I33) |
-| `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
+| `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : quatre flux, l'unité de notification, le contrôle de fraîcheur |
 
 ## Ce qu'il ne contient pas, et pourquoi
 
@@ -380,10 +380,93 @@ Le banc du dépôt (`src/tests/sonde-ficedl.test.js`) rejoue la décision contre
 deux serveurs locaux et un transport fichier, comme pour le témoin. Ce que la
 sonde ne voit pas : la cause, et une absence plus courte qu'un jour.
 
+## Le flux lourd : les gros fichiers, dans un dépôt local (18/10/2026)
+
+**Ce qui s'est passé.** Le 18/10 à 21:01, le tir `storage` a été tué par sa
+borne d'une heure (`start operation timed out`), sans un octet envoyé. Il
+purgeait son miroir et retéléchargeait **tous** les buckets à chaque tir —
+13 min le 04/10, 24 min le 11/10 — et `anarbib-pdf-public` venait de passer de
+presque rien à 16 Go en une semaine (versement des PDF). La sonde a ouvert
+l'incident « une sauvegarde a commencé et ne s'est jamais terminée ».
+
+**Ce qui l'empêchait de se régler en relançant.** Le `/data` des Herbes Folles
+fait 39,2 Go, **dont 14,3 libres**, partagé avec d'autres (nos trois dépôts n'en
+occupent que 0,6 Go). Les buckets lourds pèsent ~52 Go, fond de carte compris :
+ils n'y tiennent pas, et un tir qui l'aurait tenté aurait rempli le disque — et
+fait échouer `court` et `long` derrière lui.
+
+**Ce qui a changé.**
+
+1. **Synchronisation incrémentale** (`synchro_bucket`). La liste des objets
+   vient de `storage.objects` (nom, taille, eTag) ; le miroir tient un manifeste
+   par bucket (`<racine>/.manifestes/<bucket>.tsv`) ; seuls le nouveau et le
+   modifié sont téléchargés, six à la fois (`BG2_SYNCHRO_PARALLELE`) — chaque
+   appel à `supabase storage cp` coûte ~8 s fixes. Ce qui disparaît de Storage
+   disparaît du miroir. Téléchargement dans `<objet>.bg2-part` puis renommage :
+   jamais de fichier tronqué sous le vrai nom, et un tir tué reprend où il s'est
+   arrêté. Un objet en échec n'empêche pas la sauvegarde du reste, mais le tir
+   refuse alors son témoin d'arrivée : la sonde alerte. Banc :
+   `src/tests/bg2-synchro-incrementale.test.js`.
+2. **Un quatrième flux, `lourd`** — `pdf-restrito`, `anarbib-pdf-public`, les
+   deux buckets EPUB et `map-tiles` — vers un **dépôt restic local**. Décision
+   de Xavier, en attendant une place hors site suffisante (backlog **I21**). Le
+   flux `storage` garde les buckets légers et reste chez Herbes Folles. Un
+   bucket qui n'est dans aucune des deux listes fait échouer `storage`
+   (`buckets_orphelins`) : il ne serait sauvegardé par personne.
+3. **`map-tiles` est sauvegardé** (« si on peut le sauvegarder, on le
+   sauvegarde », 18/10). Il en était exclu depuis le 07/09 parce qu'il triplait
+   le dépôt distant ; en local, la place n'est plus un argument.
+
+| | chemin | rôle |
+|---|---|---|
+| miroir | `D:\anarbib-sauvegardes\miroir-lourd` (`/mnt/d/…`) | dernière version, fichiers en clair |
+| dépôt | `E:\anarbib-sauvegardes\anarbib-lourd` (`/mnt/e/…`) | historique 7/4/6, chiffré (même passphrase) |
+
+Trois disques physiques distincts : WSL vit sur `C:` (NVMe), le miroir sur `D:`
+(EMTEC), le dépôt sur `E:` (Samsung 860 EVO). Une panne d'un disque laisse
+l'autre. **Ce dépôt protège contre la perte de Supabase, pas contre celle du
+poste** (vol, incendie, ransomware) : il ne remplace pas un tiers. Les chemins se
+déplacent par `BG2_LOURD_WORK` et `BG2_LOURD_REPO` (le second est lu aussi par
+le contrôle de fraîcheur).
+
+**Durée et bornes.** En régime courant, le tir ne télécharge que la semaine
+écoulée. Mais une fournée comme celle du 11/10 se télécharge à ~5 Mo/s : d'où
+une borne de **3 h** (`TimeoutStartSec=10800`) et, côté sonde, un seuil
+« interrompu » de **4 h** pour ce seul flux (migration
+`20261018213744_le_flux_lourd_a_son_temoin`). Les deux nombres sont couplés :
+relever l'un, c'est relever l'autre. Les trois autres flux gardent 1 h et 60 min.
+
+**Sur une machine neuve** (une fois) :
+
+```bash
+mkdir -p /mnt/d/anarbib-sauvegardes/miroir-lourd /mnt/e/anarbib-sauvegardes
+RESTIC_PASSWORD_FILE=~/.config/restic-anarbib.pass restic init --repo /mnt/e/anarbib-sauvegardes/anarbib-lourd
+ln -sf "$PWD/deploy/ops/systemd/anarbib-backup-lourd.service" ~/.config/systemd/user/
+ln -sf "$PWD/deploy/ops/systemd/anarbib-backup-lourd.timer"   ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now anarbib-backup-lourd.timer
+```
+
+Le tir **ne crée jamais le dépôt** : un chemin changé en silence (lettre de
+disque, montage) ouvrirait une lignée neuve et vide, et le témoin dirait
+« sauvegardé » sur un dépôt sans passé. Disque absent, il s'arrête en le disant.
+
+**L'amorçage du 18/10.** Le miroir a repris les dossiers lourds de l'ancien
+`.storage-work` (adoptés quand leur taille correspond à celle annoncée par la
+base), et `map-tiles` a été recopié depuis `~/pmtiles/planet-z13-20260917.pmtiles`
+plutôt que retéléchargé : son eTag multipart, recalculé en parties de 6 Mio
+(`bc98382321d4870dda75e99d3df88a72-5664`), est identique à celui de l'objet.
+
+**Ce que ça ne règle pas.** La copie froide (`anarbib-copie-froide.sh`) ne
+réplique que les trois dépôts distants : le dépôt lourd n'a pas encore de copie
+sur le disque débranchable `F:`. Et le jour où un tiers aura la place (I21), le
+flux `lourd` y partira — c'est un changement de `LOURD_REPO`, plus une copie
+de l'historique (`restic copy`).
+
 ## Les horaires
 
-`19:00`, `dimanche 20:00`, `dimanche 21:00` — **en `Europe/Paris`**, fuseau nommé
-dans les unités. L'heure de tir suit la personne qui exploite la chaîne, pas le
+`19:00`, `dimanche 20:00`, `dimanche 21:00`, `dimanche 21:30` (flux lourd, depuis
+le 18/10) — **en `Europe/Paris`**, fuseau nommé dans les unités. L'heure de tir suit la personne qui exploite la chaîne, pas le
 fuseau du portable, qui change en voyage ; et l'heure d'été se gère seule.
 
 Avant le 20/08 les tirs étaient à 2 h, 3 h et 4 h heure machine — ils ne
@@ -509,18 +592,7 @@ tar czf anarbib-worktree-<date>.tar.gz \
 `.claude/`, `.env*`), et la copie froide est la seule sauvegarde de `CLAUDE.md` :
 
 ```bash
-tar tzf anarbib-worktree-<date>.tar.gz | grep -c '^./CLAUDE.md : ces fichiers
-portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse** :
-**Dashlane** (entrées « AnarBib — … » ; `Archives\SECRETS-EN-CLAIR` ne garde
-que la note de migration et deux fichiers périmés, les valeurs en ont été
-retirées exprès). Une sauvegarde du dépôt qui les emporterait en ferait une
-seconde, sur un disque qui circule.
-
-## Pour restaurer
-
-[`RUNBOOK_restauration_BG2_2026-07-01`](../../docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md)
-— trois flux, rétention 7/4/6, procédure de réinjection des secrets du Vault.
-   # doit dire 1
+tar tzf anarbib-worktree-<date>.tar.gz | grep -c '^./CLAUDE.md$'   # doit dire 1
 ```
 
 Les deux `--exclude` sur `deploy/*.env` ne sont pas un détail : ces fichiers
@@ -534,3 +606,9 @@ seconde, sur un disque qui circule.
 
 [`RUNBOOK_restauration_BG2_2026-07-01`](../../docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md)
 — trois flux, rétention 7/4/6, procédure de réinjection des secrets du Vault.
+
+**Depuis le 18/10, les fichiers sont répartis sur deux dépôts** : les buckets
+légers dans `anarbib-storage` (Herbes Folles), les lourds dans `anarbib-lourd`
+(local, `E:`). Restaurer les fichiers, c'est restaurer les deux, puis passer
+`anarbib-storage-restore.py --source` sur chacun des deux dossiers obtenus.
+Les instantanés `flux-storage` d'avant le 18/10 portent encore les PDF.

@@ -1,5 +1,5 @@
 [Unit]
-Description=AnarBib #BG2 — sauvegarde flux storage (16 buckets, retention 7/4/6)
+Description=AnarBib #BG2 — sauvegarde flux storage (buckets legers -> Herbes Folles, retention 7/4/6)
 Documentation=file:%h/anarbib/docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
 OnFailure=anarbib-backup-failure@%n.service
 

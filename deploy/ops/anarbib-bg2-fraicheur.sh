@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# anarbib-bg2-fraicheur.sh — controle de fraicheur des trois flux #BG2
+# anarbib-bg2-fraicheur.sh — controle de fraicheur des quatre flux #BG2
 #
 # CE FICHIER EST LA SOURCE DE VERITE — versionne. `~/anarbib-ops/` n'en a qu'un
 # lien symbolique. Voir deploy/ops/README.md.
@@ -60,7 +60,16 @@ VU="$OPS_DIR/.fraicheur-derniere-lecture"  # horodatage epoch de la derniere lec
 RESTIC_BASE="${RESTIC_BASE:-sftp:anarbib@bricolage.herbesfolles.org:/data}"
 export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-$HOME/.config/restic-anarbib.pass}"
 
-FLUX=(court long storage)
+FLUX=(court long storage lourd)
+
+# Le flux lourd (18/10/2026) a son depot sur un disque du poste, pas chez Herbes
+# Folles. MEME chemin que LOURD_REPO dans anarbib-bg2.sh, meme variable pour le
+# deplacer. Il finit par `anarbib-lourd`, comme les depots distants.
+DEPOT_lourd="${BG2_LOURD_REPO:-/mnt/e/anarbib-sauvegardes/anarbib-lourd}"
+depot_de() {
+  local var="DEPOT_$1"
+  printf '%s' "${!var:-$RESTIC_BASE/anarbib-$1}"
+}
 
 # Seuils en heures. ALIGNES SUR public.fn_backup_heartbeat_status() : les deux
 # gardes doivent porter le meme jugement, sinon on passe son temps a se demander
@@ -68,15 +77,19 @@ FLUX=(court long storage)
 #   court   quotidien  -> 36 h  (un jour saute, pas deux)
 #   long    hebdo      -> 9 j   (une semaine sautee, plus la marge du dimanche)
 #   storage hebdo      -> 9 j
+#   lourd   hebdo      -> 9 j
 SEUIL_court=36
 SEUIL_long=216
 SEUIL_storage=216
+SEUIL_lourd=216
 
 # Age au-dela duquel un marqueur « tir en cours » signale un tir MORT et non un
 # tir qui travaille. Aligne sur la regle `interrompu` de la sonde en base (60 min),
 # pour la meme raison que les seuils ci-dessus : deux gardes qui jugeraient
 # differemment feraient perdre du temps a se demander laquelle a raison.
-# Marge confortable — le plus long des trois flux, storage, tient en ~23 min.
+# Le seuil ne sert qu'aux marqueurs SANS numero de processus (anciens) : un
+# marqueur qui en porte un est juge sur la vie du processus, quelle que soit la
+# duree du tir — c'est ce qui laisse le flux lourd travailler trois heures.
 SEUIL_INTERROMPU_MIN="${SEUIL_INTERROMPU_MIN:-60}"
 
 # Au-dela de ce delai sans avoir pu LIRE les depots, l'aveuglement devient une
@@ -112,7 +125,7 @@ mkdir -p "$OPS_DIR"
 date_dernier_snapshot() {
   local flux="$1" json="" iso="" ts="" best=0 best_iso=""
 
-  json="$(RESTIC_REPOSITORY="$RESTIC_BASE/anarbib-$flux" \
+  json="$(RESTIC_REPOSITORY="$(depot_de "$flux")" \
             timeout 120 restic snapshots --no-lock --tag "flux-$flux" --json 2>/dev/null)" || return 1
 
   while IFS= read -r iso; do
@@ -363,6 +376,6 @@ if [ "$lecture_ok" = 0 ]; then
 elif [ ${#aveugle[@]} -gt 0 ]; then
   info "Flux lus : frais. NON VERIFIE(S) : ${aveugle[*]}."
 else
-  info "Les trois flux sont frais."
+  info "Les quatre flux sont frais."
 fi
 exit 0

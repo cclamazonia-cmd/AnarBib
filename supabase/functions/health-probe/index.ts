@@ -368,7 +368,7 @@ Deno.serve(async (req: Request) => {
       `${f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`} (${provenanceTexte(f)})`;
 
     // Un incident par flux, mais UN SEUL courriel par tour. Le cas le plus
-    // fréquent est aussi le plus bénin — poste éteint, les trois flux muets
+    // fréquent est aussi le plus bénin — poste éteint, tous les flux muets
     // ensemble — et trois courriels pour une seule cause useraient exactement
     // la crédibilité que ce dispositif existe pour protéger. On tient donc la
     // comptabilité flux par flux, et on ne prend la parole qu'une fois.
@@ -403,7 +403,11 @@ Deno.serve(async (req: Request) => {
         interrompus.length ? 'Un tir s’est arrêté en route' : 'Les sauvegardes sont muettes',
         `<p style="margin:0 0 10px">${
           interrompus.length
-            ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, ou processus tué. Le verrou laissé chez l'hébergeur sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
+            // 18/10/2026 : la quatrième cause, la seule qui ne guérit pas en
+            // relançant. Ce jour-là, `storage` a été arrêté par sa borne d'une
+            // heure parce qu'il avait trop à télécharger — et le courriel ne
+            // citait que la veille, WSL et un processus tué.
+            ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, processus tué, <strong>ou tir trop long, arrêté par sa borne de durée</strong> (<code>TimeoutStartSec</code>). Dans ce dernier cas, relancer ne suffira pas : <code>journalctl --user -u anarbib-backup-&lt;flux&gt;</code> dit « start operation timed out ». Le verrou laissé dans le dépôt sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
             : `Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.`
         }</p>
          <p style="margin:0 0 10px">Nouveaux flux en défaut à ce tour : <strong>${esc(
@@ -415,7 +419,7 @@ Deno.serve(async (req: Request) => {
               )}.`
             : ''
         }</p>
-         <p style="margin:0 0 10px">État des trois flux :</p>
+         <p style="margin:0 0 10px">État des flux :</p>
          <ul style="margin:0 0 10px;padding-left:18px">${flux
            .map(
              (f) =>
@@ -478,7 +482,7 @@ Deno.serve(async (req: Request) => {
               )} reste en défaut — son incident demeure ouvert.`
             : `Plus aucun flux n'est en défaut.`
         }</p>
-         <p style="margin:0 0 10px">État des trois flux :</p>
+         <p style="margin:0 0 10px">État des flux :</p>
          <ul style="margin:0 0 10px;padding-left:18px">${flux
            .map(
              (f) =>

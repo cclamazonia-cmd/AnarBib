@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-19** · 52 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-18** · 52 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3.
 
-**Fraîcheur des constats au 2026-10-19.** **41 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-18.** **41 items sur 52** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1351,7 +1351,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
 
@@ -1931,4 +1931,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-19. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 52 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-18 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9636773a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-18. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 52 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-18 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9636773a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

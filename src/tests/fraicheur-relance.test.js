@@ -111,7 +111,7 @@ function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '
     mkdirSync(path.join(procDir, pid), { recursive: true });
     writeFileSync(path.join(procDir, pid, 'cmdline'), cmd.split(' ').join('\0') + '\0');
   }
-  const AGES = { AGE_court: '1', AGE_long: '1', AGE_storage: '1' };
+  const AGES = { AGE_court: '1', AGE_long: '1', AGE_storage: '1', AGE_lourd: '1' };
   for (const [flux, age] of Object.entries(ages)) AGES[`AGE_${flux}`] = String(age);
 
   let sortie;
@@ -127,6 +127,8 @@ function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '
         PROC: posix(procDir),
         RESTIC_PASSWORD_FILE: posix(path.join(dir, 'pass')),
         RESTIC_BASE: 'sftp:essai@hote.invalid:/data',
+        // Le dépôt LOCAL du flux lourd (18/10/2026) : jamais le vrai disque.
+        BG2_LOURD_REPO: '/essai/disque/anarbib-lourd',
         JOURNAL_SYSTEMCTL: posix(journal),
         // Figés : le banc n'hérite de rien, et n'atteint jamais le vrai systemctl.
         SYSTEMCTL: posix(path.join(stub, 'systemctl')),
@@ -259,6 +261,30 @@ describe.skipIf(!BASH)('contrôle de fraîcheur #BG2 — la relance d’un tir t
     expect(r.essais).toEqual([]);
     expect(r.drapeau).toBe('');
     expect(r.code).toBe(0);
-    expect(r.sortie).toMatch(/Les trois flux sont frais/);
+    expect(r.sortie).toMatch(/Les quatre flux sont frais/);
+    expect(r.sortie).toMatch(/OK\s+lourd/);
+  });
+
+  // Flux lourd (18/10/2026) : son dépôt est local, ses relances passent par
+  // sa propre unité, et un tir de trois heures n'est pas pris pour un mort.
+  it('flux lourd en retard (dépôt local) : relancé par sa propre unité', () => {
+    const r = passage({ ages: { lourd: 300 } });
+    expect(r.relances).toEqual(['anarbib-backup-lourd.service']);
+    expect(r.drapeau).toMatch(/RETARD .*lourd/);
+  });
+
+  it('flux lourd : un tir vivant depuis 170 min n’est ni interrompu ni relancé', () => {
+    const r = passage({
+      marqueurs: { lourd: [170, 4343] },
+      proc: { 4343: '/bin/bash /home/x/anarbib-ops/anarbib-bg2.sh backup lourd' },
+    });
+    expect(r.essais).toEqual([]);
+    expect(r.sortie).toMatch(/lourd\s+tir en cours depuis 170 min/);
+  });
+
+  it('flux lourd : disque absent (dépôt illisible) → jamais relancé', () => {
+    const r = passage({ ages: { lourd: 'illisible' }, marqueurs: { lourd: [200, 4343] } });
+    expect(r.essais).toEqual([]);
+    expect(r.drapeau).toMatch(/PAS DE RELANCE : lourd — depot illisible/);
   });
 });

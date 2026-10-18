@@ -1,0 +1,19 @@
+[Unit]
+Description=AnarBib #BG2 — sauvegarde flux lourd (PDF, EPUB, fond de carte -> depot local, retention 7/4/6)
+Documentation=file:%h/anarbib/deploy/ops/README.md
+OnFailure=anarbib-backup-failure@%n.service
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+# 3 h, et non 1 h comme les trois autres flux (18/10/2026). En regime courant
+# le tir ne telecharge que la semaine ecoulee et dure quelques minutes ; mais
+# une grosse fournee de PDF (18 Go la semaine du 11/10) se telecharge a ~5 Mo/s.
+# La synchronisation reprend la ou un tir tue s'est arrete : une borne trop
+# courte ne perdrait rien, elle ferait seulement sonner l'alarme pour un tir
+# qui travaillait. COUPLE au seuil `interrompu` du flux lourd dans
+# public.fn_backup_heartbeat_status() (4 h) : relever l'un, c'est relever l'autre.
+TimeoutStartSec=10800
+ExecStartPre=-/bin/rm -f %h/anarbib-ops/.last-failure
+ExecStart=%h/anarbib-ops/anarbib-bg2.sh backup lourd
