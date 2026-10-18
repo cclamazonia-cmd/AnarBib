@@ -16,6 +16,7 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
 import { OAI_FORMATS, xmlEscape } from '../_shared/oai/metadata.ts';
+import { appUrl } from '../_shared/core/app-url.ts';
 
 const PAGE_SIZE = 100;
 
@@ -75,6 +76,16 @@ function decodeToken(t: string): any | null {
 // `until` en date seule => inclure toute la journée.
 function normUntil(v: string): string {
   return /^\d{4}-\d{2}-\d{2}$/.test(v) ? `${v}T23:59:59Z` : v;
+}
+
+// La notice avec l'adresse de sa page publique (/livro/<id>), que oai_dc sert
+// en dc:identifier : un lecteur d'un autre catalogue qui clique arrive chez
+// nous. L'adresse vient du réglage APP_BASE_URL (app-url.ts), jamais d'un
+// littéral — une instance auto-hébergée sert la sienne (étape 4 du cadrage
+// fédéralisme, 19/10/2026).
+function avecPagePublique(rec: any): any {
+  const id = Number(rec?.id);
+  return Number.isInteger(id) && id > 0 ? { ...rec, publicUrl: appUrl(`/livro/${id}`) } : rec;
 }
 
 Deno.serve(async (req) => {
@@ -221,7 +232,7 @@ Deno.serve(async (req) => {
       }
       const inner =
         `  <GetRecord>\n    <record>\n${headerXml(rec, m[1])}\n` +
-        `      <metadata>\n        ${fmt.render(rec)}\n      </metadata>\n` +
+        `      <metadata>\n        ${fmt.render(avecPagePublique(rec))}\n      </metadata>\n` +
         `    </record>\n  </GetRecord>`;
       return xmlResponse(envelope(baseUrl, requestAttrs({ verb, identifier, metadataPrefix: mp }), inner));
     }
@@ -272,7 +283,7 @@ Deno.serve(async (req) => {
       const entries = page.records.map((rec: any) => {
         if (verb === 'ListIdentifiers') return headerXml(rec, page.lib!.slug);
         return `    <record>\n${headerXml(rec, page.lib!.slug)}\n` +
-          `      <metadata>\n        ${fmt.render(rec)}\n      </metadata>\n    </record>`;
+          `      <metadata>\n        ${fmt.render(avecPagePublique(rec))}\n      </metadata>\n    </record>`;
       }).join('\n');
 
       let tokenXml = '';

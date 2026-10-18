@@ -11,7 +11,11 @@
 // Notice attendue : { identifier, datestamp, id, bibRef, title, subtitle,
 //   authors:[{name,role,ord}], responsibility, publisher, year, place, edition,
 //   isbn, issn, language, pages, cdd, subjects:[string], collection,
-//   materialType, notes }
+//   materialType, notes, publicUrl }
+// publicUrl (étape 4 du cadrage fédéralisme, 19/10/2026) : l'adresse de la
+// page publique de la notice, posée par oai-pmh-provider depuis le réglage de
+// l'adresse de l'application (_shared/core/app-url.ts). Ce module reste pur :
+// il ne lit aucun réglage.
 
 function s(v: unknown): string {
   return v === null || v === undefined ? '' : String(v);
@@ -97,6 +101,9 @@ export function oaiDcRecord(r: any): string {
   if (s(r.isbn).trim()) lines.push(el('identifier', `ISBN:${s(r.isbn).trim()}`));
   if (s(r.issn).trim()) lines.push(el('identifier', `ISSN:${s(r.issn).trim()}`));
   if (s(r.bibRef).trim()) lines.push(el('identifier', r.bibRef));
+  // La page publique de la notice, pour qu'un lecteur d'un autre catalogue qui
+  // clique arrive chez nous. Jamais un lien vers un fichier.
+  if (s(r.publicUrl).trim()) lines.push(el('identifier', r.publicUrl));
   for (const mb of mbList(r)) lines.push(el('relation', mb.url));
   lines.push(el('description', r.notes));
   const body = lines.filter(Boolean).join('\n');
