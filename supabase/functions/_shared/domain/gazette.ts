@@ -11,8 +11,8 @@
 // Events traités (Étape A) :
 //   - gazette.contribution.received   → admins réseau + boîte collective (network-admins.ts)
 //   - gazette.draft.ready_for_review  → admins réseau + boîte collective (network-admins.ts)
-//   Avant le 15/10/2026 : la brève reçue partait vers fede@anarbib.org — une adresse
-//   SANS boîte (relevé OVH du 28/08) —, et l'avis de brouillon aux seules personnes
+//   Avant le 15/10/2026 : la brève reçue partait vers la seule boîte fede@anarbib.org,
+//   et l'avis de brouillon aux seules personnes
 //   (network_staff). Ce sont des avis de TRAVAIL, pas de la gouvernance entre
 //   personnes : ils vont aussi à la boîte du réseau (décision de Xavier, 15/10). Le
 //   champ `to` que le déclencheur SQL écrit encore dans le payload est ignoré.

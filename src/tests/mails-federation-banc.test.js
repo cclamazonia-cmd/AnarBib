@@ -21,7 +21,7 @@ const eq = (chaine, nom) => chaine.find((c) => c.op === 'eq' && c.args[0] === no
 describe('domain/cartography — une auto-déclaration à modérer', () => {
   const LIGNE = { id: 3, status: 'queued', event: 'cartography.submission_received', payload: { name: 'Ateneu Llibertari', city: 'Barcelona', country: 'ES', categorie: 'ateneu', site_url: 'https://ateneu.exemple.test' } };
   function monter({ env = {}, ligne = LIGNE, resend } = {}) {
-    // 15/10/2026 : l'alerte va aux admins réseau + boîte collective (network-admins.ts), plus à fede@ (sans boîte).
+    // 15/10/2026 : l'alerte va aux admins réseau + boîte collective (network-admins.ts), plus à la seule boîte fede@.
     const ef = monterEF({ env: { NETWORK_ADMIN_CC: 'admins@exemplo.test', ...env }, resend, repondre: (_s, table, a) => (table === 'cartography_submission_notification_outbox' && !a('update') ? { data: ligne, error: null } : { data: null, error: null }) });
     return { ef, handle: ef.charger('_shared/domain/cartography.ts').handleCartographyEvent, etat: () => ef.ecrits.filter((e) => e.table === 'cartography_submission_notification_outbox').map((e) => e.donnees.status) };
   }

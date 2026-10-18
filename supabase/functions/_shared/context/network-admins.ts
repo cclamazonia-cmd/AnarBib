@@ -37,7 +37,7 @@
 // l'atelier des autorités restent adressés aux personnes. Les AVIS DE TRAVAIL de la
 // gazette (brève reçue, brouillon à relire) et de la carte (lieu à modérer) passent
 // ici depuis le 15/10/2026 (décision de Xavier) : le brouillon n°5 n'était arrivé que
-// sur une boîte personnelle, et les brèves partaient vers une adresse sans boîte.
+// sur une boîte personnelle, et les brèves n'allaient qu'à la boîte fede@.
 // L'INSTITUTIONNEL et la SUPERVISION passent ici : demandes de bibliothèques,
 // permissions documentaires, gel global d'un·e membre, rapport hebdo du réseau,
 // récapitulatif inter-bibliothèques, alertes de santé. La garde

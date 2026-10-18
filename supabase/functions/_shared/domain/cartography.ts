@@ -9,8 +9,8 @@
 //
 // Events traités :
 //   - cartography.submission_received → admins réseau + boîte collective (à modérer sur
-//     /cartografia/moderacao). Avant le 15/10/2026 : fede@anarbib.org, adresse SANS boîte
-//     (relevé OVH du 28/08) ; le champ `to` du payload SQL est désormais ignoré.
+//     /cartografia/moderacao). Avant le 15/10/2026 : la seule boîte fede@anarbib.org ;
+//     le champ `to` du payload SQL est désormais ignoré.
 // ============================================================================
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { supabaseAdmin } from "../core/env.ts";

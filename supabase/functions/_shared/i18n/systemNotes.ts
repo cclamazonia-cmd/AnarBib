@@ -10,7 +10,7 @@
 // d'injection mail sans abîmer un motif humain. Idempotent.
 //
 // Conséquence : toute clé décodable susceptible d'apparaître dans un mail doit
-// exister dans mail-strings.ts (S{}), 10 locales. Cf. bloc « Notes système ».
+// exister dans mail-strings.ts (S{}), dans toutes les locales. Cf. bloc « Notes système ».
 // ============================================================================
 
 import { tMail } from "./mail-strings.ts";

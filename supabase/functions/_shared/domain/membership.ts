@@ -456,7 +456,7 @@ export async function handleCotisationExpiring(payload) {
   // circulation étant DUR et sans période de grâce, la notif in-app part à
   // J-7/J-0 MÊME SI la biblio a désactivé l'e-mail de cotisation (le drapeau
   // cotisation_payment_mail_enabled ne gouverne QUE l'e-mail). Catégorie 'alerta'
-  // (libellée dans les 10 locales), titre/corps pré-rendus dans la langue du
+  // (libellée dans toutes les locales), titre/corps pré-rendus dans la langue du
   // membre (patron réplique restriction/gel). Best-effort : un échec n'invalide
   // pas le reste. Le bandeau /conta reste l'état permanent.
   let inapp_result = null;

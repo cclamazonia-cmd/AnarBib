@@ -1,7 +1,7 @@
 // ============================================================================
 // mail-strings.ts — i18n des notifications mail (Edge Function notify-event)
 // ============================================================================
-// 10 locales : pt-BR (référence), fr, es, en, it, de, ca, eo, nl, el
+// 11 locales : pt-BR (référence), fr, es, en, it, de, ca, eo, nl, el, ro
 //
 // Conventions militantes par locale :
 //   pt-BR : triple forme o-a-e, démonstratifs binôme dest(e-a),

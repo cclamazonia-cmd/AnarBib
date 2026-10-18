@@ -1,6 +1,6 @@
 // _shared/i18n/task-mail-strings.ts
 // i18n des libellés pour les mails de tâches internes (notify-internal-task).
-// 10 locales (pt-BR, fr, es, en, it, de, ca, eo, nl, el), repli pt-BR.
+// 11 locales (pt-BR, fr, es, en, it, de, ca, eo, nl, el, ro), repli pt-BR.
 // Ecriture inclusive selon la convention de chaque langue.
 // Patron : table par locale + helpers (tMail-like). Aucune dependance externe.
 

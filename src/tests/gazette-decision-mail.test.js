@@ -205,7 +205,7 @@ describe('gazette.contribution.received — l’avis au réseau d’une reprise 
   });
 
   it('avec parent_submission_id : la ligne « reprise » est dans le corps', async () => {
-    // 15/10/2026 : le `to: fede@` du déclencheur est ignoré (adresse sans boîte) ;
+    // 15/10/2026 : le `to: fede@` du déclencheur est ignoré ;
     // l'avis va aux admins actif·ves, chacun·e dans sa langue (ici le français), et à la boîte.
     const admin = { network_administrators: [{ user_id: 'u-l' }], profiles: [{ id: 'u-l', email: 'admin@exemplo.test', first_name: 'Lucía', preferred_language: 'fr' }] };
     const traiter = monter([recu({ parent_submission_id: 'sub-1' })], {}, undefined, admin);
@@ -243,7 +243,7 @@ describe('avis de travail de la gazette — les admins dans leur langue ET la bo
     expect(r.envois.map((e) => e.email).sort()).toEqual(['admins@exemplo.test', 'autre@exemplo.test']);
   });
 
-  it('brève reçue : jamais vers fede@ (adresse sans boîte), l’admin et la boîte la reçoivent', async () => {
+  it('brève reçue : plus vers fede@ seule, l’admin et la boîte du réseau la reçoivent', async () => {
     const r = await monter([recu], { NETWORK_ADMIN_CC: 'admins@exemplo.test' }, undefined, ADMIN)(8);
     const a = r.envois.map((e) => e.email);
     expect(a).not.toContain('fede@anarbib.org');
