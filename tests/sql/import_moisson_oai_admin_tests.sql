@@ -72,6 +72,7 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T2 deposer un fichier sur une source OAI est refuse a la coordination';
   BEGIN
+    INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'oai/essai2', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
     PERFORM public.fn_import_create(v_src, 'oai/essai2', 'oai-essai2');
     v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
   EXCEPTION WHEN OTHERS THEN
@@ -102,6 +103,7 @@ BEGIN
     INSERT INTO public.network_administrators (user_id, status) VALUES (v_coord, 'active');
 
     -- create : la garde doit etre passee
+    INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'oai/essai3', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
     v_res := public.fn_import_create(v_src, 'oai/essai3', 'oai-essai3');
     IF NOT coalesce((v_res->>'ok')::boolean, false) THEN
       RAISE EXCEPTION 'create : %', coalesce(v_res::text, 'NULL');

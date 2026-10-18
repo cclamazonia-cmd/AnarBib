@@ -68,6 +68,7 @@ BEGIN
   BEGIN
     SELECT count(*) INTO v_n FROM ingest.partner_catalog_import_runs WHERE source_id = v_src_depot;
     BEGIN
+      INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'essai/depot2.csv', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
       PERFORM public.fn_import_create(v_src_depot, 'essai/depot2.csv', 'depot2.csv');
       v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
     EXCEPTION WHEN OTHERS THEN
@@ -98,6 +99,7 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T4 la coordination depose toujours un fichier de SON catalogue';
   BEGIN
+    INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'essai/propre.csv', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
     v_res := public.fn_import_create(v_src_own, 'essai/propre.csv', 'propre.csv');
     SELECT library_id INTO v_runlib FROM ingest.partner_catalog_import_runs WHERE id = (v_res->>'run_id')::bigint;
     IF coalesce((v_res->>'ok')::boolean, false) AND v_runlib = v_lib THEN v_passed := v_passed+1;
@@ -132,6 +134,7 @@ BEGIN
       RAISE EXCEPTION 'register : %', coalesce(v_res::text, 'NULL');
     END IF;
 
+    INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'essai/depot3.csv', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
     v_res := public.fn_import_create(v_src_depot, 'essai/depot3.csv', 'depot3.csv');
     IF NOT coalesce((v_res->>'ok')::boolean, false) THEN
       RAISE EXCEPTION 'create : %', coalesce(v_res::text, 'NULL');

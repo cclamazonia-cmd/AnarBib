@@ -204,6 +204,7 @@ BEGIN
   EXECUTE $f$CREATE FUNCTION pg_temp.l8_deposer(p_nom text, p_export_complet boolean) RETURNS bigint LANGUAGE plpgsql AS $b$
     DECLARE v_src bigint; v_run bigint;
     BEGIN
+      INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'partner/manual/import/2026-10-11/' || p_nom, current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
       EXECUTE 'SET LOCAL ROLE authenticated';
       v_src := (public.fn_import_own_source()->>'source_id')::bigint;
       v_run := (public.fn_import_create(v_src, 'partner/manual/import/2026-10-11/' || p_nom, p_nom,

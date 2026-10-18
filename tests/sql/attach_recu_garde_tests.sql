@@ -119,6 +119,13 @@ BEGIN
       RETURN CASE WHEN v_m LIKE 'attach-annule:%' AND (substr(v_m, 15)::jsonb ->> 'ok') = 'true' THEN 'passe' ELSE 'refus|' || v_m END;
     END $b$ $f$;
 
+  -- 17/10/2026 (20261018211310) : la RPC d'écriture vérifie, après ses gardes,
+  -- que l'objet déclaré existe — l'Edge Function l'a versé avant de l'appeler.
+  INSERT INTO storage.objects (bucket_id, name)
+  SELECT 'pdf-restrito', 'attached/' || b || '/' || r || '_essai.pdf'
+    FROM unnest(ARRAY[v_bookA, v_bookB]) b, unnest(ARRAY[v_raA, v_raB]) r
+  ON CONFLICT (bucket_id, name) DO NOTHING;
+
   -- ───────────────────────────────────────────────────────
   v_t := 'T1 objets et droits';
   BEGIN
@@ -238,7 +245,7 @@ BEGIN
       PERFORM set_config('request.jwt.claims', json_build_object('sub', v_rec.sub, 'role', 'authenticated')::text, true);
       BEGIN
         EXECUTE 'SET LOCAL ROLE authenticated';
-        v_res := public.fn_attach_received_asset_record(v_raA, v_rec.book, 'pdf-restrito', 'attached/x/y.pdf', 'both');
+        v_res := public.fn_attach_received_asset_record(v_raA, v_rec.book, 'pdf-restrito', 'attached/' || v_rec.book || '/' || v_raA || '_essai.pdf', 'both');
         EXECUTE 'RESET ROLE';
         v_msg := 'rendu ' || v_res::text;
       EXCEPTION WHEN OTHERS THEN

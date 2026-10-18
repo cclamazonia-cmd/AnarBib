@@ -420,6 +420,7 @@ BEGIN
       v_r1 := pg_temp.h31_run(v_src, v_lib, 'h31-t8.zip', 2, 'new_record', 'pending', NULL, 'zip');
       v_runs := v_runs || v_r1;
       v_ra := pg_temp.h31_recu(v_r1, 1, 71);
+      INSERT INTO storage.objects (bucket_id, name) VALUES ('pdf-restrito', 'attached/' || v_book || '/' || v_ra || '_h31.pdf') ON CONFLICT (bucket_id, name) DO NOTHING;  -- 20261018211310 : l'objet existe
       PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
       EXECUTE 'SET LOCAL ROLE authenticated';
       v_res := public.fn_attach_received_asset_record(v_ra, v_book, 'pdf-restrito', 'attached/' || v_book || '/' || v_ra || '_h31.pdf', 'both');
@@ -445,6 +446,7 @@ BEGIN
       v_r2 := pg_temp.h31_run(v_src, v_lib, 'h31-t9.zip', 2, 'new_record', 'pending', NULL, 'zip');
       v_runs := v_runs || v_r2;
       v_ra2 := pg_temp.h31_recu(v_r2, 2, 72);
+      INSERT INTO storage.objects (bucket_id, name) VALUES ('pdf-restrito', 'attached/' || v_book || '/' || v_ra2 || '_h31.pdf') ON CONFLICT (bucket_id, name) DO NOTHING;  -- 20261018211310 : l'objet existe
       EXECUTE 'SET LOCAL ROLE authenticated';
       v_res := public.fn_attach_received_asset_record(v_ra2, v_book, 'pdf-restrito', 'attached/' || v_book || '/' || v_ra2 || '_h31.pdf', 'read');
       EXECUTE 'RESET ROLE';
@@ -636,6 +638,7 @@ BEGIN
       INSERT INTO ingest.partner_catalog_received_assets (run_id, staging_row_id, source_asset_id, asset_kind, title, mime_type, deposit_bucket, deposit_status, deposit_path, manifest_file)
       VALUES (v_r1, NULL, 171, 'pdf', 'H31 (PDF 171)', 'application/pdf', 'partner-catalog-deposits', 'deposited', 'received/' || v_r1 || '/171_h31.pdf', 'files/171_h31.pdf')
       RETURNING id INTO v_ra;
+      INSERT INTO storage.objects (bucket_id, name) VALUES ('pdf-restrito', 'attached/' || v_book || '/' || v_ra || '_h31.pdf') ON CONFLICT (bucket_id, name) DO NOTHING;  -- 20261018211310 : l'objet existe
       -- (a) le lecteur : refusé par la garde d'accès, aucun verrou
       SELECT xmax::text INTO v_x0 FROM ingest.partner_catalog_import_runs WHERE id = v_r1;
       BEGIN

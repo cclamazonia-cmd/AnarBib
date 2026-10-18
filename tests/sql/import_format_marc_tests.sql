@@ -47,6 +47,7 @@ BEGIN
   BEGIN
     v_res := public.fn_import_own_source();
     v_src := (v_res->>'source_id')::bigint;
+    INSERT INTO storage.objects (bucket_id, name, owner_id) VALUES ('catalogos_parceiros_raw', 'essai/export-pmb.marc', current_setting('request.jwt.claims', true)::json->>'sub') ON CONFLICT (bucket_id, name) DO UPDATE SET owner_id = EXCLUDED.owner_id;  -- 20261018211310 : le fichier versé par l'appelant
     v_res := public.fn_import_create(v_src, 'essai/export-pmb.marc', 'export-pmb.marc',
                                      p_detected_format := 'marc_iso2709');
     v_run := (v_res->>'run_id')::bigint;

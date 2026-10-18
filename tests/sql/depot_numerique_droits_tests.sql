@@ -61,7 +61,7 @@ BEGIN
   -- Les fichiers que les ressources acceptées désignent (T2, T6, T7) ; k.pdf
   -- n'existe QUE dans le seau public.
   INSERT INTO storage.objects (bucket_id, name) VALUES
-    ('pdf-restrito', 'books/x/d.pdf'), ('anarbib-pdf-public', 'books/x/f.pdf'),
+    ('pdf-restrito', 'books/' || v_draft || '/d.pdf'), ('anarbib-pdf-public', 'books/x/f.pdf'),
     ('anarbib-epub-public', 'books/x/j.epub'), ('anarbib-pdf-public', 'books/x/k.pdf')
   ON CONFLICT (bucket_id, name) DO NOTHING;
 
@@ -115,7 +115,7 @@ BEGIN
     IF v_hint IS DISTINCT FROM 'error.digital.justification_required' THEN v_txt := v_txt || 'cession=' || coalesce(v_hint, 'acceptee') || ' '; END IF;
     -- sous droits réservé, sans justification : permis
     INSERT INTO public.book_draft_digital_resources (book_draft_id, resource_type, usage_type, access_scope, storage_bucket, storage_path, rights_status)
-    VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/x/d.pdf', 'sob_direitos');
+    VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/' || v_draft || '/d.pdf', 'sob_direitos');
     EXECUTE 'RESET ROLE';
 
     -- bibliothèque ouverte : sous droits + public avec justification passe, sans justification non
@@ -223,7 +223,7 @@ BEGIN
     IF v_hint IS DISTINCT FROM 'error.digital.file_not_in_bucket' THEN v_txt := v_txt || 'absent-du-seau=' || coalesce(v_hint, 'accepte') || ' '; END IF;
     -- une ressource valide dont on change le chemin vers un fichier absent
     INSERT INTO public.book_draft_digital_resources (book_draft_id, resource_type, usage_type, access_scope, storage_bucket, storage_path, rights_status)
-    VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/x/d.pdf', 'sob_direitos') RETURNING id INTO v_r1;
+    VALUES (v_draft, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'pdf-restrito', 'books/' || v_draft || '/d.pdf', 'sob_direitos') RETURNING id INTO v_r1;
     v_hint := NULL;
     BEGIN UPDATE public.book_draft_digital_resources SET storage_path = 'books/x/absent.pdf' WHERE id = v_r1;
     EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT; END;
@@ -231,7 +231,7 @@ BEGIN
     -- un libellé seul ne rejuge pas le fichier
     UPDATE public.book_draft_digital_resources SET label = 'Libellé seul' WHERE id = v_r1;
     EXECUTE 'RESET ROLE';
-    IF (SELECT storage_path FROM public.book_draft_digital_resources WHERE id = v_r1) IS DISTINCT FROM 'books/x/d.pdf' THEN v_txt := v_txt || 'chemin-modifie '; END IF;
+    IF (SELECT storage_path FROM public.book_draft_digital_resources WHERE id = v_r1) IS DISTINCT FROM 'books/' || v_draft || '/d.pdf' THEN v_txt := v_txt || 'chemin-modifie '; END IF;
     IF v_txt = ''
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_txt); END IF;
