@@ -837,3 +837,9 @@ tests/sql/f25_cadence_commune_tests.sql
 # notice par n'importe lequel de ses contributeurs liés, plus seulement le premier — « Élisée Reclus: Geografia »,
 # Reclus après la coordination, manquait dans la liste des livres de Reclus.
 tests/sql/filtre_autorite_tous_contributeurs_tests.sql
+# Fichiers réservés (17/10/2026) : chaque bibliothèque gère les siens — politiques Storage versionnées,
+# ressources réservées liées à leur notice, attache et révocation bornées au chemin du livre.
+tests/sql/fichiers_reserves_par_bibliotheque_tests.sql
+# Écritures directes bornées (17/10/2026) : colonnes de gouvernance du profil par procédure, notes publiées
+# sans l'auteur·rice, réservations par les fonctions, ouvertures OAI lues par qui délibère.
+tests/sql/ecritures_directes_bornees_tests.sql

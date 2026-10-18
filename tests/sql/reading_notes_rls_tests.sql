@@ -162,10 +162,12 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN RESET ROLE; v_passed:=v_passed+1; END;
 
   -- ═══════════════════ B. SELECT visibilité (publiée) ════════════════════
-  v_t := 'B1 note publiée visible d''un lecteur d''une AUTRE biblio (réseau)';
+  -- 17/10/2026 (20261018211324) : par api.reading_notes_published_v1, sans l'auteur·rice ;
+  -- la table ne rend plus la note d'autrui en direct.
+  v_t := 'B1 note publiée visible d''un lecteur d''une AUTRE biblio (réseau), par la fonction';
   SET ROLE authenticated;
   PERFORM set_config('request.jwt.claims', json_build_object('sub',c_lib2_reader,'role','authenticated')::text, true);
-  SELECT count(*) INTO v_n FROM public.book_reading_notes WHERE work_id = v_work AND status='published';
+  SELECT count(*) INTO v_n FROM api.reading_notes_published_v1(v_work);
   RESET ROLE;
   IF v_n >= 2 THEN v_passed:=v_passed+1; ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
 

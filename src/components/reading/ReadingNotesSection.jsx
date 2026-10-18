@@ -35,10 +35,10 @@ export default function ReadingNotesSection({ workId }) {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await supabase.from('book_reading_notes')
-        .select('id, author_pseudonym, body, language, created_at, edited, author_user_id, status')
-        .eq('work_id', workId).eq('status', 'published')
-        .order('created_at', { ascending: false });
+      // Notes publiées sans l'identifiant de leur auteur·rice : la fonction
+      // rend is_mine à la place (17/10/2026).
+      const { data } = await supabase.schema('api')
+        .rpc('reading_notes_published_v1', { p_work_id: workId });
       setNotes(Array.isArray(data) ? data : []);
     } finally { setLoading(false); }
   }, [workId]);
@@ -60,7 +60,7 @@ export default function ReadingNotesSection({ workId }) {
     return () => { alive = false; };
   }, [user]);
 
-  const myNote = user ? notes.find(n => n.author_user_id === user.id) : null;
+  const myNote = user ? notes.find(n => n.is_mine) : null;
   const canWrite = !!target && !myNote;
 
   // pre-remplissage du pseudonyme (dernier utilise), sans ecraser une saisie.
@@ -166,7 +166,7 @@ export default function ReadingNotesSection({ workId }) {
       {/* Liste des notes publiées */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 18 }}>
         {notes.map(n => {
-          const mine = user && n.author_user_id === user.id;
+          const mine = !!(user && n.is_mine);
           if (mine && editing) return null; // remplacé par le formulaire d'édition ci-dessous
           return (
             <div key={n.id} style={{ padding: '12px 14px', borderRadius: 10, border: `1px solid ${mine ? 'rgba(96,165,250,.35)' : 'rgba(255,255,255,.08)'}`, background: 'rgba(0,0,0,.15)' }}>
