@@ -102,7 +102,7 @@ describe('la file et les listes ne montrent pas les reprises vierges', () => {
   const src = (f) => readFileSync(path.resolve(__dirname, '../pages/catalogacao', f), 'utf8');
 
   it('QueuePanel : chaque requête de la file active filtre retake_untouched', () => {
-    const s = src('QueuePanel.jsx');
+    const s = (src('queueOutils.js') + '\n' + src('QueuePanel.jsx'));
     const actives = s.match(/\.in\('status', statuses\)[^;\n]*/g) || [];
     expect(actives.length).toBeGreaterThan(0);
     for (const q of actives) expect(q).toContain(".eq('retake_untouched', false)");
