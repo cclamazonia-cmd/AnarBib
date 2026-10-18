@@ -172,7 +172,7 @@ describe('Importations MONTÉE sur le run v2 réel — avant les gestes', () => 
     const d8 = within(rangee('8')).getByTestId('known-detail');
     expect(d8.textContent).toContain(dire('review.report.updates.values', { b: '1993', a: '1995', n: '1994' }));
     expect(within(rangee('9')).getByTestId('known-detail-erased').textContent).toContain(dire('review.report.prepared.erased'));
-  });
+  }, 60000); // 19/10/2026 : 20 s ne suffisent pas sous charge (CI 10598084, charge ~40) ; le délai global reste 20 s
 
   it('les gestes, toutes les lignes cochées : Créer (1), Rapprocher (49), Préparer au compte des lignes préparables', async () => {
     await ouvrir();
