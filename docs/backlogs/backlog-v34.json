@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-18",
+    "maj": "2026-10-19",
     "releve": {
       "date": "2026-10-18",
       "commit": "9636773a"
@@ -660,10 +660,10 @@
               "fr": "Tests",
               "pt": "Testes"
             },
-            "3 068 + 211",
+            "3 076 + 211",
             {
-              "fr": "**3 068 tests JS** à la dernière passe complète au calme (17/10, 21 h 29 UTC, tout vert) ; le 18/10, la suite a été rejouée deux fois sur le poste pendant la CI et la suite complète de la session voisine (charge 31 à 41) : seuls des tests lents ont dépassé leurs 30 s, aucune assertion n'a rougi ; une passe au calme suit. **211 suites SQL** en CI (208 le 17/10 : **+3** — `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`) ; la suite des œuvres compte deux cas de plus (T6 réécrit, T9 neuf).",
-              "pt": "**3 068 testes JS** na última passagem completa em calma (17/10); em 18/10 a suíte rodou duas vezes sob a carga da CI e da vizinha: só testes lentos passaram dos 30 s, nenhuma asserção falhou. **211 suítes SQL** (**+3**: `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`)."
+              "fr": "**3 076 tests JS**, suite complète toute verte le 19/10 (+8 depuis le 17/10), rejouée sur le poste chargé par la CI et la session voisine (charge 30) avec un délai de 120 s par test : aucune assertion rouge. **211 suites SQL** en CI, inchangées depuis le relevé du 18/10 (208 le 17/10 : **+3** — `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`) ; la suite des œuvres compte deux cas de plus (T6 réécrit, T9 neuf).",
+              "pt": "**3 076 testes JS**, suíte completa toda verde em 19/10 (+8 desde 17/10), sob a carga da CI e da vizinha, com 120 s por teste: nenhuma asserção falhou. **211 suítes SQL** na CI, sem mudança desde 18/10 (**+3** desde 17/10: `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`)."
             }
           ],
           [
@@ -4220,6 +4220,10 @@
         {
           "fr": "**12/10, 21 h 15 — vu à l'écran par Xavier, connecté : « Tout fonctionne. »** Le Panneau (six crochets, deux modales, onze onglets) et la Bibliothèque (six sections, lots 4 et 5) sont conformes, geste par geste. Trois des cinq écrans sont donc faits : Catalogage (huit lots), Catalogue (quatre), Panneau (trois), Bibliothèque (cinq). `AccountPage` est descendu de lui-même à 74 Ko. **Reste** : `ImportacoesPage`, monté à 164 Ko avec H21 — à découper quand H34 sera posé (le voisin y travaille).",
           "pt": "**12/10, 21h15 — visto na tela por Xavier, conectado: « Tudo funciona. »** Painel e Biblioteca conformes. **Resta**: `ImportacoesPage` (164 Ko), a cortar quando H34 estiver pousado."
+        },
+        {
+          "fr": "**19/10, nuit — Catalogage, deux lots sans écran** : le panneau des lots sort de `CatalogacaoPage.jsx` dans `BatchesPanel.jsx` (`1d325cb6` : la page passe de 90 à **31 Ko**, le panneau fait 60,5 Ko) et les aides sans état de la file sortent de `QueuePanel.jsx` dans `queueOutils.js` (`4a406549` : 61,6 → **55,9 Ko**). Lignes déplacées par script, aucune réécrite ; les dix tests qui lisaient ces sources lisent les deux fichiers dans l'ordre d'avant. Lint propre, build vert, suite JS complète verte (3 076). Rien à voir à l'écran : aucun JSX n'a changé de place dans un composant. **Restent au-dessus de 60 Kio** : `ImportacoesPage.jsx` (165 Ko) et `BookDraftForm.jsx` (134 Ko), travaillés par la session voisine ; `AccountPage.jsx` (74 Ko), `AuthorDraftForm.jsx` (71 Ko) et `CatalogPage.jsx` (66 Ko), qui ne se réduisent plus qu'en coupant le JSX du composant principal — des lots à voir à l'écran, connecté, un à la fois.",
+          "pt": "**19/10, noite — Catalogação, dois lotes sem tela**: o painel dos lotes sai de `CatalogacaoPage.jsx` para `BatchesPanel.jsx` (`1d325cb6`: a página cai de 90 para **31 Ko**) e as funções auxiliares da fila saem de `QueuePanel.jsx` para `queueOutils.js` (`4a406549`: 61,6 → **55,9 Ko**). Linhas movidas por script; lint, build e suíte JS completa (3 076) verdes. **Acima de 60 KiB restam**: `ImportacoesPage` (165 Ko) e `BookDraftForm` (134 Ko), com a sessão vizinha; `AccountPage` (74), `AuthorDraftForm` (71) e `CatalogPage` (66), que só diminuem cortando o JSX — lotes a ver na tela, conectado."
         }
       ]
     },

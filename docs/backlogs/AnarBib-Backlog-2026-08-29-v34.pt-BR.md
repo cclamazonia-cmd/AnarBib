@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-18** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
 
-**Frescor dos constatos em 2026-10-18.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -113,7 +113,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 | Commits | **3 515** | +12 desde 17/10 (`075ec56f`), no espelho nu. Eu: três correções do catálogo (obra, texto de autor, livros de uma autoridade). A vizinha: biografias romenas, 59 assuntos em onze línguas, ficheiros reservados por biblioteca, escritas diretas limitadas, a ISBD calculada sozinha. |
 | Arquivos `src/` | **659** | +1 desde 17/10; 253 ficheiros em `src/tests`. **Acima de 60 Ko**: `ImportacoesPage` 165, `BookDraftForm` 134, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, `QueuePanel` 62. |
 | Chaves i18n | **7 751** | paridade estrita nas onze locales (7 751 cada); −6 desde 17/10: o botão da ISBD desapareceu, a confirmação de «Desligar» entrou. |
-| Testes | **3 068 + 211** | **3 068 testes JS** na última passagem completa em calma (17/10); em 18/10 a suíte rodou duas vezes sob a carga da CI e da vizinha: só testes lentos passaram dos 30 s, nenhuma asserção falhou. **211 suítes SQL** (**+3**: `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`). |
+| Testes | **3 076 + 211** | **3 076 testes JS**, suíte completa toda verde em 19/10 (+8 desde 17/10), sob a carga da CI e da vizinha, com 120 s por teste: nenhuma asserção falhou. **211 suítes SQL** na CI, sem mudança desde 18/10 (**+3** desde 17/10: `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`). |
 | Marcadores de dívida | **22** | pelo método fixo — **4 falsos**. **18 reais, 6 em `src/`**; sem mudança. |
 
 ---
@@ -832,7 +832,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
 
@@ -1921,4 +1921,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-18. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
