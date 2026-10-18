@@ -368,3 +368,30 @@ export function construireZonesIsbd(form, t) {
   return [buildIsbdZone0, buildIsbdZone1, buildIsbdZone2, buildIsbdZone3, buildIsbdZone4,
     buildIsbdZone5, buildIsbdZone6, buildIsbdZone7, buildIsbdZone8].map((fn) => fn());
 }
+
+// ── Paquet ISBD (18/10/2026) ──
+// Plus de bouton « Préparer l'ISBD » : le panneau de révision affiche ce paquet
+// en direct, et chaque enregistrement du brouillon l'écrit dans
+// marc_json.anarbib_isbd. `precedent` = le paquet déjà enregistré : si aucune
+// zone n'a bougé, on garde sa date, qui marque ainsi la dernière modification
+// réelle de la description (et non le dernier clic sur « Enregistrer »).
+export function paquetIsbd(form, t, zoneLabels, precedent = null) {
+  const zones = {};
+  construireZonesIsbd(form, t).forEach((valeur, i) => {
+    zones[String(i)] = { label: zoneLabels[String(i)], value: valeur || null };
+  });
+  const statement = Object.values(zones).map(z => z.value).filter(Boolean).join('. - ');
+  const nonEmptyCount = Object.values(zones).filter(z => z.value).length;
+  const inchange = !!precedent?.generated_at && precedent.statement === statement
+    && Object.keys(zones).every(k => (precedent.zones?.[k]?.value || null) === zones[k].value);
+  return {
+    statement, zones, nonEmptyCount,
+    data: {
+      enabled: true,
+      standard: 'IFLA_ISBD_integrada_2011_guided_local',
+      generated_at: inchange ? precedent.generated_at : new Date().toISOString(),
+      statement,
+      zones,
+    },
+  };
+}

@@ -9,7 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import {
-  construireZonesIsbd, buildShelfLabel, normalizeBnToCandidate, roleKeysForMaterial,
+  construireZonesIsbd, paquetIsbd, buildShelfLabel, normalizeBnToCandidate, roleKeysForMaterial,
   inferContributorRole, parseViafId, EMPTY_FORM, SERIAL_TYPES, ROLE_KEYS_TEXT,
 } from '../lib/catalogacao/bookDraft.js';
 
@@ -49,6 +49,37 @@ describe('construireZonesIsbd', () => {
 
   it('un formulaire vide ne rend que la zone 0', () => {
     expect(construireZonesIsbd({}, t).filter(Boolean)).toEqual(['‹catalogacao.isbd.zone0.textImmediate›']);
+  });
+});
+
+// 18/10/2026 : l'ISBD n'attend plus de bouton, il est réécrit à chaque
+// enregistrement du brouillon ; sa date ne bouge que si une zone change.
+describe('paquetIsbd', () => {
+  const labels = Object.fromEntries([...'012345678'].map(z => [z, `Z${z}`]));
+  const fiche = { titulo: 'A Anarquia', autor: 'Malatesta', paginas: '80' };
+
+  it('assemble zones, énoncé et compte depuis la fiche', () => {
+    const p = paquetIsbd(fiche, t, labels);
+    expect(p.zones['1']).toEqual({ label: 'Z1', value: 'A Anarquia / Malatesta' });
+    expect(p.zones['2']).toEqual({ label: 'Z2', value: null });
+    expect(p.statement).toBe('‹catalogacao.isbd.zone0.textImmediate›. - A Anarquia / Malatesta. - 80 p.');
+    expect(p.nonEmptyCount).toBe(3);
+    expect(p.data).toMatchObject({ enabled: true, standard: 'IFLA_ISBD_integrada_2011_guided_local', statement: p.statement, zones: p.zones });
+  });
+
+  it('garde la date du paquet enregistré tant que rien ne change', () => {
+    const precedent = { ...paquetIsbd(fiche, t, labels).data, generated_at: '2026-01-01T00:00:00.000Z' };
+    expect(paquetIsbd(fiche, t, labels, precedent).data.generated_at).toBe('2026-01-01T00:00:00.000Z');
+    // des libellés de zone dans une autre langue ne comptent pas comme une modification
+    const autresLabels = Object.fromEntries([...'012345678'].map(z => [z, `L${z}`]));
+    expect(paquetIsbd(fiche, t, autresLabels, precedent).data.generated_at).toBe('2026-01-01T00:00:00.000Z');
+  });
+
+  it('renouvelle la date dès qu’une zone change', () => {
+    const precedent = { ...paquetIsbd(fiche, t, labels).data, generated_at: '2026-01-01T00:00:00.000Z' };
+    expect(paquetIsbd({ ...fiche, edicao: '2. ed.' }, t, labels, precedent).data.generated_at).not.toBe('2026-01-01T00:00:00.000Z');
+    // un paquet sans date (ancien format) en reçoit une
+    expect(paquetIsbd(fiche, t, labels, { statement: precedent.statement }).data.generated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   });
 });
 
@@ -102,7 +133,7 @@ describe('le formulaire passe par le module', () => {
   it('BookDraftForm importe le module et ne redéfinit plus ses fonctions', () => {
     const src = readFileSync('src/pages/catalogacao/BookDraftForm.jsx', 'utf8');
     expect(src).toContain("from '@/lib/catalogacao/bookDraft'");
-    expect(src).toContain('construireZonesIsbd(form, t)');
+    expect(src).toContain('paquetIsbd(form, t, ZONE_LABELS)');
     for (const nom of ['function buildIsbdZone0', 'function normalizeBnToCandidate', 'function buildShelfLabel', 'const EMPTY_FORM']) {
       expect(src.includes(nom), nom).toBe(false);
     }

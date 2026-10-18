@@ -35,7 +35,7 @@ import { renderMaterialSection, renderRegistryField } from './CatalogFieldRender
 import Modal from '@/components/ui/Modal';
 
 // Constantes et fonctions pures du formulaire : src/lib/catalogacao/bookDraft.js (E6, lot 1)
-import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, provenanceFromCandidate, EMPTY_FORM, construireZonesIsbd } from '@/lib/catalogacao/bookDraft';
+import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, provenanceFromCandidate, EMPTY_FORM, paquetIsbd } from '@/lib/catalogacao/bookDraft';
 
 // ═══════════════════════════════════════════════════════════
 // BookDraftForm
@@ -174,10 +174,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     return () => window.removeEventListener('anarbib:draft-contributor-linked', surRattachement);
   }, [form.id]);
   // Sélecteur d'autorité (volet préventif) : un panneau de recherche ouvert à la fois
-
-  // ── ISBD state ─────────────────────────────────────────
-  const [isbdEnabled, setIsbdEnabled] = useState(false);
-  const [isbdData, setIsbdData] = useState(null);
 
   // ── Digital resources state ────────────────────────────
   const [digitalResources, setDigitalResources] = useState([]);
@@ -415,8 +411,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setCoverFile(null);
     setCoverPreviewUrl('');
     setContributors([{ position: 1, name: '', role: 'autor', is_primary: true }]);
-    setIsbdEnabled(false);
-    setIsbdData(null);
     // l'onglet de revision revient au résumé dans ReviewPanel (effet sur draftId)
     setDigitalResources([]);
     // le formulaire d'édition d'une ressource numérique se referme dans DigitalResourcesPanel (effet sur draftId)
@@ -1107,45 +1101,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   };
 
 
-  function prepareIsbd() {
-    const zones = {};
-    construireZonesIsbd(form, t).forEach((valeur, i) => {
-      zones[String(i)] = { label: ZONE_LABELS[String(i)], value: valeur || null };
-    });
-    const statement = Object.values(zones).map(z => z.value).filter(Boolean).join('. - ');
-    const nonEmptyCount = Object.values(zones).filter(z => z.value).length;
-
-    const data = {
-      enabled: true,
-      standard: 'IFLA_ISBD_integrada_2011_guided_local',
-      generated_at: new Date().toISOString(),
-      statement,
-      zones,
-    };
-
-    setIsbdEnabled(true);
-    setIsbdData({ statement, zones, nonEmptyCount, data });
-
-    // Sync into marc_json
-    try {
-      const raw = f('marc_json') ? JSON.parse(f('marc_json')) : {};
-      raw.anarbib_isbd = data;
-      set('marc_json', JSON.stringify(raw, null, 2));
-    } catch {}
-
-    setMsg({ text: t({ id: 'catalogacao.msg.isbdPrepared' }, { count: nonEmptyCount }), kind: 'ok' });
-    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-  }
-
-  function clearIsbd() {
-    setIsbdEnabled(false);
-    setIsbdData(null);
-    try {
-      const raw = f('marc_json') ? JSON.parse(f('marc_json')) : {};
-      delete raw.anarbib_isbd;
-      set('marc_json', JSON.stringify(raw, null, 2));
-    } catch {}
-  }
+  // 18/10/2026 : plus de bouton « Préparer / Effacer l'ISBD ». L'aperçu du
+  // panneau de révision suit la fiche en direct ; handleSave écrit le paquet
+  // dans marc_json.anarbib_isbd à chaque enregistrement (paquetIsbd garde la
+  // date tant que la description n'a pas changé).
+  const isbdData = paquetIsbd(form, t, ZONE_LABELS);
 
   // ═══════════════════════════════════════════════════════
   // Duplicate detection (ISBN + title/author)
@@ -1261,6 +1221,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // `f()` lit l'état de CE rendu, d'avant l'envoi — la charge utile
       // repartait sans le chemin du fichier qu'on venait d'envoyer.
       const envoye = coverFile ? await uploadCover() : null;
+      // ISBD recalculé à chaque enregistrement (18/10/2026) : le paquet suit la
+      // fiche sans clic ; sa date ne bouge que si une zone a changé.
+      const marcLu = f('marc_json') ? JSON.parse(f('marc_json')) : {};
+      const marc = marcLu && typeof marcLu === 'object' && !Array.isArray(marcLu)
+        ? { ...marcLu, anarbib_isbd: paquetIsbd(form, t, ZONE_LABELS, marcLu.anarbib_isbd).data }
+        : marcLu;
       const isUpdate = !!f('id');
       // 18/10/2026 : le texte d'auteur part recomposé depuis les contributeurs, DANS cet envoi.
       // Il ne l'était qu'après (syncAutorFromContributors, plus bas) : le brouillon gardait le
@@ -1315,7 +1281,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         // posées dans l'état et jamais envoyées : 0 capa attribuée sur 250.
         cover_source: envoye ? 'manual' : (f('cover_source') || null),
         cover_license: envoye ? null : (f('cover_license') || null),
-        marc_json: f('marc_json') ? JSON.parse(f('marc_json')) : null,
+        marc_json: marc,
         // Acquisition
         acquisition_mode: f('acquisition_mode') || null,
         acquisition_date: f('acquisition_date') || null,
@@ -1411,6 +1377,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         ...prev,
         id: String(result.id),
         batch_id: lotGarde,
+        // le champ MARC JSON montre le paquet ISBD tel qu'il vient d'être écrit
+        marc_json: marc ? JSON.stringify(marc, null, 2) : prev.marc_json,
         ...(result.owner_library_id ? { owner_library_id: result.owner_library_id, owner_library: result.owner_library || prev.owner_library } : {}),
       }));
 
@@ -1641,21 +1609,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     if (r.id) loadContributors(r.id, r.published_book_id);
     // Load digital resources
     if (r.id) loadDigitalResources(r.id);
-    // Restore ISBD state from marc_json if available
-    if (r.marc_json?.anarbib_isbd?.enabled) {
-      const isbd = r.marc_json.anarbib_isbd;
-      setIsbdEnabled(true);
-      const nonEmptyCount = isbd.zones ? Object.values(isbd.zones).filter(z => z?.value).length : 0;
-      setIsbdData({
-        statement: isbd.statement || '',
-        zones: isbd.zones || {},
-        nonEmptyCount,
-        data: isbd,
-      });
-    } else {
-      setIsbdEnabled(false);
-      setIsbdData(null);
-    }
   }
 
   // ── Registry-driven context (Lot 2: toutes les entrées passent par le registre) ──
@@ -2425,8 +2378,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         {/* ═══ Painel de revisão da ficha (E6 lot 5 : ReviewPanel) ═══ */}
         <ReviewPanel f={f} draftId={f('id')}
           materialLabel={MATERIAL_TYPES.find(m => m.value === materialType)?.label || materialType}
-          isbdEnabled={isbdEnabled} isbdData={isbdData} zoneLabels={ZONE_LABELS}
-          onPrepareIsbd={prepareIsbd} onClearIsbd={clearIsbd} />
+          isbdData={isbdData} zoneLabels={ZONE_LABELS} />
 
         {/* ── Action buttons ─────────────────────────── */}
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>

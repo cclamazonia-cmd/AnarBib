@@ -2,36 +2,24 @@
 // Le « Painel de revisão da ficha » du formulaire de notice, sorti de
 // BookDraftForm.jsx sans en changer une ligne de logique : trois onglets —
 // résumé de la fiche et architecture documentale, sortie publique (ligne de
-// catalogue, ouverture ISBD), pacote ISBD (énoncé et zones 0 à 8) — et les
-// boutons « préparer / effacer » l'ISBD. Le panneau ne fait qu'AFFICHER : l'état
-// ISBD, sa préparation (qui écrit marc_json) et les libellés de zones restent au
+// catalogue, ouverture ISBD), pacote ISBD (énoncé et zones 0 à 8). Le panneau ne
+// fait qu'AFFICHER : le paquet ISBD (calculé en direct depuis la fiche, écrit
+// dans marc_json à chaque enregistrement) et les libellés de zones restent au
 // parent, qui les passe en props ; seul l'onglet courant vit ici, remis sur le
 // résumé quand le brouillon change (comme resetForm le faisait pour la fiche vierge).
+// 18/10/2026 : boutons « préparer / effacer » l'ISBD retirés — l'aperçu suit la fiche.
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-export default function ReviewPanel({ f, draftId, materialLabel, isbdEnabled, isbdData, zoneLabels, onPrepareIsbd, onClearIsbd }) {
+export default function ReviewPanel({ f, draftId, materialLabel, isbdData, zoneLabels }) {
   const { formatMessage: t } = useIntl();
   const [reviewTab, setReviewTab] = useState('summary');
   useEffect(() => { setReviewTab('summary'); }, [draftId]);
 
   return (
     <div className="cat-material-section" style={{ marginTop: 18 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 6 }}>
+      <div style={{ marginBottom: 10 }}>
         <h4 style={{ margin: 0 }}>{t({id:'catalogacao.ui.reviewTitle'})}</h4>
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span className={`cat-pill ${isbdEnabled ? 'ok' : 'warn'}`}>
-            {isbdEnabled ? t({id:'catalogacao.ui.isbdReady'}) : t({id:'catalogacao.ui.isbdNotReady'})}
-          </span>
-          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-            onClick={onPrepareIsbd}>
-            {isbdEnabled ? t({id:'catalogacao.ui.isbdUpdate'}) : t({id:'catalogacao.ui.isbdPrepare'})}
-          </button>
-          {isbdEnabled && (
-            <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-              onClick={onClearIsbd}>{t({id:'catalogacao.ui.clearIsbd'})}</button>
-          )}
-        </div>
       </div>
       <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 10 }}>
         {t({id:'catalogacao.ui.reviewHint'})}
@@ -145,36 +133,28 @@ export default function ReviewPanel({ f, draftId, materialLabel, isbdEnabled, is
           <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 10 }}>
             {t({id:'catalogacao.isbd.hint'})}
           </div>
-          {isbdData ? (
-            <>
-              <div style={{ fontSize: '.78rem', marginBottom: 10 }}>
-                <strong>ISBD:</strong> {t({id:'catalogacao.isbd.zonesFilled'}, {count: isbdData.nonEmptyCount})}
-              </div>
-              {/* Statement */}
-              <div className="cat-field" style={{ marginBottom: 12 }}>
-                <label>{t({id:'catalogacao.isbd.prepared'})}</label>
-                <textarea value={isbdData.statement} readOnly rows={3}
-                  style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.2)', color: '#f4f4f4', fontSize: '.82rem', resize: 'vertical', fontFamily: 'inherit' }}
+          <div style={{ fontSize: '.78rem', marginBottom: 10 }}>
+            <strong>ISBD:</strong> {t({id:'catalogacao.isbd.zonesFilled'}, {count: isbdData.nonEmptyCount})}
+          </div>
+          {/* Statement */}
+          <div className="cat-field" style={{ marginBottom: 12 }}>
+            <label>{t({id:'catalogacao.isbd.prepared'})}</label>
+            <textarea value={isbdData.statement} readOnly rows={3}
+              style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.2)', color: '#f4f4f4', fontSize: '.82rem', resize: 'vertical', fontFamily: 'inherit' }}
+            />
+          </div>
+          {/* Individual zones */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: 10 }}>
+            {['0','1','2','3','4','5','6','7','8'].map(z => (
+              <div key={z} className="cat-field">
+                <label>{t({id:'catalogacao.isbd.zonePrefix'}, {zone: z})} — {zoneLabels[z]}</label>
+                <textarea value={isbdData.zones[z]?.value || ''} readOnly rows={2}
+                  style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.08)', background: isbdData.zones[z]?.value ? 'rgba(0,0,0,.2)' : 'rgba(0,0,0,.08)', color: isbdData.zones[z]?.value ? '#f4f4f4' : 'var(--brand-muted, #666)', fontSize: '.78rem', resize: 'vertical', fontFamily: 'inherit' }}
+                  placeholder={t({ id: 'catalogacao.ph.notPrepared' })}
                 />
               </div>
-              {/* Individual zones */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: 10 }}>
-                {['0','1','2','3','4','5','6','7','8'].map(z => (
-                  <div key={z} className="cat-field">
-                    <label>{t({id:'catalogacao.isbd.zonePrefix'}, {zone: z})} — {zoneLabels[z]}</label>
-                    <textarea value={isbdData.zones[z]?.value || ''} readOnly rows={2}
-                      style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.08)', background: isbdData.zones[z]?.value ? 'rgba(0,0,0,.2)' : 'rgba(0,0,0,.08)', color: isbdData.zones[z]?.value ? '#f4f4f4' : 'var(--brand-muted, #666)', fontSize: '.78rem', resize: 'vertical', fontFamily: 'inherit' }}
-                      placeholder={t({ id: 'catalogacao.ph.notPrepared' })}
-                    />
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: '16px 0', textAlign: 'center' }}>
-              {t({id:'catalogacao.isbd.notGenerated'})}
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       )}
     </div>

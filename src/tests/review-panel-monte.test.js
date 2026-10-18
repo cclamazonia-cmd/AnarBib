@@ -8,8 +8,9 @@
 // que ni lint, ni build, ni suite ne verraient casser :
 //   1. le panneau est MONTÉ après la grille des champs, avant les exemplaires
 //      initiaux ;
-//   2. l'état ISBD, sa préparation (qui écrit marc_json) et les libellés de
-//      zones restent au parent et lui sont passés en props ;
+//   2. le paquet ISBD (calculé en direct, écrit dans marc_json à chaque
+//      enregistrement — 18/10/2026, plus de bouton « Préparer / Effacer ») et
+//      les libellés de zones restent au parent et lui sont passés en props ;
 //   3. le panneau n'écrit rien : ni formulaire, ni état ISBD, ni brouillon ;
 //   4. l'onglet courant vit dans le panneau et revient au résumé quand le
 //      brouillon change.
@@ -37,24 +38,31 @@ describe('panneau de révision de la fiche (E6 lot 5) — réellement monté', (
     expect(form.indexOf("import ReviewPanel from './ReviewPanel';")).toBeGreaterThan(-1);
   });
 
-  it('reçoit l’ISBD du parent, qui garde sa préparation', () => {
+  it('reçoit du parent l’ISBD calculé en direct', () => {
     const mount = form.indexOf('<ReviewPanel');
     const props = form.slice(mount, form.indexOf('/>', mount));
     expect(props).toMatch(/draftId=\{f\('id'\)\}/);
-    expect(props).toMatch(/isbdEnabled=\{isbdEnabled\} isbdData=\{isbdData\} zoneLabels=\{ZONE_LABELS\}/);
-    expect(props).toMatch(/onPrepareIsbd=\{prepareIsbd\} onClearIsbd=\{clearIsbd\}/);
+    expect(props).toMatch(/isbdData=\{isbdData\} zoneLabels=\{ZONE_LABELS\}/);
     expect(props).toMatch(/materialLabel=\{MATERIAL_TYPES\.find\(m => m\.value === materialType\)\?\.label \|\| materialType\}/);
-    for (const stays of ['function prepareIsbd()', 'function clearIsbd()', 'const ZONE_LABELS = {', 'const [isbdEnabled, setIsbdEnabled]']) {
-      expect(form.includes(stays), `${stays} devrait rester dans BookDraftForm`).toBe(true);
+    expect(form).toContain('const ZONE_LABELS = {');
+    expect(form).toContain('const isbdData = paquetIsbd(form, t, ZONE_LABELS);');
+    // plus de préparation manuelle ni d'état ISBD à part
+    for (const gone of ['function prepareIsbd', 'function clearIsbd', 'setIsbdEnabled', 'setIsbdData', 'onPrepareIsbd', 'onClearIsbd']) {
+      expect(form.includes(gone), `${gone} encore dans BookDraftForm`).toBe(false);
+      expect(panel.includes(gone), `${gone} encore dans ReviewPanel`).toBe(false);
     }
   });
 
+  it('chaque enregistrement du brouillon écrit le paquet ISBD dans marc_json', () => {
+    const save = form.slice(form.indexOf('async function handleSave'), form.indexOf('async function handlePublish'));
+    expect(save).toMatch(/anarbib_isbd: paquetIsbd\(form, t, ZONE_LABELS, marcLu\.anarbib_isbd\)\.data/);
+    expect(save).toMatch(/marc_json: marc,/);
+  });
+
   it('n’écrit rien : ni formulaire, ni ISBD, ni brouillon', () => {
-    for (const forbidden of ['setForm(', 'setMany(', "set('", 'setIsbd', 'setDraftState', "f('marc_json')", 'construireZonesIsbd']) {
+    for (const forbidden of ['setForm(', 'setMany(', "set('", 'setIsbd', 'setDraftState', "f('marc_json')", 'construireZonesIsbd', 'paquetIsbd']) {
       expect(panel.includes(forbidden), `${forbidden} dans ReviewPanel`).toBe(false);
     }
-    expect(panel).toMatch(/onClick=\{onPrepareIsbd\}/);
-    expect(panel).toMatch(/onClick=\{onClearIsbd\}/);
     expect(panel).toMatch(/zoneLabels\[z\]/);
   });
 
