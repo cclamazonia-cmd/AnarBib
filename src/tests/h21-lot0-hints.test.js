@@ -123,7 +123,7 @@ describe('H21 lot 0 — les chaînes d\'écran et leurs paramètres', () => {
 
   it('les écrans emploient ces clés avec ces paramètres', () => {
     const imp = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
-    const cat = readFileSync(path.resolve(__dirname, '../pages/catalogacao/CatalogacaoPage.jsx'), 'utf8');
+    const cat = (readFileSync(path.resolve(__dirname, '../pages/catalogacao/CatalogacaoPage.jsx'), 'utf8') + '\n' + readFileSync(path.resolve(__dirname, '../pages/catalogacao/BatchesPanel.jsx'), 'utf8'));
     expect(imp).toMatch(/'importacoes\.fila\.promotedPartial' \}, \{ created, asked: ids\.length \}/);
     expect(cat).toMatch(/'catalogacao\.batch\.review\.afterReview' \}, \{ n: ajouts \}/);
   });

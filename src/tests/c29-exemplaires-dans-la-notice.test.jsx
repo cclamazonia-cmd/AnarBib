@@ -346,7 +346,7 @@ describe('ExemplaresPanel — modifier sans voir le brouillon (lot 3)', () => {
 
 describe('contrat de montage (source)', () => {
   const form = lire('src/pages/catalogacao/BookDraftForm.jsx');
-  const page = lire('src/pages/catalogacao/CatalogacaoPage.jsx');
+  const page = (lire('src/pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('src/pages/catalogacao/BatchesPanel.jsx'));
   const editeur = lire('src/pages/catalogacao/ExemplarDraftForm.jsx');
   const panneau = lire('src/pages/catalogacao/ExemplaresPanel.jsx');
 

@@ -58,7 +58,7 @@ describe('les trois éditeurs', () => {
       expect(s).toContain(`t({ id: '${cle}' }`);
       expect(s).toMatch(/onNavigateTab \}\) \{/);
     }
-    const page = src('CatalogacaoPage.jsx');
+    const page = (src('CatalogacaoPage.jsx') + '\n' + src('BatchesPanel.jsx'));
     expect(page.match(/onChanged=\{refreshAll\} onNavigateTab=\{switchTab\} \/>/g)).toHaveLength(2);
   });
 });

@@ -174,7 +174,7 @@ const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/l
 const lire = (rel) => readFileSync(path.resolve(__dirname, '..', rel), 'utf8');
 const IMPORTACOES = lire('pages/importacoes/ImportacoesPage.jsx');
 const WIZARD = lire('pages/importacoes/ImportWizard.jsx');
-const CATALOGACAO = lire('pages/catalogacao/CatalogacaoPage.jsx');
+const CATALOGACAO = (lire('pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('pages/catalogacao/BatchesPanel.jsx'));
 const MIGRATION = readFileSync(path.resolve(__dirname, '../../supabase/migrations/20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe.sql'), 'utf8');
 
 // Le corps d'une fonction du texte, de sa déclaration à la suivante.

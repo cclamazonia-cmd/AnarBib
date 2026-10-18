@@ -29,7 +29,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const page = readFileSync(path.resolve(here, '..', 'pages/catalogacao/CatalogacaoPage.jsx'), 'utf8');
+const page = (readFileSync(path.resolve(here, '..', 'pages/catalogacao/CatalogacaoPage.jsx'), 'utf8') + '\n' + readFileSync(path.resolve(here, '..', 'pages/catalogacao/BatchesPanel.jsx'), 'utf8'));
 
 // Le tableau TABS, de son ouverture à sa fermeture.
 const debutTabs = page.indexOf('const TABS = [');

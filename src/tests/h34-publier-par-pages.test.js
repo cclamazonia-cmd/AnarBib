@@ -102,7 +102,7 @@ describe('peutRouvrirRevision — un lot « publishing » se rouvre (administrat
 });
 
 describe('le catalogage : « Publier le lot » par pages, « Reprendre la publication »', () => {
-  const src = lire('src/pages/catalogacao/CatalogacaoPage.jsx');
+  const src = (lire('src/pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('src/pages/catalogacao/BatchesPanel.jsx'));
   it('le seul appel de publish_catalog_batch passe par la boucle des pages', () => {
     const appels = [...src.matchAll(/rpc\('publish_catalog_batch'/g)];
     expect(appels).toHaveLength(1);

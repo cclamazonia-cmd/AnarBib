@@ -76,7 +76,7 @@ const lire = (rel) => readFileSync(path.resolve(__dirname, rel), 'utf8');
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');
 const MIGRATION = readFileSync(path.join(MIGRATIONS,
   readdirSync(MIGRATIONS).find((f) => f.endsWith('_h21_lot5_une_divergence_signalee.sql'))), 'utf8');
-const CATALOGACAO = lire('../pages/catalogacao/CatalogacaoPage.jsx');
+const CATALOGACAO = (lire('../pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('../pages/catalogacao/BatchesPanel.jsx'));
 const EDITEUR = lire('../pages/catalogacao/BookDraftForm.jsx');
 const intl = createIntl({ locale: 'fr', messages: fr });
 const dire = (id, valeurs) => intl.formatMessage({ id }, valeurs);
