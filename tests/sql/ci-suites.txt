@@ -843,3 +843,7 @@ tests/sql/fichiers_reserves_par_bibliotheque_tests.sql
 # Écritures directes bornées (17/10/2026) : colonnes de gouvernance du profil par procédure, notes publiées
 # sans l'auteur·rice, réservations par les fonctions, ouvertures OAI lues par qui délibère.
 tests/sql/ecritures_directes_bornees_tests.sql
+# Étape 4 du cadrage fédéralisme ASB ↔ AnarBib (19/10/2026) : le lien de lecture d'une notice moissonnée
+# (dc:identifier en http(s)) devient un lien externe du brouillon puis de la notice, attribué à la source ;
+# dc:contributor arrive en « outro », jamais en auteur principal.
+tests/sql/oai_liens_externes_tests.sql

@@ -241,6 +241,9 @@ export interface MappedRecord {
   // mappedExtras (marc.ts) les range dans normalized_payload.contributors, que
   // ingest.fn_import_row_as_book lit avec leur rôle.
   contributors?: { name: string; nature: string | null; role: string; roleCode: string; primary: boolean }[];
+  // Les adresses http(s) lues en dc:identifier (page de lecture d'un entrepôt
+  // de textes en ligne). La conversion en brouillon en fait des liens externes.
+  externalLinks?: string[];
   itemType: string | null;
   externalKey: string | null;
   notes: string | null;
@@ -297,9 +300,16 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
   // ni un ISSN, quel que soit son nombre de chiffres : l'heuristique ci-dessous
   // comptait 10 ou 13 « chiffres » dans « https://…/lire/1234567890 » et en
   // faisait l'ISBN de la notice (etape 4 du cadrage federalisme, 18/10/2026).
+  // Les adresses, elles, sont gardées (une fois chacune, dans l'ordre) : chez
+  // un entrepôt de textes en ligne, c'est le lien de lecture de la notice.
   let isbn: string | null = null;
   let issn: string | null = null;
+  const externalLinks: string[] = [];
   for (const id of allTexts(xml, 'identifier')) {
+    if (/^https?:\/\/\S+$/i.test(id)) {
+      if (!externalLinks.includes(id)) externalLinks.push(id);
+      continue;
+    }
     if (/^(https?:\/\/|oai:)/i.test(id)) continue;
     const bare = id.replace(/^(ISBN|ISSN)\s*:?\s*/i, '');
     const digits = bare.replace(/[^0-9Xx]/g, '');
@@ -313,6 +323,7 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
     responsibilityStatement: creators.length ? creators.join('; ') : null,
     authorsArray: creators,
     contributors: responsabilites,
+    externalLinks,
     publisher: firstText(xml, 'publisher'),
     placeOfPublication: null,
     publicationYear: year4(firstText(xml, 'date')),

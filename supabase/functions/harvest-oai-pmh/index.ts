@@ -377,6 +377,13 @@ Deno.serve(async (req) => {
             // H17 / H18 : pages, collection, classification, responsabilités…
             // d'une notice MARC moissonnée (rien pour du Dublin Core).
             ...mappedExtras(mapped as Record<string, unknown>),
+            // Étape 4 du cadrage fédéralisme (18/10/2026) : les adresses de
+            // lecture lues en dc:identifier. ingest.fn_create_book_drafts_from_import_rows
+            // en fait des ressources « lien externe » du brouillon, attribuées
+            // à la source ; la publication les recopie. Absente quand il n'y en a pas.
+            ...(Array.isArray(mapped.externalLinks) && (mapped.externalLinks as string[]).length
+              ? { external_links: mapped.externalLinks }
+              : {}),
             notes: (mapped as { notes?: string | null }).notes ?? null,
             parser_version: parserVersion,
             oai_metadata_prefix: prefix,

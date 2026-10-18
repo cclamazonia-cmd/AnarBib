@@ -584,6 +584,32 @@ describe("T18 — dc:contributor n'est pas un auteur", () => {
   });
 });
 
+describe("T19 — l'adresse du texte moissonné est gardée dans la ligne", () => {
+  // Une notice d'un entrepôt de textes en ligne n'a de sens chez nous qu'avec
+  // son lien de lecture. La conversion en brouillon en fait une ressource
+  // « lien externe » (ingest.fn_create_book_drafts_from_import_rows).
+  it('les dc:identifier en http(s) vont dans normalized_payload.external_links, une fois chacun', async () => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', [
+      'https://asb.invalid/lire/entre-paysans',
+      'oai:asb.invalid:texte:12',
+      'https://asb.invalid/lire/entre-paysans',
+      'HTTP://miroir.invalid/entre-paysans',
+      'ISBN:9788575591234',
+      'ftp://asb.invalid/entre-paysans.pdf',
+    ])])])();
+    const l = lignesInserees(r.ecrits)[0];
+    expect(l.normalized_payload.external_links).toEqual([
+      'https://asb.invalid/lire/entre-paysans',
+      'HTTP://miroir.invalid/entre-paysans',
+    ]);
+  });
+
+  it('sans adresse, la clé est absente (rien à convertir)', async () => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', ['ISBN:9788575591234'])])])();
+    expect(lignesInserees(r.ecrits)[0].normalized_payload).not.toHaveProperty('external_links');
+  });
+});
+
 describe('T15 — une notice MARC qui ne porte que des mots-clés est gardée (H27)', () => {
   it('001 + 653 seulement → une ligne, mots-clés dans normalized_payload.keywords', async () => {
     const seulMotsCles = `<record><header><identifier>oai:x:653</identifier><datestamp>2026-08-01</datestamp></header><metadata>` +
