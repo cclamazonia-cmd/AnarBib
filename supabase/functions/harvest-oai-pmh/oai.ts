@@ -237,6 +237,10 @@ export interface MappedRecord {
   subjectsArray: string[];
   // H27 : les mots-clés libres d'une notice MARC (610 / 653), à part des vedettes.
   keywordsArray?: string[];
+  // H18 : les responsabilités structurées, même forme que celles de marc.ts ;
+  // mappedExtras (marc.ts) les range dans normalized_payload.contributors, que
+  // ingest.fn_import_row_as_book lit avec leur rôle.
+  contributors?: { name: string; nature: string | null; role: string; roleCode: string; primary: boolean }[];
   itemType: string | null;
   externalKey: string | null;
   notes: string | null;
@@ -274,9 +278,18 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
     subtitle = clean(rawTitle.slice(idx + 3));
   }
 
+  // dc:creator est l'auteur ; dc:contributor, « une autre responsabilité »
+  // (traduction, préface, illustration…) que Dublin Core ne précise pas. Les
+  // fondre ensemble faisait d'un traducteur un auteur de l'œuvre — et l'auteur
+  // principal s'il était le seul nommé. Le contributeur garde donc son nom
+  // dans les responsabilités, avec le rôle AnarBib « outro », jamais principal
+  // (etape 4 du cadrage federalisme, 18/10/2026).
   const creators = allTexts(xml, 'creator');
   const contributors = allTexts(xml, 'contributor');
-  const names = [...creators, ...contributors];
+  const responsabilites = [
+    ...creators.map((name, i) => ({ name, nature: null, role: 'autor', roleCode: 'dc:creator', primary: i === 0 })),
+    ...contributors.map((name) => ({ name, nature: null, role: 'outro', roleCode: 'dc:contributor', primary: false })),
+  ];
 
   // dc:identifier est un fourre-tout : ISBN, ISSN, URL, cote… On trie par
   // forme plutot que par position, la position ne voulant rien dire.
@@ -297,8 +310,9 @@ export function mapDublinCore(metadataXml: string): MappedRecord {
   return {
     title,
     subtitle,
-    responsibilityStatement: names.length ? names.join('; ') : null,
-    authorsArray: names,
+    responsibilityStatement: creators.length ? creators.join('; ') : null,
+    authorsArray: creators,
+    contributors: responsabilites,
     publisher: firstText(xml, 'publisher'),
     placeOfPublication: null,
     publicationYear: year4(firstText(xml, 'date')),
@@ -323,5 +337,7 @@ export function hasBibliographicContent(m: Partial<MappedRecord>): boolean {
   return !!(m.title || m.subtitle || m.responsibilityStatement || m.publisher
     || m.placeOfPublication || m.publicationYear || m.language || m.isbn || m.issn
     || (Array.isArray(m.subjectsArray) && m.subjectsArray.length > 0)
-    || (Array.isArray(m.keywordsArray) && m.keywordsArray.length > 0));
+    || (Array.isArray(m.keywordsArray) && m.keywordsArray.length > 0)
+    // Un contributeur seul (DC) comptait avant, fondu dans les auteurs.
+    || (Array.isArray(m.contributors) && m.contributors.length > 0));
 }

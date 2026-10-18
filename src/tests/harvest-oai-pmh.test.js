@@ -556,6 +556,34 @@ describe("T17 — une adresse ou un identifiant OAI n'est jamais pris pour un IS
   });
 });
 
+describe("T18 — dc:contributor n'est pas un auteur", () => {
+  // Les contributeurs étaient fondus dans les auteurs : un traducteur moissonné
+  // arrivait auteur de l'œuvre, et premier auteur s'il précédait le créateur.
+  it('creator → autor principal ; contributor → outro, jamais principal', async () => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', [], {
+      createurs: ['MALATESTA, Errico'], contributeurs: ['DUPONT, Jeanne'],
+    })])])();
+    const l = lignesInserees(r.ecrits)[0];
+    expect(l.authors).toEqual(['MALATESTA, Errico']);
+    expect(l.responsibility_statement).toBe('MALATESTA, Errico');
+    expect(l.normalized_payload.contributors).toEqual([
+      expect.objectContaining({ name: 'MALATESTA, Errico', role: 'autor', role_code: 'dc:creator', primary: true }),
+      expect.objectContaining({ name: 'DUPONT, Jeanne', role: 'outro', role_code: 'dc:contributor', primary: false }),
+    ]);
+  });
+
+  it("sans créateur, le contributeur ne devient pas l'auteur principal", async () => {
+    const r = await monterEF(etatDc(), [listRecords([recDcIdentifiants('oai:d:1', [], {
+      createurs: [], contributeurs: ['DUPONT, Jeanne'],
+    })])])();
+    const l = lignesInserees(r.ecrits)[0];
+    expect(l.authors).toEqual([]);
+    expect(l.normalized_payload.contributors).toEqual([
+      expect.objectContaining({ name: 'DUPONT, Jeanne', role: 'outro', primary: false }),
+    ]);
+  });
+});
+
 describe('T15 — une notice MARC qui ne porte que des mots-clés est gardée (H27)', () => {
   it('001 + 653 seulement → une ligne, mots-clés dans normalized_payload.keywords', async () => {
     const seulMotsCles = `<record><header><identifier>oai:x:653</identifier><datestamp>2026-08-01</datestamp></header><metadata>` +
