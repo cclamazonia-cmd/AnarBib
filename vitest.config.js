@@ -24,8 +24,20 @@ export default defineConfig({
     // 20/09/2026 (run du commit f83c5f66) : quatre « Test timed out in 5000ms »
     // sur des tests qui prennent 1 à 2 s hors charge, déploiement backend sauté
     // pour rien. 20 s laisse la marge sans masquer un test réellement bloqué.
-    testTimeout: 20000,
-    hookTimeout: 20000,
+    //
+    // 19/10/2026 : 20 s ne suffisent plus EN CI. Runs #1835 à #1840 rouges sur des
+    // seuls « Test timed out in 20000ms », jamais les mêmes tests (1, 1, 2, 7, 2 :
+    // surtout ceux qui montent ImportacoesPage, mais aussi bg2-ingest et un test
+    // qui ne fait que lire les locales), sous une charge de 30 à 48 sur 8 cœurs —
+    // runner + suites vitest complètes lancées en parallèle par les sessions. Un
+    // délai par test (9cbf470c) ne rattrape qu'un nom à la fois. En CI (CI=true,
+    // posé par l'étape « Tests » de ci.yml) : 60 s et UNE relance d'un test
+    // échoué, qui couvre aussi l'échec par ricochet d'un voisin (#1839 : « expected
+    // bound to be called »). En local, rien ne change : 20 s, aucune relance, pour
+    // qu'un test lent ou instable se voie là où on le corrige.
+    testTimeout: process.env.CI ? 60000 : 20000,
+    hookTimeout: process.env.CI ? 60000 : 20000,
+    retry: process.env.CI ? 1 : 0,
     setupFiles: ['./src/tests/setup.js'],
     exclude: [
       '**/node_modules/**',

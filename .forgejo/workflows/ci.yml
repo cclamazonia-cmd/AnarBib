@@ -115,6 +115,10 @@ jobs:
         run: npm run lint
 
       - name: Tests (vitest) — BLOQUANT
+        # CI=true : vitest.config.js passe alors à 60 s par test et une relance
+        # (le runner partage le poste ; cf. le commentaire de vitest.config.js).
+        env:
+          CI: 'true'
         run: npm test
 
       - name: Build Vite
