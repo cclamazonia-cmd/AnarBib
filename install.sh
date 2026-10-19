@@ -6,6 +6,7 @@
 #
 # USAGE:
 #   ./install.sh                       # full install and start
+#   ./install.sh --prebuilt            # zero-build start using prebuilt web image (no host Node.js/npm required)
 #   ./install.sh --lang CODE           # force display language (see the list below)
 #   ./install.sh --local               # force localhost configuration
 #   ./install.sh --prod DOMAIN         # configure for a public domain
@@ -790,6 +791,18 @@ t() {
     el:ok_build_exist) echo "Η εφαρμογή ιστού είναι ήδη έτοιμη (dist/)" ;;
     ro:ok_build_exist) echo "Aplicația web este deja pregătită (dist/)" ;;
 
+    fr:ok_prebuilt)    echo "Image web pré-compilée active (mode Zero-Build, sans Node.js sur l'hôte)." ;;
+    en:ok_prebuilt)    echo "Prebuilt web image active (zero-build mode, no host Node.js required)." ;;
+    pt:ok_prebuilt)    echo "Imagem web pré-compilada ativa (modo zero-build, sem Node.js no host)." ;;
+    es:ok_prebuilt)    echo "Imagen web precompilada activa (modo zero-build, sin Node.js en el host)." ;;
+    it:ok_prebuilt)    echo "Immagine web precompilata attiva (modalità zero-build, nessun Node.js sull'host)." ;;
+    de:ok_prebuilt)    echo "Vorgebautes Web-Image aktiv (Zero-Build-Modus, kein Node.js auf dem Host erforderlich)." ;;
+    ca:ok_prebuilt)    echo "Imatge web precompilada activa (mode zero-build, sense Node.js a l'amfitrió)." ;;
+    eo:ok_prebuilt)    echo "Antaŭkonstruita retbildo aktiva (senkonstrua reĝimo, sen Node.js sur la gastiganto)." ;;
+    nl:ok_prebuilt)    echo "Voorafgebouwd web-image actief (zero-build-modus, geen Node.js op host vereist)." ;;
+    el:ok_prebuilt)    echo "Προκατασκευασμένη εικόνα ιστού ενεργή (λειτουργία zero-build, δεν απαιτείται Node.js στον διακομιστή)." ;;
+    ro:ok_prebuilt)    echo "Imagine web precompilată activă (modul zero-build, fără Node.js pe gazdă)." ;;
+
     # ── step 4 ───────────────────────────────────────────────────────────────
     fr:step4)          echo "4/4 · Déploiement et démarrage de la pile complète (Docker)" ;;
     en:step4)          echo "4/4 · Deployment and startup of the full stack (Docker)" ;;
@@ -1116,11 +1129,16 @@ ASSUME_YES=0
 START=1
 START_FRONT=1
 ACTION="install"
+PREBUILT=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -y|--yes)
       ASSUME_YES=1
+      ;;
+    --prebuilt)
+      PREBUILT=1
+      export COMPOSE_FILE="compose.prebuilt.yml"
       ;;
     --lang)
       shift
@@ -1232,10 +1250,12 @@ if ! docker info >/dev/null 2>&1; then
 fi
 succes "$(t ok_daemon)"
 
-if ! command -v npm >/dev/null 2>&1; then
-  erreur "$(t err_node)"; exit 1
+if [ "$PREBUILT" = "0" ]; then
+  if ! command -v npm >/dev/null 2>&1; then
+    erreur "$(t err_node)"; exit 1
+  fi
+  succes "$(t ok_node "$(node --version) / npm $(npm --version)")"
 fi
-succes "$(t ok_node "$(node --version) / npm $(npm --version)")"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Environment & secrets
@@ -1409,23 +1429,27 @@ else
 fi
 succes "$(t ok_envlocal "auto")"
 
-if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
-  echo "$(t npm_install)"
-  npm ci
-  succes "$(t ok_deps)"
-else
-  succes "$(t ok_deps_exist)"
-fi
+if [ "$PREBUILT" = "0" ]; then
+  if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
+    echo "$(t npm_install)"
+    npm ci
+    succes "$(t ok_deps)"
+  else
+    succes "$(t ok_deps_exist)"
+  fi
 
-if [ ! -d "dist" ] || [ "$REBUILD" = "1" ] || [ ! -f "dist/index.html" ]; then
-  echo "$(t npm_build)"
-  npm run build
-  # Le commit construit : deploy/deploy.sh s'en sert pour savoir si le front
-  # servi par Caddy est en retard sur le dépôt (21/09/2026).
-  git rev-parse HEAD > dist/.version-front 2>/dev/null || true
-  succes "$(t ok_build)"
+  if [ ! -d "dist" ] || [ "$REBUILD" = "1" ] || [ ! -f "dist/index.html" ]; then
+    echo "$(t npm_build)"
+    npm run build
+    # Le commit construit : deploy/deploy.sh s'en sert pour savoir si le front
+    # servi par Caddy est en retard sur le dépôt (21/09/2026).
+    git rev-parse HEAD > dist/.version-front 2>/dev/null || true
+    succes "$(t ok_build)"
+  else
+    succes "$(t ok_build_exist)"
+  fi
 else
-  succes "$(t ok_build_exist)"
+  succes "$(t ok_prebuilt)"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────

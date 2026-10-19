@@ -231,9 +231,31 @@ Par défaut, les six images viennent de Docker Hub. Pour ne plus en dépendre (p
 IMAGE_PREFIX=registre.exemple.org/miroir/docker.io/
 ```
 
-Le préfixe précède le nom de chaque image : `supabase/gotrue:v2.197.0` devient `registre.exemple.org/miroir/docker.io/supabase/gotrue:v2.197.0`. Les versions épinglées ne changent pas, et un miroir fidèle sert exactement les mêmes empreintes. Caddy est écrit `library/caddy` : c'est le nom complet de l'image officielle `caddy` sur Docker Hub, c'est donc la même image, et c'est le chemin que connaît un miroir. Vide, la variable ne change rien.
-
 Un registre zot mutualisé avec AnarcosyndicalismeBOOK peut tenir ce rôle : il recopie chaque image à la première demande, puis la sert lui-même. Vérifier le résultat avant de redémarrer : `docker compose config --images`.
+
+Le registre autonome officiel de l'Union Libertaire Anarchiste met à disposition les images vérifiées de la pile :
+```bash
+IMAGE_PREFIX=hub.unionlibertaireanarchiste.org/anarbib/
+```
+
+---
+
+### Déploiement Zero-Build (sans Node.js ni compilation sur l'hôte)
+
+Pour installer et exécuter AnarBib sur une machine sans Node.js ni `npm` (ou pour éviter de saturer la mémoire d'un serveur modeste lors du build Vite) :
+
+```bash
+# Installation automatique via l'image web pré-compilée sur Zot
+./install.sh --prebuilt
+
+# Ou lancement direct avec Docker Compose
+docker compose -f deploy/compose.prebuilt.yml up -d
+```
+
+Dans ce mode :
+- Le service Caddy utilise l'image `hub.unionlibertaireanarchiste.org/anarbib/web:latest` qui intègre directement l'application web statique pré-compilée.
+- Aucun montage du dossier local `dist/` n'est requis sur l'hôte.
+- Les six conteneurs démarrent immédiatement en s'appuyant sur les versions épinglées du registre autonome.
 
 ## 3. Sécurité & Routeur `main`
 
