@@ -8,6 +8,7 @@
 // (src/tests/catalog-opac-lot1-2.test.jsx).
 import { coverUrl } from '@/lib/coverThumbs';
 import { authorLabel } from '@/lib/authorLabel';
+import { echapperHtml } from '@/lib/html';
 
 export const PAGE_SIZE = 100;
 export const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
@@ -157,10 +158,14 @@ export function exportCSV(books) {
 
 export function exportPDF(books, t) {
   const now = new Date().toLocaleDateString('pt-BR');
+  // Chaque valeur passe par echapperHtml : la fenêtre ouverte partage
+  // l'origine de l'application (17/10/2026).
+  const x = (v) => echapperHtml(v || '—');
+  const tt = (desc, vals) => echapperHtml(t(desc, vals));
   const rows = books.map(b =>
-    `<tr><td>${b.bib_ref||'—'}</td><td>${authorLabel(b, t)||'—'}</td><td>${b.titulo||'—'}${b.subtitulo?` — ${b.subtitulo}`:''}</td><td>${b.ano||'—'}</td><td>${b.publisher_display||b.editora||'—'}</td><td>${parseLibraryNames(b)||'—'}</td></tr>`
+    `<tr><td>${x(b.bib_ref)}</td><td>${x(authorLabel(b, t))}</td><td>${x(b.titulo)}${b.subtitulo?` — ${echapperHtml(b.subtitulo)}`:''}</td><td>${x(b.ano)}</td><td>${x(b.publisher_display||b.editora)}</td><td>${x(parseLibraryNames(b))}</td></tr>`
   ).join('');
-  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>AnarBib — ${t({id:'catalog.title'})} — ${now}</title>
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>AnarBib — ${tt({id:'catalog.title'})} — ${now}</title>
 <style>
   body{font-family:Georgia,serif;margin:24px;color:#111;font-size:11px;}
   h1{font-size:18px;margin:0 0 4px;}h2{font-size:12px;font-weight:normal;color:#555;margin:0 0 16px;}
@@ -171,10 +176,10 @@ export function exportPDF(books, t) {
   .footer{margin-top:16px;font-size:9px;color:#888;text-align:center;border-top:1px solid #ccc;padding-top:8px;}
   @media print{body{margin:12px;}@page{size:A4 landscape;margin:10mm;}}
 </style></head><body>
-<h1>AnarBib — ${t({id:'catalog.title'})}</h1>
-<h2>${books.length} ${t({id:'catalog.results.count'},{count:books.length})} — ${now}</h2>
-<table><thead><tr><th>${t({id:'catalog.table.ref'})}</th><th>${t({id:'catalog.table.author'})}</th><th>${t({id:'catalog.table.bookTitle'})}</th><th>${t({id:'catalog.table.year'})}</th><th>${t({id:'catalog.table.publisher'})}</th><th>${t({id:'catalog.table.libraries'})}</th></tr></thead><tbody>${rows}</tbody></table>
-<div class="footer">AnarBib — ${t({id:'app.subtitle'})} — ${now}</div>
+<h1>AnarBib — ${tt({id:'catalog.title'})}</h1>
+<h2>${books.length} ${tt({id:'catalog.results.count'},{count:books.length})} — ${now}</h2>
+<table><thead><tr><th>${tt({id:'catalog.table.ref'})}</th><th>${tt({id:'catalog.table.author'})}</th><th>${tt({id:'catalog.table.bookTitle'})}</th><th>${tt({id:'catalog.table.year'})}</th><th>${tt({id:'catalog.table.publisher'})}</th><th>${tt({id:'catalog.table.libraries'})}</th></tr></thead><tbody>${rows}</tbody></table>
+<div class="footer">AnarBib — ${tt({id:'app.subtitle'})} — ${now}</div>
 <script>window.onload=()=>window.print();</${'script'}>
 </body></html>`;
   const w = window.open('', '_blank');

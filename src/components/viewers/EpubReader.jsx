@@ -30,6 +30,7 @@ import ePub from 'epubjs';
 import { apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { createEpubEngine } from '@/lib/reader/epubEngine';
+import { assainirNoteHtml } from '@/lib/html';
 import './EpubReader.css';
 
 const SAVE_DEBOUNCE_MS = 1500;
@@ -355,8 +356,10 @@ export default function EpubReader({ src, fileName, watermark, resourceId, onErr
         <div className="ab-epub-note-modal" data-close="1" onClick={(e) => { if (e.target.dataset.close === '1') setNote(null); }}>
           <div className="ab-epub-note-box">
             {note.label && <h4 className="ab-epub-note-title">{t({ id: 'reader.epub.note' }, { num: note.label })}</h4>}
+            {/* La note vient du fichier EPUB : assainie (liste blanche) avant d'entrer
+                dans la page, qui partage l'origine de l'application (17/10/2026). */}
             {/* eslint-disable-next-line react/no-danger */}
-            <div className="ab-epub-note-content" dangerouslySetInnerHTML={{ __html: note.html || '' }} />
+            <div className="ab-epub-note-content" dangerouslySetInnerHTML={{ __html: assainirNoteHtml(note.html) }} />
             <button className="ab-epub-tb-btn" onClick={() => setNote(null)}>{t({ id: 'reader.epub.noteClose' })}</button>
           </div>
         </div>
