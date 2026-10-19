@@ -24,6 +24,7 @@
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { monterEF, liens, mailA } from './helpers/monter-ef.js';
+import { cleCompteur } from './helpers/cle-compteur.js';
 
 const BIBLIO = {
   id: 'lib-1', slug: 'blmf', name: 'Biblioteca Louise Michel', default_locale: 'fr',
@@ -58,7 +59,12 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL, existant = f
       deleteUser: async () => ({ data: null, error: null }),
       generateLink: async (o) => { liensDemandes.push(o); return { data: { properties: { action_link: LIEN } }, error: null }; },
     } },
-    rpc: (_schema, nom) => (nom === 'fn_consume_altcha_challenge' ? { data: true, error: null } : { data: null, error: null }),
+    rpc: (_schema, nom, args) => {
+      if (nom === 'fn_consume_altcha_challenge') return { data: true, error: null };
+      // `bloque` : le kind dont le compteur est déjà au plafond (fn_compteur_frapper rend true)
+      if (nom === 'fn_compteur_frapper') return { data: bloque === args.p_kind, error: null };
+      return { data: null, error: null };
+    },
     repondre: (schema, table, a) => {
       if (schema === 'api' && table === 'library_email_identity') return { data: IDENTITE, error: null };
       if (table === 'libraries') return { data: biblio, error: null };
@@ -67,14 +73,6 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL, existant = f
         if (a('update')) return a('select') ? { data: PROFIL, error: null } : { data: null, error: null };
         if (a('limit')) return { data: existant ? [PROFIL] : [], error: null };   // l'adresse est-elle déjà prise ?
         return { data: PROFIL, error: null };
-      }
-      if (table === 'auth_rate_limits') {
-        // `bloque` : le kind dont le compteur est déjà au plafond
-        const kind = a('eq') && a('eq').args && a('eq').args[1];   // .eq('kind', …) vient en premier
-        if (bloque && bloque === kind && !a('upsert')) {
-          return { data: { failure_count: 99, first_failure_at: new Date().toISOString(), blocked_until: new Date(Date.now() + 3600e3).toISOString() }, error: null };
-        }
-        return { data: null, error: null };
       }
       if (table === 'user_library_memberships') return { data: { id: 'membership-1' }, error: null };
       if (table === 'library_request_claims') return { data: { id: 'claim-1' }, error: null };
@@ -90,8 +88,10 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL, existant = f
     }));
     // F25 (17/10/2026) : le transport réserve un créneau d'envoi en base avant chaque courriel
     // (fn_mail_cadence_creneau) ; ce banc juge les appels de register, pas ceux du transport.
-    const rpcs = ef.rpcs.filter((x) => x.nom !== 'fn_mail_cadence_creneau');
-    return { ...r, ecrits: [...ef.ecrits], rpcs, envois: [...ef.envois], comptes: [...comptes], liensDemandes: [...liensDemandes] };
+    // 19/10/2026 : les frappes de compteur (fn_compteur_frapper) sont rangées à part.
+    const rpcs = ef.rpcs.filter((x) => x.nom !== 'fn_mail_cadence_creneau' && x.nom !== 'fn_compteur_frapper');
+    const frappes = ef.rpcs.filter((x) => x.nom === 'fn_compteur_frapper').map((x) => x.args);
+    return { ...r, ecrits: [...ef.ecrits], rpcs, frappes, envois: [...ef.envois], comptes: [...comptes], liensDemandes: [...liensDemandes] };
   }
   return { inscrire, tMail };
 }
@@ -248,14 +248,15 @@ describe('register — un refus n\'écrit rien', () => {
     }
   });
 
-  it('freins : clés hachées, l\'IP lue dans cf-connecting-ip plutôt que dans x-forwarded-for', async () => {
+  it('freins : clés à clé secrète, l\'IP lue dans cf-connecting-ip plutôt que dans x-forwarded-for', async () => {
     const { inscrire } = monterRegister();
     const r = await inscrire({ signup_intent: 'contributor' }, { 'cf-connecting-ip': '203.0.113.9', 'x-forwarded-for': '198.51.100.1, 10.0.0.1' });
-    const compteurs = r.ecrits.filter((e) => e.table === 'auth_rate_limits').map((e) => e.donnees);
-    const ip = compteurs.find((c) => c.kind === 'register_ip');
-    const dest = compteurs.find((c) => c.kind === 'register_dest');
-    expect(ip.key).toBe(createHash('sha256').update('203.0.113.9').digest('hex'));
-    expect(dest.key).toBe(createHash('sha256').update('louise@exemplo.test').digest('hex'));
+    const ip = r.frappes.find((c) => c.p_kind === 'register_ip');
+    const dest = r.frappes.find((c) => c.p_kind === 'register_dest');
+    expect(ip.p_key).toBe(cleCompteur('203.0.113.9'));
+    expect(dest.p_key).toBe(cleCompteur('louise@exemplo.test'));
+    expect(ip.p_key).not.toBe(createHash('sha256').update('203.0.113.9').digest('hex'));
+    expect(r.ecrits.some((e) => e.table === 'auth_rate_limits')).toBe(false);
   });
 
   it('l\'objet du mail ne reprend pas un nom de bibliothèque saisi par la personne', async () => {

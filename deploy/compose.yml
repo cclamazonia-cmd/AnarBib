@@ -233,6 +233,7 @@ services:
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
       ALLOWED_ORIGIN: ${SITE_URL}
       VERIFY_JWT: "false"     # la vérification est faite par le routeur main
+      IP_CLIENT_HEADER: x-real-ip   # posé par le Caddyfile, seule source d'IP des compteurs d'abus
     volumes:
       - ../supabase/functions:/home/deno/functions:ro
       # config.toml doit être lisible par le routeur : c'est LUI qui porte la

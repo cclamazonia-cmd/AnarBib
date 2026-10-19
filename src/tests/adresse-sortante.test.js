@@ -191,7 +191,9 @@ describe('geocode compte par compte', () => {
   it('le compteur est geocode_user, après la garde, sans x-forwarded-for', () => {
     const garde = geo.indexOf('await sessionManquante(');
     const sujet = geo.indexOf('sujetDuJeton(req.headers.get("Authorization"))');
-    const compteur = geo.indexOf('freiner(sb, "geocode_user", await sha256Hex(sujet)');
+    // 19/10/2026 : la clé est l'empreinte à clé secrète du compte (cleDeCompteur)
+    expect(geo).toMatch(/cle = await cleDeCompteur\(sujet\)/);
+    const compteur = geo.indexOf('freiner(sb, "geocode_user", cle,');
     expect(garde).toBeGreaterThan(-1);
     expect(sujet).toBeGreaterThan(garde);
     expect(compteur).toBeGreaterThan(sujet);

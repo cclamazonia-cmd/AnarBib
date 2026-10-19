@@ -18,6 +18,8 @@
 import { describe, it, expect } from 'vitest';
 import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { monterEF, liens, mailA } from './helpers/monter-ef.js';
+import { compteurEnMemoire } from './helpers/compteur-memoire.js';
+import { cleCompteur } from './helpers/cle-compteur.js';
 
 const SECRET = 'un-secret-altcha-de-banc-assez-long-0123456789abcdef';
 const ID = '11111111-2222-4333-8444-555555555555';
@@ -38,13 +40,17 @@ const CORPS = {
   reporter_email: 'personne@exemple.test',
 };
 
-function monterFonction({ existant = null, compteur = null, insertError = null, defiNeuf = true } = {}) {
+function monterFonction({ existant = null, plein = false, insertError = null, defiNeuf = true } = {}) {
+  const compteur = compteurEnMemoire();
   const ef = monterEF({
     entree: 'submit-bug-report/index.ts',
     env: { ALTCHA_HMAC_SECRET: SECRET },
-    rpc: (_s, nom) => (nom === 'fn_consume_altcha_challenge' ? { data: defiNeuf, error: null } : { data: null, error: null }),
+    rpc: (_s, nom, args) => {
+      if (nom === 'fn_consume_altcha_challenge') return { data: defiNeuf, error: null };
+      if (nom === 'fn_compteur_frapper' && plein) return { data: true, error: null };
+      return compteur.rpc(nom, args) ?? { data: null, error: null };
+    },
     repondre: (_s, table, a) => {
-      if (table === 'auth_rate_limits') return a('upsert') ? { data: null, error: null } : { data: compteur, error: null };
       if (table === 'bug_reports') {
         if (a('insert')) return insertError ? { data: null, error: insertError } : { data: { id: ID }, error: null };
         return { data: existant, error: null };
@@ -56,7 +62,7 @@ function monterFonction({ existant = null, compteur = null, insertError = null, 
     ef.vider();
     return ef.appeler(new Request('http://ef.local/', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'user-agent': 'Banc/1.0', 'x-forwarded-for': '203.0.113.7, 10.0.0.1', ...headers },
+      headers: { 'content-type': 'application/json', 'user-agent': 'Banc/1.0', 'cf-connecting-ip': '203.0.113.7', 'x-forwarded-for': '198.51.100.66, 203.0.113.7', ...headers },
       body: JSON.stringify(corps),
     }));
   }
@@ -103,11 +109,14 @@ describe('submit-bug-report — la fonction', () => {
     expect(r).toMatchObject({ statut: 201, corps: { ok: true, id: ID, duplicate: false } });
     const ligne = insere().donnees;
     expect(ligne).toMatchObject({ what_happened: CORPS.what_happened, page_path: '/conta', locale: 'fr', role_hint: 'reader', library_hint: 'BLMF', reporter_email: 'personne@exemple.test', user_agent: 'Banc/1.0' });
-    expect(ligne.source_ip_hash).toMatch(/^[0-9a-f]{64}$/);
+    // 19/10/2026 : l'empreinte est celle, à clé secrète, de cf-connecting-ip —
+    // jamais le premier élément de x-forwarded-for, que le client écrit.
+    expect(ligne.source_ip_hash).toBe(cleCompteur('203.0.113.7'));
     expect(JSON.stringify(ligne)).not.toContain('203.0.113.7');
-    // anti-rejeu consommé pour l'usage bug_report, compteur bug_ip frappé
+    // anti-rejeu consommé pour l'usage bug_report, compteur bug_ip frappé d'un seul geste
     expect(ef.rpcs.find((x) => x.nom === 'fn_consume_altcha_challenge').args.p_purpose).toBe('bug_report');
-    expect(ef.ecrits.find((e) => e.table === 'auth_rate_limits').donnees.kind).toBe('bug_ip');
+    expect(ef.rpcs.find((x) => x.nom === 'fn_compteur_frapper').args).toMatchObject({ p_kind: 'bug_ip', p_key: cleCompteur('203.0.113.7'), p_limite: 5 });
+    expect(ef.ecrits.some((e) => e.table === 'auth_rate_limits')).toBe(false);
   });
 
   it('le même défaut encore ouvert : l\'existant est rendu, aucune seconde ligne, donc aucun second courriel', async () => {
@@ -118,7 +127,7 @@ describe('submit-bug-report — la fonction', () => {
   });
 
   it('cinq signalements dans l\'heure depuis la même adresse : le sixième est freiné (429)', async () => {
-    const { envoyer, insere } = monterFonction({ compteur: { failure_count: 5, first_failure_at: new Date().toISOString(), blocked_until: null } });
+    const { envoyer, insere } = monterFonction({ plein: true });
     const r = await envoyer({ ...CORPS, altcha_payload: preuve() });
     expect(r).toMatchObject({ statut: 429, corps: { error: 'rate_limited' } });
     expect(insere()).toBeUndefined();

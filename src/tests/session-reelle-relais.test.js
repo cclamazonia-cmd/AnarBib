@@ -74,7 +74,7 @@ const SECRET_TACHE = [
 const MARQUE_SECRET = /authorizeWebhook\(|serveJsonWebhook\(|x-webhook-secret|WEBHOOK_SECRET|x-import-secret|x-cron-secret|CRON_SECRET|fn_check_\w*secret/i;
 // Publiques par nature, chacune avec la marque de sa garde propre.
 const PUBLIQUES = {
-  login: 'isRateLimited(',                               // compteurs par IP et par adresse
+  login: 'essaiRefuse(',                                 // compteurs par IP et par adresse
   register: 'verifierSolution(',                         // Altcha + compteurs (19/10/2026)
   'request-password-reset': 'frapper(',                  // compteurs, réponse constante
   'altcha-challenge': 'creerDefi(',                      // émet un défi, n'écrit rien

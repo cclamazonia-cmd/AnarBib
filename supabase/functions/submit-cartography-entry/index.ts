@@ -12,7 +12,8 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), ALTCHA_HMAC_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { cleDeCompteur, freiner } from "../_shared/core/rate-limit.ts";
+import { ipClient } from "../_shared/core/ip-client.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
@@ -59,8 +60,8 @@ async function traiter(req: Request): Promise<Response> {
   if (!CATS.includes(categorie)) return json({ error: "bad_categorie" }, 422);
   if (notes_locale && !LOCALES.includes(notes_locale)) return json({ error: "bad_locale" }, 422);
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const ipHash = await sha256Hex(ip);
+  let ipHash: string;
+  try { ipHash = await cleDeCompteur(ipClient(req)); } catch { return json({ error: "rate_limit_unavailable" }, 500); }
 
   // ── Anti-robots : preuve de travail Altcha, auto-hébergée (AR-3) ──────────
   // Remplace Cloudflare Turnstile depuis le 2026-08-20. Aucun appel sortant.

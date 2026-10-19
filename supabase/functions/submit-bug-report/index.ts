@@ -13,7 +13,8 @@
 // Déploiement : par la CI (git push). Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS, ALTCHA_HMAC_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { cleDeCompteur, freiner } from "../_shared/core/rate-limit.ts";
+import { ipClient } from "../_shared/core/ip-client.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
 import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
@@ -57,8 +58,8 @@ async function traiter(req: Request): Promise<Response> {
   const page = texte(p.page_path, 300);
   if (page && !page.startsWith("/")) return json({ error: "bad_page" }, 422);
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const ipHash = await sha256Hex(ip);
+  let ipHash: string;
+  try { ipHash = await cleDeCompteur(ipClient(req)); } catch { return json({ error: "rate_limit_unavailable" }, 500); }
 
   // ── Anti-robots : Altcha, en DEUX temps (signature, puis anti-rejeu). Échoue fermé.
   let preuve: ResultatVerification;

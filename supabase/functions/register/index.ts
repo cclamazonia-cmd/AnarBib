@@ -13,7 +13,7 @@ import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/conte
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
 import { isSupportedLocale } from "../_shared/i18n/locales.ts";
-import { freiner, sha256Hex as empreinte } from "../_shared/core/rate-limit.ts";
+import { freiner, cleDeCompteur as empreinte } from "../_shared/core/rate-limit.ts";
 import { ipClient } from "../_shared/core/ip-client.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

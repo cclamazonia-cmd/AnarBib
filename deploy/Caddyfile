@@ -67,8 +67,18 @@
 	}
 
 	# --- Edge Functions ------------------------------------------------------
+	# Les compteurs d'abus (login, inscription, formulaires publics) comptent
+	# par adresse IP, lue par _shared/core/ip-client.ts dans l'en-tête nommé par
+	# IP_CLIENT_HEADER (compose.yml : x-real-ip). Caddy l'ÉCRASE avec l'adresse
+	# qu'il voit, et retire cf-connecting-ip : envoyés par le client, l'un ou
+	# l'autre lui laisserait choisir sa clé de compteur. Derrière un tunnel ou un
+	# autre proxy, déclarer celui-ci dans `trusted_proxies` (options globales)
+	# pour que {client_ip} soit l'adresse d'origine et non celle du tunnel.
 	handle_path /functions/v1/* {
-		reverse_proxy functions:9000
+		reverse_proxy functions:9000 {
+			header_up X-Real-IP {client_ip}
+			header_up -Cf-Connecting-Ip
+		}
 	}
 
 	# --- Limitation de débit : NON ACTIVÉE ------------------------------------

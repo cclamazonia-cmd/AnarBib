@@ -17,7 +17,8 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { APP_BASE_URL } from "../_shared/core/app-url.ts";
-import { frapper, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { cleDeCompteur, frapper } from "../_shared/core/rate-limit.ts";
+import { ipClient } from "../_shared/core/ip-client.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
@@ -88,12 +89,6 @@ function renderText(loc: string, actionUrl: string): string {
   return `${s.heading}\n\n${s.intro}\n\n${s.cta}: ${actionUrl}\n\n${s.expiry}\n${s.ignore}\n\n${s.footer}`;
 }
 
-function getClientIP(req: Request): string {
-  const xf = req.headers.get("x-forwarded-for");
-  if (xf) return xf.split(",")[0].trim();
-  return req.headers.get("x-real-ip") || "unknown";
-}
-
 // LE FREIN (repris le 21/09/2026). Cette fonction gardait son propre compteur, à
 // clés EN CLAIR (« pwreset:<adresse> »). Depuis la migration 20260916201249 (B25),
 // public.auth_rate_limits n'accepte que des empreintes de 64 caractères
@@ -102,8 +97,9 @@ function getClientIP(req: Request): string {
 // repris quatre fonctions ; celle-ci était la cinquième. Trouvé en écrivant
 // request-password-reset-banc.test.js, qui émule la contrainte.
 //
-// Elle passe par _shared/core/rate-limit.ts, comme les autres : empreinte SHA-256
-// (la table ne sait ni qui ni d'où), préfixe « pwreset: » dans ce qui est haché pour
+// Elle passe par _shared/core/rate-limit.ts, comme les autres : empreinte à clé
+// secrète (la table ne sait ni qui ni d'où), adresse IP lue par
+// _shared/core/ip-client.ts, préfixe « pwreset: » dans ce qui est haché pour
 // ne PAS partager le compteur du login, kinds existants (ip, email — la contrainte
 // n'est pas à élargir). Quatre demandes par quart d'heure ; la frappe de trop
 // bloque une fenêtre. ÉCHEC FERMÉ : un compteur qui ne répond pas n'envoie rien.
@@ -136,7 +132,7 @@ Deno.serve(async (req: Request) => {
     const email = String(body?.email || "").trim().toLowerCase();
     if (!email || !email.includes("@")) return OK();
 
-    const ip = getClientIP(req);
+    const ip = ipClient(req);
     const sb = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false, autoRefreshToken: false } });
 
     // Le frein : limite atteinte OU compteur indisponible → on s'arrête en silence
@@ -147,7 +143,7 @@ Deno.serve(async (req: Request) => {
     // Les deux empreintes AVANT de lancer la moindre frappe : un `await` glissé entre
     // la création d'une promesse et son allSettled lui laisse le temps de rejeter
     // sans témoin (second rejet non géré, vu au banc le même soir).
-    const [cleAdresse, cleIp] = await Promise.all([sha256Hex(`pwreset:${email}`), sha256Hex(`pwreset:${ip}`)]);
+    const [cleAdresse, cleIp] = await Promise.all([cleDeCompteur(`pwreset:${email}`), cleDeCompteur(`pwreset:${ip}`)]);
     const frappes = await Promise.allSettled([
       frapper(sb, "email", cleAdresse, RL.limite, RL.fenetreMin),
       frapper(sb, "ip", cleIp, RL.limite, RL.fenetreMin),

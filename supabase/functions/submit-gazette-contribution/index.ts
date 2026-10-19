@@ -17,13 +17,22 @@
 // lequel des trois sans le dire à qui le tient : bad_token / token_used / token_expired
 // sont pour le formulaire, qui les affiche à la personne concernée.
 //
+// ENVOI (19/10/2026) : honeypot → validation → jeton de reprise → preuve de travail
+// Altcha (usage « gazette », anti-rejeu par fn_consume_altcha_challenge) → compteurs
+// → insertion, comme les autres formulaires publics. Chaque envoi écrit aux admins
+// du réseau : sans preuve de travail, un script les inondait au rythme du seul
+// compteur par IP. L'ouverture d'une reprise (« prefill ») n'envoie rien à personne
+// et reste sans preuve, sous son propre compteur.
+//
 // Déploiement : supabase functions deploy submit-gazette-contribution --no-verify-jwt
-// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (présents par défaut dans l'env EF).
+// Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (présents par défaut dans l'env EF), ALTCHA_HMAC_SECRET.
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { cleDeCompteur, freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { ipClient } from "../_shared/core/ip-client.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
+import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 
 const LOCALES: readonly string[] = LOCALE_CODES;
@@ -83,11 +92,11 @@ async function traiter(req: Request): Promise<Response> {
   let p: Record<string, unknown>;
   try { p = await req.json(); } catch { return json({ error: "invalid_json" }, 400); }
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const ipHash = await sha256Hex(ip);
+  let ipHash: string;
+  try { ipHash = await cleDeCompteur(ipClient(req)); } catch { return json({ error: "rate_limit_unavailable" }, 500); }
 
   // --- Rate-limit : compteurs partagés (_shared/core/rate-limit.ts), clés
-  // hachées, échoue fermé. B26 : le `hit()` local d'ici n'a jamais compté (la
+  // à clé secrète, échoue fermé. B26 : le `hit()` local d'ici n'a jamais compté (la
   // table refusait ses kinds, l'erreur n'était pas lue), et `gazette_email`
   // écrivait le courriel en clair.
 
@@ -130,11 +139,35 @@ async function traiter(req: Request): Promise<Response> {
     parent = r.parent;
   }
 
+  // --- Anti-robots : Altcha, en DEUX temps (signature, puis anti-rejeu). Échoue fermé.
+  let preuve: ResultatVerification;
+  try {
+    preuve = await verifierSolution(String(p.altcha_payload ?? ""));
+  } catch (e) {
+    console.error("gazette: Altcha indisponible —", (e as Error)?.message ?? e);
+    return json({ error: "captcha_failed" }, 403);
+  }
+  if (!preuve.ok) {
+    console.warn("gazette: preuve de travail refusée —", preuve.motif);
+    return json({ error: "captcha_failed" }, 403);
+  }
+  const { data: defiNeuf, error: errDefi } = await sb.rpc("fn_consume_altcha_challenge", {
+    p_challenge: preuve.challenge,
+    p_expires_at: preuve.expiresAt?.toISOString(),
+    p_purpose: "gazette",
+  });
+  if (errDefi || defiNeuf !== true) {
+    console.warn("gazette: défi rejoué ou consommation impossible", errDefi ?? "");
+    return json({ error: "captcha_failed" }, 403);
+  }
+
   const email = p.contributor_email ? String(p.contributor_email).trim().toLowerCase() : null;
   const stopIp = await freiner(sb, "gazette_ip", ipHash, IP_LIMIT, WINDOW_MIN, json);
   if (stopIp) return stopIp;
   if (email) {
-    const stopEmail = await freiner(sb, "gazette_email", await sha256Hex(email), EMAIL_LIMIT, WINDOW_MIN, json);
+    let cleEmail: string;
+    try { cleEmail = await cleDeCompteur(email); } catch { return json({ error: "rate_limit_unavailable" }, 500); }
+    const stopEmail = await freiner(sb, "gazette_email", cleEmail, EMAIL_LIMIT, WINDOW_MIN, json);
     if (stopEmail) return stopEmail;
   }
 

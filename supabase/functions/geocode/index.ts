@@ -12,7 +12,7 @@
 // Secrets : SUPABASE_URL, SUPABASE_SECRET_KEYS (par défaut), NOMINATIM_URL (à définir).
 
 import { secretKey } from "../_shared/core/secret-key.ts";
-import { freiner, sha256Hex } from "../_shared/core/rate-limit.ts";
+import { cleDeCompteur, freiner } from "../_shared/core/rate-limit.ts";
 import { createClient } from '../_shared/deps.ts';
 import { avecOrigine } from "../_shared/core/cors.ts";
 import { sessionManquante, statutDuRefus, sujetDuJeton } from "../_shared/core/session-reelle.ts";
@@ -63,7 +63,9 @@ async function traiter(req: Request): Promise<Response> {
   // Le `sub` du jeton ne se lit qu'après la garde (sujetDuJeton).
   const sujet = sujetDuJeton(req.headers.get("Authorization"));
   if (!sujet) return json({ error: "auth_required" }, 401);
-  const stop = await freiner(sb, "geocode_user", await sha256Hex(sujet), USER_LIMIT, WINDOW_MIN, json);
+  let cle: string;
+  try { cle = await cleDeCompteur(sujet); } catch { return json({ error: "rate_limit_unavailable" }, 500); }
+  const stop = await freiner(sb, "geocode_user", cle, USER_LIMIT, WINDOW_MIN, json);
   if (stop) return stop;
 
   // Proxy vers Nominatim self-hosted (côté serveur uniquement)

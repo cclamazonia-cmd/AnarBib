@@ -7,64 +7,41 @@
 // l'exécutait. Écrit avant de toucher à son adresse (dette app-url), sur la vraie
 // fonction, par src/tests/helpers/monter-ef.js.
 //
-// Particularité : le faux client ÉMULE les deux contraintes de
-// public.auth_rate_limits (migration 20260916201249) — `kind` dans une liste
-// fermée, `key` = empreinte de 64 caractères hexadécimaux — et tient les
-// compteurs en mémoire. Sans cela le banc ne pouvait pas voir ce qu'il a trouvé :
-// la fonction écrivait des clés EN CLAIR (« pwreset:adresse »), que la base
-// refusait depuis le 16/09 sans que personne ne lise l'erreur. Les demandes de
-// réinitialisation n'étaient donc PLUS LIMITÉES du tout (la refonte B25/B26 avait
-// repris quatre fonctions ; celle-ci était la cinquième). Voir le second describe.
+// Particularité : les compteurs sont ceux de helpers/compteur-memoire.js, qui
+// rejoue public.fn_compteur_frapper ET les deux contraintes de
+// public.auth_rate_limits — `kind` dans une liste fermée, `key` = empreinte de
+// 64 caractères hexadécimaux. Sans cela le banc ne pouvait pas voir ce qu'il a
+// trouvé : la fonction écrivait des clés EN CLAIR (« pwreset:adresse »), que la
+// base refusait depuis le 16/09 sans que personne ne lise l'erreur. Les demandes
+// de réinitialisation n'étaient donc PLUS LIMITÉES du tout (la refonte B25/B26
+// avait repris quatre fonctions ; celle-ci était la cinquième). Voir le second
+// describe. (19/10/2026 : le compte se fait d'un seul geste, par RPC ; l'IP est
+// celle de cf-connecting-ip, par _shared/core/ip-client.ts.)
 
 import { describe, it, expect } from 'vitest';
 import { monterEF, liens } from './helpers/monter-ef.js';
+import { compteurEnMemoire } from './helpers/compteur-memoire.js';
 
-const KINDS = ['ip', 'email', 'geocode_user', 'carto_ip', 'gazette_ip', 'gazette_email', 'gazette_prefill', 'bug_ip']; // = auth_rate_limits_kind_check (B45)
 const LIEN = 'http://stub/auth/v1/verify?token=abc&type=recovery';
 
 function monter({ env = {}, profils = [{ preferred_language: 'de' }], lien = { data: { properties: { action_link: LIEN } }, error: null }, tablePanne = false, resend } = {}) {
-  const compteurs = new Map();          // `${kind}|${key}` → ligne
-  const refus = [];                     // écritures que la base aurait rejetées
+  const compteur = compteurEnMemoire({ panne: tablePanne ? { message: 'table injoignable' } : null });
   const liensDemandes = [];
-  const cle = (chaine, nom) => chaine.find((c) => c.op === 'eq' && c.args[0] === nom)?.args?.[1];
-  const valider = (l) => {
-    if (!KINDS.includes(l.kind)) return { message: 'auth_rate_limits_kind_check', code: '23514' };
-    if (!/^[0-9a-f]{64}$/.test(String(l.key))) return { message: 'auth_rate_limits_key_empreinte', code: '23514' };
-    return null;
-  };
   const ef = monterEF({
     entree: 'request-password-reset/index.ts', env, resend,
     auth: { admin: { generateLink: async (o) => { liensDemandes.push(o); return lien; } } },
-    repondre: (_s, table, a, chaine) => {
-      if (table === 'profiles') return { data: profils, error: null };
-      if (table !== 'auth_rate_limits') return { data: null, error: null };
-      if (tablePanne) return { data: null, error: { message: 'table injoignable' } };
-      const ecriture = a('upsert') || a('insert');
-      if (ecriture) {
-        const l = ecriture.args[0];
-        const err = valider(l);
-        if (err) { refus.push(l); return { data: null, error: err }; }
-        compteurs.set(`${l.kind}|${l.key}`, { ...(compteurs.get(`${l.kind}|${l.key}`) || {}), ...l });
-        return { data: null, error: null };
-      }
-      const k = `${cle(chaine, 'kind')}|${cle(chaine, 'key')}`;
-      if (a('update')) {
-        if (!compteurs.has(k)) return { data: null, error: null };
-        compteurs.set(k, { ...compteurs.get(k), ...a('update').args[0] });
-        return { data: null, error: null };
-      }
-      return { data: compteurs.get(k) || null, error: null };
-    },
+    rpc: (_s, nom, args) => compteur.rpc(nom, args),
+    repondre: (_s, table) => (table === 'profiles' ? { data: profils, error: null } : { data: null, error: null }),
   });
   async function demander(email, { methode = 'POST', ip = '203.0.113.7' } = {}) {
     const avant = ef.envois.length;
     const r = await ef.appeler(new Request('http://ef.local/', {
-      method: methode, headers: { 'content-type': 'application/json', 'x-forwarded-for': ip },
+      method: methode, headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip },
       ...(methode === 'POST' ? { body: JSON.stringify({ email }) } : {}),
     }));
     return { ...r, nouveaux: ef.envois.slice(avant) };
   }
-  return { ef, demander, compteurs, refus, liensDemandes };
+  return { ef, demander, compteurs: compteur.lignes, refus: compteur.refus, liensDemandes };
 }
 
 describe('request-password-reset — toujours 200, et un mail seulement à qui existe', () => {
@@ -143,7 +120,7 @@ describe('request-password-reset — le frein', () => {
     expect(refus).toEqual([]);
     expect([...compteurs.keys()].sort().map((k) => k.split('|')[0])).toEqual(['email', 'ip']);
     for (const k of compteurs.keys()) expect(k.split('|')[1]).toMatch(/^[0-9a-f]{64}$/);
-    expect(JSON.stringify(ef.ecrits)).not.toMatch(/louise@|203\.0\.113\.7/);
+    expect(JSON.stringify([ef.ecrits, ef.rpcs])).not.toMatch(/louise@|203\.0\.113\.7/);
   });
 
   it('compteur injoignable : échec FERMÉ — aucun mail, et toujours 200', async () => {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { callEdgeFunction } from '@/lib/supabase';
+import AltchaWidget from '@/components/ui/AltchaWidget';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GazetteContributeForm — volet « Proposer une brève » de l'onglet Gazette.
@@ -17,6 +18,10 @@ import { callEdgeFunction } from '@/lib/supabase';
 // l'envoi porte le jeton : la nouvelle brève est chaînée à la rejetée, le jeton
 // est consommé. Un jeton mort (inventé, révoqué, consommé, périmé) est dit tel
 // quel — et renvoie vers le formulaire habituel, jamais vers un mur.
+//
+// ANTI-ROBOTS (19/10/2026). L'envoi porte une preuve de travail Altcha, résolue
+// dans le navigateur, comme les autres formulaires publics ; une solution ne
+// vaut qu'une fois, le widget en redemande une après chaque envoi.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const RUBRICS = ['une', 'reseau', 'luttes', 'international', 'cultures', 'agenda', 'autre'];
@@ -45,6 +50,8 @@ export default function GazetteContributeForm({ onClose, resubmitToken }) {
   // prefill (reprise en cours de chargement) | idle | sending | done | error | dead (jeton mort)
   const [phase, setPhase] = useState(isResubmit ? 'prefill' : 'idle');
   const [errId, setErrId] = useState(null);
+  const [altchaCharge, setAltchaCharge] = useState(null);
+  const [altchaReset, setAltchaReset] = useState(0);
 
   useEffect(() => {
     if (!resubmitToken) return undefined;
@@ -76,7 +83,7 @@ export default function GazetteContributeForm({ onClose, resubmitToken }) {
   const bodyLen = body.trim().length;
   const titleOk = titleLen >= 2 && titleLen <= 200;
   const bodyOk = bodyLen >= 2 && bodyLen <= 6000;
-  const canSubmit = !!rubric && titleOk && bodyOk && phase !== 'sending';
+  const canSubmit = !!rubric && titleOk && bodyOk && !!altchaCharge && phase !== 'sending';
 
   async function submit(e) {
     e.preventDefault();
@@ -96,8 +103,12 @@ export default function GazetteContributeForm({ onClose, resubmitToken }) {
       target_issue_number: undefined,
       resubmit_token: resubmitToken || undefined,
       website, // honeypot
+      altcha_payload: altchaCharge,
     };
     const { ok, status, data } = await callEdgeFunction(EF, payload);
+    // Une solution ne vaut qu'une fois : on en redemande une neuve dans tous les cas.
+    setAltchaCharge(null);
+    setAltchaReset((n) => n + 1);
     if (ok) { setPhase('done'); return; }
     if (isResubmit && (status === 404 || status === 410)) {
       // Le jeton est mort entre l'ouverture et l'envoi : le texte reste à l'écran
@@ -200,6 +211,11 @@ export default function GazetteContributeForm({ onClose, resubmitToken }) {
         className="ab-gz-hp" type="text" value={website} onChange={(e) => setWebsite(e.target.value)}
         tabIndex={-1} autoComplete="off" aria-hidden="true"
       />
+
+      {/* Anti-robots : preuve de travail résolue dans le navigateur. */}
+      <div style={{ margin: '14px 0' }}>
+        <AltchaWidget onSolved={setAltchaCharge} resetKey={altchaReset} />
+      </div>
 
       {errId && <div className="ab-gz-form-err" role="alert">{t({ id: errId })}</div>}
 
