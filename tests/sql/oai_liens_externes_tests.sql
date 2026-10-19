@@ -30,8 +30,15 @@
 --     ses contributeurs gardent les rôles (book_contributors).
 -- T6  La fonction réécrite reste SECURITY DEFINER, fermée à anon et à
 --     authenticated.
+-- T7  Ce que voit le PUBLIC (rôle anon, bibliothèque publique) : le badge du
+--     catalogue (catalog_digital_access_v1) annonce le lien externe, et le
+--     bouton de la notice (get_book_primary_public_digital_asset_v2) le rend.
+--     Le lien naît validé (20261019…_le_lien_moissonne_nait_valide) : sans
+--     cela, il était publié mais invisible — T1-T5 lisaient les tables et ne
+--     le voyaient pas.
 --
 -- Bilan OK : 'OAI-LIENS OK : N/N'
+-- (T7 : migration 20261019115107_le_lien_moissonne_nait_valide)
 -- =====================================================================
 DO $$
 DECLARE
@@ -41,7 +48,7 @@ DECLARE
   v_lib   uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';  -- BLMF de test (seed)
   v_src bigint; v_run bigint; v_l1 bigint; v_l2 bigint; v_l3 bigint;
   v_d1 bigint; v_d2 bigint; v_d3 bigint; v_b1 bigint; v_batch bigint; v_rev bigint;
-  v_res jsonb; v_txt text; v_n int; v_urls text[];
+  v_res jsonb; v_txt text; v_n int; v_urls text[]; v_usages text[];
   c_source constant text := 'LEX Entrepot de textes';
 BEGIN
   PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coord, 'role', 'authenticated')::text, true);
@@ -166,6 +173,21 @@ BEGIN
        AND NOT has_function_privilege('authenticated', 'ingest.fn_create_book_drafts_from_import_rows(bigint,bigint[],text,text,uuid)', 'EXECUTE')
     THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : droits ou enveloppe changes'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ── T7 ──────────────────────────────────────────────────────────────
+  v_t := 'T7 le public voit le lien : badge du catalogue et bouton de la notice, sous le role anon';
+  BEGIN
+    UPDATE public.libraries SET visibility_level = 'public', network_mode = 'federated', is_active = true WHERE id = v_lib;
+    PERFORM set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
+    EXECUTE 'SET LOCAL ROLE anon';
+    SELECT a.public_usages INTO v_usages FROM public.catalog_digital_access_v1(ARRAY[v_b1]) a WHERE a.book_id = v_b1;
+    SELECT p.source_url INTO v_txt FROM public.get_book_primary_public_digital_asset_v2(v_b1) p;
+    EXECUTE 'RESET ROLE';
+    IF 'link_externo' = ANY (coalesce(v_usages, '{}'::text[]))
+       AND v_txt IN ('https://lex.invalid/lire/entre-paysans', 'HTTP://miroir.invalid/entre-paysans')
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : usages='||coalesce(v_usages::text,'NULL')||' bouton='||coalesce(v_txt,'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN
