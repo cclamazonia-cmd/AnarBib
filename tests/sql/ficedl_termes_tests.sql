@@ -3,12 +3,15 @@
 -- Date    : 2026-09-24  ·  item H11  ·  doctrines DOC-SILENCE-1, DOC-MIGR-1 (esprit)
 -- Réf     : supabase/migrations/20260826191000 (462 termes, 30/06),
 --           supabase/migrations/20260924*_donnees_ficedl_thesaurus_2026_09_03 (621, 03/09),
+--           supabase/migrations/20261019*_les_deux_dates_que_le_503_avait_cachees (2, 19/10),
 --           scripts/ficedl_thesaurus_sync.mjs (le mapping), docs/journal/ficedl/
 --
 -- CE QUE CETTE SUITE PROUVE.
 --   Que le dépôt, appliqué de bout en bout sur une base neuve, produit la table
---   ficedl_thesaurus_terms de la production du 03/09/2026 : 621 termes, dont
---   159 dates, un seul horodatage d'aspiration, et la même EMPREINTE (md5 des
+--   ficedl_thesaurus_terms de la production : 623 termes, dont 161 dates, DEUX
+--   horodatages d'aspiration — le 03/09/2026 pour les 621 premiers, le
+--   19/10/2026 pour mot532 et mot538, que le 503 du jour avait cachées — et la
+--   même EMPREINTE (md5 des
 --   lignes dans l'ordre des mot_id). L'empreinte est IMPRIMÉE dans le bilan :
 --   c'est ce qui permet, depuis le journal de la CI, de la comparer à celle
 --   de la production sans rien lancer d'autre.
@@ -35,27 +38,30 @@ DO $$
 DECLARE
   ok int := 0; total int := 7;
   n int; d int; h int; empreinte text; sujet int; lien int;
-  attendu_empreinte constant text := '8d1e585e67e3c5f7059532a41adabcd0';
+  attendu_empreinte constant text := '1ee3f1a499f62917f4a29bdc7a1334c7';
   mot_date text;
 BEGIN
-  -- T1 : 621 termes
+  -- T1 : 623 termes
   SELECT count(*) INTO n FROM public.ficedl_thesaurus_terms;
-  IF n = 621 THEN ok := ok + 1; ELSE RAISE WARNING 'T1 ficedl_thesaurus_terms : % termes, attendu 621', n; END IF;
+  IF n = 623 THEN ok := ok + 1; ELSE RAISE WARNING 'T1 ficedl_thesaurus_terms : % termes, attendu 623', n; END IF;
 
-  -- T2 : 159 dates, avec un libellé français chacune
+  -- T2 : 161 dates, avec un libellé français chacune
   SELECT count(*) INTO d FROM public.ficedl_thesaurus_terms WHERE 'dates' = ANY(facet);
-  IF d = 159 THEN ok := ok + 1; ELSE RAISE WARNING 'T2 dates : %, attendu 159', d; END IF;
+  IF d = 161 THEN ok := ok + 1; ELSE RAISE WARNING 'T2 dates : %, attendu 161', d; END IF;
 
   SELECT count(*) INTO n FROM public.ficedl_thesaurus_terms WHERE 'dates' = ANY(facet) AND coalesce(labels->>'fr', '') = '';
   IF n = 0 THEN ok := ok + 1; ELSE RAISE WARNING 'T3 % dates sans libellé fr', n; END IF;
 
-  -- T4 : un seul horodatage d'aspiration, celui du 03/09
+  -- T4 : deux horodatages d'aspiration — le 03/09 pour les 621 premiers, le
+  --      19/10 pour mot532 et mot538, récupérées une fois le site revenu
   SELECT count(DISTINCT harvested_at) INTO h FROM public.ficedl_thesaurus_terms;
-  IF h = 1 AND (SELECT min(harvested_at) FROM public.ficedl_thesaurus_terms) = '2026-09-03 11:07:57.616+00'::timestamptz THEN ok := ok + 1;
-  ELSE RAISE WARNING 'T4 harvested_at : % valeur(s), min %', h, (SELECT min(harvested_at) FROM public.ficedl_thesaurus_terms); END IF;
+  IF h = 2
+     AND (SELECT min(harvested_at) FROM public.ficedl_thesaurus_terms) = '2026-09-03 11:07:57.616+00'::timestamptz
+     AND (SELECT max(harvested_at) FROM public.ficedl_thesaurus_terms) = '2026-10-19 15:08:24+00'::timestamptz THEN ok := ok + 1;
+  ELSE RAISE WARNING 'T4 harvested_at : % valeur(s), min %, max %', h, (SELECT min(harvested_at) FROM public.ficedl_thesaurus_terms), (SELECT max(harvested_at) FROM public.ficedl_thesaurus_terms); END IF;
 
-  -- T5 : les deux fiches de l'aspiration sans libellé ni H1 (mot532, mot538) ne sont pas
-  --      entrées : aucune ligne sans libellé du tout
+  -- T5 : aucune ligne sans libellé. mot532 et mot538, que le 503 du 03/09 avait
+  --      laissées dehors, sont entrées le 19/10 avec le leur (1897 et 1903).
   SELECT count(*) INTO n FROM public.ficedl_thesaurus_terms WHERE labels = '{}'::jsonb OR labels IS NULL;
   IF n = 0 THEN ok := ok + 1; ELSE RAISE WARNING 'T5 % terme(s) sans aucun libellé', n; END IF;
 
@@ -79,7 +85,7 @@ BEGIN
   END IF;
 
   IF ok = total THEN
-    RAISE NOTICE 'FICEDL-TERMES OK : %/% tests passés — 621 termes, 159 dates, empreinte % (dépôt rejoué = production depuis le déploiement du 24/09/2026)', ok, total, empreinte;
+    RAISE NOTICE 'FICEDL-TERMES OK : %/% tests passés — 623 termes, 161 dates, empreinte % (dépôt rejoué = production depuis le déploiement du 19/10/2026)', ok, total, empreinte;
   ELSE
     RAISE EXCEPTION 'FICEDL-TERMES ECHEC : %/% tests passés — empreinte %', ok, total, empreinte;
   END IF;
