@@ -16,6 +16,7 @@ import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import AltchaWidget from '@/components/ui/AltchaWidget';
 import { SITE_CODES } from '@/i18n/locales';
+import { normaliserUrlWeb } from '@/lib/html';
 
 const CATS = ['biblioteca', 'arquivo', 'centro_doc', 'ateneu', 'livraria', 'misto'];
 const MAP_LOCALES = SITE_CODES;
@@ -75,13 +76,17 @@ export default function CartografiaAjouterPage() {
   async function submit(e) {
     e.preventDefault();
     if (f.name.trim().length < 2) { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); return; }
+    // Le site est une adresse web http(s) (« exemple.org » est complété) ; la
+    // fonction et la base appliquent la même règle (17/10/2026).
+    const site = normaliserUrlWeb(f.site_url);
+    if (!site.ok) { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); return; }
     // Garde-fou d'interface : la vraie verification est cote serveur, ici on
     // evite seulement d'envoyer un formulaire qui sera refuse.
     if (!altchaCharge) { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); return; }
     setState('sending'); setErrMsg('');
     const res = await callEdgeFunction('submit-cartography-entry', {
       name: f.name, city: f.city, country: f.country, categorie: f.categorie,
-      langue_fonds: f.langue_fonds, site_url: f.site_url, email: f.email, tel: f.tel,
+      langue_fonds: f.langue_fonds, site_url: site.url || '', email: f.email, tel: f.tel,
       adresse: f.adresse, notes: f.notes, submitter_note: f.submitter_note,
       notes_locale: lang, lat: f.lat, lon: f.lon,
       altcha_payload: altchaCharge, website: f.website,

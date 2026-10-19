@@ -4,6 +4,7 @@ import { apiRpc, supabase } from '@/lib/supabase';
 import { addBasemap } from '@/lib/mapTiles';
 import { lireReseau, ecrireReseau } from '@/lib/reseaux';
 import { SITE_CODES } from '@/i18n/locales';
+import { normaliserUrlWeb } from '@/lib/html';
 
 // Modale d'édition d'une fiche cartographique (Phase 3, MAP-D). Ouverte depuis la
 // carte interne (clic « Éditer » sur un marqueur éditable). Pré-remplie via
@@ -107,13 +108,17 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
 
   async function save() {
     setSaving(true); setErr('');
+    // Le site est une adresse web : « exemple.org » devient « https://exemple.org »,
+    // tout autre schéma est refusé (la base le refuserait aussi, 17/10/2026).
+    const site = normaliserUrlWeb(form.site_url);
+    if (!site.ok) { setSaving(false); setErr(t({ id: 'federacao.carte.edit.error' })); return; }
     const payload = {
       name_i18n: { ...(row.name_i18n || {}), [lang]: form.name },
       city_i18n: { ...(row.city_i18n || {}), [lang]: form.city },
       country_i18n: { ...(row.country_i18n || {}), [lang]: form.country },
       notes_i18n: { ...(row.notes_i18n || {}), [lang]: form.notes },
       langue_fonds: form.langue_fonds.split(/[,;]+/).map((s) => s.trim()).filter(Boolean),
-      site_url: form.site_url,
+      site_url: site.url || '',
       email: form.email,
       tel: form.tel,
       adresse: form.adresse,

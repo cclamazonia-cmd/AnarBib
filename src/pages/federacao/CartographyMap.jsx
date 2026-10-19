@@ -6,6 +6,7 @@ import { loadVendorScript, loadVendorCss } from '@/lib/loadVendorScript';
 import CartographyEditModal from './CartographyEditModal';
 import './NetworkMap.css';
 import { SITE_CODES } from '@/i18n/locales';
+import { echapperHtml, urlWebSure } from '@/lib/html';
 
 // Composant carte partagé de l'annuaire géographique du réseau. Leaflet +
 // markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée). Fond de
@@ -49,9 +50,7 @@ async function loadLeaflet() {
   return L;
 }
 
-function esc(s) {
-  return String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-}
+const esc = (s) => echapperHtml(s || '');
 
 // Marqueur « goutte » coloré par catégorie. Membres AnarBib = emblème réseau (MAP-H).
 function dropIcon(L, color, isMember) {
@@ -94,8 +93,11 @@ export default function CartographyMap({ viewName }) {
   function popupHtml(p) {
     const i = (p.i18n[lang] && p.i18n[lang].name) ? p.i18n[lang] : ((p.i18n.fr && p.i18n.fr.name) ? p.i18n.fr : (p.i18n.pt || {}));
     const loc = [i.city, i.country].filter(Boolean).join(', ');
-    const site = p.site
-      ? `<a href="${esc(p.site)}" target="_blank" rel="noopener noreferrer">${esc(p.site.replace(/^https?:\/\//, ''))}</a>`
+    // La popup Leaflet est une chaîne HTML que React ne protège pas : seul un
+    // lien http(s) y entre (17/10/2026).
+    const siteSur = urlWebSure(p.site);
+    const site = siteSur
+      ? `<a href="${esc(siteSur)}" target="_blank" rel="noopener noreferrer">${esc(siteSur.replace(/^https?:\/\//, ''))}</a>`
       : '';
     const badge = p.anarbib ? `<span class="ab-map-badge">${esc(t({ id: 'federacao.carte.member' }))}</span>` : '';
     const typeLabel = p.category ? t({ id: `federacao.carte.cat.${p.category}` }) : '';

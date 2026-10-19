@@ -103,6 +103,16 @@ async function traiter(req: Request): Promise<Response> {
     ? p.langue_fonds.map((x) => String(x).trim()).filter(Boolean)
     : (p.langue_fonds ? String(p.langue_fonds).split(/[,;]+/).map((x) => x.trim()).filter(Boolean) : []);
   const num = (v: unknown) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+  // Le site est une adresse web http(s) : « exemple.org » devient
+  // « https://exemple.org », tout autre schéma est refusé (même règle que
+  // src/lib/html.js normaliserUrlWeb et que la contrainte en base, 17/10/2026).
+  const siteBrut = p.site_url ? String(p.site_url).trim().slice(0, 500) : "";
+  let site_url: string | null = null;
+  if (siteBrut) {
+    if (/^https?:\/\/[^\s<>"'`]+$/i.test(siteBrut)) site_url = siteBrut;
+    else if (/^(?:www\.)?[a-z0-9][a-z0-9.-]*\.[a-z]{2,}(?:[/?#][^\s<>"'`]*)?$/i.test(siteBrut)) site_url = `https://${siteBrut}`;
+    else return json({ error: "invalid_site_url" }, 400);
+  }
 
   const { data, error } = await sb.from("cartography_submissions").insert({
     name,
@@ -110,7 +120,7 @@ async function traiter(req: Request): Promise<Response> {
     country: p.country ? String(p.country).slice(0, 160) : null,
     categorie,
     langue_fonds: langs,
-    site_url: p.site_url ? String(p.site_url).slice(0, 500) : null,
+    site_url,
     email: p.email ? String(p.email).slice(0, 200) : null,
     tel: p.tel ? String(p.tel).slice(0, 80) : null,
     adresse: p.adresse ? String(p.adresse).slice(0, 300) : null,
