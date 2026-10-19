@@ -42,15 +42,21 @@ const CORPS = {
   phone: '+33 1 00 00 00 00', locale: 'fr', consent_email: true,
 };
 
-function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL } = {}) {
+// 19/10/2026 : le compte naît sans mot de passe connu ; le mail porte un lien
+// « recovery » (generateLink) pour le choisir.
+const LIEN = 'https://auth.test/verify?token=lien-de-definition&type=recovery';
+
+function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL, existant = false, bloque = null } = {}) {
   const comptes = [];
+  const liensDemandes = [];
   const ef = monterEF({
     entree: 'register/index.ts',
-    env,
+    env: { REGISTER_PLANCHER_MS: '0', ...env },
     remplacements: { 'altcha.ts': { verifierSolution: async () => ({ ok: true, challenge: 'defi-1', expiresAt: new Date(Date.now() + 60000) }) } },
     auth: { admin: {
       createUser: async (u) => { comptes.push(u); return { data: { user: { id: 'user-1' } }, error: null }; },
       deleteUser: async () => ({ data: null, error: null }),
+      generateLink: async (o) => { liensDemandes.push(o); return { data: { properties: { action_link: LIEN } }, error: null }; },
     } },
     rpc: (_schema, nom) => (nom === 'fn_consume_altcha_challenge' ? { data: true, error: null } : { data: null, error: null }),
     repondre: (schema, table, a) => {
@@ -59,8 +65,16 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL } = {}) {
       if (table === 'v_library_notification_context') return { data: canal, error: null };
       if (table === 'profiles') {
         if (a('update')) return a('select') ? { data: PROFIL, error: null } : { data: null, error: null };
-        if (a('limit')) return { data: [], error: null };                   // l'adresse n'est pas déjà prise
+        if (a('limit')) return { data: existant ? [PROFIL] : [], error: null };   // l'adresse est-elle déjà prise ?
         return { data: PROFIL, error: null };
+      }
+      if (table === 'auth_rate_limits') {
+        // `bloque` : le kind dont le compteur est déjà au plafond
+        const kind = a('eq') && a('eq').args && a('eq').args[1];   // .eq('kind', …) vient en premier
+        if (bloque && bloque === kind && !a('upsert')) {
+          return { data: { failure_count: 99, first_failure_at: new Date().toISOString(), blocked_until: new Date(Date.now() + 3600e3).toISOString() }, error: null };
+        }
+        return { data: null, error: null };
       }
       if (table === 'user_library_memberships') return { data: { id: 'membership-1' }, error: null };
       if (table === 'library_request_claims') return { data: { id: 'claim-1' }, error: null };
@@ -69,15 +83,15 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL } = {}) {
   });
   const tMail = ef.charger('_shared/i18n/mail-strings.ts').tMail;
 
-  async function inscrire(corps) {
-    ef.vider(); comptes.length = 0;
+  async function inscrire(corps, entetes = {}) {
+    ef.vider(); comptes.length = 0; liensDemandes.length = 0;
     const r = await ef.appeler(new Request('http://ef.local/', {
-      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...CORPS, ...corps }),
+      method: 'POST', headers: { 'content-type': 'application/json', ...entetes }, body: JSON.stringify({ ...CORPS, ...corps }),
     }));
     // F25 (17/10/2026) : le transport réserve un créneau d'envoi en base avant chaque courriel
     // (fn_mail_cadence_creneau) ; ce banc juge les appels de register, pas ceux du transport.
     const rpcs = ef.rpcs.filter((x) => x.nom !== 'fn_mail_cadence_creneau');
-    return { ...r, ecrits: [...ef.ecrits], rpcs, envois: [...ef.envois], comptes: [...comptes] };
+    return { ...r, ecrits: [...ef.ecrits], rpcs, envois: [...ef.envois], comptes: [...comptes], liensDemandes: [...liensDemandes] };
   }
   return { inscrire, tMail };
 }
@@ -87,8 +101,11 @@ describe('register — qui reçoit quoi, et quelles écritures, pour chaque sign
     const { inscrire, tMail } = monterRegister();
     const r = await inscrire({ signup_intent: 'reader_pending', library_slug: 'blmf', accept_rules: true });
     expect(r.statut).toBe(200);
-    expect(r.corps).toMatchObject({ ok: true, public_id: 'AB-0001', signup_intent: 'reader_pending', library_slug: 'blmf' });
+    // 19/10/2026 : réponse générique — ni identifiant public ni détail des envois
+    expect(r.corps).toEqual({ ok: true, signup_intent: 'reader_pending', email_usuaria_enviado: true });
     expect(r.comptes[0]).toMatchObject({ email: 'louise@exemplo.test', email_confirm: true });
+    // le mot de passe du compte est aléatoire et long, et ne part nulle part
+    expect(r.comptes[0].password.length).toBeGreaterThanOrEqual(40);
 
     const adhesion = r.ecrits.find((e) => e.table === 'user_library_memberships');
     expect(adhesion.donnees).toMatchObject({ user_id: 'user-1', library_id: 'lib-1', role: 'reader', status: 'pending_validation', is_primary: true });
@@ -101,7 +118,9 @@ describe('register — qui reçoit quoi, et quelles écritures, pour chaque sign
     const bienvenue = mailA(r.envois, 'louise@exemplo.test');
     expect(bienvenue.subject).toBe(tMail('fr', 'welcome.subject', { displayName: IDENTITE.display_name }));
     expect(bienvenue.html).toContain('AB-0001');
-    expect(bienvenue.html).toContain(r.comptes[0].password);              // le mot de passe provisoire est bien celui du compte créé
+    expect(bienvenue.html).not.toContain(r.comptes[0].password);          // plus de mot de passe dans le mail
+    expect(liens(bienvenue.html)).toContain(LIEN);                        // mais le lien pour le choisir
+    expect(r.liensDemandes[0]).toMatchObject({ type: 'recovery', email: 'louise@exemplo.test' });
     expect(bienvenue.from).toContain('anarbib@anarbib.org');
     expect(mailA(r.envois, 'coordination@biblio.test')).toBeUndefined();
     expect(mailA(r.envois, 'anarbib@anarbib.org')).toBeTruthy();
@@ -129,7 +148,8 @@ describe('register — qui reçoit quoi, et quelles écritures, pour chaque sign
     const { inscrire } = monterRegister();
     const r = await inscrire({ signup_intent: 'collective_candidate' });
     expect(r.statut).toBe(200);
-    expect(r.corps).toMatchObject({ signup_intent: 'collective_candidate', library_request_claim_created: true, library_slug: null });
+    // la réponse est générique (19/10/2026) : la création du claim se lit dans les écritures
+    expect(r.corps).toEqual({ ok: true, signup_intent: 'collective_candidate', email_usuaria_enviado: true });
     expect(r.ecrits.some((e) => e.table === 'user_library_memberships')).toBe(false);
     const claim = r.ecrits.find((e) => e.table === 'library_request_claims').donnees;
     expect(claim).toMatchObject({ user_id: 'user-1', email_snapshot: 'louise@exemplo.test', claim_purpose: 'library_request' });
@@ -190,14 +210,57 @@ describe('register — un refus n\'écrit rien', () => {
     }
   });
 
-  it('bibliothèque fermée aux inscriptions publiques : 403, aucun compte créé (ELIGIBILITE-ENONCEE)', async () => {
+  it('bibliothèque fermée aux inscriptions publiques : refusée comme une inconnue, aucun compte créé (ELIGIBILITE-ENONCEE)', async () => {
+    // 19/10/2026 : un seul refus, sans slug ni détail — distinguer « fermée » de
+    // « inconnue » disait qu'une bibliothèque privée existe.
     for (const ferme of [{ accepts_public_signup: false }, { visibility_level: 'private' }, { is_active: false }]) {
       const { inscrire } = monterRegister({ biblio: { ...BIBLIO, ...ferme } });
       const r = await inscrire({ signup_intent: 'reader_pending', library_slug: 'blmf', accept_rules: true });
-      expect(r.statut).toBe(403);
-      expect(r.corps.error).toBe('LIBRARY_NOT_OPEN_TO_SIGNUP');
-      expect(r.comptes).toHaveLength(0); expect(r.ecrits).toHaveLength(0); expect(r.envois).toHaveLength(0);
+      expect(r.statut).toBe(400);
+      expect(r.corps).toEqual({ error: 'INVALID_LIBRARY' });
+      // seuls les compteurs d'abus ont écrit
+      expect(r.comptes).toHaveLength(0); expect(r.ecrits.filter((e) => e.table !== 'auth_rate_limits')).toHaveLength(0); expect(r.envois).toHaveLength(0);
     }
+  });
+
+  it('adresse déjà inscrite : même réponse qu\'une inscription, aucun compte créé, un lien envoyé à l\'adresse seule', async () => {
+    const { inscrire, tMail } = monterRegister({ existant: true });
+    const r = await inscrire({ signup_intent: 'reader_pending', library_slug: 'blmf', accept_rules: true });
+    expect(r.statut).toBe(200);
+    expect(r.corps).toEqual({ ok: true, signup_intent: 'reader_pending', email_usuaria_enviado: true });
+    expect(r.comptes).toHaveLength(0);
+    expect(r.ecrits.filter((e) => e.table !== 'auth_rate_limits')).toHaveLength(0);
+    expect(r.envois).toHaveLength(1);                                     // ni biblio ni gestion
+    const m = mailA(r.envois, 'louise@exemplo.test');
+    expect(m.subject).toBe(tMail('fr', 'register.existing.subject'));
+    expect(liens(m.html)).toContain(LIEN);
+  });
+
+  it('freins : au-delà du plafond par IP ou par destinataire, 429 et rien d\'autre', async () => {
+    for (const kind of ['register_ip', 'register_dest']) {
+      const { inscrire } = monterRegister({ bloque: kind });
+      const r = await inscrire({ signup_intent: 'contributor' }, { 'cf-connecting-ip': '203.0.113.9' });
+      expect(r.statut, kind).toBe(429);
+      expect(r.comptes).toHaveLength(0); expect(r.envois).toHaveLength(0);
+    }
+  });
+
+  it('freins : clés hachées, l\'IP lue dans cf-connecting-ip plutôt que dans x-forwarded-for', async () => {
+    const { inscrire } = monterRegister();
+    const r = await inscrire({ signup_intent: 'contributor' }, { 'cf-connecting-ip': '203.0.113.9', 'x-forwarded-for': '198.51.100.1, 10.0.0.1' });
+    const compteurs = r.ecrits.filter((e) => e.table === 'auth_rate_limits').map((e) => e.donnees);
+    const ip = compteurs.find((c) => c.kind === 'register_ip');
+    const dest = compteurs.find((c) => c.kind === 'register_dest');
+    expect(ip.key).toBe(createHash('sha256').update('203.0.113.9').digest('hex'));
+    expect(dest.key).toBe(createHash('sha256').update('louise@exemplo.test').digest('hex'));
+  });
+
+  it('l\'objet du mail ne reprend pas un nom de bibliothèque saisi par la personne', async () => {
+    const { inscrire, tMail } = monterRegister();
+    const r = await inscrire({ signup_intent: 'collective_candidate', library_name: 'Gagnez 1000 € ici http://piege.test' });
+    const m = mailA(r.envois, 'louise@exemplo.test');
+    expect(m.subject).toBe(tMail('fr', 'welcome.subject.initial', { displayName: 'AnarBib' }));
+    expect(m.subject).not.toContain('piege');
   });
 
   it('le défi anti-robots est consommé AVANT toute écriture', async () => {

@@ -4974,19 +4974,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Το δημόσιο ID σου",
     ro: "Identificatorul tău public"
   },
-  "welcome.tempPasswordLabel": {
-    "pt-BR": "Senha provisória",
-    fr: "Mot de passe provisoire",
-    es: "Contraseña provisional",
-    en: "Temporary password",
-    it: "Password provvisoria",
-    de: "Vorläufiges Passwort",
-    ca: "Contrasenya provisional",
-    eo: "Provizora pasvorto",
-    nl: "Tijdelijk wachtwoord",
-    el: "Προσωρινός κωδικός",
-    ro: "Parolă provizorie"
-  },
   "welcome.nextAccess": {
     "pt-BR": "Nos próximos acessos ao AnarBib, entre com seu <b>ID público</b> e sua senha.",
     fr: "Pour tes prochains accès à AnarBib, connecte-toi avec ton <b>identifiant public</b> et ton mot de passe.",
@@ -5000,19 +4987,6 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Για τις επόμενες επισκέψεις σου στο AnarBib, συνδέσου με το <b>δημόσιο ID σου</b> και τον κωδικό σου.",
     ro: "Data viitoare când intri pe AnarBib, conectează-te cu <b>identificatorul tău public</b> și cu parola ta."
   },
-  "welcome.important": {
-    "pt-BR": "<b>Importante:</b> a senha enviada aqui é provisória. Depois do primeiro acesso, altere-a na página <b>Conta</b>.",
-    fr: "<b>Important :</b> le mot de passe envoyé ici est provisoire. Dès ton premier accès, tu seras invité·e à le changer.",
-    es: "<b>Importante:</b> la contraseña enviada aquí es provisional. En tu primer acceso, se te invitará a cambiarla.",
-    en: "<b>Important:</b> the password sent here is temporary. On your first login, you will be prompted to change it.",
-    it: "<b>Importante:</b> la password inviata qui è provvisoria. Al primo accesso, ti verrà chiesto di cambiarla.",
-    de: "<b>Wichtig:</b> Das hier gesendete Passwort ist vorläufig. Bei deiner ersten Anmeldung wirst du aufgefordert, es zu ändern.",
-    ca: "<b>Important:</b> la contrasenya enviada aquí és provisional. Al teu primer accés, se t'invitarà a canviar-la.",
-    eo: "<b>Grave:</b> la pasvorto sendita ĉi tie estas provizora. Ĉe via unua aliro, vi estos invitita ŝanĝi ĝin.",
-    nl: "<b>Belangrijk:</b> het hier verzonden wachtwoord is tijdelijk. Bij je eerste keer inloggen word je gevraagd het te wijzigen.",
-    el: "<b>Σημαντικό:</b> ο κωδικός που στάλθηκε εδώ είναι προσωρινός. Στην πρώτη σου σύνδεση, θα σου ζητηθεί να τον αλλάξεις.",
-    ro: "<b>Important:</b> parola trimisă aici este provizorie. La prima conectare, ți se va cere s-o schimbi."
-  },
   "welcome.forgotHint": {
     "pt-BR": "Se você perder o acesso, use o botão <b>\"Esqueci minha senha\"</b> na página de login.",
     fr: "Si tu perds l'accès, utilise le bouton <b>« Mot de passe oublié »</b> sur la page de connexion.",
@@ -5025,6 +4999,97 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Als je de toegang verliest, gebruik dan de knop <b>„Wachtwoord vergeten”</b> op de inlogpagina.",
     el: "Αν χάσεις την πρόσβαση, χρησιμοποίησε το κουμπί <b>«Ξέχασα τον κωδικό μου»</b> στη σελίδα σύνδεσης.",
     ro: "Dacă pierzi accesul, folosește butonul <b>„Am uitat parola”</b> de pe pagina de conectare."
+  },
+  "welcome.setPassword.intro": {
+    "pt-BR": "Para ativar sua conta, escolha sua senha pelo botão abaixo.",
+    fr: "Pour activer ton compte, choisis ton mot de passe avec le bouton ci-dessous.",
+    es: "Para activar tu cuenta, elegí tu contraseña con el botón de abajo.",
+    en: "To activate your account, choose your password with the button below.",
+    it: "Per attivare il tuo account, scegli la tua password con il pulsante qui sotto.",
+    de: "Um dein Konto zu aktivieren, wähle dein Passwort über die Schaltfläche unten.",
+    ca: "Per activar el teu compte, tria la teva contrasenya amb el botó de sota.",
+    eo: "Por aktivigi vian konton, elektu vian pasvorton per la suba butono.",
+    nl: "Kies je wachtwoord met de knop hieronder om je account te activeren.",
+    el: "Για να ενεργοποιήσεις τον λογαριασμό σου, διάλεξε τον κωδικό σου με το κουμπί παρακάτω.",
+    ro: "Ca să-ți activezi contul, alege-ți parola cu butonul de mai jos."
+  },
+  "welcome.setPassword.cta": {
+    "pt-BR": "Escolher minha senha",
+    fr: "Choisir mon mot de passe",
+    es: "Elegir mi contraseña",
+    en: "Choose my password",
+    it: "Scegliere la mia password",
+    de: "Mein Passwort wählen",
+    ca: "Triar la meva contrasenya",
+    eo: "Elekti mian pasvorton",
+    nl: "Mijn wachtwoord kiezen",
+    el: "Επιλογή κωδικού",
+    ro: "Alege parola"
+  },
+  "welcome.setPassword.expiry": {
+    "pt-BR": "Este link vale por uma hora. Depois disso, use <b>\"Esqueci minha senha\"</b> na página de login, com este endereço de e-mail.",
+    fr: "Ce lien vaut une heure. Passé ce délai, utilise <b>« Mot de passe oublié »</b> sur la page de connexion, avec cette adresse.",
+    es: "Este enlace vale una hora. Pasado ese plazo, usá <b>«Olvidé mi contraseña»</b> en la página de inicio de sesión, con esta dirección.",
+    en: "This link is valid for one hour. After that, use <b>\"Forgot my password\"</b> on the login page with this address.",
+    it: "Questo link vale un'ora. Dopo, usa <b>«Ho dimenticato la password»</b> nella pagina di accesso, con questo indirizzo.",
+    de: "Dieser Link gilt eine Stunde. Danach nutze <b>„Passwort vergessen“</b> auf der Anmeldeseite mit dieser Adresse.",
+    ca: "Aquest enllaç val una hora. Passat aquest termini, fes servir <b>«He oblidat la contrasenya»</b> a la pàgina d'inici de sessió, amb aquesta adreça.",
+    eo: "Ĉi tiu ligilo validas unu horon. Poste, uzu <b>«Mi forgesis mian pasvorton»</b> en la ensaluta paĝo, kun ĉi tiu adreso.",
+    nl: "Deze link is een uur geldig. Gebruik daarna <b>„Wachtwoord vergeten”</b> op de inlogpagina, met dit adres.",
+    el: "Αυτός ο σύνδεσμος ισχύει για μία ώρα. Μετά, χρησιμοποίησε το <b>«Ξέχασα τον κωδικό μου»</b> στη σελίδα σύνδεσης, με αυτή τη διεύθυνση.",
+    ro: "Acest link e valabil o oră. După aceea, folosește <b>„Am uitat parola”</b> pe pagina de conectare, cu această adresă."
+  },
+  "register.existing.subject": {
+    "pt-BR": "Sua conta AnarBib",
+    fr: "Ton compte AnarBib",
+    es: "Tu cuenta AnarBib",
+    en: "Your AnarBib account",
+    it: "Il tuo account AnarBib",
+    de: "Dein AnarBib-Konto",
+    ca: "El teu compte AnarBib",
+    eo: "Via AnarBib-konto",
+    nl: "Je AnarBib-account",
+    el: "Ο λογαριασμός σου στο AnarBib",
+    ro: "Contul tău AnarBib"
+  },
+  "register.existing.title": {
+    "pt-BR": "Você já tem uma conta",
+    fr: "Tu as déjà un compte",
+    es: "Ya tenés una cuenta",
+    en: "You already have an account",
+    it: "Hai già un account",
+    de: "Du hast schon ein Konto",
+    ca: "Ja tens un compte",
+    eo: "Vi jam havas konton",
+    nl: "Je hebt al een account",
+    el: "Έχεις ήδη λογαριασμό",
+    ro: "Ai deja un cont"
+  },
+  "register.existing.body": {
+    "pt-BR": "Alguém acaba de pedir uma inscrição no AnarBib com este endereço de e-mail, que já tem uma conta. Se foi você, pode (re)escolher sua senha pelo botão abaixo.",
+    fr: "Une inscription à AnarBib vient d'être demandée avec cette adresse, qui a déjà un compte. Si c'est toi, tu peux (re)choisir ton mot de passe avec le bouton ci-dessous.",
+    es: "Se acaba de pedir una inscripción en AnarBib con esta dirección, que ya tiene una cuenta. Si fuiste vos, podés (re)elegir tu contraseña con el botón de abajo.",
+    en: "Someone just asked to sign up to AnarBib with this address, which already has an account. If it was you, you can (re)choose your password with the button below.",
+    it: "È appena stata richiesta un'iscrizione ad AnarBib con questo indirizzo, che ha già un account. Se sei tu, puoi (ri)scegliere la tua password con il pulsante qui sotto.",
+    de: "Gerade wurde mit dieser Adresse, die schon ein Konto hat, eine Anmeldung bei AnarBib beantragt. Wenn du das warst, kannst du dein Passwort über die Schaltfläche unten (neu) wählen.",
+    ca: "Acaben de demanar una inscripció a AnarBib amb aquesta adreça, que ja té un compte. Si has estat tu, pots (tornar a) triar la teva contrasenya amb el botó de sota.",
+    eo: "Iu ĵus petis aliĝon al AnarBib per ĉi tiu adreso, kiu jam havas konton. Se tio estis vi, vi povas (re)elekti vian pasvorton per la suba butono.",
+    nl: "Er is net een inschrijving bij AnarBib aangevraagd met dit adres, dat al een account heeft. Was jij dat, dan kun je met de knop hieronder (opnieuw) je wachtwoord kiezen.",
+    el: "Μόλις ζητήθηκε εγγραφή στο AnarBib με αυτή τη διεύθυνση, που έχει ήδη λογαριασμό. Αν ήσουν εσύ, μπορείς να (ξανα)διαλέξεις τον κωδικό σου με το κουμπί παρακάτω.",
+    ro: "Tocmai s-a cerut o înscriere pe AnarBib cu această adresă, care are deja un cont. Dacă ai fost tu, îți poți (re)alege parola cu butonul de mai jos."
+  },
+  "register.existing.ignore": {
+    "pt-BR": "Se não foi você, ignore esta mensagem: nada mudou na sua conta.",
+    fr: "Si ce n'est pas toi, ignore ce message : rien n'a changé sur ton compte.",
+    es: "Si no fuiste vos, ignorá este mensaje: nada cambió en tu cuenta.",
+    en: "If it wasn't you, ignore this message: nothing has changed on your account.",
+    it: "Se non sei tu, ignora questo messaggio: nel tuo account non è cambiato nulla.",
+    de: "Wenn du es nicht warst, ignoriere diese Nachricht: An deinem Konto hat sich nichts geändert.",
+    ca: "Si no has estat tu, ignora aquest missatge: al teu compte no ha canviat res.",
+    eo: "Se tio ne estis vi, ignoru ĉi tiun mesaĝon: nenio ŝanĝiĝis en via konto.",
+    nl: "Was jij het niet, negeer dit bericht dan: er is niets veranderd aan je account.",
+    el: "Αν δεν ήσουν εσύ, αγνόησε αυτό το μήνυμα: τίποτα δεν άλλαξε στον λογαριασμό σου.",
+    ro: "Dacă nu ai fost tu, ignoră acest mesaj: nimic nu s-a schimbat în contul tău."
   },
   "welcome.libraryRequest.intro": {
     "pt-BR": "Use o botão abaixo para iniciar a solicitação institucional da sua biblioteca. Este link já está ligado à sua conta inicial, não precisa entrar manualmente de novo para começar.",

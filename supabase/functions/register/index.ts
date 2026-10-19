@@ -13,6 +13,8 @@ import { transportDisabledReason, resolveLibraryLogoUrl } from "../_shared/conte
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
 import { isSupportedLocale } from "../_shared/i18n/locales.ts";
+import { freiner, sha256Hex as empreinte } from "../_shared/core/rate-limit.ts";
+import { ipClient } from "../_shared/core/ip-client.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -76,12 +78,28 @@ function json(body, status = 200) {
 //   2. fn_consume_altcha_challenge() : ce defi a-t-il deja servi ?
 // Sans (2), une solution valide se rejoue jusqu'a expiration et la preuve de
 // travail ne coute plus rien. Cf. DECISION_anti_robots_2026-08-20 (AR-3, AR-4).
-function generateTempPassword(length = 14) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-  return Array.from({
-    length
-  }, ()=>chars[Math.floor(Math.random() * chars.length)]).join("");
+// ── Compte sans mot de passe connu (19/10/2026) ─────────────────────────────
+// Le compte naît avec un mot de passe aléatoire que personne ne connaît
+// (generateOpaqueToken, générateur cryptographique) ; la personne choisit le
+// sien par le lien du mail de bienvenue (lien « recovery », le mécanisme de
+// « mot de passe oublié »). Seule la boîte de l'adresse reçoit ce lien : c'est
+// la preuve de possession de l'adresse.
+//
+// Freins (_shared/core/rate-limit.ts, clés hachées) : par IP fiable
+// (_shared/core/ip-client.ts) et par adresse destinataire — une adresse ne
+// reçoit pas plus de quelques mails d'inscription par jour.
+const FREIN_IP = { limite: 10, fenetreMin: 60 };          // kind register_ip
+const FREIN_DEST = { limite: 3, fenetreMin: 24 * 60 };   // kind register_dest
+// Réponse au même rythme qu'il y ait création ou non (adresse déjà inscrite).
+// (REGISTER_PLANCHER_MS règle la durée ; le banc la met à 0.)
+async function plancher(debut) {
+  const reglage = Number(Deno.env.get("REGISTER_PLANCHER_MS"));
+  const cible = Number.isFinite(reglage) && Deno.env.get("REGISTER_PLANCHER_MS") ? reglage : 2500;
+  const reste = cible - (Date.now() - debut);
+  if (reste > 0) await new Promise((r) => setTimeout(r, reste));
 }
+// Longueurs bornées des champs libres.
+const borne = (v, n) => String(v || "").trim().slice(0, n);
 function escapeHtml(value) {
   return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
@@ -253,7 +271,7 @@ function projectUrl(locale) {
   const slug = SITE_PROJECT_SLUG_BY_LOCALE[String(locale || "").trim()] || "projeto";
   return siteUrl(`/${lang}/${slug}/`);
 }
-function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, isContributor = false, atelierUrl, catalogUrl, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
+function buildUserMail({ firstName, libraryName, publicId, setPasswordUrl, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, isContributor = false, atelierUrl, catalogUrl, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
@@ -278,13 +296,13 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
       value: publicId,
       tone: "red"
     })}
-    ${buildInfoCard({
-      label: tMail(locale, "welcome.tempPasswordLabel"),
-      value: tempPassword,
-      tone: "dark"
-    })}
+    ${setPasswordUrl ? buildParagraph(tMail(locale, "welcome.setPassword.intro")) : ""}
+    ${setPasswordUrl ? buildActionButton({
+      href: setPasswordUrl,
+      label: tMail(locale, "welcome.setPassword.cta")
+    }) : ""}
+    ${buildParagraph(tMail(locale, "welcome.setPassword.expiry"))}
     ${buildParagraph(tMail(locale, "welcome.nextAccess"))}
-    ${buildParagraph(tMail(locale, "welcome.important"))}
     ${buildParagraph(tMail(locale, "welcome.forgotHint"))}
     ${isWithoutLibrary && !isOrphan && !isContributor && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
     ${isWithoutLibrary && !isOrphan && !isContributor && libraryRequestUrl ? buildActionButton({
@@ -334,6 +352,43 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
           ? tMail(locale, "welcome.title.initial")
           : tMail(locale, "welcome.title", { libraryName }),
     subtitle: isContributor ? tMail(locale, "welcome.subtitle.contributor") : tMail(locale, "welcome.subtitle"),
+    logoTable,
+    contentHtml
+  });
+}
+// Lien « recovery » : la personne y choisit son mot de passe (même mécanisme
+// que request-password-reset). Vide si Supabase refuse : le mail renvoie alors
+// à « Mot de passe oublié ».
+async function lienDefinition(admin, email) {
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: "recovery",
+    email,
+    options: { redirectTo: `${APP_BASE_URL}/login` }
+  });
+  if (error || !data?.properties?.action_link) {
+    console.warn("register: lien de définition indisponible —", error?.message || "no action_link");
+    return "";
+  }
+  return data.properties.action_link;
+}
+// La réponse ne dit rien de plus qu'« un mail est parti » : ni identifiant
+// public, ni détail des envois internes — identique qu'il y ait eu création
+// ou que l'adresse ait déjà un compte.
+function reponseGenerique(signupIntent, emailEnvoye) {
+  return { ok: true, signup_intent: signupIntent, email_usuaria_enviado: emailEnvoye === true };
+}
+function buildExistingAccountMail({ setPasswordUrl, locale, anarbibLogoUrl }) {
+  const logoTable = buildLogoTable({ anarbibLogoUrl, libraryLogoUrl: "", libraryName: "AnarBib", includeLibraryLogo: false });
+  const contentHtml = `
+    ${buildParagraph(tMail(locale, "register.existing.body"))}
+    ${setPasswordUrl ? buildActionButton({ href: setPasswordUrl, label: tMail(locale, "welcome.setPassword.cta") }) : ""}
+    ${buildParagraph(tMail(locale, "welcome.setPassword.expiry"))}
+    ${buildParagraph(tMail(locale, "register.existing.ignore"))}
+  `;
+  return buildMailShell({
+    pretitle: "AnarBib",
+    title: tMail(locale, "register.existing.title"),
+    subtitle: "",
     logoTable,
     contentHtml
   });
@@ -474,31 +529,32 @@ serve(async (req)=>{
       error: "METHOD_NOT_ALLOWED"
     }, 405);
   }
+  const debut = Date.now();
   try {
     const body = await req.json();
     const altchaCharge = String(body?.altcha_payload || "");
-    const email = normalizeEmail(body?.email);
-    const firstName = String(body?.first_name || "").trim();
-    const lastName = String(body?.last_name || "").trim();
-    const phone = String(body?.phone || "").trim();
-    const gender = String(body?.gender || "").trim();
+    const email = normalizeEmail(body?.email).slice(0, 254);
+    const firstName = borne(body?.first_name, 100);
+    const lastName = borne(body?.last_name, 100);
+    const phone = borne(body?.phone, 40);
+    const gender = borne(body?.gender, 40);
     // Champs libres criar-conta : organisation d'appartenance + motivation.
     const affiliationOrg = String(body?.affiliation_org || "").trim().slice(0, 200);
     const signupMotivation = String(body?.signup_motivation || "").trim().slice(0, 1000);
-    const address1 = String(body?.address_1 || "").trim();
-    const address2 = String(body?.address_2 || "").trim();
-    const addressUnit = String(body?.address_unit || "").trim();
+    const address1 = borne(body?.address_1, 200);
+    const address2 = borne(body?.address_2, 200);
+    const addressUnit = borne(body?.address_unit, 60);
     // district : "Bairro" en pt-BR, "Quartier" en français.
     // Champ à part de address_2 (qui correspond au "Complemento" / 2e ligne).
-    const district = String(body?.district || "").trim();
-    const cep = String(body?.cep || "").trim();
-    const city = String(body?.city || "").trim();
-    const state = String(body?.state || "").trim();
+    const district = borne(body?.district, 120);
+    const cep = borne(body?.cep, 20);
+    const city = borne(body?.city, 120);
+    const state = borne(body?.state, 120);
     // state_code : code ISO 3166-2 (ex: 'SP', 'IDF') si pays a une liste fermée.
     // Permet de stocker [XX] dans le format canonique pour réinitialisation
     // exacte des dropdowns lors de l'édition ultérieure.
     const stateCode = String(body?.state_code || "").trim().toUpperCase();
-    const country = String(body?.country || "").trim();
+    const country = borne(body?.country, 120);
     // country_code : code ISO 3166-1 alpha-2 (ex: 'BR', 'FR') envoyé par le frontend
     // pour préservation explicite. Si non fourni, on utilise `country` directement
     // (peut être un code ISO 2 lettres ou un nom textuel selon legacy).
@@ -570,12 +626,12 @@ serve(async (req)=>{
     // rien consenti), le second protege la personne qui declare.
     const orphanContactConsent = body?.orphan_mention_contact_consent === true;
     const orphanAttributionConsent = body?.orphan_mention_attribution_consent === true;
-    const requestedLibraryName = String(body?.library_name || "").trim();
+    const requestedLibraryName = borne(body?.library_name, 200);
     const requestedLibraryContactEmail = normalizeEmail(body?.library_contact_email);
     const requestedLibraryReplyToEmail = normalizeEmail(body?.library_reply_to_email);
-    const requestedLibraryAddress = String(body?.library_address || "").trim();
+    const requestedLibraryAddress = borne(body?.library_address, 300);
     const requestedLibraryIsTestMode = body?.library_is_test_mode === true;
-    const preferredLoginIdentifier = String(body?.preferred_login_identifier || "public_id").trim();
+    const preferredLoginIdentifier = borne(body?.preferred_login_identifier || "public_id", 30);
     // Locale du destinataire pour le mail de bienvenue.
     // Le frontend (CriarContaPage) passe `locale: detectLocale()` dans le body.
     // Validation : doit être l'une des locales servies par l'app, sinon pt-BR.
@@ -676,6 +732,14 @@ serve(async (req)=>{
       return json({ error: "CAPTCHA_FAILED" }, 403);
     }
 
+    // ── Freins (19/10/2026) : par IP fiable, puis par adresse destinataire ──
+    // Avant toute lecture qui dépende de l'adresse : le frein par destination
+    // compte de la même façon une adresse nouvelle et une adresse déjà inscrite.
+    const freinIp = await freiner(admin, "register_ip", await empreinte(ipClient(req)), FREIN_IP.limite, FREIN_IP.fenetreMin, json);
+    if (freinIp) return freinIp;
+    const freinDest = await freiner(admin, "register_dest", await empreinte(email), FREIN_DEST.limite, FREIN_DEST.fenetreMin, json);
+    if (freinDest) return freinDest;
+
     let libraryMeta = null;
     let libraryRow = null;
     const effectiveLibrarySlug = signupIntent === "reader_pending" ? librarySlug : "";
@@ -705,11 +769,9 @@ serve(async (req)=>{
           librarySlug: effectiveLibrarySlug,
           libraryError
         });
-        return json({
-          error: "INVALID_LIBRARY",
-          detail: "No active library_email_identity row found for the requested library slug.",
-          library_slug: effectiveLibrarySlug
-        }, 400);
+        // 19/10/2026 : un seul refus pour « inconnue », « absente » et « fermée au
+        // public » — distinguer les trois disait qu'une bibliothèque privée existe.
+        return json({ error: "INVALID_LIBRARY" }, 400);
       }
       const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, reader_cards_enabled, reader_validation_mode, is_active, accepts_public_signup, visibility_level").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
@@ -717,11 +779,9 @@ serve(async (req)=>{
           librarySlug: effectiveLibrarySlug,
           libraryRowError
         });
-        return json({
-          error: "LIBRARY_NOT_FOUND",
-          detail: "No libraries row found for the requested library slug.",
-          library_slug: effectiveLibrarySlug
-        }, 400);
+        // 19/10/2026 : un seul refus pour « inconnue », « absente » et « fermée au
+        // public » — distinguer les trois disait qu'une bibliothèque privée existe.
+        return json({ error: "INVALID_LIBRARY" }, 400);
       }
       // ELIGIBILITE-ENONCEE (30/08/2026) — `register` ne verifiait NI
       // accepts_public_signup NI visibility_level. Le seul obstacle a une
@@ -749,11 +809,9 @@ serve(async (req)=>{
         // Pas de cleanupAuthUser ici : ce controle passe AVANT la creation du
         // compte auth (userId n existe qu a partir de la ligne 752). Refuser tot,
         // c est ne rien avoir a nettoyer.
-        return json({
-          error: "LIBRARY_NOT_OPEN_TO_SIGNUP",
-          detail: "This library does not accept public reader signups.",
-          library_slug: effectiveLibrarySlug
-        }, 403);
+        // 19/10/2026 : un seul refus pour « inconnue », « absente » et « fermée au
+        // public » — distinguer les trois disait qu'une bibliothèque privée existe.
+        return json({ error: "INVALID_LIBRARY" }, 400);
       }
       libraryMeta = foundLibraryMeta;
       libraryRow = foundLibraryRow;
@@ -766,15 +824,30 @@ serve(async (req)=>{
       }, 500);
     }
     if (Array.isArray(existingProfiles) && existingProfiles.length > 0) {
-      // Code stable (mappé/localisé côté frontend) plutôt qu'un message figé.
-      return json({
-        error: "EMAIL_ALREADY_REGISTERED"
-      }, 400);
+      // 19/10/2026 : l'adresse a déjà un compte. La réponse est la MÊME que pour
+      // une inscription nouvelle (rien ne dit à l'écran qu'un compte existe) ;
+      // la boîte de l'adresse reçoit un lien pour (re)choisir son mot de passe.
+      const lien = await lienDefinition(admin, email);
+      const envoi = await sendEmail({
+        logLabel: "existing account email",
+        payload: {
+          senderEmail: senderEmailEnv,
+          senderName: "AnarBib",
+          to: [email],
+          replyToEmail: ANARBIB_REPLY_TO_EMAIL,
+          replyToName: "AnarBib",
+          subject: tMail(userLocale, "register.existing.subject"),
+          html: buildExistingAccountMail({ setPasswordUrl: lien, locale: userLocale, anarbibLogoUrl: MAIL_BRAND.anarbibLogoUrl })
+        }
+      });
+      await plancher(debut);
+      return json(reponseGenerique(signupIntent, envoi.apiAccepted));
     }
-    const tempPassword = generateTempPassword();
+    // Mot de passe aléatoire que personne ne connaît : la personne choisit le
+    // sien par le lien du mail de bienvenue (cf. en-tête, 19/10/2026).
     const { data: createUserData, error: createUserError } = await admin.auth.admin.createUser({
       email,
-      password: tempPassword,
+      password: generateOpaqueToken(32),
       email_confirm: true,
       user_metadata: {
         first_name: firstName,
@@ -1145,11 +1218,12 @@ serve(async (req)=>{
       admin_recipients: adminRecipients,
       is_test_mode: isTestMode
     })));
+    const setPasswordUrl = await lienDefinition(admin, email);
     const userMailHtml = buildUserMail({
       firstName,
       libraryName: displayName,
       publicId,
-      tempPassword,
+      setPasswordUrl,
       postalAddress,
       contactEmail,
       anarbibLogoUrl,
@@ -1253,7 +1327,10 @@ serve(async (req)=>{
           : mailIsOrphan
             ? tMail(userLocale, "welcome.subject.orphan")
             : mailIsWithoutLibrary
-              ? tMail(userLocale, "welcome.subject.initial", { displayName })
+              // 19/10/2026 : l'objet ne reprend pas un nom saisi par la personne
+              // (nom de bibliothèque proposé) — le mail part à une adresse
+              // quelconque, depuis le domaine d'AnarBib.
+              ? tMail(userLocale, "welcome.subject.initial", { displayName: "AnarBib" })
               : tMail(userLocale, "welcome.subject", { displayName }),
         html: userMailHtml
       }
@@ -1305,29 +1382,19 @@ serve(async (req)=>{
         }
       });
     }
-    return json({
-      ok: true,
-      public_id: publicId,
-      email_usuaria_enviado: userSendResult.apiAccepted,
-      internal_notification_enviada: librarySendResult.apiAccepted && adminSendResult.apiAccepted,
-      library_notification_enviada: librarySendResult.apiAccepted,
-      admin_notification_enviada: adminSendResult.apiAccepted,
-      user_email_requested: userSendResult.requested,
-      user_email_api_accepted: userSendResult.apiAccepted,
-      library_email_requested: librarySendResult.requested,
-      library_email_api_accepted: librarySendResult.apiAccepted,
-      admin_email_requested: adminSendResult.requested,
-      admin_email_api_accepted: adminSendResult.apiAccepted,
-      library_slug: signupIntent === "reader_pending" ? effectiveLibrarySlug : null,
-      // ── Paquet 2 — réponse alignée sur signup_intent (spec §4.2) ─────────
+    // 19/10/2026 : le détail des envois va au journal, plus dans la réponse —
+    // qui doit rester identique à celle d'une adresse déjà inscrite.
+    console.log("register: envois", JSON.stringify({
       signup_intent: signupIntent,
-      // signup_without_library conservé pour rétrocompat tant que le Paquet 4
-      // (frontend) n'est pas livré. À RETIRER avec le fallback d'entrée.
-      signup_without_library: signupIntent !== "reader_pending",
-      library_request_claim_created: signupIntent === "collective_candidate"
-        ? Boolean(libraryRequestClaimUrl)
-        : false
-    });
+      library_slug: signupIntent === "reader_pending" ? effectiveLibrarySlug : null,
+      user_email_api_accepted: userSendResult.apiAccepted,
+      library_email_api_accepted: librarySendResult.apiAccepted,
+      admin_email_api_accepted: adminSendResult.apiAccepted,
+      set_password_link: Boolean(setPasswordUrl),
+      library_request_claim_created: signupIntent === "collective_candidate" ? Boolean(libraryRequestClaimUrl) : false
+    }));
+    await plancher(debut);
+    return json(reponseGenerique(signupIntent, userSendResult.apiAccepted));
   } catch (error) {
     console.error("register function crash", error);
     return json({
