@@ -857,3 +857,5 @@ tests/sql/import_type_de_document_tests.sql
 # ressources publiques validées au catalogue public, elle-même hors de l'annuaire et jamais moissonnable.
 tests/sql/source_catalogue_public_tests.sql
 tests/sql/source_catalogue_rien_ne_change_tests.sql
+# Ressources communes (19/10/2026) : dans library-ui-assets, hors de themes/<slug>/, seule l'administration du réseau écrit.
+tests/sql/ressources_communes_tests.sql
