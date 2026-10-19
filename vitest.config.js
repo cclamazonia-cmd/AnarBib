@@ -45,6 +45,10 @@ export default defineConfig({
       // Edge Functions Supabase (Deno, pas Node). Leurs tests purs (sans API
       // Deno autre que Deno.test) passent par src/tests/deno-tests-pont.test.js.
       '**/supabase/functions/**',
+      // Copies de travail des sessions (.claude/worktrees/<nom>/, I40, 19/10/2026) :
+      // une suite lancée depuis ~/anarbib ramassait LEURS tests — 14 faux échecs
+      // le 18/10, 7 le 19/10 — et chargeait le poste qui fait aussi tourner la CI.
+      '**/.claude/**',
     ],
   },
 });
