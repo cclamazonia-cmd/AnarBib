@@ -7,14 +7,27 @@
 // n'importe quelle application de lecture (KOReader, Thorium, Foliate…) sans
 // passer par notre interface.
 //
-// PÉRIMÈTRE, ET IL EST STRICT. Le flux ne sert QUE les ressources
-// `access_scope = 'publico'` actives — le même prédicat que garde
-// `tests/sql/documents_numeriques_tests.sql` (T1 : aucun asset non-publico ne
-// vit dans un bucket public). Les fichiers pointés sont dans des buckets
-// publics : le flux ne crée aucun accès, il rend *trouvable* ce qui est déjà
-// public. Le client parle en service_role parce que la fonction ne porte pas
-// de JWT (verify_jwt = false, flux anonyme par nature) ; la clause WHERE est
-// donc LA garde, et elle est écrite en une seule fois, en tête.
+// PÉRIMÈTRE, ET IL EST STRICT. Le flux ne sert QUE ce que lit le public
+// anonyme : ressources `access_scope = 'publico'` actives, dans le bucket
+// public, dont la notice est tenue par une bibliothèque dont le CATALOGUE se
+// voit (publique non isolée, ou source `catalog_public`, active) — la policy
+// `book_digital_resources_public_read` — et dont le rattachement à la notice
+// est validé (`bibliographic_match_validated`, la règle de
+// `get_book_primary_public_digital_asset_v2`). Les fichiers pointés sont dans
+// des buckets publics : le flux ne crée aucun accès, il rend *trouvable* ce
+// qui est déjà public.
+//
+// QUI GARDE (19/10/2026). Jusqu'ici le client parlait en service_role et le
+// seul prédicat de la requête faisait la garde : il ne regardait pas la
+// bibliothèque, donc le PDF « publico » d'une bibliothèque privée ou réseau
+// sortait dans le flux, et une source remise à `catalog_public = false` y
+// serait restée. Le client parle désormais avec la clé PUBLIQUE, sans jeton :
+// PostgREST le lit en `anon`, et c'est la RLS des notices (aide
+// `private.fn_catalog_library_ids()`) qui décide — une seule règle pour le
+// catalogue et pour le flux, et le retour arrière d'une source s'applique au
+// flux à la requête suivante (au cache HTTP d'une heure près). Le prédicat
+// ci-dessous ne fait que resserrer (validé) et dire l'intention ; il ne peut
+// plus rien ouvrir. Garde au banc : source_catalogue_public_tests T11.
 //
 // FORME. OPDS 1.2 (Atom/XML) plutôt que 2.0 (JSON) : c'est ce que lisent les
 // liseuses et applications réellement en circulation. Deux flux :
@@ -23,17 +36,18 @@
 // Dix-huit documents au 01/09/2026 : pas de pagination — le jour où il en
 // faudra une, `?limit`/`?offset` sont déjà lus et bornés.
 import { createClient } from '../_shared/deps.ts';
-import { secretKey } from '../_shared/core/secret-key.ts';
 import { APP_BASE_URL as APP_URL } from '../_shared/core/app-url.ts';
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-// B20 (20/09/2026) : la clé secrète se lit par secretKey(), un seul chemin pour
-// toutes les fonctions — jamais la variable legacy (garde : cle-legacy-garde.test.js).
-const SERVICE_ROLE_KEY = secretKey() ?? "";
+// La clé publique (en production, la plateforme sert sous ce nom la clé
+// publiable `sb_publishable_…` — la clé anon legacy est désactivée depuis B18).
+// JAMAIS la clé secrète ici : elle contournerait la RLS, qui est la garde.
+const PUBLIC_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 
-// La seule garde du flux : publico, actif, vivant. Ne pas élargir sans relire
-// documents_numeriques_tests.sql.
-const PUBLIC_PREDICATE = { access_scope: "publico", status: "active", is_active: true };
+// Resserre ce que la RLS laisse lire au public : publico, actif, vivant,
+// rattachement validé. Ne pas élargir sans relire documents_numeriques_tests.sql
+// et source_catalogue_public_tests.sql (T11).
+const PUBLIC_PREDICATE = { access_scope: "publico", status: "active", is_active: true, bibliographic_match_validated: true };
 
 const FEED_TITLE = "AnarBib — Biblioteca digital pública";
 const FEED_AUTHOR = "AnarBib — rede de bibliotecas anarquistas";
@@ -162,7 +176,7 @@ function entryXml(r: Row): string {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return json(200, { ok: true });
-  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) return json(500, { ok: false, error: "missing env" });
+  if (!SUPABASE_URL || !PUBLIC_KEY) return json(500, { ok: false, error: "missing env" });
 
   const url = new URL(req.url);
   const base = `${SUPABASE_URL}/functions/v1/opds`;
@@ -175,7 +189,8 @@ Deno.serve(async (req) => {
     const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 100, 1), 200);
     const offset = Math.max(Number(url.searchParams.get("offset")) || 0, 0);
 
-    const db = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+    // Sans en-tête Authorization de l'appelant : la requête part en `anon`.
+    const db = createClient(SUPABASE_URL, PUBLIC_KEY, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
     // Deux requêtes et une jointure ici : `book_digital_resources` ne porte

@@ -32,6 +32,11 @@
 --   T10 forme : aides dans private, ouvertes à anon/authenticated, DEFINER,
 --      search_path posé ; 12 policies de notices sur l'aide de catalogue ;
 --      la colonne naît fausse.
+--   T11 le flux OPDS (EF `opds`, lue en anon depuis le 19/10/2026) : sa
+--      requête sous anon sert la ressource de la source et celle de la
+--      publique, jamais celle d'une privée ordinaire, ni passée en 'network',
+--      ni d'une publique isolée ; source remise à catalog_public = false →
+--      sa ressource sort du flux.
 --
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'SOURCE-CATALOGUE-PUBLIC OK : N/N'
@@ -48,6 +53,7 @@ DECLARE
   c_membre constant uuid := '5c5c5c5c-0000-4000-8000-000000000014';  -- lectrice de la publique
   v_b_src bigint; v_b_pdf bigint; v_b_priv bigint; v_author bigint;
   v_r_pub bigint; v_r_restr bigint; v_r_nonval bigint;
+  v_b_pubpdf bigint; v_r_pubpdf bigint; v_r_privpdf bigint; v_ids bigint[];
   v_n int; v_txt text; v_j jsonb; v_ok boolean; r record;
 BEGIN
   -- ── Décor (postgres) ────────────────────────────────────────────────
@@ -90,6 +96,19 @@ BEGIN
                                              source_url, bibliographic_match_validated, label)
   VALUES (v_b_src, 'link_externo', 'link_externo', 'publico', 'active', true, 'https://example.invalid/non-validee', false, 'publique non validée')
   RETURNING id INTO v_r_nonval;
+  -- T11 (flux OPDS) : une publique validée tenue par la publique ordinaire, une
+  -- autre tenue par la privée ordinaire
+  INSERT INTO public.books (titulo, bib_ref, tipo_material) VALUES ('Zzsourcepubpdf notice publique numérisée', 'SRC-4', 'livro') RETURNING id INTO v_b_pubpdf;
+  INSERT INTO public.book_holdings (book_id, library_id, local_bib_ref, exemplares_total, available_count)
+  VALUES (v_b_pubpdf, c_pub, 'PUB-4', 1, 1);
+  INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active,
+                                             storage_bucket, storage_path, bibliographic_match_validated, label)
+  VALUES (v_b_pubpdf, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'essai/publique.pdf', true, 'publique de la publique')
+  RETURNING id INTO v_r_pubpdf;
+  INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active,
+                                             storage_bucket, storage_path, bibliographic_match_validated, label)
+  VALUES (v_b_priv, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'essai/privee.pdf', true, 'publique de la privée')
+  RETURNING id INTO v_r_privpdf;
 
   -- la bascule : une ligne, posée en SQL (postgres) — c'est le geste de production
   UPDATE public.libraries SET catalog_public = true WHERE id = c_src;
@@ -323,6 +342,46 @@ BEGIN
     IF v_ok THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- La requête de supabase/functions/opds/index.ts (/all), telle que PostgREST
+  -- la joue sous la clé publique sans jeton : rôle anon, prédicat PUBLIC_PREDICATE,
+  -- puis les notices des ressources lues.
+  v_t := 'T11 flux OPDS sous anon : source et publique servies, privée jamais, source retirée → hors du flux';
+  BEGIN
+    v_txt := NULL;
+    FOR r IN SELECT * FROM (VALUES
+        ('source', NULL::text, NULL::text, true,  ARRAY[v_r_pub, v_r_pubpdf]),
+        ('privée en network', 'network', NULL, true, ARRAY[v_r_pub, v_r_pubpdf]),
+        ('publique isolée', NULL, 'isolated', true, ARRAY[v_r_pub]),
+        ('source retirée', NULL, NULL, false, ARRAY[v_r_pubpdf])
+      ) x(cas, vis_priv, mode_pub, src_public, attendu) LOOP
+      -- postgres : le décor du cas
+      IF r.vis_priv IS NOT NULL THEN UPDATE public.libraries SET visibility_level = r.vis_priv WHERE id = c_priv; END IF;
+      -- isolée ⇒ catalogue local (chk_catalog_published_requires_network)
+      IF r.mode_pub IS NOT NULL THEN UPDATE public.libraries SET network_mode = r.mode_pub, catalog_mode = 'local_only' WHERE id = c_pub; END IF;
+      UPDATE public.libraries SET catalog_public = r.src_public WHERE id = c_src;
+      EXECUTE 'SET LOCAL ROLE anon';
+      SELECT coalesce(array_agg(id ORDER BY id), '{}') INTO v_ids
+        FROM public.book_digital_resources
+       WHERE access_scope = 'publico' AND status = 'active' AND is_active AND bibliographic_match_validated
+         AND id IN (v_r_pub, v_r_restr, v_r_nonval, v_r_pubpdf, v_r_privpdf);
+      IF v_ids IS DISTINCT FROM (SELECT array_agg(x ORDER BY x) FROM unnest(r.attendu) x) THEN
+        v_txt := concat_ws(' ; ', v_txt, r.cas || ' : lu ' || v_ids::text);
+      END IF;
+      -- chaque ressource servie a sa notice lisible (titre de l'entrée)
+      SELECT count(*) INTO v_n FROM public.books b
+       WHERE b.id IN (SELECT d.book_id FROM public.book_digital_resources d WHERE d.id = ANY (v_ids));
+      IF v_n <> cardinality(v_ids) THEN v_txt := concat_ws(' ; ', v_txt, r.cas || ' : notices lues ' || v_n); END IF;
+      EXECUTE 'RESET ROLE';
+      UPDATE public.libraries SET visibility_level = 'private' WHERE id = c_priv;
+      UPDATE public.libraries SET network_mode = 'federated', catalog_mode = 'network_published' WHERE id = c_pub;
+    END LOOP;
+    UPDATE public.libraries SET catalog_public = true WHERE id = c_src;
+    IF v_txt IS NULL THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'SOURCE-CATALOGUE-PUBLIC OK : %/% tests passés', v_passed, v_passed;

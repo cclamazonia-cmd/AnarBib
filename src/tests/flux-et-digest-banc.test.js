@@ -11,15 +11,20 @@
 //   - `rss-novidades` a son banc (rss-novidades.test.js) ; ici, ses liens seuls.
 
 import { describe, it, expect } from 'vitest';
-import { monterEF, liens, mailA } from './helpers/monter-ef.js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { monterEF, liens, mailA, FONCTIONS } from './helpers/monter-ef.js';
 
 const href = (xml) => [...String(xml).matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+
+// En production, la plateforme sert la clé publiable sous SUPABASE_ANON_KEY.
+const CLE_PUBLIQUE = { SUPABASE_ANON_KEY: 'sb_publishable_stub' };
 
 function monterOpds(env = {}) {
   const lectures = [];
   const ef = monterEF({
     entree: 'opds/index.ts',
-    env,
+    env: { ...CLE_PUBLIQUE, ...env },
     repondre: (_s, table, a, chaine) => {
       lectures.push({ table, chaine });
       if (table === 'book_digital_resources') return { data: [{ id: 5, book_id: 12, mime_type: 'application/pdf', storage_bucket: 'digital-public', storage_path: "reclus/L'Homme et la Terre.pdf", language_code: 'fr', rights_status: 'public_domain', attribution_text: null, updated_at: '2026-09-02T10:00:00Z' }], error: null };
@@ -73,12 +78,39 @@ describe('opds — le flux de la bibliothèque numérique publique', () => {
     const r = await ef.appeler(new Request('http://stub/functions/v1/opds/all'));
     expect(r.statut).toBe(200);
     const garde = lectures.find((l) => l.table === 'book_digital_resources').chaine.find((c) => c.op === 'match').args[0];
-    expect(garde).toEqual({ access_scope: 'publico', status: 'active', is_active: true });
+    expect(garde).toEqual({ access_scope: 'publico', status: 'active', is_active: true, bibliographic_match_validated: true });
     expect(r.texte).toContain('L&apos;Homme &amp; la Terre');
     // encodeURIComponent garde l'apostrophe ; c'est l'échappement XML qui la rend.
     expect(r.texte).toContain('http://stub/storage/v1/object/public/digital-public/reclus/L&apos;Homme%20et%20la%20Terre.pdf');
     expect(href(r.texte)).toContain('https://app.anarbib.org/livro/BLMF-0012');
     expect(r.texte).toContain('<uri>https://app.anarbib.org</uri>');
+  });
+
+  // 19/10/2026 — la garde est la RLS des notices, lue en `anon` : le flux parle
+  // avec la clé publique et ne touche plus à la clé secrète (qui la contournerait
+  // et servait les PDF « publico » des bibliothèques privées). La règle elle-même
+  // (quelle bibliothèque, source ou non) se prouve au banc SQL :
+  // source_catalogue_public_tests T11.
+  it('/all : le flux répond avec la seule clé publique, sans la clé secrète', async () => {
+    const { ef } = monterOpds({ SUPABASE_SECRET_KEYS: undefined });
+    const r = await ef.appeler(new Request('http://stub/functions/v1/opds/all'));
+    expect(r.statut).toBe(200);
+    expect(r.texte).toContain('urn:anarbib:asset:5');
+  });
+
+  it('sans clé publique : 500, aucune lecture (la clé secrète ne la remplace pas)', async () => {
+    const { ef, lectures } = monterOpds({ SUPABASE_ANON_KEY: undefined });
+    const r = await ef.appeler(new Request('http://stub/functions/v1/opds/all'));
+    expect(r.statut).toBe(500);
+    expect(lectures).toHaveLength(0);
+  });
+
+  it('la fonction ne lit pas la clé secrète', () => {
+    const src = readFileSync(join(FONCTIONS, 'opds', 'index.ts'), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/.*$/gm, '$1');
+    expect(src).not.toMatch(/secret-key|secretKey|SUPABASE_SECRET_KEYS|SERVICE_ROLE/);
+    expect(src).toMatch(/Deno\.env\.get\("SUPABASE_ANON_KEY"\)/);
   });
 });
 
