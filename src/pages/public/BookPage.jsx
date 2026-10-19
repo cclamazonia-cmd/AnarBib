@@ -17,6 +17,7 @@ import { languageLabel } from '@/lib/languages';
 import { authorLabel } from '@/lib/authorLabel';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 import { assertRpcOk } from '../../lib/rpcStatus.js';
+import { sansExemplairePhysique } from '@/lib/catalogOpac';
 
 const COVER_BASE = `${SUPABASE_URL}/storage/v1/object/public/covers/`;
 const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/`;
@@ -36,6 +37,11 @@ async function pageDeLaSource(assetId) {
 function parseJson(v) { if (!v) return null; if (typeof v === 'object') return v; try { return JSON.parse(v); } catch { return null; } }
 
 function getStatusInfo(book, sessionCtx, isAuth, t) {
+  // Aucun exemplaire nulle part (une source, un document seulement numérique) :
+  // rien à emprunter ni à consulter, la fiche ne parle pas de disponibilité.
+  if (sansExemplairePhysique(book.global_exemplares_total)) {
+    return { label: t({ id: 'catalog.avail.noPhysical' }), cls:'muted' };
+  }
   // Doctrine A1/A2/A3 (tableau BLMF) : anon = affichage public non personnalise.
   // Ne JAMAIS exposer loanable a un visiteur non connecte.
   if (!isAuth) {
@@ -373,6 +379,7 @@ export default function BookPage() {
   if (!book) return <PageShell><Topbar /><EmptyState message={t({ id: 'book.notFound' })} /><Footer /></PageShell>;
 
   const status = getStatusInfo(book, sessionCtx, isAuth, t);
+  const sansFisico = sansExemplairePhysique(book.global_exemplares_total);
   const holdingsJson = parseJson(book.holding_libraries_json);
   const tombosJson = parseJson(book.tombos_json);
   const tipoKey = book.tipo_material ? `material.${book.tipo_material}` : null;
@@ -436,7 +443,9 @@ export default function BookPage() {
             {holdingsJson.map((h, i) => (
               <div key={i} className="ab-livro-holding-line">
                 <span className="ab-livro-holding-lib">{h.library_name || h.library_slug || '?'}</span>
-                <span>— {h.available_count > 0
+                <span>— {sansExemplairePhysique(h.exemplares_total)
+                  ? t({ id: 'catalog.avail.noPhysical' })
+                  : h.available_count > 0
                   ? t({ id: 'book.holding.available' }, { count: h.available_count })
                   : h.earliest_due_back_at
                     ? t({ id: 'book.holding.unavailableUntil' }, { date: new Date(h.earliest_due_back_at).toLocaleDateString() })
@@ -680,7 +689,7 @@ export default function BookPage() {
                   - somente_consulta / funcionamento_normal -> bouton affiche
                   - lecteur sans biblio de rattachement -> bouton grise tooltip
               */}
-              {user && serviceState?.service_mode !== 'pausada' && (() => {
+              {user && !sansFisico && serviceState?.service_mode !== 'pausada' && (() => {
                 if (!sessionCtx?.session_holding_id) {
                   return (
                     <Button variant="secondary" disabled
@@ -707,7 +716,7 @@ export default function BookPage() {
                   }
                 }}>{t({ id: 'book.saveForLater' })}</Button>
               )}
-              {!user && <Link to="/cadastro"><Button>{t({ id: 'book.loginToReserve' })}</Button></Link>}
+              {!user && !sansFisico && <Link to="/cadastro"><Button>{t({ id: 'book.loginToReserve' })}</Button></Link>}
             </div>
 
             {reserveStatus && (

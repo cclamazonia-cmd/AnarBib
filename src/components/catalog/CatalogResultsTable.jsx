@@ -9,7 +9,7 @@ import { yearsLabel } from '@/lib/catalogWorks';
 import { coverThumbUrl } from '@/lib/coverThumbs';
 import { digitalBadge } from '@/hooks/useDigitalAccess';
 import { Button, EmptyState, Spinner } from '@/components/ui';
-import { TIPO_ICONS, handleThumbError, libraryNameList, orderLibraryNames, getStatusInfo } from '@/lib/catalogOpac';
+import { TIPO_ICONS, handleThumbError, libraryNameList, orderLibraryNames, getStatusInfo, sansExemplairePhysique } from '@/lib/catalogOpac';
 import LibraryCell from '@/components/catalog/LibraryCell';
 import { languageLabel } from '@/lib/languages';
 import AuthorLinks from '@/components/catalog/AuthorLinks';
@@ -145,6 +145,7 @@ export default function CatalogResultsTable(p) {
   // détient aussi : la règle ne visait que le cas « indisponible pour toi ».
   // Sans bibliothèque de session, les lignes restent informatives.
   function copyStatus(l, book) {
+    if (sansExemplairePhysique(l.exemplares_total)) return { label: t({ id: 'catalog.avail.noPhysical' }), cls: 'muted' };
     if (!isAuth) return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
     if (l.is_session_library && l.session_status_hint) {
       return getStatusInfo({ session_status_hint: l.session_status_hint, session_available_count: l.session_available_count, loanable: l.loanable }, isAuth, t);

@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Disponible per a la reserva",
   "catalog.avail.availableCount": "Disponible ({count})",
   "catalog.avail.check": "Disponibilitat per verificar",
+  "catalog.avail.noPhysical": "Sense exemplar físic",
   "catalog.avail.consult": "Consultable in situ",
   "catalog.avail.consultOnly": "Només consulta in situ",
   "catalog.avail.unavailNow": "No disponible actualment",

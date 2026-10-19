@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Disponível para reserva",
   "catalog.avail.availableCount": "Disponível ({count})",
   "catalog.avail.check": "Disponibilidade a verificar",
+  "catalog.avail.noPhysical": "Sem exemplar físico",
   "catalog.avail.consult": "Consultável no lugar",
   "catalog.avail.consultOnly": "Somente consulta no lugar",
   "catalog.avail.unavailNow": "Indisponível no momento",

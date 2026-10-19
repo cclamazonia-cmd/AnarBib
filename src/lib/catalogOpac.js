@@ -116,7 +116,19 @@ export function orderLibraryNames(names, priority) {
   return [...first, ...rest];
 }
 
+// Une notice dont le total d'exemplaires vaut 0 (le catalogue d'une
+// bibliothèque « source », un document seulement numérique) ne se prête ni ne
+// se consulte sur place : sa ligne ne parle pas de disponibilité. Le nombre
+// d'exemplaires est public (doctrine A1 intacte) ; un total absent de la ligne
+// (null, non chargé) ne déclenche rien.
+export function sansExemplairePhysique(n) {
+  return n !== null && n !== undefined && n !== '' && Number(n) === 0;
+}
+
 export function getStatusInfo(book, isAuth, t) {
+  if (sansExemplairePhysique(book.exemplares_total)) {
+    return { label: t({ id: 'catalog.avail.noPhysical' }), cls: 'muted' };
+  }
   // Doctrine A1/A2/A3 (tableau BLMF) : pour un anon, l'affichage reste public et
   // non personnalise. Ne PAS exposer la distinction pret/consultation (loanable)
   // a un visiteur non connecte.

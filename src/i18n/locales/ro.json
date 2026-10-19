@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Disponibil pentru rezervare",
   "catalog.avail.availableCount": "Disponibil ({count})",
   "catalog.avail.check": "Disponibilitate de verificat",
+  "catalog.avail.noPhysical": "Fără exemplar fizic",
   "catalog.avail.consult": "Consultabil pe loc",
   "catalog.avail.consultOnly": "Doar consultare pe loc",
   "catalog.avail.unavailNow": "Indisponibil momentan",

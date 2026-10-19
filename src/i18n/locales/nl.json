@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Beschikbaar voor reservering",
   "catalog.avail.availableCount": "Beschikbaar ({count})",
   "catalog.avail.check": "Beschikbaarheid te controleren",
+  "catalog.avail.noPhysical": "Geen fysiek exemplaar",
   "catalog.avail.consult": "Raadpleging ter plaatse",
   "catalog.avail.consultOnly": "Alleen raadpleging ter plaatse",
   "catalog.avail.unavailNow": "Momenteel niet beschikbaar",

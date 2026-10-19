@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Zur Vormerkung verfügbar",
   "catalog.avail.availableCount": "Verfügbar ({count})",
   "catalog.avail.check": "Verfügbarkeit prüfen",
+  "catalog.avail.noPhysical": "Kein physisches Exemplar",
   "catalog.avail.consult": "Präsenznutzung",
   "catalog.avail.consultOnly": "Nur Präsenznutzung",
   "catalog.avail.unavailNow": "Derzeit nicht verfügbar",

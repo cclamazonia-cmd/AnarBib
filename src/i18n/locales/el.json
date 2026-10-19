@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Διαθέσιμο για κράτηση",
   "catalog.avail.availableCount": "Διαθέσιμα ({count})",
   "catalog.avail.check": "Διαθεσιμότητα προς επαλήθευση",
+  "catalog.avail.noPhysical": "Χωρίς φυσικό αντίτυπο",
   "catalog.avail.consult": "Επιτόπια μελέτη",
   "catalog.avail.consultOnly": "Μόνο επιτόπια μελέτη",
   "catalog.avail.unavailNow": "Μη διαθέσιμο αυτή τη στιγμή",

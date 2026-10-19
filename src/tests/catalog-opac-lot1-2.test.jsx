@@ -65,6 +65,11 @@ describe('catalogOpac — les aides pures (lot 1)', () => {
 
   it('getStatusInfo : un visiteur ne voit rien de personnalisé ; une session lit son indice', () => {
     expect(getStatusInfo({ loanable: false }, false, t)).toEqual({ label: 'catalog.avail.check', cls: 'muted' });
+    // 19/10/2026 : sans aucun exemplaire (bibliothèque source, document seulement numérique),
+    // la ligne ne parle pas de prêt — pour un visiteur comme pour une lectrice ; un total absent ne compte pas.
+    expect(getStatusInfo({ exemplares_total: 0 }, false, t)).toEqual({ label: 'catalog.avail.noPhysical', cls: 'muted' });
+    expect(getStatusInfo({ exemplares_total: 0, session_status_hint: 'indisponivel_para_voce' }, true, t)).toEqual({ label: 'catalog.avail.noPhysical', cls: 'muted' });
+    expect(getStatusInfo({ exemplares_total: null, loanable: false }, true, t)).toEqual({ label: 'catalog.avail.consult', cls: 'warn' });
     expect(getStatusInfo({ loanable: false }, true, t)).toEqual({ label: 'catalog.avail.consult', cls: 'warn' });
     expect(getStatusInfo({ session_status_hint: 'indisponivel_para_voce' }, true, t).cls).toBe('bad');
     expect(getStatusInfo({ session_status_hint: 'no_acervo_da_sua_biblioteca', session_available_count: 2 }, true, t)).toEqual({ label: 'catalog.avail.availableCount:{"count":2}', cls: 'ok' });

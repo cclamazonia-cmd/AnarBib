@@ -1621,6 +1621,7 @@
   "catalog.avail.available": "Disponebla por rezervo",
   "catalog.avail.availableCount": "Disponebla ({count})",
   "catalog.avail.check": "Disponebleco kontrolenda",
+  "catalog.avail.noPhysical": "Sen fizika ekzemplero",
   "catalog.avail.consult": "Surloke konsultebla",
   "catalog.avail.consultOnly": "Nur surloka konsulto",
   "catalog.avail.unavailNow": "Nedisponebla nuntempe",
