@@ -575,7 +575,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Recontado em 19/10 no lote vivo (lote 63, run 29)** — os números originais (12 títulos, 91 fascículos, 87 monografias) vinham do primeiro arquivo, substituído em 28/08. Hoje: **43 fascículos, 3 revistas** (*Les utopiques* 27, *Cahiers de la formation syndicale* 10, *Revue internationale* 6), todos entrados como livros; revista e número ficaram na carga bruta. A fonte marca **18 linhas « mesmo número também na linha X »**, ou seja **9 pares** a decidir à mão.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** A revisão e a publicação do lote 63 continuam sendo trabalho da coordenação de Solidaires. **Fascículos**: por decisão de Xavier (19/10), uma migração cria os 3 títulos « propostos » e liga os 43 fascículos a partir das colunas da fonte, sem fundir nada. **À mão**: promover os 3 títulos, declarar o estado de coleção, decidir os 9 pares.
 

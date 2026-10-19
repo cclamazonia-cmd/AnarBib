@@ -3854,6 +3854,10 @@
         {
           "fr": "**19/10 — recompté, fiche réécrite.** Lot 63 intact depuis le 15/09 : 1 673 brouillons, tous `draft`, aucun relu ni publié, aucun `serial_id`, toujours 4 titres de périodiques dans le réseau ; la coordination de Solidaires ne s'est pas connectée depuis le 13/10 (veille de la visio du 14/10). Les chiffres d'origine (12/91/87) étaient ceux du run 18 ; le lot vivant porte 43 fascicules, 3 revues, 9 paires de numéros en double. Xavier décide le même jour de **préparer la migration de rattachement** (3 titres proposés, 43 fascicules typés et rattachés, rien de fusionné). Échéance inchangée : un début de révision avant le **26/10**, sinon `A1` / `G1`.",
           "pt": "**19/10 — recontado, ficha reescrita**: lote 63 intacto desde 15/09; 43 fascículos, 3 revistas, 9 pares. Xavier decide preparar a migração de ligação. Prazo inalterado: 26/10."
+        },
+        {
+          "fr": "**19/10, 15 h 43 — rattachement en production** (`8f590bc1`, migration `20261019131842` appliquée par la CI). Les 3 titres existent en « proposé » — *Les utopiques* (27 fascicules), *Cahiers de la formation syndicale* (10), *Revue internationale* (6) ; 7 titres de périodiques dans le réseau. Les 43 brouillons sont des fascicules rattachés, 42 avec leur numéro ; les 18 lignes des 9 paires sont toutes là, rien de fusionné ; le lot compte toujours 1 673 brouillons `draft`, dernière modification toujours au 15/09 (le rattachement ne l'a pas déplacée) ; une ligne datée dans les notes du lot. Banc : `d3_fascicules_solidaires_tests` (6). **Reste, dans l'application** : promouvoir les 3 titres (Catalogage › Périodiques ; préciser d'abord l'émetteur de *Revue internationale*), déclarer l'état de collection, trancher les 9 paires — puis la révision du lot par la coordination.",
+          "pt": "**19/10, 15h43 — ligação em produção** (`8f590bc1`): 3 títulos « propostos », 43 fascículos ligados (42 com número), 9 pares intactos, lote inalterado (1 673 rascunhos). Falta no aplicativo: promover os 3 títulos, declarar o estado de coleção, decidir os 9 pares."
         }
       ]
     },
