@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) — **49 items, 261 clôtures**.",
-      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10**; **K2 fechado em 19/10** — **49 itens, 261 fechamentos**."
+      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) ; **33 items versés le 19/10 au soir** à la relecture des sessions du 16 au 19/10, et neuf fiches remises à jour — **82 items, 261 clôtures**.",
+      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10**; **K2 fechado em 19/10**; **33 itens acrescentados em 19/10 à noite** — **82 itens, 261 fechamentos**."
     },
     "photo": [
       {
@@ -3521,6 +3521,10 @@
         {
           "fr": "**19/10 — toujours sur le poste ; la fiche s'arrêtait au 01/10.** Le runner `anarbib-local` tourne dans le WSL du poste (`ACCATTONE`) : 520 tâches reçues depuis le 12/10. **La machine est décidée depuis le 28-29/09** : une machine dédiée sous Debian, chez Xavier, dont le runner est le premier rôle — elle remplace « l'autre portable / la VM des Herbes Folles » (qui, de toute façon, n'a que 14,3 Go libres, I21). Ce que coûte le poste partagé, depuis : les seuils des suites SQL indexés sur la charge (`187ff8ac`, 15/10), des tests JS qui expirent au hasard (`a263ce85`, `9cbf470c`, `aa155a1e` : 60 s et une relance en CI, 19/10), un T14 rouge sous un pic le 19/10 ; deux gels du runner (panne de Codeberg du 12/10, mise à jour de Docker Desktop). Un seul incident `ci_en_retard` en base (01/10). **Critère 2 réécrit** : le garde-fou `_shared`/`main` ne vit plus qu'à un endroit, `scripts/ci/deployer-backend.sh`, que le workflow appelle.",
           "pt": "**19/10 — sempre no posto (520 tarefas desde 12/10). Máquina decidida em 28-29/09: uma máquina dedicada Debian, o runner primeiro.** A carga compartilhada custa: limiares SQL indexados na carga, testes JS que expiram, dois congelamentos. O guarda-fio vive só em `deployer-backend.sh`."
+        },
+        {
+          "fr": "**19/10, soir — la destination du runner a changé.** L'entrée du matin parlait d'une machine Debian dédiée chez Xavier (décision du 28-29/09) : la répartition du 19/10 envoie **le runner et la CI aux Herbes Folles** (`deploy/runner/compose.yml`, même label `anarbib-local`). Le runner tourne toujours dans le WSL du poste ; le 19/10, deux chutes de WSL (14 h 15, 14 h 28-29) et une de Docker (vers 18 h 30) ont encore laissé des runs fantômes (#1857, #1858, annulés à la main) et deux runs rouges sans faute du code (#1883, #1884). Avec la voie (a) (I35), la CI des Herbes Folles ne déploie plus rien : critère 1 à relire en conséquence.",
+          "pt": "**19/10, noite — o runner vai para Les Herbes Folles** (repartição de 19/10). Continua no WSL do posto; quedas de WSL e Docker em 19/10 deixaram runs fantasmas."
         }
       ]
     },
@@ -3649,6 +3653,10 @@
         {
           "fr": "**19/10 — deux arrivées dans la file.** (1) **23 fiches du lot `autorite_patronyme`**, versées à la clôture de C4 (`796f0379`) : la détection des doubles patronymes rejouée après les seize pays posés ; quinze « double nom probable » proposées inversées, huit « prénom composé ou initiale probable » proposées inchangées — à trancher une à une, comme les 22 d'août. C4 clos, C3 hérite aussi des 677 fiches toujours sans pays (45 %), que les sources ouvertes ne renseignent plus. (2) **896 lignes `autor_sans_autorite`**, semées par le cron du lundi 19/10 à 05 h 10 UTC : toutes des notices créées le 15/10, le chargement Anarchief (auteur·rices transcrites, sans autorité liée). Ce n'est pas une panne, c'est le gros de la file désormais : **899 « à revoir »** dans ce lot, **155** de casse de titres, **21** de forme d'autorité, **23** de patronymes.",
           "pt": "**19/10 — duas chegadas na fila.** (1) **23 fichas do lote `autorite_patronyme`**, versadas no fechamento de C4: quinze « sobrenome duplo provável », oito « prenome composto provável »; C3 herda também as 677 fichas sem país (45 %). (2) **896 linhas `autor_sans_autorite`**, semeadas pelo cron de segunda-feira: todas registros de 15/10, a carga Anarchief, sem autoridade ligada. **899 « a rever »** neste lote, 155 de caixa de títulos, 21 de forma, 23 de sobrenomes."
+        },
+        {
+          "fr": "**19/10, soir — la file a changé sous elle.** Depuis `1704c05c` (19/10, 308 autorités créées pour Anarchief, 847 notices sur 1 002 liées), **834 des 899 lignes `autor_sans_autorite` portent sur des notices dont tous les contributeurs sont déjà liés** : sans objet, mais toujours « à revoir ». À fermer par le code (ou recompter) avant d'en faire la charge de qui relit.",
+          "pt": "**19/10, noite** — 834 das 899 linhas `autor_sans_autorite` já não têm objeto (contribuidores ligados desde `1704c05c`): fechar pelo código."
         }
       ]
     },
@@ -3695,6 +3703,12 @@
         "docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md (« à corriger dans le formulaire, livre en main »)",
         "REGISTRE §43 CAPAS",
         "commit 027e6903 (BTL-TL-002335)"
+      ],
+      "verif": [
+        {
+          "fr": "**19/10, soir — d'autres notices à reprendre livre en main**, relevées par la campagne de fac-similés et la session D17 (16-17/10), non corrigées : **BTL** — 2126 (éditeur Masson et Cie ; co-auteur manquant), 1764 (1884 ou 1894), 1672 (« Porto Editora » en 1925 ?), 1084/1085 (doublon probable, éditeur et imprimeur confondus), 2742 (BD récente de Partage Noir décrite comme journal de 1911), 2071 (« Letra Livre », maison moderne), 1774 (Madrid seul ?), 1776 (autre tirage), 1773-1775 (« cinq volumes ») ; **BLMF** — 2384 (année 2019, aucun tirage connu : 2016, 2018, 2020). Par les coordinations, au formulaire, jamais par migration.",
+          "pt": "**19/10, noite** — outros registros a retomar com o livro na mão (BTL: 2126, 1764, 1672, 1084/1085, 2742, 2071, 1774, 1776, 1773-1775; BLMF: 2384)."
+        }
       ]
     },
     {
@@ -4068,6 +4082,10 @@
         {
           "fr": "**19/10 — le fond tient, les chiffres ont vieilli.** Onze locales depuis le 14/10 (le roumain, `49b479ae`), **7 751 clés chacune** (6 177 dans la fiche). Dans la charte maîtresse, `nl` reste « Provisoire — à valider en communauté » et `el` « À définir » ; depuis le 21/08, deux commits seulement touchent la charte (pt-BR le 05/10, `ro` le 14/10), aucun sur `nl` ni `el`, et aucune relecture native depuis le passage au tutoiement du 27/09. La liste néerlandaise validée par Ludwig le 09/09 est celle des **sujets du thésaurus FICEDL**, pas les conventions de l'interface. Au passage, la charte est en retard sur la CI : sa section « couverture des tests » dit `nl`/`el` hors CI, or `i18n.test.js` les inclut.",
           "pt": "**19/10 — o fundo se mantém, os números envelheceram**: onze locales, 7 751 chaves cada; carta `nl`/`el` inalterada; a lista validada por Ludwig em 09/09 é a do tesauro FICEDL, não as convenções da interface."
+        },
+        {
+          "fr": "**19/10, soir — un reste de plus pour les relectures natives** : les libellés des rôles « Introduction » et « Avant-propos » livrés le 17/10 (`580d49da`) sans relecture — ca « Presentació », el « Προλογικό σημείωμα », de « Geleitwort », nl « Woord vooraf », pt-BR « Apresentação ». La fiche ne couvre jusqu'ici que les conventions nl et el.",
+          "pt": "**19/10, noite** — rótulos « Introdução » e « Prefácio » (17/10, `580d49da`) sem revisão nativa em ca, el, de, nl, pt-BR."
         }
       ]
     },
@@ -4510,8 +4528,8 @@
         "sysadmin"
       ],
       "t": {
-        "fr": "Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09)",
-        "pt": "Manter a pilha auto-hospedada pronta — espelho, bancada, instâncias de terceiros; a produção fica na nuvem (orientação de 29/09)"
+        "fr": "Tenir la pile auto-hébergée prête pour la production à l'ASR — empreintes, proxy, reconstruction (répartition du 19/10)",
+        "pt": "Manter a pilha auto-hospedada pronta para a produção na ASR — impressões, proxy, reconstrução (repartição de 19/10)"
       },
       "v": {
         "fr": "La pile est réduite de douze à **six conteneurs** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), les versions sont épinglées, `bootstrap.sh` a été exécuté pour de vrai le 26/08 avec huit défauts relevés et corrigés, et la répétition du 18/08 a rejoué 124 migrations et restauré un dump de production en 17 secondes. Reconstruction complète mesurée : **25 minutes**.",
@@ -4568,6 +4586,10 @@
         {
           "fr": "**19/10 — la fiche ignorait l'orientation du 29/09 et presque tout ce qui a suivi le 24/09.** *L'objectif* : Xavier juge intenable d'exploiter seul une production auto-hébergée ; **la production reste sur Supabase cloud**, l'auto-hébergement sert de miroir non exposé, de banc, de base aux sauvegardes et aux instances tierces (`deploy/VM.md` : « la production reste sur le cloud ») — d'où le titre réécrit ce jour ; « la fin de la dépendance à un hébergeur tiers » n'est plus l'objectif de cette fiche. *Proxy et tunnel* : faits — Caddy dans `deploy/compose.yml`, exemples rathole et WireGuard (`deploy/tunnel/`, depuis le 06/09), et une pile complète sert `essai.anarbib.is` derrière Caddy et un tunnel Pangolin depuis la mi-octobre (VM d'ASR2026, PR #34-40). *Empreintes* : **non** — aucun `@sha256` dans la pile, `deploy/.env.example` en tags, `CADDY_TAG=2` flottant (seules les images de la CI ont été épinglées, le 19/10, `f5aa5c94`). *Reconstruction refaite un mois après* : probablement tenue (ASR2026 du 06 au 15/09, dump réel le 21/09, installation complète de la VM par un tiers en octobre) — à trancher par Xavier. *Jitsi* : la question n'a jamais été posée. *L'hébergeur pressenti* : Les Herbes Folles n'offrent que 14,3 Go libres pour ~55 nécessaires (I21, 18/10). Livré depuis le 24/09 sans être consigné ici : triggers d'authentification (`cf641ca8`), ressources du réseau tirées d'une publication Codeberg (`545a4480`), `fond-de-carte.sh` (`0c854dda`), sauvegarde depuis la VM (`98483209`), Storage épinglé en v1.78.0 (`4314fee9`), versions stables vAAAA.MM (`611eb9d5`, 17/10), `deploy/VM.md`.",
           "pt": "**19/10 — a ficha ignorava a orientação de 29/09: a produção fica na nuvem**, a auto-hospedagem serve de espelho, bancada e instâncias de terceiros (título reescrito). Proxy e túnel feitos (`essai.anarbib.is`); impressões `sha256` não; reconstrução provavelmente cumprida; Jitsi nunca perguntado; Les Herbes Folles pequenas demais (I21)."
+        },
+        {
+          "fr": "**19/10, soir — correction de l'entrée du matin.** L'entrée du 19/10 retitrait la fiche sur l'orientation du 29/09 (« la production reste sur le cloud ») : c'était déjà dépassé. Le même jour vers midi, Xavier a arrêté une autre répartition — **la production va à l'ASR**, les sauvegardes à Lyon, la CI aux Herbes Folles (voir I21). La fiche redevient ce qu'elle était, préparer la pile pour une production hors du cloud, chez l'ASR cette fois ; titre réécrit. Le reste du constat du matin tient : proxy et tunnel faits et éprouvés sur `essai.anarbib.is`, **aucune image épinglée par empreinte** (`CADDY_TAG=2` flottant), la question du Jitsi jamais posée. Le miroir d'images de l'ASR (`IMAGE_PREFIX`, `35e244c3`) est voir I37.",
+          "pt": "**19/10, noite — correção da entrada da manhã**: a produção vai para a ASR (decisão de 19/10 ao meio-dia), não fica na nuvem. Título reescrito. Continua: nenhuma imagem fixada por impressão, Jitsi nunca perguntado."
         }
       ]
     },
@@ -4828,8 +4850,8 @@
         "collectif"
       ],
       "t": {
-        "fr": "Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile",
-        "pt": "O que deve ser verdade antes da virada para Les Herbes Folles, e ainda não é — oito condições, nenhuma tecnicamente difícil"
+        "fr": "Ce qui doit être vrai avant la bascule — les sauvegardes à Lyon d'abord, puis la production à l'ASR (répartition du 19/10)",
+        "pt": "O que precisa ser verdade antes da mudança — os backups em Lyon primeiro, depois a produção na ASR (repartição de 19/10)"
       },
       "v": {
         "fr": "La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.",
@@ -4886,6 +4908,10 @@
         {
           "fr": "18/10 — **la condition « sauvegarde chez un tiers » a changé d'échelle.** Le 18/10, le tir `storage` a été tué par sa borne d'une heure : il retéléchargeait tous les buckets à chaque fois, et `anarbib-pdf-public` était passé de presque rien à **16 Go en une semaine** (versement des PDF, D13-D16 ; `pdf-restrito` +2,2 Go). Mesuré le même soir : le `/data` des Herbes Folles fait 39,2 Go, **14,3 Go libres**, partagé (nos trois dépôts n'en occupent que 0,6 Go) — ni ces PDF ni le fond de carte (`map-tiles`, 33 Go, qu'on sauvegarde désormais sur décision de Xavier) n'y tiennent. La demande faite à Rumi le 21/09 (20 Go, 50 Go à 3-5 ans, sur la base de ~3 Go par an de numérisation) est donc **caduque** : il faut compter ~55 Go tout de suite, et une pente que la semaine du 11/10 interdit de prévoir. En attendant, décision de Xavier : les buckets lourds (PDF, EPUB, fond de carte) partent dans un **quatrième flux, `lourd`, vers un dépôt restic LOCAL** (disque E: du poste, miroir sur D:) — il protège contre la perte de Supabase, **pas** contre celle du poste. Les buckets légers restent aux Herbes Folles ; la synchronisation est devenue incrémentale (seul le neuf est téléchargé). Migration `20261018213744_le_flux_lourd_a_son_temoin` (témoin de vie à quatre flux, borne de tir par flux) ; `deploy/ops/README.md` § « flux lourd ». La condition de cet item ne se lit plus « la sauvegarde part chez un tiers » mais **« les quatre flux partent chez un tiers, ~55 Go et leur croissance »**.",
           "pt": "18/10 — **a condição « backup num terceiro » mudou de escala.** Em 18/10, o disparo `storage` foi morto pelo seu limite de uma hora: voltava a baixar todos os buckets a cada vez, e `anarbib-pdf-public` passou de quase nada a **16 GB numa semana** (depósito dos PDF, D13-D16; `pdf-restrito` +2,2 GB). Medido na mesma noite: o `/data` dos Herbes Folles tem 39,2 GB, **14,3 GB livres**, partilhado (os nossos três repositórios ocupam só 0,6 GB) — nem esses PDF nem o fundo de mapa (`map-tiles`, 33 GB, agora salvaguardado por decisão de Xavier) cabem lá. O pedido feito à Rumi em 21/09 (20 GB, 50 GB em 3-5 anos, com base em ~3 GB por ano de digitalização) fica **caduco**: é preciso contar ~55 GB já, e uma inclinação que a semana de 11/10 impede de prever. Entretanto, decisão de Xavier: os buckets pesados (PDF, EPUB, fundo de mapa) vão para um **quarto fluxo, `lourd`, num repositório restic LOCAL** (disco E: do posto, espelho em D:) — protege contra a perda do Supabase, **não** contra a do posto. Os buckets leves ficam nos Herbes Folles; a sincronização passou a incremental (só o novo é baixado). Migração `20261018213744_le_flux_lourd_a_son_temoin` (testemunho de vida com quatro fluxos, limite de disparo por fluxo); `deploy/ops/README.md` § « flux lourd ». A condição deste item já não se lê « o backup vai para um terceiro », mas **« os quatro fluxos vão para um terceiro, ~55 GB e o seu crescimento »**."
+        },
+        {
+          "fr": "**19/10, soir — la destination a changé.** Décision de Xavier du 19/10 (vers 12 h 30) : **production → l'ASR** (chez le camarade `ASR2026`, qui tient déjà `essai.anarbib.is`) ; **sauvegardes → Lyon** (les quatre flux restic, ~55 Go au 18/10 — la demande de 20 Go du 21/09 est caduque) ; **runner + CI → Les Herbes Folles** ; courrier à part. Elle remplace l'orientation du 29/09 (« la production reste sur le cloud »). Ordre écrit : les sauvegardes à Lyon d'abord (règle du 07/09 : pas de bascule avant une sauvegarde chez un tiers), le runner chez Les Herbes Folles en parallèle, puis la préparation de l'ASR, la conformité, la bascule. **Conditions nouvelles** : une demande révisée à Lyon (~55 Go + croissance mesurée) ; les conventions de sous-traitance (art. 28) avec l'ASR et avec Lyon, et `REGISTRE_TRAITEMENTS` mis à jour ; à l'ASR, la suppléance, la juridiction et l'exposition (le tunnel a son DNS chez un hébergeur états-unien). Le titre de la fiche est réécrit ce soir.",
+          "pt": "**19/10, noite — o destino mudou**: produção → ASR; backups → Lyon (~55 Go); runner + CI → Les Herbes Folles. Substitui a orientação de 29/09. Ordem: backups em Lyon primeiro. Condições novas: pedido revisado a Lyon, convenções art. 28 com ASR e Lyon, REGISTRE_TRAITEMENTS, suplência e exposição na ASR."
         }
       ]
     },
@@ -4941,6 +4967,10 @@
         {
           "fr": "**12/10 — la part technique est déjà là, le constat du 07/09 est périmé** : `_shared/mail/smtp.ts` (transport SMTP générique, STARTTLS obligatoire, durci les 20-21/09, `eaaed599`) et l'aiguillage par variable dans `email.ts` (`MAIL_TRANSPORT=smtp|resend|mock`, ou `SMTP_HOST` présent) ; `sendViaBrevo` a disparu le 29/09 (`57a4aafc`), il n'en restait qu'un commentaire, retiré (`1f846c09`). Les variables sont dans `deploy/functions.env.example` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`). **Reste, et c'est tout** : demander un relais militant (ARN, Nodo50, bida.im…) — K5 —, poser ses cinq variables en secrets des fonctions et basculer `MAIL_TRANSPORT`. Rien à coder.",
           "pt": "**12/10 — a parte técnica já existe**: `smtp.ts` (transporte SMTP genérico, STARTTLS obrigatório, 20-21/09) e o comutador `MAIL_TRANSPORT` em `email.ts`; `sendViaBrevo` desapareceu a 29/09, restava um comentário, retirado (`1f846c09`). **Resta**: pedir um relé militante (K5), pôr as cinco variáveis e comutar. Nada a codar."
+        },
+        {
+          "fr": "**19/10, soir — le relais Nodo50 est prêt, et sa place est à trancher.** Le même jour : Nodo50 accepte plus de 1 000 courriels par jour ; SPF et DKIM publiés ; port 465 éprouvé depuis les fonctions (fonction d'essai retirée, `36143e66`) ; cadence et rejeu SMTP en production (`a96452ff`) ; secrets posés avec `MAIL_TRANSPORT=resend` ; runbook écrit (`cb562dae`). **Reste l'étape 7** : passer `MAIL_TRANSPORT=smtp` (jamais le lundi entre 08 h et 09 h 15 UTC), les quatre envois du chemin critique, un premier `dkim=pass`, quatre semaines de surveillance, puis fermer Resend. **Contradiction à lever par Xavier** : la répartition arrêtée le même jour vers midi écarte Nodo50 pour le courrier (« pas montré sérieux » ; candidats ARN, bida.im, repli européen) — puis le chantier Nodo50 a été mené l'après-midi.",
+          "pt": "**19/10, noite — o relé Nodo50 está pronto** (SPF/DKIM, porta 465, cadência SMTP em produção, runbook). Falta a etapa 7. Contradição a resolver por Xavier: a repartição do mesmo dia afasta a Nodo50."
         }
       ]
     },
@@ -5531,10 +5561,16 @@
         "docs/specs/REGISTRE_decisions.md §47",
         "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md"
       ],
-      "verif": {
-        "fr": "15/10 — **livré** : onglet « Candidats PDF » de la page Importations (`#tab=pdf`, `src/pages/importacoes/CandidatsPdfPanel.jsx`, session « File de candidats PDF »). Chargement du fichier de l'outil D14 dans la file ; filtres À examiner / À verser / Rejetés / Versés ; pour chaque candidat, la notice (l'exemplaire détenu) à côté de ce que l'outil a lu sur la page de titre, l'extrait de cette page, les contrôles et avertissements de l'outil, les liens « Ouvrir le PDF » et « Ouvrir la page de la source » ; la décision : édition, cas de source (avec ce qu'il implique), page de la source, justification suggérée selon le cas (décès pour le domaine public, mention citée et page pour une licence libre, exemplaire et cote pour le restreint), « Valider : à verser » ouvert seulement à la même édition, « Rejeter » avec motif suggéré portant l'édition trouvée. 77 clés dans les onze locales. Tests `numdif-candidats-pdf-panel` (lecture du fichier, portes, onglet, locales) et `numdif-candidats-pdf-rendu` (validation Harper 1873 → « à verser », Harper 1874 non validable, rejet motivé). La portée (une autre bibliothèque ne voit rien) est tenue par la base, suite `numdif_file_candidats_tests` T5. **Déployé le 15/10 à 20 h 52** (`e7c2abbb`) : app, backend, acquittement verts ; l'écran est servi (`ImportacoesPage-iPWakZKX.js` porte `fn_digital_candidates_list`). **Reste** : le voir en production sous un compte de coordination (Xavier).",
-        "pt": "15/10 — **entregue**: aba «Candidatos PDF» da página Importações (`#tab=pdf`). Ficha ao lado da folha de rosto lida pela ferramenta, decisão (edição, caso, justificativa sugerida, menção e página), validar só a mesma edição, rejeitar com motivo. 77 chaves nas onze locales; testes de leitura e de renderização. **Resta**: ver a tela em produção."
-      }
+      "verif": [
+        {
+          "fr": "15/10 — **livré** : onglet « Candidats PDF » de la page Importations (`#tab=pdf`, `src/pages/importacoes/CandidatsPdfPanel.jsx`, session « File de candidats PDF »). Chargement du fichier de l'outil D14 dans la file ; filtres À examiner / À verser / Rejetés / Versés ; pour chaque candidat, la notice (l'exemplaire détenu) à côté de ce que l'outil a lu sur la page de titre, l'extrait de cette page, les contrôles et avertissements de l'outil, les liens « Ouvrir le PDF » et « Ouvrir la page de la source » ; la décision : édition, cas de source (avec ce qu'il implique), page de la source, justification suggérée selon le cas (décès pour le domaine public, mention citée et page pour une licence libre, exemplaire et cote pour le restreint), « Valider : à verser » ouvert seulement à la même édition, « Rejeter » avec motif suggéré portant l'édition trouvée. 77 clés dans les onze locales. Tests `numdif-candidats-pdf-panel` (lecture du fichier, portes, onglet, locales) et `numdif-candidats-pdf-rendu` (validation Harper 1873 → « à verser », Harper 1874 non validable, rejet motivé). La portée (une autre bibliothèque ne voit rien) est tenue par la base, suite `numdif_file_candidats_tests` T5. **Déployé le 15/10 à 20 h 52** (`e7c2abbb`) : app, backend, acquittement verts ; l'écran est servi (`ImportacoesPage-iPWakZKX.js` porte `fn_digital_candidates_list`). **Reste** : le voir en production sous un compte de coordination (Xavier).",
+          "pt": "15/10 — **entregue**: aba «Candidatos PDF» da página Importações (`#tab=pdf`). Ficha ao lado da folha de rosto lida pela ferramenta, decisão (edição, caso, justificativa sugerida, menção e página), validar só a mesma edição, rejeitar com motivo. 77 chaves nas onze locales; testes de leitura e de renderização. **Resta**: ver a tela em produção."
+        },
+        {
+          "fr": "**19/10, soir** — le versement d'Anarchief est passé par des appels directs, pas par l'écran : **reste à voir l'écran des candidats sous un compte de coordination**, PDF ouvert (critère d'origine).",
+          "pt": "**19/10, noite** — o versamento da Anarchief passou por chamadas diretas: falta ver a tela sob uma conta de coordenação."
+        }
+      ]
     },
     {
       "id": "D16",
@@ -5583,10 +5619,16 @@
         "docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md",
         "supabase/functions/read-digital-asset/index.ts"
       ],
-      "verif": {
-        "fr": "15/10 — **livré** (migration `20261015182432_numdif_versement_cote_serveur`, fonction `deposit-digital-candidate`, session « File de candidats PDF »). **Par lots, avec reprise** (consigne de Xavier du 15/10) : l'onglet « Candidats PDF » offre « Verser le lot » (et « Verser côté serveur » candidat par candidat) ; la fonction prend une liste, traite les candidats un par un et rend ce qu'elle n'a pas eu le temps de commencer ; l'écran relance avec le reste, par paquets de cinq ; l'état vit en base (versé, ou refus noté), un lot arrêté ou interrompu se reprend en le relançant, les refus n'y rentrent que si on le demande. Pour chaque candidat : double authentification, garde sous le jeton (`fn_digital_candidate_deposit_garde` : coordination de la bibliothèque du candidat ou administration du réseau, bibliothèque encore détentrice, candidat validé), téléchargement de l'URL validée côté serveur en **flux** vers une zone **privée** (`pdf-restrito/numdif-staging/…`, jusqu'à 500 Mo, la limite des seaux ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement), empreintes calculées au passage (`empreintes.ts`, vérifié contre `node:crypto`), comparées à celle de la validation : SHA-256, ou **SHA-1 seul pour une source MediaWiki** (Anarchief), le SHA-256 étant alors calculé et retenu à ce premier téléchargement ; empreinte différente : zone effacée, refus dit à l'écran (`fingerprint_mismatch`) et noté sur le candidat ; puis passage au seau que fixe le cas (`anarbib-pdf-public` ou `pdf-restrito`) au chemin `books/<book_id>/<horodatage ms>_<nom>.pdf` — un fichier non vérifié n'est jamais public —, et enregistrement à la clé de service seule (`ingest.fn_digital_candidate_deposit_record`, fermée à authenticated : les bibliothécaires écrivent dans ces seaux), qui revérifie tout et crée la ressource avec les champs des ressources 77 et 78 ; deux adresses au gabarit de D17 : `source_url` = le fichier (provenance, jamais rendu pour une ressource restreinte), `source_page_url` = la page (NUMDIF-3). Capacité (Xavier, 15/10) : 35 Go utilisés, 52 avec Anarchief, dans le palier. Suites `numdif_versement_tests` (8, dont la source à SHA-1 seul) et `documents_numeriques_tests` (T1/T2) vertes en local ; tests `numdif-versement-fonction` (ordre des gestes, lot et reprise), `numdif-empreintes`. **Déployé et vérifié le 15/10 à 22 h 26** (`2387ab3a`) : app, backend, acquittement verts ; migration inscrite, fonction `deposit-digital-candidate` active (v1) ; T1/T2 de `documents_numeriques_tests` rejoués en production (0 restreint en seau public, aucun seau restreint public). **Reste** : un premier versement réel, puis un premier lot (Anarchief) ; le téléversement en flux vers Storage n'est éprouvé qu'en production.",
-        "pt": "15/10 — **entregue**: migração `20261015182432`, função `deposit-digital-candidate`. **Por lotes, com retomada**: a função recebe uma lista e devolve o que falta; o estado fica na base. Download pelo servidor em fluxo para uma zona privada (até 500 MB), SHA-256 ou **só SHA-1 (MediaWiki)** com o SHA-256 calculado no primeiro download; recusa dita e anotada; balde do caso; registro só pela chave de serviço. **Resta**: um primeiro envio real e um primeiro lote."
-      }
+      "verif": [
+        {
+          "fr": "15/10 — **livré** (migration `20261015182432_numdif_versement_cote_serveur`, fonction `deposit-digital-candidate`, session « File de candidats PDF »). **Par lots, avec reprise** (consigne de Xavier du 15/10) : l'onglet « Candidats PDF » offre « Verser le lot » (et « Verser côté serveur » candidat par candidat) ; la fonction prend une liste, traite les candidats un par un et rend ce qu'elle n'a pas eu le temps de commencer ; l'écran relance avec le reste, par paquets de cinq ; l'état vit en base (versé, ou refus noté), un lot arrêté ou interrompu se reprend en le relançant, les refus n'y rentrent que si on le demande. Pour chaque candidat : double authentification, garde sous le jeton (`fn_digital_candidate_deposit_garde` : coordination de la bibliothèque du candidat ou administration du réseau, bibliothèque encore détentrice, candidat validé), téléchargement de l'URL validée côté serveur en **flux** vers une zone **privée** (`pdf-restrito/numdif-staging/…`, jusqu'à 500 Mo, la limite des seaux ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement), empreintes calculées au passage (`empreintes.ts`, vérifié contre `node:crypto`), comparées à celle de la validation : SHA-256, ou **SHA-1 seul pour une source MediaWiki** (Anarchief), le SHA-256 étant alors calculé et retenu à ce premier téléchargement ; empreinte différente : zone effacée, refus dit à l'écran (`fingerprint_mismatch`) et noté sur le candidat ; puis passage au seau que fixe le cas (`anarbib-pdf-public` ou `pdf-restrito`) au chemin `books/<book_id>/<horodatage ms>_<nom>.pdf` — un fichier non vérifié n'est jamais public —, et enregistrement à la clé de service seule (`ingest.fn_digital_candidate_deposit_record`, fermée à authenticated : les bibliothécaires écrivent dans ces seaux), qui revérifie tout et crée la ressource avec les champs des ressources 77 et 78 ; deux adresses au gabarit de D17 : `source_url` = le fichier (provenance, jamais rendu pour une ressource restreinte), `source_page_url` = la page (NUMDIF-3). Capacité (Xavier, 15/10) : 35 Go utilisés, 52 avec Anarchief, dans le palier. Suites `numdif_versement_tests` (8, dont la source à SHA-1 seul) et `documents_numeriques_tests` (T1/T2) vertes en local ; tests `numdif-versement-fonction` (ordre des gestes, lot et reprise), `numdif-empreintes`. **Déployé et vérifié le 15/10 à 22 h 26** (`2387ab3a`) : app, backend, acquittement verts ; migration inscrite, fonction `deposit-digital-candidate` active (v1) ; T1/T2 de `documents_numeriques_tests` rejoués en production (0 restreint en seau public, aucun seau restreint public). **Reste** : un premier versement réel, puis un premier lot (Anarchief) ; le téléversement en flux vers Storage n'est éprouvé qu'en production.",
+          "pt": "15/10 — **entregue**: migração `20261015182432`, função `deposit-digital-candidate`. **Por lotes, com retomada**: a função recebe uma lista e devolve o que falta; o estado fica na base. Download pelo servidor em fluxo para uma zona privada (até 500 MB), SHA-256 ou **só SHA-1 (MediaWiki)** com o SHA-256 calculado no primeiro download; recusa dita e anotada; balde do caso; registro só pela chave de serviço. **Resta**: um primeiro envio real e um primeiro lote."
+        },
+        {
+          "fr": "**19/10, soir — la réserve est tombée.** La fiche attendait « un premier versement réel, puis un premier lot (Anarchief) » : **1 470 candidats versés sur 1 470**, dont les 15 derniers le 16/10 après `9232a948` ; la file est vide. Clôture proposable. Limite restée : un appel tient ~150-180 Mo (voir D27).",
+          "pt": "**19/10, noite — a ressalva caiu**: 1 470 candidatos versados de 1 470. Fechamento propostável."
+        }
+      ]
     },
     {
       "id": "D18",
@@ -5647,6 +5689,10 @@
         {
           "fr": "**16/10 — la 74 est de la même édition** : la page de crédits du PDF (texte OCR publié par Archive.org) donne Pepitas de calabaza, traduction de Luis Orsetti, **ISBN 978-84-15862-72-7** — celui de la notice 2384 —, dépôt légal Lr-1126-2016, et trois tirages sous ce même ISBN (2016, 2018, 2020) : le « [2020] » du fichier est le troisième. `NUMDIF-1` tenu, la ressource reste active. Reste un point de catalogage, pas de droits : l'année 2019 de la notice ne correspond à aucun tirage — à voir sur l'exemplaire de BLMF.",
           "pt": "**16/10 — o recurso 74 é da mesma edição**: mesmo ISBN 978-84-15862-72-7 que a notícia 2384, Pepitas de calabaza, três tiragens (2016, 2018, 2020); o « [2020] » é a terceira. `NUMDIF-1` mantido. Resta um ponto de catalogação: o ano 2019 da notícia não corresponde a nenhuma tiragem."
+        },
+        {
+          "fr": "**19/10, soir — validé, pas appliqué.** Dans la session D17 (16/10), Xavier a validé l'édition des sept ressources (74, 76, 73, 72 malgré l'absence de couverture, 62, 66, 70) et accepté de fait l'affichage de dokumen.pub et pdfcoffee (70, 72). Les deux gestes proposés n'ont pas été faits : en production, la ressource **62** a toujours `rights_status` vide et `bibliographic_match_validated` faux, et les ressources **70, 72, 73, 76** n'ont pas de `source_page_url` (SQL prêt dans `AUDIT_ressources_restreintes_numdif_2026-10-15.md`). À faire par migration, sur l'accord de Xavier — après quoi D18 se clôt.",
+          "pt": "**19/10, noite — validado, não aplicado**: recurso 62 sem estado de direitos, 70/72/73/76 sem página de origem. Migração com o acordo de Xavier, depois fechar."
         }
       ]
     },
@@ -6034,6 +6080,1410 @@
         "fr": "13/10 — lots 1 et 2 déployés et vérifiés (front servi, migration appliquée par la CI, mode `off`, `authenticator` sans `db_pre_request`, 0029 = 436, 0028 = 29) ; audit des Edge Functions déployé (tag `deployed-functions` = `069b76ea`, garde lue dans la fonction en production ; `SUPABASE_ANON_KEY` porte la clé publiable, vu aux journaux de la passerelle). Politique Storage appliquée par la CI (`20261013182456`), 48 politiques sur storage.objects, mode `off`, Storage sans erreur après le déploiement. Annonce envoyée le 13/10 (simulation puis envoi : 14/14, aucun échec). 14/10 — REGISTRE 2FA-2 (`75d86975`) et `docLinks` du manuel complet (`ab6a2baa`) : app, backend et acquittement verts ; écran vu en production par Xavier (Mon compte → Données personnelles → « Inscrire un autre appareil »). Manuel complet servi = v5-1 (empreinte `e93999b0…`), ancien archivé. Activation (`e016c5ca`) : sql-tests, rejeu-image, app, backend, acquittement verts ; en production à 02 h 11 : `schema_migrations` 20261013234826 sans `created_by`, mode `facteurs`, `authenticator` porte `pgrst.db_pre_request=private.fn_avant_requete`, refus à la nouvelle forme, API anonyme et site servis (200). 15/10 — `729b1b09` (les bibliothèques reviennent après le code TOTP) : test `src/tests/biblios-apres-code-totp.test.js` (403 en aal1, BLMF coordenador en aal2), vitest 2 914 verts, lint 0 erreur ; pipeline `7749406` vert.",
         "pt": "13/10 — lotes 1 e 2 implantados e verificados; auditoria das Edge Functions implantada (`069b76ea`). Política do Storage aplicada pela CI (`20261013182456`). Aviso enviado em 13/10 (14/14). 15/10 — `729b1b09`: teste `src/tests/biblios-apres-code-totp.test.js`, pipeline `7749406` verde."
       }
+    },
+    {
+      "id": "A7",
+      "d": "A",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Réunir Lyon, Les Herbes Folles et l'ASR autour de la répartition du 19/10",
+        "pt": "Reunir Lyon, Les Herbes Folles e a ASR em torno da repartição de 19/10"
+      },
+      "v": {
+        "fr": "La synthèse « qui fait quoi » (cinq décisions à prendre ensemble) et le message d'invitation sont prêts depuis le 19/10 (dossier « AnarBib sortie de Supabase 2026-10-19 »). L'envoi n'est consigné nulle part, la date est à fixer (visio Framatalk).",
+        "pt": "A síntese « quem faz o quê » e o convite estão prontos desde 19/10; envio não registrado, data a fixar."
+      },
+      "w": {
+        "fr": "Envoyer l'invitation, tenir la réunion, consigner les cinq décisions (au REGISTRE et dans I21).",
+        "pt": "Enviar o convite, fazer a reunião, registrar as cinco decisões."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "La réunion a eu lieu, ses décisions sont écrites au REGISTRE et reportées dans I21."
+        ],
+        "pt": [
+          "A reunião aconteceu, suas decisões estão escritas no REGISTRE e em I21."
+        ]
+      },
+      "dep": {
+        "fr": "Conditionne I21, I35 et A3.",
+        "pt": "Condiciona I21, I35 e A3."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "A8",
+      "d": "A",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Ouvrir un second accès à la console Supabase",
+        "pt": "Abrir um segundo acesso ao console Supabase"
+      },
+      "v": {
+        "fr": "Le tableau de bord de la production n'est accessible que par un seul compte (une identité GitHub, celle du mainteneur). Le perdre, c'est perdre la console jusqu'à la bascule (note « Sortir des services états-uniens » v4, 19/10).",
+        "pt": "O painel da produção só é acessível por uma conta. Perdê-la é perder o console até a mudança."
+      },
+      "w": {
+        "fr": "Inviter une seconde personne de confiance dans l'organisation Supabase (rôle minimal suffisant), ou déposer un accès de secours sous scellé.",
+        "pt": "Convidar uma segunda pessoa de confiança na organização Supabase, ou um acesso de socorro lacrado."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Deux personnes peuvent ouvrir la console de production, et la procédure est écrite."
+        ],
+        "pt": [
+          "Duas pessoas podem abrir o console, e o procedimento está escrito."
+        ]
+      },
+      "dep": {
+        "fr": "Lié à A1 (une seule personne) et à I21 (jusqu'à la bascule).",
+        "pt": "Ligado a A1 e I21."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "B46",
+      "d": "B",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql",
+        "front"
+      ],
+      "t": {
+        "fr": "Mener le chantier d'hygiène de l'audit de sécurité du 17/10 (P9)",
+        "pt": "Conduzir o canteiro de higiene da auditoria de segurança de 17/10 (P9)"
+      },
+      "v": {
+        "fr": "L'audit de sécurité du 17/10 a donné dix chantiers : P1 à P8 sont livrés (18-19/10). **P9, l'hygiène, n'est pas commencé.** Le détail vit dans le rapport hors dépôt ; par règle de l'audit, les constats ne sont pas inscrits ici avant leur correction.",
+        "pt": "A auditoria de 17/10 deu dez canteiros; P1 a P8 entregues. P9 (higiene) não começou. Detalhe fora do repositório."
+      },
+      "w": {
+        "fr": "Traiter les points du chantier P9 du rapport, un commit par point ; ne décrire ici que ce qui est corrigé. Décider le canal privé de suivi des constats ouverts.",
+        "pt": "Tratar os pontos de P9, um commit por ponto; descrever aqui só o corrigido. Decidir o canal privado de acompanhamento."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les points de P9 sont corrigés et déployés.",
+          "Un canal privé de suivi des constats ouverts existe et est connu de qui doit le lire."
+        ],
+        "pt": [
+          "Os pontos de P9 estão corrigidos.",
+          "Existe um canal privado de acompanhamento."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "C30",
+      "d": "C",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "langue",
+        "collectif"
+      ],
+      "t": {
+        "fr": "Décider du sort de ~800 biographies d'autorité traduites automatiquement",
+        "pt": "Decidir o destino de ~800 biografias de autoridade traduzidas automaticamente"
+      },
+      "v": {
+        "fr": "La migration `20261019154741` a versé des traductions de biographies en brouillon : 90 par langue pour ca, de, el, en, eo, es, it, nl ; 84 en fr, 44 en pt-BR, 5 en ro. **À vérifier** : la page d'autorité semble lire `author_translations` sans filtrer le statut — ces textes non relus seraient alors publics, sans mention. Deux doutes relevés en passant : un nom transcrit en grec (« Λε Γκεν »), et « drogas » rendu au sens de médicaments en grec (fiche 11058).",
+        "pt": "~800 traduções automáticas de biografias em rascunho (20261019154741). A verificar: a página de autoridade parece não filtrar o status."
+      },
+      "w": {
+        "fr": "Vérifier ce que la page publique affiche ; puis trancher : validation en bloc (comme pour le roumain), mention « traduction automatique » à l'écran, ou masquage jusqu'à relecture native.",
+        "pt": "Verificar o que a página pública mostra; decidir: validação em bloco, menção « tradução automática », ou ocultar até revisão."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Ce que voit le public est décidé et conforme à la décision.",
+          "Les deux doutes relevés sont tranchés."
+        ],
+        "pt": [
+          "O que o público vê está decidido e conforme.",
+          "As duas dúvidas estão resolvidas."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "C31",
+      "d": "C",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "biblio",
+        "front"
+      ],
+      "t": {
+        "fr": "Trancher un rôle « Postface » distinct de la préface",
+        "pt": "Decidir um papel « Posfácio » distinto do prefácio"
+      },
+      "v": {
+        "fr": "MARC21 a un code propre pour la postface (`waw`) ; elle est aujourd'hui rangée en préface. Proposé le 17/10 lors de l'ajout des rôles « Introduction » et « Avant-propos » (`580d49da`), sans réponse.",
+        "pt": "MARC21 tem código próprio para o posfácio (`waw`); hoje fica em prefácio. Proposto em 17/10, sem resposta."
+      },
+      "w": {
+        "fr": "Décider ; si oui, ajouter le rôle (registre des rôles, onze locales, export MARC).",
+        "pt": "Decidir; se sim, acrescentar o papel (registro, onze locales, MARC)."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "La décision est prise ; si oui, le rôle existe dans les onze langues et à l'export."
+        ],
+        "pt": [
+          "Decisão tomada; se sim, o papel existe nas onze línguas e na exportação."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "C32",
+      "d": "C",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "biblio",
+        "sql"
+      ],
+      "t": {
+        "fr": "Corriger deux erreurs d'autorités vues pendant le relevé Anarchief",
+        "pt": "Corrigir dois erros de autoridade vistos no levantamento Anarchief"
+      },
+      "v": {
+        "fr": "Signalées le 19/10, hors du lot traité, toujours en production : l'autorité 10212 (Isidro Guardia Abella) porte les formes variantes actives « Gramsci » et « GRAMSCI, Antonio », alors qu'une autorité 11346 « Gramsci » existe ; Agustín Souchy existe en double (10066 et 10304 « Agustín Souchy Bauer »).",
+        "pt": "Autoridade 10212 com variantes « Gramsci » indevidas; Souchy em duplicata (10066/10304)."
+      },
+      "w": {
+        "fr": "Retirer les deux formes de 10212 (et vérifier où elles mènent), fusionner les deux Souchy par l'Atelier ou une migration de fusion.",
+        "pt": "Retirar as duas variantes de 10212, fundir os dois Souchy."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "10212 ne porte plus de forme de Gramsci ; un seul Souchy, ses notices rattachées."
+        ],
+        "pt": [
+          "10212 sem variante de Gramsci; um só Souchy."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "C33",
+      "d": "C",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "biblio",
+        "sql"
+      ],
+      "t": {
+        "fr": "Relire et enrichir les 308 autorités créées pour Anarchief",
+        "pt": "Revisar e enriquecer as 308 autoridades criadas para a Anarchief"
+      },
+      "v": {
+        "fr": "`1704c05c` (19/10) a créé 308 autorités (197 personnes, 111 collectifs), source « Anarchief.org · import 2026-10 », aucune avec un identifiant Wikidata. La décision de Xavier prévoyait de les marquer pour relecture dans l'Atelier : aucune ligne de file n'a été créée. L'enrichissement (Wikidata, IdRef) a été renvoyé à plus tard. Une lecture à vérifier : « Wayne Prize » pris pour Wayne Price (3 notices) ; 50 graphies restent en texte.",
+        "pt": "308 autoridades criadas em 19/10 sem fila de revisão nem Wikidata."
+      },
+      "w": {
+        "fr": "Verser les 308 dans la file de revue ; rejouer l'enrichissement à deux signaux (règle de C4) ; vérifier « Wayne Prize ».",
+        "pt": "Pôr as 308 na fila de revisão; enriquecer com a regra de dois sinais; verificar « Wayne Prize »."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les 308 sont passées en revue ; celles qui ont une identité sûre portent leur identifiant externe."
+        ],
+        "pt": [
+          "As 308 foram revisadas; as de identidade segura têm identificador externo."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D21",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "biblio"
+      ],
+      "t": {
+        "fr": "Faire choisir à la BTL le tome de De Greef (notice 415)",
+        "pt": "Fazer a BTL escolher o tomo de De Greef (registro 415)"
+      },
+      "v": {
+        "fr": "Le 16/10, la recherche a produit `numdif-candidats-415-degreef.json` : trois tomes candidats, à charger dans l'onglet « Candidats PDF ». Le fichier n'a pas été chargé : aucun candidat pour la notice 415 en production.",
+        "pt": "Arquivo de três tomos candidatos pronto desde 16/10, não carregado."
+      },
+      "w": {
+        "fr": "Transmettre le fichier à la coordination de la BTL ; elle charge, choisit le tome qui correspond à l'exemplaire, et verse.",
+        "pt": "Transmitir o arquivo à coordenação da BTL; ela carrega, escolhe e versa."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "La notice 415 a sa ressource, du tome de l'exemplaire détenu, ou un refus motivé."
+        ],
+        "pt": [
+          "O registro 415 tem seu recurso, ou uma recusa motivada."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D22",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "biblio",
+        "aucune"
+      ],
+      "t": {
+        "fr": "Reprendre à la main les sources fermées aux automates",
+        "pt": "Retomar à mão as fontes fechadas aos robôs"
+      },
+      "v": {
+        "fr": "Sur 58 notices d'avant 1926 cherchées le 16/10, une quarantaine sans résultat : BNE/BDH, Gallica, HathiTrust, BN Digital, Domínio Público, la bibliothèque du Sénat brésilien refusent les agents, et l'API Google Books était à court de quota. S'y ajoutent les traductions espagnoles de Reclus encore sans fichier (265, 1767, 147, 1188).",
+        "pt": "Uma quarentena de registros sem resultado: fontes fechadas aos agentes. Mais as traduções espanholas de Reclus sem arquivo."
+      },
+      "w": {
+        "fr": "Une personne avec un navigateur consulte ces sources ; chaque trouvaille passe par la file de candidats (`--url`), validée par la bibliothèque détentrice.",
+        "pt": "Uma pessoa com navegador consulta; cada achado passa pela fila de candidatos."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les notices de la liste ont été cherchées à la main, et chacune a un candidat ou la mention « rien trouvé »."
+        ],
+        "pt": [
+          "Os registros da lista foram buscados à mão."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D23",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Recouper deux dates de droits sur des PDF versés en lecture publique",
+        "pt": "Conferir duas datas de direitos em PDFs abertos ao público"
+      },
+      "v": {
+        "fr": "Notice 223 (Cornelissen, 1907, publique) : les dates du traducteur (†1948) viennent d'un résumé de recherche web, « à recouper ». Notice 191 (Fabbri, 1921, publique) : les textes signés « Catilina » ont un auteur non identifié, « à confirmer ».",
+        "pt": "Registros 223 e 191, públicos: datas de direitos a confirmar."
+      },
+      "w": {
+        "fr": "Recouper sur une source d'autorité ; si le doute subsiste, passer la ressource en restreint (EF `realign-digital-resource`).",
+        "pt": "Conferir; se a dúvida persistir, restringir o recurso."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les deux statuts de droits reposent sur une source citée, ou les ressources sont restreintes."
+        ],
+        "pt": [
+          "Os dois estatutos têm fonte citada, ou os recursos estão restritos."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D24",
+      "d": "D",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "deno",
+        "front"
+      ],
+      "t": {
+        "fr": "Publier les textes intégraux du wiki d'Anarchief en EPUB",
+        "pt": "Publicar os textos integrais do wiki da Anarchief em EPUB"
+      },
+      "v": {
+        "fr": "La feuille de route du 09/10 prévoit des EPUB chez AnarBib, filtrés par la lettre des lots de textes ; J/M l'a rendue le 19/10. Elle n'est appliquée qu'en local (208 textes ouverts, 294 restreints selon `droits-anarchief.py`) ; rien n'est publié, et aucune fiche ne portait ce travail.",
+        "pt": "EPUBs previstos desde 09/10, aplicados só localmente (208 abertos, 294 restritos)."
+      },
+      "w": {
+        "fr": "Produire les EPUB, les verser comme ressources numériques avec la portée qui découle des lots, les rattacher aux notices.",
+        "pt": "Produzir os EPUB, versá-los com o alcance dos lotes, ligá-los aos registros."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les textes ouverts sont lisibles en EPUB depuis leur notice ; les restreints sous compte."
+        ],
+        "pt": [
+          "Os textos abertos são legíveis em EPUB; os restritos com conta."
+        ]
+      },
+      "dep": {
+        "fr": "Après le feu vert de Xavier ; suit les réponses de J/M (G21).",
+        "pt": "Após o sinal de Xavier; segue G21."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D25",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Décider du sort des 24 fichiers Word/ODT d'Anarchief",
+        "pt": "Decidir o destino dos 24 arquivos Word/ODT da Anarchief"
+      },
+      "v": {
+        "fr": "20 fichiers Word/ODT écartés le 15/10 (les seaux n'acceptent que le PDF), plus 4 ODT des pages en doublon (*Nacht over Rusland* ×3, *La conquête du pain*). Personne n'a décidé.",
+        "pt": "24 arquivos Word/ODT afastados (os baldes aceitam só PDF). Sem decisão."
+      },
+      "w": {
+        "fr": "Trancher : conversion en PDF, admission de ces formats, ou lien vers le wiki seulement.",
+        "pt": "Decidir: converter, admitir os formatos, ou só link ao wiki."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "La décision est prise et appliquée aux 24 fichiers."
+        ],
+        "pt": [
+          "Decisão tomada e aplicada aos 24."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D26",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Sortir de la fonction de versement la date du 15/10 écrite en dur",
+        "pt": "Tirar da função de versamento a data de 15/10 escrita no código"
+      },
+      "v": {
+        "fr": "Le texte « validé par lot » de `ingest.fn_digital_candidate_deposit_record` (`ef3eb581`) cite en dur la délégation et la lettre du 15/10/2026. Si une deuxième source déclare ses droits par lot, ce texte sera faux.",
+        "pt": "O texto « validado por lote » cita em código a carta de 15/10; ficará falso para outra fonte."
+      },
+      "w": {
+        "fr": "Lire la référence de la déclaration dans la source (table ou colonne), pas dans le code.",
+        "pt": "Ler a referência da declaração na fonte, não no código."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Une seconde source déclarée par lot produit une note juste, prouvé au banc."
+        ],
+        "pt": [
+          "Uma segunda fonte por lote produz nota correta, provado na bancada."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D27",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Lever la limite de taille du versement côté serveur (~150-180 Mo)",
+        "pt": "Levantar o limite de tamanho do versamento no servidor (~150-180 Mo)"
+      },
+      "v": {
+        "fr": "Même avec `node:crypto`, `deposit-digital-candidate` tient ~150 à 180 Mo par appel (mesuré le 16/10) ; au-delà, erreur 546, alors que les seaux acceptent 500 Mo.",
+        "pt": "O versamento aguenta ~150-180 Mo por chamada; os baldes aceitam 500 Mo."
+      },
+      "w": {
+        "fr": "Verser par morceaux (TUS ou multipart) et calculer l'empreinte en flux, ou documenter la limite à l'écran.",
+        "pt": "Versar por partes e calcular a impressão em fluxo, ou documentar o limite."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Un PDF de 400 Mo se verse par le chemin normal, ou la limite est dite avant l'essai."
+        ],
+        "pt": [
+          "Um PDF de 400 Mo é versado, ou o limite é dito antes."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "D28",
+      "d": "D",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus",
+        "pt": "Retirar dois objetos órfãos dos baldes PDF"
+      },
+      "v": {
+        "fr": "Vus le 19/10 : `anarbib-pdf-public/books/7594/…` (19,6 Mo, déposé le 17/10 par un brouillon de reprise publié dans la notice 1127, qui avait déjà sa ressource 980 du même ouvrage) ; un objet de test de mars dans `pdf-restrito/test/`. Aucun ne correspond à une ressource.",
+        "pt": "Dois objetos sem recurso nos baldes (um de 17/10 deixado por uma retomada, um teste de março)."
+      },
+      "w": {
+        "fr": "Sur accord de Xavier, les retirer ; vérifier au banc qu'une reprise publiée sur une notice qui a déjà sa ressource ne dépose plus de fichier.",
+        "pt": "Com o acordo de Xavier, retirar; verificar que uma retomada não deixa mais arquivo."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Plus d'objet sans ressource dans les seaux PDF ; le cas de la reprise est couvert par un test."
+        ],
+        "pt": [
+          "Nenhum objeto sem recurso; o caso da retomada coberto por teste."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "E40",
+      "d": "E",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sql",
+        "front"
+      ],
+      "t": {
+        "fr": "Rendre visible au public l'état de service d'une bibliothèque",
+        "pt": "Tornar visível ao público o estado de serviço de uma biblioteca"
+      },
+      "v": {
+        "fr": "La section « état de service » et le mot public de `/bibliotecas/:slug` sont toujours vides pour un visiteur : la vue `api.library_service_public` lit une table que seule l'équipe peut lire. Vérifié le 19/10 sous le rôle anonyme : 0 ligne, même pour les bibliothèques publiques.",
+        "pt": "A seção « estado de serviço » da página pública está sempre vazia para visitantes (vista lê tabela restrita à equipe)."
+      },
+      "w": {
+        "fr": "Choisir les champs à exposer, puis une aide DEFINER ou un droit ciblé ; test sous anon.",
+        "pt": "Escolher os campos a expor; ajuda DEFINER ou direito específico; teste sob anon."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Un visiteur anonyme voit l'état de service d'une bibliothèque publique, et rien d'une privée."
+        ],
+        "pt": [
+          "Um visitante anônimo vê o estado de serviço de uma biblioteca pública, nada de uma privada."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "E41",
+      "d": "E",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front"
+      ],
+      "t": {
+        "fr": "Rendre le nom de famille facultatif au profil",
+        "pt": "Tornar o sobrenome facultativo no perfil"
+      },
+      "v": {
+        "fr": "Le formulaire « Mes données » exige un nom de famille. Une personne qui ne veut qu'un pseudonyme ne peut pas s'y inscrire telle qu'elle se nomme (cas posé le 19/10 par un partenaire).",
+        "pt": "O formulário « Meus dados » exige sobrenome; quem usa só pseudônimo não consegue."
+      },
+      "w": {
+        "fr": "Décider ; si oui, rendre le champ facultatif partout où il est requis (front, contraintes, gabarits de courriel qui l'utilisent).",
+        "pt": "Decidir; se sim, tornar facultativo em todo lugar."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Un compte peut exister sous un seul nom, sans erreur ni affichage cassé."
+        ],
+        "pt": [
+          "Uma conta pode existir com um só nome."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "F26",
+      "d": "F",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Retirer des pieds de courriel le repli en portugais et le secret supprimé",
+        "pt": "Retirar dos rodapés o recurso em português e o segredo suprimido"
+      },
+      "v": {
+        "fr": "`notify-document-permission-request` et `notify-library-request` lisent encore `FOOTER_TEXT`, secret supprimé le 19/10 : leur pied affiche le texte de repli portugais quelle que soit la langue. `notify-network-weekly-report` et `notify-rede-digest` ont aussi un repli en portugais.",
+        "pt": "Quatro funções ainda têm rodapé de recurso em português."
+      },
+      "w": {
+        "fr": "Passer ces quatre fonctions au pied commun localisé (`4f54beeb`).",
+        "pt": "Passar as quatro funções ao rodapé comum localizado."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les quatre fonctions produisent un pied dans la langue du destinataire, prouvé au banc."
+        ],
+        "pt": [
+          "As quatro funções produzem rodapé na língua do destinatário."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "G21",
+      "d": "G",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Suivre les réponses attendues d'Anarchief et les appliquer",
+        "pt": "Acompanhar as respostas esperadas da Anarchief e aplicá-las"
+      },
+      "v": {
+        "fr": "La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoi à confirmer** : deux relectures du 19/10 se contredisent sur son départ.",
+        "pt": "Quatro perguntas a J/M (19/10): Theorie en praktijk, 34 PDF restritos, autorizações, nome exibido. Envio a confirmar."
+      },
+      "w": {
+        "fr": "Confirmer l'envoi ; à chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).",
+        "pt": "Confirmar o envio; aplicar cada resposta."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les quatre questions ont une réponse appliquée, ou une relance datée."
+        ],
+        "pt": [
+          "As quatro perguntas têm resposta aplicada, ou cobrança datada."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "G22",
+      "d": "G",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Faire saisir le téléphone public de chaque bibliothèque",
+        "pt": "Fazer cada biblioteca informar seu telefone público"
+      },
+      "v": {
+        "fr": "Depuis `4f54beeb` (16/10), un courriel porte le téléphone de sa propre bibliothèque. Aucune n'en a saisi : 0 ligne renseignée dans `library_public_contact.public_phone`.",
+        "pt": "Desde 16/10 o e-mail mostra o telefone da biblioteca; nenhuma o informou."
+      },
+      "w": {
+        "fr": "Relancer les coordinations (Gestion de la bibliothèque › Identité).",
+        "pt": "Lembrar as coordenações."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les bibliothèques actives qui ont un téléphone public l'ont saisi."
+        ],
+        "pt": [
+          "As bibliotecas ativas com telefone público o informaram."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "G23",
+      "d": "G",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "collectif",
+        "aucune"
+      ],
+      "t": {
+        "fr": "Déclarer l'usage d'Anthropic comme sous-traitant, ou le retirer",
+        "pt": "Declarar o uso da Anthropic como subcontratada, ou retirá-lo"
+      },
+      "v": {
+        "fr": "Trois fonctions de production appellent une API d'IA états-unienne (`gazette-monthly-build`, `translate-gazette-submission`, `work-titles-autofill`). Ni `docs/legal/REGISTRE_TRAITEMENTS.md` ni la politique de confidentialité n'en parlent (constat du 19/10, note v4).",
+        "pt": "Três funções chamam uma API de IA estadunidense; nem o registro de tratamentos nem a política o dizem."
+      },
+      "w": {
+        "fr": "Décider : déclarer (sous-traitant, transfert hors UE, données envoyées, durée) ou remplacer ; puis mettre à jour le registre des traitements et la politique dans les onze langues.",
+        "pt": "Decidir: declarar ou substituir; depois atualizar o registro e a política."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Le registre et la politique disent ce que fait chaque appel, ou les appels ont disparu."
+        ],
+        "pt": [
+          "O registro e a política dizem o que faz cada chamada, ou as chamadas sumiram."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "G24",
+      "d": "G",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Trancher la gouvernance des données que l'audit du 17/10 renvoie au collectif (P10)",
+        "pt": "Decidir a governança dos dados que a auditoria de 17/10 remete ao coletivo (P10)"
+      },
+      "v": {
+        "fr": "Le chantier P10 de l'audit de sécurité attend une décision collective : ce que l'administration réseau peut lire, le contenu du rapport hebdomadaire, la conservation de données jamais purgées. Détail dans le rapport hors dépôt.",
+        "pt": "P10 da auditoria espera decisão coletiva: o que a administração lê, o relatório semanal, a conservação."
+      },
+      "w": {
+        "fr": "Porter les trois questions devant le collectif (AG ou administrations réseau), inscrire les réponses au REGISTRE, puis le code.",
+        "pt": "Levar as três questões ao coletivo, registrar as respostas, depois o código."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les trois réponses sont au REGISTRE et appliquées."
+        ],
+        "pt": [
+          "As três respostas estão no REGISTRE e aplicadas."
+        ]
+      },
+      "dep": {
+        "fr": "Après A1 (une décision à trois) ou en AG (G20).",
+        "pt": "Após A1 ou em AG (G20)."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "H35",
+      "d": "H",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "collectif",
+        "deno"
+      ],
+      "t": {
+        "fr": "Mener la moisson réciproque ASB ↔ AnarBib jusqu'au pilote",
+        "pt": "Levar a colheita recíproca ASB ↔ AnarBib até o piloto"
+      },
+      "v": {
+        "fr": "Cadré le 18/10, étapes 1-2 au banc le 19/10 ; la part d'AnarBib est en production (`d0188be5`, `c32807b9`, `e28c29a4`). Attend le camarade (`ASR2026`) : corriger `oai.php` (filtre `from` au jour près — le plus urgent —, fuseau, compteur de vues qui change la date, `dc:date`, identifiant fixe, `deletedRecord`), écrire son moissonneur, monter les salons Matrix, répondre aux dix questions de `MESURES_banc_OAI_ASB_AnarBib_2026-10-19.md` (§ 4 à lui transmettre). Ensuite : moisson incrémentale, étape 7 (ASB moissonne AnarBib), pilote en production (étape 8) sur décision de Xavier. Question pour Xavier : traiter aussi les types bruts portugais vus en production (`panfleto`, `folheto`, `carta`).",
+        "pt": "Moissonnage recíproco: parte AnarBib em produção; espera correções do `oai.php` e o colhedor do camarada; depois etapas 7 e 8."
+      },
+      "w": {
+        "fr": "Transmettre la § 4 ; suivre les corrections ; éprouver la moisson incrémentale ; étapes 7 et 8.",
+        "pt": "Transmitir a § 4; acompanhar; provar a colheita incremental; etapas 7 e 8."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Une notice créée d'un côté apparaît de l'autre par la moisson incrémentale, et une suppression aussi.",
+          "Le pilote en production est décidé par écrit."
+        ],
+        "pt": [
+          "Um registro criado de um lado aparece do outro, e uma supressão também.",
+          "O piloto está decidido por escrito."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "H36",
+      "d": "H",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sql"
+      ],
+      "t": {
+        "fr": "Réaligner le thésaurus FICEDL d'AnarBib sur la source",
+        "pt": "Realinhar o tesauro FICEDL do AnarBib com a fonte"
+      },
+      "v": {
+        "fr": "En production (623 termes) : « histoire : histoire orale » alors que la source l'a renommé « histoire orale » ; la date 1848-1867 ajoutée à la source est absente. Le raclage du 19/10 (`--export`) ne rapporte ni les dates ni les 97 descripteurs géographiques à plusieurs niveaux ; le changement de libellé n'a pas été apparié.",
+        "pt": "Tesauro em produção defasado (um rótulo renomeado, uma data ausente)."
+      },
+      "w": {
+        "fr": "Migration d'alignement (libellé et date), puis étendre `--export` aux dates et aux descripteurs géographiques.",
+        "pt": "Migração de alinhamento, depois estender `--export`."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les libellés et dates d'AnarBib égalent ceux de la source au relevé suivant."
+        ],
+        "pt": [
+          "Rótulos e datas iguais aos da fonte."
+        ]
+      },
+      "dep": {
+        "fr": "Le roumain attend de toute façon la relecture (E39).",
+        "pt": "O romeno espera a revisão (E39)."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I35",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "L",
+      "sk": [
+        "sysadmin",
+        "deno"
+      ],
+      "t": {
+        "fr": "Tirer les conséquences de la « voie (a) » dans la CI",
+        "pt": "Tirar as consequências da « via (a) » na CI"
+      },
+      "v": {
+        "fr": "Tranché par Xavier le 19/10 : l'instance de l'ASR tire elle-même les versions stables (`deploy.sh --version`) ; la CI des Herbes Folles ne fait que tester et publier le front, sans aucun secret de production. Rien n'est fait.",
+        "pt": "Decidido em 19/10: a instância da ASR puxa as versões estáveis; a CI só testa e publica o front. Nada feito."
+      },
+      "w": {
+        "fr": "Publier le front au tag `v*`, après le déploiement de l'instance (décider comment la CI l'apprend) ; retirer le job `backend` et les secrets `SUPABASE_ACCESS_TOKEN` / `SUPABASE_DB_PASSWORD` ; correctifs urgents en `vAAAA.MM.N` ; à l'ASR, heure de tirage hors fenêtre de sauvegarde et alerte si `deploy.sh` échoue.",
+        "pt": "Publicar o front na tag `v*` após o deploy da instância; retirar o job backend e os segredos; correções urgentes em vAAAA.MM.N; horário e alerta na ASR."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "La CI ne porte plus aucun secret de production ; une version stable se déploie à l'ASR puis publie le front, dans cet ordre."
+        ],
+        "pt": [
+          "A CI não tem mais segredo de produção; uma versão estável se implanta na ASR e depois publica o front."
+        ]
+      },
+      "dep": {
+        "fr": "Avant la bascule (I21) ; avec le camarade (`ASR2026`).",
+        "pt": "Antes da mudança (I21)."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I36",
+      "d": "I",
+      "p": "P1",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Remettre le checkout d'exploitation `~/anarbib` sur `main`, et cesser les « copies locales »",
+        "pt": "Repor o checkout de exploração `~/anarbib` em `main`, e parar as « cópias locais »"
+      },
+      "v": {
+        "fr": "Vérifié le 19/10 au soir : `~/anarbib` a **5 commits d'avance et 72 de retard** sur `origin/main` — quatre « copies locales » des sessions de sauvegarde (`bf2b0069`, `6fe9ac8a`, `4871d70f`, `dd74aefa`) et `a648bd86` (l'ISBD, déjà en amont sous `0d884a0f` et `9636773a`). `anarbib-mirror-refresh` refuse donc d'avancer (« checkout DIVERGENT … je ne touche à rien », 14 h 31, 18 h 00, 18 h 50) : les scripts d'exploitation (#BG2, fraîcheur, témoin) tournent sur du code périmé. Régression de fait d'I33 (clos le 09/10).",
+        "pt": "`~/anarbib` com 5 commits à frente e 72 atrás de `origin/main`; o refresh do espelho recusa avançar desde 19/10."
+      },
+      "w": {
+        "fr": "Vérifier que chaque « copie locale » a son équivalent en amont, puis remettre `main` sur `origin/main` ; écrire la règle (aucun commit dans le checkout d'exploitation) là où les sessions la liront.",
+        "pt": "Verificar os equivalentes a montante e repor `main`; escrever a regra."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "`~/anarbib` égale `origin/main` et `anarbib-mirror-refresh` passe ; aucun commit local depuis."
+        ],
+        "pt": [
+          "`~/anarbib` igual a `origin/main` e o refresh passa."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I37",
+      "d": "I",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Brancher le miroir d'images de l'ASR, et sortir la CI du registre ECR",
+        "pt": "Ligar o espelho de imagens da ASR, e tirar a CI do registro ECR"
+      },
+      "v": {
+        "fr": "`IMAGE_PREFIX` est livré (`35e244c3`) et le miroir du camarade a été éprouvé le 19/10 ; la valeur reste à poser à l'installation de la production à l'ASR. La CI tire encore `supabase/postgres` depuis `public.ecr.aws` (`sql-tests.yml`), un registre états-unien.",
+        "pt": "IMAGE_PREFIX entregue; falta pô-lo na produção da ASR. A CI ainda puxa do ECR."
+      },
+      "w": {
+        "fr": "Poser `IMAGE_PREFIX` à la bascule ; faire tirer la CI depuis le miroir.",
+        "pt": "Pôr IMAGE_PREFIX na mudança; a CI puxar do espelho."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Aucune image de la production ni de la CI ne vient plus d'un registre états-unien."
+        ],
+        "pt": [
+          "Nenhuma imagem vem mais de registro estadunidense."
+        ]
+      },
+      "dep": {
+        "fr": "Avec I2 (empreintes) et I21.",
+        "pt": "Com I2 e I21."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I38",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Vérifier les premiers tirs automatiques `storage` et `lourd` du dimanche 25/10",
+        "pt": "Verificar os primeiros disparos automáticos `storage` e `lourd` de domingo 25/10"
+      },
+      "v": {
+        "fr": "Les minuteurs ont été réactivés les 18-19/10 et le premier tir `lourd` lancé à la main. Le contrôle du lundi 26/10 a été proposé, jamais programmé.",
+        "pt": "Os temporizadores foram reativados; o controle de 26/10 nunca foi programado."
+      },
+      "w": {
+        "fr": "Le 26/10, lire les journaux et les instantanés restic des deux flux ; consigner.",
+        "pt": "Em 26/10, ler os diários e instantâneos; registrar."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Les deux flux ont un instantané automatique du 25/10, vérifié."
+        ],
+        "pt": [
+          "Os dois fluxos têm instantâneo automático de 25/10."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I39",
+      "d": "I",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "M",
+      "sk": [
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Faire entrer `storage` et `lourd` au test de restauration mensuel",
+        "pt": "Incluir `storage` e `lourd` no teste de restauração mensal"
+      },
+      "v": {
+        "fr": "Le restore-test ne couvre que `court` et `long`. L'épreuve de restauration du 19/10 (14 PDF et le fond de carte, `ad927bc5`) a été faite une fois, à la main.",
+        "pt": "O restore-test cobre só `court` e `long`; a prova de 19/10 foi feita uma vez."
+      },
+      "w": {
+        "fr": "Ajouter les deux flux au restore-test, avec un échantillon de fichiers vérifiés par empreinte.",
+        "pt": "Acrescentar os dois fluxos ao restore-test."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Le restore-test mensuel restaure un échantillon de chaque flux et le compare."
+        ],
+        "pt": [
+          "O restore-test mensal restaura uma amostra de cada fluxo."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I40",
+      "d": "I",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "front",
+        "sysadmin"
+      ],
+      "t": {
+        "fr": "Exclure `.claude/` de vitest et ranger les copies de travail mortes",
+        "pt": "Excluir `.claude/` do vitest e arrumar as cópias de trabalho mortas"
+      },
+      "v": {
+        "fr": "`vitest.config.js` n'exclut que `node_modules`, `dist` et `supabase/functions` : une suite complète lancée depuis `~/anarbib` ramasse les tests des worktrees d'autres sessions (14 faux échecs le 18/10, 7 le 19/10) et charge le poste. Restent aussi des dossiers sous `.claude/worktrees/` qui ne sont plus des worktrees, un worktree `~/anarbib-wt-d17` signalé « peut être retiré », et un clone Windows indépendant (`Codeberg\\anarbib`, avec deux worktrees) contraire à la règle du dépôt unique.",
+        "pt": "vitest não exclui `.claude/`: falsos fracassos e carga. Restam cópias de trabalho mortas e um clone Windows independente."
+      },
+      "w": {
+        "fr": "Ajouter `.claude/**` à l'exclusion ; retirer, sur l'accord de Xavier, les copies mortes et le clone Windows après vérification qu'ils ne portent rien d'unique.",
+        "pt": "Excluir `.claude/**`; retirar as cópias mortas após verificação."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Une suite lancée depuis `~/anarbib` ne lit plus que ses propres tests ; plus de copie morte."
+        ],
+        "pt": [
+          "Uma suíte de `~/anarbib` só lê seus próprios testes."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "I41",
+      "d": "I",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "deno"
+      ],
+      "t": {
+        "fr": "Mettre à jour le commentaire de `[functions.opds]` dans `config.toml`",
+        "pt": "Atualizar o comentário de `[functions.opds]` em `config.toml`"
+      },
+      "v": {
+        "fr": "Depuis `1cb5bb6d` (19/10), le flux OPDS lit en anonyme et suit la visibilité du catalogue ; le commentaire décrit encore l'ancien filtre (`access_scope='publico'` seul). Laissé exprès : toucher ce fichier redéploie toutes les fonctions.",
+        "pt": "O comentário descreve o filtro antigo; deixado de propósito (tocar o arquivo reimplanta tudo)."
+      },
+      "w": {
+        "fr": "Le corriger au prochain changement de `config.toml`.",
+        "pt": "Corrigi-lo na próxima mudança de `config.toml`."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Le commentaire dit ce que fait le flux."
+        ],
+        "pt": [
+          "O comentário diz o que o fluxo faz."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "J13",
+      "d": "J",
+      "p": "P3",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Inscrire au REGISTRE le quatrième cas de source, « domaine public »",
+        "pt": "Inscrever no REGISTRE o quarto caso de fonte, « domínio público »"
+      },
+      "v": {
+        "fr": "Le 15/10, la file de candidats a reçu un cas `domaine_public`, sans l'inscrire au REGISTRE (« à toi de dire si ça fait doctrine »). NUMDIF-2 dit toujours « trois cas de source », alors que la file, les versements de Reclus et NUMDIF-6 utilisent le quatrième (87 ressources versées sous ce cas).",
+        "pt": "O caso `domaine_public` é usado (87 recursos) mas NUMDIF-2 diz « três casos »."
+      },
+      "w": {
+        "fr": "Décider si c'est doctrine ; amender NUMDIF-2 en conséquence.",
+        "pt": "Decidir se é doutrina; emendar NUMDIF-2."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "NUMDIF-2 décrit les cas que la file applique."
+        ],
+        "pt": [
+          "NUMDIF-2 descreve os casos que a fila aplica."
+        ]
+      },
+      "dep": {
+        "fr": "Relève aussi de G20 (AG).",
+        "pt": "Também de G20."
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
+    },
+    {
+      "id": "J14",
+      "d": "J",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "aucune"
+      ],
+      "t": {
+        "fr": "Passer l'outillage des sessions à onze locales et à Forgejo",
+        "pt": "Passar o ferramental das sessões a onze locales e ao Forgejo"
+      },
+      "v": {
+        "fr": "`CLAUDE.md` du checkout d'exploitation, la skill `anarbib-i18n` et les commandes `commit-front` / `i18n` décrivent encore dix locales ; la skill `anarbib-sql` parle de Woodpecker (la CI est sur Forgejo depuis le 11/06). Ces fichiers ne sont pas versionnés. C'est l'oubli que la session ISBD a dû rattraper le 18/10 (`9636773a`).",
+        "pt": "CLAUDE.md e skills ainda falam de dez locales e de Woodpecker (fora do repositório)."
+      },
+      "w": {
+        "fr": "Mettre ces fichiers à jour (onze locales, Forgejo).",
+        "pt": "Atualizar esses arquivos."
+      },
+      "y": {
+        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
+        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
+      },
+      "f": {
+        "fr": [
+          "Aucun fichier d'outillage ne parle plus de dix locales ni de Woodpecker."
+        ],
+        "pt": [
+          "Nenhum arquivo fala mais de dez locales nem de Woodpecker."
+        ]
+      },
+      "dep": {
+        "fr": "—",
+        "pt": "—"
+      },
+      "r": [
+        "Relecture des sessions du 16 au 19/10/2026"
+      ],
+      "verif": []
     }
   ]
 }

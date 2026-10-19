@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-19** · 49 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-19** · 82 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -15,16 +15,16 @@
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
-    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 2
-    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 6
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 7
-    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
-    - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 5
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 8
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 4
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
+    - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
+    - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 15
+    - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
+    - [F — Courriel et notifications](#f--courriel-et-notifications) · 2
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 4
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,9 +62,9 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ## L'état réel au 18 octobre 2026
 
-**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) — **49 items, 261 clôtures**.
+**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) ; **33 items versés le 19/10 au soir** à la relecture des sessions du 16 au 19/10, et neuf fiches remises à jour — **82 items, 261 clôtures**.
 
-**Fraîcheur des constats au 2026-10-19.** **40 items sur 49** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D4, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K1, K7). Les **9** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-19.** **74 items sur 82** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C30, C31, C32, C33, D3, D4, D8, D15, D16, D18, D21, D22, D23, D24, D25, D26, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, F26, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, H36, I2, I21, I32, I35, I36, I37, I38, I39, I40, I41, J10, J13, J14, K1, K7). Les **8** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -294,6 +294,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **A1** | Obtenir au moins deux autres administrateur·rices réseau | `P0` | Décision collective |
 | **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | En cours |
+| **A7** | Réunir Lyon, Les Herbes Folles et l'ASR autour de la répartition du 19/10 | `P1` | Ouvert |
+| **A8** | Ouvrir un second accès à la console Supabase | `P2` | Ouvert |
 
 #### A1 — Obtenir au moins deux autres administrateur·rices réseau
 
@@ -323,7 +325,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner). **Déployé en prod le 28/09 à 12 h 48** (migration `20260928095045` par la CI, CHECK élargie, aucun incident `ci_en_retard`) — après deux pushes de code que Forgejo a sautés sans un rouge parce qu'un commit du lot portait `[skip ci]` (le backlog par-dessus, puis un commit voisin ramené par le rebase) ; le hook `.githooks/pre-push` refuse désormais ce lot mixte vers Codeberg (le miroir GitHub, sans CI, passe).
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.
 
@@ -340,6 +342,46 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `CLAUDE.md, piège connu n°1` · `REPRISE_bascule_autohebergee_2026-08-26`*
 
+#### A7 — Réunir Lyon, Les Herbes Folles et l'ASR autour de la répartition du 19/10
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
+
+**État.** La synthèse « qui fait quoi » (cinq décisions à prendre ensemble) et le message d'invitation sont prêts depuis le 19/10 (dossier « AnarBib sortie de Supabase 2026-10-19 »). L'envoi n'est consigné nulle part, la date est à fixer (visio Framatalk).
+
+*Vérifié : *
+
+**Ce que c'est.** Envoyer l'invitation, tenir la réunion, consigner les cinq décisions (au REGISTRE et dans I21).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- La réunion a eu lieu, ses décisions sont écrites au REGISTRE et reportées dans I21.
+
+**Dépendances.** Conditionne I21, I35 et A3.
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### A8 — Ouvrir un second accès à la console Supabase
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** Le tableau de bord de la production n'est accessible que par un seul compte (une identité GitHub, celle du mainteneur). Le perdre, c'est perdre la console jusqu'à la bascule (note « Sortir des services états-uniens » v4, 19/10).
+
+*Vérifié : *
+
+**Ce que c'est.** Inviter une seconde personne de confiance dans l'organisation Supabase (rôle minimal suffisant), ou déposer un accès de secours sous scellé.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Deux personnes peuvent ouvrir la console de production, et la procédure est écrite.
+
+**Dépendances.** Lié à A1 (une seule personne) et à I21 (jusqu'à la bascule).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### B — Base de données, sécurité, RLS
@@ -351,6 +393,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B36** | Relire aux compteurs de production les index gardés sous réserve | `P3` | Ouvert |
 | **B41** | Recompter un seul fonds donne à une notice partagée la disponibilité de ce seul fonds jusqu’au recompte de nuit | `P3` | Ouvert |
 | **B42** | Double authentification (TOTP) obligatoire pour l’administration du réseau, les coordinations et les bibliothécaires | `P1` | En cours |
+| **B46** | Mener le chantier d'hygiène de l'audit de sécurité du 17/10 (P9) | `P2` | Ouvert |
 
 #### B36 — Relire aux compteurs de production les index gardés sous réserve
 
@@ -414,6 +457,27 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `supabase/migrations/20261013171710_b42_la_double_authentification_s_exige_cote_serveur.sql` · `tests/sql/b42_double_authentification_tests.sql` · `src/lib/doubleFacteur.js` · `src/pages/account/ContaDoubleFacteur.jsx` · `src/components/rede/DoubleFacteurPanel.jsx` · `scripts/i18n-add-b42-2fa2-inscription-guidee.cjs` · `src/contexts/LibraryContext.jsx` · `src/tests/biblios-apres-code-totp.test.js`*
 
+#### B46 — Mener le chantier d'hygiène de l'audit de sécurité du 17/10 (P9)
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** L'audit de sécurité du 17/10 a donné dix chantiers : P1 à P8 sont livrés (18-19/10). **P9, l'hygiène, n'est pas commencé.** Le détail vit dans le rapport hors dépôt ; par règle de l'audit, les constats ne sont pas inscrits ici avant leur correction.
+
+*Vérifié : *
+
+**Ce que c'est.** Traiter les points du chantier P9 du rapport, un commit par point ; ne décrire ici que ce qui est corrigé. Décider le canal privé de suivi des constats ouverts.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les points de P9 sont corrigés et déployés.
+- Un canal privé de suivi des constats ouverts existe et est connu de qui doit le lire.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### C — Catalogage et données documentaires
@@ -428,6 +492,10 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | Bloqué |
 | **C26** | Réviser et publier les 24 brouillons de l'acervo historique du CCLA (BLMF) | `P2` | Ouvert |
 | **C27** | Indexer les notices que le vocabulaire matière ne couvre pas | `P2` | Ouvert |
+| **C30** | Décider du sort de ~800 biographies d'autorité traduites automatiquement | `P2` | Ouvert |
+| **C31** | Trancher un rôle « Postface » distinct de la préface | `P3` | Ouvert |
+| **C32** | Corriger deux erreurs d'autorités vues pendant le relevé Anarchief | `P2` | Ouvert |
+| **C33** | Relire et enrichir les 308 autorités créées pour Anarchief | `P2` | Ouvert |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
 
@@ -435,7 +503,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Les 19 migrations `conventions_*` sont appliquées depuis le 21/08 : les référentiels sont normalisés, les mécaniques sûres ont été passées, la file de vérification existe et l'application permet d'y travailler. **Ce qui reste est la part qu'aucune machine ne fait.**
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Reprendre les trois tables de revue du schéma `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — et les traiter fiche par fiche depuis l'Atelier autorités.
 
@@ -457,7 +525,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** La recherche de couvertures a fait remonter des données fautives, relevées en production le 28/09 (`docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md`). **Six années impossibles** : BTL-TL-002174 `0187`, BTL-TL-002032 `0193`, BTL-TL-000065 et BTL-TL-001935 `0200`, BTL-TL-002053 `8000`, BTL-TL-002278 `2200` — cette dernière a aussi un lieu où s'est collée une ligne de colophon, avec un ISBN incomplet. **Un ISBN à clé de contrôle fausse** : BTL-TL-000503. S'y ajoute BTL-TL-002335, relevée à l'écran le 27/09 : elle décrit l'édition Ramparts Press de 1971 et porte l'ISBN de l'édition AK Press de 2004 (`027e6903`). Les deux « ISBN partagés » du même relevé ne sont pas des fautes : ce sont des paires BTL/BLMF d'une même édition, dont la fusion est une mutualisation (`DEDUP-8`).
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Notice par notice, dans le formulaire, livre en main : lire la valeur sur le livre, corriger, publier. **Jamais par migration** : une migration devinerait (décision de Xavier du 28/09). Les valeurs « probables » de la note de livraison sont des pistes, pas des corrections.
 
@@ -553,6 +621,87 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `clôture C7` · `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md`*
 
+#### C30 — Décider du sort de ~800 biographies d'autorité traduites automatiquement
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : langue maternelle, délibération collective
+
+**État.** La migration `20261019154741` a versé des traductions de biographies en brouillon : 90 par langue pour ca, de, el, en, eo, es, it, nl ; 84 en fr, 44 en pt-BR, 5 en ro. **À vérifier** : la page d'autorité semble lire `author_translations` sans filtrer le statut — ces textes non relus seraient alors publics, sans mention. Deux doutes relevés en passant : un nom transcrit en grec (« Λε Γκεν »), et « drogas » rendu au sens de médicaments en grec (fiche 11058).
+
+*Vérifié : *
+
+**Ce que c'est.** Vérifier ce que la page publique affiche ; puis trancher : validation en bloc (comme pour le roumain), mention « traduction automatique » à l'écran, ou masquage jusqu'à relecture native.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Ce que voit le public est décidé et conforme à la décision.
+- Les deux doutes relevés sont tranchés.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### C31 — Trancher un rôle « Postface » distinct de la préface
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, React / JavaScript
+
+**État.** MARC21 a un code propre pour la postface (`waw`) ; elle est aujourd'hui rangée en préface. Proposé le 17/10 lors de l'ajout des rôles « Introduction » et « Avant-propos » (`580d49da`), sans réponse.
+
+*Vérifié : *
+
+**Ce que c'est.** Décider ; si oui, ajouter le rôle (registre des rôles, onze locales, export MARC).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- La décision est prise ; si oui, le rôle existe dans les onze langues et à l'export.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### C32 — Corriger deux erreurs d'autorités vues pendant le relevé Anarchief
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
+
+**État.** Signalées le 19/10, hors du lot traité, toujours en production : l'autorité 10212 (Isidro Guardia Abella) porte les formes variantes actives « Gramsci » et « GRAMSCI, Antonio », alors qu'une autorité 11346 « Gramsci » existe ; Agustín Souchy existe en double (10066 et 10304 « Agustín Souchy Bauer »).
+
+*Vérifié : *
+
+**Ce que c'est.** Retirer les deux formes de 10212 (et vérifier où elles mènent), fusionner les deux Souchy par l'Atelier ou une migration de fusion.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- 10212 ne porte plus de forme de Gramsci ; un seul Souchy, ses notices rattachées.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### C33 — Relire et enrichir les 308 autorités créées pour Anarchief
+
+`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
+
+**État.** `1704c05c` (19/10) a créé 308 autorités (197 personnes, 111 collectifs), source « Anarchief.org · import 2026-10 », aucune avec un identifiant Wikidata. La décision de Xavier prévoyait de les marquer pour relecture dans l'Atelier : aucune ligne de file n'a été créée. L'enrichissement (Wikidata, IdRef) a été renvoyé à plus tard. Une lecture à vérifier : « Wayne Prize » pris pour Wayne Price (3 notices) ; 50 graphies restent en texte.
+
+*Vérifié : *
+
+**Ce que c'est.** Verser les 308 dans la file de revue ; rejouer l'enrichissement à deux signaux (règle de C4) ; vérifier « Wayne Prize ».
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les 308 sont passées en revue ; celles qui ont une identité sûre portent leur identifiant externe.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### D — Périodiques, éphémères, ressources numériques
@@ -568,6 +717,14 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | À vérifier |
 | **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | À vérifier |
 | **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | En cours |
+| **D21** | Faire choisir à la BTL le tome de De Greef (notice 415) | `P3` | Ouvert |
+| **D22** | Reprendre à la main les sources fermées aux automates | `P3` | Ouvert |
+| **D23** | Recouper deux dates de droits sur des PDF versés en lecture publique | `P3` | Ouvert |
+| **D24** | Publier les textes intégraux du wiki d'Anarchief en EPUB | `P2` | Ouvert |
+| **D25** | Décider du sort des 24 fichiers Word/ODT d'Anarchief | `P3` | Ouvert |
+| **D26** | Sortir de la fonction de versement la date du 15/10 écrite en dur | `P3` | Ouvert |
+| **D27** | Lever la limite de taille du versement côté serveur (~150-180 Mo) | `P3` | Ouvert |
+| **D28** | Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus | `P3` | Ouvert |
 
 #### D3 — Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double
 
@@ -663,7 +820,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `NUMDIF-5` : la coordination de la bibliothèque détentrice dispose ; l'outil propose. La responsabilité reste la sienne (doctrine du 20/08).
 
-*Vérifié : 15/10 — **livré** : onglet « Candidats PDF » de la page Importations (`#tab=pdf`, `src/pages/importacoes/CandidatsPdfPanel.jsx`, session « File de candidats PDF »). Chargement du fichier de l'outil D14 dans la file ; filtres À examiner / À verser / Rejetés / Versés ; pour chaque candidat, la notice (l'exemplaire détenu) à côté de ce que l'outil a lu sur la page de titre, l'extrait de cette page, les contrôles et avertissements de l'outil, les liens « Ouvrir le PDF » et « Ouvrir la page de la source » ; la décision : édition, cas de source (avec ce qu'il implique), page de la source, justification suggérée selon le cas (décès pour le domaine public, mention citée et page pour une licence libre, exemplaire et cote pour le restreint), « Valider : à verser » ouvert seulement à la même édition, « Rejeter » avec motif suggéré portant l'édition trouvée. 77 clés dans les onze locales. Tests `numdif-candidats-pdf-panel` (lecture du fichier, portes, onglet, locales) et `numdif-candidats-pdf-rendu` (validation Harper 1873 → « à verser », Harper 1874 non validable, rejet motivé). La portée (une autre bibliothèque ne voit rien) est tenue par la base, suite `numdif_file_candidats_tests` T5. **Déployé le 15/10 à 20 h 52** (`e7c2abbb`) : app, backend, acquittement verts ; l'écran est servi (`ImportacoesPage-iPWakZKX.js` porte `fn_digital_candidates_list`). **Reste** : le voir en production sous un compte de coordination (Xavier).*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Dans la page Importations ou le catalogage : la notice à côté de la page de titre du candidat, le verdict et le cas proposés, la justification à écrire (pour `licenca_livre`, la mention citée avec sa page), « valider » ou « rejeter » avec motif. Toutes les locales servies (`DOC-I18N-1`).
 
@@ -684,7 +841,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Décision `NUMDIF-4` (15/10). Le 14/10, les deux Reclus ont été versés par une commande lancée à la main dans WSL avec la clé de service ; la clé legacy `service_role` a d'abord été refusée (« signature verification failed ») : seule `sb_secret_…` dans l'en-tête `apikey` passe. Le garde-fou de Claude Code refuse, à juste titre, qu'un agent lise la clé.
 
-*Vérifié : 15/10 — **livré** (migration `20261015182432_numdif_versement_cote_serveur`, fonction `deposit-digital-candidate`, session « File de candidats PDF »). **Par lots, avec reprise** (consigne de Xavier du 15/10) : l'onglet « Candidats PDF » offre « Verser le lot » (et « Verser côté serveur » candidat par candidat) ; la fonction prend une liste, traite les candidats un par un et rend ce qu'elle n'a pas eu le temps de commencer ; l'écran relance avec le reste, par paquets de cinq ; l'état vit en base (versé, ou refus noté), un lot arrêté ou interrompu se reprend en le relançant, les refus n'y rentrent que si on le demande. Pour chaque candidat : double authentification, garde sous le jeton (`fn_digital_candidate_deposit_garde` : coordination de la bibliothèque du candidat ou administration du réseau, bibliothèque encore détentrice, candidat validé), téléchargement de l'URL validée côté serveur en **flux** vers une zone **privée** (`pdf-restrito/numdif-staging/…`, jusqu'à 500 Mo, la limite des seaux ; arrêt sur 401/403/429/503 ou Cloudflare, sans contournement), empreintes calculées au passage (`empreintes.ts`, vérifié contre `node:crypto`), comparées à celle de la validation : SHA-256, ou **SHA-1 seul pour une source MediaWiki** (Anarchief), le SHA-256 étant alors calculé et retenu à ce premier téléchargement ; empreinte différente : zone effacée, refus dit à l'écran (`fingerprint_mismatch`) et noté sur le candidat ; puis passage au seau que fixe le cas (`anarbib-pdf-public` ou `pdf-restrito`) au chemin `books/<book_id>/<horodatage ms>_<nom>.pdf` — un fichier non vérifié n'est jamais public —, et enregistrement à la clé de service seule (`ingest.fn_digital_candidate_deposit_record`, fermée à authenticated : les bibliothécaires écrivent dans ces seaux), qui revérifie tout et crée la ressource avec les champs des ressources 77 et 78 ; deux adresses au gabarit de D17 : `source_url` = le fichier (provenance, jamais rendu pour une ressource restreinte), `source_page_url` = la page (NUMDIF-3). Capacité (Xavier, 15/10) : 35 Go utilisés, 52 avec Anarchief, dans le palier. Suites `numdif_versement_tests` (8, dont la source à SHA-1 seul) et `documents_numeriques_tests` (T1/T2) vertes en local ; tests `numdif-versement-fonction` (ordre des gestes, lot et reprise), `numdif-empreintes`. **Déployé et vérifié le 15/10 à 22 h 26** (`2387ab3a`) : app, backend, acquittement verts ; migration inscrite, fonction `deposit-digital-candidate` active (v1) ; T1/T2 de `documents_numeriques_tests` rejoués en production (0 restreint en seau public, aucun seau restreint public). **Reste** : un premier versement réel, puis un premier lot (Anarchief) ; le téléversement en flux vers Storage n'est éprouvé qu'en production.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une fonction Edge appelée avec le jeton de la coordination de la bibliothèque détentrice : elle relit le candidat validé, télécharge l'URL du fichier côté serveur, refuse si l'empreinte SHA-256 diffère de celle enregistrée à la validation, verse dans le seau que fixe `NUMDIF-2` (`books/<book_id>/<horodatage>_<nom>.pdf`), crée la ressource avec les mêmes champs que les ressources 77 et 78 (source, attribution, justification, `bibliographic_match_validated`), et rend un statut lu (`DOC-RPC-4`).
 
@@ -706,7 +863,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Mesuré le 15/10 : la ressource 62 (Ferrua, Le Maquis) porte `bibliographic_match_validated = false` et aucun `rights_status` — non conforme à `NUMDIF-1`. Les six autres sont `sob_direitos` ; cinq URL sources sur sept désignent un fichier (we.riseup.net `/assets/`, pdfcoffee `/qdownload/`, deux `/wp-content/uploads/`, un fichier `dn….archive.org`).
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Pour chacune : vérifier l'édition sur la page de titre ; trancher le cas de source (`NUMDIF-2`) ; trouver l'URL de la page qui présente le fichier (pour `D17`). La ressource 62 est mise en conformité ou retirée, par décision de la bibliothèque détentrice.
 
@@ -720,6 +877,166 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Aucune ; précède `D17`.
 
 *Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
+
+#### D21 — Faire choisir à la BTL le tome de De Greef (notice 415)
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
+
+**État.** Le 16/10, la recherche a produit `numdif-candidats-415-degreef.json` : trois tomes candidats, à charger dans l'onglet « Candidats PDF ». Le fichier n'a pas été chargé : aucun candidat pour la notice 415 en production.
+
+*Vérifié : *
+
+**Ce que c'est.** Transmettre le fichier à la coordination de la BTL ; elle charge, choisit le tome qui correspond à l'exemplaire, et verse.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- La notice 415 a sa ressource, du tome de l'exemplaire détenu, ou un refus motivé.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D22 — Reprendre à la main les sources fermées aux automates
+
+`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, aucune compétence technique
+
+**État.** Sur 58 notices d'avant 1926 cherchées le 16/10, une quarantaine sans résultat : BNE/BDH, Gallica, HathiTrust, BN Digital, Domínio Público, la bibliothèque du Sénat brésilien refusent les agents, et l'API Google Books était à court de quota. S'y ajoutent les traductions espagnoles de Reclus encore sans fichier (265, 1767, 147, 1188).
+
+*Vérifié : *
+
+**Ce que c'est.** Une personne avec un navigateur consulte ces sources ; chaque trouvaille passe par la file de candidats (`--url`), validée par la bibliothèque détentrice.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les notices de la liste ont été cherchées à la main, et chacune a un candidat ou la mention « rien trouvé ».
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D23 — Recouper deux dates de droits sur des PDF versés en lecture publique
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** Notice 223 (Cornelissen, 1907, publique) : les dates du traducteur (†1948) viennent d'un résumé de recherche web, « à recouper ». Notice 191 (Fabbri, 1921, publique) : les textes signés « Catilina » ont un auteur non identifié, « à confirmer ».
+
+*Vérifié : *
+
+**Ce que c'est.** Recouper sur une source d'autorité ; si le doute subsiste, passer la ressource en restreint (EF `realign-digital-resource`).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les deux statuts de droits reposent sur une source citée, ou les ressources sont restreintes.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D24 — Publier les textes intégraux du wiki d'Anarchief en EPUB
+
+`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : Deno / TypeScript, React / JavaScript
+
+**État.** La feuille de route du 09/10 prévoit des EPUB chez AnarBib, filtrés par la lettre des lots de textes ; J/M l'a rendue le 19/10. Elle n'est appliquée qu'en local (208 textes ouverts, 294 restreints selon `droits-anarchief.py`) ; rien n'est publié, et aucune fiche ne portait ce travail.
+
+*Vérifié : *
+
+**Ce que c'est.** Produire les EPUB, les verser comme ressources numériques avec la portée qui découle des lots, les rattacher aux notices.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les textes ouverts sont lisibles en EPUB depuis leur notice ; les restreints sous compte.
+
+**Dépendances.** Après le feu vert de Xavier ; suit les réponses de J/M (G21).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D25 — Décider du sort des 24 fichiers Word/ODT d'Anarchief
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** 20 fichiers Word/ODT écartés le 15/10 (les seaux n'acceptent que le PDF), plus 4 ODT des pages en doublon (*Nacht over Rusland* ×3, *La conquête du pain*). Personne n'a décidé.
+
+*Vérifié : *
+
+**Ce que c'est.** Trancher : conversion en PDF, admission de ces formats, ou lien vers le wiki seulement.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- La décision est prise et appliquée aux 24 fichiers.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D26 — Sortir de la fonction de versement la date du 15/10 écrite en dur
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Le texte « validé par lot » de `ingest.fn_digital_candidate_deposit_record` (`ef3eb581`) cite en dur la délégation et la lettre du 15/10/2026. Si une deuxième source déclare ses droits par lot, ce texte sera faux.
+
+*Vérifié : *
+
+**Ce que c'est.** Lire la référence de la déclaration dans la source (table ou colonne), pas dans le code.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Une seconde source déclarée par lot produit une note juste, prouvé au banc.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D27 — Lever la limite de taille du versement côté serveur (~150-180 Mo)
+
+`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
+
+**État.** Même avec `node:crypto`, `deposit-digital-candidate` tient ~150 à 180 Mo par appel (mesuré le 16/10) ; au-delà, erreur 546, alors que les seaux acceptent 500 Mo.
+
+*Vérifié : *
+
+**Ce que c'est.** Verser par morceaux (TUS ou multipart) et calculer l'empreinte en flux, ou documenter la limite à l'écran.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Un PDF de 400 Mo se verse par le chemin normal, ou la limite est dite avant l'essai.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### D28 — Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** Vus le 19/10 : `anarbib-pdf-public/books/7594/…` (19,6 Mo, déposé le 17/10 par un brouillon de reprise publié dans la notice 1127, qui avait déjà sa ressource 980 du même ouvrage) ; un objet de test de mars dans `pdf-restrito/test/`. Aucun ne correspond à une ressource.
+
+*Vérifié : *
+
+**Ce que c'est.** Sur accord de Xavier, les retirer ; vérifier au banc qu'une reprise publiée sur une notice qui a déjà sa ressource ne dépose plus de fichier.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Plus d'objet sans ressource dans les seaux PDF ; le cas de la reprise est couvert par un test.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
 ---
 
@@ -737,6 +1054,8 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **E20** | La barre de navigation se regroupe par nature — Public, Moi, Travail — en menus qui s'ouvrent au clic, pas au survol | `P2` | Ouvert |
 | **E30** | Faire relire le guide de gouvernance espagnol | `P3` | Ouvert |
 | **E39** | Ajouter le roumain (ro), onzième langue — annoncé, relecture en dernier | `P3` | Ouvert |
+| **E40** | Rendre visible au public l'état de service d'une bibliothèque | `P2` | Ouvert |
+| **E41** | Rendre le nom de famille facultatif au profil | `P3` | Ouvert |
 
 #### E1 — Faire auditer l'accessibilité par quelqu'un qui n'a pas écrit le code
 
@@ -766,7 +1085,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Les dix locales sont à parité stricte de clés — 6 177 chacune, vérifiée en intégration continue depuis le 27/08. Mais les **conventions** de deux d'entre elles ne sont pas tranchées : le néerlandais est à l'état de brouillon, le grec reste à définir. Le test de parité ne voit pas ça : il compte les clés, pas leur justesse.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Une locutrice ou un locuteur natif reprend la charte de langage inclusif, décide de la forme neutre pour sa langue, et relit les 6 177 chaînes en priorité sur les écrans les plus vus.
 
@@ -915,6 +1234,46 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde` · `DOC-I18N-5` · `lot 3 : 49b479ae` · `RELECTURE_roumain_2026-10-14.md` · `données : cc34a4c9` · `THES-FIC6` · `lot 4 : cf64ee88` · `lot 5 : 5dccf68f, vitrine 997070f et 3809dce` · `lot 6 : a67b3405` · `ouverture : 11c90c62, vitrine b2e4aa5` · `annonce : vitrine 041b06f, app 3872d4f9, brève 33a2763b`*
 
+#### E40 — Rendre visible au public l'état de service d'une bibliothèque
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** La section « état de service » et le mot public de `/bibliotecas/:slug` sont toujours vides pour un visiteur : la vue `api.library_service_public` lit une table que seule l'équipe peut lire. Vérifié le 19/10 sous le rôle anonyme : 0 ligne, même pour les bibliothèques publiques.
+
+*Vérifié : *
+
+**Ce que c'est.** Choisir les champs à exposer, puis une aide DEFINER ou un droit ciblé ; test sous anon.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Un visiteur anonyme voit l'état de service d'une bibliothèque publique, et rien d'une privée.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### E41 — Rendre le nom de famille facultatif au profil
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript
+
+**État.** Le formulaire « Mes données » exige un nom de famille. Une personne qui ne veut qu'un pseudonyme ne peut pas s'y inscrire telle qu'elle se nomme (cas posé le 19/10 par un partenaire).
+
+*Vérifié : *
+
+**Ce que c'est.** Décider ; si oui, rendre le champ facultatif partout où il est requis (front, contraintes, gabarits de courriel qui l'utilisent).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Un compte peut exister sous un seul nom, sans erreur ni affichage cassé.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### F — Courriel et notifications
@@ -924,6 +1283,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
+| **F26** | Retirer des pieds de courriel le repli en portugais et le secret supprimé | `P3` | Ouvert |
 
 #### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
 
@@ -931,7 +1291,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Demander avant de choisir (les relais militants d'abord, Scaleway en repli) ; écrire `sendViaSmtp` (ou le transport retenu) et rétablir un aiguillage par variable ; supprimer `sendViaBrevo` ; ne faire lever que ce qui doit lever (**F7** est clos là-dessus).
 
@@ -946,6 +1306,26 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
 
+#### F26 — Retirer des pieds de courriel le repli en portugais et le secret supprimé
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** `notify-document-permission-request` et `notify-library-request` lisent encore `FOOTER_TEXT`, secret supprimé le 19/10 : leur pied affiche le texte de repli portugais quelle que soit la langue. `notify-network-weekly-report` et `notify-rede-digest` ont aussi un repli en portugais.
+
+*Vérifié : *
+
+**Ce que c'est.** Passer ces quatre fonctions au pied commun localisé (`4f54beeb`).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les quatre fonctions produisent un pied dans la langue du destinataire, prouvé au banc.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### G — Réseau, gouvernance, fédération
@@ -959,6 +1339,10 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **G8** | Compléter la cartographie avec les archives repérées ailleurs | `P2` | Ouvert |
 | **G15** | DIRA : un essai d'import sur échantillon avant toute adhésion, PMB restant la base de référence | `P1` | Ouvert |
 | **G20** | Porter en assemblée générale la « troisième voie » et son extension aux PDF déjà diffusés en ligne | `P1` | Décision collective |
+| **G21** | Suivre les réponses attendues d'Anarchief et les appliquer | `P2` | Ouvert |
+| **G22** | Faire saisir le téléphone public de chaque bibliothèque | `P3` | Ouvert |
+| **G23** | Déclarer l'usage d'Anthropic comme sous-traitant, ou le retirer | `P1` | Ouvert |
+| **G24** | Trancher la gouvernance des données que l'audit du 17/10 renvoie au collectif (P10) | `P2` | Ouvert |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1073,6 +1457,86 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md`*
 
+#### G21 — Suivre les réponses attendues d'Anarchief et les appliquer
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoi à confirmer** : deux relectures du 19/10 se contredisent sur son départ.
+
+*Vérifié : *
+
+**Ce que c'est.** Confirmer l'envoi ; à chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les quatre questions ont une réponse appliquée, ou une relance datée.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### G22 — Faire saisir le téléphone public de chaque bibliothèque
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** Depuis `4f54beeb` (16/10), un courriel porte le téléphone de sa propre bibliothèque. Aucune n'en a saisi : 0 ligne renseignée dans `library_public_contact.public_phone`.
+
+*Vérifié : *
+
+**Ce que c'est.** Relancer les coordinations (Gestion de la bibliothèque › Identité).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les bibliothèques actives qui ont un téléphone public l'ont saisi.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### G23 — Déclarer l'usage d'Anthropic comme sous-traitant, ou le retirer
+
+`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : délibération collective, aucune compétence technique
+
+**État.** Trois fonctions de production appellent une API d'IA états-unienne (`gazette-monthly-build`, `translate-gazette-submission`, `work-titles-autofill`). Ni `docs/legal/REGISTRE_TRAITEMENTS.md` ni la politique de confidentialité n'en parlent (constat du 19/10, note v4).
+
+*Vérifié : *
+
+**Ce que c'est.** Décider : déclarer (sous-traitant, transfert hors UE, données envoyées, durée) ou remplacer ; puis mettre à jour le registre des traitements et la politique dans les onze langues.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Le registre et la politique disent ce que fait chaque appel, ou les appels ont disparu.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### G24 — Trancher la gouvernance des données que l'audit du 17/10 renvoie au collectif (P10)
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : délibération collective
+
+**État.** Le chantier P10 de l'audit de sécurité attend une décision collective : ce que l'administration réseau peut lire, le contenu du rapport hebdomadaire, la conservation de données jamais purgées. Détail dans le rapport hors dépôt.
+
+*Vérifié : *
+
+**Ce que c'est.** Porter les trois questions devant le collectif (AG ou administrations réseau), inscrire les réponses au REGISTRE, puis le code.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les trois réponses sont au REGISTRE et appliquées.
+
+**Dépendances.** Après A1 (une décision à trois) ou en AG (G20).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### H — Interopérabilité, thésaurus, moisson
@@ -1089,6 +1553,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H16** | Un rapport de couverture par import : chaque zone du fichier que l'import ne reprend pas est comptée et montrée | `P1` | À vérifier |
 | **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | À vérifier |
 | **H29** | Au retour dans PMB, un exemplaire garde son type, sa section et son code statistique | `P2` | Ouvert |
+| **H35** | Mener la moisson réciproque ASB ↔ AnarBib jusqu'au pilote | `P2` | Ouvert |
+| **H36** | Réaligner le thésaurus FICEDL d'AnarBib sur la source | `P3` | Ouvert |
 
 #### H34 — Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire
 
@@ -1263,6 +1729,47 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `claude/aller-retour-PMB_2026-09-26` · `Tableau de couverture AnarBib ↔ PMB, § 4 (docs/interop/couverture-pmb.md)`*
 
+#### H35 — Mener la moisson réciproque ASB ↔ AnarBib jusqu'au pilote
+
+`P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : délibération collective, Deno / TypeScript
+
+**État.** Cadré le 18/10, étapes 1-2 au banc le 19/10 ; la part d'AnarBib est en production (`d0188be5`, `c32807b9`, `e28c29a4`). Attend le camarade (`ASR2026`) : corriger `oai.php` (filtre `from` au jour près — le plus urgent —, fuseau, compteur de vues qui change la date, `dc:date`, identifiant fixe, `deletedRecord`), écrire son moissonneur, monter les salons Matrix, répondre aux dix questions de `MESURES_banc_OAI_ASB_AnarBib_2026-10-19.md` (§ 4 à lui transmettre). Ensuite : moisson incrémentale, étape 7 (ASB moissonne AnarBib), pilote en production (étape 8) sur décision de Xavier. Question pour Xavier : traiter aussi les types bruts portugais vus en production (`panfleto`, `folheto`, `carta`).
+
+*Vérifié : *
+
+**Ce que c'est.** Transmettre la § 4 ; suivre les corrections ; éprouver la moisson incrémentale ; étapes 7 et 8.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Une notice créée d'un côté apparaît de l'autre par la moisson incrémentale, et une suppression aussi.
+- Le pilote en production est décidé par écrit.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### H36 — Réaligner le thésaurus FICEDL d'AnarBib sur la source
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
+
+**État.** En production (623 termes) : « histoire : histoire orale » alors que la source l'a renommé « histoire orale » ; la date 1848-1867 ajoutée à la source est absente. Le raclage du 19/10 (`--export`) ne rapporte ni les dates ni les 97 descripteurs géographiques à plusieurs niveaux ; le changement de libellé n'a pas été apparié.
+
+*Vérifié : *
+
+**Ce que c'est.** Migration d'alignement (libellé et date), puis étendre `--export` aux dates et aux descripteurs géographiques.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les libellés et dates d'AnarBib égalent ceux de la source au relevé suivant.
+
+**Dépendances.** Le roumain attend de toute façon la relecture (E39).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### I — Auto-hébergement, exploitation, sauvegardes, CI
@@ -1271,18 +1778,25 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 | | | | |
 |---|---|---|---|
-| **I2** | Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09) | `P1` | Ouvert |
-| **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
+| **I2** | Tenir la pile auto-hébergée prête pour la production à l'ASR — empreintes, proxy, reconstruction (répartition du 19/10) | `P1` | Ouvert |
+| **I21** | Ce qui doit être vrai avant la bascule — les sauvegardes à Lyon d'abord, puis la production à l'ASR (répartition du 19/10) | `P1` | Ouvert |
 | **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
 | **I34** | Faire savoir quand la publication du front échoue (Deploy Pages non bloquant) | `P1` | Ouvert |
+| **I35** | Tirer les conséquences de la « voie (a) » dans la CI | `P1` | Ouvert |
+| **I36** | Remettre le checkout d'exploitation `~/anarbib` sur `main`, et cesser les « copies locales » | `P1` | Ouvert |
+| **I37** | Brancher le miroir d'images de l'ASR, et sortir la CI du registre ECR | `P3` | Ouvert |
+| **I38** | Vérifier les premiers tirs automatiques `storage` et `lourd` du dimanche 25/10 | `P2` | Ouvert |
+| **I39** | Faire entrer `storage` et `lourd` au test de restauration mensuel | `P2` | Ouvert |
+| **I40** | Exclure `.claude/` de vitest et ranger les copies de travail mortes | `P3` | Ouvert |
+| **I41** | Mettre à jour le commentaire de `[functions.opds]` dans `config.toml` | `P3` | Ouvert |
 
-#### I2 — Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09)
+#### I2 — Tenir la pile auto-hébergée prête pour la production à l'ASR — empreintes, proxy, reconstruction (répartition du 19/10)
 
 `P1` Prioritaire · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : administration système
 
 **État.** La pile est réduite de douze à **six conteneurs** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), les versions sont épinglées, `bootstrap.sh` a été exécuté pour de vrai le 26/08 avec huit défauts relevés et corrigés, et la répétition du 18/08 a rejoué 124 migrations et restauré un dump de production en 17 secondes. Reconstruction complète mesurée : **25 minutes**.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé. **Ajouté le 08/09/2026, à poser à l'hébergeur pressenti (Les Herbes Folles), ou à un ou plusieurs autres** : **un Jitsi à nous.** La visio d'entraide et d'assemblées vivait chez Autistici/Inventati ; A/I a été désigné « SDGT » par les États-Unis le 26/08 et a fermé ; le 08/09 on a basculé sur Framatalk (Framasoft, Hetzner en Allemagne) — un tiers de confiance, mais un tiers, et sur une infrastructure qu'une mesure du même genre peut atteindre. Un Jitsi hébergé par nous (ou par un collectif d'hébergement allié, ou réparti entre plusieurs) est la seule sortie complète. Ce n'est pas la même charge que le reste de la pile : le videobridge consomme de la bande passante montante à proportion des participantes, et une assemblée de vingt personnes n'est pas une aide à deux. **Questions à poser** : la VM peut-elle tenir un Jitsi (RAM, bande passante, ports UDP 10000) ; préfèrent-ils une seconde machine ; un autre hébergeur allié (Chapril, Systemli, une instance amie) accepterait-il de porter la visio pour le réseau, quitte à ce qu'elle ne vive pas au même endroit que la base ? Le même jour, **le fichier de fond de carte** (`map-tiles/planet-z12.pmtiles`, 18 Go, à réextraire en z15 depuis la VM : 138 Go) est entré dans ce qui déménage — à compter dans le disque demandé (I21).
 
@@ -1300,13 +1814,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
-#### I21 — Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile
+#### I21 — Ce qui doit être vrai avant la bascule — les sauvegardes à Lyon d'abord, puis la production à l'ASR (répartition du 19/10)
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, délibération collective
 
 **État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
 
@@ -1354,6 +1868,146 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **Pourquoi ça compte.** Une CI verte ne prouve pas que le front est en ligne : une correction paraît livrée alors que l'écran sert l'ancienne version, et une migration qui change la forme d'une réponse peut casser un front resté en arrière — en silence.
 
+#### I35 — Tirer les conséquences de la « voie (a) » dans la CI
+
+`P1` Prioritaire · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : administration système, Deno / TypeScript
+
+**État.** Tranché par Xavier le 19/10 : l'instance de l'ASR tire elle-même les versions stables (`deploy.sh --version`) ; la CI des Herbes Folles ne fait que tester et publier le front, sans aucun secret de production. Rien n'est fait.
+
+*Vérifié : *
+
+**Ce que c'est.** Publier le front au tag `v*`, après le déploiement de l'instance (décider comment la CI l'apprend) ; retirer le job `backend` et les secrets `SUPABASE_ACCESS_TOKEN` / `SUPABASE_DB_PASSWORD` ; correctifs urgents en `vAAAA.MM.N` ; à l'ASR, heure de tirage hors fenêtre de sauvegarde et alerte si `deploy.sh` échoue.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- La CI ne porte plus aucun secret de production ; une version stable se déploie à l'ASR puis publie le front, dans cet ordre.
+
+**Dépendances.** Avant la bascule (I21) ; avec le camarade (`ASR2026`).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I36 — Remettre le checkout d'exploitation `~/anarbib` sur `main`, et cesser les « copies locales »
+
+`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Vérifié le 19/10 au soir : `~/anarbib` a **5 commits d'avance et 72 de retard** sur `origin/main` — quatre « copies locales » des sessions de sauvegarde (`bf2b0069`, `6fe9ac8a`, `4871d70f`, `dd74aefa`) et `a648bd86` (l'ISBD, déjà en amont sous `0d884a0f` et `9636773a`). `anarbib-mirror-refresh` refuse donc d'avancer (« checkout DIVERGENT … je ne touche à rien », 14 h 31, 18 h 00, 18 h 50) : les scripts d'exploitation (#BG2, fraîcheur, témoin) tournent sur du code périmé. Régression de fait d'I33 (clos le 09/10).
+
+*Vérifié : *
+
+**Ce que c'est.** Vérifier que chaque « copie locale » a son équivalent en amont, puis remettre `main` sur `origin/main` ; écrire la règle (aucun commit dans le checkout d'exploitation) là où les sessions la liront.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- `~/anarbib` égale `origin/main` et `anarbib-mirror-refresh` passe ; aucun commit local depuis.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I37 — Brancher le miroir d'images de l'ASR, et sortir la CI du registre ECR
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** `IMAGE_PREFIX` est livré (`35e244c3`) et le miroir du camarade a été éprouvé le 19/10 ; la valeur reste à poser à l'installation de la production à l'ASR. La CI tire encore `supabase/postgres` depuis `public.ecr.aws` (`sql-tests.yml`), un registre états-unien.
+
+*Vérifié : *
+
+**Ce que c'est.** Poser `IMAGE_PREFIX` à la bascule ; faire tirer la CI depuis le miroir.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Aucune image de la production ni de la CI ne vient plus d'un registre états-unien.
+
+**Dépendances.** Avec I2 (empreintes) et I21.
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I38 — Vérifier les premiers tirs automatiques `storage` et `lourd` du dimanche 25/10
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
+
+**État.** Les minuteurs ont été réactivés les 18-19/10 et le premier tir `lourd` lancé à la main. Le contrôle du lundi 26/10 a été proposé, jamais programmé.
+
+*Vérifié : *
+
+**Ce que c'est.** Le 26/10, lire les journaux et les instantanés restic des deux flux ; consigner.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Les deux flux ont un instantané automatique du 25/10, vérifié.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I39 — Faire entrer `storage` et `lourd` au test de restauration mensuel
+
+`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système
+
+**État.** Le restore-test ne couvre que `court` et `long`. L'épreuve de restauration du 19/10 (14 PDF et le fond de carte, `ad927bc5`) a été faite une fois, à la main.
+
+*Vérifié : *
+
+**Ce que c'est.** Ajouter les deux flux au restore-test, avec un échantillon de fichiers vérifiés par empreinte.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Le restore-test mensuel restaure un échantillon de chaque flux et le compare.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I40 — Exclure `.claude/` de vitest et ranger les copies de travail mortes
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : React / JavaScript, administration système
+
+**État.** `vitest.config.js` n'exclut que `node_modules`, `dist` et `supabase/functions` : une suite complète lancée depuis `~/anarbib` ramasse les tests des worktrees d'autres sessions (14 faux échecs le 18/10, 7 le 19/10) et charge le poste. Restent aussi des dossiers sous `.claude/worktrees/` qui ne sont plus des worktrees, un worktree `~/anarbib-wt-d17` signalé « peut être retiré », et un clone Windows indépendant (`Codeberg\anarbib`, avec deux worktrees) contraire à la règle du dépôt unique.
+
+*Vérifié : *
+
+**Ce que c'est.** Ajouter `.claude/**` à l'exclusion ; retirer, sur l'accord de Xavier, les copies mortes et le clone Windows après vérification qu'ils ne portent rien d'unique.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Une suite lancée depuis `~/anarbib` ne lit plus que ses propres tests ; plus de copie morte.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### I41 — Mettre à jour le commentaire de `[functions.opds]` dans `config.toml`
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
+
+**État.** Depuis `1cb5bb6d` (19/10), le flux OPDS lit en anonyme et suit la visibilité du catalogue ; le commentaire décrit encore l'ancien filtre (`access_scope='publico'` seul). Laissé exprès : toucher ce fichier redéploie toutes les fonctions.
+
+*Vérifié : *
+
+**Ce que c'est.** Le corriger au prochain changement de `config.toml`.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Le commentaire dit ce que fait le flux.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
 ---
 
 ### J — Documentation et corpus
@@ -1363,6 +2017,8 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
+| **J13** | Inscrire au REGISTRE le quatrième cas de source, « domaine public » | `P3` | Ouvert |
+| **J14** | Passer l'outillage des sessions à onze locales et à Forgejo | `P2` | Ouvert |
 
 #### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
 
@@ -1383,6 +2039,46 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après Bologne. Sans dépendance technique.
 
 *Renvois : `claude/GLB_v17_releve_et_constats_2026-09-01` · `REGISTRE §0 DOC-GEL-1`*
+
+#### J13 — Inscrire au REGISTRE le quatrième cas de source, « domaine public »
+
+`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
+
+**État.** Le 15/10, la file de candidats a reçu un cas `domaine_public`, sans l'inscrire au REGISTRE (« à toi de dire si ça fait doctrine »). NUMDIF-2 dit toujours « trois cas de source », alors que la file, les versements de Reclus et NUMDIF-6 utilisent le quatrième (87 ressources versées sous ce cas).
+
+*Vérifié : *
+
+**Ce que c'est.** Décider si c'est doctrine ; amender NUMDIF-2 en conséquence.
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- NUMDIF-2 décrit les cas que la file applique.
+
+**Dépendances.** Relève aussi de G20 (AG).
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### J14 — Passer l'outillage des sessions à onze locales et à Forgejo
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
+
+**État.** `CLAUDE.md` du checkout d'exploitation, la skill `anarbib-i18n` et les commandes `commit-front` / `i18n` décrivent encore dix locales ; la skill `anarbib-sql` parle de Woodpecker (la CI est sur Forgejo depuis le 11/06). Ces fichiers ne sont pas versionnés. C'est l'oubli que la session ISBD a dû rattraper le 18/10 (`9636773a`).
+
+*Vérifié : *
+
+**Ce que c'est.** Mettre ces fichiers à jour (onze locales, Forgejo).
+
+**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
+
+**Ce qui compte comme fini.**
+
+- Aucun fichier d'outillage ne parle plus de dix locales ni de Woodpecker.
+
+**Dépendances.** —
+
+*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
 ---
 
@@ -1865,4 +2561,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-19. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 49 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-18 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9636773a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-19. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 82 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-18 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9636773a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
