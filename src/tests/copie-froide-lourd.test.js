@@ -17,7 +17,7 @@
 // On exécute le VRAI script, avec un `sftp` et un `restic` stubés.
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -83,26 +83,23 @@ function nouveauCas() {
   return { dir, lourd, base: path.join(dir, 'miroir') };
 }
 function tir(cas, args = [], env = {}) {
-  let sortie;
-  let code = 0;
-  try {
-    sortie = execFileSync(BASH, [posix(SCRIPT), ...args], {
-      encoding: 'utf8',
-      env: {
-        ...process.env,
-        PATH: `${posix(stub)}:${process.env.PATH}`,
-        RESTIC_PASSWORD_FILE: posix(path.join(cas.dir, 'pass')),
-        ANARBIB_COPIE_FROIDE_DIR: posix(cas.base),
-        BG2_LOURD_REPO: posix(cas.lourd),
-        OPS_DIR: posix(path.join(cas.dir, 'ops')),
-        ...env,
-      },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-  } catch (e) {
-    sortie = `${e.stdout || ''}${e.stderr || ''}`;
-    code = e.status;
-  }
+  // Les deux sorties, que le script réussisse ou non : ses alertes (« rsync
+  // absent »…) partent sur la sortie d'erreur, y compris quand il rend 0.
+  const res = spawnSync(BASH, [posix(SCRIPT), ...args], {
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      PATH: `${posix(stub)}:${process.env.PATH}`,
+      RESTIC_PASSWORD_FILE: posix(path.join(cas.dir, 'pass')),
+      ANARBIB_COPIE_FROIDE_DIR: posix(cas.base),
+      BG2_LOURD_REPO: posix(cas.lourd),
+      OPS_DIR: posix(path.join(cas.dir, 'ops')),
+      ...env,
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const sortie = `${res.stdout || ''}${res.stderr || ''}`;
+  const code = res.status;
   const jour = readdirSync(cas.base).find((d) => /^\d{4}-\d{2}-\d{2}$/.test(d));
   const dest = jour ? path.join(cas.base, jour) : null;
   return { sortie, code, dest };
@@ -181,5 +178,20 @@ describe.skipIf(!BASH)('#BG2 — copie froide du dépôt lourd (19/10/2026)', { 
     expect(r2.code).toBe(0);
     const avecRsync = !/rsync absent/.test(r2.sortie);
     if (avecRsync) expect(existsSync(path.join(disque, 'anarbib-lourd', 'snapshots', '955e'))).toBe(false);
+  });
+
+  // 19/10/2026 : la CI n'a pas rsync. Le repli recopiait tout le dépôt,
+  // `locks/` compris — et le cas ci-dessus, vert sur le poste, rougissait la CI.
+  it('--vers sans rsync : le repli recopie et revalide, et laisse aussi les verrous de côté', () => {
+    const cas = nouveauCas();
+    const disque = path.join(cas.dir, 'disque-f');
+    mkdirSync(disque, { recursive: true });
+    const r = tir(cas, ['--vers', posix(disque)], { RSYNC: 'rsync-absent-pour-le-banc' });
+    expect(r.code).toBe(0);
+    expect(r.sortie).toMatch(/rsync absent/);
+    expect(r.sortie).toMatch(/revalidation du depot lourd sur le disque : OK/);
+    expect(lire(path.join(disque, 'anarbib-lourd', 'data', 'ab', 'ab01'))).toBe('paquet-pdf');
+    expect(lire(path.join(disque, 'anarbib-lourd', 'config'))).toBe('config-lourd');
+    expect(existsSync(path.join(disque, 'anarbib-lourd', 'locks'))).toBe(false);
   });
 });

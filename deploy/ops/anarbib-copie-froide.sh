@@ -344,11 +344,21 @@ if [ -n "$VERS" ] && [ -d "$VERS" ] && [ -w "$VERS" ]; then
   fi
   if [ "$LOURD_OK" -eq 1 ]; then
     info "    replique du depot lourd vers $VERS/$LOURD_NOM"
-    if command -v rsync >/dev/null 2>&1; then
-      rsync -a --delete --exclude=/locks/ "$LOURD_REPO/" "$VERS/$LOURD_NOM/"
+    # RSYNC se remplace pour le banc (copie-froide-lourd.test.js), qui doit
+    # eprouver aussi le repli : la CI n'a pas rsync, le poste l'a.
+    if command -v "${RSYNC:-rsync}" >/dev/null 2>&1; then
+      "${RSYNC:-rsync}" -a --delete --exclude=/locks/ "$LOURD_REPO/" "$VERS/$LOURD_NOM/"
     else
       alerte "    rsync absent : recopie sans retrait des paquets prunes (cp -ru)"
-      mkdir -p "$VERS/$LOURD_NOM" && cp -ru "$LOURD_REPO/." "$VERS/$LOURD_NOM/"
+      # Entree par entree, pour laisser `locks/` de cote comme le fait rsync :
+      # un verrou restic passager n'a rien a faire sur un disque froid. Le
+      # 19/10, le repli recopiait tout le depot, verrous compris (CI rouge).
+      mkdir -p "$VERS/$LOURD_NOM"
+      for e in "$LOURD_REPO"/* "$LOURD_REPO"/.[!.]*; do
+        [ -e "$e" ] || continue
+        [ "$(basename "$e")" = locks ] && continue
+        cp -ru "$e" "$VERS/$LOURD_NOM/"
+      done
     fi
     if ( cd "$VERS" && sha256sum --quiet -c "$CIBLE/SHA256SUMS-lourd.txt" >/dev/null 2>&1 ); then
       info "    revalidation du depot lourd sur le disque : OK"
