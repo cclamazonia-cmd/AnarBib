@@ -1,5 +1,11 @@
 import '../_shared/core/journal-masque.ts'; // F19 : aucune adresse en clair dans les journaux
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+// 19/10/2026 : la fonction ne relaie plus pour n'importe qui. Garde de session
+// (session-reelle) avant la lecture du corps et tout appel à la BN ; délais et
+// lectures bornés ; une redirection ne quitte pas acervo.bn.gov.br ; plus de
+// HTML tiers ni de détail interne dans les réponses.
+import { sessionManquante, statutDuRefus } from '../_shared/core/session-reelle.ts';
+import { lireOctetsBornes } from '../_shared/core/adresse-sortante.ts';
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
     status,
@@ -96,6 +102,29 @@ function parseResults(html) {
   }
   return items;
 }
+const BASE = "https://acervo.bn.gov.br";
+const HOTE_BN = "acervo.bn.gov.br";
+const DELAI_MS = 10_000;
+const MAX_OCTETS = 2 * 1024 * 1024;
+
+// Une page de la BN : délai sur la requête ET la lecture, corps borné.
+async function lirePage(url, init) {
+  const res = await fetch(url, { ...init, signal: AbortSignal.timeout(DELAI_MS) });
+  const octets = await lireOctetsBornes(res, MAX_OCTETS);
+  if (octets === null) throw new Error("réponse de la BN trop volumineuse");
+  return { res, html: new TextDecoder().decode(octets) };
+}
+
+// Une adresse de la BN, et d'elle seule.
+function adresseBn(location) {
+  try {
+    const u = new URL(location, BASE);
+    return u.protocol === "https:" && u.host === HOTE_BN ? u.toString() : "";
+  } catch {
+    return "";
+  }
+}
+
 serve(async (req)=>{
   if (req.method === "OPTIONS") return json({
     ok: true
@@ -103,19 +132,20 @@ serve(async (req)=>{
   if (req.method !== "POST") return json({
     error: "method not allowed"
   }, 405);
+  const refus = await sessionManquante(
+    Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_ANON_KEY"), req.headers.get("Authorization"),
+  );
+  if (refus) return json({ ok: false, error: refus }, statutDuRefus(refus));
   try {
     const body = await req.json().catch(()=>({}));
-    const isbnRaw = String(body?.isbn || "").trim();
-    const debug = !!body?.debug;
-    const isbn = isbnRaw.replace(/[^0-9Xx]/g, "").toUpperCase();
-    if (!isbn) {
+    const isbn = String(body?.isbn || "").trim().slice(0, 40).replace(/[^0-9Xx]/g, "").toUpperCase();
+    if (!isbn || isbn.length > 13) {
       return json({
         error: "isbn missing"
       }, 400);
     }
-    const base = "https://acervo.bn.gov.br";
-    const searchPageUrl = `${base}/sophia_web/busca/acervo/isbn/`;
-    const postUrl = `${base}/Sophia_Web/Busca/RapidaAcervo?bibliotecas=&localizacoes=`;
+    const searchPageUrl = `${BASE}/sophia_web/busca/acervo/isbn/`;
+    const postUrl = `${BASE}/Sophia_Web/Busca/RapidaAcervo?bibliotecas=&localizacoes=`;
     const commonHeaders = {
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
       "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -123,39 +153,35 @@ serve(async (req)=>{
       "cache-control": "no-cache",
       "pragma": "no-cache"
     };
-    // 1) Open search page
-    const pageResp = await fetch(searchPageUrl, {
+    // 1) Page de recherche
+    const { res: pageResp, html: pageHtml } = await lirePage(searchPageUrl, {
       method: "GET",
       headers: commonHeaders,
       redirect: "follow"
     });
-    const pageHtml = await pageResp.text();
+    if (adresseBn(pageResp.url) === "") {
+      return json({ error: "bn unavailable", step: "get_search_page" }, 502);
+    }
     const pageCookies = extractSetCookie(pageResp.headers);
     const token = extractAntiForgeryToken(pageHtml);
     const extractedGuid = extractGuid(pageHtml);
     const guid = isRealGuid(extractedGuid) ? extractedGuid : Date.now().toString();
     if (!token) {
-      return json({
-        error: "token not found",
-        step: "get_search_page",
-        final_url: pageResp.url,
-        status: pageResp.status,
-        snippet: pageHtml.slice(0, 2500)
-      }, 500);
+      return json({ error: "bn unavailable", step: "get_search_page" }, 502);
     }
-    // 2) Submit search
+    // 2) Recherche
     const form = new URLSearchParams();
     form.set("__RequestVerificationToken", token);
     form.set("Guid", guid);
     form.set("TipoBuscaRapida", "0");
     form.set("IniciadoCom", "false");
     form.set("PalavraChave", isbn);
-    const postResp = await fetch(postUrl, {
+    const { res: postResp, html: postText } = await lirePage(postUrl, {
       method: "POST",
       headers: {
         ...commonHeaders,
         "content-type": "application/x-www-form-urlencoded",
-        "origin": base,
+        "origin": BASE,
         "referer": `${searchPageUrl}?PalavraChave=${encodeURIComponent(isbn)}`,
         "cookie": mergeCookieStrings(pageCookies)
       },
@@ -167,26 +193,19 @@ serve(async (req)=>{
     const location = postResp.headers.get("location");
     let resultUrl = "";
     if (location) {
-      resultUrl = location.startsWith("http") ? location : `${base}${location}`;
+      // les cookies de session de la BN ne partent que vers la BN
+      resultUrl = adresseBn(location);
     } else {
-      const postText = await postResp.text();
       const responseGuid = extractGuid(postText);
       if (isRealGuid(responseGuid)) {
-        resultUrl = `${base}/Sophia_Web/Resultado/Listar?guid=${responseGuid}`;
+        resultUrl = `${BASE}/Sophia_Web/Resultado/Listar?guid=${encodeURIComponent(responseGuid)}`;
       }
     }
     if (!resultUrl) {
-      return json({
-        error: "result url not found",
-        step: "post_search",
-        post_status: postResp.status,
-        request_guid: guid,
-        extracted_guid_from_get: extractedGuid,
-        location: location || null
-      }, 500);
+      return json({ error: "bn unavailable", step: "post_search" }, 502);
     }
-    // 3) Fetch result page WITH SAME SESSION
-    const resultResp = await fetch(resultUrl, {
+    // 3) Page de résultats, même session, sans redirection hors de la BN
+    const { res: resultResp, html: resultHtml } = await lirePage(resultUrl, {
       method: "GET",
       headers: {
         ...commonHeaders,
@@ -195,15 +214,8 @@ serve(async (req)=>{
       },
       redirect: "follow"
     });
-    const resultHtml = await resultResp.text();
-    if (/Sess[aã]o expirada/i.test(resultHtml)) {
-      return json({
-        error: "session expired on result fetch",
-        step: "get_results",
-        result_url: resultUrl,
-        status: resultResp.status,
-        snippet: resultHtml.slice(0, 2500)
-      }, 500);
+    if (adresseBn(resultResp.url) === "" || /Sess[aã]o expirada/i.test(resultHtml)) {
+      return json({ error: "bn unavailable", step: "get_results" }, 502);
     }
     const summary = extractSearchSummary(resultHtml);
     const results = parseResults(resultHtml);
@@ -213,22 +225,12 @@ serve(async (req)=>{
       result_url: resultUrl,
       total: results.length,
       summary,
-      results,
-      ...debug ? {
-        debug: {
-          search_page_status: pageResp.status,
-          post_status: postResp.status,
-          result_status: resultResp.status,
-          request_guid: guid,
-          extracted_guid_from_get: extractedGuid,
-          token_preview: token.slice(0, 20)
-        }
-      } : {}
+      results
     });
   } catch (error) {
+    console.warn("bn_isbn_lookup :", error instanceof Error ? error.message : String(error));
     return json({
-      error: "unexpected error",
-      message: error instanceof Error ? error.message : String(error)
+      error: "unexpected error"
     }, 500);
   }
 });

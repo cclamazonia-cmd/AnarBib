@@ -12,6 +12,11 @@
 //   * LISTE FERMÉE : toute fonction laissée au défaut verify_jwt = true doit
 //     être rangée ici dans une des trois familles. Une fonction nouvelle, non
 //     rangée, fait échouer ce banc.
+//   * 19/10/2026 : la liste fermée couvre aussi les fonctions déclarées
+//     verify_jwt = false — c'est par là que bn_isbn_lookup, sans aucune garde,
+//     avait échappé au banc. Chaque fonction est rangée dans EXACTEMENT une
+//     famille (relais, administration, jeton de l'appelant, secret de tâche,
+//     publique par nature) et porte la marque de sa garde.
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi } from 'vitest';
@@ -33,6 +38,7 @@ const RELAIS = {
   geocode: 'async function traiter(',
   audio_fingerprint_lookup: 'Deno.serve(',
   'fetch-url-metadata': 'Deno.serve(', // verify_jwt = false, même garde
+  bn_isbn_lookup: 'serve(async (req)=>{', // verify_jwt = false, même garde (19/10/2026)
 };
 // Réservée à l'administration du réseau (B43).
 const ADMIN_RESEAU = ['probe-partner-catalog'];
@@ -49,6 +55,36 @@ const JETON_APPELANT = {
   'deposit-digital-candidate': 'await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)',
   'revoke-digital-asset': "userClient.rpc('fn_revoke_digital_asset_record'",
   'notify-library-invitation': 'await asCaller.rpc(',
+};
+// Tâches appelées par la base, un cron ou un partenaire : un secret partagé,
+// vérifié par la fonction (en-tête, ou en base pour health-probe et
+// notify-security-notice).
+const SECRET_TACHE = [
+  'notify-cross-library-digest', 'notify-digital-share', 'notify-document-permission-request',
+  'notify-event', 'notify-interlibrary-loan', 'notify-internal-task', 'notify-library-request',
+  'notify-loan-cycle', 'notify-network-weekly-report', 'notify-oai-opening', 'notify-rede-digest',
+  'notify-security-notice', 'notify-weekly-report',
+  'cover-batch', 'gazette-monthly-build', 'translate-gazette-submission', 'work-titles-autofill',
+  'gc-deposits', 'harvest-oai-pmh', 'process-partner-catalog-import', 'receive-fonds-bundle',
+  'health-probe',
+];
+const MARQUE_SECRET = /authorizeWebhook\(|serveJsonWebhook\(|x-webhook-secret|WEBHOOK_SECRET|x-import-secret|x-cron-secret|CRON_SECRET|fn_check_\w*secret/i;
+// Publiques par nature, chacune avec la marque de sa garde propre.
+const PUBLIQUES = {
+  login: 'isRateLimited(',                               // compteurs par IP et par adresse
+  register: 'verifierSolution(',                         // Altcha + compteurs (19/10/2026)
+  'request-password-reset': 'frapper(',                  // compteurs, réponse constante
+  'altcha-challenge': 'creerDefi(',                      // émet un défi, n'écrit rien
+  'submit-bug-report': 'verifierSolution(',
+  'submit-cartography-entry': 'verifierSolution(',
+  'submit-gazette-contribution': 'freiner(',
+  'lettre-confirm': 'fn_lettre_confirm',                 // jeton opaque, RPC réservée à la clé de service
+  'lettre-unsubscribe': 'fn_lettre_unsubscribe',
+  'oai-pmh-provider': 'fn_oai_harvestable_records',      // ouverture votée, contrôlée en SQL
+  opds: 'publico',                                       // ressources publiques seulement
+  'rss-novidades': 'libraries_public_v1',                // bibliothèques publiques seulement
+  'read-digital-asset': 'get_accessible_digital_asset_by_id_v2', // droit lu sous le jeton
+  'read-ill-shared-asset': 'fn_ill_signed_url',          // partage PEB revalidé à chaque appel
 };
 
 describe('sessionManquante', () => {
@@ -152,6 +188,33 @@ describe('liste fermée des fonctions en verify_jwt = true', () => {
   it('la fonction réservée à l’administration du réseau garde sa garde', () => {
     for (const fonction of ADMIN_RESEAU) {
       expect(source(fonction)).toMatch(/await appelantAdministreLeReseau\(/);
+    }
+  });
+});
+
+describe('liste fermée de TOUTES les fonctions, verify_jwt = false compris (19/10/2026)', () => {
+  const fonctions = readdirSync(FONCTIONS).filter((f) =>
+    !f.startsWith('_') && f !== 'main' && statSync(path.join(FONCTIONS, f)).isDirectory()).sort();
+  const familles = [
+    ...Object.keys(RELAIS), ...ADMIN_RESEAU, ...Object.keys(JETON_APPELANT),
+    ...SECRET_TACHE, ...Object.keys(PUBLIQUES),
+  ];
+
+  it('chaque fonction est rangée dans exactement une famille', () => {
+    const doublons = familles.filter((f, i) => familles.indexOf(f) !== i);
+    expect(doublons).toEqual([]);
+    expect([...familles].sort()).toEqual(fonctions);
+  });
+
+  it('chaque fonction à secret de tâche le vérifie', () => {
+    for (const fonction of SECRET_TACHE) {
+      expect(source(fonction), fonction).toMatch(MARQUE_SECRET);
+    }
+  });
+
+  it('chaque fonction publique porte la marque de sa garde', () => {
+    for (const [fonction, marque] of Object.entries(PUBLIQUES)) {
+      expect(source(fonction).includes(marque), fonction).toBe(true);
     }
   });
 });
