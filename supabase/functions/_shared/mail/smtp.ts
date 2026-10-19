@@ -28,6 +28,26 @@ export interface SmtpOptions {
   text?: string;
 }
 
+// ─── Erreurs qualifiées (19/10/2026, sortie de Resend par Nodo50) ──────────
+// Le transport (_shared/transport/email.ts) rejoue un échec temporaire et
+// jamais un refus définitif : il lui faut le code de la réponse et l'étape où
+// l'envoi a échoué, sans relire le message. Chaque erreur qui sort de
+// sendViaSmtp porte `smtpEtape` (connexion, ehlo, starttls, auth, mail_from,
+// rcpt, data, livraison) et, quand le serveur a répondu, `smtpCode` (421, 535,
+// 550…) ; un timeout ou une connexion rompue n'a pas de code. Le message, lui,
+// ne change pas : c'est lui qu'on note dans mail_transport_failures.
+export interface SmtpErreur extends Error {
+  smtpCode?: number | null;
+  smtpEtape?: string;
+}
+
+function echec(message: string, reponse?: string): SmtpErreur {
+  const e = new Error(message) as SmtpErreur;
+  const m = /^\s*(\d{3})/.exec(reponse ?? "");
+  e.smtpCode = m ? Number(m[1]) : null;
+  return e;
+}
+
 export function resolveTimeout(raw: unknown, fallbackMs = 15000): number {
   const parsed = typeof raw === "number" ? raw : parseInt(String(raw ?? ""), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
@@ -67,7 +87,7 @@ class SmtpConnection {
 
     const banner = await this.readResponse();
     if (!banner.startsWith("220")) {
-      throw new Error(`SMTP banner inattendue : ${banner}`);
+      throw echec(`SMTP banner inattendue : ${banner}`, banner);
     }
   }
 
@@ -163,47 +183,52 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
   const allowInsecure = opts.allowInsecure ?? false;
 
   const client = new SmtpConnection(timeoutMs);
+  let etape = "connexion";
   try {
     await client.connect(host, port, secure);
 
     // Salutation EHLO
+    etape = "ehlo";
     let ehloRes = await client.sendCommand(`EHLO ${Deno.env.get("API_DOMAIN") || "localhost"}`);
     if (!ehloRes.startsWith("250")) {
       ehloRes = await client.sendCommand(`HELO ${Deno.env.get("API_DOMAIN") || "localhost"}`);
       if (!ehloRes.startsWith("250")) {
-        throw new Error(`Échec EHLO/HELO : ${ehloRes}`);
+        throw echec(`Échec EHLO/HELO : ${ehloRes}`, ehloRes);
       }
     }
 
     // STARTTLS si sur port non-sécurisé (587 ou 25)
     if (!secure) {
+      etape = "starttls";
       const startTlsRes = await client.sendCommand("STARTTLS");
       if (startTlsRes.startsWith("220")) {
         await client.upgradeToTls(host);
         // Ré-émettre EHLO après le handshake TLS
         await client.sendCommand(`EHLO ${Deno.env.get("API_DOMAIN") || "localhost"}`);
       } else if (!allowInsecure) {
-        throw new Error(
+        throw echec(
           `STARTTLS refusé par le serveur SMTP (${startTlsRes.trim()}). ` +
           `Refus d'envoyer des identifiants en clair sans chiffrement TLS. ` +
-          `(Pour autoriser explicitement un relais local sans TLS, définissez SMTP_ALLOW_INSECURE=true).`
+          `(Pour autoriser explicitement un relais local sans TLS, définissez SMTP_ALLOW_INSECURE=true).`,
+          startTlsRes
         );
       }
     }
 
     // Authentification si identifiants fournis
     if (opts.user && opts.pass) {
+      etape = "auth";
       const authRes = await client.sendCommand("AUTH LOGIN");
       if (authRes.startsWith("334")) {
         const userB64 = btoa(opts.user);
         const userRes = await client.sendCommand(userB64);
         if (!userRes.startsWith("334")) {
-          throw new Error(`Échec auth SMTP (username) : ${userRes}`);
+          throw echec(`Échec auth SMTP (username) : ${userRes}`, userRes);
         }
         const passB64 = btoa(opts.pass);
         const passRes = await client.sendCommand(passB64);
         if (!passRes.startsWith("235")) {
-          throw new Error(`Échec auth SMTP (mot de passe) : ${passRes}`);
+          throw echec(`Échec auth SMTP (mot de passe) : ${passRes}`, passRes);
         }
       } else {
         // Tentative AUTH PLAIN
@@ -211,31 +236,34 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
         const plainB64 = btoa(plainStr);
         const plainRes = await client.sendCommand(`AUTH PLAIN ${plainB64}`);
         if (!plainRes.startsWith("235")) {
-          throw new Error(`Échec auth SMTP (AUTH PLAIN) : ${plainRes}`);
+          throw echec(`Échec auth SMTP (AUTH PLAIN) : ${plainRes}`, plainRes);
         }
       }
     }
 
     // Enveloppe MAIL FROM
+    etape = "mail_from";
     const fromEmail = extractEmail(opts.from);
     const mailFromRes = await client.sendCommand(`MAIL FROM:<${fromEmail}>`);
     if (!mailFromRes.startsWith("250")) {
-      throw new Error(`Échec MAIL FROM : ${mailFromRes}`);
+      throw echec(`Échec MAIL FROM : ${mailFromRes}`, mailFromRes);
     }
 
     // Enveloppe RCPT TO
+    etape = "rcpt";
     for (const to of opts.to) {
       const toEmail = extractEmail(to);
       const rcptRes = await client.sendCommand(`RCPT TO:<${toEmail}>`);
       if (!rcptRes.startsWith("250")) {
-        throw new Error(`Échec RCPT TO pour ${toEmail} : ${rcptRes}`);
+        throw echec(`Échec RCPT TO pour ${toEmail} : ${rcptRes}`, rcptRes);
       }
     }
 
     // Commande DATA
+    etape = "data";
     const dataRes = await client.sendCommand("DATA");
     if (!dataRes.startsWith("354")) {
-      throw new Error(`Échec DATA : ${dataRes}`);
+      throw echec(`Échec DATA : ${dataRes}`, dataRes);
     }
 
     // Construction du message MIME
@@ -278,12 +306,24 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
       "." // Point final de fin de données SMTP
     ];
 
+    etape = "livraison";
     const sendDataRes = await client.sendCommand(bodyLines.join("\r\n"));
     if (!sendDataRes.startsWith("250")) {
-      throw new Error(`Échec livraison DATA : ${sendDataRes}`);
+      throw echec(`Échec livraison DATA : ${sendDataRes}`, sendDataRes);
     }
 
     return sendDataRes;
+  } catch (err) {
+    // Timeout, connexion refusée ou rompue, TLS : l'erreur vient de Deno, sans
+    // code ; on lui attache l'étape. Une erreur figée (non extensible) passe telle quelle.
+    if (err && typeof err === "object") {
+      const e = err as SmtpErreur;
+      try {
+        if (e.smtpEtape === undefined) e.smtpEtape = etape;
+        if (e.smtpCode === undefined) e.smtpCode = null;
+      } catch { /* ignoré */ }
+    }
+    throw err;
   } finally {
     await client.close();
   }

@@ -54,18 +54,28 @@ import { masquerAdresse } from "../core/journal-masque.ts";
 // RESEND_CADENCE_COMMUNE=off la coupe (banc). Une attente est plafonnée à
 // 30 s : au-delà, on envoie quand même — le rejeu reste le filet.
 // RESEND_API_URL ne sert qu'au banc (un faux Resend) : absent en production.
+//
+// ─── Le relais SMTP a sa cadence (19/10/2026, sortie de Resend par Nodo50) ──
+// Même mécanique, canal distinct (`smtp`) : SMTP_MIN_INTERVAL_MS, défaut 1000
+// — une par seconde, prudent tant que Nodo50 n'a pas donné son plafond ; la
+// base borne le pas à deux secondes. SMTP_CADENCE_COMMUNE=off la coupe (banc).
 const dormir = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 function entierEnv(nom: string, defaut: number): number {
   const v = parseInt((Deno.env.get(nom) || "").trim(), 10);
   return Number.isFinite(v) && v >= 0 ? v : defaut;
 }
+type Canal = "resend" | "smtp";
+const CANAUX: Record<Canal, { prefixe: string; intervalle: number }> = {
+  resend: { prefixe: "RESEND", intervalle: 125 },
+  smtp: { prefixe: "SMTP", intervalle: 1000 },
+};
 const ATTENTE_COMMUNE_MAX_MS = 30000;
-let repliSignale = false;
-async function attenteCommune(intervalle: number): Promise<number | null> {
-  if ((Deno.env.get("RESEND_CADENCE_COMMUNE") || "").trim().toLowerCase() === "off") return null;
+const repliSignale: Partial<Record<Canal, boolean>> = {};
+async function attenteCommune(canal: Canal, intervalle: number): Promise<number | null> {
+  if ((Deno.env.get(`${CANAUX[canal].prefixe}_CADENCE_COMMUNE`) || "").trim().toLowerCase() === "off") return null;
   let raison = "";
   try {
-    const { data, error } = await supabaseAdmin.rpc("fn_mail_cadence_creneau", { p_canal: "resend", p_intervalle_ms: intervalle });
+    const { data, error } = await supabaseAdmin.rpc("fn_mail_cadence_creneau", { p_canal: canal, p_intervalle_ms: intervalle });
     if (!error) {
       const n = Number(data);
       if (Number.isFinite(n) && n >= 0) return Math.min(n, ATTENTE_COMMUNE_MAX_MS);
@@ -74,23 +84,23 @@ async function attenteCommune(intervalle: number): Promise<number | null> {
   } catch (e) {
     raison = String((e as Error)?.message ?? e);
   }
-  if (!repliSignale) {
-    repliSignale = true;
-    console.warn(`[transport] cadence commune indisponible (${raison.slice(0, 120)}) : cadence de l'isolat seule`);
+  if (!repliSignale[canal]) {
+    repliSignale[canal] = true;
+    console.warn(`[transport] cadence commune ${canal} indisponible (${raison.slice(0, 120)}) : cadence de l'isolat seule`);
   }
   return null;
 }
-let prochainCreneau = 0;
-async function cadencer(): Promise<void> {
-  const intervalle = entierEnv("RESEND_MIN_INTERVAL_MS", 125);
-  const commune = await attenteCommune(intervalle);
+const prochainCreneau: Partial<Record<Canal, number>> = {};
+async function cadencer(canal: Canal): Promise<void> {
+  const intervalle = entierEnv(`${CANAUX[canal].prefixe}_MIN_INTERVAL_MS`, CANAUX[canal].intervalle);
+  const commune = await attenteCommune(canal, intervalle);
   if (commune !== null) {
     if (commune > 0) await dormir(commune);
     return;
   }
   const maintenant = Date.now();
-  const creneau = Math.max(maintenant, prochainCreneau);
-  prochainCreneau = creneau + intervalle;
+  const creneau = Math.max(maintenant, prochainCreneau[canal] ?? 0);
+  prochainCreneau[canal] = creneau + intervalle;
   if (creneau > maintenant) await dormir(creneau - maintenant);
 }
 export function rejouable(status: number): boolean {
@@ -167,7 +177,7 @@ async function sendViaResend(opts) {
   const base = entierEnv("RESEND_RETRY_BASE_MS", 400);
   let tentative = 0;
   for (;;) {
-    await cadencer();
+    await cadencer("resend");
     let status = 0, body = "", retryAfter: string | null = null;
     try {
       const res = await fetch(url, {
@@ -194,6 +204,53 @@ async function sendViaResend(opts) {
   }
 }
 
+// ─── Rejeu SMTP et garde d'authentification (19/10/2026, sortie de Resend) ──
+// Avant la bascule vers le relais Nodo50, le chemin SMTP n'avait ni cadence ni
+// rejeu. Ici :
+//   - rejeu : une réponse 4xx (421 service indisponible, 450/451/452 refus
+//     passager), un timeout ou une connexion rompue est rejoué jusqu'à deux
+//     fois, après une attente croissante avec un aléa (SMTP_RETRY_BASE_MS,
+//     défaut 1000 : 1 s, 2 s) — chaque essai rouvre une connexion, et un
+//     timeout coûte déjà SMTP_TIMEOUT_MS. Un 5xx (550/553 adresse refusée,
+//     554) est définitif : le rejouer ne changerait rien. Une connexion rompue
+//     après le point final peut faire partir le courriel deux fois : c'est la
+//     règle des relais (RFC 5321 §6.1), mieux vaut un doublon qu'une perte.
+//   - authentification : un échec à l'étape AUTH n'est JAMAIS rejoué, 4xx ou
+//     timeout compris. Et il suspend le SMTP du réseau entier pendant
+//     SMTP_AUTH_PAUSE_MS (défaut 15 min ; 0 coupe la garde) : sans elle, un
+//     SMTP_PASS faux ferait un essai d'authentification raté par courriel —
+//     soixante-dix en quelques minutes à une pointe, de quoi faire bannir
+//     l'adresse de Supabase par le relais. La garde lit l'isolat, puis la note
+//     dans mail_transport_failures (tout échec noté qui commence par « Échec
+//     auth SMTP ») ; si la base ne répond pas, elle laisse passer. Pendant la
+//     pause, chaque courriel échoue sans toucher au relais, et l'échec est noté
+//     comme un autre : l'incident mail_transport s'ouvre.
+// Une erreur sans `smtpEtape` ne vient pas du client SMTP (config, bogue) : pas de rejeu.
+const MARQUE_AUTH_SMTP = "Échec auth SMTP";
+const REJEUX_SMTP_MAX = 2;
+let authSmtpEchoueeA = 0;
+
+export function smtpRejouable(err): boolean {
+  const etape = err?.smtpEtape;
+  if (!etape || etape === "auth") return false;
+  const code = err?.smtpCode;
+  if (typeof code === "number") return code >= 400 && code <= 499;
+  return true;
+}
+
+async function authSmtpSuspendue(): Promise<string | null> {
+  const pause = entierEnv("SMTP_AUTH_PAUSE_MS", 15 * 60 * 1000);
+  if (pause === 0) return null;
+  if (Date.now() - authSmtpEchoueeA < pause) return "échec vu par cet isolat";
+  try {
+    const depuis = new Date(Date.now() - pause).toISOString();
+    const { data, error } = await supabaseAdmin.from("mail_transport_failures")
+      .select("id").gte("occurred_at", depuis).like("error", `${MARQUE_AUTH_SMTP}%`).limit(1);
+    if (!error && Array.isArray(data) && data.length > 0) return "échec noté au réseau";
+  } catch { /* base injoignable : la garde laisse passer */ }
+  return null;
+}
+
 async function sendViaConfiguredSmtp(opts) {
   const r = routageEffectif(opts);
   const host = (Deno.env.get("SMTP_HOST") || "").trim();
@@ -204,21 +261,49 @@ async function sendViaConfiguredSmtp(opts) {
   const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
   const timeoutMs = resolveTimeout(Deno.env.get("SMTP_TIMEOUT_MS"));
 
-  return await sendViaSmtp({
-    host,
-    port,
-    user,
-    pass,
-    secure,
-    allowInsecure,
-    timeoutMs,
-    from: formatAddress(r.senderEmail, r.senderName),
-    to: destinataires(opts),
-    replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
-    subject: opts.subject,
-    html: opts.html,
-    text: opts.text
-  });
+  const suspendue = await authSmtpSuspendue();
+  if (suspendue) {
+    throw new Error(`SMTP suspendu après un échec d'authentification (${suspendue}) : vérifier SMTP_USER/SMTP_PASS ; reprise après SMTP_AUTH_PAUSE_MS`);
+  }
+
+  const base = entierEnv("SMTP_RETRY_BASE_MS", 1000);
+  let tentative = 0;
+  for (;;) {
+    await cadencer("smtp");
+    try {
+      return await sendViaSmtp({
+        host,
+        port,
+        user,
+        pass,
+        secure,
+        allowInsecure,
+        timeoutMs,
+        from: formatAddress(r.senderEmail, r.senderName),
+        to: destinataires(opts),
+        replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
+        subject: opts.subject,
+        html: opts.html,
+        text: opts.text
+      });
+    } catch (err) {
+      if (err?.smtpEtape === "auth") {
+        authSmtpEchoueeA = Date.now();
+        const msg = String(err?.message ?? err);
+        // La garde réseau se fie au début du message noté : un timeout à l'étape AUTH le reçoit aussi.
+        if (!msg.startsWith(MARQUE_AUTH_SMTP)) throw new Error(`${MARQUE_AUTH_SMTP} (${msg})`);
+        throw err;
+      }
+      if (smtpRejouable(err) && tentative < REJEUX_SMTP_MAX) {
+        const attente = attenteAvantRejeu(null, tentative, base);
+        tentative++;
+        console.warn(`[transport] SMTP ${err?.smtpCode ?? "(réseau)"} à l'étape ${err?.smtpEtape} (label=${opts.label ?? "?"}) : rejeu ${tentative}/${REJEUX_SMTP_MAX} dans ${attente} ms`);
+        await dormir(attente);
+        continue;
+      }
+      throw err;
+    }
+  }
 }
 
 // --- Wrapper neutre ------------------------------------------------------
