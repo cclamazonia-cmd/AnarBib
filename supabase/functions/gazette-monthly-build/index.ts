@@ -201,6 +201,22 @@ function nettoyer(brut: string): string {
   return t.replace(/\s+/g, " ").trim();
 }
 
+// ---------- échecs de fabrication (19/10/2026) ----------
+// Une étape qui échoue est rejouée par le tick suivant (cinq minutes), et chaque
+// rejeu d'une étape assistée est un appel FACTURÉ au modèle. Le routeur ne
+// marquait 'failed' que si issue_number venait du corps de la requête, ce que le
+// tick n'envoie jamais : une sortie tronquée (JSON illisible) se rejouait donc
+// sans fin, jusqu'à ~288 appels par jour. Désormais :
+//   · une étape a ESSAIS_MAX essais ; le compte est tenu dans step_error
+//     (« tentative k/3 — cause »), que le panel staff affiche déjà ;
+//   · au dernier, le job passe 'failed' — état terminal, le tick ne le reprend
+//     plus ; le remettre en route est un geste humain ;
+//   · une réponse coupée par max_tokens (EchecTerminal) ne sera pas meilleure au
+//     rejeu : 'failed' tout de suite, sans brûler les essais restants.
+const ESSAIS_MAX = 3;
+const PREFIXE_ESSAI = /^tentative (\d+)\/\d+ — /;
+class EchecTerminal extends Error {}
+
 async function claude(system: string, user: string): Promise<string> {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -213,10 +229,30 @@ async function claude(system: string, user: string): Promise<string> {
       model: ANTHROPIC_MODEL, max_tokens: 8000, system,
       messages: [{ role: "user", content: user }],
     }),
+    signal: AbortSignal.timeout(120_000),
   });
   const j = await r.json();
   if (!r.ok) throw new Error("anthropic: " + JSON.stringify(j).slice(0, 300));
+  if (j.stop_reason === "max_tokens") {
+    throw new EchecTerminal("anthropic : réponse coupée par max_tokens — le JSON est incomplet, un rejeu le serait aussi.");
+  }
   return j.content?.[0]?.text ?? "";
+}
+
+// Note l'échec d'une étape sur le job : un essai de plus, ou 'failed' au dernier
+// (ou d'emblée pour un EchecTerminal). Un job déjà terminal n'est pas touché.
+async function noterEchec(number: number, e: unknown, connu?: { status?: string; step_error?: string | null }) {
+  const job = connu ?? (await sb.from("gazette_build_jobs")
+    .select("issue_number,status,step_error").eq("issue_number", number).maybeSingle()).data;
+  if (!job || job.status === "failed" || job.status === "ready") return;
+  const precedent = PREFIXE_ESSAI.exec(String(job.step_error ?? ""));
+  const essai = (precedent ? Number(precedent[1]) : 0) + 1;
+  const cause = String(e).slice(0, 400);
+  const terminal = e instanceof EchecTerminal || essai >= ESSAIS_MAX;
+  await sb.from("gazette_build_jobs").update(terminal
+    ? { status: "failed", step_error: `échec après ${essai} essai(s) — ${cause}` }
+    : { step_error: `tentative ${essai}/${ESSAIS_MAX} — ${cause}` },
+  ).eq("issue_number", number);
 }
 function parseJsonBlock(s: string) {
   const a = s.indexOf("["); const b = s.lastIndexOf("]");
@@ -664,8 +700,8 @@ async function stepTranslate(number: number) {
     `Conserve EXACTEMENT la structure, les clés et les balises <b>…</b>. Rends UNIQUEMENT le JSON traduit.`;
   const pages = parseJsonBlock(await claude(system, JSON.stringify(source)));
   // Un modèle qui rend sa source telle quelle n'a pas traduit. On le dit et on
-  // sort le job de la file — arrêt propre : le tick n'envoie pas issue_number,
-  // une exception rejouerait le même échec toutes les cinq minutes.
+  // sort le job de la file — arrêt propre : une exception brûlerait les trois
+  // essais (trois appels facturés) pour rendre trois fois la même chose.
   if (JSON.stringify(pages) === JSON.stringify(source)) {
     const raison = `traduction '${target}' identique à la source : le modèle n'a rien traduit. ` +
       `Vérifier, puis remettre le job en 'translating' (cursor_locale='${target}').`;
@@ -719,10 +755,8 @@ async function stepAssembleReseau(number: number) {
 
     // L'étape SE REJOUE, et pas seulement à la main : la boucle fait un update
     // par locale (10) et ne passe le job en 'finalizing' qu'à la fin. Si un seul
-    // update échoue au milieu, le job reste en 'assembling' — le catch du routeur
-    // ne marque 'failed' que si issue_number était dans le corps de requête, ce
-    // que le tick n'envoie jamais — et le tick suivant rejoue l'étape 5 minutes
-    // plus tard. Sans ce filtre, chaque passage AJOUTAIT une page « Vie du
+    // update échoue au milieu, le job reste en 'assembling' et le tick suivant
+    // rejoue l'étape 5 minutes plus tard (jusqu'à trois essais, cf. noterEchec). Sans ce filtre, chaque passage AJOUTAIT une page « Vie du
     // réseau » de plus aux locales déjà traitées. On retire donc celle qui est
     // déjà là avant d'insérer : par le marqueur kind='reseau' pour les pages
     // posées à partir d'ici, et par le libellé localisé de la rubrique
@@ -836,18 +870,24 @@ async function upsertLocale(number: number, locale: string, content: unknown, ts
 
 // ---------- routeur ----------
 Deno.serve(async (req) => {
-  if (req.headers.get("x-cron-secret") !== Deno.env.get("GAZETTE_CRON_SECRET")) {
+  // Un secret absent ou vide n'ouvre rien : sans lui, un en-tête vide suffisait.
+  const secret = Deno.env.get("GAZETTE_CRON_SECRET") ?? "";
+  if (!secret || req.headers.get("x-cron-secret") !== secret) {
     return new Response("forbidden", { status: 403 });
   }
   const { step, issue_number } = await req.json().catch(() => ({ step: "tick" }));
+  // Le numéro et l'état du job sont connus HORS du try : le catch en a besoin
+  // pour compter l'échec, y compris sur un tick (qui n'envoie pas issue_number).
+  let s = step, n = issue_number;
+  let jobDuTick: { status?: string; step_error?: string | null } | undefined;
   try {
     // "tick" : avance le job courant d'une étape (utilisé par le cron reconcile).
-    let s = step, n = issue_number;
     if (s === "tick") {
       const { data: job } = await sb.from("gazette_build_jobs")
-        .select("issue_number,status").not("status", "in", "(ready,failed)")
+        .select("issue_number,status,step_error").not("status", "in", "(ready,failed)")
         .order("issue_number", { ascending: false }).limit(1).maybeSingle();
       if (!job) return Response.json({ idle: true });
+      jobDuTick = job;
       n = job.issue_number;
       s = ({ curating: "curate", translating: "translate", assembling: "assemble_reseau",
              finalizing: "finalize" } as Record<string, string>)[job.status] ?? "noop";
@@ -858,12 +898,11 @@ Deno.serve(async (req) => {
     // curate/translate/assemble lancé à la main pour rattraper un build, ou
     // contre un tick qui avancerait un job resté ouvert pendant que le staff
     // publiait le numéro.
-    // L'arrêt doit être PROPRE, pas une exception : levée sur un appel du tick,
-    // une erreur ne marquerait rien (le catch ci-dessous ne connaît que
-    // l'issue_number du corps de requête, absent d'un tick) et le cron rejouerait
-    // l'étape en échec toutes les 5 minutes, indéfiniment. On sort donc le job de
-    // la file — 'failed' et 'ready' sont ses deux états terminaux, et 'failed'
-    // dit la vérité — avec un step_error lisible par le panel staff.
+    // L'arrêt doit être PROPRE, pas une exception : une exception compterait un
+    // essai et serait rejouée, alors que ce refus ne changera pas d'un tick à
+    // l'autre. On sort donc le job de la file — 'failed' et 'ready' sont ses deux
+    // états terminaux, et 'failed' dit la vérité — avec un step_error lisible par
+    // le panel staff.
     if (n && s !== "start" && s !== "noop") {
       const { data: issue } = await sb.from("gazette_issues")
         .select("status").eq("number", n).maybeSingle();
@@ -886,10 +925,13 @@ Deno.serve(async (req) => {
     else if (s === "assemble_reseau") out = await stepAssembleReseau(n);
     else if (s === "finalize") out = await stepFinalize(n);
     else out = { noop: true };
+    // L'étape a abouti : le compte d'essais repart de zéro pour la suivante.
+    if (n && PREFIXE_ESSAI.test(String(jobDuTick?.step_error ?? ""))) {
+      await sb.from("gazette_build_jobs").update({ step_error: null }).eq("issue_number", n);
+    }
     return Response.json({ ok: true, step: s, ...out });
   } catch (e) {
-    if (issue_number) await sb.from("gazette_build_jobs")
-      .update({ status: "failed", step_error: String(e) }).eq("issue_number", issue_number);
+    if (n && s !== "start" && s !== "probe_sources") await noterEchec(n, e, jobDuTick);
     return Response.json({ ok: false, error: String(e) }, { status: 500 });
   }
 });

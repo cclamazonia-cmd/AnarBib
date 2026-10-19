@@ -115,7 +115,8 @@ function monterEF(etat) {
   };
 
   let handler = null;
-  const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
+  // `etat.env` remplace une variable d'ENV pour ce montage (19/10/2026 : secret vide).
+  const DenoStub = { env: { get: (k) => (etat.env && k in etat.env ? etat.env[k] : ENV[k]) }, serve: (h) => { handler = h; } };
   // Les flux : `etat.flux(url)` rend la réponse d'un site (ou lève) ; chaque
   // appel est noté, avec ses en-têtes — c'est là qu'on lit le User-Agent.
   const appelsFetch = [];
@@ -175,6 +176,79 @@ describe("l'EF reste fermée sans l'en-tête X-Cron-Secret", () => {
     const r = await appeler({ step: 'start' }, { secret: 'pas-le-bon' });
     expect(r.statut).toBe(403);
     expect(r.ecrits).toEqual([]);
+  });
+  it('un secret de cron vide côté serveur n’ouvre rien, même à un en-tête vide (19/10/2026)', async () => {
+    const etat = { ...etatNeuf(), numero: { status: 'draft', build_mode: 'revue' }, env: { GAZETTE_CRON_SECRET: '' } };
+    const r = await monterEF(etat)({ step: 'start' }, { secret: '' });
+    expect(r.statut).toBe(403);
+    expect(r.ecrits).toEqual([]);
+  });
+});
+
+// ── Échecs bornés (19/10/2026) ──────────────────────────────────────────────
+// Le tick n'envoie pas issue_number : le catch du routeur ne marquait rien, et
+// une étape assistée en échec (JSON tronqué) rappelait le modèle toutes les
+// cinq minutes, sans fin. Trois essais par étape, comptés dans step_error ;
+// une réponse coupée par max_tokens arrête tout de suite.
+describe('gazette-monthly-build — une étape en échec ne rappelle pas le modèle sans fin', () => {
+  const PAGES_OK = JSON.stringify([{ sec: 'La Une', blocks: [{ type: 'lead', h: 'Une', p: ['…'] }] }]);
+  const etatCurate = (step_error = null, reponse = { stop_reason: 'end_turn', content: [{ text: 'pas du JSON' }] }) => ({
+    ...etatNeuf(),
+    numero: { status: 'draft', build_mode: 'assisted' },
+    job: { issue_number: 7, status: 'curating', step_error, sources: {} },
+    flux: (url) => (url.includes('api.anthropic.com')
+      ? new Response(JSON.stringify(reponse), { status: 200, headers: { 'content-type': 'application/json' } })
+      : new Response('<rss></rss>', { status: 200 })),
+  });
+  const majJob = (r) => r.ecrits.filter((e) => e.table === 'gazette_build_jobs' && e.op === 'update').map((e) => e.donnees);
+  const appelsModele = (r) => r.appelsFetch.filter((a) => a.url.includes('api.anthropic.com')).length;
+
+  it('premier échec sur un tick : « tentative 1/3 », le job reste en file', async () => {
+    const r = await monterEF(etatCurate())({ step: 'tick' });
+    expect(r.statut).toBe(500);
+    expect(appelsModele(r)).toBe(1);
+    const maj = majJob(r);
+    expect(maj).toHaveLength(1);
+    expect(maj[0].step_error).toMatch(/^tentative 1\/3 — /);
+    expect(maj[0].status).toBeUndefined();
+  });
+
+  it('troisième échec : le job passe « failed », le tick ne le reprendra plus', async () => {
+    const r = await monterEF(etatCurate('tentative 2/3 — SyntaxError'))({ step: 'tick' });
+    const maj = majJob(r);
+    expect(maj).toHaveLength(1);
+    expect(maj[0]).toMatchObject({ status: 'failed' });
+    expect(maj[0].step_error).toMatch(/^échec après 3 essai\(s\) — /);
+  });
+
+  it('une réponse coupée par max_tokens : « failed » d’emblée, sans brûler les essais restants', async () => {
+    const r = await monterEF(etatCurate(null, { stop_reason: 'max_tokens', content: [{ text: '[{"sec":"La Une","blo' }] }))({ step: 'tick' });
+    expect(appelsModele(r)).toBe(1);
+    const maj = majJob(r);
+    expect(maj).toHaveLength(1);
+    expect(maj[0]).toMatchObject({ status: 'failed' });
+    expect(maj[0].step_error).toMatch(/max_tokens/);
+  });
+
+  it('une étape qui aboutit après un essai manqué remet le compte à zéro', async () => {
+    const r = await monterEF(etatCurate('tentative 1/3 — SyntaxError', { stop_reason: 'end_turn', content: [{ text: PAGES_OK }] }))({ step: 'tick' });
+    expect(r.statut).toBe(200);
+    const maj = majJob(r);
+    expect(maj.some((m) => m.status === 'translating')).toBe(true);
+    expect(maj.at(-1)).toEqual({ step_error: null });
+  });
+
+  it('un appel manuel en échec compte aussi ses essais (le job est relu en base)', async () => {
+    const r = await monterEF(etatCurate())({ step: 'curate', issue_number: 7 });
+    const maj = majJob(r);
+    expect(maj).toHaveLength(1);
+    expect(maj[0].step_error).toMatch(/^tentative 1\/3 — /);
+  });
+
+  it('l’appel au modèle porte un délai', async () => {
+    const r = await monterEF(etatCurate())({ step: 'tick' });
+    const appel = r.appelsFetch.find((a) => a.url.includes('api.anthropic.com'));
+    expect(appel.opts.signal).toBeDefined();
   });
 });
 
