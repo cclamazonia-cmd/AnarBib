@@ -175,3 +175,15 @@ passe le statut à « reviewed ». Requête de la liste :
 | « Entre paysans » (Malatesta) | „Fra contadini” („Între țărani”) | Titre d'origine + traduction. |
 | Organisation internationale du travail (OIT) | Organizația Internațională a Muncii (OIM) | Sigle roumain. |
 | métiers à la con (Graeber) | „slujbe de rahat” | Registre familier voulu par la source. |
+
+Le 19/10, les biographies sont passées aux onze langues (migration
+`20261019154741`), puis une relecture des sources portugaises a corrigé, dans
+chaque langue touchée (migration `20261019163950`) : Engel → Engels,
+« ecomomista », la phrase de Bookchin, Penafiel redoublé, la légende d'image
+orpheline de Colombo, le titre « La Volonté du peuple. Démocratie et
+anarchie », Лвович → Львович, Sébastien Faure, la ponctuation de Leuenroth,
+Almeida Prado et Antonini, le présent de Creagh et de Colombo (morts) mis au
+passé, « triangular » → « articular » (Mechoso). Pour Reclus, l'identification
+de la Villa Commedia est rapportée à une tradition locale et la parution dans
+« Amanhã » (1909) est dite posthume. Laissés tels quels : « Λε Γκεν » (graphie
+grecque usuelle) et « drogas » (Almeida Prado, sens ambigu dans la source).
