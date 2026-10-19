@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Επεξεργασία της πολιτικής",
   "biblioteca.privacy.loans": "Ιστορικό δανεισμών",
   "biblioteca.privacy.loansHint": "Μετά από αυτή την περίοδο, οι ολοκληρωμένοι δανεισμοί αφαιρούνται από το ιστορικό.",
+  "biblioteca.privacy.noCirculation": "Αυτή η βιβλιοθήκη δεν δανείζει: δεν υπάρχουν χρόνοι διατήρησης για δανεισμούς, κρατήσεις ή επιτόπιες αναγνώσεις.",
   "biblioteca.privacy.notes": "Εσωτερικές σημειώσεις",
   "biblioteca.privacy.notesPlaceholder": "Αιτιολογήσεις, συλλογική απόφαση, αναφορά σε εσωτερικό έγγραφο…",
   "biblioteca.privacy.notifications": "Αναγνωσμένες ειδοποιήσεις",

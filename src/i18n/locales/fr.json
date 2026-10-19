@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modifier la politique",
   "biblioteca.privacy.loans": "Historique des emprunts",
   "biblioteca.privacy.loansHint": "Passé ce délai, les emprunts terminés sont supprimés de l'historique.",
+  "biblioteca.privacy.noCirculation": "Cette bibliothèque ne prête pas : pas de durée de conservation pour des prêts, des réservations ou des consultations.",
   "biblioteca.privacy.notes": "Notes internes",
   "biblioteca.privacy.notesPlaceholder": "Justifications, décision collective, référence à un document interne…",
   "biblioteca.privacy.notifications": "Notifications lues",

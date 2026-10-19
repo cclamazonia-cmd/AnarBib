@@ -157,6 +157,11 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
   const [consultationsInput, setConsultationsInput] = useState('');
   const [notificationsInput, setNotificationsInput] = useState('');
   const [notesInput, setNotesInput] = useState('');
+  // Une bibliothèque sans prêt (circulation_mode = 'off', une bibliothèque
+  // « source » comme Anarchief.Org) n'a ni prêts, ni réservations, ni
+  // consultations : leurs durées ne se montrent pas. Les valeurs chargées
+  // restent dans le formulaire et repartent telles quelles à l'enregistrement.
+  const [circulationOff, setCirculationOff] = useState(false);
 
   // ─── Chargement initial ────────────────────────────────────────────────────
   useEffect(() => {
@@ -165,9 +170,13 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
     (async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase.rpc('fn_get_retention_policy', { p_library_id: libraryId });
+        const [{ data, error }, lib] = await Promise.all([
+          supabase.rpc('fn_get_retention_policy', { p_library_id: libraryId }),
+          supabase.from('libraries').select('circulation_mode').eq('id', libraryId).maybeSingle(),
+        ]);
         if (cancelled) return;
         if (error) throw error;
+        setCirculationOff(lib?.data?.circulation_mode === 'off');
         setPolicy(data);
         // Initialise les inputs avec les valeurs override (vide si pas d'override)
         setLoansInput(data?.overrides?.loans ? String(data.retention_loans_days) : '');
@@ -243,7 +252,11 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
         <h4 style={{ margin: '0 0 8px', fontSize: '.95rem' }}>
           {t({ id: 'biblioteca.privacy.currentEffective' })}
         </h4>
+        {circulationOff && (
+          <p style={{ ...helperStyle, margin: '0 0 8px' }}>{t({ id: 'biblioteca.privacy.noCirculation' })}</p>
+        )}
         <ul style={{ fontSize: '.88rem', lineHeight: 1.7, margin: 0, paddingLeft: 18 }}>
+          {!circulationOff && (<>
           <li>
             {t({ id: 'biblioteca.privacy.loans' })} :{' '}
             <strong>{formatDuration(policy?.retention_loans_days, t)}</strong>
@@ -265,6 +278,7 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
               ? <span style={{ color: '#fbbf24' }}>({t({ id: 'biblioteca.privacy.customized' })})</span>
               : <span style={{ color: 'var(--brand-muted)' }}>({t({ id: 'biblioteca.privacy.useDefault' })})</span>}
           </li>
+          </>)}
           <li>
             {t({ id: 'biblioteca.privacy.notifications' })} :{' '}
             <strong>{formatDuration(policy?.retention_notifications_days, t)}</strong>
@@ -286,6 +300,7 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
           </p>
 
           <div style={fieldGridStyle}>
+            {!circulationOff && (<>
             <div style={fieldStyle}>
               <label style={labelStyle}>{t({ id: 'biblioteca.privacy.loans' })} ({t({ id: 'biblioteca.privacy.days' })})</label>
               <input type="number" min="0" placeholder={`${t({ id: 'biblioteca.privacy.default' })} : ${DEFAULT_LOANS}`}
@@ -304,6 +319,7 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
                 value={consultationsInput} onChange={e => setConsultationsInput(e.target.value)} style={inputStyle} />
               <span style={helperStyle}>{t({ id: 'biblioteca.privacy.consultationsHint' })}</span>
             </div>
+            </>)}
             <div style={fieldStyle}>
               <label style={labelStyle}>{t({ id: 'biblioteca.privacy.notifications' })} ({t({ id: 'biblioteca.privacy.days' })})</label>
               <input type="number" min="0" placeholder={`${t({ id: 'biblioteca.privacy.default' })} : ${DEFAULT_NOTIFICATIONS}`}

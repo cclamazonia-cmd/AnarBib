@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modifică politica",
   "biblioteca.privacy.loans": "Istoricul împrumuturilor",
   "biblioteca.privacy.loansHint": "După acest termen, împrumuturile încheiate sunt șterse din istoric.",
+  "biblioteca.privacy.noCirculation": "Această bibliotecă nu împrumută: nu există termene de păstrare pentru împrumuturi, rezervări sau consultări.",
   "biblioteca.privacy.notes": "Note interne",
   "biblioteca.privacy.notesPlaceholder": "Justificări, decizie colectivă, trimitere la un document intern…",
   "biblioteca.privacy.notifications": "Notificări citite",

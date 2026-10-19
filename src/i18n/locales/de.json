@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Richtlinie ändern",
   "biblioteca.privacy.loans": "Ausleihverlauf",
   "biblioteca.privacy.loansHint": "Nach Ablauf dieses Zeitraums werden abgeschlossene Ausleihen aus dem Verlauf entfernt.",
+  "biblioteca.privacy.noCirculation": "Diese Bibliothek verleiht nicht: keine Aufbewahrungsfristen für Ausleihen, Reservierungen oder Einsichtnahmen.",
   "biblioteca.privacy.notes": "Interne Notizen",
   "biblioteca.privacy.notesPlaceholder": "Begründungen, kollektive Entscheidung, Verweis auf ein internes Dokument…",
   "biblioteca.privacy.notifications": "Gelesene Benachrichtigungen",

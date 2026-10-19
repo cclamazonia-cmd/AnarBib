@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Edit the policy",
   "biblioteca.privacy.loans": "Loan history",
   "biblioteca.privacy.loansHint": "After this period, completed loans are removed from history.",
+  "biblioteca.privacy.noCirculation": "This library does not lend: there are no retention periods for loans, reservations or consultations.",
   "biblioteca.privacy.notes": "Internal notes",
   "biblioteca.privacy.notesPlaceholder": "Justifications, collective decision, reference to an internal document…",
   "biblioteca.privacy.notifications": "Read notifications",

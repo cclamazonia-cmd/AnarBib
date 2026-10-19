@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modifi la politikon",
   "biblioteca.privacy.loans": "Historio de la pruntoj",
   "biblioteca.privacy.loansHint": "Post ĉi tiu limdato, la finitaj pruntoj estas forigitaj el la historio.",
+  "biblioteca.privacy.noCirculation": "Ĉi tiu biblioteko ne pruntedonas: neniuj konservaj daŭroj por pruntoj, rezervoj aŭ konsultoj.",
   "biblioteca.privacy.notes": "Internaj notoj",
   "biblioteca.privacy.notesPlaceholder": "Pravigoj, kolektiva decido, referenco al interna dokumento…",
   "biblioteca.privacy.notifications": "Legitaj sciigoj",

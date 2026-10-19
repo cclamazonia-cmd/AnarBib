@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modificare la politica",
   "biblioteca.privacy.loans": "Storico dei prestiti",
   "biblioteca.privacy.loansHint": "Trascorso questo periodo, i prestiti conclusi vengono eliminati dallo storico.",
+  "biblioteca.privacy.noCirculation": "Questa biblioteca non presta: nessun periodo di conservazione per prestiti, prenotazioni o consultazioni.",
   "biblioteca.privacy.notes": "Note interne",
   "biblioteca.privacy.notesPlaceholder": "Giustificazioni, decisione collettiva, riferimento a un documento interno…",
   "biblioteca.privacy.notifications": "Notifiche lette",

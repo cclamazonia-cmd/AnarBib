@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modificar la política",
   "biblioteca.privacy.loans": "Historial dels préstecs",
   "biblioteca.privacy.loansHint": "Passat aquest termini, els préstecs finalitzats se suprimeixen de l'historial.",
+  "biblioteca.privacy.noCirculation": "Aquesta biblioteca no presta: no hi ha terminis de conservació per a préstecs, reserves ni consultes.",
   "biblioteca.privacy.notes": "Notes internes",
   "biblioteca.privacy.notesPlaceholder": "Justificacions, decisió col·lectiva, referència a un document intern…",
   "biblioteca.privacy.notifications": "Notificacions llegides",

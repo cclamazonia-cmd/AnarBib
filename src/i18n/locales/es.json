@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modificar la política",
   "biblioteca.privacy.loans": "Historial de préstamos",
   "biblioteca.privacy.loansHint": "Pasado este plazo, los préstamos finalizados son eliminados del historial.",
+  "biblioteca.privacy.noCirculation": "Esta biblioteca no presta: no hay plazos de conservación para préstamos, reservas ni consultas.",
   "biblioteca.privacy.notes": "Notas internas",
   "biblioteca.privacy.notesPlaceholder": "Justificaciones, decisión colectiva, referencia a un documento interno…",
   "biblioteca.privacy.notifications": "Notificaciones leídas",

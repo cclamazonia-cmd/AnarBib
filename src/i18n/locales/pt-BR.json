@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Modificar a política",
   "biblioteca.privacy.loans": "Histórico de empréstimos",
   "biblioteca.privacy.loansHint": "Após este prazo, os empréstimos finalizados são excluídos do histórico.",
+  "biblioteca.privacy.noCirculation": "Esta biblioteca não empresta: não há prazos de conservação para empréstimos, reservas nem consultas.",
   "biblioteca.privacy.notes": "Observações internas",
   "biblioteca.privacy.notesPlaceholder": "Justificativas, decisão coletiva, referência a um documento interno…",
   "biblioteca.privacy.notifications": "Notificações lidas",

@@ -1157,6 +1157,7 @@
   "biblioteca.privacy.editTitle": "Het beleid bewerken",
   "biblioteca.privacy.loans": "Uitleengeschiedenis",
   "biblioteca.privacy.loansHint": "Na deze periode worden afgeronde uitleningen uit de geschiedenis verwijderd.",
+  "biblioteca.privacy.noCirculation": "Deze bibliotheek leent niet uit: er zijn geen bewaartermijnen voor uitleningen, reserveringen of raadplegingen.",
   "biblioteca.privacy.notes": "Interne notities",
   "biblioteca.privacy.notesPlaceholder": "Rechtvaardigingen, collectief besluit, verwijzing naar een intern document…",
   "biblioteca.privacy.notifications": "Gelezen meldingen",
