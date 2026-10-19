@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) — **50 items, 260 clôtures**.
 
-**Fraîcheur des constats au 2026-10-19.** **39 items sur 50** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Les **11** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-19.** **41 items sur 50** portent une vérification datée qui leur est propre (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D4, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K1, K2, K7). Les **9** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -323,7 +323,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner). **Déployé en prod le 28/09 à 12 h 48** (migration `20260928095045` par la CI, CHECK élargie, aucun incident `ci_en_retard`) — après deux pushes de code que Forgejo a sautés sans un rouge parce qu'un commit du lot portait `[skip ci]` (le backlog par-dessus, puis un commit voisin ramené par le rebase) ; le hook `.githooks/pre-push` refuse désormais ce lot mixte vers Codeberg (le miroir GitHub, sans CI, passe).
 
-*Vérifié : 31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur. Le commit de la sonde `ci_en_retard`, de `deploy/ops/RUNNER.md` et de `deploy/runner/compose.yml` (28/09) est `afdb81a2`.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.
 
@@ -332,7 +332,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Ce qui compte comme fini.**
 
 - Un push sur `main` déclenche un déploiement sans que la machine du mainteneur soit allumée.
-- Le garde-fou d'exclusion du routeur `main` est préservé aux deux endroits (workflow et script).
+- Le garde-fou d'exclusion du routeur `main` est préservé dans `scripts/ci/deployer-backend.sh`, seul endroit où il vit depuis que le workflow appelle ce script (19/10).
 - La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé. — **fait le 28/09 : `deploy/ops/RUNNER.md`.**
 - Une panne du runner se voit : un courriel « chaîne de déploiement en retard » part dans les trois heures (sonde `ci_en_retard`, 28/09).
 
@@ -597,7 +597,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Rien n'existe. Le modèle de notice hérité de la bibliothéconomie du livre ne sait pas décrire ce matériel, et AnarBib ne fait pas exception. C'est le besoin **le plus mal couvert**, pour une part énorme de nos fonds.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Ce matériel n'a ni ISBN, ni éditeur, souvent ni auteur ni titre. Il est visuel autant que textuel : une affiche ne se résume pas à son océrisation. Le chantier commence par de la réflexion documentaire — que décrit-on, avec quoi, et pour qui — avant toute table.
 
@@ -766,7 +766,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Les dix locales sont à parité stricte de clés — 6 177 chacune, vérifiée en intégration continue depuis le 27/08. Mais les **conventions** de deux d'entre elles ne sont pas tranchées : le néerlandais est à l'état de brouillon, le grec reste à définir. Le test de parité ne voit pas ça : il compte les clés, pas leur justesse.
 
-*Vérifié : 31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond. **27/09** — `b425dfb1` a réécrit 18 valeurs `nl` (« u/uw » → « je/jouw », et deux « jullie » adressés à une seule personne → « je ») et 172 valeurs `el` (2e personne du pluriel → singulier), par substitutions écrites clé par clé (`scripts/i18n-it-de-nl-el-tu.cjs`), sous `DOC-ADDR-1`. Aucune personne de langue maternelle ne les a relues : le commit n'en cite aucune. La relecture du critère 2 doit commencer par ces 190 valeurs ; la table DE → PARA du script sert de feuille de relecture.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Une locutrice ou un locuteur natif reprend la charte de langage inclusif, décide de la forme neutre pour sa langue, et relit les 6 177 chaînes en priorité sur les écrans les plus vus.
 
@@ -788,7 +788,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `it.json` n'est pas conforme à la convention de l'astérisque final : les paires irrégulières comme `lettore` / `lettrice` ne se réduisent pas à `lettor*`. Le test de charte vérifie une seule chose sur l'italien — que `camerata` et `camerati` n'y figurent jamais, terme fasciste, échec dur — et rien d'autre.
 
-*Vérifié : [object Object]*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Décider du traitement des paires irrégulières avec un locuteur natif, puis l'appliquer aux chaînes concernées. C'est un travail de langue, pas de code.
 
@@ -853,7 +853,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Demande de Xavier le 08/09/2026, tranchée après débat.** `src/components/layout/index.jsx` aligne sur **une seule ligne** jusqu'à **douze liens** pour une coordination qui est aussi admin réseau : Catalogue, Je veux…, Bibliothèques, Cartographie, Thésaurus, Mon compte, Panneau (`canSeePainel`), Catalogage, Importations (`canSeeImportacoes`), Bibliothèque, Fédération, Réseau (`canSeeRede`). Et chaque page aligne ses onglets sur une ligne aussi : neuf à Mon compte, douze à Bibliothèque, quinze à Réseau. Tout est aplati : rien ne dit d'un coup d'œil ce qui est public, ce qui est à soi, ce qui est du travail de bibliothèque ou de réseau. Xavier proposait d'abord des menus **par rôle** (« Bibliothécaire », « Coordinateur ») ouverts **au survol** ; le débat a retenu autre chose sur les deux points, voir « ce qu'il faut faire ».
 
-*Vérifié : 08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** **Regrouper par nature, pas par rôle** — une coordination est aussi bibliothécaire et lectrice, un menu par rôle lui en montrerait deux pour elle seule et une bibliothécaire verrait un menu « Coordinateur » vide. Trois groupes : **Public** (Catalogue, Bibliothèques, Cartographie, Thésaurus), **Moi** (Mon compte, Je veux…), **Travail** (Panneau, Catalogage, Importations, Bibliothèque, Fédération, Réseau — chaque entrée soumise au même `canSee*` qu'aujourd'hui, le groupe n'apparaissant que s'il a une entrée ; le rôle qui ouvre chaque entrée peut être un sous-titre dans le menu). Le catalogue reste un lien direct, c'est la porte d'entrée publique. **Les menus s'ouvrent au clic ou à la touche Entrée, jamais au survol** : le survol n'existe ni au doigt (E9) ni au clavier (E1) ; `aria-haspopup`, `aria-expanded`, fermeture à Échap et au clic dehors, focus rendu au bouton. **Les onglets ne bougent pas dans ce lot** : un troisième niveau ferait pire, et les 51 intentions de « Je veux… » pointent déjà page + onglet exacts ; un regroupement des onglets, s'il s'impose, sera un lot à part. À livrer avec : le registre `intentions.js` relu (les chemins ne changent pas, les libellés de groupe entrent dans ses mots-clés), les dix locales (trois libellés de groupe, les sous-titres de rôle), le Manuel v5 et la formation BLMF (89 diapositives montrent la barre actuelle).
 
@@ -1271,18 +1271,18 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 | | | | |
 |---|---|---|---|
-| **I2** | Achever la bascule vers l'auto-hébergement | `P1` | Ouvert |
+| **I2** | Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09) | `P1` | Ouvert |
 | **I21** | Ce qui doit être vrai avant la bascule chez Les Herbes Folles, et ne l'est pas encore — huit conditions, aucune technique difficile | `P1` | Ouvert |
 | **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
 | **I34** | Faire savoir quand la publication du front échoue (Deploy Pages non bloquant) | `P1` | Ouvert |
 
-#### I2 — Achever la bascule vers l'auto-hébergement
+#### I2 — Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09)
 
 `P1` Prioritaire · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : administration système
 
 **État.** La pile est réduite de douze à **six conteneurs** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), les versions sont épinglées, `bootstrap.sh` a été exécuté pour de vrai le 26/08 avec huit défauts relevés et corrigés, et la répétition du 18/08 a rejoué 124 migrations et restauré un dump de production en 17 secondes. Reconstruction complète mesurée : **25 minutes**.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Ce qui reste : découpler la chaîne de déploiement de l'intégration continue (**de l'extraction, pas de la création** — `scripts/ci/deployer-backend.sh` existe déjà), poser un proxy inverse avec tunnel devant la pile, passer des tags aux empreintes `sha256`, et refaire la répétition à froid un mois plus tard pour vérifier que rien n'a divergé. **Ajouté le 08/09/2026, à poser à l'hébergeur pressenti (Les Herbes Folles), ou à un ou plusieurs autres** : **un Jitsi à nous.** La visio d'entraide et d'assemblées vivait chez Autistici/Inventati ; A/I a été désigné « SDGT » par les États-Unis le 26/08 et a fermé ; le 08/09 on a basculé sur Framatalk (Framasoft, Hetzner en Allemagne) — un tiers de confiance, mais un tiers, et sur une infrastructure qu'une mesure du même genre peut atteindre. Un Jitsi hébergé par nous (ou par un collectif d'hébergement allié, ou réparti entre plusieurs) est la seule sortie complète. Ce n'est pas la même charge que le reste de la pile : le videobridge consomme de la bande passante montante à proportion des participantes, et une assemblée de vingt personnes n'est pas une aide à deux. **Questions à poser** : la VM peut-elle tenir un Jitsi (RAM, bande passante, ports UDP 10000) ; préfèrent-ils une seconde machine ; un autre hébergeur allié (Chapril, Systemli, une instance amie) accepterait-il de porter la visio pour le réseau, quitte à ce qu'elle ne vive pas au même endroit que la base ? Le même jour, **le fichier de fond de carte** (`map-tiles/planet-z12.pmtiles`, 18 Go, à réextraire en z15 depuis la VM : 138 Go) est entré dans ce qui déménage — à compter dans le disque demandé (I21).
 
@@ -1296,7 +1296,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Piège déjà rencontré : les rôles de service n'ont pas de mot de passe dans l'image `supabase/postgres` (SQLSTATE 28P01 en boucle), `postgres` n'est pas superutilisateur (c'est `supabase_admin`), `authenticator` est réservé, et un `set -e` dans la boucle tue le script au premier rôle en échec.
 - La question d'un Jitsi (chez l'hébergeur, chez un allié, ou réparti) a été posée, et la réponse est consignée ici — même si c'est « non ».
 
-**Dépendances.** **Gelé sur la production jusqu'au 14/09.** Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.
+**Dépendances.** Gel levé le 24/09. Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
@@ -1404,7 +1404,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Un projet d'acte est rédigé et archivé. Il n'a pas été adopté. **C'est le préalable politique à l'ouverture de tout canal d'encaissement : rien ne bouge avant.**
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** L'acte doit faire quatre choses : créer le fonds, désigner nommément la personne qui tient la clé Pix, désigner la personne dépositaire de la part européenne, et fixer le principe du rapport annuel.
 
@@ -1427,7 +1427,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Liberapay est en ligne et a reçu son premier don le 27/08. L'encart « soutenir financièrement » est publié dans les dix locales et nomme Liberapay comme unique canal ouvert. **Pix et IBAN dorment** dans un bloc de commentaire HTML entre les marqueurs `ENCART-DORMANT-START` et `ENCART-DORMANT-END`. Wero est en attente d'une réponse de l'établissement bancaire.
 
-*Vérifié : 31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Côté Brésil : une clé aléatoire dédiée créée par la personne mandatée, et l'ouverture d'un compte au numéro d'entreprise — une coopérative de crédit est plus cohérente qu'une banque commerciale. Côté Europe : décider quel compte reçoit. Puis remplir les gabarits, retirer les deux marqueurs de commentaire, et supprimer les deux paragraphes « en cours d'ouverture ».
 

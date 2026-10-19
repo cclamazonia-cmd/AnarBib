@@ -3482,7 +3482,7 @@
       "f": {
         "fr": [
           "Un push sur `main` déclenche un déploiement sans que la machine du mainteneur soit allumée.",
-          "Le garde-fou d'exclusion du routeur `main` est préservé aux deux endroits (workflow et script).",
+          "Le garde-fou d'exclusion du routeur `main` est préservé dans `scripts/ci/deployer-backend.sh`, seul endroit où il vit depuis que le workflow appelle ce script (19/10).",
           "La procédure de remise en route du runner est écrite pour quelqu'un qui ne l'a pas installé. — **fait le 28/09 : `deploy/ops/RUNNER.md`.**",
           "Une panne du runner se voit : un courriel « chaîne de déploiement en retard » part dans les trois heures (sonde `ci_en_retard`, 28/09)."
         ],
@@ -3501,10 +3501,16 @@
         "CLAUDE.md, piège connu n°1",
         "REPRISE_bascule_autohebergee_2026-08-26"
       ],
-      "verif": {
-        "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur. Le commit de la sonde `ci_en_retard`, de `deploy/ops/RUNNER.md` et de `deploy/runner/compose.yml` (28/09) est `afdb81a2`.",
-        "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor. O commit da sonda `ci_en_retard`, de `RUNNER.md` e de `compose.yml` (28/09) é `afdb81a2`."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — 7 occurrences de `runs-on: anarbib-local` dans `.forgejo/workflows/`. Rien n'a bougé. **28/09, prod** : migration `20260928095045` appliquée par la CI (`created_by` vide), CHECK des incidents élargie à `ci_en_retard`, health-probe déployé (marqueur `11da0df8`) ; premier tick horaire à 13 h 05 UTC+2 : la sonde a lu les incidents ouverts, n'en a trouvé ni ouvert aucun — la chaîne était à l'heure. `deploy/ops/RUNNER.md` et `deploy/runner/compose.yml` au dépôt. Trois des quatre critères tenus ; reste le premier (la machine), à la main de Xavier. **27-28/09** — `4ac70cc0` : la suite `ci_en_retard_kind_tests` exerce la CHECK des incidents contre la base (le kind `ci_en_retard` admis, un kind inconnu refusé, les anciens gardés) — la garde vitest ne lisait que le texte de la migration ; et les journaux Docker du runner en conteneur tournent (3 × 10 Mo). Le hook `.githooks/pre-push` vient de `1737bee9`, limité à Codeberg par `8bf62c1d`. `51f6dcd9` (27/09) : le banc du script de déploiement (`deployer-backend-marqueur.test.js`) rougissait à chaque `npm test` sous Windows (9 cas, code 127), parce que `bash` y lance WSL ; il prend Git Bash, ou se saute sans lui, et la CI Linux garde `bash`. **01/10** — preuve par l'usage : deux runs cassés par l'arrêt du poste. Le 30/09 au soir, le `backend` de F16 a bloqué une heure (Codeberg lent, marqueur non repoussé) — tout était pourtant déployé ; le 01/10 à 7 h 55, le poste s'est arrêté une minute après le départ du `sql-tests` de F17 : Docker injoignable, runner coupé, Codeberg a affiché le job « en cours » pendant 11 heures, jusqu'au retour du poste à 18 h 47 ; deux conteneurs orphelins relancés par Docker au redémarrage, retirés à la main. F17 n'a été déployé qu'à 18 h 55. La CI vit et meurt avec la machine du mainteneur. Le commit de la sonde `ci_en_retard`, de `deploy/ops/RUNNER.md` et de `deploy/runner/compose.yml` (28/09) est `afdb81a2`.",
+          "pt": "31/08 — 7 ocorrências de `runs-on: anarbib-local`. Nada mudou. **28/09, produção** : migração `20260928095045` aplicada pela CI, CHECK alargada a `ci_en_retard`, health-probe implantado; primeiro tique horário às 13h05: a sonda não abriu incidente — a cadeia estava em dia. Três dos quatro critérios cumpridos; falta a máquina, decisão de Xavier. **27-28/09** — `4ac70cc0`: a suíte `ci_en_retard_kind_tests` testa a CHECK dos incidentes contra o banco (o kind `ci_en_retard` aceito, um kind desconhecido recusado, os antigos mantidos), e os logs Docker do runner em contêiner giram (3 × 10 MB). O hook `.githooks/pre-push` vem de `1737bee9`, limitado à Codeberg por `8bf62c1d`. `51f6dcd9` (27/09): o teste do script de implantação (`deployer-backend-marqueur.test.js`) ficava vermelho a cada `npm test` no Windows (9 casos, código 127), porque ali `bash` abre o WSL; agora usa o Git Bash, ou é pulado sem ele, e a CI Linux mantém `bash`. **01/10** — dois runs quebrados pela parada do posto (o de F17 ficou « em curso » 11 horas). A CI vive e morre com a máquina do mantenedor. O commit da sonda `ci_en_retard`, de `RUNNER.md` e de `compose.yml` (28/09) é `afdb81a2`."
+        },
+        {
+          "fr": "**19/10 — toujours sur le poste ; la fiche s'arrêtait au 01/10.** Le runner `anarbib-local` tourne dans le WSL du poste (`ACCATTONE`) : 520 tâches reçues depuis le 12/10. **La machine est décidée depuis le 28-29/09** : une machine dédiée sous Debian, chez Xavier, dont le runner est le premier rôle — elle remplace « l'autre portable / la VM des Herbes Folles » (qui, de toute façon, n'a que 14,3 Go libres, I21). Ce que coûte le poste partagé, depuis : les seuils des suites SQL indexés sur la charge (`187ff8ac`, 15/10), des tests JS qui expirent au hasard (`a263ce85`, `9cbf470c`, `aa155a1e` : 60 s et une relance en CI, 19/10), un T14 rouge sous un pic le 19/10 ; deux gels du runner (panne de Codeberg du 12/10, mise à jour de Docker Desktop). Un seul incident `ci_en_retard` en base (01/10). **Critère 2 réécrit** : le garde-fou `_shared`/`main` ne vit plus qu'à un endroit, `scripts/ci/deployer-backend.sh`, que le workflow appelle.",
+          "pt": "**19/10 — sempre no posto (520 tarefas desde 12/10). Máquina decidida em 28-29/09: uma máquina dedicada Debian, o runner primeiro.** A carga compartilhada custa: limiares SQL indexados na carga, testes JS que expiram, dois congelamentos. O guarda-fio vive só em `deployer-backend.sh`."
+        }
+      ]
     },
     {
       "id": "B36",
@@ -3885,6 +3891,12 @@
       "r": [
         "docs/CHANTIERS_OUVERTS.md §3",
         "VEILLE_leftovers_maydayrooms_2026-08-19"
+      ],
+      "verif": [
+        {
+          "fr": "**19/10 — la fiche disait « rien n'existe » ; un premier modèle à plat existe depuis le printemps au moins.** Types `tract`, `cartaz` et `zine` admis par `books_tipo_material_check` (déjà au baseline du 10/05), sur `books` comme sur `book_drafts` ; une douzaine de colonnes propres en production (`tract_campaign`, `emitter_org`, `approximate_date`, `physical_format`, `print_technique`, `physical_state`, `recto_verso`, `diffusion_place`, `zine_print_run`, `zine_technique`, `zine_format`) ; au catalogage, une section « matériel éphémère militant : tract + affiche » et une section « zine » (`fieldRegistry.js`), tracts et affiches non empruntables, ISBD zone 0 « affiche » et zone 5 « pièce unique » (`bookDraft.js`), des guides par type dans les locales, le type deviné par l'OCR. En production : **4 tracts et 1 affiche publiés**, 0 zine, 10 tracts et 8 affiches en brouillon ; deux notices du 05/10 remplissent les champs propres. **Ce qui manque toujours** : le cadrage documentaire, la discussion avec un autre fonds, l'épreuve sur 50 pièces, les autocollants (aucun type). Non vérifié : l'affichage de ces champs dans l'OPAC.",
+          "pt": "**19/10 — a ficha dizia « nada existe »; um primeiro modelo plano existe pelo menos desde a primavera**: tipos `tract`, `cartaz`, `zine`, uma dúzia de campos próprios, seções de catalogação, ISBD, guias. Em produção: 4 panfletos e 1 cartaz publicados, 18 rascunhos. Falta: o enquadramento escrito, a conversa com outro acervo, a prova em 50 peças, os adesivos."
+        }
       ]
     },
     {
@@ -4028,10 +4040,16 @@
         "docs/CHANTIERS_OUVERTS.md §5",
         "docs/notes-audit/anarbib-charte-langage-inclusif-v2.md"
       ],
-      "verif": {
-        "fr": "31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond. **27/09** — `b425dfb1` a réécrit 18 valeurs `nl` (« u/uw » → « je/jouw », et deux « jullie » adressés à une seule personne → « je ») et 172 valeurs `el` (2e personne du pluriel → singulier), par substitutions écrites clé par clé (`scripts/i18n-it-de-nl-el-tu.cjs`), sous `DOC-ADDR-1`. Aucune personne de langue maternelle ne les a relues : le commit n'en cite aucune. La relecture du critère 2 doit commencer par ces 190 valeurs ; la table DE → PARA du script sert de feuille de relecture.",
-        "pt": "31/08 — os dez arquivos da carta v2 existem desde 05/06, `nl` e `el` incluídos; mas dentro deles a convenção `nl` está marcada « provisória » e a `el` « a definir com uma pessoa falante de grego militante ». Os documentos existem, as decisões não. **27/09** — `b425dfb1` reescreveu 18 valores `nl` («u/uw» → «je/jouw», e dois «jullie» dirigidos a uma só pessoa → «je») e 172 valores `el` (2ª pessoa do plural → singular), por substituições escritas chave por chave (`scripts/i18n-it-de-nl-el-tu.cjs`), sob `DOC-ADDR-1`, sem revisão de falante nativo. A revisão do critério 2 deve começar por esses 190 valores; a tabela DE → PARA do script serve de folha de revisão."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — les dix fichiers `anarbib-charte-langage-inclusif-v2-*.md` existent depuis le 05/06, `nl` et `el` compris ; mais dedans, la convention `nl` est marquée « provisoire » et la `el` « à définir avec une personne locutrice grecque militante ». Les documents existent, les décisions non : le constat tient sur le fond. **27/09** — `b425dfb1` a réécrit 18 valeurs `nl` (« u/uw » → « je/jouw », et deux « jullie » adressés à une seule personne → « je ») et 172 valeurs `el` (2e personne du pluriel → singulier), par substitutions écrites clé par clé (`scripts/i18n-it-de-nl-el-tu.cjs`), sous `DOC-ADDR-1`. Aucune personne de langue maternelle ne les a relues : le commit n'en cite aucune. La relecture du critère 2 doit commencer par ces 190 valeurs ; la table DE → PARA du script sert de feuille de relecture.",
+          "pt": "31/08 — os dez arquivos da carta v2 existem desde 05/06, `nl` e `el` incluídos; mas dentro deles a convenção `nl` está marcada « provisória » e a `el` « a definir com uma pessoa falante de grego militante ». Os documentos existem, as decisões não. **27/09** — `b425dfb1` reescreveu 18 valores `nl` («u/uw» → «je/jouw», e dois «jullie» dirigidos a uma só pessoa → «je») e 172 valores `el` (2ª pessoa do plural → singular), por substituições escritas chave por chave (`scripts/i18n-it-de-nl-el-tu.cjs`), sob `DOC-ADDR-1`, sem revisão de falante nativo. A revisão do critério 2 deve começar por esses 190 valores; a tabela DE → PARA do script serve de folha de revisão."
+        },
+        {
+          "fr": "**19/10 — le fond tient, les chiffres ont vieilli.** Onze locales depuis le 14/10 (le roumain, `49b479ae`), **7 751 clés chacune** (6 177 dans la fiche). Dans la charte maîtresse, `nl` reste « Provisoire — à valider en communauté » et `el` « À définir » ; depuis le 21/08, deux commits seulement touchent la charte (pt-BR le 05/10, `ro` le 14/10), aucun sur `nl` ni `el`, et aucune relecture native depuis le passage au tutoiement du 27/09. La liste néerlandaise validée par Ludwig le 09/09 est celle des **sujets du thésaurus FICEDL**, pas les conventions de l'interface. Au passage, la charte est en retard sur la CI : sa section « couverture des tests » dit `nl`/`el` hors CI, or `i18n.test.js` les inclut.",
+          "pt": "**19/10 — o fundo se mantém, os números envelheceram**: onze locales, 7 751 chaves cada; carta `nl`/`el` inalterada; a lista validada por Ludwig em 09/09 é a do tesauro FICEDL, não as convenções da interface."
+        }
+      ]
     },
     {
       "id": "E4",
@@ -4082,6 +4100,10 @@
         {
           "fr": "20/09 — mesuré dans `it.json` : 318 clés portent une forme en -tore/-trice, et **quatre conventions coexistent** — barre oblique abrégée (`lettore/trice` ×55, `autore/trice` ×29), astérisque (`amministratori*` ×19, `coordinatori*` ×6), masculin nu (`autore` ×20, `lettore` ×15, `editore` ×15) et paire développée (`autore/autrice` ×3). La fiche parlait de paires qui « ne se réduisent pas à `lettor*` » ; l'état réel est une absence de convention unique. Les « trois chaînes restées en français » n'ont pas été retrouvées : une heuristique (valeur it identique à la valeur fr) rend zéro, ce qui ne prouve rien. La décision reste à prendre avec un·e locuteur·rice, comme la fiche le dit.",
           "pt": "20/09 — medido em `it.json`: 318 chaves têm uma forma em -tore/-trice, e **quatro convenções coexistem** — barra abreviada (`lettore/trice` ×55), asterisco (`amministratori*` ×19), masculino nu (`autore` ×20, `lettore` ×15) e par desenvolvido (`autore/autrice` ×3). As « três cadeias que ficaram em francês » não foram reencontradas. A decisão continua a tomar-se com uma pessoa falante, como a ficha diz."
+        },
+        {
+          "fr": "**19/10 — la décision était déjà écrite ; reste à l'appliquer.** La charte maîtresse (§ Italien) porte depuis la v2 du 05/06, statut « Adoptée » : astérisque pour les paires régulières, **slash abrégé pour les irrégulières** (`lettore/trice`, `autore/trice`, `amministratore/trice`, `coordinatore/trice`, pluriel `lettori/trici`), `lettor*` jugé fautif — le critère 1 est tenu. Dans `it.json` : 143 formes conformes ; **28 fautives** (`amministratori*` ×19, `coordinatori*` ×6, `lettore*` ×3 — les mêmes qu'au 20/09), 6 paires développées, des masculins nus à trier (`autore` 23, `lettore` 19, `lettori` 15 ; `editore` 24, souvent la maison d'édition). Aucun test ne fait respecter la règle. Le « comment » devient : appliquer la règle, puis faire relire l'application par une personne italophone — plus « décider ». Critère 3 (trois chaînes restées en français) non revérifié.",
+          "pt": "**19/10 — a decisão já estava escrita (carta v2, 05/06: barra abreviada para os pares irregulares); falta aplicá-la**: 28 formas erradas em `it.json`, as mesmas de 20/09, 6 pares desenvolvidos, masculinos a triar."
         }
       ]
     },
@@ -4468,8 +4490,8 @@
         "sysadmin"
       ],
       "t": {
-        "fr": "Achever la bascule vers l'auto-hébergement",
-        "pt": "Concluir a migração para a auto-hospedagem"
+        "fr": "Tenir la pile auto-hébergée prête — miroir, banc, instances tierces ; la production reste sur le cloud (orientation du 29/09)",
+        "pt": "Manter a pilha auto-hospedada pronta — espelho, bancada, instâncias de terceiros; a produção fica na nuvem (orientação de 29/09)"
       },
       "v": {
         "fr": "La pile est réduite de douze à **six conteneurs** (`db`, `rest`, `auth`, `storage`, `functions`, `caddy`), les versions sont épinglées, `bootstrap.sh` a été exécuté pour de vrai le 26/08 avec huit défauts relevés et corrigés, et la répétition du 18/08 a rejoué 124 migrations et restauré un dump de production en 17 secondes. Reconstruction complète mesurée : **25 minutes**.",
@@ -4500,8 +4522,8 @@
         ]
       },
       "dep": {
-        "fr": "**Gelé sur la production jusqu'au 14/09.** Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.",
-        "pt": "**Congelado na produção até 14/09.** Depende de **I1**. A fazer antes de alugar o que quer que seja: retomar a conexão autenticada em local, bloqueada por uma resolução IPv6 sem rota — **esse bloqueio provavelmente desapareceu sozinho**, verificá-lo custa cinco minutos e pode poupar uma máquina montada à toa."
+        "fr": "Gel levé le 24/09. Dépend de **I1**. À faire avant de louer quoi que ce soit : reprendre la connexion authentifiée en local, bloquée par une résolution IPv6 sans route — **ce blocage a probablement disparu de lui-même**, le vérifier coûte cinq minutes et peut épargner une machine montée pour rien.",
+        "pt": "Congelamento levantado em 24/09. Depende de **I1**. A fazer antes de alugar o que quer que seja: retomar a conexão autenticada em local, bloqueada por uma resolução IPv6 sem rota — **esse bloqueio provavelmente desapareceu sozinho**, verificá-lo custa cinco minutos e pode poupar uma máquina montada à toa."
       },
       "r": [
         "docs/CHANTIERS_OUVERTS.md §2",
@@ -4522,6 +4544,10 @@
         {
           "fr": "24/09 — le gel « jusqu au 14/09 » est levé ; état remis à « ouvert ». Restent au « comment » : proxy inverse avec tunnel, empreintes `sha256`, répétition à froid, la question du Jitsi — et I21 devant.",
           "pt": "24/09 — congelamento levantado; estado reposto em « aberto »."
+        },
+        {
+          "fr": "**19/10 — la fiche ignorait l'orientation du 29/09 et presque tout ce qui a suivi le 24/09.** *L'objectif* : Xavier juge intenable d'exploiter seul une production auto-hébergée ; **la production reste sur Supabase cloud**, l'auto-hébergement sert de miroir non exposé, de banc, de base aux sauvegardes et aux instances tierces (`deploy/VM.md` : « la production reste sur le cloud ») — d'où le titre réécrit ce jour ; « la fin de la dépendance à un hébergeur tiers » n'est plus l'objectif de cette fiche. *Proxy et tunnel* : faits — Caddy dans `deploy/compose.yml`, exemples rathole et WireGuard (`deploy/tunnel/`, depuis le 06/09), et une pile complète sert `essai.anarbib.is` derrière Caddy et un tunnel Pangolin depuis la mi-octobre (VM d'ASR2026, PR #34-40). *Empreintes* : **non** — aucun `@sha256` dans la pile, `deploy/.env.example` en tags, `CADDY_TAG=2` flottant (seules les images de la CI ont été épinglées, le 19/10, `f5aa5c94`). *Reconstruction refaite un mois après* : probablement tenue (ASR2026 du 06 au 15/09, dump réel le 21/09, installation complète de la VM par un tiers en octobre) — à trancher par Xavier. *Jitsi* : la question n'a jamais été posée. *L'hébergeur pressenti* : Les Herbes Folles n'offrent que 14,3 Go libres pour ~55 nécessaires (I21, 18/10). Livré depuis le 24/09 sans être consigné ici : triggers d'authentification (`cf641ca8`), ressources du réseau tirées d'une publication Codeberg (`545a4480`), `fond-de-carte.sh` (`0c854dda`), sauvegarde depuis la VM (`98483209`), Storage épinglé en v1.78.0 (`4314fee9`), versions stables vAAAA.MM (`611eb9d5`, 17/10), `deploy/VM.md`.",
+          "pt": "**19/10 — a ficha ignorava a orientação de 29/09: a produção fica na nuvem**, a auto-hospedagem serve de espelho, bancada e instâncias de terceiros (título reescrito). Proxy e túnel feitos (`essai.anarbib.is`); impressões `sha256` não; reconstrução provavelmente cumprida; Jitsi nunca perguntado; Les Herbes Folles pequenas demais (I21)."
         }
       ]
     },
@@ -4571,6 +4597,12 @@
       "r": [
         "PLAN_financement_AnarBib_2026-08-25 §9",
         "MINUTA_ata_fundo_anarbib_CCLA_2026-08-26"
+      ],
+      "verif": [
+        {
+          "fr": "**19/10 — « rien ne bouge avant l'acte » ne décrit plus la situation.** Les canaux se sont ouverts sans que l'adoption de l'acte soit consignée nulle part : une caisse commune avec le **CCLA** existe depuis le 27/08 (Liberapay), le **Pix au CNPJ du CCLA** est ouvert et publié depuis le 30/08 (dépôt vitrine `856e5f5`), le dispositif est dit « définitif » le 31/08 (`28b11aa` : deux canaux publics, virement sur demande), et la caisse a un nom public, « Fundo AnarBib » (`FINANCES.md`, comptes publiés, dernière mise à jour 12/10 : 8,00 € bruts reçus, rien dépensé). Ce qui reste invérifiable d'ici : l'adoption de l'acte lui-même (le projet `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26` n'est ni au dépôt ni sur le poste) ; la clé Pix est celle de l'association, pas d'une personne nommée, ce qui change la nature du critère 2 ; et `FINANCES.md` laisse à l'assemblée du CCLA la question des frais avancés par une personne. **À Xavier** : l'acte a-t-il été adopté (si oui, où est-il archivé) ? sinon, l'article 1 a-t-il servi de base à l'ouverture, comme le critère 4 le permettait ?",
+          "pt": "**19/10 — « nada se move antes do ato » não descreve mais a situação**: caixa comum com o CCLA desde 27/08, Pix no CNPJ do CCLA aberto e publicado desde 30/08, nome público « Fundo AnarBib ». A adoção do ato não está consignada em lugar nenhum: pergunta a Xavier."
+        }
       ]
     },
     {
@@ -4620,10 +4652,16 @@
         "PLAN_financement_AnarBib_2026-08-25",
         "FINANCES.md"
       ],
-      "verif": {
-        "fr": "31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.",
-        "pt": "31/08 — os marcadores `ENCART-DORMANT-START` estão nos dez arquivos do repositório vitrine."
-      }
+      "verif": [
+        {
+          "fr": "31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.",
+          "pt": "31/08 — os marcadores `ENCART-DORMANT-START` estão nos dez arquivos do repositório vitrine."
+        },
+        {
+          "fr": "**19/10 — les critères sont tenus depuis le 30-31/08 ; la vérif du 31/08 a été écrite juste avant.** Le **Pix au CNPJ du CCLA est ouvert** depuis le 30/08 (`856e5f5`, « deuxième canal ») et publié en ligne (page « Contribuer », revérifiée ce jour) ; le bloc dormant a été retiré le 31/08 à 19 h 32 (`28b11aa`, « dispositif définitif — deux canaux publics, virement sur demande ») — plus aucun `ENCART-DORMANT` ni au dépôt ni en ligne ; le générateur des comptes a suivi chaque édition de `FINANCES.md` (dernière le 12/10). Deux choix à consigner à la clôture : **l'IBAN n'est pas publié** (sur demande, à `anarbib@proton.me`), contrairement à la recommandation de la fiche ; **Wero n'apparaît nulle part**, la réponse de la banque n'a pas été retrouvée. Clôture proposée à Xavier.",
+          "pt": "**19/10 — critérios cumpridos desde 30-31/08**: Pix no CNPJ do CCLA aberto e publicado, bloco dormente retirado (`28b11aa`). IBAN sob pedido; Wero ausente. Fechamento proposto a Xavier."
+        }
+      ]
     },
     {
       "id": "K3",
@@ -5041,10 +5079,16 @@
         "anarbib-rede-perimetre-admins (doctrine : une porte se pose dans la page du geste, pas dans la barre)",
         "K7 (formation BLMF)"
       ],
-      "verif": {
-        "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
-        "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
-      }
+      "verif": [
+        {
+          "fr": "08/09 — barre relue : sept liens publics ou personnels + jusqu'à six liens de travail selon `canSee*` (`roles.js` : Painel et Catalogage dès `librarian`, Importations et Bibliothèque dès `coordenador`, Fédération pour tout rôle, Réseau pour l'admin réseau). Onglets comptés : Mon compte 9, Bibliothèque 12, Réseau 15, Fédération 8. Le lien Réseau reste réservé aux admins (décision du 02/09) : le regroupement n'y change rien. **15/09 — un des six liens de Travail a changé de nom** : « Bibliothèque » (`/biblioteca`) s'appelle « Gestion de la bibliothèque » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`) — deux liens homonymes au singulier et au pluriel ne disaient pas ce qu'on y trouve. Le groupe Travail listera donc Panneau, Catalogage, Importations, **Gestion de la bibliothèque**, Fédération, Réseau ; les 89 diapositives BLMF montrent l'ancien mot et la barre d'avant : à reprendre dans ce lot.",
+          "pt": "08/09 — barra relida : sete ligações públicas ou pessoais + até seis de trabalho segundo `canSee*`. Separadores : Minha conta 9, Biblioteca 12, Rede 15, Federação 8. Rede continua reservada às admins (02/09). **15/09 — uma das seis ligações de Trabalho mudou de nome** : « Biblioteca » (`/biblioteca`) chama-se « Gestão da biblioteca » (Xavier, `09165764`, REGISTRE 0.36 `PUBLIB-NAV-2`). O grupo Trabalho listará Painel, Catalogação, Importações, **Gestão da biblioteca**, Federação, Rede ; os 89 diapositivos BLMF mostram a palavra antiga : retomar neste lote."
+        },
+        {
+          "fr": "**19/10 — rien n'est livré, la fiche est juste ; le contexte a bougé.** La barre aligne toujours ses liens à plat (`components/layout/index.jsx`), sans groupe ni `aria-haspopup`. Depuis le 15/09 : **E9 est clos (05/10)** ; le bandeau est collant depuis le 11/10 (E37), à prendre en compte pour les menus ; onglets recomptés dans le code avant filtrage par rôle — Mon compte 9, Gestion de la bibliothèque **15** (12 dans la fiche, Correspondance comprise), Réseau **12** (15 dans la fiche).",
+          "pt": "**19/10 — nada entregue; E9 fechado (05/10), banner fixo desde 11/10 (E37); abas recontadas: Biblioteca 15, Rede 12.**"
+        }
+      ]
     },
     {
       "id": "G15",
