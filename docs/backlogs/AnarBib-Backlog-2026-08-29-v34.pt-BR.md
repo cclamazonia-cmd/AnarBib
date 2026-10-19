@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-18** · 52 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 2
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 6
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 7
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 18 de outubro de 2026
 
-**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3.
+**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10** — **51 itens, 259 fechamentos**.
 
-**Frescor dos constatos em 2026-10-18.** **41 itens de 52** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C4, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **40 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -423,7 +423,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
-| **C4** | Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09) | `P2` | Aberto |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
 | **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
@@ -436,7 +435,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** As 19 migrações `conventions_*` estão aplicadas desde 21/08: os referenciais estão normalizados, as mecânicas seguras foram passadas, a fila de verificação existe e o aplicativo permite trabalhar nela. **O que resta é a parte que nenhuma máquina faz.**
 
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Retomar as três tabelas de revisão do esquema `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — e tratá-las ficha por ficha a partir da Oficina de autoridades.
 
@@ -451,27 +450,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Faz-se no aplicativo, sem migração. É um canteiro de biblioteconomia, aberto a quem sabe catalogar.
 
 *Remissões : `AUDIT_conventions_catalographiques_2026-08-20` · `REGISTRE §37 CONV`*
-
-#### C4 — Preencher os países ausentes das fichas de autoridade (674 de 1 505 em 27/09)
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
-
-**Estado.** **Em 29/08, 722 fichas de 1 305 (55 %) não tinham `country`; em 27/09, depois de três passagens (Wikidata `b418e149`, Library of Congress `abaa4755`, IdRef `62553dc6`), 674 de 1 505 (45 %).** Ora, é `country` que comanda a regra de entrada do nome: sem ele, a detecção dos duplos sobrenomes hispânicos só vê uma fração dos casos. Os 22 apontamentos são um **piso**, não um total.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** **Decisão de Xavier em 08/10: enriquecimento Wikidata / LC / IdRef, proposto em revisão** — país de autoridade externa quando a identidade é segura, posto como proposta na Oficina, nunca de ofício.
-
-**Por que importa.** É o pré-requisito duro de toda a cadeia de convenções: `CONV-7` faz de `country` em ISO 3166-1 α-2 uma condição, e `CONV-3` faz a caixa ser comandada pela língua. Um catálogo com 45 % sem país (27/09) aplica as próprias regras pela metade.
-
-**O que conta como terminado.**
-
-- A proporção de fichas sem `country` caiu abaixo de 20 %.
-- A detecção dos duplos sobrenomes foi reexecutada e a nova lista passou por revisão humana.
-
-**Dependências.** Pré-requisito da segunda passagem de **C3**.
-
-*Remissões : `AUDIT_conventions_catalographiques_2026-08-20 A5` · `REGISTRE §37 CONV-7`*
 
 #### C15 — Corrigir oito registros da BTL, com o livro na mão
 
@@ -1890,6 +1868,7 @@ CI verde. |
 | D14 | 2026-10-16 | **Fechado em 16/10**. Receita: 86 e 96 → «mesma edição» (SHA-256 idênticos aos recursos 77 e 78); Guérin → 0 «mesma edição»; os três PDF conhecidos (Anarres, Proyección, RyR) achados pela ferramenta → «outra edição» com a edição achada; empréstimo controlado excluído. Teste com 14 casos. |
 | D17 | 2026-10-16 | **Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`. |
 | F25 | 2026-10-17 | **Fechado em 17/10 por decisão de Xavier, depois da prova real e da sua correção.** Em 09/10, 72 envios em dois segundos, **58 perdidos**; nessa noite (`6b03ebe4`) o transporte repete um 429 e cadencia a 8/s. **Em 17/10 às 03h45 UTC a prova real chega sozinha**: catorze propostas resolvidas de uma vez, 72 e-mails, **0 perdido**, mas **82 respostas 429** apanhadas pela repetição, uma à última tentativa: a cadência valia por isolado. **Correção de 17/10 (`a24b669e`)**: uma cadência comum a todos os isolados (`private.mail_cadence`, `public.fn_mail_cadence_creneau`, service_role só); cada envio reserva o seu horário na base; recurso à cadência local se a reserva falhar. Dois retoques: a tabela classificada para a cópia de segurança (`af866530`) e o banco de `register` (`bdad9b36`). **Verificado em produção às 23 h 27 (Paris)**: 501 migrações = 501, aplicada pela CI, função fechada a `anon` e `authenticated`, `deployed-functions` em `bdad9b36`. |
+| C4 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier, critério 1 retirado, critério 2 cumprido.** De 722 fichas de autoridade sem país em 1 305 (29/08) a 677 em 1 496 (45 %): três passagens automáticas em setembro, depois a regra de Xavier (08/10) — país só com identidade segura, sempre como **proposta** no Ateliê; dezesseis propostas aplicadas por Xavier em 18/10. **Critério 1 (« abaixo de 20 % ») retirado**: as fontes abertas não dão mais nada seguro; o resto vai para a revisão humana de **C3**. **Critério 2 cumprido**: a detecção dos sobrenomes duplos hispânicos, refeita em leitura sobre a produção, dá **23 candidatas**, versadas no lote `autorite_patronyme` (`796f0379`) com um parecer: quinze « sobrenome duplo provável », propostas invertidas; oito « prenome composto ou inicial provável », propostas sem mudança. **Verificado em produção às 12 h 59 (Paris)**. A triagem se faz no Ateliê (C3). |
 
 ---
 
@@ -1921,4 +1900,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-18. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 52 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
