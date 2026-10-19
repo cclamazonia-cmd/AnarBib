@@ -19,6 +19,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { appelantAdministreLeReseau } from "../_shared/core/admin-reseau.ts";
 import { createClient } from '../_shared/deps.ts';
+import { fetchSortant, lireTexteBorne } from "../_shared/core/adresse-sortante.ts";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const SUPABASE_SERVICE_ROLE_KEY = secretKey() || "";
@@ -78,13 +79,15 @@ function looksConfirmed(capabilityKey, status, bodyText, contentType) {
   }
   return false;
 }
+// 19/10/2026 : l'adresse d'un partenaire est saisie, et ses redirections lui
+// appartiennent. Chaque saut passe par fetchSortant (adresses publiques
+// seulement, redirections revérifiées) ; le corps est lu borné (MAX_OCTETS_SONDE).
+const MAX_OCTETS_SONDE = 2 * 1024 * 1024;
 async function fetchWithTimeout(url, timeoutMs = 12000) {
   const controller = new AbortController();
   const timer = setTimeout(()=>controller.abort(), timeoutMs);
   try {
-    return await fetch(url, {
-      method: "GET",
-      redirect: "follow",
+    return await fetchSortant(url, {
       signal: controller.signal,
       headers: {
         "user-agent": "AnarBib probe-partner-catalog/1.0",
@@ -177,7 +180,7 @@ Deno.serve(async (req)=>{
         const response = await fetchWithTimeout(endpointUrl);
         httpStatus = response.status;
         contentType = response.headers.get("content-type") || "";
-        const rawText = await response.text();
+        const rawText = await lireTexteBorne(response, MAX_OCTETS_SONDE);
         responseExcerpt = excerptText(rawText, 500);
         probeOk = looksConfirmed(capability.capability_key, response.status, rawText, contentType);
       } catch (error) {

@@ -43,12 +43,24 @@ import { createClient } from '../_shared/deps.ts';
 import { doubleFacteurManquant } from '../_shared/core/double-facteur.ts';
 import { Sha1, Sha256 } from './empreintes.ts';
 import { sanitize } from './nom.ts';
+import { AdresseRefusee, fetchSortant } from '../_shared/core/adresse-sortante.ts';
 
 const MAX_OCTETS = 500 * 1024 * 1024;        // file_size_limit de pdf-restrito et anarbib-pdf-public
 const MAX_PAR_APPEL = 25;
 const BUDGET_MS = 100_000;                    // on ne commence plus de candidat au-delà
 const ZONE_PRIVEE = 'pdf-restrito';
 const UA = 'AnarBib-NUMDIF/1.0 (versement d\'une bibliotheque du reseau AnarBib)';
+// 19/10/2026 : file_url est saisie par une coordination. Le téléchargement passe
+// par fetchSortant (adresses publiques seulement, chaque redirection revérifiée)
+// et porte un délai : une source qui pend ne tient plus la fonction jusqu'à sa
+// coupure.
+const DELAI_TELECHARGEMENT_MS = 120_000;
+
+// Le nom tiré de l'URL : un « % » mal formé ne lève plus (URIError), il reste tel quel.
+function dernierSegment(url: string): string {
+  const brut = new URL(url).pathname.split('/').pop() || '';
+  try { return decodeURIComponent(brut); } catch { return brut; }
+}
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -121,10 +133,11 @@ Deno.serve(async (req) => {
     // 2. le téléchargement côté serveur, en flux
     let reponse: Response;
     try {
-      reponse = await fetch(g.file_url, { headers: { 'User-Agent': UA }, redirect: 'follow' });
+      reponse = await fetchSortant(g.file_url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(DELAI_TELECHARGEMENT_MS) });
     } catch (e) {
-      await noterEchec(`source injoignable : ${String((e as Error)?.message || e).slice(0, 200)}`);
-      issues.push(echec(id, 'source_unreachable', 'La source ne répond pas.'));
+      const refusee = e instanceof AdresseRefusee;
+      await noterEchec(refusee ? `adresse refusée : ${(e as Error).message}` : `source injoignable : ${String((e as Error)?.message || e).slice(0, 200)}`);
+      issues.push(echec(id, 'source_unreachable', refusee ? 'L\'adresse de la source n\'est pas admise.' : 'La source ne répond pas.'));
       continue;
     }
     const cloudflare = Boolean(reponse.headers.get('cf-mitigated')) || (reponse.headers.get('server') || '').toLowerCase().includes('cloudflare');
@@ -203,7 +216,7 @@ Deno.serve(async (req) => {
 
     // 4. le fichier vérifié passe au seau que fixe le cas de source
     const bucket: string = g.destination.storage_bucket;
-    const nom = sanitize(g.original_filename || decodeURIComponent(new URL(g.file_url).pathname.split('/').pop() || ''));
+    const nom = sanitize(g.original_filename || dernierSegment(g.file_url));
     const chemin = `books/${g.book_id}/${horodatage}_${nom}`;
     const { error: mvErr } = await service.storage.from(ZONE_PRIVEE).move(zone, chemin,
       bucket === ZONE_PRIVEE ? undefined : { destinationBucket: bucket });

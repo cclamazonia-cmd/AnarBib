@@ -40,6 +40,7 @@ import {
   OAI_PARSER_VERSION, parseOaiEnvelope, parseMetadataFormats, chooseMetadataPrefix,
   isMarcPrefix, buildOaiUrl, mapDublinCore, hasBibliographicContent,
 } from './oai.ts';
+import { fetchSortant, lireTexteBorne } from '../_shared/core/adresse-sortante.ts';
 
 const IMPORT_SECRET_HEADER = 'x-import-secret';
 const IMPORT_SECRET_ENV = 'ANARBIB_PARTNER_IMPORT_SECRET';
@@ -63,6 +64,9 @@ const USER_AGENT = `AnarBib-OAI-Harvester/1.0 (+${HARVESTER_CONTACT})`;
 // pg_net (20 lots x 20 s = 400 s > 120 s : c est pg_net qui tranchera avant, et
 // le resumptionToken deja ecrit fera repartir le cycle suivant d ou il en est).
 const MAX_LOTS_HARD_CAP = 20;
+// Un lot ListRecords pèse quelques Mo (100 notices MARCXML) ; au-delà de ce
+// plafond, la réponse est refusée plutôt que lue en mémoire (19/10/2026).
+const MAX_OCTETS_LOT = 32 * 1024 * 1024;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -101,12 +105,16 @@ function retryAfterMs(header: string | null): number | null {
   return Math.max(0, when - Date.now());
 }
 
+// 19/10/2026 : l'adresse de l'entrepot est saisie par une coordination. Elle
+// passe par fetchSortant (chaque saut vérifié : nom résolu en adresses
+// publiques, redirections suivies à la main), le corps par lireTexteBorne, et
+// une erreur ne recopie plus d'extrait de la réponse (il finissait dans
+// last_error, lisible par le staff).
 async function fetchOai(url: string): Promise<string> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), HTTP_TIMEOUT_MS);
   try {
-    const res = await fetch(url, {
-      method: 'GET',
+    const res = await fetchSortant(url, {
       headers: { 'Accept': 'text/xml, application/xml', 'User-Agent': USER_AGENT },
       signal: ctrl.signal,
     });
@@ -119,23 +127,22 @@ async function fetchOai(url: string): Promise<string> {
     if (res.status === 503 || res.status === 429) {
       const wait = retryAfterMs(res.headers.get('retry-after'));
       if (wait !== null && wait <= MAX_RETRY_AFTER_MS) {
+        await res.body?.cancel().catch(() => {});
         await dors(wait);
-        const retry = await fetch(url, {
-          method: 'GET',
+        const retry = await fetchSortant(url, {
           headers: { 'Accept': 'text/xml, application/xml', 'User-Agent': USER_AGENT },
           signal: ctrl.signal,
         });
-        const retryText = await retry.text();
-        if (!retry.ok) throw new BackOff(wait, retry.status);
-        return retryText;
+        if (!retry.ok) { await retry.body?.cancel().catch(() => {}); throw new BackOff(wait, retry.status); }
+        return await lireTexteBorne(retry, MAX_OCTETS_LOT);
       }
+      await res.body?.cancel().catch(() => {});
       throw new BackOff(wait ?? 0, res.status);
     }
-    const text = await res.text();
     // Un entrepot peut repondre 200 avec une <error> OAI (protocole), ou un vrai
     // code HTTP (transport). On ne confond pas les deux : ici c'est le transport.
-    if (!res.ok) throw new Error(`HTTP ${res.status} de l'entrepot (${text.slice(0, 200)})`);
-    return text;
+    if (!res.ok) { await res.body?.cancel().catch(() => {}); throw new Error(`HTTP ${res.status} de l'entrepot`); }
+    return await lireTexteBorne(res, MAX_OCTETS_LOT);
   } finally {
     clearTimeout(timer);
   }

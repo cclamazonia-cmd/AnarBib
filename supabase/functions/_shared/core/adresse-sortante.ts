@@ -139,8 +139,10 @@ export function hoteInterdit(hote: string): boolean {
 export type Resolveur = (nom: string, type: 'A' | 'AAAA') => Promise<string[]>;
 
 function resolveurParDefaut(): Resolveur | null {
+  // L'identifiant `Deno` d'abord (sous Deno, c'est le même objet que
+  // globalThis.Deno ; un banc qui monte une fonction l'injecte ainsi).
   // deno-lint-ignore no-explicit-any
-  const d = (globalThis as any).Deno;
+  const d = (typeof Deno !== 'undefined' ? Deno : (globalThis as any).Deno) as any;
   return typeof d?.resolveDns === 'function' ? (nom, type) => d.resolveDns(nom, type) : null;
 }
 
@@ -221,4 +223,22 @@ export async function lireOctetsBornes(res: Response, max: number): Promise<Uint
   let pos = 0;
   for (const m of morceaux) { out.set(m, pos); pos += m.byteLength; }
   return out;
+}
+
+export class ReponseTropLourde extends Error {
+  constructor(max: number) {
+    super(`Réponse trop volumineuse (plus de ${Math.round(max / 1e6)} Mo).`);
+    this.name = 'ReponseTropLourde';
+  }
+}
+
+/**
+ * Le corps en texte (UTF-8), sans jamais en lire plus de `max` octets — au-delà,
+ * lève ReponseTropLourde (19/10/2026 : moissonnage OAI, flux de la gazette, sonde
+ * des partenaires lisaient `res.text()` sans plafond).
+ */
+export async function lireTexteBorne(res: Response, max: number): Promise<string> {
+  const octets = await lireOctetsBornes(res, max);
+  if (octets === null) throw new ReponseTropLourde(max);
+  return new TextDecoder().decode(octets);
 }

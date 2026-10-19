@@ -33,6 +33,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
+import { AdresseRefusee, ReponseTropLourde, fetchSortant, lireTexteBorne } from "../_shared/core/adresse-sortante.ts";
 
 const LOCALES: readonly string[] = LOCALE_CODES;
 const TRANSLATE_TARGETS = LOCALES.filter((l) => l !== "fr"); // fr = original curé
@@ -79,6 +80,12 @@ function issueForToday() {
 // passagère : erreur réseau, délai dépassé, ou 5xx. Un 403 ou un 404 ne se
 // répare pas en quelques secondes, et insister serait impoli envers un site
 // tenu par des camarades — c'est aussi comme ça qu'on se fait limiter.
+// 19/10/2026 : feed_url est modifiable par le staff réseau. Chaque saut passe
+// par fetchSortant (adresses publiques seulement, redirections revérifiées) et
+// le corps par lireTexteBorne : un « flux » de 2 Go ne se lit plus en mémoire.
+// Une adresse refusée ne vaut pas de second essai.
+const MAX_OCTETS_FLUX = 8 * 1024 * 1024;
+
 async function recupererFlux(feedUrl: string, essais = 2): Promise<string> {
   let dernier: Error | null = null;
   for (let n = 1; n <= essais; n++) {
@@ -89,19 +96,20 @@ async function recupererFlux(feedUrl: string, essais = 2): Promise<string> {
       // maximal, un flux qui pend bloque l'étape. 40 s : la collecte est
       // parallèle, un flux lent ne coûte rien aux autres, et l'origine
       // d'Info Libertaire a dépassé 20 s deux mois de suite (08 et 09/2026).
-      const res = await fetch(feedUrl, {
-        redirect: "follow",
+      const res = await fetchSortant(feedUrl, {
         signal: AbortSignal.timeout(40000),
         headers: {
           "User-Agent": "AnarBib-Gazette/1.0 (+https://app.anarbib.org/federacao/gazeta)",
           "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
         },
       });
-      if (res.ok) return await res.text();
+      if (res.ok) return await lireTexteBorne(res, MAX_OCTETS_FLUX);
+      await res.body?.cancel().catch(() => {});
       dernier = new Error(`HTTP ${res.status} sur ${feedUrl}`);
       // Seuls les 5xx valent un second essai.
       if (res.status < 500 || n === essais) throw dernier;
     } catch (e) {
+      if (e instanceof AdresseRefusee || e instanceof ReponseTropLourde) throw e;
       const err = e instanceof Error ? e : new Error(String(e));
       // Erreur réseau ou délai dépassé : passager, on retente.
       if (dernier !== err) dernier = err;

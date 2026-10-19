@@ -132,7 +132,12 @@ function monterEF(etat, reponses) {
   });
 
   let handler = null;
-  const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
+  // 19/10/2026 : l'entrepot passe par fetchSortant, qui résout le nom avant
+  // d'appeler : le banc répond une adresse publique (documentation exclue).
+  const DenoStub = {
+    env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; },
+    resolveDns: async (_nom, type) => (type === 'A' ? ['93.184.216.34'] : []),
+  };
   let i = 0;
   const fetchStub = async (url, options) => {
     urlsVues.push(String(url));
@@ -153,6 +158,8 @@ function monterEF(etat, reponses) {
     // Le vrai module, pas un stub. Depuis B18 (02/09/2026) le repli legacy
     // n'existe plus : le banc exerce SUPABASE_SECRET_KEYS, le seul chemin.
     if (spec.endsWith('secret-key.ts')) return evaluer(cjs(CLE), {});
+    // Le vrai garde des appels sortants (19/10/2026), sur le fetch du banc.
+    if (spec.endsWith('core/adresse-sortante.ts')) return evaluer(cjs(new URL('../../supabase/functions/_shared/core/adresse-sortante.ts', import.meta.url)), {});
     if (spec.includes('edge-runtime.d.ts')) return {};
     throw new Error(`import inattendu : ${spec}`);
   };

@@ -22,7 +22,8 @@ const i = (s) => { const n = SRC.indexOf(s); expect(n, s).toBeGreaterThan(-1); r
 describe('deposit-digital-candidate — l’ordre des gestes', () => {
   it('garde → téléchargement → zone privée (empreintes au passage) → vérification → seau du cas → enregistrement', () => {
     const garde = i("userClient.rpc('fn_digital_candidate_deposit_garde'");
-    const telechargement = i('await fetch(g.file_url');
+    // 19/10/2026 : par fetchSortant (adresses publiques, redirections revérifiées), avec un délai
+    const telechargement = i('await fetchSortant(g.file_url, { headers: { \'User-Agent\': UA }, signal: AbortSignal.timeout(DELAI_TELECHARGEMENT_MS) })');
     const passage = i('h256.update(value); h1.update(value);');
     const zone = i('service.storage.from(ZONE_PRIVEE).upload(zone, flux');
     const verification = i('if (attendue.obtenue !== attendue.valeur)');

@@ -18,17 +18,26 @@
 // (typiquement quelques minutes à quelques heures), puis se reconstruit
 // automatiquement à froid.
 //
-// Sécurité : on n'inline QUE les images dont l'URL contient "supabase.co" ou
-// "supabase.in". Si une notification contient une image externe (ex.
-// couverture de livre Open Library), elle reste en URL distante et Brevo la
-// gère comme avant.
+// Sécurité (resserrée le 19/10/2026) : on n'inline QUE les images du stockage
+// public d'un projet Supabase — https, hôte « <ref>.supabase.co » ou
+// « <ref>.supabase.in » EXACTEMENT, chemin /storage/v1/object/public/. Avant,
+// une sous-chaîne suffisait (« https://piege.test/?supabase.co » passait), sans
+// garde d'adresse, sans plafond de lecture ni de cache. Désormais : fetchSortant
+// (adresses publiques, redirections revérifiées), lecture bornée à 1 Mo, un type
+// image/* exigé, un cache de 64 entrées. Une image externe (ex. couverture
+// Open Library) reste en URL distante, comme avant.
 //
 // Cette transformation est appliquée dans transport/email.ts juste avant
 // l'envoi via sendBrevoEmail. Aucune modification nécessaire dans les
 // fichiers domain ou dans renderEmail (qui reste synchrone).
 // ============================================================================
+import { fetchSortant, lireOctetsBornes } from "../core/adresse-sortante.ts";
+
 // Cache mémoire global : URL source -> data URI base64
 const logoCache = new Map();
+const MAX_OCTETS_IMAGE = 1024 * 1024;
+const MAX_CACHE = 64;
+const DELAI_IMAGE_MS = 8000;
 /**
  * Télécharge une image depuis une URL et la convertit en data URI base64.
  * Utilise un cache mémoire pour éviter les téléchargements répétés.
@@ -40,15 +49,25 @@ const logoCache = new Map();
   if (url.startsWith("data:")) return url; // déjà inliné
   const cached = logoCache.get(url);
   if (cached) return cached;
+  if (!shouldInline(url)) return url;
   try {
-    const res = await fetch(url);
+    const res = await fetchSortant(url, { signal: AbortSignal.timeout(DELAI_IMAGE_MS) }, { protocoles: ["https:"] });
     if (!res.ok) {
+      await res.body?.cancel().catch(() => {});
       console.warn(`[inline-image] fetch ${res.status} for ${url}`);
       return url; // fallback à l'URL originale
     }
-    const contentType = res.headers.get("content-type") || "image/png";
-    const buffer = await res.arrayBuffer();
-    const bytes = new Uint8Array(buffer);
+    const contentType = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+    if (!/^image\/[a-z0-9.+-]+$/.test(contentType)) {
+      await res.body?.cancel().catch(() => {});
+      console.warn(`[inline-image] type ${contentType || "absent"} refusé pour ${url}`);
+      return url;
+    }
+    const bytes = await lireOctetsBornes(res, MAX_OCTETS_IMAGE);
+    if (bytes === null) {
+      console.warn(`[inline-image] image de plus de ${MAX_OCTETS_IMAGE} octets, laissée distante : ${url}`);
+      return url;
+    }
     // Conversion en base64 via btoa (chunks pour éviter les limites de stack)
     let binary = "";
     const chunkSize = 0x8000; // 32 KB
@@ -58,6 +77,7 @@ const logoCache = new Map();
     }
     const base64 = btoa(binary);
     const dataUri = `data:${contentType};base64,${base64}`;
+    if (logoCache.size >= MAX_CACHE) logoCache.delete(logoCache.keys().next().value);
     logoCache.set(url, dataUri);
     console.log(`[inline-image] cached ${url} (${bytes.length} bytes -> ${dataUri.length} chars b64)`);
     return dataUri;
@@ -70,11 +90,15 @@ const logoCache = new Map();
  * Vérifie si une URL doit être inlinée. On inline uniquement les images
  * hébergées sur Supabase Storage (logos AnarBib + biblio), pas les images
  * externes.
- */ function shouldInline(url) {
+ */ export function shouldInline(url) {
   if (!url) return false;
   if (url.startsWith("data:")) return false;
-  // Cible : URLs Supabase Storage uniquement
-  return url.includes("supabase.co") || url.includes("supabase.in");
+  // Cible : le stockage public d'un projet Supabase, et lui seul
+  let u;
+  try { u = new URL(url); } catch { return false; }
+  if (u.protocol !== "https:" || u.username || u.password || u.port) return false;
+  if (!/^[a-z0-9]+\.supabase\.(co|in)$/i.test(u.hostname)) return false;
+  return u.pathname.startsWith("/storage/v1/object/public/");
 }
 /**
  * Parcourt un HTML et remplace toutes les `<img src="https://...">` par

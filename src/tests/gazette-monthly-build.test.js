@@ -37,6 +37,10 @@ const CLE_CODE = transformSync(readFileSync(CLE_SRC, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
 }).code;
 
+const SORTANT_CODE = transformSync(readFileSync(new URL('../../supabase/functions/_shared/core/adresse-sortante.ts', import.meta.url), 'utf8'), {
+  loader: 'ts', format: 'cjs', target: 'es2022',
+}).code;
+
 const SECRET = 's3cr3t-de-test';
 const ENV = {
   SUPABASE_URL: 'http://stub', SUPABASE_SECRET_KEYS: '{"default":"stub"}',
@@ -116,7 +120,12 @@ function monterEF(etat) {
 
   let handler = null;
   // `etat.env` remplace une variable d'ENV pour ce montage (19/10/2026 : secret vide).
-  const DenoStub = { env: { get: (k) => (etat.env && k in etat.env ? etat.env[k] : ENV[k]) }, serve: (h) => { handler = h; } };
+  // `resolveDns` : les flux passent par fetchSortant (19/10/2026), qui résout le
+  // nom avant d'appeler ; `etat.dns(nom)` peut rendre d'autres adresses.
+  const DenoStub = {
+    env: { get: (k) => (etat.env && k in etat.env ? etat.env[k] : ENV[k]) }, serve: (h) => { handler = h; },
+    resolveDns: async (nom, type) => (type === 'A' ? (etat.dns ? etat.dns(nom) : ['93.184.216.34']) : []),
+  };
   // Les flux : `etat.flux(url)` rend la réponse d'un site (ou lève) ; chaque
   // appel est noté, avec ses en-têtes — c'est là qu'on lit le User-Agent.
   const appelsFetch = [];
@@ -130,6 +139,14 @@ function monterEF(etat) {
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', CLE_CODE)(
         avecLocales(requireStub), m, m.exports, DenoStub,
+      );
+      return m.exports;
+    }
+    if (spec.endsWith('core/adresse-sortante.ts')) {
+      // le vrai garde des appels sortants, sur le fetch du banc
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', 'Deno', 'fetch', SORTANT_CODE)(
+        avecLocales(requireStub), m, m.exports, DenoStub, fetchStub,
       );
       return m.exports;
     }
@@ -273,6 +290,19 @@ describe("probe_sources : tester les flux à la main, sans toucher aux numéros 
     // ni numéro, ni job : la santé des sources, et rien d'autre
     expect(r.ecrits.every((e) => e.table === 'gazette_sources')).toBe(true);
     expect(r.ecrits).toHaveLength(2);
+  });
+
+  it("un flux dont le nom se résout en adresse privée n'est jamais appelé (19/10/2026)", async () => {
+    const etat = {
+      ...etatDeuxSources(),
+      dns: (nom) => (nom === 'tombe.test' ? ['10.0.0.5'] : ['93.184.216.34']),
+    };
+    const r = await monterEF(etat)({ step: 'probe_sources' });
+    const bilan = Object.fromEntries(r.corps.bilan.map((b) => [b.name, b]));
+    expect(bilan['Qui tombe'].status).toBe('error');
+    expect(bilan['Qui tombe'].error).toMatch(/non-public/);
+    expect(r.appelsFetch.some((a) => a.url.includes('tombe.test'))).toBe(false);
+    expect(bilan['Qui répond'].status).toBe('ok');
   });
 
   it("dit qui on est, avec une adresse où nous joindre", async () => {
