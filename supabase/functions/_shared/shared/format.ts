@@ -1,5 +1,17 @@
+// Échapper UNE fois (19/10/2026). tMail échappe désormais ses paramètres
+// (_shared/i18n/mail-strings.ts) : une phrase traduite qui passe ensuite par esc()
+// — un titre, une salutation, un libellé que renderEmail échappe lui-même — ne
+// doit pas l'être deux fois (« L&amp;#039;Insoumise » à l'écran). esc() rend
+// donc d'abord leur caractère aux entités qu'il produit lui-même, puis échappe.
+// Une valeur brute est échappée comme avant ; une valeur déjà échappée ne bouge pas.
+const ENTITE_SURE = /&(amp|lt|gt|quot|#0*39|#x0*27);/gi;
+const DESENTITE = { amp: "&", lt: "<", gt: ">", quot: '"' };
+/** Rend leur caractère aux cinq entités que produit esc() (pour un objet, un texte brut). */
+export function desechapper(s) {
+  return String(s ?? "").replace(ENTITE_SURE, (_m, n)=>DESENTITE[n.toLowerCase()] ?? "'");
+}
 export function esc(s) {
-  return s.replace(/[&<>"']/g, (c)=>({
+  return desechapper(s).replace(/[&<>"']/g, (c)=>({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",

@@ -93,6 +93,8 @@ describe('email.ts — aiguillage strict DOC-SILENCE-1', () => {
     const fn = new Function('require', 'module', 'exports', 'Deno', EMAIL_CODE);
     const customRequire = (id) => {
       if (id.includes('smtp')) return loadSmtpModule();
+      // 19/10/2026 : sendEmail rend leur caractère aux entités de l'objet et du texte
+      if (id.includes('shared/format')) return { desechapper: (s) => String(s ?? '') };
       return {};
     };
     fn(customRequire, mod, mod.exports, {

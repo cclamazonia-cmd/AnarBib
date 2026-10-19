@@ -8914,8 +8914,52 @@ const D: SupportedMailLocale = "pt-BR";
 // API publique du module
 // ============================================================================
 
+// ── Les paramètres sont échappés pour le HTML, par défaut (19/10/2026) ─────────
+// Les gabarits portent du HTML voulu (<b>…</b>) et sont insérés tels quels dans
+// le corps des courriels (introHtml). Leurs PARAMÈTRES, eux, viennent de la base
+// ou d'un formulaire : nom de lectrice, de bibliothèque, de proposant·e, titre
+// d'un livre. Interpolés bruts, un nom comme « <a href=…>Cliquez ici</a> »
+// devenait un lien dans un courriel aux couleurs d'AnarBib. Désormais :
+//   · tMail échappe chaque paramètre (& < > " ') — UNE fois : une valeur déjà
+//     échappée par l'appelant (escapeHtml, esc) n'est pas échappée deux fois ;
+//   · un paramètre dont le NOM finit par « Html » passe tel quel : c'est un
+//     fragment construit et échappé par le code, jamais une saisie ;
+//   · tMailTexte rend les paramètres bruts, pour ce qui n'est pas du HTML : une
+//     cloche (user_notifications) que l'application affiche elle-même.
+// Les objets et versions texte des courriels sont désentités au départ par le
+// transport (_shared/transport/email.ts) : « L'Insoumise » y reste lisible.
+const ENTITE_SURE = /&(amp|lt|gt|quot|#0*39|#x0*27);/gi;
+const DESENTITE: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"' };
+const ENTITE: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
+
+function echapperUneFois(v: unknown): string {
+  const brut = String(v ?? "").replace(ENTITE_SURE, (_m, n: string) => DESENTITE[n.toLowerCase()] ?? "'");
+  return brut.replace(/[&<>"']/g, (c) => ENTITE[c]);
+}
+
+function rendre(
+  locale: string | null | undefined,
+  key: string,
+  params: Record<string, string | number> | undefined,
+  html: boolean,
+): string {
+  const e = (locale && V.has(locale) ? locale : D) as SupportedMailLocale;
+  const d = S[key];
+  if (!d) return key;
+  let t = d[e] || d[D] || key;
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      const valeur = html && !/Html$/.test(k) ? echapperUneFois(v) : String(v);
+      // une fonction de remplacement : « $& » dans un nom ne se réinterprète pas
+      t = t.replace(new RegExp(`\\{${k}\\}`, "g"), () => valeur);
+    }
+  }
+  return t;
+}
+
 /**
- * Récupère la traduction d'une clé pour une locale donnée.
+ * Récupère la traduction d'une clé pour une locale donnée, paramètres échappés
+ * pour le HTML (voir plus haut).
  * Si la clé n'existe pas, retourne la clé brute (pour faciliter le debug).
  * Si la locale n'est pas supportée ou est null, fallback vers pt-BR (D).
  *
@@ -8928,16 +8972,16 @@ export function tMail(
   key: string,
   params?: Record<string, string | number>
 ): string {
-  const e = (locale && V.has(locale) ? locale : D) as SupportedMailLocale;
-  const d = S[key];
-  if (!d) return key;
-  let t = d[e] || d[D] || key;
-  if (params) {
-    for (const [k, v] of Object.entries(params)) {
-      t = t.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
-    }
-  }
-  return t;
+  return rendre(locale, key, params, true);
+}
+
+/** Comme tMail, paramètres BRUTS : pour un texte que personne n'insère en HTML. */
+export function tMailTexte(
+  locale: string | null | undefined,
+  key: string,
+  params?: Record<string, string | number>
+): string {
+  return rendre(locale, key, params, false);
 }
 
 /** Salutation localisée, avec ou sans nom. */

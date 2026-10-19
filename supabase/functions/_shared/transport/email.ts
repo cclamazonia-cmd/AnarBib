@@ -1,6 +1,6 @@
 import { resolveMailRouting, transportDisabledReason } from "../context/library-mail-routing.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
-import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
+import { desechapper, firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
 import { sendViaSmtp, resolveTimeout } from "../mail/smtp.ts";
 import { supabaseAdmin } from "../core/env.ts";
@@ -250,7 +250,15 @@ async function noterEchecTransport(opts, err) {
   }
 }
 
-export async function sendEmail(opts) {
+// L'objet et la version texte ne sont pas du HTML (19/10/2026) : les phrases de
+// tMail y arrivent paramètres échappés (« L&#039;Insoumise »), on leur rend leurs
+// caractères ici, au seul point de départ de tous les courriels.
+export async function sendEmail(entree) {
+  const opts = {
+    ...entree,
+    subject: desechapper(entree?.subject),
+    ...(entree?.text != null ? { text: desechapper(entree.text) } : {}),
+  };
   try {
     return await aiguillerEtEnvoyer(opts);
   } catch (err) {

@@ -38,12 +38,13 @@ import { APP_BASE_URL } from "../core/app-url.ts";
 import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { tMail, greeting, formatDateLocale } from "../i18n/mail-strings.ts";
 
+import { esc as echapperHtml } from "../shared/format.ts";
 const OUTBOX = "gazette_submission_notification_outbox";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
 
 function esc(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(s);
 }
 function safeUrl(u) {
   const s = String(u ?? "").trim();

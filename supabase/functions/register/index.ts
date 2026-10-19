@@ -15,6 +15,7 @@ import { APP_BASE_URL, appUrl } from "../_shared/core/app-url.ts";
 import { isSupportedLocale } from "../_shared/i18n/locales.ts";
 import { freiner, cleDeCompteur as empreinte } from "../_shared/core/rate-limit.ts";
 import { ipClient } from "../_shared/core/ip-client.ts";
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -101,7 +102,8 @@ async function plancher(debut) {
 // Longueurs bornées des champs libres.
 const borne = (v, n) => String(v || "").trim().slice(0, n);
 function escapeHtml(value) {
-  return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(value);
 }
 function normalizeEmail(value) {
   return String(value ?? "").trim().toLowerCase();

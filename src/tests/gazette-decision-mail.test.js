@@ -29,8 +29,12 @@ const APPURL_CODE = cjs(new URL('../../supabase/functions/_shared/core/app-url.t
 
 const VERDICT_CODE = cjs(new URL('../../supabase/functions/_shared/domain/outbox-verdict.ts', import.meta.url));
 const ADMINS_CODE = cjs(new URL('../../supabase/functions/_shared/context/network-admins.ts', import.meta.url));
+// 19/10/2026 : l'échappeur de gazette.ts est l'esc partagé (idempotent) — le vrai.
+const FORMAT_CODE = cjs(new URL('../../supabase/functions/_shared/shared/format.ts', import.meta.url));
 
 const JETON = 'c'.repeat(64);
+// Le HTML échappe l'apostrophe (&#039;, esc partagé du 19/10/2026) : on lit le texte.
+const lisible = (html) => String(html).replace(/&#0*39;/g, "'");
 
 // `transport(cible)` : ce que rend safeSendEmail pour ce destinataire ; par défaut
 // l'envoi part. Un résultat `ok:false` n'est PAS compté dans `envois`.
@@ -74,6 +78,7 @@ function monter(outbox, env = {}, transport = () => ({ ok: true }), tables = {})
     if (spec.endsWith('core/app-url.ts')) return evaluer(APPURL_CODE);
     if (spec.endsWith('outbox-verdict.ts')) return evaluer(VERDICT_CODE);
     if (spec.endsWith('context/network-admins.ts')) return evaluer(ADMINS_CODE);
+    if (spec.endsWith('shared/format.ts')) return evaluer(FORMAT_CODE);
     if (spec.endsWith('mail/layout.ts')) {
       return {
         renderEmail: (opts) => { rendus.push(opts); return { html: opts.introHtml, text: '' }; },
@@ -134,7 +139,7 @@ describe('gazette.contribution.rejected — la décision est dite, dans la langu
     expect(box.ctaUrl).toBe(`https://app.anarbib.org/federacao/gazeta?reprise=${JETON}`);
     expect(box.ctaLabel).toBe('Corriger et renvoyer');
     // l'échéance est dite, dans le corps
-    expect(r.envois[0].html).toMatch(/jusqu'au .*2026/);
+    expect(lisible(r.envois[0].html)).toMatch(/jusqu'au .*2026/);
     expect(r.statutOutbox).toMatchObject({ status: 'sent' });
     expect(r.resultat.recipients_count).toBe(1);
   });
@@ -192,7 +197,7 @@ describe('gazette.contribution.accepted — la bonne nouvelle aussi', () => {
     }]);
     const r = await traiter(4);
     expect(r.envois).toHaveLength(1);
-    expect(r.envois[0].html).toContain("L'équipe a apporté quelques corrections");
+    expect(lisible(r.envois[0].html)).toContain("L'équipe a apporté quelques corrections");
     expect(r.envois[0].html).toContain('<b>Titre corrigé</b>');
     expect(r.envois[0].html).toContain('Corps corrigé.\nDeuxième ligne.');
   });
@@ -212,7 +217,7 @@ describe('gazette.contribution.received — l’avis au réseau d’une reprise 
     const r = await traiter(3);
     expect(r.envois).toHaveLength(1);
     expect(r.envois[0].email).toBe('admin@exemplo.test');
-    expect(r.envois[0].html).toContain("Reprise d'une brève rejetée précédemment");
+    expect(lisible(r.envois[0].html)).toContain("Reprise d'une brève rejetée précédemment");
   });
 
   it('sans parent : rien de plus qu’avant', async () => {

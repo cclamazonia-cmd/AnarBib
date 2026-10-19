@@ -53,6 +53,7 @@ import { resolveLibraryNotificationContext } from '../_shared/context/library-no
 import { tMail, greeting, label, formatDateLocale } from '../_shared/i18n/mail-strings.ts';
 import { appUrl } from '../_shared/core/app-url.ts';
 
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_MID_LOAN') || '').trim();
 
 // Les quatre moments. `toggle` nomme la colonne de `library_notification_policies`
@@ -66,7 +67,8 @@ const MOMENTS = {
 };
 
 function esc(v: unknown): string {
-  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(v);
 }
 
 function jourISO(d: Date): string {

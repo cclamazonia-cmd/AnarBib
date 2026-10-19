@@ -36,6 +36,7 @@ import { renderEmail, footerPadrao } from "../_shared/mail/layout.ts";
 import { safeSendEmail } from "../_shared/transport/email.ts";
 import { isSupportedLocale } from "../_shared/i18n/locales.ts";
 
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
 const CONTACT_EMAIL = (Deno.env.get("ANARBIB_CONTACT_EMAIL") || "anarbib@proton.me").trim();
 const COORD_NAME = (Deno.env.get("ANARBIB_COORD_NAME") || "Coordination AnarBib").trim();
@@ -54,7 +55,8 @@ function json(body: unknown, status = 200) {
 }
 
 function esc(v: unknown): string {
-  return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(v);
 }
 
 // Contexte mail « coordination ». Même précaution que notify-oai-opening : on ne

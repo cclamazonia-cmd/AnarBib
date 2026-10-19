@@ -32,7 +32,7 @@ import { resolveLibraryNotificationContext } from "../context/library-notificati
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult } from "../transport/email.ts";
 import { esc } from "../shared/format.ts";
-import { tMail } from "../i18n/mail-strings.ts";
+import { tMail, tMailTexte } from "../i18n/mail-strings.ts";
 import { LOCALE_CODES } from "../i18n/locales.ts";
 
 const LOCALES: ReadonlySet<string> = new Set(LOCALE_CODES);
@@ -97,8 +97,9 @@ export async function handleCorrespondanceMessage(recordId: number) {
         const loc = normaliser(p.preferred_language);
         return {
           user_id: p.id, library_id: libId, category: "info",
-          title: tMail(loc, "corr.bell.title", { library: expeditrice }),
-          body: tMail(loc, "corr.bell.body", { subject: sujet, excerpt: extrait(corps), lang: nomLangue(lang, loc) }),
+          // la cloche est du texte, que l'application affiche (et échappe) elle-même
+          title: tMailTexte(loc, "corr.bell.title", { library: expeditrice }),
+          body: tMailTexte(loc, "corr.bell.body", { subject: sujet, excerpt: extrait(corps), lang: nomLangue(lang, loc) }),
           link_type: "correspondance", link_id: String(m.conversation_id),
         };
       });

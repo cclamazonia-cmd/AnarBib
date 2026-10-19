@@ -63,7 +63,7 @@ function chargerLayout() {
   return charger('mail/layout.ts', (spec) => {
     if (spec.includes('core/env')) return envStub;
     if (spec.includes('context/library-mail-routing')) return routing;
-    if (spec.includes('shared/format')) return { esc: (t) => String(t ?? '') };
+    if (spec.includes('shared/format')) return { esc: (t) => String(t ?? ''), desechapper: (t) => String(t ?? '') };
     if (spec.includes('i18n/mail-strings')) return i18n;
     throw new Error(`import inattendu : ${spec}`);
   });

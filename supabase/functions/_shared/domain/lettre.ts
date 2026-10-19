@@ -16,12 +16,13 @@ import { appUrl } from "../core/app-url.ts";
 import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
 import { marked } from "https://esm.sh/marked@12";
 
+import { esc as echapperHtml } from "../shared/format.ts";
 const OUTBOX = "lettre_notification_outbox";
 const FUNCTIONS_BASE = (Deno.env.get("SUPABASE_URL") || "").replace(/\/+$/, "") + "/functions/v1";
 
 function esc(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(s);
 }
 
 // Markdown → HTML (corps riche d'un numéro) + sanitisation basique (contenu

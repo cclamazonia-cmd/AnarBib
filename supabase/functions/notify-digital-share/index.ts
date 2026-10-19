@@ -22,6 +22,7 @@ import { appUrl } from '../_shared/core/app-url.ts';
 import { verdictEnvois, type VerdictEnvoi } from '../_shared/domain/outbox-verdict.ts';
 import { masquerAdresse } from '../_shared/core/journal-masque.ts';
 
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_DIGITAL_SHARE') || '').trim();
 const SHARE_URL = appUrl('/painel');
 
@@ -34,7 +35,8 @@ const NETWORK_CTX = {
 };
 
 function esc(v: unknown): string {
-  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(v);
 }
 
 async function sendIll(

@@ -22,6 +22,7 @@ import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { APP_BASE_URL as APP_URL } from "../_shared/core/app-url.ts";
 
 
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 function mustEnv(name: string): string {
   const v = Deno.env.get(name);
   if (!v || !v.trim()) throw new Error(`Missing env: ${name}`);
@@ -34,9 +35,8 @@ function json(status: number, data: unknown): Response {
   });
 }
 function esc(value: unknown): string {
-  return String(value ?? "").replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-  }[c] as string));
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(value);
 }
 function isValidEmail(email: unknown): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());

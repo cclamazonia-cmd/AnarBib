@@ -27,7 +27,7 @@ function monter(env = {}, base = null) {
   const stubs = {
     '../context/library-mail-routing.ts': { resolveMailRouting: () => ({ senderEmail: 'no-reply@exemple.invalid', senderName: 'AnarBib', adminEmail: '', replyToEmail: null }), transportDisabledReason: () => null },
     '../mail/inline-images.ts': { inlineLogosInHtml: async (h) => h },
-    '../shared/format.ts': { firstNameOnly: (s) => s, fullName: (p) => p?.name || '', isValidEmail: (e) => /^[^@\s]+@[^@\s]+$/.test(e) },
+    '../shared/format.ts': { firstNameOnly: (s) => s, fullName: (p) => p?.name || '', isValidEmail: (e) => /^[^@\s]+@[^@\s]+$/.test(e), desechapper: (s) => String(s ?? '') },
     '../mail/smtp.ts': { sendViaSmtp: async () => '', resolveTimeout: () => 1000 },
     '../core/env.ts': { supabaseAdmin: { from: () => ({ insert: async (row) => { notes.push(row); return { error: null }; } }), ...(base ? { rpc: base.rpc } : {}) } },
     './restriction.ts': { dejaServi: () => false },

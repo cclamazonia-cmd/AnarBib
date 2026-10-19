@@ -1,5 +1,5 @@
 import { publicStorageUrl, resolveMailRouting } from "../context/library-mail-routing.ts";
-import { esc } from "../shared/format.ts";
+import { desechapper, esc } from "../shared/format.ts";
 import { tMail } from "../i18n/mail-strings.ts";
 // Chantier i18n layout (2A, 18/05/2026) : footerPadrao et renderEmail acceptent
 // désormais une `locale` pour router toutes les chaînes layout.* via tMail.
@@ -115,8 +115,10 @@ export function renderEmail(opts) {
     if (telTxt) tl.push(`${tMail(locale, "layout.phoneLabel")}: ${telTxt}`);
   }
   tl.push(ligneFinale);
+  // La version texte est du texte : les entités venues d'introHtml ou des
+  // phrases de tMail (paramètres échappés) y redeviennent des caractères.
   return {
     html,
-    text: tl.join("\n")
+    text: desechapper(tl.join("\n"))
   };
 }

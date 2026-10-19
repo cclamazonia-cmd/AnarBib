@@ -40,6 +40,8 @@ import { avecLocales } from './helpers/locales-ts.js';
 const SRC = new URL('../../supabase/functions/notify-oai-opening/index.ts', import.meta.url);
 const WEBHOOK = new URL('../../supabase/functions/_shared/core/webhook.ts', import.meta.url);
 const STRINGS = new URL('../../supabase/functions/_shared/i18n/mail-strings.ts', import.meta.url);
+// 19/10/2026 : l'échappeur de la fonction est l'esc partagé (idempotent) — le vrai.
+const FORMAT = new URL('../../supabase/functions/_shared/shared/format.ts', import.meta.url);
 
 const cjs = (url) => transformSync(readFileSync(url, 'utf8'), {
   loader: 'ts', format: 'cjs', target: 'es2022',
@@ -97,6 +99,7 @@ function monterEF(monde) {
   const requireStub = (spec) => {
     if (spec.endsWith('core/webhook.ts')) return evaluer(cjs(WEBHOOK));
     if (spec.endsWith('i18n/mail-strings.ts')) return evaluer(cjs(STRINGS));
+    if (spec.endsWith('shared/format.ts')) return evaluer(cjs(FORMAT));
     if (spec.endsWith('core/env.ts')) return { supabaseAdmin: { from: table }, APP_BASE_URL: 'https://app.test' };
     if (spec.endsWith('mail/layout.ts')) {
       return { renderEmail: ({ title }) => ({ html: `<p>${title}</p>`, text: title }), footerPadrao: () => '' };

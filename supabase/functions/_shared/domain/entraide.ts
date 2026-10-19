@@ -15,11 +15,12 @@ import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
 import { APP_BASE_URL } from "../core/app-url.ts";
 
+import { esc as echapperHtml } from "../shared/format.ts";
 const APP_URL = APP_BASE_URL; // foyer unique : ../core/app-url.ts (secret APP_BASE_URL)
 
 function esc(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(s);
 }
 
 export async function handleEntraideRequestCircle(payload) {

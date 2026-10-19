@@ -50,6 +50,7 @@ function chargeTransport(env = { RESEND_API_KEY: 'cle-de-banc', RESEND_RETRY_BAS
       firstNameOnly: (x) => x,
       fullName: (x) => x,
       isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')),
+      desechapper: (s) => String(s ?? ''),
     },
     smtp: { sendViaSmtp: async () => 'smtp-ok', resolveTimeout: () => 15000 },
     'core/env': { supabaseAdmin: { from: (table) => ({ insert: async (row) => { ecrits.push({ table, row }); return { error: null }; } }) } },

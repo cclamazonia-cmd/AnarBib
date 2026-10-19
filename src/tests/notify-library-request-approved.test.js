@@ -128,7 +128,7 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
         if (sp.endsWith('library-mail-routing.ts')) return { resolveMailRouting: () => { throw new Error('routage du contexte consulté alors que la fonction le passe explicitement'); }, transportDisabledReason: () => null };
         if (sp.endsWith('layout.ts')) return { renderEmail: () => ({ html: '', text: '' }), footerPadrao: () => '' };
         if (sp.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
-        if (sp.endsWith('format.ts')) return { firstNameOnly: (x) => x, fullName: (x) => x, isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')) };
+        if (sp.endsWith('format.ts')) return { firstNameOnly: (x) => x, fullName: (x) => x, isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '')), desechapper: (s) => String(s ?? '') };
         if (sp.endsWith('smtp.ts')) return { sendViaSmtp: async () => 'smtp', resolveTimeout: () => 15000 };
         if (sp.endsWith('core/env.ts')) return { supabaseAdmin: { from: () => ({ insert: async () => ({ error: null }) }) } };
         // F12 (25/09/2026) : la restriction des rejeux ; hors rejeu, personne n'est « déjà servi ».

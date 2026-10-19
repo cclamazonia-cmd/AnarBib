@@ -50,6 +50,7 @@ import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
 import { masquerAdresse } from '../_shared/core/journal-masque.ts';
 
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const WEBHOOK_SECRET = (Deno.env.get('WEBHOOK_SECRET_NOTIFY_OAI_OPENING') || '').trim();
 const FEDERAL_EMAIL = (Deno.env.get('OAI_ADMIN_EMAIL') || 'fede@anarbib.org').trim();
 const FEDERAL_NAME = (Deno.env.get('OAI_ADMIN_NAME') || 'Administration AnarBib').trim();
@@ -77,7 +78,8 @@ const FEDERAL_CTX = {
 const FEDERAL_TARGET = { email: FEDERAL_EMAIL, name: FEDERAL_NAME };
 
 function esc(v: unknown): string {
-  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // 19/10/2026 : l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(v);
 }
 
 async function sendOai(
