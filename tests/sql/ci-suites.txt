@@ -51,6 +51,7 @@ tests/sql/salle_des_machines_tests.sql
 # que les deux familles refusent dans les memes termes.
 tests/sql/arbitrage_periodiques_tests.sql
 tests/sql/d3_fascicules_solidaires_tests.sql
+tests/sql/lieu_retire_des_copies_tests.sql
 # B14 paquet 10 : un document restreint ne vit jamais dans un bucket public.
 # Le talon de la chaine d acces (RPC-portier -> EF qui signe en service_role)
 # est le RANGEMENT : un asset conta_ativa dans un bucket public serait servi
