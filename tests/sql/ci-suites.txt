@@ -849,3 +849,6 @@ tests/sql/ecritures_directes_bornees_tests.sql
 tests/sql/oai_liens_externes_tests.sql
 # Un site est une adresse web (19/10/2026) : site_url de la cartographie et des réseaux en http(s) seulement.
 tests/sql/un_site_est_une_adresse_web_tests.sql
+# Type de document importé (19/10/2026, décision de Xavier après le banc OAI ASB) : la nature du document, pas son
+# support — vocabulaire d'AnarcosyndicalismeBOOK, types DCMI, et les codes d'AnarBib reconnus par la conversion.
+tests/sql/import_type_de_document_tests.sql
