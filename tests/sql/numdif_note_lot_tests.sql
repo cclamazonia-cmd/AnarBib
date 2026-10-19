@@ -21,6 +21,11 @@
 -- T4  la fonction garde ses droits (fermée à authenticated et anon, ouverte
 --     à service_role) et son SECURITY DEFINER
 --
+-- T5  D26 (19/10/2026) : la référence de la déclaration et de la délégation
+--     vient de la source (meta.declaracao_lote, meta.delegacao_validacao) ;
+--     sans elle, la phrase sans référence ; plus aucune date en dur dans le
+--     versement ni le réalignement
+--
 --   Bilan OK : 'NUMDIF-NOTE-LOT OK : N/N tests passés'
 -- =====================================================================
 DO $$
@@ -46,6 +51,11 @@ BEGIN
   VALUES ('Essai NUMDIF lot', 'TEST-NUMDIF-LOT', 'livro', 'ambos', true, 'Imprimerie d''essai', 'Gand', '1920', 'nl')
   RETURNING id INTO v_book;
   INSERT INTO public.book_holdings (book_id, library_id, exemplares_total, available_count) VALUES (v_book, c_blmf, 1, 1);
+  -- D26 : la source qui alimente la bibliothèque porte la référence de sa déclaration
+  INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled, destination_library_id, meta)
+  VALUES ('Wiki d''essai', c_blmf, 'mapeada', 'partner_deposit', true, c_blmf,
+          jsonb_build_object('declaracao_lote', 'Règle d''essai v0.1, lettre du 01/01/2026',
+                             'delegacao_validacao', 'délégation écrite du 01/01/2026 (essai)'));
 
   PERFORM set_config('request.jwt.claims', json_build_object('sub', v_coordA, 'role', 'authenticated')::text, true);
   PERFORM public.fn_digital_candidates_propose(c_blmf, jsonb_build_array(
@@ -74,9 +84,9 @@ BEGIN
   SELECT * INTO v_r FROM public.book_digital_resources WHERE id = (v_res->>'resource_id')::bigint;
   IF v_r.notes = 'Fac-símile da edição da ficha, fornecido pela mesma fonte que a ficha (NUMDIF-6 ; folha de rosto não verificada '
                  || 'arquivo por arquivo). Candidato NUMDIF n.º ' || v_c1
-                 || ', validado em lote pela administração da rede, por delegação escrita de 15/10/2026.'
+                 || ', validado em lote pela administração da rede, por délégation écrite du 01/01/2026 (essai).'
      AND v_r.rights_justification = c_justif
-                 || ' Declaração de direitos por lote do arquivista (Rechtenregeling v0.1, carta de 15/10/2026).'
+                 || ' Declaração de direitos por lote do arquivista (Règle d''essai v0.1, lettre du 01/01/2026).'
      AND v_r.rights_justification NOT LIKE '%Menção impressa%'
      AND v_r.notes NOT LIKE '%coordenação%'
      AND v_r.rights_status = 'licenca_livre' AND v_r.access_scope = 'publico' THEN
@@ -115,6 +125,17 @@ BEGIN
      AND NOT has_function_privilege('anon', c_sig, 'EXECUTE')
      AND has_function_privilege('service_role', c_sig, 'EXECUTE')
      AND (SELECT prosecdef FROM pg_proc WHERE oid = c_sig::regprocedure) THEN
+    v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
+
+  -- ── T5 ────────────────────────────────────────────────────────────
+  v_t := 'T5 D26 : la reference vient de la source, rien en dur';
+  IF ingest.fn_declaration_par_lot(c_blmf, 'declaracao_lote') = 'Règle d''essai v0.1, lettre du 01/01/2026'
+     AND ingest.fn_declaration_par_lot(gen_random_uuid(), 'declaracao_lote') IS NULL
+     AND ingest.fn_declaration_par_lot(NULL, 'declaracao_lote') IS NULL
+     AND pg_get_functiondef(c_sig::regprocedure) !~ '15/10/2026|Rechtenregeling'
+     AND pg_get_functiondef('ingest.fn_digital_resource_realign_record'::regproc) !~ '15/10/2026|Rechtenregeling'
+     AND pg_get_functiondef(c_sig::regprocedure) ~ 'fn_declaration_par_lot' THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; END IF;
 

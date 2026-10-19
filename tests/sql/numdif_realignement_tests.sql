@@ -151,7 +151,7 @@ BEGIN
   IF NOT (v_g->>'aligned')::boolean AND v_g->'destination'->>'storage_bucket' = c_public
      AND v_r.storage_bucket = c_public AND v_r.storage_path = v_path AND v_r.access_scope = 'publico'
      AND v_r.resource_type = 'pdf_publico' AND v_r.rights_status = 'licenca_livre' AND v_r.is_active
-     AND v_r.rights_justification LIKE '%lettre « A + B »%Declaração de direitos por lote do arquivista (Rechtenregeling v0.1).'
+     AND v_r.rights_justification LIKE '%lettre « A + B »%Declaração de direitos por lote do arquivista.'
      AND v_r.rights_justification NOT LIKE '%Menção impressa%'
      AND v_r.metadata->>'source_case' = 'diffusion_autorisee' AND v_r.metadata->>'sha256' = v_sha
      AND jsonb_array_length(v_r.metadata->'realignements') = 1
