@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-19** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 49 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -25,7 +25,7 @@
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
-    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 5
+    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 4
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
 - [Manutenção deste documento](#manutenção-deste-documento)
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 18 de outubro de 2026
 
-**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10** — **50 itens, 260 fechamentos**.
+**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10**; **K2 fechado em 19/10** — **49 itens, 261 fechamentos**.
 
-**Frescor dos constatos em 2026-10-19.** **41 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D4, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K1, K2, K7). Os **9** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **40 itens de 49** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D4, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K1, K7). Os **9** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1393,7 +1393,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **K1** | Fazer adotar a ata de criação do Fundo AnarBib | `P0` | Bloqueado |
-| **K2** | Abrir os canais de arrecadação dormentes | `P1` | Bloqueado |
 | **K3** | Manter o registro público das contas | `P2` | Aberto |
 | **K7** | Conduzir a formação das duas coordenações BLMF até a autonomia | `P1` | Em curso |
 | **K8** | Terminar o texto de orientação sobre as ferramentas de bibliotecas militantes | `P2` | Aberto |
@@ -1420,29 +1419,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Bloqueia **K2**.
 
 *Remissões : `PLAN_financement_AnarBib_2026-08-25 §9` · `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26`*
-
-#### K2 — Abrir os canais de arrecadação dormentes
-
-`P1` Prioritário · Estado : **Bloqueado** · Carga : alguns dias · O que exige : deliberação coletiva
-
-**Estado.** O Liberapay está no ar e recebeu sua primeira doação em 27/08. O encarte «apoiar financeiramente» está publicado nas dez locales e nomeia o Liberapay como único canal aberto. **Pix e IBAN dormem** num bloco de comentário HTML entre os marcadores `ENCART-DORMANT-START` e `ENCART-DORMANT-END`.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Lado Brasil: uma chave aleatória dedicada criada pela pessoa mandatada, e a abertura de uma conta no CNPJ — uma cooperativa de crédito é mais coerente que um banco comercial. Lado Europa: decidir qual conta recebe. Depois preencher os modelos, retirar os dois marcadores de comentário, e suprimir os dois parágrafos «em abertura».
-
-**Por que importa.** O Pix não pode ser criado desde a França — a ampliação de agosto de 2026 só vale para enviar. E uma chave posta no CPF pessoal de um compa o expõe à malha fina: daí a urgência da conta no CNPJ. Sobre o IBAN, a recomendação escrita é publicá-lo **em claro** — um «pedir por e-mail» fará perder mais doações do que evitará aborrecimentos.
-
-**O que conta como terminado.**
-
-- Pelo menos um canal adicional está aberto e publicado nas dez locales.
-- O gerador das páginas de contas foi reexecutado após cada edição de `FINANCES.md`.
-- Se a resposta sobre o Wero for negativa, **a frase Wero é retirada do bloco dormente dos dez arquivos** — o modelo ainda está lá.
-- Lembrete: o hook `pre-push` recusa o push enquanto um modelo estiver visível fora do bloco dormente.
-
-**Dependências.** **Bloqueado por K1.**
-
-*Remissões : `PLAN_financement_AnarBib_2026-08-25` · `FINANCES.md`*
 
 #### K3 — Manter o registro público das contas
 
@@ -1847,6 +1823,7 @@ CI verde. |
 | F25 | 2026-10-17 | **Fechado em 17/10 por decisão de Xavier, depois da prova real e da sua correção.** Em 09/10, 72 envios em dois segundos, **58 perdidos**; nessa noite (`6b03ebe4`) o transporte repete um 429 e cadencia a 8/s. **Em 17/10 às 03h45 UTC a prova real chega sozinha**: catorze propostas resolvidas de uma vez, 72 e-mails, **0 perdido**, mas **82 respostas 429** apanhadas pela repetição, uma à última tentativa: a cadência valia por isolado. **Correção de 17/10 (`a24b669e`)**: uma cadência comum a todos os isolados (`private.mail_cadence`, `public.fn_mail_cadence_creneau`, service_role só); cada envio reserva o seu horário na base; recurso à cadência local se a reserva falhar. Dois retoques: a tabela classificada para a cópia de segurança (`af866530`) e o banco de `register` (`bdad9b36`). **Verificado em produção às 23 h 27 (Paris)**: 501 migrações = 501, aplicada pela CI, função fechada a `anon` e `authenticated`, `deployed-functions` em `bdad9b36`. |
 | C4 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier, critério 1 retirado, critério 2 cumprido.** De 722 fichas de autoridade sem país em 1 305 (29/08) a 677 em 1 496 (45 %): três passagens automáticas em setembro, depois a regra de Xavier (08/10) — país só com identidade segura, sempre como **proposta** no Ateliê; dezesseis propostas aplicadas por Xavier em 18/10. **Critério 1 (« abaixo de 20 % ») retirado**: as fontes abertas não dão mais nada seguro; o resto vai para a revisão humana de **C3**. **Critério 2 cumprido**: a detecção dos sobrenomes duplos hispânicos, refeita em leitura sobre a produção, dá **23 candidatas**, versadas no lote `autorite_patronyme` (`796f0379`) com um parecer: quinze « sobrenome duplo provável », propostas invertidas; oito « prenome composto ou inicial provável », propostas sem mudança. **Verificado em produção às 12 h 59 (Paris)**. A triagem se faz no Ateliê (C3). |
 | G10 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier — a ficha estava quatro meses atrasada em relação ao código.** As três questões foram construídas em 18-19/06. **`#111` — acordada e em serviço**: avaliação colaborativa dos pedidos de adesão (proposta, voto por unanimidade, modo degradado com menos de três admins), **3 votos** em produção, resumo diário ativo. **`ONBO-Q13` — caminho escrito e provado na bancada**: `api.fn_constitution_transfer_mandate`, chamada pela página Rede, suíte SQL na CI a cada push; nenhuma transferência real, **Xavier aceita a bancada como prova**. **Volet 10 — pronto no código, facultativo na prática**: as duas bibliotecas que passaram pelo ateliê foram ativadas sem regimento; **decisão de Xavier: o volet 10 continua facultativo.** |
+| K2 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier — cumprido de fato desde 30-31/08.** Liberapay aberto em 27/08 (caixa comum com o CCLA), **Pix no CNPJ do CCLA aberto em 30/08** (`856e5f5`), dispositivo definitivo em 31/08 (`28b11aa`: dois canais públicos, transferência sob pedido; o bloco dormente sumiu). **O IBAN não é publicado** (sob pedido, `anarbib@proton.me`); **Wero abandonado**. Fica a montante o **K1** (o ato do Fundo). |
 
 ---
 
@@ -1878,4 +1855,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 49 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

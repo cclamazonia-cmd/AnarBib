@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) — **50 items, 260 clôtures**.",
-      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10** — **50 itens, 260 fechamentos**."
+      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) — **49 items, 261 clôtures**.",
+      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10**; **K2 fechado em 19/10** — **49 itens, 261 fechamentos**."
     },
     "photo": [
       {
@@ -3342,6 +3342,14 @@
           "fr": "**Clos le 19/10 sur décision de Xavier — la fiche avait quatre mois de retard sur le code.** Elle disait les trois questions « marquées au plus vite depuis juin, sans bouger » ; le backlog v34 (29/08) avait repris le texte du v33 sans le confronter : les trois avaient été bâties les 18 et 19/06 (session « Audit 360 — morceaux rouges »). Constat du 19/10, production en lecture seule. **`#111` — verdict : réveillée, et en service** : l'évaluation collaborative des demandes d'adhésion (`20260619001817` lot 1 : proposition et vote à l'unanimité, calqués sur la cooptation des admins, mode dégradé sous trois admins actifs ; lot 2a : messages et échanges ; lot 3c : récapitulatif quotidien) — `library_request_votes` compte **3 votes**, un par demande (Solidaires, Anarchief, une demande refusée), deux admins actifs donc mode dégradé, le cron `anarbib-request-eval-digest` a tourné le 19/10. **`ONBO-Q13` — chemin écrit, éprouvé au banc** : `api.fn_constitution_transfer_mandate` (`20260618161110` : repointe la constitution, la membership pré-active et la demande vers la nouvelle personne, garde l'avancement des volets, trace dans `library_request_mandate_transfers`), réservée aux admins réseau, appelée depuis la page Réseau (`RedePage.jsx`, par numéro de lecteur·rice) ; la suite `onbo_q13_transfer_mandate_tests` tourne en CI à chaque push (verte, run #1854). Aucun transfert réel (0 ligne) : **Xavier retient le banc comme preuve**, l'essai sur `blmf-teste` aurait demandé de fabriquer une constitution de test en production. **Volet 10 — fini dans le code, facultatif dans les faits** : l'atelier (`AtelierConstituicaoPage`) génère le squelette de règlement en PDF (présenté comme document à délibérer, pas comme certificat), le téléverse, l'enregistre et clôt la constitution ; mais les deux bibliothèques passées par l'atelier, Solidaires (14/09) et Anarchief (24/09), ont été activées par l'administration du réseau sans règlement (`volet_10_regimento_done` faux, aucun PDF). **Décision de Xavier du 19/10 : le volet 10 reste facultatif**, l'activation ne l'exige pas.",
           "pt": "**Fechado em 19/10 por decisão de Xavier — a ficha estava quatro meses atrasada em relação ao código.** As três questões foram construídas em 18-19/06. **`#111` — acordada e em serviço**: avaliação colaborativa dos pedidos de adesão (proposta, voto por unanimidade, modo degradado com menos de três admins), **3 votos** em produção, resumo diário ativo. **`ONBO-Q13` — caminho escrito e provado na bancada**: `api.fn_constitution_transfer_mandate`, chamada pela página Rede, suíte SQL na CI a cada push; nenhuma transferência real, **Xavier aceita a bancada como prova**. **Volet 10 — pronto no código, facultativo na prática**: as duas bibliotecas que passaram pelo ateliê foram ativadas sem regimento; **decisão de Xavier: o volet 10 continua facultativo.**"
         }
+      ],
+      [
+        "K2",
+        "2026-10-19",
+        {
+          "fr": "**Clos le 19/10 sur décision de Xavier — tenu de fait depuis le 30-31/08.** La fiche (et sa seule vérif, du 31/08 au matin) disait Pix et IBAN endormis dans un bloc commenté du site, Wero en attente de la banque. Constat du 19/10 sur le dépôt vitrine (`anarbib_site`, à jour avec Codeberg) et en ligne : le 27/08, Liberapay ouvre la caisse commune avec le CCLA (`a6cab58`) et les pages de comptes sont engendrées depuis `FINANCES.md` en dix langues (`a67293b`) ; le 30/08, **le Pix au CNPJ du CCLA est ouvert, deuxième canal** (`856e5f5`) ; le 31/08 à 19 h 32, **le dispositif est dit définitif** — deux canaux publics, virement sur demande — et le bloc dormant disparaît (`28b11aa`, 110 lignes retirées ; plus aucun `ENCART-DORMANT` ni au dépôt ni en ligne). Le Pix figure sur la page « Contribuer » (revérifiée en ligne le 19/10) ; le générateur des comptes a suivi chaque édition de `FINANCES.md` (dernière le 12/10 : 8,00 € bruts reçus, deux dons Liberapay, rien dépensé, aucune recette Pix encore inscrite). **Deux choix consignés, décision de Xavier du 19/10** : **l'IBAN n'est pas publié** — il se donne sur demande à `anarbib@proton.me`, contrairement à la recommandation de la fiche (le publier en clair) ; **Wero est abandonné** — il n'apparaît nulle part sur le site, et la réponse de la banque n'a pas été retrouvée. Le hook `pre-push` du site (`tools/hooks/pre-push`) n'a plus de gabarit dormant à garder. Reste en amont : **K1** (l'acte du Fonds), dont les canaux n'ont pas attendu l'adoption consignée.",
+          "pt": "**Fechado em 19/10 por decisão de Xavier — cumprido de fato desde 30-31/08.** Liberapay aberto em 27/08 (caixa comum com o CCLA), **Pix no CNPJ do CCLA aberto em 30/08** (`856e5f5`), dispositivo definitivo em 31/08 (`28b11aa`: dois canais públicos, transferência sob pedido; o bloco dormente sumiu). **O IBAN não é publicado** (sob pedido, `anarbib@proton.me`); **Wero abandonado**. Fica a montante o **K1** (o ato do Fundo)."
+        }
       ]
     ]
   },
@@ -4602,64 +4610,6 @@
         {
           "fr": "**19/10 — « rien ne bouge avant l'acte » ne décrit plus la situation.** Les canaux se sont ouverts sans que l'adoption de l'acte soit consignée nulle part : une caisse commune avec le **CCLA** existe depuis le 27/08 (Liberapay), le **Pix au CNPJ du CCLA** est ouvert et publié depuis le 30/08 (dépôt vitrine `856e5f5`), le dispositif est dit « définitif » le 31/08 (`28b11aa` : deux canaux publics, virement sur demande), et la caisse a un nom public, « Fundo AnarBib » (`FINANCES.md`, comptes publiés, dernière mise à jour 12/10 : 8,00 € bruts reçus, rien dépensé). Ce qui reste invérifiable d'ici : l'adoption de l'acte lui-même (le projet `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26` n'est ni au dépôt ni sur le poste) ; la clé Pix est celle de l'association, pas d'une personne nommée, ce qui change la nature du critère 2 ; et `FINANCES.md` laisse à l'assemblée du CCLA la question des frais avancés par une personne. **À Xavier** : l'acte a-t-il été adopté (si oui, où est-il archivé) ? sinon, l'article 1 a-t-il servi de base à l'ouverture, comme le critère 4 le permettait ?",
           "pt": "**19/10 — « nada se move antes do ato » não descreve mais a situação**: caixa comum com o CCLA desde 27/08, Pix no CNPJ do CCLA aberto e publicado desde 30/08, nome público « Fundo AnarBib ». A adoção do ato não está consignada em lugar nenhum: pergunta a Xavier."
-        }
-      ]
-    },
-    {
-      "id": "K2",
-      "d": "K",
-      "p": "P1",
-      "s": "bloque",
-      "e": "M",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Ouvrir les canaux d'encaissement dormants",
-        "pt": "Abrir os canais de arrecadação dormentes"
-      },
-      "v": {
-        "fr": "Liberapay est en ligne et a reçu son premier don le 27/08. L'encart « soutenir financièrement » est publié dans les dix locales et nomme Liberapay comme unique canal ouvert. **Pix et IBAN dorment** dans un bloc de commentaire HTML entre les marqueurs `ENCART-DORMANT-START` et `ENCART-DORMANT-END`. Wero est en attente d'une réponse de l'établissement bancaire.",
-        "pt": "O Liberapay está no ar e recebeu sua primeira doação em 27/08. O encarte «apoiar financeiramente» está publicado nas dez locales e nomeia o Liberapay como único canal aberto. **Pix e IBAN dormem** num bloco de comentário HTML entre os marcadores `ENCART-DORMANT-START` e `ENCART-DORMANT-END`."
-      },
-      "w": {
-        "fr": "Côté Brésil : une clé aléatoire dédiée créée par la personne mandatée, et l'ouverture d'un compte au numéro d'entreprise — une coopérative de crédit est plus cohérente qu'une banque commerciale. Côté Europe : décider quel compte reçoit. Puis remplir les gabarits, retirer les deux marqueurs de commentaire, et supprimer les deux paragraphes « en cours d'ouverture ».",
-        "pt": "Lado Brasil: uma chave aleatória dedicada criada pela pessoa mandatada, e a abertura de uma conta no CNPJ — uma cooperativa de crédito é mais coerente que um banco comercial. Lado Europa: decidir qual conta recebe. Depois preencher os modelos, retirar os dois marcadores de comentário, e suprimir os dois parágrafos «em abertura»."
-      },
-      "y": {
-        "fr": "Le Pix ne peut pas être créé depuis la France — l'élargissement d'août 2026 ne vaut que pour envoyer. Et une clé posée sur le numéro fiscal personnel d'un compa l'expose au contrôle fiscal : d'où l'urgence du compte au numéro d'entreprise. Sur l'IBAN, la recommandation écrite est de le publier **en clair** — un « demander par courriel » fera perdre plus de dons qu'il n'évitera d'ennuis.",
-        "pt": "O Pix não pode ser criado desde a França — a ampliação de agosto de 2026 só vale para enviar. E uma chave posta no CPF pessoal de um compa o expõe à malha fina: daí a urgência da conta no CNPJ. Sobre o IBAN, a recomendação escrita é publicá-lo **em claro** — um «pedir por e-mail» fará perder mais doações do que evitará aborrecimentos."
-      },
-      "f": {
-        "fr": [
-          "Au moins un canal supplémentaire est ouvert et publié dans les dix locales.",
-          "Le générateur des pages de comptes a été relancé après chaque édition de `FINANCES.md`.",
-          "Si la réponse sur Wero est négative, **la phrase Wero est retirée du bloc dormant des dix fichiers** — le gabarit y est encore.",
-          "Rappel : le hook `pre-push` refuse la poussée tant qu'un gabarit est visible hors du bloc dormant."
-        ],
-        "pt": [
-          "Pelo menos um canal adicional está aberto e publicado nas dez locales.",
-          "O gerador das páginas de contas foi reexecutado após cada edição de `FINANCES.md`.",
-          "Se a resposta sobre o Wero for negativa, **a frase Wero é retirada do bloco dormente dos dez arquivos** — o modelo ainda está lá.",
-          "Lembrete: o hook `pre-push` recusa o push enquanto um modelo estiver visível fora do bloco dormente."
-        ]
-      },
-      "dep": {
-        "fr": "**Bloqué par K1.**",
-        "pt": "**Bloqueado por K1.**"
-      },
-      "r": [
-        "PLAN_financement_AnarBib_2026-08-25",
-        "FINANCES.md"
-      ],
-      "verif": [
-        {
-          "fr": "31/08 — les marqueurs `ENCART-DORMANT-START` sont en place dans les dix fichiers du dépôt vitrine. Rien de neuf mesurable d'ici sur Pix, IBAN ou Wero.",
-          "pt": "31/08 — os marcadores `ENCART-DORMANT-START` estão nos dez arquivos do repositório vitrine."
-        },
-        {
-          "fr": "**19/10 — les critères sont tenus depuis le 30-31/08 ; la vérif du 31/08 a été écrite juste avant.** Le **Pix au CNPJ du CCLA est ouvert** depuis le 30/08 (`856e5f5`, « deuxième canal ») et publié en ligne (page « Contribuer », revérifiée ce jour) ; le bloc dormant a été retiré le 31/08 à 19 h 32 (`28b11aa`, « dispositif définitif — deux canaux publics, virement sur demande ») — plus aucun `ENCART-DORMANT` ni au dépôt ni en ligne ; le générateur des comptes a suivi chaque édition de `FINANCES.md` (dernière le 12/10). Deux choix à consigner à la clôture : **l'IBAN n'est pas publié** (sur demande, à `anarbib@proton.me`), contrairement à la recommandation de la fiche ; **Wero n'apparaît nulle part**, la réponse de la banque n'a pas été retrouvée. Clôture proposée à Xavier.",
-          "pt": "**19/10 — critérios cumpridos desde 30-31/08**: Pix no CNPJ do CCLA aberto e publicado, bloco dormente retirado (`28b11aa`). IBAN sob pedido; Wero ausente. Fechamento proposto a Xavier."
         }
       ]
     },
