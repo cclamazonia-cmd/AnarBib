@@ -33,7 +33,7 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
 | `wait-for-docker.sh` | Attend le socket Docker (pont Docker Desktop ↔ WSL), appelé en `ExecStartPre` du runner |
 | `systemd/forgejo-runner.service` · `systemd/forgejo-runner.service.d/` | Le runner Forgejo et son drop-in |
-| `anarbib-copie-froide.sh` | La réplique hors ligne des trois dépôts restic sur un disque qu'on débranche, et sa vérification intégrale (lecture seule côté distant) |
+| `anarbib-copie-froide.sh` | La réplique hors ligne des quatre dépôts restic sur un disque qu'on débranche (les trois distants, et le dépôt local du flux lourd depuis le 19/10), et sa vérification intégrale (lecture seule côté distant) |
 | `anarbib-mirror-refresh.sh` | Le rafraîchissement du miroir Git `anarbib-mirror.git`, avec le garde-fou anti-réécriture d'historique |
 | `anarbib-exploitation-suit.sh` | Le checkout d'exploitation `~/anarbib` suit `main` en avance rapide seulement — appelé en fin de tir du miroir (I33) |
 | `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : quatre flux, l'unité de notification, le contrôle de fraîcheur |
@@ -457,11 +457,12 @@ base), et `map-tiles` a été recopié depuis `~/pmtiles/planet-z13-20260917.pmt
 plutôt que retéléchargé : son eTag multipart, recalculé en parties de 6 Mio
 (`bc98382321d4870dda75e99d3df88a72-5664`), est identique à celui de l'objet.
 
-**Ce que ça ne règle pas.** La copie froide (`anarbib-copie-froide.sh`) ne
-réplique que les trois dépôts distants : le dépôt lourd n'a pas encore de copie
-sur le disque débranchable `F:`. Et le jour où un tiers aura la place (I21), le
-flux `lourd` y partira — c'est un changement de `LOURD_REPO`, plus une copie
-de l'historique (`restic copy`).
+**Ce que ça ne règle pas.** Le dépôt lourd n'a pas de copie chez un tiers.
+Depuis le 19/10, la copie froide le vérifie et prépare sa réplique sur le disque
+débranchable `F:` (section suivante) : c'est une copie hors du poste, pas hors
+du lieu. Le jour où un tiers aura la place (I21), le flux `lourd` y partira —
+c'est un changement de `LOURD_REPO`, plus une copie de l'historique
+(`restic copy`).
 
 ## Les horaires
 
@@ -492,7 +493,26 @@ fois.* Corrigé le 26/08 par [`anarbib-copie-froide.sh`](anarbib-copie-froide.sh
 ```bash
 deploy/ops/anarbib-copie-froide.sh          # télécharge, vérifie, prépare
 deploy/ops/anarbib-copie-froide.sh --vers /mnt/f/anarbib-backups   # si le disque est monté
+deploy/ops/anarbib-copie-froide.sh --sans-lourd   # les trois distants seuls (rapide)
 ```
+
+**Le dépôt lourd (depuis le 19/10/2026).** Le quatrième dépôt, celui du flux
+`lourd` (PDF, EPUB, fond de carte : ~51 Gio), est **local**, sur `E:`. Il ne
+passe donc pas par le téléchargement, ni par `~/restic-miroir/` : le recopier
+dans WSL coûterait 51 Go à `C:`. Le script le vérifie **en place**, verrou
+`.bg2.lock` tenu (aucun tir n'écrit pendant la lecture — un tir en cours finit
+d'abord, 45 min d'attente au plus) : `restic check --read-data`, puis les
+empreintes, écrites dans `SHA256SUMS-lourd.txt` avec la copie datée. Elles sont
+**en cache** (`~/restic-miroir/.empreintes-lourd.tsv`, clé chemin + taille +
+date) : un paquet restic ne change jamais une fois écrit, seuls les nouveaux
+sont hachés. Vers `F:`, **une seule réplique**, non datée,
+`F:\anarbib-backups\anarbib-lourd`, tenue par `robocopy /MIR` — le script
+imprime la commande, puis le `sha256sum -c` qui prouve la copie. `/MIR` retire
+aussi les paquets que le prune a retirés : la réplique reste un dépôt cohérent.
+La règle « une seule génération » ci-dessous vise le dépôt `court` et ses
+données personnelles ; celui-ci n'en porte pas, et une génération datée de
+51 Gio par passage remplirait le disque. Un dépôt lourd illisible ou absent
+rend la copie **incomplète** (code 1). Banc : `src/tests/copie-froide-lourd.test.js`.
 
 **Pourquoi le script ne peut pas écrire directement sur le disque.** Trois
 contraintes se combinent, aucune contournable sans privilèges :
@@ -533,6 +553,8 @@ copie**, et elle est gardée à ce titre.
 | originale | Herbes Folles, SFTP | par le réseau |
 | hors ligne | `F:\anarbib-backups\restic-<date>` | disque débranché |
 | locale | `~/restic-miroir/<date>/` | sur le poste |
+| **lourd**, originale | `E:\anarbib-sauvegardes\anarbib-lourd` | sur le poste |
+| **lourd**, hors ligne | `F:\anarbib-backups\anarbib-lourd` | disque débranché |
 
 > **Une seule génération (REGISTRE `BG2-FROID-1`, 21/09/2026).** Chaque copie
 > emporte le dépôt `court`, donc des données personnelles chiffrées promises à
