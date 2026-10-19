@@ -4971,6 +4971,10 @@
         {
           "fr": "**19/10, soir — le relais Nodo50 est prêt, et sa place est à trancher.** Le même jour : Nodo50 accepte plus de 1 000 courriels par jour ; SPF et DKIM publiés ; port 465 éprouvé depuis les fonctions (fonction d'essai retirée, `36143e66`) ; cadence et rejeu SMTP en production (`a96452ff`) ; secrets posés avec `MAIL_TRANSPORT=resend` ; runbook écrit (`cb562dae`). **Reste l'étape 7** : passer `MAIL_TRANSPORT=smtp` (jamais le lundi entre 08 h et 09 h 15 UTC), les quatre envois du chemin critique, un premier `dkim=pass`, quatre semaines de surveillance, puis fermer Resend. **Contradiction à lever par Xavier** : la répartition arrêtée le même jour vers midi écarte Nodo50 pour le courrier (« pas montré sérieux » ; candidats ARN, bida.im, repli européen) — puis le chantier Nodo50 a été mené l'après-midi.",
           "pt": "**19/10, noite — o relé Nodo50 está pronto** (SPF/DKIM, porta 465, cadência SMTP em produção, runbook). Falta a etapa 7. Contradição a resolver por Xavier: a repartição do mesmo dia afasta a Nodo50."
+        },
+        {
+          "fr": "**19/10, soir — Nodo50 reste le relais retenu** (mot de Xavier : « ils se sont sauvés de peu ») ; la contradiction relevée plus haut est levée. Reste l'étape 7 telle qu'écrite : `MAIL_TRANSPORT=smtp` hors du lundi 08 h - 09 h 15 UTC, les quatre envois du chemin critique, un premier `dkim=pass`, quatre semaines de surveillance, puis fermer Resend.",
+          "pt": "**19/10, noite — a Nodo50 continua como relé** (« salvaram-se por pouco »). Falta a etapa 7."
         }
       ]
     },
@@ -6863,12 +6867,12 @@
         "pt": "Acompanhar as respostas esperadas da Anarchief e aplicá-las"
       },
       "v": {
-        "fr": "La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoi à confirmer** : deux relectures du 19/10 se contredisent sur son départ.",
-        "pt": "Quatro perguntas a J/M (19/10): Theorie en praktijk, 34 PDF restritos, autorizações, nome exibido. Envio a confirmar."
+        "fr": "La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoyée le 19/10 au soir** (confirmé par Xavier).",
+        "pt": "Quatro perguntas a J/M (19/10): Theorie en praktijk, 34 PDF restritos, autorizações, nome exibido. Enviada em 19/10 à noite."
       },
       "w": {
-        "fr": "Confirmer l'envoi ; à chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).",
-        "pt": "Confirmar o envio; aplicar cada resposta."
+        "fr": "À chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).",
+        "pt": "Aplicar cada resposta."
       },
       "y": {
         "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
@@ -7188,7 +7192,12 @@
       "r": [
         "Relecture des sessions du 16 au 19/10/2026"
       ],
-      "verif": []
+      "verif": [
+        {
+          "fr": "**19/10, 21 h 26 — réaligné, le miroir repasse.** `~/anarbib` a été remis sur `origin/main` à 21 h 11 (reflog : `reset: moving to origin/main`, hors de cette session) ; un lancement à la main de `anarbib-mirror-refresh` à 21 h 26 a avancé le miroir (`d127f2bb → 04c83102`) puis le checkout (`0c972798 → 04c83102`), sans erreur. Écart avec `origin/main` : 0/0. **Reste pour clore** : le passage automatique du 20/10 à 18 h sans erreur, aucun commit local d'ici là, et la règle écrite là où les sessions la lisent.",
+          "pt": "**19/10, 21h26 — realinhado**: `~/anarbib` reposto em `origin/main` às 21h11; o refresh do espelho passou às 21h26. Falta: a passagem automática de 20/10 às 18h e a regra escrita."
+        }
+      ]
     },
     {
       "id": "I37",

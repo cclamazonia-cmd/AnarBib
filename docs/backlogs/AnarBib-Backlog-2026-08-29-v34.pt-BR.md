@@ -1291,7 +1291,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** **Verificado no repositório em 07/09**: `supabase/functions/_shared/transport/email.ts` conhece dois transportes, `sendViaResend` e `sendViaBrevo` — o segundo sobrevive à retirada do Brevo (R.6/R.7, anunciado fechado). Nenhum transporte SMTP genérico, logo nenhum meio de ligar um relay militante (ARN, Nodo50, bida.im) no dia em que um disser sim. A nota de 05-06/09 põe essa saída depois de Bolonha, atrás do pedido de um relay SMTP no dia 12.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Pedir antes de escolher (os relays militantes primeiro, Scaleway como recuo); escrever `sendViaSmtp` (ou o transporte escolhido) e restabelecer um roteamento por variável; remover `sendViaBrevo`; só levantar erro onde deve (**F7** está fechado nisso).
 
@@ -1461,11 +1461,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 `P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
 
-**Estado.** Quatro perguntas a J/M (19/10): Theorie en praktijk, 34 PDF restritos, autorizações, nome exibido. Envio a confirmar.
+**Estado.** Quatro perguntas a J/M (19/10): Theorie en praktijk, 34 PDF restritos, autorizações, nome exibido. Enviada em 19/10 à noite.
 
 *Verificado : *
 
-**O que é.** Confirmar o envio; aplicar cada resposta.
+**O que é.** Aplicar cada resposta.
 
 **Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
 
@@ -1894,7 +1894,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `~/anarbib` com 5 commits à frente e 72 atrás de `origin/main`; o refresh do espelho recusa avançar desde 19/10.
 
-*Verificado : *
+*Verificado : [object Object]*
 
 **O que é.** Verificar os equivalentes a montante e repor `main`; escrever a regra.
 

@@ -1291,7 +1291,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** **Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Demander avant de choisir (les relais militants d'abord, Scaleway en repli) ; écrire `sendViaSmtp` (ou le transport retenu) et rétablir un aiguillage par variable ; supprimer `sendViaBrevo` ; ne faire lever que ce qui doit lever (**F7** est clos là-dessus).
 
@@ -1461,11 +1461,11 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 `P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
 
-**État.** La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoi à confirmer** : deux relectures du 19/10 se contredisent sur son départ.
+**État.** La réponse groupée du 19/10 à J/M pose quatre questions : *Theorie en praktijk* (pages 322 et 3027), un document ou deux (lignes du run 33 restées en attente) ; les 34 PDF Constandse et Lehning restreints par précaution le 19/10 (`18d8edf8`), à rouvrir ou non ; qui demande les autorisations aux trois ayants droit nommés et à un traducteur ; le nom affiché dans l'application. **Envoyée le 19/10 au soir** (confirmé par Xavier).
 
 *Vérifié : *
 
-**Ce que c'est.** Confirmer l'envoi ; à chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).
+**Ce que c'est.** À chaque réponse, appliquer (fusion ou non des deux pages, réouverture par `realign-digital-resource`, demandes d'autorisation, nom d'affichage — voir E41).
 
 **Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
 
@@ -1894,7 +1894,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Vérifié le 19/10 au soir : `~/anarbib` a **5 commits d'avance et 72 de retard** sur `origin/main` — quatre « copies locales » des sessions de sauvegarde (`bf2b0069`, `6fe9ac8a`, `4871d70f`, `dd74aefa`) et `a648bd86` (l'ISBD, déjà en amont sous `0d884a0f` et `9636773a`). `anarbib-mirror-refresh` refuse donc d'avancer (« checkout DIVERGENT … je ne touche à rien », 14 h 31, 18 h 00, 18 h 50) : les scripts d'exploitation (#BG2, fraîcheur, témoin) tournent sur du code périmé. Régression de fait d'I33 (clos le 09/10).
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Vérifier que chaque « copie locale » a son équivalent en amont, puis remettre `main` sur `origin/main` ; écrire la règle (aucun commit dans le checkout d'exploitation) là où les sessions la liront.
 
