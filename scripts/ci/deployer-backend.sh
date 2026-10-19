@@ -91,6 +91,7 @@ else
   command -v supabase >/dev/null 2>&1 || {
     echo "✗ CLI supabase introuvable dans le PATH." >&2
     echo "  curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz" >&2
+    echo "  echo \"78ee2574205bbca1530d01749b0df3c1cd37c8ca35d047887584d4620542a729  /tmp/supabase.tar.gz\" | sha256sum -c -" >&2
     echo "  tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/supabase" >&2
     exit 1
   }

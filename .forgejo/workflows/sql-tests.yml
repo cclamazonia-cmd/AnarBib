@@ -62,10 +62,10 @@ jobs:
   sql-tests:
     runs-on: anarbib-local
     container:
-      image: node:22
+      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
     services:
       db:
-        image: public.ecr.aws/supabase/postgres:17.6.1.084  # = image db du stack local
+        image: public.ecr.aws/supabase/postgres:17.6.1.084@sha256:95d92e9563121189086690a4b7f8f2b711a4809a2499f45592199aae68ebae5f  # = image db du stack local, épinglée le 19/10/2026
         env:
           POSTGRES_PASSWORD: postgres
         # Health TCP : l'image lance un serveur d'amorçage (socket-only) puis le
@@ -84,9 +84,10 @@ jobs:
           echo "✓ outils prêts ($(psql --version))"
 
       - name: Checkout (shallow)
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
         with:
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Suites SQL d'acceptation
         env:
@@ -110,10 +111,10 @@ jobs:
   rejeu-image:
     runs-on: anarbib-local
     container:
-      image: node:22
+      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
     services:
       db:
-        image: public.ecr.aws/supabase/postgres:17.6.1.084  # = image db du stack local
+        image: public.ecr.aws/supabase/postgres:17.6.1.084@sha256:95d92e9563121189086690a4b7f8f2b711a4809a2499f45592199aae68ebae5f  # = image db du stack local, épinglée le 19/10/2026
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -130,9 +131,10 @@ jobs:
           echo "✓ outils prêts ($(psql --version))"
 
       - name: Checkout (shallow)
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
         with:
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Rejeu des migrations sur l'image (scripts de deploy/, A.1, sous postgres)
         env:
@@ -175,7 +177,7 @@ jobs:
     if: failure()
     runs-on: anarbib-local
     container:
-      image: node:22
+      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
     steps:
       - name: Ouvrir ou rouvrir le ticket de rouge
         env:
@@ -256,7 +258,7 @@ jobs:
     if: ${{ !cancelled() && needs['sql-tests'].result == 'success' && needs['rejeu-image'].result == 'success' }}
     runs-on: anarbib-local
     container:
-      image: node:22
+      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
     continue-on-error: true
     steps:
       - name: Refermer le ticket de rouge s'il y en a un
