@@ -35,6 +35,8 @@ const TRANSPORT_CODE = tsToCjs(new URL('../../supabase/functions/_shared/transpo
 // F15 (24/09/2026) : les destinataires d'administration viennent du module
 // partagé (admins actif·ves + boîte collective) — le vrai, sans import.
 const ADMINS_CODE = tsToCjs(new URL('../../supabase/functions/_shared/context/network-admins.ts', import.meta.url));
+// F26 (19/10/2026) : le pied est le pied commun du réseau, localisé — le vrai dictionnaire.
+const MAIL_CODE = tsToCjs(new URL('../../supabase/functions/_shared/i18n/mail-strings.ts', import.meta.url));
 
 const SECRET = 'webhook-de-test';
 const ENV = {
@@ -115,6 +117,11 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
     if (spec.endsWith('deps.ts')) return { createClient: () => ({ from: requete }) };
     if (spec.endsWith('inline-images.ts')) return { inlineLogosInHtml: async (h) => h };
     if (spec.endsWith('./strings.ts')) return strings;
+    if (spec.endsWith('mail-strings.ts')) {
+      const m = { exports: {} };
+      new Function('require', 'module', 'exports', MAIL_CODE)(avecLocales(requireStub), m, m.exports);
+      return m.exports;
+    }
     if (spec.endsWith('network-admins.ts')) {
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', ADMINS_CODE)(avecLocales(requireStub), m, m.exports, DenoStub);
@@ -250,5 +257,24 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
     expect(envois[0].to[0]).toBe('louise@exemplo.test');
     expect(envois[0].html).not.toContain('anarbib.org/fr/accueil/');
     expect(envois[0].html).toContain(esc(tr('fr', 'refused.intro', { library: DEMANDE.library_name })));
+  });
+
+  // F26 (19/10/2026) : le pied venait de la devise FOOTER_TEXT (secret supprimé,
+  // repli portugais « Em caso de dúvida, responda a este e-mail. ») et de la clé
+  // `footer` (« réponds à cet e-mail ») — une invitation à répondre à un courriel
+  // qui part sans adresse de réponse. C'est désormais le pied commun du réseau.
+  it('le pied est celui du réseau, dans la langue de chaque destinataire, sans invitation à répondre', async () => {
+    const appeler = monterEF({ langueDemandeuse: 'fr', env: { FOOTER_TEXT: 'Devise globale à ne plus lire' } });
+    const { envois } = await appeler('library_request_approved');
+    const m = envois.find((e) => e.to[0] === 'louise@exemplo.test');
+    const copie = envois.find((e) => e.to[0] === 'admin@exemplo.test');
+    expect(m.html).toContain(esc('Message automatique du réseau AnarBib.'));
+    expect(m.text).toContain('Message automatique du réseau AnarBib.');
+    expect(copie.html).toContain('Automatische Nachricht des AnarBib-Netzwerks.');
+    for (const e of envois) {
+      expect(e.html).not.toContain('Devise globale');
+      expect(e.html).not.toMatch(/Em caso de dúvida|répond(?:ez|s) à cet e-mail|antworte einfach/i);
+      expect(e.reply_to ?? null).toBeNull();
+    }
   });
 });

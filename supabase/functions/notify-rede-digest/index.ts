@@ -17,7 +17,7 @@
 // ============================================================================
 import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
-import { tMail, greeting } from "../_shared/i18n/mail-strings.ts";
+import { tMail, tMailTexte, greeting } from "../_shared/i18n/mail-strings.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { APP_BASE_URL as APP_URL } from "../_shared/core/app-url.ts";
 
@@ -62,12 +62,15 @@ function section(headingHtml: string, itemsHtml: string): string {
 }
 
 function renderDigest(opts: {
-  brand: string; loc: string; name?: string | null; logoUrl: string; footerText: string;
+  brand: string; loc: string; name?: string | null; logoUrl: string;
   unsubUrl: string;
   gazettes: Array<{ number: number; masthead_title?: string | null }>;
   circles: Array<{ name: string; description?: string | null }>;
 }): { subject: string; html: string; text: string } {
-  const { brand, loc, gazettes, circles, unsubUrl, logoUrl, footerText } = opts;
+  const { brand, loc, gazettes, circles, unsubUrl, logoUrl } = opts;
+  // F26 (19/10/2026) : le pied commun du réseau, dans la langue de l'abonné·e.
+  // NETWORK_FOOTER_TEXT / FOOTER_TEXT ne sont plus lus (repli portugais en dur).
+  const footerText = tMailTexte(loc, "layout.footerTextNetwork");
   const subject = tMail(loc, "rede.digest.subject", { brand });
   const title = tMail(loc, "rede.digest.title");
   const intro = tMail(loc, "rede.digest.intro");
@@ -185,7 +188,6 @@ Deno.serve(async (req) => {
     const senderName = (Deno.env.get("SENDER_NAME") || brand).trim();
     const senderEmail = (Deno.env.get("SENDER_EMAIL") || "anarbib@anarbib.org").trim();
     const logoUrl = (Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("LOGO_URL") || "").trim();
-    const footerText = (Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("FOOTER_TEXT") || "AnarBib — Rede de bibliotecas libertárias.").trim();
 
     let sent = 0;
     const errors: Array<{ email: string; error: string }> = [];
@@ -193,7 +195,7 @@ Deno.serve(async (req) => {
       const loc = r.preferred_language || "pt-BR";
       const token = tokenByUser.get(r.id) || "";
       const unsubUrl = `${supabaseUrl}/functions/v1/lettre-unsubscribe?token=${encodeURIComponent(token)}`;
-      const { subject, html, text } = renderDigest({ brand, loc, name: r.first_name, logoUrl, footerText, unsubUrl, gazettes, circles });
+      const { subject, html, text } = renderDigest({ brand, loc, name: r.first_name, logoUrl, unsubUrl, gazettes, circles });
       try {
         await sendDigestEmail({ senderName, senderEmail, to: r.email, subject, html, text });
         sent++;

@@ -4,6 +4,7 @@ import { createClient } from '../_shared/deps.ts';
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
+import { tMailTexte } from "../_shared/i18n/mail-strings.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
@@ -13,7 +14,6 @@ const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || "").trim();
 const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || "").trim() || "Coordenação do AnarBib";
 const BRAND_NAME = (Deno.env.get("BRAND_NAME") || "").trim() || "AnarBib";
 const SENDER_EMAIL = (Deno.env.get("SENDER_EMAIL") || "").trim() || "anarbib@anarbib.org";
-const FOOTER_TEXT = (Deno.env.get("FOOTER_TEXT") || "").trim() || "Em caso de dúvida, responda a este e-mail.";
 const LOGO_URL = (Deno.env.get("LOGO_URL") || "").trim();
 // LIBRARIAN_PHONE n'est plus lu (16/10/2026) : numéro personnel global, sans rapport
 // avec la bibliothèque candidate ni avec le réseau.
@@ -169,15 +169,16 @@ function adminTarget() {
     name: ADMIN_NAME || undefined
   };
 }
+// F26 (19/10/2026) : le pied commun du réseau, localisé (layout.footerTextNetwork).
+// L'ancien pied (« En cas de doute, réponds à cet e-mail », clé `footer` de
+// strings.ts) et la devise FOOTER_TEXT imprimée sous le cadre (secret supprimé le
+// 19/10, repli portugais en dur) invitaient à répondre à un courriel qui part
+// sans adresse de réponse (noReplyTo, F14).
 function footerHtml(locale) {
-  const parts = [];
-  parts.push(esc(tr(locale || FALLBACK_LOCALE, "footer")));
-  return parts.join("<br>");
+  return esc(tMailTexte(locale || FALLBACK_LOCALE, "layout.footerTextNetwork"));
 }
 function footerText(locale) {
-  const parts = [];
-  parts.push(tr(locale || FALLBACK_LOCALE, "footer"));
-  return parts.join("\n");
+  return tMailTexte(locale || FALLBACK_LOCALE, "layout.footerTextNetwork");
 }
 // Version texte (16/09/2026) : introHtml passe par esc() ; retirer les balises
 // laissait les entités (« n&#039;est »). On les rend à la lettre.
@@ -231,7 +232,7 @@ function renderEmail(opts) {
           </tr>
           <tr>
             <td style="padding:12px 6px 0;color:#9c9c9c;font-size:12px;line-height:1.4;text-align:center;">
-              © ${esc(BRAND_NAME)} — ${esc(FOOTER_TEXT)}
+              © ${esc(BRAND_NAME)}
             </td>
           </tr>
         </table>

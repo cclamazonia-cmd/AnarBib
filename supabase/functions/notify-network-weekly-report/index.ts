@@ -4,6 +4,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
+import { tMailTexte } from "../_shared/i18n/mail-strings.ts";
 const PAGE_SIZE = 1000;
 function mustEnv(name) {
   const value = Deno.env.get(name);
@@ -55,8 +56,13 @@ function resolveEnvLogoUrl() {
   // rapport hebdomadaire du réseau, NETWORK_LOGO_URL est donc lu en priorité.
   return (Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "").trim();
 }
-function resolveEnvFooterText() {
-  return (Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("FOOTER_TEXT") || "Mensagem automática de coordenação do AnarBib.").trim();
+// F26 (19/10/2026) : le pied commun du réseau (layout.footerTextNetwork) ;
+// NETWORK_FOOTER_TEXT / FOOTER_TEXT ne sont plus lus (repli portugais en dur, secret
+// supprimé le 19/10). Le rapport est rédigé en pt-BR seul (mail-ptbr-voce,
+// TEXTE_EN_DUR_PT) : le pied suit la langue du corps, pas celle du profil.
+const LANGUE_DU_RAPPORT = "pt-BR";
+function resolveFooterText() {
+  return tMailTexte(LANGUE_DU_RAPPORT, "layout.footerTextNetwork");
 }
 function resolveEnvSenderName() {
   // R.7 : harmonise sur SENDER_NAME canonique (NETWORK_SENDER_NAME etait aligne).
@@ -223,7 +229,7 @@ function resolveRouting() {
     recipientName: resolveEnvReplyToName() || null,
     brandName: resolveEnvBrandName(),
     logoUrl: resolveEnvLogoUrl(),
-    footerText: resolveEnvFooterText()
+    footerText: resolveFooterText()
   };
 }
 function normalizeName(row, ctx) {

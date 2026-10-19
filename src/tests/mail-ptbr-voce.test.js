@@ -233,7 +233,9 @@ describe('courriel de bienvenue = écran de fin d\'inscription', () => {
 const TEXTE_EN_DUR_PT = [
   'notify-weekly-report/index.ts',
   'notify-network-weekly-report/index.ts',
-  'notify-document-permission-request/index.ts',
+  // 'notify-document-permission-request/index.ts' en est sorti le 19/10/2026 (F26) :
+  // ses chaînes passent par mail-strings.ts (clés docperm.*), onze langues ; la
+  // garde f26-pieds-de-courriel veille à ce qu'aucune prose portugaise n'y revienne.
   '_shared/shared/events.ts',
   // '_shared/core/env.ts' en est sorti le 06/10/2026 (F24) : son dernier texte
   // portugais, le nom d'expéditeur par défaut, est devenu « AnarBib » — le
