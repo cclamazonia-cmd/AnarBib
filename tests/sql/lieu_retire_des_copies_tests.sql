@@ -12,7 +12,8 @@
 --    intact ; lieu vide ou document nul → inchangé.
 -- T2 la notice : plus de lieu nulle part, adresse neutre, les autres clés
 --    de la charge brute intactes.
--- T3 le brouillon publié (charge brute, éditeur), la ligne d'import
+-- T3 le brouillon publié (charge brute, racine du marc_json, éditeur ; un
+--    brouillon sans copie d'import garde son marc_json), la ligne d'import
 --    (charge brute, normalisée, éditeur) et la référence (brute, projetée).
 -- T4 une autre notice qui porte le même mot ailleurs ne bouge pas.
 -- T5 idempotence : le second passage ne change rien.
@@ -37,7 +38,11 @@ BEGIN
   INSERT INTO public.books (titulo, bib_ref, editora) VALUES ('Guide de Bancheville', 'LIEU-AUTRE-1', 'Office de Bancheville')
   RETURNING id INTO v_autre;
   INSERT INTO public.book_drafts (titulo, status, tipo_material, editora, published_book_id, marc_json)
-  VALUES ('Livre de banc', 'draft', 'livro', 'Bancheville', v_book, jsonb_build_object('ingest', jsonb_build_object('raw_payload', v_raw)));
+  VALUES ('Livre de banc', 'draft', 'livro', 'Bancheville', v_book,
+          jsonb_build_object('publisher', 'Bancheville', 'titre', 'Livre de banc', 'ingest', jsonb_build_object('raw_payload', v_raw)));
+  -- un autre brouillon de la même notice, SANS copie d'import : son marc_json ne doit jamais devenir NULL
+  INSERT INTO public.book_drafts (titulo, status, tipo_material, published_book_id, marc_json)
+  VALUES ('Livre de banc, reprise', 'draft', 'livro', v_book, jsonb_build_object('note', 'sans import'));
   INSERT INTO ingest.partner_catalog_sources (partner_name, library_id, relation_status, source_kind, import_enabled)
   VALUES ('Lieu banc', v_lib, 'mapeada', 'own_catalog', true) RETURNING id INTO v_src;
   INSERT INTO ingest.partner_catalog_import_runs (source_id, library_id, storage_path, original_filename, detected_format, run_status)
@@ -79,6 +84,8 @@ BEGIN
   v_t := 'T3 brouillon, ligne et référence d''import';
   IF NOT EXISTS (SELECT 1 FROM public.book_drafts d WHERE d.published_book_id = v_book AND to_jsonb(d)::text ~* 'bancheville')
      AND EXISTS (SELECT 1 FROM public.book_drafts d WHERE d.published_book_id = v_book AND d.editora IS NULL)
+     AND EXISTS (SELECT 1 FROM public.book_drafts d WHERE d.published_book_id = v_book AND d.marc_json ? 'publisher' AND d.marc_json->>'publisher' IS NULL AND d.marc_json->>'titre' = 'Livre de banc')
+     AND (SELECT marc_json FROM public.book_drafts WHERE titulo = 'Livre de banc, reprise') = '{"note": "sans import"}'::jsonb
      AND NOT EXISTS (SELECT 1 FROM ingest.partner_catalog_staging_rows s WHERE s.external_key = '21161' AND to_jsonb(s)::text ~* 'bancheville')
      AND EXISTS (SELECT 1 FROM ingest.partner_catalog_staging_rows s WHERE s.external_key = '21161' AND s.publisher IS NULL AND s.normalized_payload->>'title' = 'Livre de banc')
      AND NOT EXISTS (SELECT 1 FROM ingest.book_import_baselines r WHERE r.raw_payload->>'cle' = '21161' AND to_jsonb(r)::text ~* 'bancheville')

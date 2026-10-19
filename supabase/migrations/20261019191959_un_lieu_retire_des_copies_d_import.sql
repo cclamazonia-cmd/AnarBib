@@ -82,15 +82,21 @@ BEGIN
   v_esc := regexp_replace(v_lieu, '([.\\+*?\[^\]$(){}=!<>|:/-])', '\\\1', 'g');
 
   -- 1. La notice publiée.
+  -- (la racine du marc_json aussi : un brouillon y garde un `publisher` brut ;
+  --  jsonb_set n'est appelé que si la copie d'import existe, jamais sur NULL)
   UPDATE public.books b
-     SET marc_json = jsonb_set(b.marc_json, '{ingest,raw_payload}',
-                               private.fn_jsonb_sans_lieu(b.marc_json->'ingest'->'raw_payload', v_lieu, v_url))
+     SET marc_json = CASE WHEN b.marc_json->'ingest'->'raw_payload' IS NOT NULL
+                          THEN jsonb_set(private.fn_jsonb_sans_lieu(b.marc_json, v_lieu, v_url), '{ingest,raw_payload}',
+                                         private.fn_jsonb_sans_lieu(b.marc_json->'ingest'->'raw_payload', v_lieu, v_url))
+                          ELSE private.fn_jsonb_sans_lieu(b.marc_json, v_lieu, v_url) END
    WHERE b.id = v_book;
 
   -- 2. Ses brouillons (publié ou non) : même titre de page.
   UPDATE public.book_drafts d
-     SET marc_json = jsonb_set(d.marc_json, '{ingest,raw_payload}',
-                               private.fn_jsonb_sans_lieu(d.marc_json->'ingest'->'raw_payload', v_lieu, v_url)),
+     SET marc_json = CASE WHEN d.marc_json->'ingest'->'raw_payload' IS NOT NULL
+                          THEN jsonb_set(private.fn_jsonb_sans_lieu(d.marc_json, v_lieu, v_url), '{ingest,raw_payload}',
+                                         private.fn_jsonb_sans_lieu(d.marc_json->'ingest'->'raw_payload', v_lieu, v_url))
+                          ELSE private.fn_jsonb_sans_lieu(d.marc_json, v_lieu, v_url) END,
          editora = CASE WHEN d.editora ~* v_esc THEN nullif(btrim(regexp_replace(d.editora, v_esc, '', 'gi')), '') ELSE d.editora END,
          local_publicacao = CASE WHEN d.local_publicacao ~* v_esc THEN nullif(btrim(regexp_replace(d.local_publicacao, v_esc, '', 'gi')), '') ELSE d.local_publicacao END
    WHERE d.published_book_id = v_book
