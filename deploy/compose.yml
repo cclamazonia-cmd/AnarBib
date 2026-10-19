@@ -14,6 +14,12 @@
 # doit être rempli à partir des versions officielles (cf. README, §« Épingler »).
 # Aucune image en `latest` : c'est la règle qui rend la reconstruction
 # reproductible.
+#
+# MIROIR D'IMAGES (facultatif) : IMAGE_PREFIX, vide par défaut (Docker Hub),
+# précède le nom de chaque image. Avec un registre miroir, par exemple
+#   IMAGE_PREFIX=registre.exemple.org/miroir/docker.io/
+# les six images sont tirées de ce miroir, aux mêmes versions épinglées.
+# Le préfixe se termine par « / ». Voir README, §« Miroir d'images ».
 # =============================================================================
 
 # ⚠️ NE PAS renommer en « anarbib ». Ce nom est déjà celui du projet Compose de
@@ -33,7 +39,7 @@ services:
   # sont fournies par l'image Supabase, pas par Postgres standard.
   # ---------------------------------------------------------------------------
   db:
-    image: supabase/postgres:${POSTGRES_TAG}
+    image: ${IMAGE_PREFIX:-}supabase/postgres:${POSTGRES_TAG}
     restart: unless-stopped
     mem_limit: 1536m
     # BG2-18 (21/08/2026) : Postgres est borné explicitement.
@@ -119,7 +125,7 @@ services:
   # PostgREST — toutes les RPC `api.*` du front passent par ici.
   # ---------------------------------------------------------------------------
   rest:
-    image: postgrest/postgrest:${POSTGREST_TAG}
+    image: ${IMAGE_PREFIX:-}postgrest/postgrest:${POSTGREST_TAG}
     restart: unless-stopped
     mem_limit: 384m
     depends_on:
@@ -144,7 +150,7 @@ services:
   # ⚠️ À CONFIRMER avant bascule (cf. README, §« Points à vérifier »).
   # ---------------------------------------------------------------------------
   auth:
-    image: supabase/gotrue:${GOTRUE_TAG}
+    image: ${IMAGE_PREFIX:-}supabase/gotrue:${GOTRUE_TAG}
     restart: unless-stopped
     mem_limit: 192m
     depends_on:
@@ -176,7 +182,7 @@ services:
   # imgproxy volontairement absent : aucune transformation d'image demandée.
   # ---------------------------------------------------------------------------
   storage:
-    image: supabase/storage-api:${STORAGE_TAG}
+    image: ${IMAGE_PREFIX:-}supabase/storage-api:${STORAGE_TAG}
     restart: unless-stopped
     mem_limit: 768m
     depends_on:
@@ -210,7 +216,7 @@ services:
   # de travail restant.
   # ---------------------------------------------------------------------------
   functions:
-    image: supabase/edge-runtime:${EDGE_RUNTIME_TAG}
+    image: ${IMAGE_PREFIX:-}supabase/edge-runtime:${EDGE_RUNTIME_TAG}
     restart: unless-stopped
     mem_limit: 512m
     depends_on:
@@ -242,7 +248,7 @@ services:
   # seule VITE_SUPABASE_URL bascule vers le nouveau domaine.
   # ---------------------------------------------------------------------------
   caddy:
-    image: caddy:${CADDY_TAG}
+    image: ${IMAGE_PREFIX:-}library/caddy:${CADDY_TAG}
     restart: unless-stopped
     mem_limit: 128m
     depends_on:

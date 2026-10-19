@@ -223,6 +223,18 @@ Les deux modes coexistent sans interférence : le frontend détecte automatiquem
 
 ---
 
+### Miroir d'images (facultatif)
+
+Par défaut, les six images viennent de Docker Hub. Pour ne plus en dépendre (pannes, limites de téléchargement, retrait d'une étiquette par l'éditeur, juridiction états-unienne), on peut les tirer d'un registre miroir. Il suffit de régler `IMAGE_PREFIX` dans `deploy/.env`, avec l'adresse du miroir terminée par `/` :
+
+```bash
+IMAGE_PREFIX=registre.exemple.org/miroir/docker.io/
+```
+
+Le préfixe précède le nom de chaque image : `supabase/gotrue:v2.197.0` devient `registre.exemple.org/miroir/docker.io/supabase/gotrue:v2.197.0`. Les versions épinglées ne changent pas, et un miroir fidèle sert exactement les mêmes empreintes. Caddy est écrit `library/caddy` : c'est le nom complet de l'image officielle `caddy` sur Docker Hub, c'est donc la même image, et c'est le chemin que connaît un miroir. Vide, la variable ne change rien.
+
+Un registre zot mutualisé avec AnarcosyndicalismeBOOK peut tenir ce rôle : il recopie chaque image à la première demande, puis la sert lui-même. Vérifier le résultat avant de redémarrer : `docker compose config --images`.
+
 ## 3. Sécurité & Routeur `main`
 
 Le routeur Deno (`supabase/functions/main/index.ts`) est le point d'entrée unique de `edge-runtime` :
