@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-19** · 81 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-19** · 73 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -10,21 +10,21 @@
 
 - [Pourquoi une réécriture](#pourquoi-une-réécriture)
 - [Mode d'emploi](#mode-demploi)
-- [L'état réel au 18 octobre 2026](#létat-réel-au-18-octobre-2026)
+- [L'état réel au 19 octobre 2026](#létat-réel-au-19-octobre-2026)
 - [Écarts relevés entre le réel et l'écrit](#écarts-relevés-entre-le-réel-et-lécrit)
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 4
-    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 10
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 15
+    - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 12
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 10
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
-    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 10
-    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
+    - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
+    - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 10
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 4
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -60,61 +60,61 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ---
 
-## L'état réel au 18 octobre 2026
+## L'état réel au 19 octobre 2026
 
-**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) ; **K2 clos le 19/10** (Pix ouvert depuis le 30/08, IBAN sur demande, Wero abandonné) ; **33 items versés le 19/10 au soir** à la relecture des sessions du 16 au 19/10, et neuf fiches remises à jour — **82 items, 261 clôtures**.
+**Relevé du 19 octobre 2026 au soir** (production mesurée à 21 h 40 UTC, dépôt recompté sur `7d6475b6`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 18/10 au soir, `9636773a`). **530 migrations appliquées, 530 au dépôt.** La plus grosse journée du mois : **+72 commits, +26 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — Anarchief passe au catalogue public, reçoit 308 autorités (dont 94 avec Wikidata), 393 liens vers ses pages, tranche ses doublons ; un lieu qui situait un partenaire est retiré de toutes les copies d'import ; les 43 fascicules de Solidaires sont rattachés à leurs trois revues (D3) ; 853 biographies traduites validées en bloc ; Gramsci et Souchy remis en ordre ; **la base** — +17 fonctions, −6 policies (deux migrations de sécurité), avis 493 ; **la CI** — un soir chahuté : WSL tombé trois fois et Docker une fois (runs fantômes annulés), une migration refusée par son propre garde-fou, corrigée ; **le réseau** — identique ; Nodo50 retenu comme relais (F10). **Le compte** : **73 items** et 270 lignes de clôture — C4, G10, K2, F26, C30, D16, D18, C32, D26, J14, H36 et I41 clos le 19/10, et 33 items versés à la relecture des sessions du 16 au 19/10. **Ce qui presse** : D3 (Solidaires, avant le 26/10), B36 (index, le 28/10), I38 (sauvegardes du 25/10), G23 (une API d'IA à déclarer), A7 (réunion Lyon / Herbes Folles / ASR), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage), K1 (le document signé de Belém).
 
-**Fraîcheur des constats au 2026-10-19.** **73 items sur 81** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C30, C31, C32, C33, D3, D4, D8, D15, D16, D18, D21, D22, D23, D24, D25, D26, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, H36, I2, I21, I32, I35, I36, I37, I38, I39, I40, I41, J10, J13, J14, K1, K7). Les **8** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-19.** **65 items sur 73** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D23, D24, D25, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I35, I36, I37, I38, I39, I40, J10, J13, K1, K7). Les **8** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
 | | | |
 |---|---:|---|
-| Tables `public` | **199** | toutes avec RLS, 314 policies ; 48 politiques sur `storage.objects` ; trois tables dans `private` (le réglage et le journal de B42, le créneau d'envoi commun de F25). Inchangé depuis le 17/10. |
+| Tables `public` | **199** | toutes avec RLS, **308 policies** (314 le 18/10) ; **46** politiques sur `storage.objects` (48) — les deux migrations de sécurité de la voisine du 18/10 au soir (écritures directes bornées, fichiers réservés par bibliothèque), passées depuis ; trois tables dans `private`, inchangé. |
 | Tables `ingest` | **14** | toutes avec RLS ; une seule a une policy, 13 n'en ont pas (avis 0008). Inchangé. |
 | Vues `api` | **68** | inchangé ; 67 en `security_invoker`, une sans l'option (`library_email_identity`). |
-| Fonctions applicatives | **1 151** | `public` 792 · `api` 206 · `ingest` 117 · `private` 36. Dont **858 SECURITY DEFINER** (857 le 17/10). **+1** : le déclencheur qui range l'œuvre qu'une notice supprimée laisse vide (`tg_books_range_oeuvre_quittee`). Trois fonctions réécrites sans changer de nombre : `detach_book_from_work` (une œuvre à elle au lieu d'une œuvre vide), `api.catalog_works_v1` et `api.catalog_facets_v1` (le filtre par autorité voit tous les contributeurs liés). |
-| Migrations appliquées | **504** | **504 appliquées en production, 506 numérotées au dépôt** : les deux migrations de la session voisine de 23 h 13 (Paris) — les fichiers réservés par bibliothèque, les écritures directes bornées — ne sont pas encore passées à l'heure du relevé (CI au repos depuis minuit moins sept). Toutes par la CI (`created_by` vide ; les 57 qui portent un auteur sont antérieures au 24/09). **+3 depuis le 17/10 au soir**, toutes du 17-18/10 : une notice garde toujours une œuvre, le texte d'auteur suit les contributeurs, les livres d'une autorité comptent tous ses contributeurs liés. |
+| Fonctions applicatives | **1 168** | `public` 797 · `api` 207 · `ingest` 119 · `private` 45 (**+17** depuis le 18/10). Dont **866 SECURITY DEFINER** (+8). Parmi les ajouts du jour : la lecture de la déclaration par lot d'une source (`ingest.fn_declaration_par_lot`, D26), le retrait d'un lieu dans une copie d'import (`private.fn_jsonb_sans_lieu`), les autorités par liste et leur enrichissement (Anarchief), la bibliothèque source publique, les ressources communes. |
+| Migrations appliquées | **530** | **530 appliquées, 530 au dépôt** : rien en attente. Toutes par la CI (`created_by` vide ; celle du 24/09 qui porte un auteur est connue). **+26 depuis le 18/10 au soir**, dont 22 du 19/10 — la plus grosse journée du mois. Un accroc du soir : la migration qui retire un lieu (`20261019191959`) a été refusée par son propre garde-fou au premier passage (« 1 ligne le porte encore ») — rien d'écrit, mais chaque run de CI butait dessus ; corrigée en place (`731bb91e`), elle est passée à 23 h 38 avec les trois qu'elle bloquait. |
 | Jobs `pg_cron` | **43** | actifs, aucun inactif ; inchangé depuis le 09/10. |
-| Avis de sécurité | **491** | 0 ERROR · **437** WARN sur les DEFINER exposées à `authenticated` (0029), **22** sur celles exposées à `anon` (0028), **1** `search_path` non figé (0011, voulu, B32), **31** INFO « RLS sans policy » (0008 : `ingest` 13, `private` 3, `public` 15). Inchangé depuis le 17/10 : le déclencheur neuf est fermé à `authenticated`. |
-| Avis de performance | **362** | **338** « index inutilisé » (339 le 17/10 ; les compteurs courent depuis le 07/10 18 h 18 UTC, aucun redémarrage depuis), **17** clés étrangères sans index (garde CI à liste fermée), **6** tables sans clé primaire (`conv_backup` ×6), **1** sur les connexions du serveur Auth (voulu). B36 relit les index le 28/10. |
+| Avis de sécurité | **493** | 0 ERROR · **439** WARN sur les DEFINER exposées à `authenticated` (0029, +2), **22** sur celles exposées à `anon` (0028), **1** `search_path` non figé (0011, voulu, B32), **31** INFO « RLS sans policy » (0008 : `ingest` 13, `private` 3, `public` 15). L'audit de sécurité du 17/10 suit son cours ailleurs (B46). |
+| Avis de performance | **280** | **256** « index inutilisé » (338 le 18/10 : les imports et recherches du jour ont servi 82 index), **17** clés étrangères sans index (garde CI à liste fermée), **6** tables sans clé primaire (`conv_backup` ×6), **1** sur les connexions du serveur Auth (voulu). B36 relit les index le 28/10. |
 | Schémas de rebut | **1** | `conv_backup`, sept tables ; inchangé. |
 
 ### Fonctions Edge
 
 | | | |
 |---|---:|---|
-| Dossiers au dépôt | **53** | + `_shared` ; inchangé. Dont le routeur `main`, jamais déployé (I3). Marqueur `deployed-functions` sur `95ae3827`. |
-| Déclarations `verify_jwt` | **38** | dans `supabase/config.toml` ; inchangé. |
+| Dossiers au dépôt | **54** | + `_shared` ; **+1** : `realign-digital-resource` (changer la portée d'un PDF versé) ; `smtp-essai`, posé pour éprouver le relais Nodo50, retiré le même jour. Dont le routeur `main`, jamais déployé (I3). Marqueur `deployed-functions` sur `731bb91e`. |
+| Déclarations `verify_jwt` | **38** | dans `supabase/config.toml` ; inchangé (le commentaire du bloc OPDS dit désormais la garde réelle, `7a6ea3e3`). |
 
 ### Catalogue
 
 | | | |
 |---|---:|---|
-| Notices | **3 566** | **Aucune notice créée, fusionnée ni supprimée depuis le 17/10 au soir.** 2 762 exemplaires (aucun touché), **3 345 œuvres** (−3 depuis le 17/10, par le travail sur les éditions au catalogage), **1 496 autorités** (une fusion d'autorités, 11211 dans 10122), 3 660 fonds dont 1 002 vides, tous d'Anarchief.org (voulu). 1 538 ressources numériques (+6). 44 notices modifiées (BTL 39, MLEG 5). **Plus aucune notice sans œuvre ni œuvre orpheline** : 1841 a repris l'œuvre 1228, 2178 en a reçu une, 2212 rattachée par Xavier ; « Détacher » donne désormais une œuvre à la notice sortie et une notice supprimée range son œuvre vide (`13fe46e8`). Trois textes d'auteur périmés recomposés (636, 220, 2738) et le formulaire envoie désormais le texte recomposé (`3ed61cab`). « Élisée Reclus: Geografia » : Reclus remis en contributeur par Xavier, et la liste des livres d'une autorité voit maintenant tous les contributeurs liés (`95ae3827` ; Reclus : 51 → 59 notices). |
-| Brouillons de catalogage | **3 591** | `draft` 1 844, `published` 1 746, `cancelled` 1 (**+55 reprises de notices publiées hors lot** depuis le 17/10 au soir — le catalogage de la BTL ; `action = update` 467). **Six lots**, inchangés : MLEG 8 (411), BLMF 57 (6) et 66 (24, C26), **Solidaires 63 (1 673 `draft` — D3, un début de révision attendu avant le 26/10)**, Anarchief 67 et 68 (1 002, publiés) ; 475 hors lot. Aucun réimport (H21) : DIRA n'a pas réimporté. |
-| Indexation matière | **2 100 / 3 566** | notices avec au moins un sujet — **1 466 sans aucun**, dont les 1 002 d'Anarchief.org ; inchangé. Item C27. |
-| Thésaurus FICEDL | **621** | descripteurs de l'instantané du 03/09 (H13), 110 liens ; inchangé. **H3** (l'export complet) attend la réponse de la source sur les groupes de mots-clés SPIP. |
-| Périodiques | **4** | titres, 5 notices rattachées ; inchangé. Les douze titres de Solidaires attendent D3. |
+| Notices | **3 562** | **−4 depuis le 18/10** : les pages en doublon d'Anarchief tranchées par l'archiviste (cinq fusions au journal). Aucune notice créée. 2 762 exemplaires (aucun touché), **3 343 œuvres** (−2), **1 803 autorités (+307)** : 308 créées pour Anarchief (847 notices sur 1 002 liées, dont 94 avec un identifiant Wikidata et 76 avec un pays depuis l'enrichissement du soir, `1c072eb6`), une fusion (Souchy, C32). 3 659 fonds dont 1 002 vides (Anarchief, voulu). **1 933 ressources numériques (+395)** : les 393 liens vers la page d'Anarchief des notices sans fichier ; **129 restreintes** (Overige ouvert, 156 PDF ; 34 Constandse et Lehning restreints par précaution). Plus aucune notice sans œuvre ni œuvre orpheline. **Un lieu qui situe un partenaire retiré de toutes les copies d'import** (`04c83102`, `731bb91e`). |
+| Brouillons de catalogage | **3 602** | `draft` 1 842, `published` 1 758, `cancelled` 2 (+11 reprises depuis le 18/10, `action = update` 478). **Six lots** : MLEG 8 (411), BLMF 57 (6, fermé) et 66 (24, C26), **Solidaires 63 (1 673 `draft`, intact — mais 43 fascicules rattachés à leurs trois revues le 19/10, D3 ; un début de révision attendu avant le 26/10)**, Anarchief 67 et 68 (1 002, publiés). Aucun réimport (H21). |
+| Indexation matière | **2 096 / 3 562** | notices avec au moins un sujet — **1 466 sans aucun**, dont les 1 002 d'Anarchief.org ; inchangé à quatre notices près (fusions). Item C27. |
+| Thésaurus FICEDL | **623** | descripteurs (**+2** : les deux dates que la panne du 03/09 avait cachées, `85e38794`), 110 liens. **H36 clos** : « histoire orale » n'a pas été renommé à la source (la fiche dit toujours « histoire : histoire orale »), et « 1848-1867 » n'est pas un terme du thésaurus. **H3** attend toujours la réponse sur les groupes de mots-clés. |
+| Périodiques | **7** | titres (**+3** : *Les utopiques*, *Cahiers de la formation syndicale*, *Revue internationale*, en « proposé », D3) ; 5 notices publiées rattachées, **48 brouillons** rattachés dont les 43 fascicules de Solidaires (9 paires de numéros en double à trancher à la main). |
 
 ### Réseau
 
 | | | |
 |---|---:|---|
-| Bibliothèques | **5 + 1** | **par requête** (`private.fn_mesures_hors_fixtures()`, 21 h 32 UTC) : **5 réelles, toutes actives** — BTL, BLMF, MLEG, Solidaires, anarchief.org — **et 1 de formation**, `blmf-teste`. Inchangé. La correspondance : un fil, deux messages. **L'Atelier : les seize propositions de C4 résolues par consentement (17 et 18/10) et appliquées par Xavier le 18/10 vers minuit** — seize pays posés, Wikidata compris quand il était sûr ; 677 fiches restent sans pays sur 1 496 (45 %). |
-| Comptes | **19 + 4** | **19 comptes réels, dont 17 confirmés, et 4 de formation** ; aucun compte créé depuis le 17/10. Appartenances actives **17 + 9**, exemplaires **2 757 + 5**. Deux seconds facteurs TOTP vérifiés (les deux administrateurs réseau). |
-| Administrateur·rices réseau | **2** | actives, toutes deux avec un second facteur ; A1 attend une troisième administration d'un autre collectif. |
-| Circulation vivante | **9 / 21 / 22 / 0** | emprunts / réservations / consultations / PEB **non archivés**, tous dans les bibliothèques réelles, 0 en formation. Tous « encerrado » ; aucun emprunt créé depuis le 17/10. **Aucun échec de transport mail depuis le 11/10** ; la cadence commune de F25 a servi pour la première fois le 18/10 (sa ligne `resend` existe). **Un incident de santé** : la sauvegarde hebdomadaire des fichiers (Storage) du 18/10 a dépassé son plafond d'une heure — le bucket public des PDF pèse 13 Go depuis les 1 470 PDF d'Anarchief — incident ouvert à 22 h 05 et refermé à minuit dix ; la session voisine travaille à une resynchronisation incrémentale, le minuteur hebdomadaire est suspendu en attendant. |
+| Bibliothèques | **5 + 1** | **par requête** (`private.fn_mesures_hors_fixtures()`, 21 h 40 UTC) : **5 réelles, toutes actives** — BTL, BLMF, MLEG, Solidaires, anarchief.org (passée en catalogue public le 19/10, hors annuaire) — **et 1 de formation**, `blmf-teste`. La correspondance : un fil, deux messages. L'Atelier : les seize propositions de C4 appliquées ; C4 clos. |
+| Comptes | **20 + 4** | **20 comptes réels (+1), dont 17 confirmés, et 4 de formation** ; appartenances actives **17 + 9**, exemplaires **2 757 + 5**. Deux seconds facteurs TOTP vérifiés (les deux administrations réseau). |
+| Administrateur·rices réseau | **2** | actives, toutes deux avec un second facteur ; aucune cooptation depuis le 05/10 (A1, revu le 19/10). |
+| Circulation vivante | **9 / 21 / 22 / 0** | emprunts / réservations / consultations / PEB **non archivés**, tous dans les bibliothèques réelles, 0 en formation. Tous « encerrado » ; aucun emprunt créé. **Aucun échec de transport mail depuis le 11/10** ; le relais SMTP Nodo50 est prêt (cadence, rejeu, runbook), la bascule reste à faire (F10). Aucun incident de santé depuis celui de la sauvegarde des fichiers du 18/10, refermé à 23 h 45 UTC ; la sauvegarde lourde a désormais un dépôt local incrémental et une copie froide. |
 
 ### Dépôt
 
 | | | |
 |---|---:|---|
-| Commits | **3 515** | +12 depuis le relevé du 17/10 au soir (`075ec56f`), compte fait sur le miroir nu complet. Moi : trois correctifs du catalogage nés de ce que Xavier a vu en cataloguant — une notice garde toujours une œuvre, le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs — et la correction du relevé. La voisine : les biographies roumaines (88 en brouillon, puis publiées), 59 sujets traduits en onze langues, les fichiers réservés par bibliothèque, les écritures directes bornées, l'ISBD qui se calcule seul et dont la zone 1 nomme les contributeurs. |
-| Fichiers `src/` | **659** | +1 depuis le 17/10 (un test) ; 253 fichiers dans `src/tests`. **Au-dessus de 60 Ko, hors locales et polices** : `ImportacoesPage` 165 Ko, `BookDraftForm` 134, `CatalogacaoPage` 90, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, le test `h21-lot0-ecrans` 63, `QueuePanel` 62. |
-| Clés i18n | **7 751** | parité stricte sur les onze locales (7 751 chacune, gardée en CI) ; −6 depuis le 17/10 (7 757) : le bouton « Préparer l'ISBD » a disparu, l'ISBD se calculant seul, et la confirmation de « Détacher » est entrée. |
-| Tests | **3 076 + 211** | **3 076 tests JS**, suite complète toute verte le 19/10 (+8 depuis le 17/10), rejouée sur le poste chargé par la CI et la session voisine (charge 30) avec un délai de 120 s par test : aucune assertion rouge. **211 suites SQL** en CI, inchangées depuis le relevé du 18/10 (208 le 17/10 : **+3** — `filtre_autorite_tous_contributeurs`, `fichiers_reserves_par_bibliotheque`, `ecritures_directes_bornees`) ; la suite des œuvres compte deux cas de plus (T6 réécrit, T9 neuf). |
-| Marqueurs de dette | **22** | par la méthode fixe — **dont 4 faux** (le mot « TODOS »). **18 réels, dont 6 dans `src/`** ; inchangé. Aucun n'est une tâche ouverte. |
+| Commits | **3 587** | **+72 depuis le relevé du 18/10 au soir** (`9636773a`). Moi : E6 (deux lots du catalogage), C4 (patronymes), D3 (fascicules), D26, I40, les gestes du soir (C30, D18, C32, C3), le retrait d'un lieu, et le backlog (C4, G10, K2 clos, 33 items versés). Les voisines : l'OAI et la moisson réciproque (ASB), la sauvegarde lourde et sa copie froide, Anarchief (catalogue public, liens wiki, autorités et leur enrichissement, doublons, Overige), les biographies dans les onze langues, F26 (pieds de courriel), Nodo50, la sécurité (freins, appels sortants, compteurs), l'épinglage des images de la CI. |
+| Fichiers `src/` | **677** | **+18** depuis le 18/10 (15 tests, `BatchesPanel.jsx`, `queueOutils.js`, `lib/html.js`) ; 266 fichiers dans `src/tests`. **Au-dessus de 60 Ko, hors locales et polices** : `ImportacoesPage` 165 Ko, `BookDraftForm` 134, `AccountPage` 74, `AuthorDraftForm` 71, `CatalogPage` 66, le test `h21-lot0-ecrans` 63 — `CatalogacaoPage` (31) et `QueuePanel` (56) en sont sortis (E6). |
+| Clés i18n | **7 753** | parité stricte sur les onze locales (7 753 chacune, gardée en CI) ; +2 depuis le 18/10. |
+| Tests | **3 246 + 223** | **3 246 tests JS**, suite complète toute verte le 19/10 à 21 h 40 UTC (262 fichiers, 5 ignorés), lancée runner presque au repos, en quatre minutes — +170 depuis le 18/10 (3 076). En CI, délai de 60 s et une relance par test depuis le 19/10 (`aa155a1e`) ; en local, 20 s sans relance. **223 suites SQL** en CI (+12 depuis le 18/10, dont `d3_fascicules_solidaires`, `lieu_retire_des_copies`, `autorites_par_liste`, `enrichir_autorites`, `source_catalogue_public`, `ressources_communes`, `lien_page_source`, `oai_liens_externes`) ; `numdif_note_lot` gagne un cas (T5, D26). |
+| Marqueurs de dette | **22** | par la méthode fixe — **dont 4 faux** (le mot « TODOS »). **18 réels, dont 6 dans `src/`** ; inchangé. |
 
 ---
 
@@ -492,9 +492,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **C18** | Relire quatorze rapprochements d'œuvres : une même œuvre scindée en deux fiches ? | `P2` | Bloqué |
 | **C26** | Réviser et publier les 24 brouillons de l'acervo historique du CCLA (BLMF) | `P2` | Ouvert |
 | **C27** | Indexer les notices que le vocabulaire matière ne couvre pas | `P2` | Ouvert |
-| **C30** | Décider du sort de ~800 biographies d'autorité traduites automatiquement | `P2` | Ouvert |
 | **C31** | Trancher un rôle « Postface » distinct de la préface | `P3` | Ouvert |
-| **C32** | Corriger deux erreurs d'autorités vues pendant le relevé Anarchief | `P2` | Ouvert |
 | **C33** | Relire et enrichir les 308 autorités créées pour Anarchief | `P2` | Ouvert |
 
 #### C3 — Mener la revue humaine des autorités : patronymes, casse, titres
@@ -503,7 +501,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Les 19 migrations `conventions_*` sont appliquées depuis le 21/08 : les référentiels sont normalisés, les mécaniques sûres ont été passées, la file de vérification existe et l'application permet d'y travailler. **Ce qui reste est la part qu'aucune machine ne fait.**
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Reprendre les trois tables de revue du schéma `conv_backup` — `titres_a_revoir_20260820` (211), `autorites_casse_a_revoir_20260820` (1 274), `autorites_patronyme_a_revoir_20260820` (22) — et les traiter fiche par fiche depuis l'Atelier autorités.
 
@@ -621,27 +619,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `clôture C7` · `docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md`*
 
-#### C30 — Décider du sort de ~800 biographies d'autorité traduites automatiquement
-
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : langue maternelle, délibération collective
-
-**État.** La migration `20261019154741` a versé des traductions de biographies en brouillon : 90 par langue pour ca, de, el, en, eo, es, it, nl ; 84 en fr, 44 en pt-BR, 5 en ro. **À vérifier** : la page d'autorité semble lire `author_translations` sans filtrer le statut — ces textes non relus seraient alors publics, sans mention. Deux doutes relevés en passant : un nom transcrit en grec (« Λε Γκεν »), et « drogas » rendu au sens de médicaments en grec (fiche 11058).
-
-*Vérifié : *
-
-**Ce que c'est.** Vérifier ce que la page publique affiche ; puis trancher : validation en bloc (comme pour le roumain), mention « traduction automatique » à l'écran, ou masquage jusqu'à relecture native.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Ce que voit le public est décidé et conforme à la décision.
-- Les deux doutes relevés sont tranchés.
-
-**Dépendances.** —
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### C31 — Trancher un rôle « Postface » distinct de la préface
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, React / JavaScript
@@ -662,33 +639,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### C32 — Corriger deux erreurs d'autorités vues pendant le relevé Anarchief
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
-
-**État.** Signalées le 19/10, hors du lot traité, toujours en production : l'autorité 10212 (Isidro Guardia Abella) porte les formes variantes actives « Gramsci » et « GRAMSCI, Antonio », alors qu'une autorité 11346 « Gramsci » existe ; Agustín Souchy existe en double (10066 et 10304 « Agustín Souchy Bauer »).
-
-*Vérifié : *
-
-**Ce que c'est.** Retirer les deux formes de 10212 (et vérifier où elles mènent), fusionner les deux Souchy par l'Atelier ou une migration de fusion.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- 10212 ne porte plus de forme de Gramsci ; un seul Souchy, ses notices rattachées.
-
-**Dépendances.** —
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### C33 — Relire et enrichir les 308 autorités créées pour Anarchief
 
 `P2` Courant · État : **Ouvert** · Charge : plusieurs semaines · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
 
 **État.** `1704c05c` (19/10) a créé 308 autorités (197 personnes, 111 collectifs), source « Anarchief.org · import 2026-10 », aucune avec un identifiant Wikidata. La décision de Xavier prévoyait de les marquer pour relecture dans l'Atelier : aucune ligne de file n'a été créée. L'enrichissement (Wikidata, IdRef) a été renvoyé à plus tard. Une lecture à vérifier : « Wayne Prize » pris pour Wayne Price (3 notices) ; 50 graphies restent en texte.
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Verser les 308 dans la file de revue ; rejouer l'enrichissement à deux signaux (règle de C4) ; vérifier « Wayne Prize ».
 
@@ -715,14 +672,11 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
 | **D15** | Un écran pour valider ou rejeter les candidats, PDF ouvert | `P2` | À vérifier |
-| **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | À vérifier |
-| **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | En cours |
 | **D21** | Faire choisir à la BTL le tome de De Greef (notice 415) | `P3` | Ouvert |
 | **D22** | Reprendre à la main les sources fermées aux automates | `P3` | Ouvert |
 | **D23** | Recouper deux dates de droits sur des PDF versés en lecture publique | `P3` | Ouvert |
 | **D24** | Publier les textes intégraux du wiki d'Anarchief en EPUB | `P2` | Ouvert |
 | **D25** | Décider du sort des 24 fichiers Word/ODT d'Anarchief | `P3` | Ouvert |
-| **D26** | Sortir de la fonction de versement la date du 15/10 écrite en dur | `P3` | Ouvert |
 | **D27** | Lever la limite de taille du versement côté serveur (~150-180 Mo) | `P3` | Ouvert |
 | **D28** | Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus | `P3` | Ouvert |
 
@@ -835,49 +789,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
 
-#### D16 — Verser un candidat validé côté serveur, sans clé manipulée par une personne
-
-`P2` Courant · État : **À vérifier** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, SQL / PostgreSQL
-
-**État.** Décision `NUMDIF-4` (15/10). Le 14/10, les deux Reclus ont été versés par une commande lancée à la main dans WSL avec la clé de service ; la clé legacy `service_role` a d'abord été refusée (« signature verification failed ») : seule `sb_secret_…` dans l'en-tête `apikey` passe. Le garde-fou de Claude Code refuse, à juste titre, qu'un agent lise la clé.
-
-*Vérifié : [object Object],[object Object]*
-
-**Ce que c'est.** Une fonction Edge appelée avec le jeton de la coordination de la bibliothèque détentrice : elle relit le candidat validé, télécharge l'URL du fichier côté serveur, refuse si l'empreinte SHA-256 diffère de celle enregistrée à la validation, verse dans le seau que fixe `NUMDIF-2` (`books/<book_id>/<horodatage>_<nom>.pdf`), crée la ressource avec les mêmes champs que les ressources 77 et 78 (source, attribution, justification, `bibliographic_match_validated`), et rend un statut lu (`DOC-RPC-4`).
-
-**Pourquoi ça compte.** Plus de clé dans un terminal, plus d'erreur de shell, et un fichier versé qui est exactement celui qu'on a regardé.
-
-**Ce qui compte comme fini.**
-
-- Un candidat validé est versé et lisible (sous `anon` s'il est public, sous un compte membre s'il est restreint).
-- Une empreinte qui ne correspond plus fait échouer le versement, et l'échec se dit.
-- Contrôles T1/T2 de `documents_numeriques_tests.sql` verts.
-
-**Dépendances.** `D13`, `D15`.
-
-*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md` · `supabase/functions/read-digital-asset/index.ts`*
-
-#### D18 — Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source
-
-`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : bibliothéconomie
-
-**État.** Mesuré le 15/10 : la ressource 62 (Ferrua, Le Maquis) porte `bibliographic_match_validated = false` et aucun `rights_status` — non conforme à `NUMDIF-1`. Les six autres sont `sob_direitos` ; cinq URL sources sur sept désignent un fichier (we.riseup.net `/assets/`, pdfcoffee `/qdownload/`, deux `/wp-content/uploads/`, un fichier `dn….archive.org`).
-
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
-
-**Ce que c'est.** Pour chacune : vérifier l'édition sur la page de titre ; trancher le cas de source (`NUMDIF-2`) ; trouver l'URL de la page qui présente le fichier (pour `D17`). La ressource 62 est mise en conformité ou retirée, par décision de la bibliothèque détentrice.
-
-**Pourquoi ça compte.** Les règles neuves ne valent que si l'existant les respecte.
-
-**Ce qui compte comme fini.**
-
-- Aucune ressource active à `bibliographic_match_validated = false`.
-- Chaque ressource restreinte a un `rights_status` et, si elle en a une, l'URL de sa page source.
-
-**Dépendances.** Aucune ; précède `D17`.
-
-*Renvois : `docs/specs/REGISTRE_decisions.md §47` · `docs/journal/cadrages/CADRAGE_pdf-sous-droits-diffuses_2026-10-15.md`*
-
 #### D21 — Faire choisir à la BTL le tome de De Greef (notice 415)
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : bibliothéconomie
@@ -978,26 +889,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### D26 — Sortir de la fonction de versement la date du 15/10 écrite en dur
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** Le texte « validé par lot » de `ingest.fn_digital_candidate_deposit_record` (`ef3eb581`) cite en dur la délégation et la lettre du 15/10/2026. Si une deuxième source déclare ses droits par lot, ce texte sera faux.
-
-*Vérifié : *
-
-**Ce que c'est.** Lire la référence de la déclaration dans la source (table ou colonne), pas dans le code.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Une seconde source déclarée par lot produit une note juste, prouvé au banc.
-
-**Dépendances.** —
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### D27 — Lever la limite de taille du versement côté serveur (~150-180 Mo)
 
 `P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
@@ -1024,7 +915,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vus le 19/10 : `anarbib-pdf-public/books/7594/…` (19,6 Mo, déposé le 17/10 par un brouillon de reprise publié dans la notice 1127, qui avait déjà sa ressource 980 du même ouvrage) ; un objet de test de mars dans `pdf-restrito/test/`. Aucun ne correspond à une ressource.
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Sur accord de Xavier, les retirer ; vérifier au banc qu'une reprise publiée sur une notice qui a déjà sa ressource ne dépose plus de fichier.
 
@@ -1533,7 +1424,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **H21** | Réimporter un catalogue met à jour ce que l'import connaît déjà au lieu de le dupliquer | `P2` | À vérifier |
 | **H29** | Au retour dans PMB, un exemplaire garde son type, sa section et son code statistique | `P2` | Ouvert |
 | **H35** | Mener la moisson réciproque ASB ↔ AnarBib jusqu'au pilote | `P2` | Ouvert |
-| **H36** | Réaligner le thésaurus FICEDL d'AnarBib sur la source | `P3` | Ouvert |
 
 #### H34 — Publier un gros lot importé prend plusieurs minutes : chaque exemplaire publié recompte la disponibilité de tout le réseau et relit tous les numéros d’inventaire
 
@@ -1729,26 +1619,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### H36 — Réaligner le thésaurus FICEDL d'AnarBib sur la source
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
-
-**État.** En production (623 termes) : « histoire : histoire orale » alors que la source l'a renommé « histoire orale » ; la date 1848-1867 ajoutée à la source est absente. Le raclage du 19/10 (`--export`) ne rapporte ni les dates ni les 97 descripteurs géographiques à plusieurs niveaux ; le changement de libellé n'a pas été apparié.
-
-*Vérifié : *
-
-**Ce que c'est.** Migration d'alignement (libellé et date), puis étendre `--export` aux dates et aux descripteurs géographiques.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Les libellés et dates d'AnarBib égalent ceux de la source au relevé suivant.
-
-**Dépendances.** Le roumain attend de toute façon la relecture (E39).
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
 ---
 
 ### I — Auto-hébergement, exploitation, sauvegardes, CI
@@ -1767,7 +1637,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | **I38** | Vérifier les premiers tirs automatiques `storage` et `lourd` du dimanche 25/10 | `P2` | Ouvert |
 | **I39** | Faire entrer `storage` et `lourd` au test de restauration mensuel | `P2` | Ouvert |
 | **I40** | Exclure `.claude/` de vitest et ranger les copies de travail mortes | `P3` | Ouvert |
-| **I41** | Mettre à jour le commentaire de `[functions.opds]` dans `config.toml` | `P3` | Ouvert |
 
 #### I2 — Tenir la pile auto-hébergée prête pour la production à l'ASR — empreintes, proxy, reconstruction (répartition du 19/10)
 
@@ -1953,7 +1822,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** `vitest.config.js` n'exclut que `node_modules`, `dist` et `supabase/functions` : une suite complète lancée depuis `~/anarbib` ramasse les tests des worktrees d'autres sessions (14 faux échecs le 18/10, 7 le 19/10) et charge le poste. Restent aussi des dossiers sous `.claude/worktrees/` qui ne sont plus des worktrees, un worktree `~/anarbib-wt-d17` signalé « peut être retiré », et un clone Windows indépendant (`Codeberg\anarbib`, avec deux worktrees) contraire à la règle du dépôt unique.
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Ajouter `.claude/**` à l'exclusion ; retirer, sur l'accord de Xavier, les copies mortes et le clone Windows après vérification qu'ils ne portent rien d'unique.
 
@@ -1962,26 +1831,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Ce qui compte comme fini.**
 
 - Une suite lancée depuis `~/anarbib` ne lit plus que ses propres tests ; plus de copie morte.
-
-**Dépendances.** —
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
-#### I41 — Mettre à jour le commentaire de `[functions.opds]` dans `config.toml`
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : Deno / TypeScript
-
-**État.** Depuis `1cb5bb6d` (19/10), le flux OPDS lit en anonyme et suit la visibilité du catalogue ; le commentaire décrit encore l'ancien filtre (`access_scope='publico'` seul). Laissé exprès : toucher ce fichier redéploie toutes les fonctions.
-
-*Vérifié : *
-
-**Ce que c'est.** Le corriger au prochain changement de `config.toml`.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Le commentaire dit ce que fait le flux.
 
 **Dépendances.** —
 
@@ -1997,7 +1846,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 |---|---|---|---|
 | **J10** | Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement | `P3` | Ouvert |
 | **J13** | Inscrire au REGISTRE le quatrième cas de source, « domaine public » | `P3` | Ouvert |
-| **J14** | Passer l'outillage des sessions à onze locales et à Forgejo | `P2` | Ouvert |
 
 #### J10 — Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement
 
@@ -2036,26 +1884,6 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - NUMDIF-2 décrit les cas que la file applique.
 
 **Dépendances.** Relève aussi de G20 (AG).
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
-#### J14 — Passer l'outillage des sessions à onze locales et à Forgejo
-
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** `CLAUDE.md` du checkout d'exploitation, la skill `anarbib-i18n` et les commandes `commit-front` / `i18n` décrivent encore dix locales ; la skill `anarbib-sql` parle de Woodpecker (la CI est sur Forgejo depuis le 11/06). Ces fichiers ne sont pas versionnés. C'est l'oubli que la session ISBD a dû rattraper le 18/10 (`9636773a`).
-
-*Vérifié : *
-
-**Ce que c'est.** Mettre ces fichiers à jour (onze locales, Forgejo).
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Aucun fichier d'outillage ne parle plus de dix locales ni de Woodpecker.
-
-**Dépendances.** —
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
@@ -2510,6 +2338,14 @@ CI verte : lint et suite unitaire. |
 | G10 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier — la fiche avait quatre mois de retard sur le code.** Elle disait les trois questions « marquées au plus vite depuis juin, sans bouger » ; le backlog v34 (29/08) avait repris le texte du v33 sans le confronter : les trois avaient été bâties les 18 et 19/06 (session « Audit 360 — morceaux rouges »). Constat du 19/10, production en lecture seule. **`#111` — verdict : réveillée, et en service** : l'évaluation collaborative des demandes d'adhésion (`20260619001817` lot 1 : proposition et vote à l'unanimité, calqués sur la cooptation des admins, mode dégradé sous trois admins actifs ; lot 2a : messages et échanges ; lot 3c : récapitulatif quotidien) — `library_request_votes` compte **3 votes**, un par demande (Solidaires, Anarchief, une demande refusée), deux admins actifs donc mode dégradé, le cron `anarbib-request-eval-digest` a tourné le 19/10. **`ONBO-Q13` — chemin écrit, éprouvé au banc** : `api.fn_constitution_transfer_mandate` (`20260618161110` : repointe la constitution, la membership pré-active et la demande vers la nouvelle personne, garde l'avancement des volets, trace dans `library_request_mandate_transfers`), réservée aux admins réseau, appelée depuis la page Réseau (`RedePage.jsx`, par numéro de lecteur·rice) ; la suite `onbo_q13_transfer_mandate_tests` tourne en CI à chaque push (verte, run #1854). Aucun transfert réel (0 ligne) : **Xavier retient le banc comme preuve**, l'essai sur `blmf-teste` aurait demandé de fabriquer une constitution de test en production. **Volet 10 — fini dans le code, facultatif dans les faits** : l'atelier (`AtelierConstituicaoPage`) génère le squelette de règlement en PDF (présenté comme document à délibérer, pas comme certificat), le téléverse, l'enregistre et clôt la constitution ; mais les deux bibliothèques passées par l'atelier, Solidaires (14/09) et Anarchief (24/09), ont été activées par l'administration du réseau sans règlement (`volet_10_regimento_done` faux, aucun PDF). **Décision de Xavier du 19/10 : le volet 10 reste facultatif**, l'activation ne l'exige pas. |
 | K2 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier — tenu de fait depuis le 30-31/08.** La fiche (et sa seule vérif, du 31/08 au matin) disait Pix et IBAN endormis dans un bloc commenté du site, Wero en attente de la banque. Constat du 19/10 sur le dépôt vitrine (`anarbib_site`, à jour avec Codeberg) et en ligne : le 27/08, Liberapay ouvre la caisse commune avec le CCLA (`a6cab58`) et les pages de comptes sont engendrées depuis `FINANCES.md` en dix langues (`a67293b`) ; le 30/08, **le Pix au CNPJ du CCLA est ouvert, deuxième canal** (`856e5f5`) ; le 31/08 à 19 h 32, **le dispositif est dit définitif** — deux canaux publics, virement sur demande — et le bloc dormant disparaît (`28b11aa`, 110 lignes retirées ; plus aucun `ENCART-DORMANT` ni au dépôt ni en ligne). Le Pix figure sur la page « Contribuer » (revérifiée en ligne le 19/10) ; le générateur des comptes a suivi chaque édition de `FINANCES.md` (dernière le 12/10 : 8,00 € bruts reçus, deux dons Liberapay, rien dépensé, aucune recette Pix encore inscrite). **Deux choix consignés, décision de Xavier du 19/10** : **l'IBAN n'est pas publié** — il se donne sur demande à `anarbib@proton.me`, contrairement à la recommandation de la fiche (le publier en clair) ; **Wero est abandonné** — il n'apparaît nulle part sur le site, et la réponse de la banque n'a pas été retrouvée. Le hook `pre-push` du site (`tools/hooks/pre-push`) n'a plus de gabarit dormant à garder. Reste en amont : **K1** (l'acte du Fonds), dont les canaux n'ont pas attendu l'adoption consignée. |
 | F26 | 2026-10-19 | **Clos le 19/10 — prouvé au banc, fonctions déployées par la CI (run 1907, tag `deployed-functions` sur `2deaddb4`, source relue en production).** Le job `backend` de ce run est rouge à l'étape suivante, `db push`, à cause d'une migration d'une autre session (`20261019191959_un_lieu_retire_des_copies_d_import`, reprise par `731bb91e`) : sans rapport avec F26, qui n'a pas de migration. Quatre fonctions construisaient leur propre pied en lisant `FOOTER_TEXT` (ou `NETWORK_FOOTER_TEXT`), secret supprimé le 19/10, et retombaient sur un repli écrit en dur en portugais. **Toutes passent au pied commun localisé `layout.footerTextNetwork`** (`4f54beeb`) : `notify-library-request` dans la langue de chaque destinataire — la devise imprimée sous le cadre et la clé `footer` de `strings.ts` (« réponds à cet e-mail ») disparaissent, ces courriels partant sans adresse de réponse (`noReplyTo`) ; `notify-rede-digest` dans la langue de l'abonné·e ; `notify-network-weekly-report` dans la langue du rapport, rédigé en pt-BR seul. **Étendu par décision de Xavier du 19/10 : `notify-document-permission-request` est traduite en entier** — 37 clés `docperm.*` dans les onze langues (pt-BR au « você », français sans adresse directe), chaque destinataire dans sa langue : les coordinations par le `default_locale` de `v_library_notification_context` (fr, nl, pt-BR en production), les admins par leur profil, la boîte collective en pt-BR ; envoi, destinataires et transport inchangés. Import mort de `FOOTER_TEXT` retiré de `notify-weekly-report`. **Preuve** : banc `f26-pieds-de-courriel` (18 tests) — aucune des quatre ne lit plus la devise ni n'imprime de repli, plus de prose portugaise en dur dans la quatrième (contre-épreuve sur les phrases d'avant), parité des clés dans les onze langues, rendu réel de la quatrième en nl, fr, de et pt-BR, pied compris ; `notify-library-request-approved` épingle le pied du réseau en fr et en de. La quatrième sort de `TEXTE_EN_DUR_PT` (`mail-ptbr-voce`). Reste hors de cette fiche : l'intro `more_info` de `notify-library-request` dit encore « réponds à cet e-mail » dans les onze langues. |
+| C30 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier : validées en bloc.** 853 biographies d'autorité traduites automatiquement (358 du 19/10 portant la note « Traduction automatique (Claude) depuis pt-BR — à relire », 492 de la même série des 01-18/10, 50 par langue, sans auteur) s'affichaient déjà sans mention : la page d'autorité lit `author_translations` sans filtrer le statut, et la table est lisible de tous. Passées `reviewed` avec la décision en note (`9c62b5cd`, migration `20261019195531`, en production à 23 h 38) : 0 brouillon, 1 023 relues. Les deux doutes relevés sont levés : « Λε Γκεν » est la graphie grecque usuelle de Le Guin, et « drogas » est dans le titre d'un livre de médecine (« φάρμακα » plausible). |
+| D16 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier.** La réserve de la fiche (« un premier versement réel, puis un premier lot ») est tombée : **1 470 candidats versés sur 1 470** pour Anarchief, les 15 derniers le 16/10 après `9232a948`, file vide. Limite restante, suivie à part : un appel tient ~150-180 Mo (D27). |
+| D18 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier.** Les éditions des sept ressources restreintes avaient été validées par Xavier le 16/10 ; restaient deux gestes, faits par `9c62b5cd` (migration `20261019195531`, en production à 23 h 38) : les pages sources de 70 (dokumen.pub), 72 (pdfcoffee), 73 (anarquista.net) et 76 (collectif d'Évora), vérifiées le 15/10, posées sur la ressource et son brouillon ; la ressource 62 reçoit son statut de droits (`sob_direitos`) et la validation de son édition. La 66 reste sans page publique trouvable. |
+| C32 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier.** Les formes « Gramsci » et « GRAMSCI, Antonio », rattachées par erreur à Isidro Guardia Abella (10212, dont le seul livre est bien le sien), passent à l'autorité de Gramsci (11346, Wikidata Q83003) ; Agustín Souchy Bauer (10304, un livre) rejoint Agustín Souchy (10066, Wikidata) par `fn_conv_fusionner_variante`, l'autre graphie gardée en forme variante — six livres sous 10066. `9c62b5cd`, en production à 23 h 38. |
+| D26 | 2026-10-19 | **Clos le 19/10.** La référence d'une déclaration de droits par lot vient désormais de la source (`partner_catalog_sources.meta` : `declaracao_lote`, `delegacao_validacao`, posées pour Anarchief à l'identique), lue par `ingest.fn_declaration_par_lot` ; le versement ET le réalignement, patchés sur leur définition réelle, ne portent plus de date en dur, et une source sans déclaration reçoit la phrase sans référence. `e6440a7a`, migration `20261019194227`, en production à 23 h 38 ; suites `numdif_note_lot` (T5 neuf), `numdif_realignement`, `numdif_versement`, `source_numerique_sans_exemplaire` vertes. |
+| J14 | 2026-10-19 | **Clos le 19/10 sur décision de Xavier.** `CLAUDE.md` du checkout d'exploitation, les skills `anarbib-i18n`, `anarbib-sql`, `anarbib-deploy` et les commandes `commit-front`, `commit-migration`, `i18n` disent onze locales (`ro` compris, source unique `src/i18n/locales.js`) et la CI Forgejo Actions ; restent les mentions historiques (« migré depuis Woodpecker le 11/06 », « 10 locales » au 05/06). Fichiers hors dépôt : rien à committer. |
+| H36 | 2026-10-19 | **Clos le 19/10 sans migration : la source n'avait pas bougé.** Vérifié sur la source (cinq requêtes) : la fiche `mot512` porte toujours « histoire : histoire orale » (titre et fil d'Ariane) — la page d'export n'affiche que la feuille, d'où le faux écart ; et « 1848-1867 » n'est pas un terme du thésaurus (recherche du site : rien ; ni dans les dates de parution, qui n'ont que des années, ni en géographie) — elle concerne sans doute les sites partenaires. Les deux dates cachées par la panne du 03/09 étaient entrées le même jour par une autre voie (`85e38794`). Le manque restant de `--export` (ni dates ni géo à plusieurs niveaux) est un trait connu du racleur, hors dépôt. |
+| I41 | 2026-10-19 | **Clos le 19/10 — fait par la session OPDS** (`7a6ea3e3`, « le bloc opds dit la garde réelle ») : le commentaire de `[functions.opds]` décrit désormais la garde réelle (RLS anonyme, clé publique), et non plus l'ancien filtre `access_scope='publico'`. |
 
 ---
 
@@ -2541,4 +2377,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-19. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 81 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-18 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `9636773a` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-19. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 73 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-19 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `7d6475b6` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
