@@ -17,6 +17,7 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
 import JSZip from 'npm:jszip@3';
+import { ouvrirZipBorne } from '../_shared/core/zip-borne.ts';
 
 const IMPORT_SECRET_HEADER = 'x-import-secret';
 const IMPORT_SECRET_ENV = 'ANARBIB_PARTNER_IMPORT_SECRET';
@@ -25,6 +26,18 @@ const DEPOSIT_BUCKET = 'partner-catalog-deposits';
 const MANIFEST_SCHEMA = 'anarbib-fonds-export/v1';
 const PARSER_VERSION = 'fonds_receive_v1';
 const INSERT_BATCH = 250;
+// 19/10/2026 : un paquet reçu se déballe sous bornes (_shared/core/zip-borne.ts) —
+// paquet, nombre de fichiers, chaque fichier et total décompressés, comptés sur
+// le flux et non sur ce que le ZIP déclare.
+const BORNES_ZIP = {
+  maxOctetsPaquet: 200 * 1024 * 1024,
+  maxEntrees: 5000,
+  maxOctetsEntree: 150 * 1024 * 1024,
+  maxOctetsTotal: 600 * 1024 * 1024,
+};
+// L'identifiant d'un fichier vient du manifeste : il n'entre dans un chemin de
+// dépôt qu'en caractères sûrs.
+const idSur = (v: unknown) => String(v ?? 'x').replace(/[^\w-]+/g, '_').slice(0, 40) || 'x';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -114,15 +127,20 @@ Deno.serve(async (req) => {
     // touché, le refus va au journal du run (fn_import_dispatch refuse déjà
     // un run sans fichier à l'envoi).
     let zip: any;
+    let paquet: Awaited<ReturnType<typeof ouvrirZipBorne>>;
     let manifest: any;
     try {
       const { data: blob, error: dlErr } = await admin.storage.from(bucketId).download(storagePath);
       if (dlErr) throw dlErr;
       if (!blob) throw new Error('Storage download returned no file.');
-      zip = await JSZip.loadAsync(await blob.arrayBuffer());
-      const manifestEntry = zip.file('manifest.json');
-      if (!manifestEntry) throw new Error('manifest.json absent du ZIP : ce n\'est pas un paquet de fonds.');
-      try { manifest = JSON.parse(await manifestEntry.async('string')); }
+      if (blob.size > BORNES_ZIP.maxOctetsPaquet) {
+        throw new Error(`Paquet trop lourd : ${Math.round(blob.size / 1e6)} Mo (au plus ${Math.round(BORNES_ZIP.maxOctetsPaquet / 1e6)} Mo).`);
+      }
+      paquet = await ouvrirZipBorne(JSZip, await blob.arrayBuffer(), BORNES_ZIP);
+      zip = paquet.zip;
+      const texteManifeste = await paquet.lireTexte('manifest.json');
+      if (texteManifeste === null) throw new Error('manifest.json absent du ZIP : ce n\'est pas un paquet de fonds.');
+      try { manifest = JSON.parse(texteManifeste); }
       catch { throw new Error('manifest.json illisible (JSON invalide).'); }
       if (manifest?.schema !== MANIFEST_SCHEMA) throw new Error(`Schéma de manifeste inattendu : ${manifest?.schema ?? '—'} (attendu ${MANIFEST_SCHEMA}).`);
     } catch (lecture) {
@@ -228,8 +246,9 @@ Deno.serve(async (req) => {
           metadataOnly += 1;
         } else {
           try {
-            const bytes = await zEntry.async('uint8array');
-            const depositPath = `received/${runId}/${a?.asset_id ?? 'x'}_${sanitize(basename(zipPath))}`;
+            const bytes = await paquet!.lire(zipPath);
+            if (!bytes) throw new Error(`« ${zipPath} » absent du paquet.`);
+            const depositPath = `received/${runId}/${idSur(a?.asset_id)}_${sanitize(basename(zipPath))}`;
             const { error: upErr } = await admin.storage.from(DEPOSIT_BUCKET)
               .upload(depositPath, bytes, { contentType: meta.mime_type || 'application/octet-stream', upsert: true });
             if (upErr) throw upErr;
