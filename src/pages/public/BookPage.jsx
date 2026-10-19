@@ -386,6 +386,11 @@ export default function BookPage() {
   const tipoLabel = tipoKey ? t({ id: tipoKey, defaultMessage: book.tipo_material }) : '';
   const hasCover = !!book.cover_object_path;
   const hasDigital = !!digitalAccess?.hasPublicAccess || !!digitalAccess?.hasRestrictedAccess;
+  // 19/10/2026 : une ressource « lien externe » (la page de la notice dans sa
+  // source, ex. les 393 notices d'Anarchief sans fichier) n'est pas un document
+  // à lire ici : la fiche dit « En ligne (lien) » et ouvre la page elle-même.
+  const lienExterne = !!digitalAccess?.hasPublicAccess && digitalAccess?.usageType === 'link_externo'
+    && !!digitalAccess?.sourceUrl;
   const isbdStatement = buildIsbdStatement(book);
   const isbdZones = buildIsbdZones(book, t);
 
@@ -616,7 +621,14 @@ export default function BookPage() {
             {/* Accès numérique */}
             <div className="ab-livro-digital">
               <span className="ab-livro-digital-label">{t({ id: 'book.digital.label' })}</span>
-              {hasDigital ? (
+              {lienExterne ? (
+                <>
+                  <span className="ab-livro-digital-chip ab-livro-digital-chip--yes">{t({ id: 'catalog.digital.externalLink' })}</span>
+                  <a href={digitalAccess.sourceUrl} target="_blank" rel="noopener noreferrer" className="ab-button">
+                    {sourceLabel(digitalAccess.sourceName, digitalAccess.sourceUrl)}
+                  </a>
+                </>
+              ) : hasDigital ? (
                 <>
                   <span className="ab-livro-digital-chip ab-livro-digital-chip--yes">
                     {digitalAccess.hasPublicAccess ? t({ id: 'book.digital.yes' }) : t({ id: 'book.digital.reserved' })}
@@ -650,7 +662,7 @@ export default function BookPage() {
             {/* Attribution source. D17 (NUMDIF-3) : quand la page de la copie
                 d'origine est connue, c'est elle qu'on montre (« aussi en
                 ligne »), jamais le fichier. */}
-            {digitalAccess?.sourcePageUrl ? (
+            {lienExterne ? null : digitalAccess?.sourcePageUrl ? (
               <div className="ab-livro-digital-source">
                 {t({ id: 'book.digital.alsoOnline' }, { name: (
                   <a href={digitalAccess.sourcePageUrl} target="_blank" rel="noopener noreferrer">

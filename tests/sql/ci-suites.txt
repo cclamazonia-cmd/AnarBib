@@ -859,3 +859,5 @@ tests/sql/source_catalogue_public_tests.sql
 tests/sql/source_catalogue_rien_ne_change_tests.sql
 # Ressources communes (19/10/2026) : dans library-ui-assets, hors de themes/<slug>/, seule l'administration du réseau écrit.
 tests/sql/ressources_communes_tests.sql
+# Lien vers la page source (19/10/2026) : une notice sans fichier d’une source partenaire renvoie à sa page (Anarchief, curid).
+tests/sql/lien_page_source_tests.sql

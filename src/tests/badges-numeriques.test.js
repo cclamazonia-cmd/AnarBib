@@ -62,4 +62,9 @@ describe('la fiche dit à qui la version numérique est réservée', () => {
     expect(src).toContain('catalogacao.digital.rights.${digitalAccess.rights}');
     expect(src).not.toContain('<span> — {digitalAccess.rights}</span>');
   });
+  it('un lien externe ouvre la page de la source, sans bouton Lire ni « Aussi en ligne »', () => {
+    expect(src).toContain("digitalAccess?.usageType === 'link_externo'");
+    expect(src).toMatch(/\{lienExterne \? \(\s*<>\s*<span[^>]*>\{t\(\{ id: 'catalog\.digital\.externalLink' \}\)\}<\/span>\s*<a href=\{digitalAccess\.sourceUrl\} target="_blank" rel="noopener noreferrer"/);
+    expect(src).toContain('{lienExterne ? null : digitalAccess?.sourcePageUrl ? (');
+  });
 });
