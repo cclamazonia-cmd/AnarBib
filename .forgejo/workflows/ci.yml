@@ -95,7 +95,7 @@ jobs:
   app:
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     steps:
       - name: Outils système (git, curl, tar)
         run: |
@@ -246,7 +246,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     steps:
       - name: Outils système (git, curl, tar)
         run: |
@@ -372,7 +372,7 @@ jobs:
     if: failure()
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     steps:
       - name: Ouvrir ou rouvrir le ticket de rouge
         env:
@@ -452,7 +452,7 @@ jobs:
     if: ${{ !cancelled() && needs.app.result == 'success' && (needs.backend.result == 'success' || needs.backend.result == 'skipped') }}
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     continue-on-error: true
     steps:
       - name: Refermer le ticket de rouge s'il y en a un

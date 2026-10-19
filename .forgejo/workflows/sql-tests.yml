@@ -62,7 +62,7 @@ jobs:
   sql-tests:
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     services:
       db:
         image: public.ecr.aws/supabase/postgres:17.6.1.084@sha256:95d92e9563121189086690a4b7f8f2b711a4809a2499f45592199aae68ebae5f  # = image db du stack local, épinglée le 19/10/2026
@@ -111,7 +111,7 @@ jobs:
   rejeu-image:
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     services:
       db:
         image: public.ecr.aws/supabase/postgres:17.6.1.084@sha256:95d92e9563121189086690a4b7f8f2b711a4809a2499f45592199aae68ebae5f  # = image db du stack local, épinglée le 19/10/2026
@@ -177,7 +177,7 @@ jobs:
     if: failure()
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     steps:
       - name: Ouvrir ou rouvrir le ticket de rouge
         env:
@@ -258,7 +258,7 @@ jobs:
     if: ${{ !cancelled() && needs['sql-tests'].result == 'success' && needs['rejeu-image'].result == 'success' }}
     runs-on: anarbib-local
     container:
-      image: node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8  # node:22 au 19/10/2026
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
     continue-on-error: true
     steps:
       - name: Refermer le ticket de rouge s'il y en a un
