@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-19** · 82 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 81 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -20,7 +20,7 @@
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 15
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
-    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 2
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 10
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10**; **K2 fechado em 19/10**; **33 itens acrescentados em 19/10 à noite** — **82 itens, 261 fechamentos**.
 
-**Frescor dos constatos em 2026-10-19.** **74 itens de 82** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C30, C31, C32, C33, D3, D4, D8, D15, D16, D18, D21, D22, D23, D24, D25, D26, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, F26, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, H36, I2, I21, I32, I35, I36, I37, I38, I39, I40, I41, J10, J13, J14, K1, K7). Os **8** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **73 itens de 81** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C30, C31, C32, C33, D3, D4, D8, D15, D16, D18, D21, D22, D23, D24, D25, D26, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, H36, I2, I21, I32, I35, I36, I37, I38, I39, I40, I41, J10, J13, J14, K1, K7). Os **8** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1283,7 +1283,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
-| **F26** | Retirar dos rodapés o recurso em português e o segredo suprimido | `P3` | Aberto |
 
 #### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
 
@@ -1305,26 +1304,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Depois de **K5** (relay pedido em Bolonha). Não antes de **I2**: mudar de transporte e de hospedeiro na mesma semana são duas incógnitas.
 
 *Remissões : `claude/NOTE_sortie_services_etats_uniens_2026-09-05 (chemin, étape 4)` · `spec-migration-mail-resend`*
-
-#### F26 — Retirar dos rodapés o recurso em português e o segredo suprimido
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : Deno / TypeScript
-
-**Estado.** Quatro funções ainda têm rodapé de recurso em português.
-
-*Verificado : *
-
-**O que é.** Passar as quatro funções ao rodapé comum localizado.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- As quatro funções produzem rodapé na língua do destinatário.
-
-**Dependências.** —
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
 
 ---
 
@@ -2520,6 +2499,7 @@ CI verde. |
 | C4 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier, critério 1 retirado, critério 2 cumprido.** De 722 fichas de autoridade sem país em 1 305 (29/08) a 677 em 1 496 (45 %): três passagens automáticas em setembro, depois a regra de Xavier (08/10) — país só com identidade segura, sempre como **proposta** no Ateliê; dezesseis propostas aplicadas por Xavier em 18/10. **Critério 1 (« abaixo de 20 % ») retirado**: as fontes abertas não dão mais nada seguro; o resto vai para a revisão humana de **C3**. **Critério 2 cumprido**: a detecção dos sobrenomes duplos hispânicos, refeita em leitura sobre a produção, dá **23 candidatas**, versadas no lote `autorite_patronyme` (`796f0379`) com um parecer: quinze « sobrenome duplo provável », propostas invertidas; oito « prenome composto ou inicial provável », propostas sem mudança. **Verificado em produção às 12 h 59 (Paris)**. A triagem se faz no Ateliê (C3). |
 | G10 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier — a ficha estava quatro meses atrasada em relação ao código.** As três questões foram construídas em 18-19/06. **`#111` — acordada e em serviço**: avaliação colaborativa dos pedidos de adesão (proposta, voto por unanimidade, modo degradado com menos de três admins), **3 votos** em produção, resumo diário ativo. **`ONBO-Q13` — caminho escrito e provado na bancada**: `api.fn_constitution_transfer_mandate`, chamada pela página Rede, suíte SQL na CI a cada push; nenhuma transferência real, **Xavier aceita a bancada como prova**. **Volet 10 — pronto no código, facultativo na prática**: as duas bibliotecas que passaram pelo ateliê foram ativadas sem regimento; **decisão de Xavier: o volet 10 continua facultativo.** |
 | K2 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier — cumprido de fato desde 30-31/08.** Liberapay aberto em 27/08 (caixa comum com o CCLA), **Pix no CNPJ do CCLA aberto em 30/08** (`856e5f5`), dispositivo definitivo em 31/08 (`28b11aa`: dois canais públicos, transferência sob pedido; o bloco dormente sumiu). **O IBAN não é publicado** (sob pedido, `anarbib@proton.me`); **Wero abandonado**. Fica a montante o **K1** (o ato do Fundo). |
+| F26 | 2026-10-19 | **Fechado em 19/10 — provado na bancada, funções implantadas pela CI (run 1907, tag `deployed-functions` em `2deaddb4`, código relido em produção).** O job `backend` ficou vermelho no `db push` por uma migração de outra sessão, sem relação com F26. As quatro funções passam ao rodapé comum localizado `layout.footerTextNetwork`; nenhuma lê mais `FOOTER_TEXT` / `NETWORK_FOOTER_TEXT` nem imprime recurso em português. **Por decisão de Xavier, `notify-document-permission-request` foi traduzida por inteiro**: 37 chaves `docperm.*` nas onze línguas, cada destinatário na sua língua (biblioteca: `default_locale`; admins: perfil; caixa coletiva: pt-BR). Bancada `f26-pieds-de-courriel` (18 testes). Fica fora: a intro `more_info` de `notify-library-request` ainda diz « responda a este e-mail ». |
 
 ---
 
@@ -2551,4 +2531,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 82 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 81 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

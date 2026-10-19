@@ -3350,6 +3350,14 @@
           "fr": "**Clos le 19/10 sur décision de Xavier — tenu de fait depuis le 30-31/08.** La fiche (et sa seule vérif, du 31/08 au matin) disait Pix et IBAN endormis dans un bloc commenté du site, Wero en attente de la banque. Constat du 19/10 sur le dépôt vitrine (`anarbib_site`, à jour avec Codeberg) et en ligne : le 27/08, Liberapay ouvre la caisse commune avec le CCLA (`a6cab58`) et les pages de comptes sont engendrées depuis `FINANCES.md` en dix langues (`a67293b`) ; le 30/08, **le Pix au CNPJ du CCLA est ouvert, deuxième canal** (`856e5f5`) ; le 31/08 à 19 h 32, **le dispositif est dit définitif** — deux canaux publics, virement sur demande — et le bloc dormant disparaît (`28b11aa`, 110 lignes retirées ; plus aucun `ENCART-DORMANT` ni au dépôt ni en ligne). Le Pix figure sur la page « Contribuer » (revérifiée en ligne le 19/10) ; le générateur des comptes a suivi chaque édition de `FINANCES.md` (dernière le 12/10 : 8,00 € bruts reçus, deux dons Liberapay, rien dépensé, aucune recette Pix encore inscrite). **Deux choix consignés, décision de Xavier du 19/10** : **l'IBAN n'est pas publié** — il se donne sur demande à `anarbib@proton.me`, contrairement à la recommandation de la fiche (le publier en clair) ; **Wero est abandonné** — il n'apparaît nulle part sur le site, et la réponse de la banque n'a pas été retrouvée. Le hook `pre-push` du site (`tools/hooks/pre-push`) n'a plus de gabarit dormant à garder. Reste en amont : **K1** (l'acte du Fonds), dont les canaux n'ont pas attendu l'adoption consignée.",
           "pt": "**Fechado em 19/10 por decisão de Xavier — cumprido de fato desde 30-31/08.** Liberapay aberto em 27/08 (caixa comum com o CCLA), **Pix no CNPJ do CCLA aberto em 30/08** (`856e5f5`), dispositivo definitivo em 31/08 (`28b11aa`: dois canais públicos, transferência sob pedido; o bloco dormente sumiu). **O IBAN não é publicado** (sob pedido, `anarbib@proton.me`); **Wero abandonado**. Fica a montante o **K1** (o ato do Fundo)."
         }
+      ],
+      [
+        "F26",
+        "2026-10-19",
+        {
+          "fr": "**Clos le 19/10 — prouvé au banc, fonctions déployées par la CI (run 1907, tag `deployed-functions` sur `2deaddb4`, source relue en production).** Le job `backend` de ce run est rouge à l'étape suivante, `db push`, à cause d'une migration d'une autre session (`20261019191959_un_lieu_retire_des_copies_d_import`, reprise par `731bb91e`) : sans rapport avec F26, qui n'a pas de migration. Quatre fonctions construisaient leur propre pied en lisant `FOOTER_TEXT` (ou `NETWORK_FOOTER_TEXT`), secret supprimé le 19/10, et retombaient sur un repli écrit en dur en portugais. **Toutes passent au pied commun localisé `layout.footerTextNetwork`** (`4f54beeb`) : `notify-library-request` dans la langue de chaque destinataire — la devise imprimée sous le cadre et la clé `footer` de `strings.ts` (« réponds à cet e-mail ») disparaissent, ces courriels partant sans adresse de réponse (`noReplyTo`) ; `notify-rede-digest` dans la langue de l'abonné·e ; `notify-network-weekly-report` dans la langue du rapport, rédigé en pt-BR seul. **Étendu par décision de Xavier du 19/10 : `notify-document-permission-request` est traduite en entier** — 37 clés `docperm.*` dans les onze langues (pt-BR au « você », français sans adresse directe), chaque destinataire dans sa langue : les coordinations par le `default_locale` de `v_library_notification_context` (fr, nl, pt-BR en production), les admins par leur profil, la boîte collective en pt-BR ; envoi, destinataires et transport inchangés. Import mort de `FOOTER_TEXT` retiré de `notify-weekly-report`. **Preuve** : banc `f26-pieds-de-courriel` (18 tests) — aucune des quatre ne lit plus la devise ni n'imprime de repli, plus de prose portugaise en dur dans la quatrième (contre-épreuve sur les phrases d'avant), parité des clés dans les onze langues, rendu réel de la quatrième en nl, fr, de et pt-BR, pied compris ; `notify-library-request-approved` épingle le pied du réseau en fr et en de. La quatrième sort de `TEXTE_EN_DUR_PT` (`mail-ptbr-voce`). Reste hors de cette fiche : l'intro `more_info` de `notify-library-request` dit encore « réponds à cet e-mail » dans les onze langues.",
+          "pt": "**Fechado em 19/10 — provado na bancada, funções implantadas pela CI (run 1907, tag `deployed-functions` em `2deaddb4`, código relido em produção).** O job `backend` ficou vermelho no `db push` por uma migração de outra sessão, sem relação com F26. As quatro funções passam ao rodapé comum localizado `layout.footerTextNetwork`; nenhuma lê mais `FOOTER_TEXT` / `NETWORK_FOOTER_TEXT` nem imprime recurso em português. **Por decisão de Xavier, `notify-document-permission-request` foi traduzida por inteiro**: 37 chaves `docperm.*` nas onze línguas, cada destinatário na sua língua (biblioteca: `default_locale`; admins: perfil; caixa coletiva: pt-BR). Bancada `f26-pieds-de-courriel` (18 testes). Fica fora: a intro `more_info` de `notify-library-request` ainda diz « responda a este e-mail »."
+        }
       ]
     ]
   },
@@ -6800,48 +6808,6 @@
         ],
         "pt": [
           "Uma conta pode existir com um só nome."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
-    },
-    {
-      "id": "F26",
-      "d": "F",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Retirer des pieds de courriel le repli en portugais et le secret supprimé",
-        "pt": "Retirar dos rodapés o recurso em português e o segredo suprimido"
-      },
-      "v": {
-        "fr": "`notify-document-permission-request` et `notify-library-request` lisent encore `FOOTER_TEXT`, secret supprimé le 19/10 : leur pied affiche le texte de repli portugais quelle que soit la langue. `notify-network-weekly-report` et `notify-rede-digest` ont aussi un repli en portugais.",
-        "pt": "Quatro funções ainda têm rodapé de recurso em português."
-      },
-      "w": {
-        "fr": "Passer ces quatre fonctions au pied commun localisé (`4f54beeb`).",
-        "pt": "Passar as quatro funções ao rodapé comum localizado."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Les quatre fonctions produisent un pied dans la langue du destinataire, prouvé au banc."
-        ],
-        "pt": [
-          "As quatro funções produzem rodapé na língua do destinatário."
         ]
       },
       "dep": {
