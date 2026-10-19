@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-19** · 51 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 50 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 7
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 6
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 5
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 8
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 4
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 18 de outubro de 2026
 
-**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10** — **51 itens, 259 fechamentos**.
+**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10** — **50 itens, 260 fechamentos**.
 
-**Frescor dos constatos em 2026-10-19.** **40 itens de 51** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G10, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **39 itens de 50** trazem uma verificação datada própria (A1, A3, B36, B41, B42, C3, C16, C18, C26, D3, D8, D15, D16, D18, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, H6, H15, H16, H21, H28, H29, H34, I2, I21, I32, J10, K2, K7). Os **11** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -957,7 +957,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G1** | Percorrer os circuitos construídos e jamais usados | `P0` | Aberto |
 | **G6** | Fazer um empréstimo entre bibliotecas de ponta a ponta pela sua tela | `P2` | Aberto |
 | **G8** | Completar a cartografia com os arquivos identificados alhures | `P2` | Aberto |
-| **G10** | Liquidar as três questões de onboarding marcadas «o mais rápido possível» | `P2` | Aberto |
 | **G15** | DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência | `P1` | Aberto |
 | **G20** | Levar à assembleia geral a «terceira via» e sua extensão aos PDF já difundidos online | `P1` | Decisão coletiva |
 
@@ -1030,28 +1029,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Nenhuma. **Entrada sem competência técnica.**
 
 *Remissões : `VEILLE_leftovers_maydayrooms_2026-08-19 §3.4` · `REGISTRE §34 MAP-E`*
-
-#### G10 — Liquidar as três questões de onboarding marcadas «o mais rápido possível»
-
-`P2` Corrente · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** Três pontos estão marcados 🔴 «a resolver o mais rápido possível» desde junho e não se moveram: `#111` (avaliação colaborativa de uma pessoa administradora de rede, dormente), `ONBO-Q13` (transferência técnica do mandato de coordenação), e o acabamento do módulo 10 da oficina de onboarding.
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Os três se tratam juntos porque carregam a mesma questão: o que acontece quando alguém chega, e quando alguém sai?
-
-**Por que importa.** `ONBO-Q13` é o caso de uma coordenação que muda de mãos. Hoje, uma biblioteca cuja pessoa coordenadora desaparece não tem caminho escrito. É exatamente o risco que **A1** descreve na escala da rede, desta vez na escala de uma biblioteca.
-
-**O que conta como terminado.**
-
-- A transferência de mandato tem um caminho escrito e testado em `blmf-teste`.
-- `#111` tem um veredicto: reativada, ou fechada.
-- O módulo 10 está terminado.
-
-**Dependências.** Esclarecido por **G3** (o circuito de convite é o mesmo).
-
-*Remissões : `REGISTRE §26 ONBO-Q13` · `spec-onboarding-biblioteca-v2.0`*
 
 #### G15 — DIRA: um ensaio de importação sobre amostra antes de qualquer adesão, o PMB continuando como base de referência
 
@@ -1869,6 +1846,7 @@ CI verde. |
 | D17 | 2026-10-16 | **Fechado em 16/10** (NUMDIF-3; migração `20261015180042`, commit `faa76c17`). Coluna `source_page_url`, seguida pela retomada e pela publicação; a RPC e `read-digital-asset` devolvem a página e nunca o arquivo de um recurso restrito armazenado. Ficha, leitor e painel; onze línguas. Suíte `d17_page_de_la_source_tests` 9/9; verificado por Xavier com uma conta membro da BLMF no livro 2384 (16/10). As páginas dos outros restritos ficam em `D18`. |
 | F25 | 2026-10-17 | **Fechado em 17/10 por decisão de Xavier, depois da prova real e da sua correção.** Em 09/10, 72 envios em dois segundos, **58 perdidos**; nessa noite (`6b03ebe4`) o transporte repete um 429 e cadencia a 8/s. **Em 17/10 às 03h45 UTC a prova real chega sozinha**: catorze propostas resolvidas de uma vez, 72 e-mails, **0 perdido**, mas **82 respostas 429** apanhadas pela repetição, uma à última tentativa: a cadência valia por isolado. **Correção de 17/10 (`a24b669e`)**: uma cadência comum a todos os isolados (`private.mail_cadence`, `public.fn_mail_cadence_creneau`, service_role só); cada envio reserva o seu horário na base; recurso à cadência local se a reserva falhar. Dois retoques: a tabela classificada para a cópia de segurança (`af866530`) e o banco de `register` (`bdad9b36`). **Verificado em produção às 23 h 27 (Paris)**: 501 migrações = 501, aplicada pela CI, função fechada a `anon` e `authenticated`, `deployed-functions` em `bdad9b36`. |
 | C4 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier, critério 1 retirado, critério 2 cumprido.** De 722 fichas de autoridade sem país em 1 305 (29/08) a 677 em 1 496 (45 %): três passagens automáticas em setembro, depois a regra de Xavier (08/10) — país só com identidade segura, sempre como **proposta** no Ateliê; dezesseis propostas aplicadas por Xavier em 18/10. **Critério 1 (« abaixo de 20 % ») retirado**: as fontes abertas não dão mais nada seguro; o resto vai para a revisão humana de **C3**. **Critério 2 cumprido**: a detecção dos sobrenomes duplos hispânicos, refeita em leitura sobre a produção, dá **23 candidatas**, versadas no lote `autorite_patronyme` (`796f0379`) com um parecer: quinze « sobrenome duplo provável », propostas invertidas; oito « prenome composto ou inicial provável », propostas sem mudança. **Verificado em produção às 12 h 59 (Paris)**. A triagem se faz no Ateliê (C3). |
+| G10 | 2026-10-19 | **Fechado em 19/10 por decisão de Xavier — a ficha estava quatro meses atrasada em relação ao código.** As três questões foram construídas em 18-19/06. **`#111` — acordada e em serviço**: avaliação colaborativa dos pedidos de adesão (proposta, voto por unanimidade, modo degradado com menos de três admins), **3 votos** em produção, resumo diário ativo. **`ONBO-Q13` — caminho escrito e provado na bancada**: `api.fn_constitution_transfer_mandate`, chamada pela página Rede, suíte SQL na CI a cada push; nenhuma transferência real, **Xavier aceita a bancada como prova**. **Volet 10 — pronto no código, facultativo na prática**: as duas bibliotecas que passaram pelo ateliê foram ativadas sem regimento; **decisão de Xavier: o volet 10 continua facultativo.** |
 
 ---
 
@@ -1900,4 +1878,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 51 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 50 itens em 11 domínios. O estado numérico foi levantado em 2026-10-18 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `9636773a`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

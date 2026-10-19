@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) — **51 items, 259 clôtures**.",
-      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10** — **51 itens, 259 fechamentos**."
+      "fr": "**Relevé du 18 octobre 2026 au soir** (production mesurée à 21 h 32 UTC, dépôt recompté sur `9636773a`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 17/10 au soir, `075ec56f`). **504 migrations appliquées, 506 au dépôt** : les deux de la voisine de 23 h 13 ne sont pas encore passées. Ce qui a bougé et pourquoi : **la base** — +3 migrations, +1 fonction, trois fonctions réécrites, nées de ce que Xavier a vu en cataloguant : une notice garde toujours une œuvre (« Détacher » ne la laisse plus sans), le texte d'auteur suit les contributeurs, la liste des livres d'une autorité voit tous ses contributeurs liés ; avis de sécurité inchangés (491) ; **le catalogue** — aucune notice créée ni fusionnée, 55 reprises (le catalogage de la BTL), plus aucune notice sans œuvre ni œuvre orpheline ; **l'Atelier** — les seize pays de C4 appliqués par Xavier ; **le réseau** — identique, aucun échec mail ; **un incident** — la sauvegarde hebdomadaire des fichiers a dépassé son heure (13 Go de PDF publics depuis Anarchief), refermé, la voisine y travaille ; **le dépôt** — +12 commits, 11 locales à 7 751 clés, 211 suites SQL. **Le compte** : 52 items et 258 clôtures. **Ce qui reste à clore, et par qui** — *sur un fait à venir* : **B36** (les index, le 28/10), **D3** (Solidaires, avant le 26/10), H34, D15, D16, D18 (voisine), H15, H16, H21, H28 (DIRA), B42 (`equipes` le 01/01/2027) ; *décision de Xavier* : **C4** (seize pays appliqués ; le critère « sous 20 % » n'est pas atteignable par les sources ouvertes — le retrancher et clore, ou le confier à C3), **A1**, **G20**, C16, I32 ; *sans code* : A3, G8, **H3**, K1, K2, K3. *Depuis le relevé* : **C4 clos le 19/10** (critère « sous 20 % » retranché, 23 fiches versées en revue des patronymes) ; **G10 clos le 19/10** (les trois questions bâties en juin, constat et décisions de Xavier) — **50 items, 260 clôtures**.",
+      "pt": "**Levantamento de 18 de outubro de 2026 à noite** (produção às 21h32 UTC, repositório em `9636773a`) — **todas as linhas remedidas** (anterior: 17/10, `075ec56f`). **504 migrações aplicadas, 506 no repositório**. O que mudou: **o banco** — +3 migrações, +1 função, três funções reescritas (obra, texto de autor, livros de uma autoridade); **o catálogo** — nenhuma ficha criada nem fundida, 55 retomadas, nenhuma ficha sem obra; **o Ateliê** — os dezasseis países de C4 aplicados por Xavier; **a rede** — idêntica; **um incidente** — a cópia semanal do Storage passou da sua hora (13 Go de PDF), fechado; **o repositório** — +12 commits, 211 suítes SQL. **A conta**: 52 itens e 258 fechos. **O que falta fechar**: **B36**, **D3**, H34, D15, D16, D18, H15, H16, H21, H28, B42; *decisões*: **C4**, **A1**, **G20**, C16, I32; *sem código*: A3, G8, **H3**, K1, K2, K3. *Desde o levantamento*: **C4 fechado em 19/10**; **G10 fechado em 19/10** — **50 itens, 260 fechamentos**."
     },
     "photo": [
       {
@@ -3334,6 +3334,14 @@
           "fr": "**Clos le 19/10 sur décision de Xavier, critère 1 retranché, critère 2 tenu.** Le chemin : 722 fiches d'autorité sans pays sur 1 305 au 29/08 (55 %) ; trois passes automatiques en septembre (Wikidata, Library of Congress, IdRef) ; le 08/10, la règle de Xavier — un pays ne vient d'une autorité externe que si l'identité est sûre (dates concordantes, ou deux signaux indépendants), et il entre en **proposition** dans l'Atelier, jamais d'office ; le 09/10 puis le 10/10, seize propositions (quatorze, puis deux) ; résolues par consentement les 17 et 18/10 et **appliquées par Xavier** le 18/10 : seize pays posés, avec l'identifiant Wikidata quand il était sûr. **Critère 1 (« sous 20 % ») retranché le 19/10** : 677 fiches restent sans pays sur 1 496 (45 %), et les sources ouvertes ne donnent plus rien de sûr — les 424 introuvables, 121 sans second signal et 51 collectivités (le pays d'un collectif n'est pas une nationalité) relèvent de la revue humaine de **C3**. **Critère 2 tenu le 19/10** : la détection des doubles patronymes hispaniques, qui n'existe pas dans le cron du lundi (cinq semeurs, pas celui-là : la liste du 20/08 avait été dressée à la main), a été rejouée en lecture seule — fiche de personne d'un pays hispanophone, point d'accès « NOM, Prénom Autre », absente du lot : 155 fiches hispanophones, **23 candidates**. Versées dans le lot `autorite_patronyme` par `20261019102547` (`796f0379`), chacune avec un avis : quinze « double nom probable », proposées inversées (Álvarez Junco, Rivera Cusicanqui, Semprún Maura, Calvo Ospina, Gutiérrez Molina — une des seize de C4 —, Díaz del Moral…) ; huit « prénom composé ou initiale probable » (José Pablo, Luis Alberto, Juan Manuel, Ramón J.…), proposées **inchangées** pour qu'une validation par erreur n'abîme rien. Anti-écrasement : une ligne n'entre que si le point d'accès est encore celui lu le matin. **Vérifié en production à 12 h 59 (Paris)** : migration appliquée par la CI, 23 lignes « à revoir » dans le lot. Le tri fiche par fiche se fait dans l'Atelier, au titre de C3.",
           "pt": "**Fechado em 19/10 por decisão de Xavier, critério 1 retirado, critério 2 cumprido.** De 722 fichas de autoridade sem país em 1 305 (29/08) a 677 em 1 496 (45 %): três passagens automáticas em setembro, depois a regra de Xavier (08/10) — país só com identidade segura, sempre como **proposta** no Ateliê; dezesseis propostas aplicadas por Xavier em 18/10. **Critério 1 (« abaixo de 20 % ») retirado**: as fontes abertas não dão mais nada seguro; o resto vai para a revisão humana de **C3**. **Critério 2 cumprido**: a detecção dos sobrenomes duplos hispânicos, refeita em leitura sobre a produção, dá **23 candidatas**, versadas no lote `autorite_patronyme` (`796f0379`) com um parecer: quinze « sobrenome duplo provável », propostas invertidas; oito « prenome composto ou inicial provável », propostas sem mudança. **Verificado em produção às 12 h 59 (Paris)**. A triagem se faz no Ateliê (C3)."
         }
+      ],
+      [
+        "G10",
+        "2026-10-19",
+        {
+          "fr": "**Clos le 19/10 sur décision de Xavier — la fiche avait quatre mois de retard sur le code.** Elle disait les trois questions « marquées au plus vite depuis juin, sans bouger » ; le backlog v34 (29/08) avait repris le texte du v33 sans le confronter : les trois avaient été bâties les 18 et 19/06 (session « Audit 360 — morceaux rouges »). Constat du 19/10, production en lecture seule. **`#111` — verdict : réveillée, et en service** : l'évaluation collaborative des demandes d'adhésion (`20260619001817` lot 1 : proposition et vote à l'unanimité, calqués sur la cooptation des admins, mode dégradé sous trois admins actifs ; lot 2a : messages et échanges ; lot 3c : récapitulatif quotidien) — `library_request_votes` compte **3 votes**, un par demande (Solidaires, Anarchief, une demande refusée), deux admins actifs donc mode dégradé, le cron `anarbib-request-eval-digest` a tourné le 19/10. **`ONBO-Q13` — chemin écrit, éprouvé au banc** : `api.fn_constitution_transfer_mandate` (`20260618161110` : repointe la constitution, la membership pré-active et la demande vers la nouvelle personne, garde l'avancement des volets, trace dans `library_request_mandate_transfers`), réservée aux admins réseau, appelée depuis la page Réseau (`RedePage.jsx`, par numéro de lecteur·rice) ; la suite `onbo_q13_transfer_mandate_tests` tourne en CI à chaque push (verte, run #1854). Aucun transfert réel (0 ligne) : **Xavier retient le banc comme preuve**, l'essai sur `blmf-teste` aurait demandé de fabriquer une constitution de test en production. **Volet 10 — fini dans le code, facultatif dans les faits** : l'atelier (`AtelierConstituicaoPage`) génère le squelette de règlement en PDF (présenté comme document à délibérer, pas comme certificat), le téléverse, l'enregistre et clôt la constitution ; mais les deux bibliothèques passées par l'atelier, Solidaires (14/09) et Anarchief (24/09), ont été activées par l'administration du réseau sans règlement (`volet_10_regimento_done` faux, aucun PDF). **Décision de Xavier du 19/10 : le volet 10 reste facultatif**, l'activation ne l'exige pas.",
+          "pt": "**Fechado em 19/10 por decisão de Xavier — a ficha estava quatro meses atrasada em relação ao código.** As três questões foram construídas em 18-19/06. **`#111` — acordada e em serviço**: avaliação colaborativa dos pedidos de adesão (proposta, voto por unanimidade, modo degradado com menos de três admins), **3 votos** em produção, resumo diário ativo. **`ONBO-Q13` — caminho escrito e provado na bancada**: `api.fn_constitution_transfer_mandate`, chamada pela página Rede, suíte SQL na CI a cada push; nenhuma transferência real, **Xavier aceita a bancada como prova**. **Volet 10 — pronto no código, facultativo na prática**: as duas bibliotecas que passaram pelo ateliê foram ativadas sem regimento; **decisão de Xavier: o volet 10 continua facultativo.**"
+        }
       ]
     ]
   },
@@ -4394,62 +4402,6 @@
         {
           "fr": "**12/10 — bloqué sur la liste** : les « neuf archives repérées dans le réseau NORLA » ne sont écrites nulle part — ni dans le dépôt (seul le backlog les cite), ni dans la vitrine (`data/carte-publique.geojson`, 109 entrées, aucune propriété de réseau), ni dans les cadrages (NORLA y est un exemple d'archive d'éphémères). Sans les neuf noms, rien à confronter. **Reste** : Xavier dépose la liste (noms, villes, adresses des sites) ; la confrontation et les entrées manquantes suivent dans la soirée.",
           "pt": "**12/10 — bloqueado na lista**: as « nove arquivos NORLA » não estão escritos em lado nenhum (nem no repositório, nem na montra, nem nos enquadramentos). **Resta**: Xavier deposita a lista; o confronto segue."
-        }
-      ]
-    },
-    {
-      "id": "G10",
-      "d": "G",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "collectif"
-      ],
-      "t": {
-        "fr": "Solder les trois questions d'onboarding marquées « au plus vite »",
-        "pt": "Liquidar as três questões de onboarding marcadas «o mais rápido possível»"
-      },
-      "v": {
-        "fr": "Trois points sont marqués 🔴 « à résoudre au plus vite » depuis juin et n'ont pas bougé : `#111` (évaluation collaborative d'un·e administrateur·rice réseau, dormante), `ONBO-Q13` (transfert technique du mandat de coordination), et la finition du volet 10 de l'atelier d'onboarding.",
-        "pt": "Três pontos estão marcados 🔴 «a resolver o mais rápido possível» desde junho e não se moveram: `#111` (avaliação colaborativa de uma pessoa administradora de rede, dormente), `ONBO-Q13` (transferência técnica do mandato de coordenação), e o acabamento do módulo 10 da oficina de onboarding."
-      },
-      "w": {
-        "fr": "Les trois se traitent ensemble parce qu'ils portent la même question : que se passe-t-il quand quelqu'un arrive, et quand quelqu'un part ?",
-        "pt": "Os três se tratam juntos porque carregam a mesma questão: o que acontece quando alguém chega, e quando alguém sai?"
-      },
-      "y": {
-        "fr": "`ONBO-Q13` est le cas de figure d'une coordination qui change de mains. Aujourd'hui, une bibliothèque dont la personne coordinatrice disparaît n'a pas de chemin écrit. C'est exactement le risque que **A1** décrit à l'échelle du réseau, à l'échelle d'une bibliothèque cette fois.",
-        "pt": "`ONBO-Q13` é o caso de uma coordenação que muda de mãos. Hoje, uma biblioteca cuja pessoa coordenadora desaparece não tem caminho escrito. É exatamente o risco que **A1** descreve na escala da rede, desta vez na escala de uma biblioteca."
-      },
-      "f": {
-        "fr": [
-          "Le transfert de mandat a un chemin écrit et éprouvé sur `blmf-teste`.",
-          "`#111` a un verdict : réveillée, ou fermée.",
-          "Le volet 10 est fini."
-        ],
-        "pt": [
-          "A transferência de mandato tem um caminho escrito e testado em `blmf-teste`.",
-          "`#111` tem um veredicto: reativada, ou fechada.",
-          "O módulo 10 está terminado."
-        ]
-      },
-      "dep": {
-        "fr": "Éclairé par **G3** (le circuit d'invitation est le même).",
-        "pt": "Esclarecido por **G3** (o circuito de convite é o mesmo)."
-      },
-      "r": [
-        "REGISTRE §26 ONBO-Q13",
-        "spec-onboarding-biblioteca-v2.0"
-      ],
-      "verif": [
-        {
-          "fr": "07/09 — dans le dépôt : `fn_activate_approved_library_request` n'est appelée par **aucun** composant de `src/` — « Concluir a constituição » ne vaut donc pas activation, comme le manuel v5 l'avait relevé le 01/09. C'est la quatrième question d'onboarding, ou la première.",
-          "pt": "07/09 — no repositório: `fn_activate_approved_library_request` não é chamada por **nenhum** componente de `src/` — «Concluir a constituição» não vale, portanto, ativação, como o manual v5 tinha levantado em 01/09. É a quarta questão de onboarding, ou a primeira."
-        },
-        {
-          "fr": "**18/10 — la quatrième question est sans objet dans les faits** : les cinq bibliothèques réelles sont actives (mesuré par `private.fn_mesures_hors_fixtures()`) ; leur activation est passée par l'administration du réseau, pas par `fn_activate_approved_library_request`, fermée le 02/09 faute d'appelant. Restent les trois questions d'origine : le transfert de mandat, le verdict sur `#111`, le volet 10.",
-          "pt": "**18/10 — a quarta questão é sem objeto**: as cinco bibliotecas reais estão ativas, ativadas pela administração da rede. Restam as três questões de origem."
         }
       ]
     },
