@@ -561,7 +561,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **D3** | Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES | `P1` | Aberto |
+| **D3** | Ligar os 43 fascículos do lote SOLIDAIRES às suas 3 revistas, e decidir os 9 números em duplicata | `P1` | Aberto |
 | **D4** | O material efêmero: panfletos, cartazes, adesivos, fanzines | `P1` | Aberto |
 | **D5** | Testar a cadeia de digitalização em dez obras antes de equipar quem quer que seja | `P2` | Aberto |
 | **D8** | Descrever os arquivos de coletivos segundo a ISAD(G): níveis vinculados, produtores, acesso por nível, exportação EAD | `P3` | Bloqueado |
@@ -569,22 +569,22 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D16** | Enviar um candidato validado pelo servidor, sem chave manipulada por uma pessoa | `P2` | A verificar |
 | **D18** | Rever os sete recursos restritos à luz de `NUMDIF`: edição exata, caso de origem, página da origem | `P2` | Em curso |
 
-#### D3 — Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES
+#### D3 — Ligar os 43 fascículos do lote SOLIDAIRES às suas 3 revistas, e decidir os 9 números em duplicata
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia
 
-**Estado.** O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo.
+**Estado.** **Recontado em 19/10 no lote vivo (lote 63, run 29)** — os números originais (12 títulos, 91 fascículos, 87 monografias) vinham do primeiro arquivo, substituído em 28/08. Hoje: **43 fascículos, 3 revistas** (*Les utopiques* 27, *Cahiers de la formation syndicale* 10, *Revue internationale* 6), todos entrados como livros; revista e número ficaram na carga bruta. A fonte marca **18 linhas « mesmo número também na linha X »**, ou seja **9 pares** a decidir à mão.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
-**O que é.** **Primeiro**: revisar e publicar o lote 63 (1 673 rascunhos) pela tela dos lotes, pela própria coordenação da Solidaires, com as ferramentas entregues — relatório de revisão (H16), publicação por lote (B30), numeração e cotas (E21). **Depois**: criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente.
+**O que é.** A revisão e a publicação do lote 63 continuam sendo trabalho da coordenação de Solidaires. **Fascículos**: por decisão de Xavier (19/10), uma migração cria os 3 títulos « propostos » e liga os 43 fascículos a partir das colunas da fonte, sem fundir nada. **À mão**: promover os 3 títulos, declarar o estado de coleção, decidir os 9 pares.
 
 **Por que importa.** Um título que contém «n°» nem sempre é um fascículo — às vezes é um título de coleção, às vezes um erro de digitação. A flag sinaliza, não decide. E a rede conta hoje apenas 4 títulos de periódicos: este lote os multiplicaria por quatro, e testaria o subsistema de verdade.
 
 **O que conta como terminado.**
 
-- Os 12 títulos existem e os 91 fascículos estão vinculados.
-- As 87 candidatas foram submetidas, e cada veredicto é humano.
+- Os 3 títulos existem, promovidos, e os 43 fascículos estão ligados a eles.
+- Os 9 pares de números em duplicata têm cada um um veredicto humano.
 - O comportamento observado nos quatro registros *Encontros com a Civilização brasileira* confirma a regra antifalsos-duplicados: dois pares saem, dois ficam.
 
 **Dependências.** Desbloqueado desde 24/09; **P1 confirmado por Xavier em 12/10**. O projeto fornece as ferramentas e acompanha, não cataloga no lugar de um coletivo: a revisão é da Solidaires. Se a Solidaires não tiver começado em **26/10**, subir para `A1` / `G1` — a quinta biblioteca com acervo passa por este lote, e a condição posta à v19 (uma segunda biblioteca que empreste) também.

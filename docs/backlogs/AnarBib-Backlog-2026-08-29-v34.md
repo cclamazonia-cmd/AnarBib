@@ -561,7 +561,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P1` | Ouvert |
+| **D3** | Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double | `P1` | Ouvert |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D8** | Décrire les archives de collectifs selon ISAD(G) : niveaux rattachés, producteurs, accès par niveau, export EAD | `P3` | Bloqué |
@@ -569,22 +569,22 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D16** | Verser un candidat validé côté serveur, sans clé manipulée par une personne | `P2` | À vérifier |
 | **D18** | Revoir les sept ressources restreintes au regard de `NUMDIF` : édition exacte, cas de source, page de la source | `P2` | En cours |
 
-#### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
+#### D3 — Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
 
-**État.** Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.
+**État.** **Recompté le 19/10 dans le lot vivant (lot 63, run 29, `SOLIDAIRES_import_v2.csv`)** — les chiffres d'origine de la fiche (12 titres, 91 fascicules, 87 monographies marquées `numero_dans_titre`) venaient du premier fichier, celui du run 18, remplacé le 28/08. Dans les 1 673 brouillons d'aujourd'hui, **43 portent une revue** dans la colonne `periodico` de la source, **3 titres** : *Les utopiques* (27), *Cahiers de la formation syndicale* (10), *Revue internationale* (6) ; le numéro est dans la colonne `numero` (vide pour une ligne). Tous sont entrés comme des livres : le profil d'import n'a repris ni la revue ni le numéro dans les champs du brouillon, ils sont restés dans la charge brute. Le drapeau `numero_dans_titre` n'existe pas dans ce fichier ; à sa place, la source marque **18 lignes « même numéro aussi en ligne X — à trancher par la source »** (`duplo_numero`) — toutes parmi les 43, soit **9 paires** (*Les utopiques* n° 5, 6, 7, 8, 10, 12, 13, 14 ; *Cahiers de la formation syndicale* n° 6) : un même fascicule décrit deux fois (une notice, deux exemplaires) ou deux fascicules distincts — c'est un jugement, pas un calcul.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
-**Ce que c'est.** **D'abord** : réviser et publier le lot 63 (1 673 brouillons) depuis l'écran des lots, par la coordination de Solidaires elle-même, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Ensuite** : créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.
+**Ce que c'est.** **D'abord** : la révision et la publication du lot 63 restent le travail de la coordination de Solidaires, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Pour les fascicules** : sur décision de Xavier du 19/10, une migration crée les 3 titres en « proposé » et rattache les 43 fascicules (type périodique, titre de revue, forme transcrite, numéro) depuis les colonnes de la source — sans rien fusionner. **Restent à la main** : promouvoir les 3 titres (Catalogage › Périodiques), déclarer l'état de collection, et trancher les 9 paires de numéros en double, une par une.
 
 **Pourquoi ça compte.** Un titre qui contient « n° » n'est pas toujours un fascicule — c'est parfois un titre de collection, parfois une coquille. Le drapeau signale, il ne décide pas. Et le réseau ne compte aujourd'hui que 4 titres de périodiques : ce lot les multiplierait par quatre, et éprouverait le sous-système pour de bon.
 
 **Ce qui compte comme fini.**
 
-- Les 12 titres existent et les 91 fascicules y sont rattachés.
-- Les 87 candidates ont été soumises, et chaque verdict est humain.
+- Les 3 titres existent, promus, et les 43 fascicules y sont rattachés.
+- Les 9 paires de numéros en double ont chacune un verdict humain (un fascicule et deux exemplaires, ou deux fascicules).
 - Le comportement observé sur les quatre notices *Encontros com a Civilização brasileira* confirme la règle anti-faux-doublons : deux paires en sortent, deux y restent.
 
 **Dépendances.** Débloqué depuis le 24/09 ; **P1 confirmé par Xavier le 12/10**. Le projet outille et accompagne, il ne catalogue pas à la place d'un collectif : la révision est celle de Solidaires. Si Solidaires n'a pas commencé le **26/10**, remonter à `A1` / `G1` — la cinquième bibliothèque dotée d'un fonds passe par ce lot, et la condition posée à la v19 (une seconde bibliothèque qui prête) aussi.

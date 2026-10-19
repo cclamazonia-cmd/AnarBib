@@ -3799,16 +3799,16 @@
         "biblio"
       ],
       "t": {
-        "fr": "Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES",
-        "pt": "Vincular os 91 fascículos e as 87 monografias suspeitas de SOLIDAIRES"
+        "fr": "Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double",
+        "pt": "Ligar os 43 fascículos do lote SOLIDAIRES às suas 3 revistas, e decidir os 9 números em duplicata"
       },
       "v": {
-        "fr": "Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.",
-        "pt": "O arquivo SOLIDAIRES já traz colunas `revue` e `numero`: **12 títulos a criar, 91 fascículos a vincular**. Além disso, **87 monografias trazem «n°» no título** e estão marcadas por uma flag `numero_dans_titre`: são candidatas ao vínculo."
+        "fr": "**Recompté le 19/10 dans le lot vivant (lot 63, run 29, `SOLIDAIRES_import_v2.csv`)** — les chiffres d'origine de la fiche (12 titres, 91 fascicules, 87 monographies marquées `numero_dans_titre`) venaient du premier fichier, celui du run 18, remplacé le 28/08. Dans les 1 673 brouillons d'aujourd'hui, **43 portent une revue** dans la colonne `periodico` de la source, **3 titres** : *Les utopiques* (27), *Cahiers de la formation syndicale* (10), *Revue internationale* (6) ; le numéro est dans la colonne `numero` (vide pour une ligne). Tous sont entrés comme des livres : le profil d'import n'a repris ni la revue ni le numéro dans les champs du brouillon, ils sont restés dans la charge brute. Le drapeau `numero_dans_titre` n'existe pas dans ce fichier ; à sa place, la source marque **18 lignes « même numéro aussi en ligne X — à trancher par la source »** (`duplo_numero`) — toutes parmi les 43, soit **9 paires** (*Les utopiques* n° 5, 6, 7, 8, 10, 12, 13, 14 ; *Cahiers de la formation syndicale* n° 6) : un même fascicule décrit deux fois (une notice, deux exemplaires) ou deux fascicules distincts — c'est un jugement, pas un calcul.",
+        "pt": "**Recontado em 19/10 no lote vivo (lote 63, run 29)** — os números originais (12 títulos, 91 fascículos, 87 monografias) vinham do primeiro arquivo, substituído em 28/08. Hoje: **43 fascículos, 3 revistas** (*Les utopiques* 27, *Cahiers de la formation syndicale* 10, *Revue internationale* 6), todos entrados como livros; revista e número ficaram na carga bruta. A fonte marca **18 linhas « mesmo número também na linha X »**, ou seja **9 pares** a decidir à mão."
       },
       "w": {
-        "fr": "**D'abord** : réviser et publier le lot 63 (1 673 brouillons) depuis l'écran des lots, par la coordination de Solidaires elle-même, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Ensuite** : créer les 12 titres, lier les 91 fascicules, puis **soumettre** les 87 candidates à quelqu'un qui connaît le fonds. Ne pas les rattacher automatiquement.",
-        "pt": "**Primeiro**: revisar e publicar o lote 63 (1 673 rascunhos) pela tela dos lotes, pela própria coordenação da Solidaires, com as ferramentas entregues — relatório de revisão (H16), publicação por lote (B30), numeração e cotas (E21). **Depois**: criar os 12 títulos, vincular os 91 fascículos, depois **submeter** as 87 candidatas a alguém que conheça o acervo. Não vinculá-las automaticamente."
+        "fr": "**D'abord** : la révision et la publication du lot 63 restent le travail de la coordination de Solidaires, outillée — rapport de révision (H16), publication par lot (B30), numérotation et cotes (E21). **Pour les fascicules** : sur décision de Xavier du 19/10, une migration crée les 3 titres en « proposé » et rattache les 43 fascicules (type périodique, titre de revue, forme transcrite, numéro) depuis les colonnes de la source — sans rien fusionner. **Restent à la main** : promouvoir les 3 titres (Catalogage › Périodiques), déclarer l'état de collection, et trancher les 9 paires de numéros en double, une par une.",
+        "pt": "A revisão e a publicação do lote 63 continuam sendo trabalho da coordenação de Solidaires. **Fascículos**: por decisão de Xavier (19/10), uma migração cria os 3 títulos « propostos » e liga os 43 fascículos a partir das colunas da fonte, sem fundir nada. **À mão**: promover os 3 títulos, declarar o estado de coleção, decidir os 9 pares."
       },
       "y": {
         "fr": "Un titre qui contient « n° » n'est pas toujours un fascicule — c'est parfois un titre de collection, parfois une coquille. Le drapeau signale, il ne décide pas. Et le réseau ne compte aujourd'hui que 4 titres de périodiques : ce lot les multiplierait par quatre, et éprouverait le sous-système pour de bon.",
@@ -3816,13 +3816,13 @@
       },
       "f": {
         "fr": [
-          "Les 12 titres existent et les 91 fascicules y sont rattachés.",
-          "Les 87 candidates ont été soumises, et chaque verdict est humain.",
+          "Les 3 titres existent, promus, et les 43 fascicules y sont rattachés.",
+          "Les 9 paires de numéros en double ont chacune un verdict humain (un fascicule et deux exemplaires, ou deux fascicules).",
           "Le comportement observé sur les quatre notices *Encontros com a Civilização brasileira* confirme la règle anti-faux-doublons : deux paires en sortent, deux y restent."
         ],
         "pt": [
-          "Os 12 títulos existem e os 91 fascículos estão vinculados.",
-          "As 87 candidatas foram submetidas, e cada veredicto é humano.",
+          "Os 3 títulos existem, promovidos, e os 43 fascículos estão ligados a eles.",
+          "Os 9 pares de números em duplicata têm cada um um veredicto humano.",
           "O comportamento observado nos quatro registros *Encontros com a Civilização brasileira* confirma a regra antifalsos-duplicados: dois pares saem, dois ficam."
         ]
       },
@@ -3850,6 +3850,10 @@
         {
           "fr": "**12/10 — reclassement en P1 confirmé par Xavier**, et les bras choisis : la coordination de Solidaires (un compte actif), avec les outils déjà livrés — plutôt que le mainteneur, ce que la v18 appelle précisément à éviter (quinze à vingt soirées pour 1 673 notices, et un collectif qui ne catalogue pas son fonds). Échéance : un début de révision avant le 26/10, sinon la question remonte à `A1` / `G1`.",
           "pt": "**12/10 — reclassificação em P1 confirmada por Xavier**, e os braços escolhidos: a coordenação da Solidaires (uma conta ativa), com as ferramentas já entregues — e não o mantenedor, o que a v18 pede justamente para evitar (quinze a vinte noites para 1 673 fichas, e um coletivo que não cataloga o próprio acervo). Prazo: um começo de revisão antes de 26/10, senão a questão sobe para `A1` / `G1`."
+        },
+        {
+          "fr": "**19/10 — recompté, fiche réécrite.** Lot 63 intact depuis le 15/09 : 1 673 brouillons, tous `draft`, aucun relu ni publié, aucun `serial_id`, toujours 4 titres de périodiques dans le réseau ; la coordination de Solidaires ne s'est pas connectée depuis le 13/10 (veille de la visio du 14/10). Les chiffres d'origine (12/91/87) étaient ceux du run 18 ; le lot vivant porte 43 fascicules, 3 revues, 9 paires de numéros en double. Xavier décide le même jour de **préparer la migration de rattachement** (3 titres proposés, 43 fascicules typés et rattachés, rien de fusionné). Échéance inchangée : un début de révision avant le **26/10**, sinon `A1` / `G1`.",
+          "pt": "**19/10 — recontado, ficha reescrita**: lote 63 intacto desde 15/09; 43 fascículos, 3 revistas, 9 pares. Xavier decide preparar a migração de ligação. Prazo inalterado: 26/10."
         }
       ]
     },
