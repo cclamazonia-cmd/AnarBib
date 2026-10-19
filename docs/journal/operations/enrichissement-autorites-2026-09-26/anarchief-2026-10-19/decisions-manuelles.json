@@ -1,0 +1,53 @@
+{
+ "B": {
+  "11580": ["Q1374710", "WD (un signal) + IdRef 02683409X par titre « Van christen tot anarchist », dates 1846-1919 concordantes"],
+  "11589": ["Q3270448", "WD (un signal) + IdRef 026764466 par titre « Le drapeau noir, l'équerre et le compas », dates 1905-1992 concordantes"],
+  "11584": ["Q191318", "Zenzl Mühsam : alias « Zensi » de la fiche, livre sur Erich Mühsam ; VIAF"],
+  "11622": ["Q3146126", "juriste néerlandais ; IdRef « Holterman, Thom (1942-) » = même naissance que Wikidata"],
+  "11624": ["Q133727959", "IdRef « Moulaert, Jan (1956- ; historien) » = même naissance que Wikidata ; titres d'histoire de l'anarchisme belge"],
+  "11686": ["Q16220699", "Wikidata : militant communiste libertaire belge ; IdRef « Chapelier, Émile (1870-1933) » concordant"],
+  "11704": ["Q133622813", "Wikidata : trotskiste ; IdRef « Dache, Gustave (1936-) » concordant ; livre sur la grève de 1960-1961"],
+  "11640": ["Q1489361", "écrivain anarchiste ; IdRef « Kuhn, Gabriel (1972-) » = même naissance que Wikidata"],
+  "11636": ["Q3644481", "sociologue australien (défense sociale, non-violence) ; IdRef « Martin, Brian (1947-) » = même naissance"],
+  "11631": ["Q215955", "IdRef 027097536 par titre « La révolution n'est pas une affaire de parti », dates 1874-1943 = Wikidata"],
+  "11627": ["Q21539795", "IdRef 027952231 par titre « De Commune van Parijs, 1871 » ; Wikidata : historienne belge 1930-2015 (l'actrice homonyme écartée)"],
+  "11643": ["Q112527931", "IdRef 034360794 par titre « Le rouge et le noir, la tribune bruxelloise… » ; Wikidata : écrivain belge né en 1965"],
+  "11588": ["Q2639107", "Wikidata : anarcho-syndicaliste et antimilitariste néerlandais 1891-1970 (les trois homonymes écartés)"],
+  "11666": ["Q505871", "Wikidata : anarchiste américain 1854-1939, « Staatssocialisme en anarchisme » (les cinq homonymes écartés)"],
+  "11706": ["Q42511", "H. G. Wells, écrivain britannique (homonymes : un politicien, un rugbyman)"],
+  "11675": ["Q5115823", "Chuck W. Morse, anarchisme déclaré (Institute for Social Ecology) ; « Libertair Municipalisme »"],
+  "11764": ["Q1549072", "Peter Marshall, historien britannique né en 1946, auteur sur l'anarchisme (neuf homonymes écartés)"],
+  "11749": ["Q109857576", "Louis Simon, militant anarchiste français 1900-1980, proche de Han Ryner (« Han Ryner, individualiste social »)"],
+  "11644": ["Q127692402", "Wikidata : anarchiste britannique ; titres sur la prison"],
+  "11763": ["Q1891328", "féministe américaine, auteure d'« Anarchism: the feminist connection »"],
+  "11663": ["Q6656001", "philosophe taoïste anarchiste (IIIe-IVe s.), « Noch heer, noch onderdaan »"],
+  "11790": ["Q603522", "journaliste autrichien, auteur de « Diktatur der Lüge » (1937)"]
+ },
+ "C": {
+  "11635": ["Q1981186", "homme politique flamand marxiste (1929-2003) ; IdRef même naissance ; rien ne relie ses écrits à l'anarchisme individualiste"],
+  "11633": ["Q2064594", "psychologue et criminologue de Louvain (1932-2007), « non conventionnel » ; pas d'identifiant de bibliothèque"],
+  "11712": ["Q13653599", "journaliste et cinéaste néerlandais né en 1958 ; accepté par la règle (VIAF + métier) mais aucun lien direct avec la désobéissance civile"]
+ },
+ "COLL": {
+  "11604": ["Q850181", "Internationale situationniste"],
+  "11607": ["Q1046722", "Industrial Workers of the World"],
+  "11606": ["Q2693521", "Vrije Bond, fédération anarchiste (Pays-Bas/Belgique)"],
+  "11800": ["Q2867806", "Internationale Anti-Militaristische Vereeniging, fondée en 1904"],
+  "11593": ["Q2490855", "Bij' De Vieze Gasten, troupe de Gand"],
+  "11876": ["Q1374966", "Eurodusnie, collectif de Leyde"],
+  "11867": ["Q8034816", "Workers Solidarity Movement, organisation anarchiste irlandaise"],
+  "11833": ["Q2783365", "De Vrije Gedachte, association néerlandaise de libres penseurs"],
+  "11883": ["Q47458246", "Wereldscholen – Centrum voor Vorming en Aktie (Belgique)"]
+ },
+ "COLL_C": {
+  "11797": ["Q97704882", "Wikidata date le NSV de 1923-1940 ; les brochures d'Anarchief sont de 1957-1958 (refondation ?)"],
+  "11831": ["Q54860250", "« organisation néerlandaise » sans plus ; brochure de théâtre de 1977"]
+ },
+ "EXCLU_A": {
+  "11638": "Dirk Wouters : diplomate né en 1955, les brochures maoïstes sont de 1974-1975",
+  "11793": "Xavier Bekaert : IdRef le dit physicien théoricien",
+  "11776": "Samar Ranjan Sen : économiste, rien ne le relie au livre préfacé par Hem Day"
+ },
+ "SANS_PAYS": { "11623": "Clara Wichmann : la règle donne DE (née à Hambourg), elle est juriste néerlandaise — pays laissé vide, à trancher" },
+ "SANS_LANGUE": { "11622": "Thom Holterman : Wikidata donne l'anglais, il écrit en néerlandais" }
+}

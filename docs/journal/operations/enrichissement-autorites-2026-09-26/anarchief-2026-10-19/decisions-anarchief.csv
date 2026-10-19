@@ -1,0 +1,309 @@
+id,nom,type,lot,decision_wikidata,qid,idref,naissance,mort,pays,langue,motif_ou_candidats
+11578,Anton Constandse,person,A,accepte,Q591526,,1899,1985,NL,nl,
+11579,Bart de Ligt,person,A,accepte,Q809218,113365624,1883,1938,NL,nl,
+11580,Ferdinand Domela Nieuwenhuis,person,B,manuel_B,Q1374710,02683409X,1846,1919,NL,nl,"WD (un signal) + IdRef 02683409X par titre « Van christen tot anarchist », dates 1846-1919 concordantes"
+11581,Hem Day,person,A,accepte,Q15407596,,1902,1969,BE,fr,
+11582,Ravachol,person,A,accepte,Q558456,,1859,1892,FR,fr,
+11583,Ernst Schneider,person,,ambigu,,,,,,,"Q123859626 biblio ; Q116052761 biblio ; Q17151365 biblio ; Q105846778 ; Q119473 biblio,metier"
+11584,Kreszentia Mühsam,person,B,manuel_B,Q191318,,1884,1962,,,"Zenzl Mühsam : alias « Zensi » de la fiche, livre sur Erich Mühsam ; VIAF"
+11585,Hans Ramaer,person,A,accepte,Q59479639,,1941,2015,NL,nl,
+11586,Boudewijn Chorus,person,,introuvable,,,,,,,
+11587,Catherina Lydia de Ligt-van Rossem,person,,introuvable,,,,,,,
+11588,Albert de Jong,person,B,manuel_B,Q2639107,,1891,1970,NL,nl,Wikidata : anarcho-syndicaliste et antimilitariste néerlandais 1891-1970 (les trois homonymes écartés)
+11589,Léo Campion,person,B,manuel_B,Q3270448,026764466,1905,1992,FR,fr,"WD (un signal) + IdRef 026764466 par titre « Le drapeau noir, l'équerre et le compas », dates 1905-1992 concordantes"
+11590,J. Hooijberg,person,,introuvable,,,,,,,
+11591,Alexander Schapiro,person,,ambigu,,,,,,,"Q821655 biblio,metier,anarchisme ; Q875398 biblio,metier,anarchisme ; Q17907972 biblio,metier ; Q12171106 biblio,metier né 1969, publié dès 1938 ; Q4520196 biblio,metier"
+11592,Anarchistisch Kollektief La Cecilia (Leuven),collective,,introuvable,,,,,,,
+11593,De Vieze Gasten,collective,K,manuel_COLL,Q2490855,,,,BE,,"Bij' De Vieze Gasten, troupe de Gand"
+11594,Landelijk Anarchistisch Overleg,collective,,introuvable,,,,,,,
+11595,Anarchistische Groep Nijmegen,collective,,introuvable,,,,,,,
+11596,Anarchist Black Cross Gent,collective,,introuvable,,,,,,,
+11597,Anarchist Black Cross Nijmegen,collective,,introuvable,,,,,,,
+11598,Anarchist Black Cross Utrecht,collective,,introuvable,,,,,,,
+11599,Organisatie van Roermondse Anarchisten,collective,,introuvable,,,,,,,
+11600,SKAL (Socio-Kulturele Aktiegroep Leuven),collective,,introuvable,,,,,,,
+11601,Onafhankelijk Verbond van Bedrijfsorganisaties,collective,,introuvable,,,,,,,
+11602,Anarchistisch Kollektief Gent,collective,,introuvable,,,,,,,
+11603,Anarchistische Groep Amsterdam,collective,,introuvable,,,,,,,
+11604,Situationistische Internationale,collective,K,manuel_COLL,Q850181,,,,,,Internationale situationniste
+11605,De Struikrover,collective,,collectif_a_relire,,,,,,,Q15943267
+11606,Vrije Bond,collective,K,manuel_COLL,Q2693521,,,,,,"Vrije Bond, fédération anarchiste (Pays-Bas/Belgique)"
+11607,IWW,collective,K,manuel_COLL,Q1046722,,,,,,Industrial Workers of the World
+11608,"Eigen Hulp (Koor, Orkest)",collective,,introuvable,,,,,,,
+11609,5 vrouwen uit Utrecht,collective,,introuvable,,,,,,,
+11610,Stichting OVERAL,collective,,introuvable,,,,,,,
+11611,Bertolt Brecht,person,A,accepte,Q38757,028208617,1898,1956,DE,de,
+11612,Brian A. Dominick,person,A,accepte,Q130442036,,,,US,,
+11613,Gustave Hervé,person,A,accepte,Q764182,031440126,1871,1944,FR,fr,
+11614,Attila Kotányi,person,A,accepte,Q315836,256981876,1924,2003,HU,hu,
+11615,Wayne Price,person,,non_corrobore,,,,,,,Q7976537 ; Q107169543 ; Q99248403 chercheur
+11616,Amory B. Lovins,person,A,accepte,Q474194,,1947,,US,,
+11617,John M. Swomley Jr.,person,,introuvable,,,,,,,
+11618,H. Kolthek Jr.,person,,introuvable,,,,,,,
+11619,Hetty C. Passchier-Meijer,person,,introuvable,,,,,,,
+11620,David H. Albert,person,,introuvable,,,,,,,
+11621,Étienne de La Boétie,person,A,accepte,Q290227,026955776,1530,1563,FR,fr,
+11622,Thom Holterman,person,B,manuel_B,Q3146126,079242669,1942,,NL,,"juriste néerlandais ; IdRef « Holterman, Thom (1942-) » = même naissance que Wikidata"
+11623,Clara Wichmann,person,A,accepte,Q1095182,19788296X,1885,1922,,nl,
+11624,Jan Moulaert,person,B,manuel_B,Q133727959,035018925,1956,,BE,nl,"IdRef « Moulaert, Jan (1956- ; historien) » = même naissance que Wikidata ; titres d'histoire de l'anarchisme belge"
+11625,Ruud Uittenhout,person,,introuvable,,,,,,,
+11626,Roger Jacobs,person,,non_corrobore,,,,,,,Q13104856 ; Q59395362 ; Q112199090 ; Q140292494
+11627,Denise De Weerdt,person,B,manuel_B,Q21539795,027952231,1930,2015,BE,,"IdRef 027952231 par titre « De Commune van Parijs, 1871 » ; Wikidata : historienne belge 1930-2015 (l'actrice homonyme écartée)"
+11628,Gene Sharp,person,A,accepte,Q263681,032582242,1928,2018,US,en,
+11629,Herman Gorter,person,A,accepte,Q325191,034346287,1864,1927,NL,nl,
+11630,Johny Lenaerts,person,,introuvable,,,,,,,
+11631,Otto Rühle,person,B,manuel_B,Q215955,027097536,1874,1943,DE,de,"IdRef 027097536 par titre « La révolution n'est pas une affaire de parti », dates 1874-1943 = Wikidata"
+11632,Simon Radius,person,,introuvable,,,,,,,
+11633,Steven De Batselier,person,C,manuel_C,Q2064594,,1932,2007,BE,,"psychologue et criminologue de Louvain (1932-2007), « non conventionnel » ; pas d'identifiant de bibliothèque"
+11634,André Bons,person,,introuvable,,,,,,,
+11635,Antoon Roosens,person,C,manuel_C,Q1981186,150390149,1929,2003,BE,nl,homme politique flamand marxiste (1929-2003) ; IdRef même naissance ; rien ne relie ses écrits à l'anarchisme individualiste
+11636,Brian Martin,person,B,manuel_B,Q3644481,270023569,1947,,AU,en,"sociologue australien (défense sociale, non-violence) ; IdRef « Martin, Brian (1947-) » = même naissance"
+11637,César De Paepe,person,A,accepte,Q1150699,030539552,1841,1890,BE,fr,
+11638,Dirk Wouters,person,,exclu,,,,,,,Q98380334 metier
+11639,Eddy Bonte,person,,non_corrobore,,,,,,,Q99397932
+11640,Gabriel Kuhn,person,B,manuel_B,Q1489361,158635450,1972,,AT,,"écrivain anarchiste ; IdRef « Kuhn, Gabriel (1972-) » = même naissance que Wikidata"
+11641,Henk Eikeboom,person,A,accepte,Q94532201,,1898,1945,NL,nl,
+11642,Jan Bervoets,person,,introuvable,,,,,,,
+11643,Jean-François Füeg,person,B,manuel_B,Q112527931,034360794,1965,,BE,fr,"IdRef 034360794 par titre « Le rouge et le noir, la tribune bruxelloise… » ; Wikidata : écrivain belge né en 1965"
+11644,Mark Barnsley,person,B,manuel_B,Q127692402,,,,GB,,Wikidata : anarchiste britannique ; titres sur la prison
+11645,Peter Zegers,person,,a_relire,,,,,,,Q133609546 biblio
+11646,A. Sormon,person,,introuvable,,,,,,,
+11647,A. Cabo,person,,introuvable,,,,,,,
+11648,A. H. van Kampen,person,,introuvable,,,,,,,
+11649,Adam Weaver,person,,non_corrobore,,,,,,,Q117991067 ; Q51906596 chercheur
+11650,Agnès Pawlowsky,person,,introuvable,,,,,,,
+11651,Aimé Dieu Rosecroix,person,,introuvable,,,,,,,
+11652,Albo Helm,person,,non_corrobore,,,,,,,Q1909209
+11653,An Gordier,person,,introuvable,,,,,,,
+11654,André Prudhommeaux,person,A,accepte,Q2848487,059554037,1902,1968,FR,,
+11655,Anja van Oostrom,person,,a_relire,,,,,,,Q140624320 metier
+11656,Ariane Miéville,person,,introuvable,,,,,,,
+11657,Arnold Roller,person,A,accepte,Q79769427,,,1956,AT,,
+11658,Arthur IJzerman,person,,introuvable,,,,,,,
+11659,Arthur Mendes-George,person,,introuvable,,,,,,,
+11660,August Vermeylen,person,A,accepte,Q764378,095074716,1872,1945,BE,nl,
+11661,B. Cold,person,,introuvable,,,,,,,
+11662,B. Damme,person,,introuvable,,,,,,,
+11663,Bao Jingyan,person,B,manuel_B,Q6656001,,,,,,"philosophe taoïste anarchiste (IIIe-IVe s.), « Noch heer, noch onderdaan »"
+11664,Bas Moreel,person,,introuvable,,,,,,,
+11665,Bas van der Plas,person,A,accepte,Q2544900,,1947,,NL,nl,
+11666,Benjamin Tucker,person,B,manuel_B,Q505871,,1854,1939,US,en,"Wikidata : anarchiste américain 1854-1939, « Staatssocialisme en anarchisme » (les cinq homonymes écartés)"
+11667,Bernard Salmon,person,,introuvable,,,,,,,
+11668,Bert Altena,person,A,accepte,Q57457025,076318338,1950,2018,NL,nl,
+11669,R. Bökkerkink,person,,introuvable,,,,,,,
+11670,Bruno Bifo,person,,introuvable,,,,,,,
+11671,C. Rubens,person,,non_corrobore,,,,,,,Q119728645
+11672,C. Drossaart van Dusseldorp,person,,introuvable,,,,,,,
+11673,Cees Richter,person,,introuvable,,,,,,,
+11674,Chaz Bufe,person,A,accepte,Q5088654,,,,US,,
+11675,Chuck Morse,person,B,manuel_B,Q5115823,,1969,,,,"Chuck W. Morse, anarchisme déclaré (Institute for Social Ecology) ; « Libertair Municipalisme »"
+11676,Cyril Markus,person,,introuvable,,,,,,,
+11677,D. Petit,person,,introuvable,,,,,,,
+11678,D. H. Lawrence,person,A,accepte,Q34970,,1885,1930,GB,en,
+11679,David Stephens,person,,ambigu,,,,,,,Q5240068 ; Q5240069 ; Q106622316 ; Q20710224 ; Q37383204 chercheur
+11680,B. de Vries,person,,ambigu,,,,,,,"Q21510073 ; Q140383232 ; Q118430346 ; Q108910904 ; Q4422235 biblio,metier"
+11681,Deric Shannon,person,A,accepte,Q92319485,,,,US,,
+11682,Doctress Neutopia,person,,introuvable,,,,,,,
+11683,Doug Morris,person,,a_relire,,,,,,,Q3638496 biblio ; Q60668431 chercheur
+11684,E. Zandstra,person,,introuvable,,,,,,,
+11685,Elly Kloosterman,person,,introuvable,,,,,,,
+11686,Émile Chapelier,person,B,manuel_B,Q16220699,28578725X,1870,1933,BE,fr,"Wikidata : militant communiste libertaire belge ; IdRef « Chapelier, Émile (1870-1933) » concordant"
+11687,Emile Vandervelde,person,A,accepte,Q286556,027176851,1866,1938,BE,fr,
+11688,Eric Duivenvoorden,person,A,accepte,Q19587577,,1962,,NL,,
+11689,Eric Krebbers,person,,introuvable,,,,,,,
+11690,Erik Buelinckx,person,,a_relire,,,,,,,Q136576368 biblio
+11691,Evie Embrechts,person,,introuvable,,,,,,,
+11692,F. Boenders,person,,introuvable,,,,,,,
+11693,Flip Glastra,person,,introuvable,,,,,,,
+11694,Francisco Galceran Ferrer,person,,introuvable,,,,,,,
+11695,Frans Lodewijkx,person,,introuvable,,,,,,,
+11696,Frans Masereel,person,A,accepte,Q559297,027014878,1889,1972,BE,fr,
+11697,Fredy Perlman,person,A,accepte,Q2458048,074459651,1934,1985,US,en,
+11698,G. Iospa,person,,introuvable,,,,,,,
+11699,G. L. Meijer,person,,introuvable,,,,,,,
+11700,George Katsiaficas,person,A,accepte,Q18275311,,1949,,US,,
+11701,George Lakey,person,A,accepte,Q27948866,,1937,,US,,
+11702,Gerhard Rijnders,person,A,accepte,Q3485290,,1876,1950,NL,,
+11703,Gernot Jochheim,person,A,accepte,Q1514404,077755650,1942,,DE,de,
+11704,Gustave Dache,person,B,manuel_B,Q133622813,151362343,1936,,BE,fr,"Wikidata : trotskiste ; IdRef « Dache, Gustave (1936-) » concordant ; livre sur la grève de 1960-1961"
+11705,Guy Debord,person,A,accepte,Q298075,026815672,1931,1994,FR,fr,
+11706,H. G. Wells,person,B,manuel_B,Q42511,,1866,1946,GB,en,"H. G. Wells, écrivain britannique (homonymes : un politicien, un rugbyman)"
+11707,H. P. G. Quack,person,A,accepte,Q2629919,,1834,1917,NL,nl,
+11708,Han Schook,person,,a_relire,,,,,,,Q27891495 biblio
+11709,Han Kuysten,person,,introuvable,,,,,,,
+11710,Hanneke Willemse,person,,non_corrobore,,,,,,,Q106306653
+11711,Hans Jar,person,,introuvable,,,,,,,
+11712,Hans Krikke,person,C,manuel_C,Q13653599,,1958,,NL,nl,journaliste et cinéaste néerlandais né en 1958 ; accepté par la règle (VIAF + métier) mais aucun lien direct avec la désobéissance civile
+11713,Harmen van Houten,person,,a_relire,,,,,,,Q94507904 biblio
+11714,Henri Haenen,person,,introuvable,,,,,,,
+11715,Henriëtte Roland Holst,person,A,accepte,Q441439,,1869,1952,NL,nl,
+11716,Herbert L. Matthews,person,,introuvable,,,,,,,
+11717,Hubert van den Berg,person,A,accepte,Q64666669,050531492,1963,,,nl,
+11718,Huub Kurstjens,person,,introuvable,,,,,,,
+11719,I. Colstee,person,,introuvable,,,,,,,
+11720,J. Rogue,person,A,accepte,Q125352761,,,,US,,
+11721,J. C. Schemerhorn,person,,introuvable,,,,,,,
+11722,J. H. Mackay,person,,introuvable,,,,,,,
+11723,Jacob Kats,person,A,accepte,Q2442614,,1804,1886,BE,nl,
+11724,Jacques J. Giele,person,A,accepte,Q108784124,,1942,2012,NL,,
+11725,Jane Meyerding,person,,introuvable,,,,,,,
+11726,Jean Barrot,person,A,accepte,Q2033010,026706962,1947,,FR,fr,
+11727,Jean Casseur,person,,introuvable,,,,,,,
+11728,Jean De Boë,person,A,accepte,Q10306538,084578165,1889,1974,BE,fr,
+11729,Jean Tillie,person,,introuvable,,,,,,,
+11730,Jeanne Duprat,person,,introuvable,,,,,,,
+11731,Jeroen ten Dam,person,,introuvable,,,,,,,
+11732,Jeroen van Raalte,person,,introuvable,,,,,,,
+11733,Jessica Mitford,person,A,accepte,Q457856,030410843,1917,1996,GB,en,
+11734,Joao Mora,person,,introuvable,,,,,,,
+11735,Johan Anthierens,person,A,accepte,Q2360102,034120068,1937,2000,BE,nl,
+11736,Jos Geens,person,,non_corrobore,,,,,,,Q2734759
+11737,Jules Vallès,person,A,accepte,Q551597,,1832,1885,FR,fr,
+11738,Kathlijn Pittomvils,person,,introuvable,,,,,,,
+11739,Kees Stad,person,,introuvable,,,,,,,
+11740,Ken Knabb,person,A,accepte,Q6387959,,1945,,US,en,
+11741,Klaas Pit,person,,introuvable,,,,,,,
+11742,L. J. Bot,person,,introuvable,,,,,,,
+11743,L. Lichtveld,person,,introuvable,,,,,,,
+11744,L. Vanheerentals,person,,introuvable,,,,,,,
+11745,Lao Tsu,person,A,accepte,Q9333,,,,,,
+11746,Louis Adamic,person,A,accepte,Q713658,029157323,1898,1951,,en,
+11747,Louis Loréal,person,,introuvable,,,,,,,
+11748,Louis Paul Boon,person,A,accepte,Q469627,028491777,1912,1979,BE,nl,
+11749,Louis Simon,person,B,manuel_B,Q109857576,,1900,1980,FR,,"Louis Simon, militant anarchiste français 1900-1980, proche de Han Ryner (« Han Ryner, individualiste social »)"
+11750,Louis Sinner,person,,introuvable,,,,,,,
+11751,Lucien Grelaud,person,,non_corrobore,,,,,,,Q131300775
+11752,Ludo Abicht,person,A,accepte,Q4730107,030595150,1936,,BE,nl,
+11753,Marina Micheli,person,,introuvable,,,,,,,
+11754,Meinte Ringia,person,,introuvable,,,,,,,
+11755,Melaina Feenstra,person,,introuvable,,,,,,,
+11756,Michael P. Spahr,person,,introuvable,,,,,,,
+11757,Nicolas Inghels,person,,introuvable,,,,,,,
+11758,Nina Nijsten,person,,a_relire,,,,,,,Q86915813 metier
+11759,Oscar Testut,person,A,accepte,Q139061844,056982224,1845,,FR,fr,
+11760,P. J. De Ridder,person,,a_relire,,,,,,,Q18912689 biblio
+11761,P. Vervest,person,,introuvable,,,,,,,
+11762,Patrick Pasture,person,A,accepte,Q93239186,050725254,1961,,BE,nl,
+11763,Peggy Kornegger,person,B,manuel_B,Q1891328,,,,US,,"féministe américaine, auteure d'« Anarchism: the feminist connection »"
+11764,Peter Marshall,person,B,manuel_B,Q1549072,,1946,,GB,,"Peter Marshall, historien britannique né en 1946, auteur sur l'anarchisme (neuf homonymes écartés)"
+11765,Peter Storm,person,,non_corrobore,,,,,,,Q102173716
+11766,Philippe Wittenberg,person,,introuvable,,,,,,,
+11767,Pietre Bianchi,person,,introuvable,,,,,,,
+11768,René Gabriëls,person,,non_corrobore,,,,,,,Q2144634
+11769,René Johannes Sanders,person,,introuvable,,,,,,,
+11770,René Steyaert,person,,non_corrobore,,,,,,,Q112288955
+11771,Robert Willem Frijn,person,,introuvable,,,,,,,
+11772,Roel van Duyn,person,A,accepte,Q2161427,,1943,,NL,nl,
+11773,Romain Rolland,person,A,accepte,Q47162,027106861,1866,1944,FR,fr,
+11774,Rymke Wiersma,person,,introuvable,,,,,,,
+11775,S. M. Sheehan,person,,introuvable,,,,,,,
+11776,Samar Ranjan Sen,person,,exclu,,,,,,,Q109924714 metier
+11777,Sonali Kolhatkar,person,,a_relire,,,,,,,Q135404295 metier
+11778,Stijn Vanclooster,person,A,accepte,Q133028941,,1974,,,,
+11779,T. Barnacle,person,,introuvable,,,,,,,
+11780,T. Veenstra,person,,a_relire,,,,,,,Q108875013 metier
+11781,Thomas Meyer-Falk,person,A,accepte,Q122168283,,1971,,DE,,
+11782,Tommy Ryan,person,,non_corrobore,,,,,,,Q1367745 ; Q7819825 ; Q7819827 ; Q7819826 ; Q19605023
+11783,Toni Negri,person,A,accepte,Q310341,,1933,2023,IT,it,
+11784,Torsten Liesegang,person,,introuvable,,,,,,,
+11785,Tristan Faes,person,,introuvable,,,,,,,
+11786,Upton Sinclair,person,A,accepte,Q216134,027139913,1878,1968,US,en,
+11787,Van den Dungen,person,,introuvable,,,,,,,
+11788,G. Van der Bruggen,person,,introuvable,,,,,,,
+11789,W. J. Jong,person,,introuvable,,,,,,,
+11790,Willi Schlamm,person,B,manuel_B,Q603522,,1904,1978,,,"journaliste autrichien, auteur de « Diktatur der Lüge » (1937)"
+11791,Willy Verhoysen,person,,introuvable,,,,,,,
+11792,Wolfgang Sternstein,person,A,accepte,Q18917973,094220239,1939,,DE,de,
+11793,Xavier Bekaert,person,,exclu,,,,,,,Q131286245 biblio
+11794,Radicale Criminologen (Leuven),collective,,introuvable,,,,,,,
+11795,Libertaire Studiegroep Gent,collective,,introuvable,,,,,,,
+11796,Landelijke Anarchistische Samenwerking,collective,,introuvable,,,,,,,
+11797,Nederlands Syndicalistisch Vakverbond,collective,KC,manuel_COLL_C,Q97704882,,,,,,Wikidata date le NSV de 1923-1940 ; les brochures d'Anarchief sont de 1957-1958 (refondation ?)
+11798,ONKRUIT België,collective,,introuvable,,,,,,,
+11799,Aktiegroep Dierenbevrijding Gent (ADB Gent),collective,,introuvable,,,,,,,
+11800,IAMV,collective,K,manuel_COLL,Q2867806,,,,,,"Internationale Anti-Militaristische Vereeniging, fondée en 1904"
+11801,IOC-MAB,collective,,introuvable,,,,,,,
+11802,'t kan anders,collective,,introuvable,,,,,,,
+11803,A SEED Europe,collective,,introuvable,,,,,,,
+11804,ABC Antwerpen-Gent (Anarchist Black Cross),collective,,introuvable,,,,,,,
+11805,ActivistSecurity.org Collective,collective,,introuvable,,,,,,,
+11806,Afdeling Amsterdam Onafhankelijk Verbond van Bedrijfsorganisaties,collective,,introuvable,,,,,,,
+11807,Aktie Strohalm,collective,,introuvable,,,,,,,
+11808,Amsterdam Autovrij,collective,,introuvable,,,,,,,
+11809,Anarchisme Leuven,collective,,introuvable,,,,,,,
+11810,Anarchistisch Kollektief Unief Gent,collective,,introuvable,,,,,,,
+11811,Anarchistische Dagen Frankfurt,collective,,introuvable,,,,,,,
+11812,Anarchistische Federatie Gent,collective,,introuvable,,,,,,,
+11813,Anarchistische Federatie Nederland,collective,,introuvable,,,,,,,
+11814,Anarchistische Uitgeverij,collective,,introuvable,,,,,,,
+11815,AntiFascistisch Front (AFF Gent),collective,,introuvable,,,,,,,
+11816,Antimilitaristisch Buro Leuven,collective,,introuvable,,,,,,,
+11817,Aspegroep Nederland,collective,,introuvable,,,,,,,
+11818,Asturian Institute of Comparative Vandalism,collective,,introuvable,,,,,,,
+11819,Autonome Antifa Gent,collective,,introuvable,,,,,,,
+11820,Autonoom Centrum Gent (AC Gent),collective,,introuvable,,,,,,,
+11821,BedrijfsGroep Amsterdam,collective,,introuvable,,,,,,,
+11822,Bedrijfsorganisatie Collectieve Sector,collective,,introuvable,,,,,,,
+11823,Beweging van de Tachtig (Nijmegen),collective,,introuvable,,,,,,,
+11824,Beweging voor ArbeidersZelfbeheer,collective,,introuvable,,,,,,,
+11825,Black Cross Collective,collective,,introuvable,,,,,,,
+11826,BNFL,collective,,collectif_a_relire,,,,,,,Q261875 biblio
+11827,Bond Werkschuw Tuig,collective,,introuvable,,,,,,,
+11828,Collectief Zonder Stembiljet,collective,,introuvable,,,,,,,
+11829,Coördinatie van autonome groepen in Spanje,collective,,introuvable,,,,,,,
+11830,Croque Maison,collective,,introuvable,,,,,,,
+11831,De Nieuwe Komedie,collective,KC,manuel_COLL_C,Q54860250,,,,,,« organisation néerlandaise » sans plus ; brochure de théâtre de 1977
+11832,De Vrienden van het Volk Bibliotheek,collective,,introuvable,,,,,,,
+11833,De Vrije Gedachte,collective,K,manuel_COLL,Q2783365,,,,,,"De Vrije Gedachte, association néerlandaise de libres penseurs"
+11834,De Vrije Ruisledenaar,collective,,introuvable,,,,,,,
+11835,Federatie van Vrije Socialisten Recht voor Allen,collective,,introuvable,,,,,,,
+11836,Het Cirkus van Vuile Mon,collective,,introuvable,,,,,,,
+11837,Het internationaal Van der Lubbe-comite,collective,,introuvable,,,,,,,
+11838,Het Krakend Gewricht,collective,,introuvable,,,,,,,
+11839,Internationale aaneensluiting tegen oorlog en militarisme RIGM,collective,,introuvable,,,,,,,
+11840,Internationale Anarchistische Bijeenkomst Ruigoord,collective,,introuvable,,,,,,,
+11841,KA,collective,,introuvable,,,,,,,
+11842,Kafe de Harde Kern,collective,,introuvable,,,,,,,
+11843,Karavaan Stop Europa,collective,,introuvable,,,,,,,
+11844,Kollektiv (Bremen),collective,,introuvable,,,,,,,
+11845,Kritische Universiteit Nijmegen,collective,,introuvable,,,,,,,
+11846,Landelijke Werkgroep Anti-Autoritaire,collective,,introuvable,,,,,,,
+11847,Leesclub Les Pétroleuses,collective,,introuvable,,,,,,,
+11848,Les Groupes Anarchistes Bruxellois,collective,,introuvable,,,,,,,
+11849,Nederlands Instituut voor Vredesvraagstukken,collective,,introuvable,,,,,,,
+11850,Papieren Tijger,collective,,collectif_a_relire,,,,,,,Q2003229
+11851,Pleasure Tendency,collective,,introuvable,,,,,,,
+11852,Red Sunshine Gang,collective,,introuvable,,,,,,,
+11853,Revolutionaire RadenSocialisten (Antwerpen),collective,,introuvable,,,,,,,
+11854,Riot Squad,collective,,ambigu,,,,,,,Q7335447 biblio ; Q10362971 ; Q7335448 ; Q106899531 ; Q17015612
+11855,Scola Oikonomia,collective,,introuvable,,,,,,,
+11856,Socialistiese Opvoeding,collective,,introuvable,,,,,,,
+11857,Solidarité Ouvrière,collective,,collectif_a_relire,,,,,,,Q1178465
+11858,Spartacusbond NL,collective,,introuvable,,,,,,,
+11859,Stichting Afval,collective,,introuvable,,,,,,,
+11860,Studenten van Straatsburg,collective,,introuvable,,,,,,,
+11861,The Laughing Poets,collective,,introuvable,,,,,,,
+11862,Twin Cities IWW Branch,collective,,introuvable,,,,,,,
+11863,Uitgeverij de Dolle Hond,collective,,introuvable,,,,,,,
+11864,Vuile Mong en de vieze gasten,collective,,introuvable,,,,,,,
+11865,Werkgroep Alternatieve Ekonomie,collective,,introuvable,,,,,,,
+11866,Werklozenvakbond Leuven,collective,,introuvable,,,,,,,
+11867,Workers Solidarity Movement,collective,K,manuel_COLL,Q8034816,,,,,,"Workers Solidarity Movement, organisation anarchiste irlandaise"
+11868,FELS Für Eine Linke Stromung,collective,,introuvable,,,,,,,
+11869,Accion Fuego,collective,,introuvable,,,,,,,
+11870,Angel Alley,collective,,collectif_a_relire,,,,,,,Q135964155
+11871,A-Koepel,collective,,introuvable,,,,,,,
+11872,Anarchisme-info,collective,,collectif_a_relire,,,,,,,Q3292974
+11873,Anarkantus,collective,,introuvable,,,,,,,
+11874,Cre-Act,collective,,collectif_a_relire,,,,,,,Q18265320
+11875,Éen-meiGroep,collective,,introuvable,,,,,,,
+11876,EuroDusnie,collective,K,manuel_COLL,Q1374966,,,,,,"Eurodusnie, collectif de Leyde"
+11877,Queerilla,collective,,introuvable,,,,,,,
+11878,Streetmedics,collective,,introuvable,,,,,,,
+11879,Wildgroei,collective,,ambigu,,,,,,,Q2672634 ; Q4929138
+11880,Spuigroep,collective,,introuvable,,,,,,,
+11881,ASSW,collective,,introuvable,,,,,,,
+11882,Elcker-Ik,collective,,collectif_a_relire,,,,,,,Q123928734
+11883,Wereldscholen,collective,K,manuel_COLL,Q47458246,,,,BE,,Wereldscholen – Centrum voor Vorming en Aktie (Belgique)
+11884,Vorming tot bevrijding,collective,,introuvable,,,,,,,
+11885,Prole.info,collective,,introuvable,,,,,,,

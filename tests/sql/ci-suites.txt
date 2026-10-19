@@ -868,3 +868,5 @@ tests/sql/ressources_communes_tests.sql
 tests/sql/lien_page_source_tests.sql
 # Autorités par liste fermée (19/10/2026) : renommer, éclater, créer, lier — jamais une autorité existante modifiée.
 tests/sql/autorites_par_liste_tests.sql
+# Enrichir des autorités par liste fermée (19/10/2026) : le vide seulement, trace par source, tout ou rien (Anarchief, D7).
+tests/sql/enrichir_autorites_tests.sql
