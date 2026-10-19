@@ -463,6 +463,16 @@ export default function LoginPage() {
         return;
       }
       setResetMsg({ text: t({ id: 'auth.resetSuccess' }), kind: 'ok' });
+      // Le mot de passe vient d'être choisi par la personne elle-même : un éventuel
+      // drapeau « à changer » (ancien mot de passe provisoire) n'a plus lieu d'être,
+      // sinon la connexion suivante redemande un changement (19/10/2026).
+      if (user?.id) {
+        try {
+          await supabase.from('profiles')
+            .update({ must_change_password: false, password_changed_at: new Date().toISOString() })
+            .eq('id', user.id);
+        } catch { /* non bloquant : au pire, le changement est redemandé */ }
+      }
       // Reset réussi via le lien de récup : on déconnecte la session de récupération
       // (signOut → SIGNED_OUT → recovery=false) puis on renvoie au login pour une
       // connexion fraîche avec le nouveau MDP. Sans le signOut, la garde

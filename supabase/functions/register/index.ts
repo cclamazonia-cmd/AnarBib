@@ -912,7 +912,10 @@ serve(async (req)=>{
       address: fullAddress || null,
       consent_email: consentEmail,
       consent_email_at: consentEmailAt,
-      must_change_password: true,
+      // 19/10/2026 : plus de mot de passe provisoire — la personne choisit le
+      // sien par le lien du mail de bienvenue. Un « true » ici imposait un
+      // second changement juste après le premier.
+      must_change_password: false,
     }).eq("id", userId).select("id, email, public_id").maybeSingle();
     if (profileUpdateError || !profileUpdatedRow?.id || !profileUpdatedRow?.email) {
       console.error("register: profile update failed", {
@@ -1037,7 +1040,8 @@ serve(async (req)=>{
         claim_id: claimRow?.id ?? null
       };
       // Paquet 25.11 — URL du CTA reconstruite pour passer par /login d'abord.
-      // L'usager doit de toute facon se connecter (must_change_password=true).
+      // L'usager doit de toute facon se connecter (apres avoir choisi son mot de
+      // passe par le lien du mail de bienvenue, 19/10/2026).
       // En passant par /login?next=<finalUrl> on garantit que :
       //  1. Apres login + force-change, il atterrit sur la page finale
       //  2. Le claim token est preserve dans l'URL finale (apres redirect)

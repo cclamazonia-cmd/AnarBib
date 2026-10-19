@@ -106,6 +106,9 @@ describe('register — qui reçoit quoi, et quelles écritures, pour chaque sign
     expect(r.comptes[0]).toMatchObject({ email: 'louise@exemplo.test', email_confirm: true });
     // le mot de passe du compte est aléatoire et long, et ne part nulle part
     expect(r.comptes[0].password.length).toBeGreaterThanOrEqual(40);
+    // la personne choisit son mot de passe par le lien : rien à « changer » ensuite
+    const profil = r.ecrits.find((e) => e.table === 'profiles' && e.op === 'update' && 'must_change_password' in e.donnees);
+    expect(profil.donnees.must_change_password).toBe(false);
 
     const adhesion = r.ecrits.find((e) => e.table === 'user_library_memberships');
     expect(adhesion.donnees).toMatchObject({ user_id: 'user-1', library_id: 'lib-1', role: 'reader', status: 'pending_validation', is_primary: true });
