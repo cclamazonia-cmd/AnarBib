@@ -129,6 +129,8 @@ function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '
         RESTIC_BASE: 'sftp:essai@hote.invalid:/data',
         // Le dépôt LOCAL du flux lourd (18/10/2026) : jamais le vrai disque.
         BG2_LOURD_REPO: '/essai/disque/anarbib-lourd',
+        BG2_LOURD_WORK: '/essai/disque-d/miroir-lourd',
+        PLACE_MIN_GO: '50',
         JOURNAL_SYSTEMCTL: posix(journal),
         // Figés : le banc n'hérite de rien, et n'atteint jamais le vrai systemctl.
         SYSTEMCTL: posix(path.join(stub, 'systemctl')),
@@ -280,6 +282,36 @@ describe.skipIf(!BASH)('contrôle de fraîcheur #BG2 — la relance d’un tir t
     });
     expect(r.essais).toEqual([]);
     expect(r.sortie).toMatch(/lourd\s+tir en cours depuis 170 min/);
+  });
+
+  // Place libre (19/10/2026) : un disque du flux lourd sous le seuil se dit,
+  // seul (code 4) ou à côté d'une autre alerte, sans la cacher.
+  it('disque du flux lourd sous le seuil : drapeau PLACE, code 4, et rien n’est relancé', () => {
+    const disque = path.join(racine, 'disque-place');
+    mkdirSync(path.join(disque, 'anarbib-lourd'), { recursive: true });
+    const r = passage({ env: { BG2_LOURD_REPO: posix(path.join(disque, 'anarbib-lourd')), PLACE_MIN_GO: '999999999' } });
+    expect(r.code).toBe(4);
+    expect(r.essais).toEqual([]);
+    expect(r.drapeau).toMatch(/^PLACE /);
+    expect(r.drapeau).toMatch(/PLACE : .*disque-place : \d+ Go libres \(seuil 999999999 Go\)/);
+  });
+
+  it('place basse ET retard : le drapeau du retard porte aussi la ligne de place', () => {
+    const disque = path.join(racine, 'disque-place-2');
+    mkdirSync(path.join(disque, 'anarbib-lourd'), { recursive: true });
+    const r = passage({ ages: { court: 40 }, env: { BG2_LOURD_REPO: posix(path.join(disque, 'anarbib-lourd')), PLACE_MIN_GO: '999999999' } });
+    expect(r.code).toBe(1);
+    expect(r.drapeau).toMatch(/^RETARD /);
+    expect(r.drapeau).toMatch(/PLACE : .*disque-place-2/);
+  });
+
+  it('disque au-dessus du seuil : une ligne OK, pas de drapeau', () => {
+    const disque = path.join(racine, 'disque-ok');
+    mkdirSync(path.join(disque, 'anarbib-lourd'), { recursive: true });
+    const r = passage({ env: { BG2_LOURD_REPO: posix(path.join(disque, 'anarbib-lourd')), PLACE_MIN_GO: '0' } });
+    expect(r.code).toBe(0);
+    expect(r.drapeau).toBe('');
+    expect(r.sortie).toMatch(/OK\s+place\s+.*disque-ok/);
   });
 
   it('flux lourd : disque absent (dépôt illisible) → jamais relancé', () => {

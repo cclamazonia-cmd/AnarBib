@@ -23,4 +23,4 @@ ExecStart=%h/anarbib-ops/anarbib-bg2-fraicheur.sh
 # 1 = un flux en retard · 3 = aveugle depuis trop longtemps. Dans les deux cas le
 # drapeau est pose et le journal porte le detail ; on ne veut pas en plus une
 # unite "failed" a nettoyer a la main avant le prochain tir.
-SuccessExitStatus=1 3
+SuccessExitStatus=1 3 4

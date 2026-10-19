@@ -49,7 +49,8 @@
 #   lire un depot, l'impossibilite de verifier devient elle-meme l'alerte.
 #
 # Sorties : 0 = tout frais · 1 = au moins un flux en retard · 3 = aveugle trop
-#           longtemps · 2 = erreur d'usage/prerequis.
+#           longtemps · 4 = disque du flux lourd presque plein (19/10/2026) ·
+#           2 = erreur d'usage/prerequis.
 # --------------------------------------------------------------------------
 set -euo pipefail
 
@@ -96,6 +97,16 @@ SEUIL_INTERROMPU_MIN="${SEUIL_INTERROMPU_MIN:-60}"
 # alerte a part entiere. Trois jours : assez pour absorber un voyage ou une
 # coupure, trop peu pour qu'un depot mort passe une semaine inapercu.
 MAX_AVEUGLE_H="${MAX_AVEUGLE_H:-72}"
+
+# --- PLACE SUR LES DISQUES DU FLUX LOURD (19/10/2026) ------------------------
+# Le flux lourd ecrit sur deux disques du poste : le miroir (D:) et le depot
+# (E:). Rien ne disait quand ils se remplissent : le tir echouerait le jour ou,
+# et seulement ce jour-la. La semaine du 11/10 a verse 18 Go de PDF ; 50 Go de
+# marge, c'est donc environ trois semaines au pire rythme vu, une a deux mois
+# au rythme ordinaire — le temps de trouver de la place, pas d'eteindre un feu.
+# Un disque absent n'est pas juge ici : le depot illisible le dit deja (??).
+PLACE_MIN_GO="${PLACE_MIN_GO:-50}"
+DISQUES_LOURD=("$(dirname "$DEPOT_lourd")" "${BG2_LOURD_WORK:-/mnt/d/anarbib-sauvegardes/miroir-lourd}")
 
 info() { echo ">>> $*"; }
 die()  { echo "ERREUR: $*" >&2; exit 2; }
@@ -183,6 +194,26 @@ for flux in "${FLUX[@]}"; do
 done
 
 [ "$lecture_ok" = 1 ] && echo "$maintenant" > "$VU"
+
+place=()   # « chemin : N Go libres (seuil S Go) »
+for d in "${DISQUES_LOURD[@]}"; do
+  [ -d "$d" ] || continue
+  libre_ko="$(df -Pk "$d" 2>/dev/null | awk 'NR==2{print $4}' || true)"
+  case "$libre_ko" in ''|*[!0-9]*) continue ;; esac   # df illisible : pas de verdict
+  libre_go=$(( libre_ko / 1048576 ))
+  if [ "$libre_go" -lt "$PLACE_MIN_GO" ]; then
+    place+=("$d : ${libre_go} Go libres (seuil ${PLACE_MIN_GO} Go)")
+    printf '    !!  %-8s %s — %s Go libres, seuil %s Go\n' place "$d" "$libre_go" "$PLACE_MIN_GO"
+  else
+    printf '    OK  %-8s %s — %s Go libres\n' place "$d" "$libre_go"
+  fi
+done
+# Ajoutee a tout drapeau pose plus bas : une alerte de place ne doit pas se
+# perdre derriere un retard ou un tir interrompu, ni les cacher.
+ligne_place() {
+  local p
+  for p in "${place[@]}"; do echo "PLACE : $p — le flux lourd echouera quand le disque sera plein"; done
+}
 
 # --- TIRS INTERROMPUS -------------------------------------------------------
 # Un marqueur `.en-cours-<flux>` que rien n'est venu retirer = un tir parti et
@@ -321,6 +352,7 @@ if [ ${#interrompus[@]} -gt 0 ]; then
     echo "encore fraiche — ce n'est pas un retard, c'est un tir mort."
     echo "Un rattrapage tue ne se rejoue pas tout seul (Persistent= ne rejoue que les tirs MANQUES)."
     ligne_relance
+    ligne_place
     for i in "${interrompus[@]}"; do
       echo "  Relancer a la main : systemctl --user start anarbib-backup-${i%% *}.service"
     done
@@ -343,6 +375,7 @@ if [ ${#retard[@]} -gt 0 ]; then
     echo "--- ce que cela veut dire ---"
     echo "Un flux n'a pas produit de snapshot depuis plus longtemps que prevu."
     ligne_relance
+    ligne_place
     echo "Relancer a la main : systemctl --user start anarbib-backup-<flux>.service"
     echo "Verifier : journalctl --user -u anarbib-backup-<flux>.service -n 40"
   } > "$FLAG"
@@ -358,9 +391,26 @@ if [ "$lecture_ok" = 0 ] && [ "$aveugle_depuis_h" -gt "$MAX_AVEUGLE_H" ]; then
     echo "Ce n'est PAS un flux en retard : c'est l'impossibilite de le verifier."
     echo "Hote de sauvegarde injoignable, cle SSH, ou depot restic casse."
     echo "Verifier : restic -r $RESTIC_BASE/anarbib-court snapshots"
+    ligne_place
   } > "$FLAG"
   info "AVEUGLE depuis ${aveugle_depuis_h} h — drapeau pose."
   exit 3
+fi
+
+# Les flux sont frais, mais un disque du flux lourd se remplit : son propre
+# drapeau, son propre code (4), pour qu'il ne passe pas pour un retard.
+if [ ${#place[@]} -gt 0 ]; then
+  {
+    echo "PLACE $(date -u +%Y-%m-%dT%H:%M:%SZ) : disque du flux lourd presque plein"
+    echo "--- ce que cela veut dire ---"
+    echo "Les sauvegardes sont a jour. Mais le miroir (D:) ou le depot (E:) du flux"
+    echo "lourd passe sous le seuil : faire de la place, deplacer le depot"
+    echo "(BG2_LOURD_REPO / BG2_LOURD_WORK), ou trouver la place hors site (I21)."
+    ligne_place
+  } > "$FLAG"
+  info "PLACE : ${place[*]}"
+  info "Drapeau pose ($FLAG) — il s'affichera a l'ouverture du terminal."
+  exit 4
 fi
 
 # Tout est frais : on retire le drapeau. Un drapeau qui survit a la reparation

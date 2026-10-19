@@ -22,8 +22,9 @@
 #            plus vault.sql : les secrets du Vault déchiffrés, dont le sel de
 #            pseudonymisation sans lequel une restauration corrompt en silence.
 #            Quotidien, rétention 7 jours / 4 semaines / 6 mois.
-#   storage  le volume Docker des fichiers (buckets), sauf map-tiles (le fond
-#            de carte, reconstructible en 30 min, triplerait le dépôt).
+#   storage  le volume Docker des fichiers (tous les buckets, fond de carte
+#            map-tiles compris depuis le 19/10/2026 ; MAP_TILES=exclu pour
+#            l'en retirer quand le dépôt distant manque de place).
 #            Hebdomadaire, même rétention.
 #
 # Pas de découpage court/long (données personnelles à rétention courte) : il
@@ -33,10 +34,11 @@
 # dans le dépôt restic. À dire dans le registre des traitements de l'instance.
 #
 # TÉMOINS EN BASE. La sonde health-probe de l'instance lit
-# public.fn_backup_heartbeat_status() et attend trois flux nommés court (36 h),
-# long (9 j) et storage (9 j) — les noms de #BG2, figés par une contrainte. Le
-# tir « base » quotidien témoigne donc pour court ET long (il contient les
-# deux), le tir « storage » pour storage. L'absence de témoin ouvre un incident
+# public.fn_backup_heartbeat_status() et attend quatre flux nommés court (36 h),
+# long (9 j), storage (9 j) et lourd (9 j, depuis le 18/10/2026) — les noms de
+# #BG2, figés par une contrainte. Le tir « base » quotidien témoigne donc pour
+# court ET long (il contient les deux), le tir « storage » pour storage ET
+# lourd (le volume porte tous les buckets, légers et lourds). L'absence de témoin ouvre un incident
 # et un courriel aux admins de l'instance : c'est la supervision, sans rien
 # d'autre à installer.
 #
@@ -72,6 +74,13 @@ WORK="$ANARBIB_OPS/.work"
 COMPOSE_FILE="$ANARBIB_DIR/deploy/compose.yml"
 COMPOSE_PROJECT="${COMPOSE_PROJECT:-anarbib-selfhost}"         # `name:` de deploy/compose.yml
 STORAGE_VOLUME="${STORAGE_VOLUME:-${COMPOSE_PROJECT}_storage-data}"
+# Le fond de carte (bucket map-tiles, ~33 Go pour la planète en z13) est
+# sauvegardé par défaut depuis le 19/10/2026 — décision de Xavier : « si on
+# peut le sauvegarder, on le sauvegarde » ; le reconstruire demande une
+# extraction planétaire, longue. Une instance dont le dépôt distant n'a pas la
+# place pose MAP_TILES=exclu dans sauvegarde.env (`check` dit ce qu'il pèse).
+MAP_TILES="${MAP_TILES:-inclus}"
+case "$MAP_TILES" in inclus|exclu) ;; *) echo "ERREUR : MAP_TILES=$MAP_TILES (attendu inclus ou exclu)" >&2; exit 2 ;; esac
 CLI_VERSION_RECETTE="v2.98.1"   # la version du CLI dont on reproduit les dumps (cf. ci.yml)
 
 # Comment on parle à la base. Par défaut : le conteneur db du compose. Pour le
@@ -281,15 +290,26 @@ backup_storage() {
   point="$(docker volume inspect -f '{{.Mountpoint}}' "$STORAGE_VOLUME" 2>/dev/null)" \
     || die "volume Docker introuvable : $STORAGE_VOLUME (la pile tourne-t-elle sous ce nom de projet ?)"
   [ -d "$point" ] || die "le point de montage du volume n'est pas lisible : $point (lancer en root)"
-  heartbeat storage started
+  # Le volume porte TOUS les buckets, légers et lourds : ce tir témoigne donc
+  # pour storage ET pour lourd. Depuis le 18/10/2026 (migration
+  # 20261018213744), la sonde attend un quatrième flux, `lourd` : sans ce
+  # témoin, l'amorçage posé par la migration expirerait au bout de 9 jours et
+  # chaque instance recevrait une fausse alerte « lourd muet ».
+  heartbeat storage started; heartbeat lourd started
   unlock_stale
-  info "restic backup du volume $STORAGE_VOLUME ($point), map-tiles exclu…"
-  # Disposition du service : <s3>/<tenant>/<bucket>/<objet>/<version>. On exclut
-  # le bucket du fond de carte où qu'il soit dans l'arbre.
-  restic backup "$point" --tag flux-vm-storage --tag anarbib-vm --exclude '*/map-tiles' --exclude '*/map-tiles/**'
+  # Disposition du service : <s3>/<tenant>/<bucket>/<objet>/<version>. Le bucket
+  # du fond de carte, où qu'il soit dans l'arbre, n'est exclu que sur demande.
+  local exclusions=()
+  if [ "$MAP_TILES" = exclu ]; then
+    exclusions=(--exclude '*/map-tiles' --exclude '*/map-tiles/**')
+    info "restic backup du volume $STORAGE_VOLUME ($point), map-tiles EXCLU (MAP_TILES=exclu)…"
+  else
+    info "restic backup du volume $STORAGE_VOLUME ($point), map-tiles compris…"
+  fi
+  restic backup "$point" --tag flux-vm-storage --tag anarbib-vm "${exclusions[@]}"
   restic forget --tag flux-vm-storage --group-by tags --keep-daily 7 --keep-weekly 4 --keep-monthly 6
   local snap; snap="$(snapshot_id_de flux-vm-storage)"
-  heartbeat storage ok "$snap"
+  heartbeat storage ok "$snap"; heartbeat lourd ok "$snap"
   info "Flux storage terminé (instantané ${snap:-?})."
 }
 
@@ -304,7 +324,14 @@ cmd_check() {
     && info "Témoin de vie : fonction présente." || echo "AVERTISSEMENT : public.fn_record_backup_heartbeat absente — pas de supervision par la sonde." >&2
   [ "$(psql_db "select count(*) from vault.decrypted_secrets where name='pseudonym_salt'")" = "1" ] \
     && info "Vault : pseudonym_salt présent." || die "Vault : pseudonym_salt ABSENT — une sauvegarde sans lui ne vaut rien."
-  if docker volume inspect "$STORAGE_VOLUME" >/dev/null 2>&1; then info "Volume Storage : $STORAGE_VOLUME présent."
+  if docker volume inspect "$STORAGE_VOLUME" >/dev/null 2>&1; then
+    info "Volume Storage : $STORAGE_VOLUME présent."
+    # Ce que coûte le fond de carte dans le dépôt : à savoir AVANT le premier
+    # tir, quand le dépôt distant est petit (MAP_TILES=exclu, cf. en-tête).
+    local point tuiles
+    point="$(docker volume inspect -f '{{.Mountpoint}}' "$STORAGE_VOLUME" 2>/dev/null || true)"
+    tuiles="$(find "$point" -type d -name map-tiles -prune -exec du -sh {} + 2>/dev/null | cut -f1 | head -1)"
+    info "Fond de carte (map-tiles) : ${tuiles:-absent ou illisible} — MAP_TILES=$MAP_TILES."
   else echo "AVERTISSEMENT : volume $STORAGE_VOLUME absent — le flux storage échouera." >&2; fi
   local nb_base nb_storage
   nb_base="$(restic snapshots --tag flux-vm-base --json 2>/dev/null | grep -o '"short_id"' | wc -l)"

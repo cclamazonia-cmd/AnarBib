@@ -457,6 +457,24 @@ base), et `map-tiles` a été recopié depuis `~/pmtiles/planet-z13-20260917.pmt
 plutôt que retéléchargé : son eTag multipart, recalculé en parties de 6 Mio
 (`bc98382321d4870dda75e99d3df88a72-5664`), est identique à celui de l'objet.
 
+**La place sur les deux disques** (19/10). Le contrôle de fraîcheur lit la
+place libre de `E:` (dépôt) et `D:` (miroir) à chaque passage, et pose un
+drapeau `PLACE` sous **50 Go** (`PLACE_MIN_GO`) : environ trois semaines au
+pire rythme vu (18 Go la semaine du 11/10), le temps de trouver de la place.
+Seule, l'alerte sort en code 4 ; jointe à un retard ou à un tir interrompu,
+elle s'ajoute à leur drapeau sans le cacher.
+
+**Épreuve de restauration du 19/10/2026.** Sur l'instantané `955e4674`,
+échantillon tiré au hasard : 14 PDF (publics et restreints, dont deux en eTag
+multipart) et le fond de carte entier (35,6 Go). Chaque objet, sorti de restic
+par `restic dump`, redonne **l'eTag de Storage** — la preuve que ce qui est
+sauvegardé est ce que l'application sert, pas seulement ce que le miroir
+contient. Trois objets ont en plus été restaurés pour de vrai
+(`restic restore --include`) et revérifiés. Piège rencontré : la taille de
+partie d'un eTag multipart ne se devine pas toujours de son nombre de parties
+(un PDF en 2 parties était découpé en 16 Mio, pas en 10) ; un écart apparent se
+lève en essayant les tailles possibles, pas en accusant la sauvegarde.
+
 **Ce que ça ne règle pas.** Le dépôt lourd n'a pas de copie chez un tiers.
 Depuis le 19/10, la copie froide le vérifie et prépare sa réplique sur le disque
 débranchable `F:` (section suivante) : c'est une copie hors du poste, pas hors

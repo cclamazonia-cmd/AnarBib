@@ -86,15 +86,21 @@ describe('sauvegarde depuis la VM — la recette du CLI Supabase, figée', () =>
     expect(script).toContain("'pseudonym_salt'");
   });
 
-  it('témoigne sous les noms que la sonde accepte (court, long, storage)', () => {
+  it('témoigne sous les noms que la sonde accepte (court, long, storage, lourd)', () => {
     expect(script).toMatch(/heartbeat court started; heartbeat long started/);
-    expect(script).toMatch(/heartbeat storage started/);
-    const contrainte = lire('supabase/migrations/20260820100000_temoin_de_vie_sauvegardes.sql');
-    expect(contrainte).toContain("check (flow in ('court', 'long', 'storage'))");
+    expect(script).toMatch(/heartbeat storage started; heartbeat lourd started/);
+    expect(script).toMatch(/heartbeat storage ok "\$snap"; heartbeat lourd ok "\$snap"/);
+    const contrainte = lire('supabase/migrations/20261018213744_le_flux_lourd_a_son_temoin.sql');
+    expect(contrainte).toContain("check (flow in ('court', 'long', 'storage', 'lourd'))");
   });
 
-  it('exclut le fond de carte du flux storage', () => {
-    expect(script).toMatch(/--exclude '\*\/map-tiles'/);
+  // 19/10/2026 : le fond de carte est sauvegardé par défaut (décision de
+  // Xavier) ; une instance au dépôt trop petit l'exclut par MAP_TILES=exclu.
+  it('sauvegarde le fond de carte par défaut, et ne l’exclut que sur MAP_TILES=exclu', () => {
+    expect(script).toMatch(/MAP_TILES="\$\{MAP_TILES:-inclus\}"/);
+    expect(script).toMatch(/if \[ "\$MAP_TILES" = exclu \]; then\s+exclusions=\(--exclude '\*\/map-tiles'/);
+    expect(script).toMatch(/restic backup "\$point" --tag flux-vm-storage --tag anarbib-vm "\$\{exclusions\[@\]\}"/);
+    expect(lire('deploy/ops/vm/sauvegarde.env.example')).toMatch(/^#MAP_TILES=exclu$/m);
   });
 
   it('les unités systemd appellent le script, et chaque service a son minuteur', () => {

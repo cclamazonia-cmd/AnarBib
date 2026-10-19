@@ -11,11 +11,15 @@
 | Flux | Contenu | Quand | Rétention | Témoin en base |
 |---|---|---|---|---|
 | `base` | `schema.sql`, `data.sql`, `migrations.sql` — produits par `pg_dump` dans le conteneur `db` avec **la recette exacte de `supabase db dump` v2.98.1** (schémas exclus, filtres sed), donc restaurables par `deploy/scripts/restore.sh` — et `vault.sql` (les secrets du Vault déchiffrés, dont `pseudonym_salt`) | chaque jour, 03:30 Europe/Paris | 7 jours, 4 semaines, 6 mois | `court` et `long` |
-| `storage` | le volume Docker `anarbib-selfhost_storage-data` (les fichiers des buckets), **sauf `map-tiles`** (le fond de carte, reconstructible en 30 min) | dimanche 04:30 | idem | `storage` |
+| `storage` | le volume Docker `anarbib-selfhost_storage-data` (les fichiers de tous les buckets, **fond de carte `map-tiles` compris** depuis le 19/10/2026 ; `MAP_TILES=exclu` dans `sauvegarde.env` pour l'en retirer si le dépôt distant manque de place — `check` dit ce qu'il pèse, ~33 Go pour la planète en z13) | dimanche 04:30 | idem | `storage` et `lourd` |
 
 Les témoins portent les noms que la sonde `health-probe` de l'instance attend
-(`court` 36 h, `long` 9 j, `storage` 9 j, contrainte en base) : un tir `base`
-témoigne pour `court` **et** `long`, puisqu'il contient les deux. Sans témoin,
+(`court` 36 h, `long` 9 j, `storage` 9 j, `lourd` 9 j depuis le 18/10/2026,
+contrainte en base) : un tir `base` témoigne pour `court` **et** `long`,
+puisqu'il contient les deux ; un tir `storage` pour `storage` **et** `lourd`,
+puisque le volume porte tous les buckets. (Sur le poste de maintenance,
+`../anarbib-bg2.sh` sépare les buckets lourds dans un dépôt à part faute de
+place chez l'hébergeur de sauvegarde ; une instance n'a pas cette contrainte.) Sans témoin,
 la sonde ouvre un incident et écrit aux admins de l'instance. C'est toute la
 supervision ; il n'y a rien d'autre à installer.
 
