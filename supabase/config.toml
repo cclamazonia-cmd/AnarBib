@@ -31,6 +31,7 @@ project_id = "anarbib"
 #   - première requête sous le jeton de l'appelant, à une RPC qu'anon ne peut
 #     pas exécuter (export-catalog-lote, export-fonds-bundle,
 #     deposit-fonds-direct, attach-received-asset, revoke-digital-asset,
+#     deposit-digital-candidate, realign-digital-resource,
 #     notify-library-invitation) ;
 #   - fonctions publiques par nature (login, register, OAI-PMH, OPDS, RSS,
 #     formulaires publics) : leur propre garde (auth_rate_limits, Altcha,

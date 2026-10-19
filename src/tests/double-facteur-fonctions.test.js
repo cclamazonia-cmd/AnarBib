@@ -67,6 +67,18 @@ describe('les Edge Functions à la clé de service', () => {
     expect(src.slice(garde, premierService)).toContain("return refus('aal2_required'");
   });
 
+  // NUMDIF (19/10/2026) : le réalignement d'une ressource versée suit le même ordre.
+  it('realign-digital-resource : double authentification et garde avant la clé de service', () => {
+    const src = source('realign-digital-resource');
+    const df = src.indexOf('await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)');
+    const garde = src.indexOf("await userClient.rpc('fn_digital_resource_realign_garde'");
+    const cle = src.indexOf('createClient(supabaseUrl, serviceKey');
+    expect(df).toBeGreaterThan(-1);
+    expect(garde).toBeGreaterThan(df);
+    expect(cle).toBeGreaterThan(garde);
+    expect(src.slice(df, garde)).toContain("return refus('aal2_required'");
+  });
+
   // NUMDIF D16 (15/10/2026) : même ordre que attach-received-asset — double
   // authentification, garde sous le jeton, et seulement ensuite la clé de service.
   it('deposit-digital-candidate : double authentification et garde avant la clé de service', () => {

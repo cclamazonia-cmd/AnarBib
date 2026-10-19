@@ -54,6 +54,8 @@ const JETON_APPELANT = {
   // NUMDIF D16 (15/10/2026) : double authentification, puis la garde sous le jeton.
   'deposit-digital-candidate': 'await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)',
   'revoke-digital-asset': "userClient.rpc('fn_revoke_digital_asset_record'",
+  // NUMDIF (19/10/2026) : même ordre que le versement, pour réaligner une ressource versée.
+  'realign-digital-resource': 'await doubleFacteurManquant(supabaseUrl, anonKey, authHeader)',
   'notify-library-invitation': 'await asCaller.rpc(',
 };
 // Tâches appelées par la base, un cron ou un partenaire : un secret partagé,

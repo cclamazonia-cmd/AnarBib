@@ -819,6 +819,10 @@ tests/sql/numdif_versement_tests.sql
 # NUMDIF-6 (16/10/2026, migration 20261016083340) : une ressource versée par lot (déclaration de droits de l archiviste, ou validation par lot écrite
 # dans la justification) ne dit ni « verificado na folha de rosto » ni « Menção impressa na edição » ; hors lot, l ancien texte demeure ; droits inchangés.
 tests/sql/numdif_note_lot_tests.sql
+# NUMDIF réalignement (19/10/2026, migration 20261019145347) : une ressource versée se remet au seau que fixe le cas de son candidat —
+# garde sous le jeton (anon, autre bibliothèque, ressource sans candidat refusés), enregistrement à la clé de service seule (place actuelle, seau du
+# cas, même chemin, empreinte, objet présent, portée) ; lot repassé en diffusion autorisée → public, licenca_livre ; retrait → pdf-restrito.
+tests/sql/numdif_realignement_tests.sql
 # Source numérique sans exemplaire (15/10/2026, décision Xavier ; migration 20261015192644) : une source d'import dont meta.sans_exemplaire = true
 # ne reçoit pas d'exemplaire automatique à la publication (holding seule) ; IMP-25 inchangé pour les autres ; les exemplaires importés (H19) passent avant.
 tests/sql/source_numerique_sans_exemplaire_tests.sql

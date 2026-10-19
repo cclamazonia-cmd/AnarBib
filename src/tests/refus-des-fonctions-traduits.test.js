@@ -21,7 +21,8 @@ import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 // Liste fermée : une fonction de plus dont l'écran affiche le refus y entre.
-const FONCTIONS = ['attach-received-asset', 'deposit-fonds-direct', 'revoke-digital-asset', 'deposit-digital-candidate'];
+const FONCTIONS = ['attach-received-asset', 'deposit-fonds-direct', 'revoke-digital-asset', 'deposit-digital-candidate',
+  'realign-digital-resource'];
 const LOC = path.resolve(RACINE, 'src/i18n/locales');
 const locales = readdirSync(LOC).filter((f) => f.endsWith('.json'))
   .map((f) => [f, JSON.parse(readFileSync(path.join(LOC, f), 'utf8'))]);
