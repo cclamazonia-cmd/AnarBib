@@ -1403,7 +1403,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Un projet d'acte est rédigé et archivé. Il n'a pas été adopté. **C'est le préalable politique à l'ouverture de tout canal d'encaissement : rien ne bouge avant.**
 
-*Vérifié : [object Object]*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** L'acte doit faire quatre choses : créer le fonds, désigner nommément la personne qui tient la clé Pix, désigner la personne dépositaire de la part européenne, et fixer le principe du rapport annuel.
 
@@ -1416,7 +1416,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 - Le nom public de la caisse est arrêté.
 - **Son article 1 suffit à lui seul à publier un canal honnêtement, si l'assemblée tarde.**
 
-**Dépendances.** Bloque **K2**.
+**Dépendances.** Bloquait **K2** (clos le 19/10 : les canaux se sont ouverts dès les 27-31/08).
 
 *Renvois : `PLAN_financement_AnarBib_2026-08-25 §9` · `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26`*
 

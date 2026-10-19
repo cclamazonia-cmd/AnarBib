@@ -4599,8 +4599,8 @@
         ]
       },
       "dep": {
-        "fr": "Bloque **K2**.",
-        "pt": "Bloqueia **K2**."
+        "fr": "Bloquait **K2** (clos le 19/10 : les canaux se sont ouverts dès les 27-31/08).",
+        "pt": "Bloqueava **K2** (fechado em 19/10)."
       },
       "r": [
         "PLAN_financement_AnarBib_2026-08-25 §9",
@@ -4610,6 +4610,10 @@
         {
           "fr": "**19/10 — « rien ne bouge avant l'acte » ne décrit plus la situation.** Les canaux se sont ouverts sans que l'adoption de l'acte soit consignée nulle part : une caisse commune avec le **CCLA** existe depuis le 27/08 (Liberapay), le **Pix au CNPJ du CCLA** est ouvert et publié depuis le 30/08 (dépôt vitrine `856e5f5`), le dispositif est dit « définitif » le 31/08 (`28b11aa` : deux canaux publics, virement sur demande), et la caisse a un nom public, « Fundo AnarBib » (`FINANCES.md`, comptes publiés, dernière mise à jour 12/10 : 8,00 € bruts reçus, rien dépensé). Ce qui reste invérifiable d'ici : l'adoption de l'acte lui-même (le projet `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26` n'est ni au dépôt ni sur le poste) ; la clé Pix est celle de l'association, pas d'une personne nommée, ce qui change la nature du critère 2 ; et `FINANCES.md` laisse à l'assemblée du CCLA la question des frais avancés par une personne. **À Xavier** : l'acte a-t-il été adopté (si oui, où est-il archivé) ? sinon, l'article 1 a-t-il servi de base à l'ouverture, comme le critère 4 le permettait ?",
           "pt": "**19/10 — « nada se move antes do ato » não descreve mais a situação**: caixa comum com o CCLA desde 27/08, Pix no CNPJ do CCLA aberto e publicado desde 30/08, nome público « Fundo AnarBib ». A adoção do ato não está consignada em lugar nenhum: pergunta a Xavier."
+        },
+        {
+          "fr": "**19/10, réponse de Xavier — l'acte est adopté** par l'assemblée du CCLA ; le document signé n'est pas encore arrivé de Belém. **Reste pour clore** : recevoir le document signé et l'archiver (critère 1), puis relire les trois autres critères contre lui — la clé Pix est celle de l'association (CNPJ du CCLA), pas d'une personne nommée (critère 2) ; le nom public « Fundo AnarBib » est déjà en usage dans les comptes publiés (critère 3) ; la personne dépositaire de la part européenne, le premier rapport annuel et le sort des frais avancés (que `FINANCES.md` laisse à l'assemblée du CCLA) se lisent dans l'acte. K2, que K1 bloquait, est clos le 19/10.",
+          "pt": "**19/10, resposta de Xavier — o ato foi adotado** pela assembleia do CCLA; o documento assinado ainda não chegou de Belém. **Para fechar**: receber e arquivar o documento assinado, depois reler os demais critérios contra ele. K2 fechado em 19/10."
         }
       ]
     },

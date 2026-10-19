@@ -1403,7 +1403,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** Um projeto de ata está redigido e arquivado. Não foi adotado. **É o preliminar político à abertura de qualquer canal de arrecadação: nada se move antes.**
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** A ata deve fazer quatro coisas: criar o fundo, designar nominalmente a pessoa que detém a chave Pix, designar a pessoa depositária da parte europeia, e fixar o princípio do relatório anual.
 
@@ -1416,7 +1416,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 - O nome público da caixa está definido.
 - **Seu artigo 1 basta sozinho para publicar um canal honestamente, se a assembleia demorar.**
 
-**Dependências.** Bloqueia **K2**.
+**Dependências.** Bloqueava **K2** (fechado em 19/10).
 
 *Remissões : `PLAN_financement_AnarBib_2026-08-25 §9` · `MINUTA_ata_fundo_anarbib_CCLA_2026-08-26`*
 
