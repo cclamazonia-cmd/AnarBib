@@ -12,13 +12,16 @@
 --
 -- Couvre :
 --   T1 aucune policy n'appelle plus fn_library_visible_to_caller ligne à ligne ;
---      celles qui en dépendent lisent fn_visible_library_ids() ;
+--      celles qui en dépendent lisent fn_visible_library_ids() (niveau
+--      bibliothèque) ou private.fn_catalog_library_ids() (notices, sources
+--      comprises — 20261019122125) ;
 --   T2 fn_visible_library_ids() rend exactement les bibliothèques que
 --      fn_library_visible_to_caller déclare visibles, pour cinq identités
 --      (anonyme, lectrice d'une bibliothèque privée, membre du réseau,
 --      compte sans adhésion, coordination) ;
 --   T3 sous anon, le plan de `count(*)` sur books calcule l'ensemble une fois
---      (InitPlan) et n'appelle pas fn_library_visible_to_caller ;
+--      (InitPlan, fn_catalog_library_ids depuis le 19/10) et n'appelle pas
+--      fn_library_visible_to_caller ;
 --   T4 la liste du catalogue lit la vue matérialisée elle-même (plus de
 --      parcours de fonction) : son index des titres sert un tri LIMIT ;
 --   T5 work_id et l'éditeur affiché sont ceux qu'écrivaient les deux fonctions
@@ -75,12 +78,12 @@ BEGIN
   REFRESH MATERIALIZED VIEW public.mv_books_catalog_list_network_v1;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T1 aucune policy n''appelle fn_library_visible_to_caller ; 21 lisent fn_visible_library_ids()';
+  v_t := 'T1 aucune policy n''appelle fn_library_visible_to_caller ; 21 lisent fn_visible_library_ids() ou fn_catalog_library_ids()';
   SELECT count(*) INTO v_n FROM pg_policy pol
    WHERE coalesce(pg_get_expr(pol.polqual, pol.polrelid), '') || coalesce(pg_get_expr(pol.polwithcheck, pol.polrelid), '') ~ 'fn_library_visible_to_caller';
   SELECT string_agg(pol.polrelid::regclass::text || '.' || pol.polname, ', ') INTO v_txt FROM pg_policy pol
    WHERE coalesce(pg_get_expr(pol.polqual, pol.polrelid), '') || coalesce(pg_get_expr(pol.polwithcheck, pol.polrelid), '') ~ 'fn_library_visible_to_caller';
-  IF v_n = 0 AND (SELECT count(*) FROM pg_policy pol WHERE pg_get_expr(pol.polqual, pol.polrelid) ~ 'fn_visible_library_ids') >= 21 THEN
+  IF v_n = 0 AND (SELECT count(*) FROM pg_policy pol WHERE pg_get_expr(pol.polqual, pol.polrelid) ~ '(fn_visible_library_ids|fn_catalog_library_ids)') >= 21 THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : encore ligne à ligne : ' || coalesce(v_txt, '∅')); END IF;
 
@@ -119,7 +122,7 @@ BEGIN
       v_plan := coalesce(v_plan || E'\n', '') || r."QUERY PLAN";
     END LOOP;
     RESET ROLE;
-    IF v_plan ~ 'InitPlan' AND v_plan ~ 'fn_visible_library_ids' AND v_plan !~ 'fn_library_visible_to_caller' THEN
+    IF v_plan ~ 'InitPlan' AND v_plan ~ 'fn_catalog_library_ids' AND v_plan !~ 'fn_library_visible_to_caller' THEN
       v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || left(v_plan, 400)); END IF;
   EXCEPTION WHEN OTHERS THEN RESET ROLE; v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;

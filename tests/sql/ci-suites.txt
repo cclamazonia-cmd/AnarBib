@@ -852,3 +852,7 @@ tests/sql/un_site_est_une_adresse_web_tests.sql
 # Type de document importé (19/10/2026, décision de Xavier après le banc OAI ASB) : la nature du document, pas son
 # support — vocabulaire d'AnarcosyndicalismeBOOK, types DCMI, et les codes d'AnarBib reconnus par la conversion.
 tests/sql/import_type_de_document_tests.sql
+# Bibliothèque « source » (19/10/2026, décision de Xavier) : libraries.catalog_public — ses notices et
+# ressources publiques validées au catalogue public, elle-même hors de l'annuaire et jamais moissonnable.
+tests/sql/source_catalogue_public_tests.sql
+tests/sql/source_catalogue_rien_ne_change_tests.sql

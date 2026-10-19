@@ -204,7 +204,11 @@ BEGIN
         ('public.fn_caller_is_library_staff(uuid)'),
         -- B32 (27/09) : l'ensemble des bibliothèques visibles, calculé une fois
         -- par requête dans les 21 policies qui appelaient fn_library_visible_to_caller.
-        ('public.fn_visible_library_ids()')
+        ('public.fn_visible_library_ids()'),
+        -- 19/10/2026 (20261019122125) : la visibilité du CATALOGUE (sources
+        -- catalog_public comprises), lue par les 12 policies des notices.
+        ('private.fn_catalog_library_ids()'),
+        ('private.fn_catalog_library_visible_to_caller(uuid)')
       ) AS f(sig)
      WHERE NOT has_function_privilege('anon', f.sig::regprocedure, 'EXECUTE');
     IF v_n = 0 THEN v_passed := v_passed+1;
@@ -377,6 +381,12 @@ BEGIN
       ('private.fn_auteurs_par_nom'),   -- 11/10/2026 : recherche par les autres noms de l'autorité (DEFINER, hors PostgREST)
       ('private.fn_avant_requete'),     -- B42, 13/10/2026 : fonction d'avant-requête de PostgREST (INVOKER), appelée sous le rôle de CHAQUE requête, anon compris ; rend la main aussitôt hors authenticated
       ('private.fn_cartography_public_rows'),
+      ('private.fn_catalog_library_ids'),                -- 19/10/2026 : l'ensemble des catalogues lisibles (DEFINER, hors PostgREST), lu par 12 policies
+      ('private.fn_catalog_library_visible_to_caller'),  -- 19/10/2026 : le même test pour une bibliothèque (DEFINER, hors PostgREST), lu par les RPC numériques
+      ('private.fn_catalog_library_ids'),                -- 19/10/2026 : l'ensemble des catalogues lisibles (DEFINER, hors PostgREST), lu par 12 policies
+      ('private.fn_catalog_library_visible_to_caller'),  -- 19/10/2026 : le même test pour une bibliothèque (DEFINER, hors PostgREST), lu par les RPC numériques
+      ('private.fn_catalog_library_ids'),                -- 19/10/2026 : l'ensemble des catalogues lisibles (DEFINER, hors PostgREST), lu par 12 policies
+      ('private.fn_catalog_library_visible_to_caller'),  -- 19/10/2026 : le même test pour une bibliothèque (DEFINER, hors PostgREST), lu par les RPC numériques
       ('private.fn_mots_proches'),      -- 11/10/2026 : un mot à une ou deux lettres près (INVOKER, IMMUTABLE)
       ('public._anarbib_safe_date'),
       ('public._anarbib_trim_or_null'),
