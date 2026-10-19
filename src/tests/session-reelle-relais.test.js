@@ -41,8 +41,7 @@ const RELAIS = {
   bn_isbn_lookup: 'serve(async (req)=>{', // verify_jwt = false, même garde (19/10/2026)
 };
 // Réservée à l'administration du réseau (B43).
-// smtp-essai : temporaire (étape 6 de la sortie de Resend), à retirer d'ici avec son dossier.
-const ADMIN_RESEAU = ['probe-partner-catalog', 'smtp-essai'];
+const ADMIN_RESEAU = ['probe-partner-catalog'];
 // Première requête sous le jeton de l'appelant, à une RPC qu'anon ne peut pas
 // exécuter (relevé du 13/10 : fn_export_catalog_lote, fn_export_fonds_records,
 // fn_create_library_request_invitation, fn_revoke_digital_asset_record ;
