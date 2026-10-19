@@ -125,6 +125,17 @@ export function sansExemplairePhysique(n) {
   return n !== null && n !== undefined && n !== '' && Number(n) === 0;
 }
 
+// Bibliothèques du filtre « Bibliothèques AnarBib » du catalogue : celles dont
+// le CATALOGUE se lit, sources comprises (api.catalog_filter_libraries_v1,
+// 19/10/2026 — une source reste hors de l'annuaire, de la carte et de l'OAI).
+// Repli sur api.libraries_public_v1 le temps que la migration se déploie : le
+// front part avant les migrations. apiQuery est passé par la page.
+export async function bibliothequesDuFiltre(apiQuery) {
+  const opts = { select: 'slug,name,short_name,city', order: 'name.asc' };
+  const r = await apiQuery('catalog_filter_libraries_v1', opts);
+  return r.error ? apiQuery('libraries_public_v1', opts) : r;
+}
+
 export function getStatusInfo(book, isAuth, t) {
   if (sansExemplairePhysique(book.exemplares_total)) {
     return { label: t({ id: 'catalog.avail.noPhysical' }), cls: 'muted' };

@@ -21,7 +21,7 @@ import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
 import CatalogFiltersBar from '@/components/catalog/CatalogFiltersBar';
 import CatalogResultsTable from '@/components/catalog/CatalogResultsTable';
-import { PAGE_SIZE, ALPHABET, localizedSubjectLabel, CDD_DIV_LABELS, PUBLIC_COLS, SESSION_COLS, sortLabel, loadSavedFilters, ecranEtroit, saveFilters } from '@/lib/catalogOpac';
+import { PAGE_SIZE, ALPHABET, localizedSubjectLabel, CDD_DIV_LABELS, PUBLIC_COLS, SESSION_COLS, sortLabel, loadSavedFilters, ecranEtroit, saveFilters, bibliothequesDuFiltre } from '@/lib/catalogOpac';
 import { useDebounce } from '@/hooks/useDebounce';
 import CatalogExportActions from '@/components/catalog/CatalogExportActions';
 import { languageOptions } from '@/lib/languages';
@@ -240,13 +240,10 @@ export default function CatalogPage() {
     return sortValue;
   }
 
-  // Bibliothèques (Phase B.4a: api.libraries_public_v1 au lieu de catalog_books_public_v2)
+  // Bibliothèques du filtre (sources comprises) : bibliothequesDuFiltre, src/lib/catalogOpac.js.
   useEffect(() => {
     (async () => {
-      const { data } = await apiQuery('libraries_public_v1', {
-        select: 'slug,name,short_name,city',
-        order: 'name.asc',
-      });
+      const { data } = await bibliothequesDuFiltre(apiQuery);
       setLibraryOptionsSettled(true);
       if (data?.length) {
         setLibraryOptions([

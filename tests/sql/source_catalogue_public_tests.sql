@@ -38,6 +38,10 @@
 --      ni d'une publique isolée ; source remise à catalog_public = false →
 --      sa ressource sort du flux.
 --
+--   T12 le filtre « Bibliothèques AnarBib » du catalogue (api.catalog_filter_libraries_v1)
+--      propose la source, sous anon comme connecté·e ; pas la privée ordinaire ;
+--      la publique oui ; libraries_public_v1 (annuaire du filtre d'avant, RSS) reste sans la source.
+--
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'SOURCE-CATALOGUE-PUBLIC OK : N/N'
 -- =====================================================================
@@ -381,6 +385,33 @@ BEGIN
     IF v_txt IS NULL THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T12 le filtre du catalogue propose la source, pas la privée ordinaire ; libraries_public_v1 inchangée';
+  BEGIN
+    v_txt := NULL;
+    FOR r IN SELECT * FROM (VALUES ('anon', '', 'anon'),
+                                   ('sans', json_build_object('sub', c_sans, 'role', 'authenticated')::text, 'authenticated')) x(nom, claims, role) LOOP
+      PERFORM set_config('request.jwt.claims', r.claims, true);
+      EXECUTE format('SET LOCAL ROLE %I', r.role);
+      IF NOT EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_src) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : source absente du filtre'); END IF;
+      IF NOT EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_pub) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : publique absente du filtre'); END IF;
+      IF EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_priv) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : privée dans le filtre'); END IF;
+      IF EXISTS (SELECT 1 FROM api.libraries_public_v1 WHERE id = c_src) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : source dans libraries_public_v1'); END IF;
+      EXECUTE 'RESET ROLE';
+    END LOOP;
+    PERFORM set_config('request.jwt.claims', '', true);
+    -- une source retirée quitte le filtre
+    UPDATE public.libraries SET catalog_public = false WHERE id = c_src;
+    EXECUTE 'SET LOCAL ROLE anon';
+    IF EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_src) THEN v_txt := concat_ws(',', v_txt, 'source retirée encore dans le filtre'); END IF;
+    EXECUTE 'RESET ROLE';
+    UPDATE public.libraries SET catalog_public = true WHERE id = c_src;
+    IF v_txt IS NULL THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+    PERFORM set_config('request.jwt.claims', '', true);
     v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
 
   IF v_failed = 0 THEN
