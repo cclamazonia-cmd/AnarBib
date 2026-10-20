@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-19** · 73 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-19** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,14 +16,14 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 4
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 12
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 10
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 11
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
-    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 10
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 4
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 19 de outubro de 2026 à noite** (produção às 21h40 UTC, repositório em `7d6475b6`) — **todas as linhas remedidas** (anterior: 18/10, `9636773a`). **530 migrações aplicadas, 530 no repositório.** O maior dia do mês: **+72 commits, +26 migrações**. O que mudou: **o catálogo** — Anarchief em catálogo público, 308 autoridades, 393 ligações, duplicatas decididas; um lugar que situava um parceiro retirado; os 43 fascículos de Solidaires ligados (D3); 853 biografias validadas; **o banco** — +17 funções, −6 policies; **a CI** — uma noite agitada, corrigida; **a rede** — idêntica; Nodo50 retido (F10). **A conta**: **73 itens** e 270 linhas de fechamento. **O que aperta**: D3, B36, I38, G23, A7, I35; *a Xavier*: D28, K1.
 
-**Frescor dos constatos em 2026-10-19.** **65 itens de 73** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B41, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D23, D24, D25, D27, D28, E1, E2, E4, E6, E10, E20, E39, E40, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I35, I36, I37, I38, I39, I40, J10, J13, K1, K7). Os **8** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-19.** **62 itens de 69** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D27, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Os **7** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -391,7 +391,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B36** | Reler, com os contadores de produção, os índices mantidos com ressalva | `P3` | Aberto |
-| **B41** | Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno | `P3` | Aberto |
 | **B42** | Autenticação em dois fatores (TOTP) obrigatória para a administração da rede, as coordenações e as equipes de biblioteca | `P1` | Em curso |
 | **B46** | Conduzir o canteiro de higiene da auditoria de segurança de 17/10 (P9) | `P2` | Aberto |
 
@@ -415,27 +414,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Adiado de propósito: releitura **em 28/10**, contando desde o reinício de 07/10 (três semanas), **perímetro B10 e B32 apenas** — os índices mantidos com ressalva em 27/09 e os três das visões materializadas. Nenhum índice de uma camada nunca exercida (notas de leitura, assembleias, círculos, EEB, compartilhamento digital) entra na releitura, seja qual for o seu contador (`DOC-MESURE-1`). Decisão de Xavier, 12/10.
 
 *Remissões : `docs/journal/audits/AUDIT_performance_B10_2026-09-27.md` · `docs/journal/audits/AUDIT_catalogue_grande_echelle_B32_2026-09-28.md` · `tests/sql/index_redondants_garde_tests.sql` · `clôtures B10 et B32`*
-
-#### B41 — Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado.** O recálculo de um fundo apaga do registro a disponibilidade dos outros fundos até 04:43.
-
-*Verificado : 12/10 — aberto pela revisão de H34.*
-
-**O que é.** Somar todos os fundos do registro ao recalcular; teste com duas bibliotecas.
-
-**Por que importa.** O OPAC pode dizer «indisponível» por horas.
-
-**O que conta como terminado.**
-
-- A disponibilidade continua a soma dos fundos.
-- Um teste com duas bibliotecas.
-
-**Dependências.** Depois de **H34**.
-
-*Remissões : `supabase/migrations` · `tests/sql`*
 
 #### B42 — Autenticação em dois fatores (TOTP) obrigatória para a administração da rede, as coordenações e as equipes de biblioteca
 
@@ -645,7 +623,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** 308 autoridades criadas em 19/10 sem fila de revisão nem Wikidata.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Pôr as 308 na fila de revisão; enriquecer com a regra de dois sinais; verificar « Wayne Prize ».
 
@@ -674,7 +652,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D15** | Uma tela para validar ou rejeitar os candidatos, com o PDF aberto | `P2` | A verificar |
 | **D21** | Fazer a BTL escolher o tomo de De Greef (registro 415) | `P3` | Aberto |
 | **D22** | Retomar à mão as fontes fechadas aos robôs | `P3` | Aberto |
-| **D23** | Conferir duas datas de direitos em PDFs abertos ao público | `P3` | Aberto |
 | **D24** | Publicar os textos integrais do wiki da Anarchief em EPUB | `P2` | Aberto |
 | **D25** | Decidir o destino dos 24 arquivos Word/ODT da Anarchief | `P3` | Aberto |
 | **D27** | Levantar o limite de tamanho do versamento no servidor (~150-180 Mo) | `P3` | Aberto |
@@ -829,26 +806,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### D23 — Conferir duas datas de direitos em PDFs abertos ao público
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** Registros 223 e 191, públicos: datas de direitos a confirmar.
-
-*Verificado : *
-
-**O que é.** Conferir; se a dúvida persistir, restringir o recurso.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- Os dois estatutos têm fonte citada, ou os recursos estão restritos.
-
-**Dependências.** —
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### D24 — Publicar os textos integrais do wiki da Anarchief em EPUB
 
 `P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : Deno / TypeScript, React / JavaScript
@@ -915,7 +872,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** Dois objetos sem recurso nos baldes (um de 17/10 deixado por uma retomada, um teste de março).
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Com o acordo de Xavier, retirar; verificar que uma retomada não deixa mais arquivo.
 
@@ -945,7 +902,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E20** | A barra de navegação agrupa-se por natureza — Público, Eu, Trabalho — em menus que abrem ao clique, não ao passar do rato | `P2` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E39** | Adicionar o romeno (ro), décima primeira língua — anunciado, revisão por último | `P3` | Aberto |
-| **E40** | Tornar visível ao público o estado de serviço de uma biblioteca | `P2` | Aberto |
 | **E41** | Tornar o sobrenome facultativo no perfil | `P3` | Aberto |
 
 #### E1 — Fazer auditar a acessibilidade por alguém que não escreveu o código
@@ -1124,26 +1080,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Uma pessoa romenófona para validar D2 e revisar (Anarhiva, Cluj-Napoca, a contatar).
 
 *Remissões : `DOC-I18N-4` · `DOC-I18N-1` · `document du 13/10/2026` · `lot 1 : cinq commits du 13/10/2026 : i18n, fonctions, base, install, garde` · `DOC-I18N-5` · `lot 3 : 49b479ae` · `RELECTURE_roumain_2026-10-14.md` · `données : cc34a4c9` · `THES-FIC6` · `lot 4 : cf64ee88` · `lot 5 : 5dccf68f, vitrine 997070f et 3809dce` · `lot 6 : a67b3405` · `ouverture : 11c90c62, vitrine b2e4aa5` · `annonce : vitrine 041b06f, app 3872d4f9, brève 33a2763b`*
-
-#### E40 — Tornar visível ao público o estado de serviço de uma biblioteca
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
-
-**Estado.** A seção « estado de serviço » da página pública está sempre vazia para visitantes (vista lê tabela restrita à equipe).
-
-*Verificado : *
-
-**O que é.** Escolher os campos a expor; ajuda DEFINER ou direito específico; teste sob anon.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- Um visitante anônimo vê o estado de serviço de uma biblioteca pública, nada de uma privada.
-
-**Dependências.** —
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
 
 #### E41 — Tornar o sobrenome facultativo no perfil
 
@@ -1630,12 +1566,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | **I2** | Manter a pilha auto-hospedada pronta para a produção na ASR — impressões, proxy, reconstrução (repartição de 19/10) | `P1` | Aberto |
 | **I21** | O que precisa ser verdade antes da mudança — os backups em Lyon primeiro, depois a produção na ASR (repartição de 19/10) | `P1` | Aberto |
 | **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
-| **I34** | Avisar quando a publicação do front falha (Deploy Pages não bloqueante) | `P1` | Aberto |
+| **I34** | Avisar quando a publicação do front falha (Deploy Pages não bloqueante) | `P1` | A verificar |
 | **I35** | Tirar as consequências da « via (a) » na CI | `P1` | Aberto |
 | **I36** | Repor o checkout de exploração `~/anarbib` em `main`, e parar as « cópias locais » | `P1` | Aberto |
 | **I37** | Ligar o espelho de imagens da ASR, e tirar a CI do registro ECR | `P3` | Aberto |
 | **I38** | Verificar os primeiros disparos automáticos `storage` e `lourd` de domingo 25/10 | `P2` | Aberto |
-| **I39** | Incluir `storage` e `lourd` no teste de restauração mensal | `P2` | Aberto |
 | **I40** | Excluir `.claude/` do vitest e arrumar as cópias de trabalho mortas | `P3` | Aberto |
 
 #### I2 — Manter a pilha auto-hospedada pronta para a produção na ASR — impressões, proxy, reconstrução (repartição de 19/10)
@@ -1706,11 +1641,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### I34 — Avisar quando a publicação do front falha (Deploy Pages não bloqueante)
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : administração de sistemas
+`P1` Prioritário · Estado : **A verificar** · Carga : uma noite · O que exige : administração de sistemas
 
 **Estado.** Constatado em 12/10/2026 no run 1693 (`4dfbaa47`): os três passos «Deploy Pages (git-pages)» falharam («cannot fetch authorized forge user: … 503»). São `continue-on-error: true` por escolha (uma falha do Codeberg não deve privar `backend` das migrações): `app` ficou verde, nenhum alerta saiu. A migração passou; o site serviu o build de 07:45 UTC até a republicação por um commit vazio (`e752798d`, 12:45 UTC) — base e front desencontrados uns vinte minutos sem aviso.
 
-*Constato de 29/08, não reverificado desde então.*
+*Verificado : [object Object]*
 
 **O que é.** Manter o passo não bloqueante para `backend`, mas: (1) repeti-lo uma vez após 60 s quando falha; (2) no fim do job `app`, comparar o `index.html` servido pelos três domínios com `dist/index.html` e, se diferirem, disparar `alerte` sem deixar `app` vermelho; (3) registrar no runbook a solução do commit vazio. **Critério**: uma publicação que falha gera um alerta recebido por Xavier, depois de uma segunda tentativa automática.
 
@@ -1742,7 +1677,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** `~/anarbib` com 5 commits à frente e 72 atrás de `origin/main`; o refresh do espelho recusa avançar desde 19/10.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Verificar os equivalentes a montante e repor `main`; escrever a regra.
 
@@ -1791,26 +1726,6 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **O que conta como terminado.**
 
 - Os dois fluxos têm instantâneo automático de 25/10.
-
-**Dependências.** —
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
-
-#### I39 — Incluir `storage` e `lourd` no teste de restauração mensal
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas
-
-**Estado.** O restore-test cobre só `court` e `long`; a prova de 19/10 foi feita uma vez.
-
-*Verificado : *
-
-**O que é.** Acrescentar os dois fluxos ao restore-test.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- O restore-test mensal restaura uma amostra de cada fluxo.
 
 **Dependências.** —
 
@@ -2336,6 +2251,10 @@ CI verde. |
 | J14 | 2026-10-19 | **Fechado em 19/10.** CLAUDE.md, skills e comandos falam de onze locales e da CI Forgejo (fora do repositório). |
 | H36 | 2026-10-19 | **Fechado em 19/10 sem migração: a fonte não tinha mudado.** `mot512` continua « histoire : histoire orale »; « 1848-1867 » não é um termo do tesauro. |
 | I41 | 2026-10-19 | **Fechado em 19/10 — feito pela sessão OPDS** (`7a6ea3e3`). |
+| B41 | 2026-10-20 | **Fechado em 20/10: um registro compartilhado conta todos os seus acervos** (`81445edf`). Recontar um só acervo não faz mais o registro esquecer os exemplares das outras bibliotecas. Banco: 6/6; H34 19/19. |
+| E40 | 2026-10-20 | **Fechado em 20/10: o estado de serviço de uma biblioteca pública se lê sem conta** (`d98b1ff0`, `839f752d`). Nada de uma biblioteca privada; as configurações de consulta continuam com a equipe. Banco: 5/5; B10 33/33. |
+| D23 | 2026-10-20 | **Fechado em 20/10: as duas datas apoiadas em fonte citada; os dois PDF continuam públicos** (`25ab6c3e`). Eugénio Vieira (1877-1948) conferido em « Revistas de Ideias e Cultura »; « Catilina » é pseudônimo de Luigi Fabbri. |
+| I39 | 2026-10-20 | **Fechado em 20/10: o restore-test também restaura arquivos** (`2e41a66e`): uma amostra de cada fluxo (`storage`, `lourd`) restaurada e comparada por SHA-256 ao Storage. Testado nos repositórios reais: 3/3 e 3/3. |
 
 ---
 
@@ -2367,4 +2286,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 73 itens em 11 domínios. O estado numérico foi levantado em 2026-10-19 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `7d6475b6`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-19. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-19 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `7d6475b6`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

@@ -3422,6 +3422,38 @@
           "fr": "**Clos le 19/10 — fait par la session OPDS** (`7a6ea3e3`, « le bloc opds dit la garde réelle ») : le commentaire de `[functions.opds]` décrit désormais la garde réelle (RLS anonyme, clé publique), et non plus l'ancien filtre `access_scope='publico'`.",
           "pt": "**Fechado em 19/10 — feito pela sessão OPDS** (`7a6ea3e3`)."
         }
+      ],
+      [
+        "B41",
+        "2026-10-20",
+        {
+          "fr": "**Clos le 20/10 : une notice partagée compte tous ses fonds.** `81445edf`, migration `20261020193346` : `fn_v2_recompute_holdings_availability(p_holding_ids)` pose sur la notice la somme de TOUS ses fonds — ceux qu'on vient de recompter et les autres tels qu'ils sont tenus —, plus seulement la somme des fonds recomptés ensemble ; sans argument (le recompte de nuit) rien ne change. `fn_h34_recompter_fonds_notes` perd son détour « un appel par fonds ». Patch par remplacement exact dans la définition réelle. Banc : `b41_notice_partagee_tous_ses_fonds_tests` 6/6 (prêt chez l'une, réservation chez l'autre, chacune recomptée seule : la notice garde l'autre ; égale à sa page publique) ; H34 19/19 (T02 et T10 suivent la règle) ; fusion, brouillon périmé, réattribution, couvertures, H21 lot 4, OPAC par œuvre verts. Production avant : 92 notices à plusieurs fonds, 0 écart.",
+          "pt": "**Fechado em 20/10: um registro compartilhado conta todos os seus acervos** (`81445edf`). Recontar um só acervo não faz mais o registro esquecer os exemplares das outras bibliotecas. Banco: 6/6; H34 19/19."
+        }
+      ],
+      [
+        "E40",
+        "2026-10-20",
+        {
+          "fr": "**Clos le 20/10 : l'état de service d'une bibliothèque publique se lit sans compte.** `d98b1ff0` (migration `20261020193858`) puis `839f752d` (`20261020200523`, forme B10 : la première posait deux permissives de lecture pour `authenticated`, refusées par `policies_permissives_uniques_tests` — run `sql-tests` 1932 rouge, 1934 vert). Lecture publique `TO anon` limitée aux bibliothèques actives et publiques ; `library_service_state_select_authenticated` = la même OU l'équipe ; anon perd le droit de table et ne garde que les colonnes des vues publiques (mode, mot public, réservations et prêts ouverts, date) — les réglages de consultation restent à l'équipe. Banc : `e40_etat_de_service_public_tests` 5/5, garde B10 33/33.",
+          "pt": "**Fechado em 20/10: o estado de serviço de uma biblioteca pública se lê sem conta** (`d98b1ff0`, `839f752d`). Nada de uma biblioteca privada; as configurações de consulta continuam com a equipe. Banco: 5/5; B10 33/33."
+        }
+      ],
+      [
+        "D23",
+        "2026-10-20",
+        {
+          "fr": "**Clos le 20/10 : les deux dates reposent sur une source citée, les deux PDF restent publics.** `25ab6c3e`, migration `20261020194455`. Ressource 981 (Cornelissen, 1907) : Eugénio Vieira (1877-1948), traducteur de cette édition, conféré sur l'index « Revistas de Ideias e Cultura » (pt.revistasdeideias.net, `aut_0000013495` ; l'entrée de Cornelissen y dit « Traduzido por Eugénio Vieira »). Ressource 979 (Fabbri, 1921) : « Catilina » est un pseudonyme de Luigi Fabbri (†1935, Wikidata) ; et une œuvre pseudonyme de 1921 est du domaine public depuis 1992 (Lei 9.610/98, art. 43, par. único ; Berne, art. 7.3). Justification réécrite sur la ressource et ses brouillons.",
+          "pt": "**Fechado em 20/10: as duas datas apoiadas em fonte citada; os dois PDF continuam públicos** (`25ab6c3e`). Eugénio Vieira (1877-1948) conferido em « Revistas de Ideias e Cultura »; « Catilina » é pseudônimo de Luigi Fabbri."
+        }
+      ],
+      [
+        "I39",
+        "2026-10-20",
+        {
+          "fr": "**Clos le 20/10 : le restore-test restaure aussi des fichiers.** `2e41a66e` : `verifier_fichiers` tire au sort 4 objets (`BG2_RT_ECHANTILLON`) que le dernier instantané de chaque flux doit porter (posés plus de 3 h avant lui, de 1 octet à 50 Mo), les restaure depuis restic, les retélécharge de Storage et compare les SHA-256 ; le verdict dit le bucket et la taille, jamais le nom ; un écart se dit sans faire échouer le test. Éprouvé le 20/10 sur les vrais dépôts (fonction seule) : `storage` 3/3 et `lourd` 3/3 identiques, 17 s et 16 s. Garde : `src/tests/i39-restore-test-fichiers.test.js`.",
+          "pt": "**Fechado em 20/10: o restore-test também restaura arquivos** (`2e41a66e`): uma amostra de cada fluxo (`storage`, `lourd`) restaurada e comparada por SHA-256 ao Storage. Testado nos repositórios reais: 3/3 e 3/3."
+        }
       ]
     ]
   },
@@ -5914,7 +5946,7 @@
       "id": "I34",
       "d": "I",
       "p": "P1",
-      "s": "ouvert",
+      "s": "a-verifier",
       "e": "S",
       "sk": [
         "sysadmin"
@@ -5934,55 +5966,13 @@
       "y": {
         "fr": "Une CI verte ne prouve pas que le front est en ligne : une correction paraît livrée alors que l'écran sert l'ancienne version, et une migration qui change la forme d'une réponse peut casser un front resté en arrière — en silence.",
         "pt": "Uma CI verde não prova que o front está no ar: uma correção parece entregue enquanto a tela serve a versão antiga, e uma migração que muda a forma de uma resposta pode quebrar um front atrasado — em silêncio."
-      }
-    },
-    {
-      "id": "B41",
-      "d": "B",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "sql"
-      ],
-      "t": {
-        "fr": "Recompter un seul fonds donne à une notice partagée la disponibilité de ce seul fonds jusqu’au recompte de nuit",
-        "pt": "Recalcular um único fundo dá a um registro compartilhado a disponibilidade só desse fundo até o recálculo noturno"
       },
-      "v": {
-        "fr": "Constaté le 12/10 par la relecture de H34 (comportement antérieur, gardé tel quel) : `fn_v2_recompute_holdings_availability(fonds)` pose sur la notice (`books.available_count`) la disponibilité des seuls fonds recomptés ensemble ; sur une notice détenue par plusieurs bibliothèques, un prêt ou un retour dans l’une efface du compte les exemplaires des autres jusqu’au recompte complet du cron de 04:43. Le 12/10 : 0 écart sur les 87 notices à plusieurs fonds de la production.",
-        "pt": "O recálculo de um fundo apaga do registro a disponibilidade dos outros fundos até 04:43."
-      },
-      "w": {
-        "fr": "Quand la fonction recompte des fonds, recompter la notice sur TOUS ses fonds (somme), sans repasser par tout le réseau ; test : notice à deux bibliothèques, prêt dans l’une, la disponibilité de la notice compte encore l’autre ; vérifier l’OPAC (vues matérialisées) et l’écran de circulation.",
-        "pt": "Somar todos os fundos do registro ao recalcular; teste com duas bibliotecas."
-      },
-      "y": {
-        "fr": "L’OPAC peut dire « indisponible » une notice que l’autre bibliothèque peut prêter, pendant des heures.",
-        "pt": "O OPAC pode dizer «indisponível» por horas."
-      },
-      "f": {
-        "fr": [
-          "La disponibilité d’une notice partagée reste la somme de ses fonds après tout prêt, retour ou réservation.",
-          "Un test à deux bibliothèques."
-        ],
-        "pt": [
-          "A disponibilidade continua a soma dos fundos.",
-          "Um teste com duas bibliotecas."
-        ]
-      },
-      "dep": {
-        "fr": "Après **H34**.",
-        "pt": "Depois de **H34**."
-      },
-      "r": [
-        "supabase/migrations",
-        "tests/sql"
-      ],
-      "verif": {
-        "fr": "12/10 — ouvert sur constat de la relecture de H34.",
-        "pt": "12/10 — aberto pela revisão de H34."
-      }
+      "verif": [
+        {
+          "fr": "**20/10 — livré** (`a7ab1f7e`, run 1927 vert) : un pas « Deploy Pages » qui échoue est rejoué une fois après 60 s ; le job `front-en-ligne` (à côté de `backend`, il ne retient aucune migration) compare pendant au plus six minutes le `index.html` servi par les trois domaines à l'empreinte du build ; écart persistant → ticket « [Front non publié] ci » ouvert ou rouvert, refermé au retour de l'accord ; le job ne fait jamais rougir le run. Premier passage : vert, aucun ticket (pas de fausse alerte). Parade écrite : `docs/journal/operations/RUNBOOK_front_non_publie_2026-10-20.md`. **Reste le critère** : un échec réel de publication qui produit l'alerte.",
+          "pt": "**20/10 — entregue** (`a7ab1f7e`, run 1927 verde): nova tentativa após 60 s; o job `front-en-ligne` compara o `index.html` servido pelos três domínios ao build e abre o ticket « [Front non publié] ci » se divergir. Primeira passagem verde, sem ticket. Falta o critério: uma falha real que produza o alerta."
+        }
+      ]
     },
     {
       "id": "B42",
@@ -6254,6 +6244,10 @@
         {
           "fr": "**19/10, soir — enrichissement fait en partie par la session D7** (`1c072eb6`, migration `20261019192349`) : sur les 308 autorités d'Anarchief, **94 ont un identifiant Wikidata et 76 un pays**. Reste la relecture : aucune n'est encore dans la file de revue.",
           "pt": "**19/10, noite — enriquecimento parcial pela sessão D7** (`1c072eb6`): 94 com Wikidata, 76 com país. Falta a revisão."
+        },
+        {
+          "fr": "**20/10 — les 308 sont dans la file de revue** (`33d60c59`, migration `20261020194156`) : 197 personnes au lot `autorite_forme` (proposition de forme de l'outil), 111 collectivités au lot `autorite_collectivite`, contexte « Anarchief », note qui dit le Wikidata à confirmer ou son absence ; aucun écran ne change, « valider » confirme, « corriger » donne la forme retenue, `conv_revue_appliquer` l'écrit. « Wayne Prize » vérifié : les trois notices (ANARCHIEF-988, -3052, -3053) sont liées à Wayne Price (11615), la graphie de la source gardée en variante — rien à corriger. **Reste** : la relecture elle-même, dans l'Atelier.",
+          "pt": "**20/10 — as 308 estão na fila de revisão** (`33d60c59`): 197 pessoas no lote `autorite_forme`, 111 coletividades em `autorite_collectivite`. « Wayne Prize » verificado: ligado a Wayne Price (11615). Falta a revisão no Atelier."
         }
       ]
     },
@@ -6331,48 +6325,6 @@
         ],
         "pt": [
           "Os registros da lista foram buscados à mão."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
-    },
-    {
-      "id": "D23",
-      "d": "D",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Recouper deux dates de droits sur des PDF versés en lecture publique",
-        "pt": "Conferir duas datas de direitos em PDFs abertos ao público"
-      },
-      "v": {
-        "fr": "Notice 223 (Cornelissen, 1907, publique) : les dates du traducteur (†1948) viennent d'un résumé de recherche web, « à recouper ». Notice 191 (Fabbri, 1921, publique) : les textes signés « Catilina » ont un auteur non identifié, « à confirmer ».",
-        "pt": "Registros 223 e 191, públicos: datas de direitos a confirmar."
-      },
-      "w": {
-        "fr": "Recouper sur une source d'autorité ; si le doute subsiste, passer la ressource en restreint (EF `realign-digital-resource`).",
-        "pt": "Conferir; se a dúvida persistir, restringir o recurso."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Les deux statuts de droits reposent sur une source citée, ou les ressources sont restreintes."
-        ],
-        "pt": [
-          "Os dois estatutos têm fonte citada, ou os recursos estão restritos."
         ]
       },
       "dep": {
@@ -6555,51 +6507,12 @@
         {
           "fr": "**19/10, soir — reconfirmé, à faire par Xavier dans le tableau de bord (Storage)** : une suppression en SQL direct est refusée par Storage. Les deux objets, sans ressource ni brouillon qui les cite : `anarbib-pdf-public/books/7594/1792236996308_estadosunidosdo00galvgoog.pdf` (18,7 Mo, reprise du 17/10) et `pdf-restrito/test/PDF-TEST-0001.pdf` (3,5 Mo, test de mars). Reste à vérifier qu'une reprise ne dépose plus de fichier.",
           "pt": "**19/10, noite — a fazer por Xavier no painel (Storage)**: dois objetos sem recurso."
+        },
+        {
+          "fr": "**20/10 — la cause de l'orphelin n'est pas dans la base.** L'objet `books/7594/…` porte le dossier du brouillon de reprise 7594 et un nom d'Archive.org ; ni la file des candidats (`ingest.digital_candidates`) ni les ressources de brouillon ne le citent — le brouillon 7594 cite le fichier de la ressource 980. Le chemin le plus probable : un versement dans le formulaire du brouillon (`DigitalResourcesPanel`, `books/<brouillon>/<horodatage>_<nom>`) remplacé ensuite sans retrait de l'objet. La garantie demandée (« une reprise ne dépose plus de fichier ») suppose un ramassage des objets qu'aucune ressource ni brouillon ne cite après un délai — plus qu'une reprise : à décider.",
+          "pt": "**20/10 — a causa do órfão não está no banco**: provável envio pelo formulário do rascunho, depois substituído sem remover o objeto. A garantia pede uma coleta periódica dos objetos não citados — a decidir."
         }
       ]
-    },
-    {
-      "id": "E40",
-      "d": "E",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sql",
-        "front"
-      ],
-      "t": {
-        "fr": "Rendre visible au public l'état de service d'une bibliothèque",
-        "pt": "Tornar visível ao público o estado de serviço de uma biblioteca"
-      },
-      "v": {
-        "fr": "La section « état de service » et le mot public de `/bibliotecas/:slug` sont toujours vides pour un visiteur : la vue `api.library_service_public` lit une table que seule l'équipe peut lire. Vérifié le 19/10 sous le rôle anonyme : 0 ligne, même pour les bibliothèques publiques.",
-        "pt": "A seção « estado de serviço » da página pública está sempre vazia para visitantes (vista lê tabela restrita à equipe)."
-      },
-      "w": {
-        "fr": "Choisir les champs à exposer, puis une aide DEFINER ou un droit ciblé ; test sous anon.",
-        "pt": "Escolher os campos a expor; ajuda DEFINER ou direito específico; teste sob anon."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Un visiteur anonyme voit l'état de service d'une bibliothèque publique, et rien d'une privée."
-        ],
-        "pt": [
-          "Um visitante anônimo vê o estado de serviço de uma biblioteca pública, nada de uma privada."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
     },
     {
       "id": "E41",
@@ -6944,6 +6857,10 @@
         {
           "fr": "**19/10, 21 h 26 — réaligné, le miroir repasse.** `~/anarbib` a été remis sur `origin/main` à 21 h 11 (reflog : `reset: moving to origin/main`, hors de cette session) ; un lancement à la main de `anarbib-mirror-refresh` à 21 h 26 a avancé le miroir (`d127f2bb → 04c83102`) puis le checkout (`0c972798 → 04c83102`), sans erreur. Écart avec `origin/main` : 0/0. **Reste pour clore** : le passage automatique du 20/10 à 18 h sans erreur, aucun commit local d'ici là, et la règle écrite là où les sessions la lisent.",
           "pt": "**19/10, 21h26 — realinhado**: `~/anarbib` reposto em `origin/main` às 21h11; o refresh do espelho passou às 21h26. Falta: a passagem automática de 20/10 às 18h e a regra escrita."
+        },
+        {
+          "fr": "**20/10, soir — règle écrite, mais le checkout diverge de nouveau.** La règle (« aucun commit dans `~/anarbib` », worktree à soi) est dans le `CLAUDE.md` du checkout, que toutes les sessions lisent. Le passage de 18 h n'a pas eu lieu ; celui de 19 h 33 n'a pas avancé le checkout (une sauvegarde courte tournait, refus voulu). Et entre 20 h 21 et 20 h 35, une session sur les couvertures (CAPAS-7) a fait **4 commits locaux** dans `~/anarbib`, migration comprise : 4 d'avance, 5 de retard sur `origin/main`, le miroir refusera d'avancer. À cette session de les pousser depuis un worktree ; la fiche reste ouverte.",
+          "pt": "**20/10, noite — regra escrita, mas o checkout diverge de novo**: uma sessão sobre capas fez 4 commits locais em `~/anarbib` (20h21-20h35). A ficha continua aberta."
         }
       ]
     },
@@ -7020,48 +6937,6 @@
         ],
         "pt": [
           "Os dois fluxos têm instantâneo automático de 25/10."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
-    },
-    {
-      "id": "I39",
-      "d": "I",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "sysadmin"
-      ],
-      "t": {
-        "fr": "Faire entrer `storage` et `lourd` au test de restauration mensuel",
-        "pt": "Incluir `storage` e `lourd` no teste de restauração mensal"
-      },
-      "v": {
-        "fr": "Le restore-test ne couvre que `court` et `long`. L'épreuve de restauration du 19/10 (14 PDF et le fond de carte, `ad927bc5`) a été faite une fois, à la main.",
-        "pt": "O restore-test cobre só `court` e `long`; a prova de 19/10 foi feita uma vez."
-      },
-      "w": {
-        "fr": "Ajouter les deux flux au restore-test, avec un échantillon de fichiers vérifiés par empreinte.",
-        "pt": "Acrescentar os dois fluxos ao restore-test."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Le restore-test mensuel restaure un échantillon de chaque flux et le compare."
-        ],
-        "pt": [
-          "O restore-test mensal restaura uma amostra de cada fluxo."
         ]
       },
       "dep": {
