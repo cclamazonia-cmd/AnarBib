@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Lote terminado: {done} subido(s), {failed} rechazado(s) de {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Lote detenido: {done} subido(s), {failed} rechazado(s) de {total}. Relánzalo para retomar; lo subido no vuelve a pasar.",
   "notif.restrictedOrphan.title": "Un PDF restringido ya no tiene biblioteca que lo tenga",
-  "notif.restrictedOrphan.body": "La última tenencia de este libro acaba de desaparecer: su PDF restringido ya no se abre para nadie. Vincula un ejemplar, o decide retirar el recurso."
+  "notif.restrictedOrphan.body": "La última tenencia de este libro acaba de desaparecer: su PDF restringido ya no se abre para nadie. Vincula un ejemplar, o decide retirar el recurso.",
+  "error.catalog.wikidata_already_used": "El Wikidata {qid} ya está en la ficha «{name}» (n.º {author_id}). Una persona tiene una sola ficha: si es la misma, fusiona las dos (botón «Reemplazar por otra autoridad…» en la ficha duplicada) en lugar de copiar el identificador; si no, revisa el Wikidata."
 }

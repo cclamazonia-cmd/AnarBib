@@ -12,7 +12,7 @@
 --   2. « Formes variantes » saisies à la main (, et ;) rattachent (exact).
 --   3. « Pseudonymes » rattachent aussi (exact).
 --   4. variant_forms en tableau de {form} (fusions) rattache (exact).
---   5. Deux fiches au même Wikidata, noms sans rapport : la détection par
+--   5. Deux fiches au même VIAF (Wikidata avant le 20/10), noms sans rapport : la détection par
 --      autorité les voit, dans les deux sens.
 --   6. Le balayage global les voit aussi, au niveau « identifiant » (DEDUP-6).
 --   7. Une paire écartée (« pas un doublon ») reste écartée des deux vues.
@@ -50,11 +50,14 @@ WITH u_coord AS (
           '[{"form": "Plowdinska, E.", "source": "fusion essai"}]'::jsonb)
   RETURNING id
 ), a_id1 AS (
-  INSERT INTO public.authors (preferred_name, sort_name, wikidata_id)
-  VALUES ('Brunhilde Okkervil', 'Okkervil, Brunhilde', 'Q987654321') RETURNING id
+  -- 20/10/2026 : un Wikidata ne se pose plus sur deux fiches (index unique,
+  -- 20261020174755) ; la paire partage donc un VIAF, que les deux détections
+  -- comparent de la même façon.
+  INSERT INTO public.authors (preferred_name, sort_name, viaf_id)
+  VALUES ('Brunhilde Okkervil', 'Okkervil, Brunhilde', '987654321') RETURNING id
 ), a_id2 AS (
-  INSERT INTO public.authors (preferred_name, sort_name, wikidata_id)
-  VALUES ('Tchoung Mavlast', 'Mavlast, Tchoung', 'Q987654321') RETURNING id
+  INSERT INTO public.authors (preferred_name, sort_name, viaf_id)
+  VALUES ('Tchoung Mavlast', 'Mavlast, Tchoung', '987654321') RETURNING id
 ), b AS (
   INSERT INTO public.books (titulo, autor)
   VALUES ('Livre AUT-VAR', 'Zvarkof ; Serguei Zvarquev ; Qwolpin ; Plowdinska, E.') RETURNING id
@@ -124,19 +127,19 @@ BEGIN
   SELECT count(*) INTO v_n FROM public.suggest_author_duplicates(v_i1) s
    WHERE s.author_id = v_i2 AND s.match_kind = 'exact';
   IF v_n <> 1 THEN
-    RAISE EXCEPTION 'TEST 5 ÉCHOUÉ : même Wikidata, la détection par autorité ne voit pas la paire.';
+    RAISE EXCEPTION 'TEST 5 ÉCHOUÉ : même VIAF, la détection par autorité ne voit pas la paire.';
   END IF;
   SELECT count(*) INTO v_n FROM public.suggest_author_duplicates(v_i2) s WHERE s.author_id = v_i1;
   IF v_n <> 1 THEN
     RAISE EXCEPTION 'TEST 5 ÉCHOUÉ : la paire n''est pas vue depuis l''autre fiche.';
   END IF;
-  RAISE NOTICE 'TEST 5 OK — même Wikidata, noms sans rapport : la détection par autorité voit la paire.';
+  RAISE NOTICE 'TEST 5 OK — même VIAF, noms sans rapport : la détection par autorité voit la paire.';
 
   -- 6 ---------------------------------------------------------------
   SELECT niveau_preuve INTO v_txt FROM public.suggest_authority_duplicates(500)
    WHERE author_id_a = least(v_i1, v_i2) AND author_id_b = greatest(v_i1, v_i2);
   IF v_txt IS DISTINCT FROM 'identifiant' THEN
-    RAISE EXCEPTION 'TEST 6 ÉCHOUÉ : le balayage global rend % pour la paire au même Wikidata.', coalesce(v_txt, 'rien');
+    RAISE EXCEPTION 'TEST 6 ÉCHOUÉ : le balayage global rend % pour la paire au même VIAF.', coalesce(v_txt, 'rien');
   END IF;
   RAISE NOTICE 'TEST 6 OK — le balayage global la voit aussi, au niveau « identifiant ».';
 

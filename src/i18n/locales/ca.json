@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Lot acabat: {done} dipositat(s), {failed} rebutjat(s) de {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Lot aturat: {done} dipositat(s), {failed} rebutjat(s) de {total}. Torna’l a llançar per reprendre; el que s’ha dipositat no torna a passar.",
   "notif.restrictedOrphan.title": "Un PDF restringit ja no té cap biblioteca que el tingui",
-  "notif.restrictedOrphan.body": "L’última tinença d’aquest llibre acaba de desaparèixer: el seu PDF restringit ja no s’obre per a ningú. Vincula un exemplar, o decideix retirar el recurs."
+  "notif.restrictedOrphan.body": "L’última tinença d’aquest llibre acaba de desaparèixer: el seu PDF restringit ja no s’obre per a ningú. Vincula un exemplar, o decideix retirar el recurs.",
+  "error.catalog.wikidata_already_used": "El Wikidata {qid} ja és a la fitxa «{name}» (núm. {author_id}). Una persona només té una fitxa: si és la mateixa, fusiona les dues (botó «Substituir per una altra autoritat…» a la fitxa duplicada) en lloc de copiar l’identificador; si no, revisa el Wikidata."
 }

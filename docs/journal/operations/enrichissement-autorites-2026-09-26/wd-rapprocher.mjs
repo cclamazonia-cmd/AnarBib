@@ -103,6 +103,25 @@ for (const n of notices) {
 }
 
 const personnes = auteurs.filter((a) => a.authority_type === null || a.authority_type === 'person');
+
+// ── Wikidata déjà en base (20/10/2026, cas Q51862284) ───────────────────────
+// Un qid ne se pose que sur UNE fiche (index unique authors_wikidata_id_unique, 20261020174755).
+// Q51862284 avait été proposé pour 11572 alors que 10907 le portait : authors.json vient de l'API
+// publique (fiches à détention publique seulement) et n'était qu'un extrait (cinquième phase, onze
+// fiches) — il ne dit pas tout ce qui est pris. QIDS_EN_BASE nomme un relevé complet, en lecture seule :
+//   select json_agg(json_build_object('id', id, 'wikidata_id', wikidata_id) order by id)
+//     from public.authors where wikidata_id is not null;
+// QIDS_EN_BASE=- pour s'en passer en connaissance de cause (authors.json est l'export complet).
+const QIDS_EN_BASE = process.env.QIDS_EN_BASE;
+if (!QIDS_EN_BASE) {
+  console.error('QIDS_EN_BASE manquant : un relevé des wikidata_id en base (requête en tête de section), ou QIDS_EN_BASE=- .');
+  process.exit(2);
+}
+const porteur = new Map();   // qid → id de la fiche qui le porte
+const noter = (q, id) => { const k = String(q || '').trim().toUpperCase(); if (k && !porteur.has(k)) porteur.set(k, Number(id)); };
+for (const a of auteurs) noter(a.wikidata_id, a.id);
+if (QIDS_EN_BASE !== '-') for (const r of JSON.parse(readFileSync(QIDS_EN_BASE, 'utf8'))) noter(r.wikidata_id, r.id);
+const prisAilleurs = (q, id) => { const p = porteur.get(String(q).toUpperCase()); return p !== undefined && p !== Number(id) ? p : null; };
 const LIMITE = Number(process.env.LIMITE || personnes.length);
 
 // ── 1. Recherche ────────────────────────────────────────────────────────────
@@ -162,13 +181,29 @@ for (const a of personnes.slice(0, LIMITE)) {
     decision = (viables[0].accord || forts >= 2) ? 'accepte' : 'a_relire'; retenu = viables[0]; }
   else if (viables.length === 0) decision = verdicts.some((v) => v.motifs.length) ? 'contradiction' : 'non_corrobore';
   else decision = 'ambigu';
+  // Porté par une autre fiche : jamais retenu, c'est un doublon à fusionner (décision « deja_pris »).
+  let dejaPris = null;
+  if (retenu && !a.wikidata_id) {
+    const p = prisAilleurs(retenu.e.id, a.id);
+    if (p !== null) { dejaPris = { qid: retenu.e.id, fiche: p }; decision = 'deja_pris'; retenu = null; }
+  }
   resultats.push({
-    id: a.id, nom: a.preferred_name, decision, qid: retenu?.e.id || null,
+    id: a.id, nom: a.preferred_name, decision, qid: retenu?.e.id || null, deja_pris: dejaPris,
     candidats: verdicts.map((v) => ({ qid: v.e.id, motifs: v.motifs, corrobore: v.corrobore, accord: !!v.accord, signaux: v.signaux })),
     signaux: retenu ? retenu.signaux : [], accord: retenu ? !!retenu.accord : false,
     minPub, langues: [...ev.langues],
   });
 }
+
+// Deux fiches de CE passage sur le même qid : aucune n'est retenue, la paire est à arbitrer.
+const parQid = new Map();
+for (const r of resultats) if (r.qid && r.decision !== 'deja_lie') parQid.set(r.qid, [...(parQid.get(r.qid) || []), r]);
+for (const [q, rs] of parQid) {
+  if (rs.length < 2) continue;
+  for (const r of rs) { r.deja_pris = { qid: q, fiche: rs.filter((x) => x !== r).map((x) => x.id) }; r.decision = 'deja_pris'; r.qid = null; }
+}
+for (const r of resultats.filter((x) => x.decision === 'deja_pris'))
+  console.error(`déjà pris : ${r.id} ${r.nom} → ${r.deja_pris.qid} porté par ${[].concat(r.deja_pris.fiche).join(', ')} (fusion à examiner)`);
 
 // ── 4. Pays et langues des retenus ──────────────────────────────────────────
 const retenus = resultats.filter((r) => r.qid).map((r) => entites.get(r.qid)).filter(Boolean);

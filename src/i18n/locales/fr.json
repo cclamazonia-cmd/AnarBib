@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Lot terminé : {done} versé(s), {failed} refusé(s) sur {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Lot arrêté : {done} versé(s), {failed} refusé(s) sur {total}. Relance-le pour reprendre ; ce qui est versé ne repasse pas.",
   "notif.restrictedOrphan.title": "Un PDF restreint n’a plus de bibliothèque détentrice",
-  "notif.restrictedOrphan.body": "La dernière détention de ce livre vient de disparaître : son PDF restreint ne s’ouvre plus pour personne. Rattache un exemplaire, ou décide de retirer la ressource."
+  "notif.restrictedOrphan.body": "La dernière détention de ce livre vient de disparaître : son PDF restreint ne s’ouvre plus pour personne. Rattache un exemplaire, ou décide de retirer la ressource.",
+  "error.catalog.wikidata_already_used": "Le Wikidata {qid} est déjà porté par la fiche « {name} » (n° {author_id}). Une personne n’a qu’une fiche : si c’est la même, fusionne les deux (bouton « Remplacer par une autre autorité… » sur la fiche en double) au lieu de recopier l’identifiant ; sinon, vérifie le Wikidata."
 }

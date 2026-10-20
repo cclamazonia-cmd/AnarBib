@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Batch finished: {done} deposited, {failed} refused out of {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Batch stopped: {done} deposited, {failed} refused out of {total}. Launch it again to resume; what is deposited does not go through twice.",
   "notif.restrictedOrphan.title": "A restricted PDF no longer has a holding library",
-  "notif.restrictedOrphan.body": "The last holding of this book has just disappeared: its restricted PDF no longer opens for anyone. Attach a copy, or decide to withdraw the resource."
+  "notif.restrictedOrphan.body": "The last holding of this book has just disappeared: its restricted PDF no longer opens for anyone. Attach a copy, or decide to withdraw the resource.",
+  "error.catalog.wikidata_already_used": "Wikidata {qid} is already on the record “{name}” (no. {author_id}). A person has only one record: if it is the same person, merge the two (“Replace with another authority…” button on the duplicate record) instead of copying the identifier; otherwise, check the Wikidata."
 }

@@ -121,17 +121,39 @@ function extractApiCode(err) {
  *
  * @param {function} t - formatMessage de useIntl()
  * @param {string} id - cle i18n
+ * @param {object} [values] - valeurs ICU (cf. valeursDuDetail)
  * @returns {string|null}
  */
-function tryTranslate(t, id) {
+function tryTranslate(t, id, values) {
   if (!id) return null;
   try {
-    const result = t({ id });
+    const result = values ? t({ id }, values) : t({ id });
     // Si t retourne l'id lui-même (comportement react-intl par défaut quand
     // la clé est absente), on considère que la traduction a échoué.
     return result === id ? null : result;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Valeurs de traduction portées par le DETAIL d'un RAISE (PostgREST le rend
+ * dans err.details), quand c'est un objet JSON. Premier usage (20/10/2026) :
+ * le refus 'error.catalog.wikidata_already_used' porte {qid, author_id, name},
+ * la fiche qui a déjà ce Wikidata — sans elle, le refus ne dit pas quoi
+ * fusionner. Un DETAIL texte ordinaire est ignoré.
+ *
+ * @param {*} err
+ * @returns {object|undefined}
+ */
+function valeursDuDetail(err) {
+  const d = err && typeof err === 'object' ? err.details : null;
+  if (typeof d !== 'string' || !d.trim().startsWith('{')) return undefined;
+  try {
+    const v = JSON.parse(d);
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : undefined;
+  } catch {
+    return undefined;
   }
 }
 
@@ -283,8 +305,9 @@ export function localizeError(err, t, actionFallbackKey) {
 
   // Cas 1 : hint i18n style 'error.library.*' ou 'error.publish.*'
   // (convention paquet C.4 + chantier publish guards)
+  // Le DETAIL JSON du RAISE, s'il y en a un, fournit les valeurs du message.
   if (typeof err === 'object' && typeof err.hint === 'string' && err.hint.startsWith('error.')) {
-    const translated = tryTranslate(t, err.hint);
+    const translated = tryTranslate(t, err.hint, valeursDuDetail(err));
     if (translated) return translated;
   }
 

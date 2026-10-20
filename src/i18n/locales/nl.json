@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Partij klaar: {done} opgeslagen, {failed} geweigerd van {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Partij gestopt: {done} opgeslagen, {failed} geweigerd van {total}. Start haar opnieuw om verder te gaan; wat opgeslagen is, komt niet nog eens.",
   "notif.restrictedOrphan.title": "Een beperkte pdf heeft geen bibliotheek meer die hem bezit",
-  "notif.restrictedOrphan.body": "Het laatste bezit van dit boek is net verdwenen: de beperkte pdf opent voor niemand meer. Koppel een exemplaar, of beslis de bron in te trekken."
+  "notif.restrictedOrphan.body": "Het laatste bezit van dit boek is net verdwenen: de beperkte pdf opent voor niemand meer. Koppel een exemplaar, of beslis de bron in te trekken.",
+  "error.catalog.wikidata_already_used": "Wikidata {qid} staat al op de beschrijving „{name}” (nr. {author_id}). Eén persoon heeft maar één beschrijving: is het dezelfde, voeg de twee dan samen (knop „Vervangen door een andere autoriteit…” op de dubbele beschrijving) in plaats van de identificatie te kopiëren; zo niet, controleer de Wikidata."
 }

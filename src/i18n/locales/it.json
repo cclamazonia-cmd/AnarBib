@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Lotto finito: {done} depositati, {failed} rifiutati su {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Lotto fermato: {done} depositati, {failed} rifiutati su {total}. Rilancialo per riprendere; ciò che è depositato non ripassa.",
   "notif.restrictedOrphan.title": "Un PDF riservato non ha più una biblioteca che lo possiede",
-  "notif.restrictedOrphan.body": "L’ultimo possesso di questo libro è appena scomparso: il suo PDF riservato non si apre più per nessuno. Collega un esemplare, o decidi di ritirare la risorsa."
+  "notif.restrictedOrphan.body": "L’ultimo possesso di questo libro è appena scomparso: il suo PDF riservato non si apre più per nessuno. Collega un esemplare, o decidi di ritirare la risorsa.",
+  "error.catalog.wikidata_already_used": "Il Wikidata {qid} è già sulla scheda «{name}» (n. {author_id}). Una persona ha una sola scheda: se è la stessa, unisci le due (pulsante «Sostituire con un’altra autorità…» sulla scheda doppia) invece di copiare l’identificativo; altrimenti, controlla il Wikidata."
 }

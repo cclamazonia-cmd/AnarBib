@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Aro finita: {done} deponitaj, {failed} rifuzitaj el {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Aro haltigita: {done} deponitaj, {failed} rifuzitaj el {total}. Relanĉu ĝin por daŭrigi; la deponitaĵoj ne trairas denove.",
   "notif.restrictedOrphan.title": "Limigita PDF ne plu havas posedantan bibliotekon",
-  "notif.restrictedOrphan.body": "La lasta posedo de ĉi tiu libro ĵus malaperis: ĝia limigita PDF ne plu malfermiĝas por iu ajn. Ligu ekzempleron, aŭ decidu retiri la rimedon."
+  "notif.restrictedOrphan.body": "La lasta posedo de ĉi tiu libro ĵus malaperis: ĝia limigita PDF ne plu malfermiĝas por iu ajn. Ligu ekzempleron, aŭ decidu retiri la rimedon.",
+  "error.catalog.wikidata_already_used": "La Vikidatumoj-ero {qid} jam estas en la registro « {name} » (n-ro {author_id}). Persono havas nur unu registron: se temas pri la sama, kunfandu ambaŭ (butono « Anstataŭigi per alia aŭtoritato… » ĉe la duobla registro) anstataŭ kopii la identigilon; alie, kontrolu la Vikidatumojn."
 }

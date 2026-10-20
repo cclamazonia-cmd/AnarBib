@@ -870,3 +870,7 @@ tests/sql/lien_page_source_tests.sql
 tests/sql/autorites_par_liste_tests.sql
 # Enrichir des autorités par liste fermée (19/10/2026) : le vide seulement, trace par source, tout ou rien (Anarchief, D7).
 tests/sql/enrichir_autorites_tests.sql
+# Un Wikidata, une seule fiche (20/10/2026, cas Q51862284) : publish_author_draft (deux branches), fn_authority_propose et
+# fn_authority_apply refusent un Wikidata porté par une autre fiche (hint + DETAIL qui la nomme) ; index unique partiel ;
+# merge_author_with_fields reprend le Wikidata du doublon.
+tests/sql/wikidata_une_seule_fiche_tests.sql

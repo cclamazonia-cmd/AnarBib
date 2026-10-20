@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Lot încheiat: {done} depuși, {failed} refuzați din {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată.",
   "notif.restrictedOrphan.title": "Un PDF restricționat nu mai are bibliotecă deținătoare",
-  "notif.restrictedOrphan.body": "Ultima deținere a acestei cărți tocmai a dispărut: PDF-ul ei restricționat nu se mai deschide pentru nimeni. Leagă un exemplar sau hotărăște să retragi resursa."
+  "notif.restrictedOrphan.body": "Ultima deținere a acestei cărți tocmai a dispărut: PDF-ul ei restricționat nu se mai deschide pentru nimeni. Leagă un exemplar sau hotărăște să retragi resursa.",
+  "error.catalog.wikidata_already_used": "Wikidata {qid} este deja pe fișa „{name}” (nr. {author_id}). O persoană are o singură fișă: dacă este aceeași, unește-le pe cele două (butonul „Înlocuiește cu altă autoritate…” de pe fișa dublă) în loc să copiezi identificatorul; altfel, verifică Wikidata."
 }

@@ -7751,5 +7751,6 @@
   "importacoes.pdfCandidates.batch.done": "Stapel fertig: {done} abgelegt, {failed} abgelehnt von {total}.",
   "importacoes.pdfCandidates.batch.stopped": "Stapel angehalten: {done} abgelegt, {failed} abgelehnt von {total}. Starte ihn neu, um weiterzumachen; Abgelegtes läuft nicht noch einmal.",
   "notif.restrictedOrphan.title": "Ein eingeschränktes PDF hat keine besitzende Bibliothek mehr",
-  "notif.restrictedOrphan.body": "Der letzte Bestand dieses Buches ist gerade verschwunden: Sein eingeschränktes PDF öffnet sich für niemanden mehr. Verknüpfe ein Exemplar oder entscheide, die Ressource zurückzuziehen."
+  "notif.restrictedOrphan.body": "Der letzte Bestand dieses Buches ist gerade verschwunden: Sein eingeschränktes PDF öffnet sich für niemanden mehr. Verknüpfe ein Exemplar oder entscheide, die Ressource zurückzuziehen.",
+  "error.catalog.wikidata_already_used": "Das Wikidata-Objekt {qid} steht bereits im Datensatz „{name}“ (Nr. {author_id}). Eine Person hat nur einen Datensatz: Ist es dieselbe, führe die beiden zusammen (Schaltfläche „Durch einen anderen Normdatensatz ersetzen…“ am doppelten Datensatz), statt die Kennung zu kopieren; sonst prüfe das Wikidata-Objekt."
 }
