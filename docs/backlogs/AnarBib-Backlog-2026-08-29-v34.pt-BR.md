@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-20** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-20** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -18,7 +18,7 @@
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 8
-    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 11
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 10
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 20 de outubro de 2026 à noite** (produção às 20h54 UTC, repositório em `5c67ec55`) — **todas as linhas remedidas** (anterior: 19/10, `7d6475b6`). **541 migrações aplicadas, 541 no repositório.** Um dia mais calmo: **+25 commits, +11 migrações**. O que mudou: **o catálogo** — doze fichas da Anarchief, uma autoridade duplicada fundida, as 308 autoridades da Anarchief na fila de revisão (C33), um registro compartilhado conta todos os seus acervos (B41), duas datas de direitos conferidas (D23); **o banco** — +1 policy (E40), +1 vista, +2 funções; **a CI** — o front servido comparado ao build (I34); **a exploração** — o restore-test cobre os arquivos (I39), `~/anarbib` divergiu e foi realinhado pela própria sessão durante o levantamento (I36). **A conta**: **69 itens** e 274 linhas de fechamento. **O que aperta**: D3, I38, B36, I36, G23, A7, I35; *a Xavier*: D28, K1.
 
-**Frescor dos constatos em 2026-10-20.** **62 itens de 69** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D27, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Os **7** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-20.** **61 itens de 68** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Os **7** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -654,7 +654,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **D22** | Retomar à mão as fontes fechadas aos robôs | `P3` | Aberto |
 | **D24** | Publicar os textos integrais do wiki da Anarchief em EPUB | `P2` | Aberto |
 | **D25** | Decidir o destino dos 24 arquivos Word/ODT da Anarchief | `P3` | Aberto |
-| **D27** | Levantar o limite de tamanho do versamento no servidor (~150-180 Mo) | `P3` | Aberto |
 | **D28** | Retirar dois objetos órfãos dos baldes PDF | `P3` | Aberto |
 
 #### D3 — Ligar os 43 fascículos do lote SOLIDAIRES às suas 3 revistas, e decidir os 9 números em duplicata
@@ -846,26 +845,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### D27 — Levantar o limite de tamanho do versamento no servidor (~150-180 Mo)
-
-`P3` Adiado · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript
-
-**Estado.** O versamento aguenta ~150-180 Mo por chamada; os baldes aceitam 500 Mo.
-
-*Verificado : *
-
-**O que é.** Versar por partes e calcular a impressão em fluxo, ou documentar o limite.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- Um PDF de 400 Mo é versado, ou o limite é dito antes.
-
-**Dependências.** —
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### D28 — Retirar dois objetos órfãos dos baldes PDF
 
 `P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
@@ -954,7 +933,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `it.json` não está conforme à convenção do asterisco final: os pares irregulares como `lettore` / `lettrice` não se reduzem a `lettor*`. O teste de carta verifica uma só coisa no italiano — que `camerata` e `camerati` nunca apareçam, termo fascista, falha dura — e nada mais.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Decidir o tratamento dos pares irregulares com um falante nativo, depois aplicá-lo às cadeias envolvidas. É um trabalho de língua, não de código.
 
@@ -1109,15 +1088,15 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts` | `P2` | Aberto |
+| **F10** | Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer | `P2` | Aberto |
 
-#### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`
+#### F10 — Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer
 
 `P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : Deno / TypeScript, deliberação coletiva
 
 **Estado.** **Verificado no repositório em 07/09**: `supabase/functions/_shared/transport/email.ts` conhece dois transportes, `sendViaResend` e `sendViaBrevo` — o segundo sobrevive à retirada do Brevo (R.6/R.7, anunciado fechado). Nenhum transporte SMTP genérico, logo nenhum meio de ligar um relay militante (ARN, Nodo50, bida.im) no dia em que um disser sim. A nota de 05-06/09 põe essa saída depois de Bolonha, atrás do pedido de um relay SMTP no dia 12.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Pedir antes de escolher (os relays militantes primeiro, Scaleway como recuo); escrever `sendViaSmtp` (ou o transporte escolhido) e restabelecer um roteamento por variável; remover `sendViaBrevo`; só levantar erro onde deve (**F7** está fechado nisso).
 
@@ -1389,7 +1368,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** A NORLA construiu seu vocabulário — com suas facetas *Tactics* e *Social Movement* — **sem vínculo com o tesauro FICEDL**. Dois vocabulários militantes, construídos em paralelo, que se ignoram. Além disso, as 11 categorias temáticas do AnarcosyndicalismeBOOK não estão alinhadas a nada.
 
-*Verificado : [object Object]*
+*Verificado : [object Object],[object Object]*
 
 **O que é.** Começar pelo menor e mais viável: as 11 categorias do AnarcosyndicalismeBOOK, **um primeiro passo concreto, delimitado, viável numa noite** — e como o tesauro já está em dez línguas, o alinhamento vale simultaneamente para as dez. Depois abrir a conversa com a NORLA.
 
@@ -2255,6 +2234,7 @@ CI verde. |
 | E40 | 2026-10-20 | **Fechado em 20/10: o estado de serviço de uma biblioteca pública se lê sem conta** (`d98b1ff0`, `839f752d`). Nada de uma biblioteca privada; as configurações de consulta continuam com a equipe. Banco: 5/5; B10 33/33. |
 | D23 | 2026-10-20 | **Fechado em 20/10: as duas datas apoiadas em fonte citada; os dois PDF continuam públicos** (`25ab6c3e`). Eugénio Vieira (1877-1948) conferido em « Revistas de Ideias e Cultura »; « Catilina » é pseudônimo de Luigi Fabbri. |
 | I39 | 2026-10-20 | **Fechado em 20/10: o restore-test também restaura arquivos** (`2e41a66e`): uma amostra de cada fluxo (`storage`, `lourd`) restaurada e comparada por SHA-256 ao Storage. Testado nos repositórios reais: 3/3 e 3/3. |
+| D27 | 2026-10-20 | **Fechado em 20/10: o limite é dito antes da tentativa** (`14ec3c01`): 140 MB por chamada; a função recusa antes de baixar, a tela avisa antes da chamada (onze línguas). Um arquivo maior vai à mão, em partes. |
 
 ---
 
@@ -2286,4 +2266,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-20. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5c67ec55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-20. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5c67ec55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

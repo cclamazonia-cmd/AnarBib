@@ -3454,6 +3454,14 @@
           "fr": "**Clos le 20/10 : le restore-test restaure aussi des fichiers.** `2e41a66e` : `verifier_fichiers` tire au sort 4 objets (`BG2_RT_ECHANTILLON`) que le dernier instantané de chaque flux doit porter (posés plus de 3 h avant lui, de 1 octet à 50 Mo), les restaure depuis restic, les retélécharge de Storage et compare les SHA-256 ; le verdict dit le bucket et la taille, jamais le nom ; un écart se dit sans faire échouer le test. Éprouvé le 20/10 sur les vrais dépôts (fonction seule) : `storage` 3/3 et `lourd` 3/3 identiques, 17 s et 16 s. Garde : `src/tests/i39-restore-test-fichiers.test.js`.",
           "pt": "**Fechado em 20/10: o restore-test também restaura arquivos** (`2e41a66e`): uma amostra de cada fluxo (`storage`, `lourd`) restaurada e comparada por SHA-256 ao Storage. Testado nos repositórios reais: 3/3 e 3/3."
         }
+      ],
+      [
+        "D27",
+        "2026-10-20",
+        {
+          "fr": "**Clos le 20/10 : la limite est dite avant l'essai** (critère, seconde branche). `14ec3c01` : une seule limite, `LIMITE_APPEL` = 140 Mo par appel (la fonction meurt à 2 s de CPU vers 150-180 Mo). `deposit-digital-candidate` refuse sur la taille relevée à la validation AVANT de télécharger, puis sur la taille annoncée par la source, puis en flux ; le refus est noté sur le candidat (`file_too_large`) au lieu d'un appel mort en route avec un objet partiel dans la zone privée. L'écran des candidats le dit avant l'appel et retire le bouton (clé `importacoes.pdfCandidates.deposit.tooLarge`, onze langues) ; `error.edge.file_too_large` dit 140 au lieu de 150. Un plus gros fichier se verse à la main, par morceaux (`scripts/maptiles/televerser-tus.mjs`). Garde : `src/tests/numdif-limite-appel.test.js`. En production, aucun candidat au-dessus de 98 Mo ; le versement par morceaux CÔTÉ SERVEUR reste possible si le besoin vient (nouvelle fiche alors).",
+          "pt": "**Fechado em 20/10: o limite é dito antes da tentativa** (`14ec3c01`): 140 MB por chamada; a função recusa antes de baixar, a tela avisa antes da chamada (onze línguas). Um arquivo maior vai à mão, em partes."
+        }
       ]
     ]
   },
@@ -4250,6 +4258,10 @@
         {
           "fr": "**19/10 — la décision était déjà écrite ; reste à l'appliquer.** La charte maîtresse (§ Italien) porte depuis la v2 du 05/06, statut « Adoptée » : astérisque pour les paires régulières, **slash abrégé pour les irrégulières** (`lettore/trice`, `autore/trice`, `amministratore/trice`, `coordinatore/trice`, pluriel `lettori/trici`), `lettor*` jugé fautif — le critère 1 est tenu. Dans `it.json` : 143 formes conformes ; **28 fautives** (`amministratori*` ×19, `coordinatori*` ×6, `lettore*` ×3 — les mêmes qu'au 20/09), 6 paires développées, des masculins nus à trier (`autore` 23, `lettore` 19, `lettori` 15 ; `editore` 24, souvent la maison d'édition). Aucun test ne fait respecter la règle. Le « comment » devient : appliquer la règle, puis faire relire l'application par une personne italophone — plus « décider ». Critère 3 (trois chaînes restées en français) non revérifié.",
           "pt": "**19/10 — a decisão já estava escrita (carta v2, 05/06: barra abreviada para os pares irregulares); falta aplicá-la**: 28 formas erradas em `it.json`, as mesmas de 20/09, 6 pares desenvolvidos, masculinos a triar."
+        },
+        {
+          "fr": "**20/10, soir — la règle est appliquée** (`6a3847bc`) : dans `it.json` et les lignes italiennes de `mail-strings.ts`, 51 astérisques fautifs (`amministratori*`, `coordinatori*`, `autor*`, `relator*`, `Lettor*rice`…), 6 paires développées (`autore/autrice` → `autore/trice`), 4 points médians (`lettore·trice`, proscrits par la charte) et les masculins nus qui désignent des personnes dans l'interface (« Accesso riservato ai coordinatori », « Annullata dal lettore », « Lettori »…), l'accord compris (`del/la`, `un*`, singulier ou pluriel). Garde : `src/tests/i18n-it-paires-irregulieres.test.js`. Laissés tels quels, à trier avec la personne italophone : les doublets complets (« lettrici e lettori »), les appareils (« Lettore PDF »), les mots-clés de recherche, `editore` (la maison d'édition) et `autore` comme rôle de catalogage. **Restent** : cette relecture, et le critère 3 (trois chaînes restées en français), non revérifié.",
+          "pt": "**20/10, noite — a regra está aplicada** (`6a3847bc`): 51 asteriscos errados, 6 pares desenvolvidos, 4 pontos médios e os masculinos nus de pessoas corrigidos, com a concordância; guarda `i18n-it-paires-irregulieres`. Faltam a revisão italófona e o critério 3."
         }
       ]
     },
@@ -4623,6 +4635,10 @@
         {
           "fr": "**05/10 — AnarcosyndicalismeBOOK, lu de près** à l'occasion du coup de main au camarade (`ASR2026`) : son CMS expose déjà un flux OPDS (`opds.php`, Dublin Core). AnarBib pourrait le moissonner, ou lui proposer un point OAI-PMH — FED-O11, « seul le catalogue traverse ». C'est la collaboration la plus intéressante politiquement, et elle se discute avec lui d'abord, jamais par une PR surprise. (Sa PR n° 2 chez lui — liste blanche d'upload, nettoyage des fichiers retirés, option Calibre auto-signé — a été fusionnée le 05/10.)",
           "pt": "**05/10 — AnarcosyndicalismeBOOK, lido de perto** por ocasião da ajuda ao camarada (`ASR2026`): seu CMS já expõe um fluxo OPDS. O AnarBib poderia colhê-lo, ou propor um ponto OAI-PMH (FED-O11). Discutir com ele primeiro, nunca por uma PR surpresa."
+        },
+        {
+          "fr": "**20/10, soir — la table de travail est écrite** (`cc72c067`, `docs/interop/alignement-categories-asb-ficedl.md`) : les **douze** catégories du semis d'AnarcosyndicalismeBOOK (et non onze), lues à `480f898`, face aux 623 descripteurs FICEDL de la production — quatre exactes (anarchisme, anarchosyndicalisme, autogestion, internationalisme), quatre proches, deux plus larges côté FICEDL (féminisme, écologie), une associée (théorie → philosophie), une sans objet (« Brochures » est une forme, pas un sujet). Rien n'est envoyé ni écrit en base. **Reste** : en parler avec le camarade (ASR2026) — cinq questions ouvertes à la fin du document, dont le sens de la moisson (H35) et les trous de FICEDL (décroissance, municipalisme libertaire) à signaler à la FICEDL.",
+          "pt": "**20/10, noite — a tabela de trabalho está escrita** (`cc72c067`): as doze categorias da ASB face aos 623 descritores FICEDL. Nada enviado. Falta conversar com o camarada (ASR2026)."
         }
       ]
     },
@@ -5034,8 +5050,8 @@
         "collectif"
       ],
       "t": {
-        "fr": "Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`",
-        "pt": "Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer — e `sendViaBrevo` ainda está em `email.ts`"
+        "fr": "Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir",
+        "pt": "Sair do Resend: um relay militante a pedir, um transporte a escrever, o roteamento a restabelecer"
       },
       "v": {
         "fr": "**Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.",
@@ -5083,6 +5099,10 @@
         {
           "fr": "**19/10, soir — Nodo50 reste le relais retenu** (mot de Xavier : « ils se sont sauvés de peu ») ; la contradiction relevée plus haut est levée. Reste l'étape 7 telle qu'écrite : `MAIL_TRANSPORT=smtp` hors du lundi 08 h - 09 h 15 UTC, les quatre envois du chemin critique, un premier `dkim=pass`, quatre semaines de surveillance, puis fermer Resend.",
           "pt": "**19/10, noite — a Nodo50 continua como relé** (« salvaram-se por pouco »). Falta a etapa 7."
+        },
+        {
+          "fr": "**20/10 — l'intitulé disait une dette déjà réglée.** `sendViaBrevo` n'est plus dans le code (il n'en reste que deux commentaires sur le bogue des logos de mai) ; `sendViaSmtp` (`_shared/mail/smtp.ts`) et l'aiguillage par `MAIL_TRANSPORT` sont en place dans `_shared/transport/email.ts`. Des quatre gestes de la fiche, seul reste le dernier : la bascule (étape 7 du runbook Nodo50).",
+          "pt": "**20/10 — o título falava de uma dívida já paga**: `sendViaBrevo` saiu do código; `sendViaSmtp` e o roteamento por `MAIL_TRANSPORT` estão no lugar. Falta só a mudança (etapa 7)."
         }
       ]
     },
@@ -6410,48 +6430,6 @@
         ],
         "pt": [
           "Decisão tomada e aplicada aos 24."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
-    },
-    {
-      "id": "D27",
-      "d": "D",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "deno"
-      ],
-      "t": {
-        "fr": "Lever la limite de taille du versement côté serveur (~150-180 Mo)",
-        "pt": "Levantar o limite de tamanho do versamento no servidor (~150-180 Mo)"
-      },
-      "v": {
-        "fr": "Même avec `node:crypto`, `deposit-digital-candidate` tient ~150 à 180 Mo par appel (mesuré le 16/10) ; au-delà, erreur 546, alors que les seaux acceptent 500 Mo.",
-        "pt": "O versamento aguenta ~150-180 Mo por chamada; os baldes aceitam 500 Mo."
-      },
-      "w": {
-        "fr": "Verser par morceaux (TUS ou multipart) et calculer l'empreinte en flux, ou documenter la limite à l'écran.",
-        "pt": "Versar por partes e calcular a impressão em fluxo, ou documentar o limite."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Un PDF de 400 Mo se verse par le chemin normal, ou la limite est dite avant l'essai."
-        ],
-        "pt": [
-          "Um PDF de 400 Mo é versado, ou o limite é dito antes."
         ]
       },
       "dep": {

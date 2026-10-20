@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-20** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-20** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,7 +18,7 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 8
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 11
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 10
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 20 octobre 2026 au soir** (production mesurée à 20 h 54 UTC, dépôt recompté sur `5c67ec55`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 19/10 au soir, `7d6475b6`). **541 migrations appliquées, 541 au dépôt** au moment de la mesure ; une 542e (couvertures, CAPAS-7) est arrivée dans la file juste après. Une journée plus calme : **+25 commits, +11 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — douze notices d'Anarchief de plus (lot 69), une autorité en double fusionnée, un Wikidata n'a plus qu'une fiche ; les 308 autorités d'Anarchief versées à la file de revue de l'Atelier (C33) ; une notice partagée compte enfin tous ses fonds (B41) ; deux dates de droits recoupées (D23) ; **la base** — +1 policy (l'état de service lisible sans compte, E40), +1 vue, +2 fonctions, avis inchangés ; **la CI** — le front servi est désormais comparé au build (I34), un rouge de `sql-tests` venu d'E40, corrigé dans l'heure ; **l'exploitation** — le test de restauration couvre les fichiers (I39) ; `~/anarbib` a divergé dans la soirée (4 commits locaux d'une session voisine, I36), puis cette session les a poussés depuis un worktree pendant le relevé (`4c2d442d` à `5031a4d6`, migration réhorodatée) : le checkout n'a plus qu'un commit de retard. **Le compte** : **69 items** et 274 lignes de clôture — B41, E40, D23 et I39 clos le 20/10. **Ce qui presse** : D3 (Solidaires, avant le 26/10 — la révision n'a pas commencé), I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), I36 (le passage automatique du miroir à vérifier), G23 (une API d'IA à déclarer), A7 (réunion Lyon / Herbes Folles / ASR), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et décider d'un ramassage), K1 (le document signé de Belém).
 
-**Fraîcheur des constats au 2026-10-20.** **62 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D27, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **7** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-20.** **61 items sur 68** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **7** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -654,7 +654,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D22** | Reprendre à la main les sources fermées aux automates | `P3` | Ouvert |
 | **D24** | Publier les textes intégraux du wiki d'Anarchief en EPUB | `P2` | Ouvert |
 | **D25** | Décider du sort des 24 fichiers Word/ODT d'Anarchief | `P3` | Ouvert |
-| **D27** | Lever la limite de taille du versement côté serveur (~150-180 Mo) | `P3` | Ouvert |
 | **D28** | Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus | `P3` | Ouvert |
 
 #### D3 — Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double
@@ -846,26 +845,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
-#### D27 — Lever la limite de taille du versement côté serveur (~150-180 Mo)
-
-`P3` Différé · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript
-
-**État.** Même avec `node:crypto`, `deposit-digital-candidate` tient ~150 à 180 Mo par appel (mesuré le 16/10) ; au-delà, erreur 546, alors que les seaux acceptent 500 Mo.
-
-*Vérifié : *
-
-**Ce que c'est.** Verser par morceaux (TUS ou multipart) et calculer l'empreinte en flux, ou documenter la limite à l'écran.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- Un PDF de 400 Mo se verse par le chemin normal, ou la limite est dite avant l'essai.
-
-**Dépendances.** —
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
 #### D28 — Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus
 
 `P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : SQL / PostgreSQL
@@ -954,7 +933,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `it.json` n'est pas conforme à la convention de l'astérisque final : les paires irrégulières comme `lettore` / `lettrice` ne se réduisent pas à `lettor*`. Le test de charte vérifie une seule chose sur l'italien — que `camerata` et `camerati` n'y figurent jamais, terme fasciste, échec dur — et rien d'autre.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Décider du traitement des paires irrégulières avec un locuteur natif, puis l'appliquer aux chaînes concernées. C'est un travail de langue, pas de code.
 
@@ -1109,15 +1088,15 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts` | `P2` | Ouvert |
+| **F10** | Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir | `P2` | Ouvert |
 
-#### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir — et `sendViaBrevo` traîne encore dans `email.ts`
+#### F10 — Sortir de Resend : un relais militant à demander, un transport à écrire, l'aiguillage à rétablir
 
 `P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : Deno / TypeScript, délibération collective
 
 **État.** **Vérifié dans le dépôt le 07/09** : `supabase/functions/_shared/transport/email.ts` connaît deux transports, `sendViaResend` et `sendViaBrevo` — le second survit au retrait de Brevo (R.6/R.7, annoncé clos). Aucun transport SMTP générique, donc aucun moyen de brancher un relais militant (ARN, Nodo50, bida.im) le jour où l'un dit oui. La note du 05-06/09 place cette sortie après Bologne, derrière la demande d'un relais SMTP le 12.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Demander avant de choisir (les relais militants d'abord, Scaleway en repli) ; écrire `sendViaSmtp` (ou le transport retenu) et rétablir un aiguillage par variable ; supprimer `sendViaBrevo` ; ne faire lever que ce qui doit lever (**F7** est clos là-dessus).
 
@@ -1389,7 +1368,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** NORLA a bâti son vocabulaire — avec ses facettes *Tactics* et *Social Movement* — **sans lien avec le thésaurus FICEDL**. Deux vocabulaires militants, construits en parallèle, qui s'ignorent. Par ailleurs, les 11 catégories thématiques d'AnarcosyndicalismeBOOK ne sont alignées sur rien.
 
-*Vérifié : [object Object]*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Commencer par le plus petit et le plus faisable : les 11 catégories d'AnarcosyndicalismeBOOK, **un premier pas concret, borné, faisable en une soirée** — et comme le thésaurus est déjà en dix langues, l'alignement vaut simultanément pour les dix. Puis ouvrir la conversation avec NORLA.
 
@@ -2265,6 +2244,7 @@ CI verte : lint et suite unitaire. |
 | E40 | 2026-10-20 | **Clos le 20/10 : l'état de service d'une bibliothèque publique se lit sans compte.** `d98b1ff0` (migration `20261020193858`) puis `839f752d` (`20261020200523`, forme B10 : la première posait deux permissives de lecture pour `authenticated`, refusées par `policies_permissives_uniques_tests` — run `sql-tests` 1932 rouge, 1934 vert). Lecture publique `TO anon` limitée aux bibliothèques actives et publiques ; `library_service_state_select_authenticated` = la même OU l'équipe ; anon perd le droit de table et ne garde que les colonnes des vues publiques (mode, mot public, réservations et prêts ouverts, date) — les réglages de consultation restent à l'équipe. Banc : `e40_etat_de_service_public_tests` 5/5, garde B10 33/33. |
 | D23 | 2026-10-20 | **Clos le 20/10 : les deux dates reposent sur une source citée, les deux PDF restent publics.** `25ab6c3e`, migration `20261020194455`. Ressource 981 (Cornelissen, 1907) : Eugénio Vieira (1877-1948), traducteur de cette édition, conféré sur l'index « Revistas de Ideias e Cultura » (pt.revistasdeideias.net, `aut_0000013495` ; l'entrée de Cornelissen y dit « Traduzido por Eugénio Vieira »). Ressource 979 (Fabbri, 1921) : « Catilina » est un pseudonyme de Luigi Fabbri (†1935, Wikidata) ; et une œuvre pseudonyme de 1921 est du domaine public depuis 1992 (Lei 9.610/98, art. 43, par. único ; Berne, art. 7.3). Justification réécrite sur la ressource et ses brouillons. |
 | I39 | 2026-10-20 | **Clos le 20/10 : le restore-test restaure aussi des fichiers.** `2e41a66e` : `verifier_fichiers` tire au sort 4 objets (`BG2_RT_ECHANTILLON`) que le dernier instantané de chaque flux doit porter (posés plus de 3 h avant lui, de 1 octet à 50 Mo), les restaure depuis restic, les retélécharge de Storage et compare les SHA-256 ; le verdict dit le bucket et la taille, jamais le nom ; un écart se dit sans faire échouer le test. Éprouvé le 20/10 sur les vrais dépôts (fonction seule) : `storage` 3/3 et `lourd` 3/3 identiques, 17 s et 16 s. Garde : `src/tests/i39-restore-test-fichiers.test.js`. |
+| D27 | 2026-10-20 | **Clos le 20/10 : la limite est dite avant l'essai** (critère, seconde branche). `14ec3c01` : une seule limite, `LIMITE_APPEL` = 140 Mo par appel (la fonction meurt à 2 s de CPU vers 150-180 Mo). `deposit-digital-candidate` refuse sur la taille relevée à la validation AVANT de télécharger, puis sur la taille annoncée par la source, puis en flux ; le refus est noté sur le candidat (`file_too_large`) au lieu d'un appel mort en route avec un objet partiel dans la zone privée. L'écran des candidats le dit avant l'appel et retire le bouton (clé `importacoes.pdfCandidates.deposit.tooLarge`, onze langues) ; `error.edge.file_too_large` dit 140 au lieu de 150. Un plus gros fichier se verse à la main, par morceaux (`scripts/maptiles/televerser-tus.mjs`). Garde : `src/tests/numdif-limite-appel.test.js`. En production, aucun candidat au-dessus de 98 Mo ; le versement par morceaux CÔTÉ SERVEUR reste possible si le besoin vient (nouvelle fiche alors). |
 
 ---
 
@@ -2296,4 +2276,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5c67ec55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5c67ec55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
