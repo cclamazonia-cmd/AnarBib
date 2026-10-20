@@ -46,6 +46,16 @@ import { sanitize } from './nom.ts';
 import { AdresseRefusee, fetchSortant } from '../_shared/core/adresse-sortante.ts';
 
 const MAX_OCTETS = 500 * 1024 * 1024;        // file_size_limit de pdf-restrito et anarbib-pdf-public
+// D27 (20/10/2026) : ce qu'UN appel tient vraiment. La plateforme coupe une
+// fonction à 2 s de CPU (HTTP 546) ; le flux et les empreintes natives en
+// coûtent ~12 ms par Mo (98 Mo : ~1,25 s au banc du 16/10), d'où une marge de
+// ~150-180 Mo. Au-delà, l'appel mourait en route, sans refus noté ni message,
+// en laissant un objet partiel dans la zone privée. Le refus se dit désormais
+// AVANT le téléchargement (taille relevée à la validation, ou annoncée par la
+// source), et le flux s'arrête proprement s'il dépasse sans l'avoir annoncé.
+// L'écran (CandidatsPdfPanel) le dit avant même l'appel. Un plus gros fichier
+// se verse à la main (scripts/maptiles/televerser-tus.mjs, par morceaux).
+const LIMITE_APPEL = 140 * 1000 * 1000;
 const MAX_PAR_APPEL = 25;
 const BUDGET_MS = 100_000;                    // on ne commence plus de candidat au-delà
 const ZONE_PRIVEE = 'pdf-restrito';
@@ -129,6 +139,15 @@ Deno.serve(async (req) => {
     const noterEchec = async (raison: string) => {
       try { await userClient.rpc('fn_digital_candidate_deposit_failed', { p_id: id, p_reason: raison }); } catch (_) { /* best-effort */ }
     };
+    const tropLourd = async (octets: number | null) => {
+      await noterEchec(`trop lourd pour un versement par le serveur (${octets ? Math.round(octets / 1e6) + ' Mo, ' : ''}${LIMITE_APPEL / 1e6} Mo au plus par appel)`);
+      issues.push(echec(id, 'file_too_large', `Fichier trop lourd pour un versement par le serveur (${LIMITE_APPEL / 1e6} Mo au plus).`,
+        { bytes: octets, max: LIMITE_APPEL }));
+    };
+
+    // D27 : la taille relevée à la validation suffit à refuser, sans rien télécharger
+    const relevee = Number(g.file_size_bytes) || 0;
+    if (relevee > LIMITE_APPEL) { await tropLourd(relevee); continue; }
 
     // 2. le téléchargement côté serveur, en flux
     let reponse: Response;
@@ -153,10 +172,9 @@ Deno.serve(async (req) => {
       continue;
     }
     const annonce = Number(reponse.headers.get('content-length')) || 0;
-    if (annonce > MAX_OCTETS) {
+    if (annonce > LIMITE_APPEL) {
       await reponse.body.cancel();
-      await noterEchec(`trop lourd (${Math.round(annonce / 1e6)} Mo)`);
-      issues.push(echec(id, 'file_too_large', 'Fichier trop lourd pour un seau (500 Mo au plus).', { bytes: annonce, max: MAX_OCTETS }));
+      await tropLourd(annonce);
       continue;
     }
 
@@ -172,7 +190,7 @@ Deno.serve(async (req) => {
         const { done, value } = await lecteur.read();
         if (done) { ctl.close(); return; }
         lu += value.byteLength;
-        if (lu > MAX_OCTETS) { raisonFlux = 'file_too_large'; await lecteur.cancel(); ctl.error(new Error('trop lourd')); return; }
+        if (lu > Math.min(MAX_OCTETS, LIMITE_APPEL)) { raisonFlux = 'file_too_large'; await lecteur.cancel(); ctl.error(new Error('trop lourd')); return; }
         if (tete.length < 5) {
           const t = new Uint8Array(tete.length + value.byteLength); t.set(tete); t.set(value, tete.length); tete = t.subarray(0, 5);
           if (tete.length >= 5 && new TextDecoder('latin1').decode(tete) !== '%PDF-') {
@@ -195,8 +213,7 @@ Deno.serve(async (req) => {
         await noterEchec('la réponse n\'est pas un PDF');
         issues.push(echec(id, 'not_a_pdf', 'La source ne rend pas un PDF.'));
       } else if (raisonFlux === 'file_too_large') {
-        await noterEchec(`trop lourd (plus de ${Math.round(MAX_OCTETS / 1e6)} Mo)`);
-        issues.push(echec(id, 'file_too_large', 'Fichier trop lourd pour un seau (500 Mo au plus).', { max: MAX_OCTETS }));
+        await tropLourd(lu);
       } else {
         await noterEchec(`dépôt dans le stockage échoué : ${upErr?.message}`);
         issues.push(echec(id, 'server_error', `Dépôt dans le stockage échoué : ${upErr?.message}`));

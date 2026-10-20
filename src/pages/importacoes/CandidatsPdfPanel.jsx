@@ -286,9 +286,15 @@ function VerserLeLot({ t, n, onFin }) {
   );
 }
 
+// D27 (20/10/2026) : ce qu'un appel de deposit-digital-candidate tient
+// (LIMITE_APPEL, même valeur, gardée égale par src/tests/numdif-limite-appel.test.js).
+// Au-delà, la fonction refuse sans télécharger ; l'écran le dit avant l'essai.
+export const LIMITE_VERSEMENT_SERVEUR = 140 * 1000 * 1000;
+
 function Verser({ c, t, onDone }) {
   const [occupe, setOccupe] = useState(false);
   const [erreur, setErreur] = useState('');
+  const tropLourd = Number(c.file_size_bytes) > LIMITE_VERSEMENT_SERVEUR;
   const verser = async () => {
     setOccupe(true); setErreur('');
     try {
@@ -312,7 +318,14 @@ function Verser({ c, t, onDone }) {
         </div>
       )}
       {erreur && <div className="cat-message error" role="alert" style={{ margin: '8px 0' }}>{erreur}</div>}
-      <button type="button" className="cat-btn primary" data-testid="pdf-candidate-deposit-button" disabled={occupe} onClick={verser}>
+      {tropLourd && (
+        <div data-testid="pdf-candidate-too-large" style={{ ...muted, color: 'var(--brand-warning, #eab308)', marginBottom: 6 }}>
+          {t({ id: 'importacoes.pdfCandidates.deposit.tooLarge' }, {
+            size: (c.file_size_bytes / 1e6).toFixed(0), max: LIMITE_VERSEMENT_SERVEUR / 1e6,
+          })}
+        </div>
+      )}
+      <button type="button" className="cat-btn primary" data-testid="pdf-candidate-deposit-button" disabled={occupe || tropLourd} onClick={verser}>
         {occupe ? t({ id: 'importacoes.pdfCandidates.deposit.running' }) : t({ id: 'importacoes.pdfCandidates.deposit.button' })}
       </button>
     </div>
