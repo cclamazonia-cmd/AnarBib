@@ -5,6 +5,7 @@ import { localizeError } from '@/lib/localizeError';
 import { COVER_BUCKET, removeCoverThumb, writeCoverThumb } from '@/lib/coverThumbs';
 import { cheminPhoto, preparerPhoto } from '@/lib/photoCapa';
 import CardScanner from './CardScanner';
+import CapasPdfLot from './CapasPdfLot';
 
 // ═══════════════════════════════════════════════════════════
 // TabCapas — photographier les couvertures, livre en main (27/09/2026)
@@ -175,6 +176,10 @@ export default function TabCapas({ t, libraryId }) {
 
   return (
     <div className="ab-capas-photo">
+      {/* Les fonds numériques : la page 1 de leurs PDF, en lot (20/10/2026). */}
+      <CapasPdfLot t={t} libraryId={libraryId}
+        onPosees={() => { chargerResume(); chargerListe(page, recherche.trim()); }} />
+
       <h2 className="ab-painel-section-title">{t({ id: 'capas.photo.titre' })}</h2>
       <p className="ab-painel-hint">{t({ id: 'capas.photo.intro' })}</p>
 

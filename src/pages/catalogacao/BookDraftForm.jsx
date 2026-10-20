@@ -27,6 +27,7 @@ import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { writeCoverThumb, removeCoverThumb, cheminCapaNeuf, nomCapaNeuf, extensionCapa } from '@/lib/coverThumbs';
+import { rendrePage1, canvasEnJpeg } from '@/lib/capaPdf';
 import { messageRechercheCapas, accordEdition, parIsbn, etiquetteCandidate, ordonnerCandidates } from '@/lib/coverSources';
 import { volumesDifferents } from '@/lib/volumes';
 import { fichierSansMetadonnees } from '@/lib/imageMetadata';
@@ -35,7 +36,7 @@ import { renderMaterialSection, renderRegistryField } from './CatalogFieldRender
 import Modal from '@/components/ui/Modal';
 
 // Constantes et fonctions pures du formulaire : src/lib/catalogacao/bookDraft.js (E6, lot 1)
-import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, PDFJS_BASE, loadPdfjsCat, inferContributorRole, autoMatchContributors, provenanceFromCandidate, EMPTY_FORM, paquetIsbd } from '@/lib/catalogacao/bookDraft';
+import { MATERIAL_TYPE_KEYS, SERIAL_TYPES, TRACT_TYPES, NON_LOANABLE_TYPES, MATERIAL_SECTION_IDS, roleKeysForMaterial, AUTHOR_DISPLAY_ROLES, inferContributorRole, autoMatchContributors, provenanceFromCandidate, EMPTY_FORM, paquetIsbd } from '@/lib/catalogacao/bookDraft';
 
 // ═══════════════════════════════════════════════════════════
 // BookDraftForm
@@ -726,28 +727,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         throw new Error('no source');
       }
 
-      // 2. Rendre la page 1 sur un canvas hors-ecran.
-      const pdfjs = await loadPdfjsCat();
-      const pdf = await pdfjs.getDocument({
-        data: arrayBuffer,
-        cMapUrl: `${PDFJS_BASE}/web/cmaps/`,
-        cMapPacked: true,
-        standardFontDataUrl: `${PDFJS_BASE}/web/standard_fonts/`,
-      }).promise;
-      const page = await pdf.getPage(1);
-      const base = page.getViewport({ scale: 1 });
-      const targetW = 800;
-      const viewport = page.getViewport({ scale: targetW / base.width });
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-      const ctx = canvas.getContext('2d');
-      await page.render({ canvasContext: ctx, viewport }).promise;
-      pdf.destroy();
+      // 2. Rendre la page 1 sur un canvas hors-ecran (meme rendu que le lot du Painel).
+      const canvas = await rendrePage1(arrayBuffer);
 
       // 3. Canvas -> blob -> upload bucket covers (blob local, pas de CORS).
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
-      if (!blob) throw new Error('toBlob failed');
+      const blob = await canvasEnJpeg(canvas);
       // Adresse neuve, sans upsert : même règle que le fichier envoyé (28/09/2026).
       const storagePath = cheminCapaNeuf(stableKey, 'jpg');
       const { error: upErr } = await supabase.storage.from('covers').upload(storagePath, blob, { upsert: false, contentType: 'image/jpeg' });

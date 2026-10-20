@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Batch stopped: {done} deposited, {failed} refused out of {total}. Launch it again to resume; what is deposited does not go through twice.",
   "notif.restrictedOrphan.title": "A restricted PDF no longer has a holding library",
   "notif.restrictedOrphan.body": "The last holding of this book has just disappeared: its restricted PDF no longer opens for anyone. Attach a copy, or decide to withdraw the resource.",
-  "error.catalog.wikidata_already_used": "Wikidata {qid} is already on the record “{name}” (no. {author_id}). A person has only one record: if it is the same person, merge the two (“Replace with another authority…” button on the duplicate record) instead of copying the identifier; otherwise, check the Wikidata."
+  "error.catalog.wikidata_already_used": "Wikidata {qid} is already on the record “{name}” (no. {author_id}). A person has only one record: if it is the same person, merge the two (“Replace with another authority…” button on the duplicate record) instead of copying the identifier; otherwise, check the Wikidata.",
+  "capas.pdf.titre": "Page 1 of the PDFs",
+  "capas.pdf.intro": "{n, plural, =0 {No record without a cover has a public PDF.} one {# record without a cover has a public PDF: its first page can serve as its cover.} other {# records without a cover have a public PDF: the first page of each can serve as its cover.}}",
+  "capas.pdf.deja": "{n, plural, one {# cover already taken from a PDF.} other {# covers already taken from a PDF.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# record only has a restricted-distribution PDF: its page 1 is not made public here.} other {# records only have a restricted-distribution PDF: their page 1 is not made public here.}}",
+  "capas.pdf.lancer": "Use page 1 as the cover ({n})",
+  "capas.pdf.arreter": "Stop",
+  "capas.pdf.progression": "{posees, plural, one {# cover set} other {# covers set}} · {echecs, plural, one {# unreadable PDF} other {# unreadable PDFs}}",
+  "capas.pdf.courante": "Now: {titre}",
+  "capas.pdf.fini": "Done: {posees, plural, one {# cover set} other {# covers set}}, {echecs, plural, one {# unreadable PDF} other {# unreadable PDFs}}.",
+  "capas.pdf.arretee": "Stopped: {posees, plural, one {# cover set} other {# covers set}}, {echecs, plural, one {# unreadable PDF} other {# unreadable PDFs}}. The rest waits for the next click.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF not rendered} other {# PDFs not rendered}} (file unreadable or unreachable)",
+  "error.capas.pdf_non_public": "This record has no public PDF: page 1 of a restricted-distribution PDF does not become a public cover."
 }

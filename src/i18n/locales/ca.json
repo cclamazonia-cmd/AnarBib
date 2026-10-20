@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Lot aturat: {done} dipositat(s), {failed} rebutjat(s) de {total}. Torna’l a llançar per reprendre; el que s’ha dipositat no torna a passar.",
   "notif.restrictedOrphan.title": "Un PDF restringit ja no té cap biblioteca que el tingui",
   "notif.restrictedOrphan.body": "L’última tinença d’aquest llibre acaba de desaparèixer: el seu PDF restringit ja no s’obre per a ningú. Vincula un exemplar, o decideix retirar el recurs.",
-  "error.catalog.wikidata_already_used": "El Wikidata {qid} ja és a la fitxa «{name}» (núm. {author_id}). Una persona només té una fitxa: si és la mateixa, fusiona les dues (botó «Substituir per una altra autoritat…» a la fitxa duplicada) en lloc de copiar l’identificador; si no, revisa el Wikidata."
+  "error.catalog.wikidata_already_used": "El Wikidata {qid} ja és a la fitxa «{name}» (núm. {author_id}). Una persona només té una fitxa: si és la mateixa, fusiona les dues (botó «Substituir per una altra autoritat…» a la fitxa duplicada) en lloc de copiar l’identificador; si no, revisa el Wikidata.",
+  "capas.pdf.titre": "Pàgina 1 dels PDF",
+  "capas.pdf.intro": "{n, plural, =0 {Cap fitxa sense coberta no té un PDF públic.} one {# fitxa sense coberta té un PDF públic: la seva primera pàgina li pot servir de coberta.} other {# fitxes sense coberta tenen un PDF públic: la primera pàgina de cadascun els pot servir de coberta.}}",
+  "capas.pdf.deja": "{n, plural, one {# coberta ja treta d’un PDF.} other {# cobertes ja tretes d’un PDF.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# fitxa només té un PDF de difusió restringida: la seva pàgina 1 no es fa pública aquí.} other {# fitxes només tenen un PDF de difusió restringida: la seva pàgina 1 no es fa pública aquí.}}",
+  "capas.pdf.lancer": "Fer servir la pàgina 1 com a coberta ({n})",
+  "capas.pdf.arreter": "Aturar",
+  "capas.pdf.progression": "{posees, plural, one {# coberta posada} other {# cobertes posades}} · {echecs, plural, one {# PDF il·legible} other {# PDF il·legibles}}",
+  "capas.pdf.courante": "En curs: {titre}",
+  "capas.pdf.fini": "Fet: {posees, plural, one {# coberta posada} other {# cobertes posades}}, {echecs, plural, one {# PDF il·legible} other {# PDF il·legibles}}.",
+  "capas.pdf.arretee": "Aturat: {posees, plural, one {# coberta posada} other {# cobertes posades}}, {echecs, plural, one {# PDF il·legible} other {# PDF il·legibles}}. La resta espera el proper clic.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF no renderitzat} other {# PDF no renderitzats}} (fitxer il·legible o inaccessible)",
+  "error.capas.pdf_non_public": "Aquesta fitxa no té PDF públic: la pàgina 1 d’un PDF de difusió restringida no esdevé una coberta pública."
 }

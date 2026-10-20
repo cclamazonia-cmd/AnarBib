@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Lot oprit: {done} depuși, {failed} refuzați din {total}. Relansează-l ca să reiei; ce s-a depus nu mai trece o dată.",
   "notif.restrictedOrphan.title": "Un PDF restricționat nu mai are bibliotecă deținătoare",
   "notif.restrictedOrphan.body": "Ultima deținere a acestei cărți tocmai a dispărut: PDF-ul ei restricționat nu se mai deschide pentru nimeni. Leagă un exemplar sau hotărăște să retragi resursa.",
-  "error.catalog.wikidata_already_used": "Wikidata {qid} este deja pe fișa „{name}” (nr. {author_id}). O persoană are o singură fișă: dacă este aceeași, unește-le pe cele două (butonul „Înlocuiește cu altă autoritate…” de pe fișa dublă) în loc să copiezi identificatorul; altfel, verifică Wikidata."
+  "error.catalog.wikidata_already_used": "Wikidata {qid} este deja pe fișa „{name}” (nr. {author_id}). O persoană are o singură fișă: dacă este aceeași, unește-le pe cele două (butonul „Înlocuiește cu altă autoritate…” de pe fișa dublă) în loc să copiezi identificatorul; altfel, verifică Wikidata.",
+  "capas.pdf.titre": "Pagina 1 din PDF-uri",
+  "capas.pdf.intro": "{n, plural, =0 {Nicio fișă fără copertă nu are un PDF public.} one {# fișă fără copertă are un PDF public: prima lui pagină îi poate servi drept copertă.} few {# fișe fără copertă au un PDF public: prima pagină a fiecăruia le poate servi drept copertă.} other {# de fișe fără copertă au un PDF public: prima pagină a fiecăruia le poate servi drept copertă.}}",
+  "capas.pdf.deja": "{n, plural, one {# copertă deja luată dintr-un PDF.} few {# coperte deja luate din PDF-uri.} other {# de coperte deja luate din PDF-uri.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# fișă are doar un PDF cu difuzare restrânsă: pagina 1 nu este făcută publică aici.} few {# fișe au doar un PDF cu difuzare restrânsă: pagina 1 nu este făcută publică aici.} other {# de fișe au doar un PDF cu difuzare restrânsă: pagina 1 nu este făcută publică aici.}}",
+  "capas.pdf.lancer": "Folosește pagina 1 drept copertă ({n})",
+  "capas.pdf.arreter": "Oprește",
+  "capas.pdf.progression": "{posees, plural, one {# copertă pusă} few {# coperte puse} other {# de coperte puse}} · {echecs, plural, one {# PDF ilizibil} few {# PDF-uri ilizibile} other {# de PDF-uri ilizibile}}",
+  "capas.pdf.courante": "În curs: {titre}",
+  "capas.pdf.fini": "Gata: {posees, plural, one {# copertă pusă} few {# coperte puse} other {# de coperte puse}}, {echecs, plural, one {# PDF ilizibil} few {# PDF-uri ilizibile} other {# de PDF-uri ilizibile}}.",
+  "capas.pdf.arretee": "Oprit: {posees, plural, one {# copertă pusă} few {# coperte puse} other {# de coperte puse}}, {echecs, plural, one {# PDF ilizibil} few {# PDF-uri ilizibile} other {# de PDF-uri ilizibile}}. Restul așteaptă următorul clic.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF neredat} few {# PDF-uri neredate} other {# de PDF-uri neredate}} (fișier ilizibil sau inaccesibil)",
+  "error.capas.pdf_non_public": "Această fișă nu are un PDF public: pagina 1 a unui PDF cu difuzare restrânsă nu devine copertă publică."
 }

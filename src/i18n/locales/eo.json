@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Aro haltigita: {done} deponitaj, {failed} rifuzitaj el {total}. Relanĉu ĝin por daŭrigi; la deponitaĵoj ne trairas denove.",
   "notif.restrictedOrphan.title": "Limigita PDF ne plu havas posedantan bibliotekon",
   "notif.restrictedOrphan.body": "La lasta posedo de ĉi tiu libro ĵus malaperis: ĝia limigita PDF ne plu malfermiĝas por iu ajn. Ligu ekzempleron, aŭ decidu retiri la rimedon.",
-  "error.catalog.wikidata_already_used": "La Vikidatumoj-ero {qid} jam estas en la registro « {name} » (n-ro {author_id}). Persono havas nur unu registron: se temas pri la sama, kunfandu ambaŭ (butono « Anstataŭigi per alia aŭtoritato… » ĉe la duobla registro) anstataŭ kopii la identigilon; alie, kontrolu la Vikidatumojn."
+  "error.catalog.wikidata_already_used": "La Vikidatumoj-ero {qid} jam estas en la registro « {name} » (n-ro {author_id}). Persono havas nur unu registron: se temas pri la sama, kunfandu ambaŭ (butono « Anstataŭigi per alia aŭtoritato… » ĉe la duobla registro) anstataŭ kopii la identigilon; alie, kontrolu la Vikidatumojn.",
+  "capas.pdf.titre": "Paĝo 1 de la PDF-oj",
+  "capas.pdf.intro": "{n, plural, =0 {Neniu katalogero sen kovrilo havas publikan PDF.} one {# katalogero sen kovrilo havas publikan PDF: ĝia unua paĝo povas servi kiel kovrilo.} other {# katalogeroj sen kovrilo havas publikan PDF: la unua paĝo de ĉiu povas servi kiel kovrilo.}}",
+  "capas.pdf.deja": "{n, plural, one {# kovrilo jam prenita el PDF.} other {# kovriloj jam prenitaj el PDF.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# katalogero havas nur PDF kun limigita disvastigo: ĝia paĝo 1 ne estas publikigita ĉi tie.} other {# katalogeroj havas nur PDF kun limigita disvastigo: ilia paĝo 1 ne estas publikigita ĉi tie.}}",
+  "capas.pdf.lancer": "Uzi paĝon 1 kiel kovrilon ({n})",
+  "capas.pdf.arreter": "Haltigi",
+  "capas.pdf.progression": "{posees, plural, one {# kovrilo metita} other {# kovriloj metitaj}} · {echecs, plural, one {# nelegebla PDF} other {# nelegeblaj PDF-oj}}",
+  "capas.pdf.courante": "Nun: {titre}",
+  "capas.pdf.fini": "Farite: {posees, plural, one {# kovrilo metita} other {# kovriloj metitaj}}, {echecs, plural, one {# nelegebla PDF} other {# nelegeblaj PDF-oj}}.",
+  "capas.pdf.arretee": "Haltigita: {posees, plural, one {# kovrilo metita} other {# kovriloj metitaj}}, {echecs, plural, one {# nelegebla PDF} other {# nelegeblaj PDF-oj}}. La resto atendas la sekvan klakon.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF ne bildigita} other {# PDF-oj ne bildigitaj}} (dosiero nelegebla aŭ neatingebla)",
+  "error.capas.pdf_non_public": "Ĉi tiu katalogero ne havas publikan PDF: paĝo 1 de PDF kun limigita disvastigo ne iĝas publika kovrilo."
 }

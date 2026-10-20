@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Lot arrêté : {done} versé(s), {failed} refusé(s) sur {total}. Relance-le pour reprendre ; ce qui est versé ne repasse pas.",
   "notif.restrictedOrphan.title": "Un PDF restreint n’a plus de bibliothèque détentrice",
   "notif.restrictedOrphan.body": "La dernière détention de ce livre vient de disparaître : son PDF restreint ne s’ouvre plus pour personne. Rattache un exemplaire, ou décide de retirer la ressource.",
-  "error.catalog.wikidata_already_used": "Le Wikidata {qid} est déjà porté par la fiche « {name} » (n° {author_id}). Une personne n’a qu’une fiche : si c’est la même, fusionne les deux (bouton « Remplacer par une autre autorité… » sur la fiche en double) au lieu de recopier l’identifiant ; sinon, vérifie le Wikidata."
+  "error.catalog.wikidata_already_used": "Le Wikidata {qid} est déjà porté par la fiche « {name} » (n° {author_id}). Une personne n’a qu’une fiche : si c’est la même, fusionne les deux (bouton « Remplacer par une autre autorité… » sur la fiche en double) au lieu de recopier l’identifiant ; sinon, vérifie le Wikidata.",
+  "capas.pdf.titre": "Page 1 des PDF",
+  "capas.pdf.intro": "{n, plural, =0 {Aucune notice sans couverture n’a de PDF public.} one {# notice sans couverture a un PDF public : sa première page peut lui servir de couverture.} other {# notices sans couverture ont un PDF public : la première page de chacun peut leur servir de couverture.}}",
+  "capas.pdf.deja": "{n, plural, one {# couverture déjà tirée d’un PDF.} other {# couvertures déjà tirées d’un PDF.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# notice n’a qu’un PDF à diffusion restreinte : sa page 1 n’est pas rendue publique ici.} other {# notices n’ont qu’un PDF à diffusion restreinte : leur page 1 n’est pas rendue publique ici.}}",
+  "capas.pdf.lancer": "Poser la page 1 comme couverture ({n})",
+  "capas.pdf.arreter": "Arrêter",
+  "capas.pdf.progression": "{posees, plural, one {# couverture posée} other {# couvertures posées}} · {echecs, plural, one {# PDF illisible} other {# PDF illisibles}}",
+  "capas.pdf.courante": "En cours : {titre}",
+  "capas.pdf.fini": "Terminé : {posees, plural, one {# couverture posée} other {# couvertures posées}}, {echecs, plural, one {# PDF illisible} other {# PDF illisibles}}.",
+  "capas.pdf.arretee": "Arrêté : {posees, plural, one {# couverture posée} other {# couvertures posées}}, {echecs, plural, one {# PDF illisible} other {# PDF illisibles}}. Le reste attend le prochain clic.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF non rendu} other {# PDF non rendus}} (fichier illisible ou injoignable)",
+  "error.capas.pdf_non_public": "Cette notice n’a pas de PDF public : la page 1 d’un PDF à diffusion restreinte ne devient pas une couverture publique."
 }

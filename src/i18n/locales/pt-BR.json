@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Lote parado: {done} enviado(s), {failed} recusado(s) de {total}. Relance-o para retomar; o que foi enviado não passa de novo.",
   "notif.restrictedOrphan.title": "Um PDF restrito não tem mais biblioteca detentora",
   "notif.restrictedOrphan.body": "A última posse deste livro acaba de desaparecer: o PDF restrito dele não abre mais para ninguém. Vincule um exemplar, ou decida retirar o recurso.",
-  "error.catalog.wikidata_already_used": "O Wikidata {qid} já está na ficha « {name} » (nº {author_id}). Uma pessoa tem uma só ficha: se for a mesma, mescle as duas (botão « Substituir por outra autoridade… » na ficha duplicada) em vez de copiar o identificador; se não for, confira o Wikidata."
+  "error.catalog.wikidata_already_used": "O Wikidata {qid} já está na ficha « {name} » (nº {author_id}). Uma pessoa tem uma só ficha: se for a mesma, mescle as duas (botão « Substituir por outra autoridade… » na ficha duplicada) em vez de copiar o identificador; se não for, confira o Wikidata.",
+  "capas.pdf.titre": "Página 1 dos PDF",
+  "capas.pdf.intro": "{n, plural, =0 {Nenhuma ficha sem capa tem um PDF público.} one {# ficha sem capa tem um PDF público: sua primeira página pode servir de capa.} other {# fichas sem capa têm um PDF público: a primeira página de cada um pode servir de capa.}}",
+  "capas.pdf.deja": "{n, plural, one {# capa já tirada de um PDF.} other {# capas já tiradas de um PDF.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# ficha só tem um PDF de difusão restrita: sua página 1 não é tornada pública aqui.} other {# fichas só têm um PDF de difusão restrita: a página 1 delas não é tornada pública aqui.}}",
+  "capas.pdf.lancer": "Usar a página 1 como capa ({n})",
+  "capas.pdf.arreter": "Parar",
+  "capas.pdf.progression": "{posees, plural, one {# capa colocada} other {# capas colocadas}} · {echecs, plural, one {# PDF ilegível} other {# PDF ilegíveis}}",
+  "capas.pdf.courante": "Em curso: {titre}",
+  "capas.pdf.fini": "Concluído: {posees, plural, one {# capa colocada} other {# capas colocadas}}, {echecs, plural, one {# PDF ilegível} other {# PDF ilegíveis}}.",
+  "capas.pdf.arretee": "Interrompido: {posees, plural, one {# capa colocada} other {# capas colocadas}}, {echecs, plural, one {# PDF ilegível} other {# PDF ilegíveis}}. O resto espera o próximo clique.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF não renderizado} other {# PDF não renderizados}} (arquivo ilegível ou inacessível)",
+  "error.capas.pdf_non_public": "Esta ficha não tem PDF público: a página 1 de um PDF de difusão restrita não vira capa pública."
 }

@@ -7752,5 +7752,17 @@
   "importacoes.pdfCandidates.batch.stopped": "Partij gestopt: {done} opgeslagen, {failed} geweigerd van {total}. Start haar opnieuw om verder te gaan; wat opgeslagen is, komt niet nog eens.",
   "notif.restrictedOrphan.title": "Een beperkte pdf heeft geen bibliotheek meer die hem bezit",
   "notif.restrictedOrphan.body": "Het laatste bezit van dit boek is net verdwenen: de beperkte pdf opent voor niemand meer. Koppel een exemplaar, of beslis de bron in te trekken.",
-  "error.catalog.wikidata_already_used": "Wikidata {qid} staat al op de beschrijving „{name}” (nr. {author_id}). Eén persoon heeft maar één beschrijving: is het dezelfde, voeg de twee dan samen (knop „Vervangen door een andere autoriteit…” op de dubbele beschrijving) in plaats van de identificatie te kopiëren; zo niet, controleer de Wikidata."
+  "error.catalog.wikidata_already_used": "Wikidata {qid} staat al op de beschrijving „{name}” (nr. {author_id}). Eén persoon heeft maar één beschrijving: is het dezelfde, voeg de twee dan samen (knop „Vervangen door een andere autoriteit…” op de dubbele beschrijving) in plaats van de identificatie te kopiëren; zo niet, controleer de Wikidata.",
+  "capas.pdf.titre": "Pagina 1 van de PDF’s",
+  "capas.pdf.intro": "{n, plural, =0 {Geen fiche zonder omslag heeft een openbare PDF.} one {# fiche zonder omslag heeft een openbare PDF: de eerste pagina kan als omslag dienen.} other {# fiches zonder omslag hebben een openbare PDF: de eerste pagina van elk kan als omslag dienen.}}",
+  "capas.pdf.deja": "{n, plural, one {# omslag al uit een PDF gehaald.} other {# omslagen al uit een PDF gehaald.}}",
+  "capas.pdf.restreintes": "{n, plural, one {# fiche heeft alleen een PDF met beperkte verspreiding: pagina 1 wordt hier niet openbaar gemaakt.} other {# fiches hebben alleen een PDF met beperkte verspreiding: pagina 1 wordt hier niet openbaar gemaakt.}}",
+  "capas.pdf.lancer": "Pagina 1 als omslag gebruiken ({n})",
+  "capas.pdf.arreter": "Stoppen",
+  "capas.pdf.progression": "{posees, plural, one {# omslag geplaatst} other {# omslagen geplaatst}} · {echecs, plural, one {# onleesbare PDF} other {# onleesbare PDF’s}}",
+  "capas.pdf.courante": "Bezig: {titre}",
+  "capas.pdf.fini": "Klaar: {posees, plural, one {# omslag geplaatst} other {# omslagen geplaatst}}, {echecs, plural, one {# onleesbare PDF} other {# onleesbare PDF’s}}.",
+  "capas.pdf.arretee": "Gestopt: {posees, plural, one {# omslag geplaatst} other {# omslagen geplaatst}}, {echecs, plural, one {# onleesbare PDF} other {# onleesbare PDF’s}}. De rest wacht op de volgende klik.",
+  "capas.pdf.echecs": "{n, plural, one {# PDF niet weergegeven} other {# PDF’s niet weergegeven}} (bestand onleesbaar of onbereikbaar)",
+  "error.capas.pdf_non_public": "Deze fiche heeft geen openbare PDF: pagina 1 van een PDF met beperkte verspreiding wordt geen openbare omslag."
 }
