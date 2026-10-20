@@ -3,8 +3,9 @@ import { mustSecretKey } from "../_shared/core/secret-key.ts";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from '../_shared/deps.ts';
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
-import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
-import { tMailTexte } from "../_shared/i18n/mail-strings.ts";
+import { destinatairesAdminsReseau, LOCALE_BOITE_COLLECTIVE } from "../_shared/context/network-admins.ts";
+import { tMailTexte, formatDateLocale } from "../_shared/i18n/mail-strings.ts";
+import { esc as echapperHtml } from "../_shared/shared/format.ts";
 const PAGE_SIZE = 1000;
 function mustEnv(name) {
   const value = Deno.env.get(name);
@@ -20,13 +21,8 @@ function json(status, data) {
   });
 }
 function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (char)=>({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]);
+  // l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(value);
 }
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
@@ -39,9 +35,11 @@ function addDaysISO(dateStr, days) {
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString();
 }
-function formatBR(dateStr) {
-  const [y, m, d] = String(dateStr || "").split("-");
-  return y && m && d ? `${d}/${m}/${y}` : String(dateStr || "—");
+// Une date « AAAA-MM-JJ » dans la langue du rapport (même format que les autres courriels).
+function formatDate(dateStr, loc) {
+  const s = String(dateStr || "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return s || "—";
+  return formatDateLocale(`${s}T00:00:00.000Z`, loc);
 }
 function countOr0(v) {
   return String(v ?? 0);
@@ -56,14 +54,10 @@ function resolveEnvLogoUrl() {
   // rapport hebdomadaire du réseau, NETWORK_LOGO_URL est donc lu en priorité.
   return (Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "").trim();
 }
-// F26 (19/10/2026) : le pied commun du réseau (layout.footerTextNetwork) ;
-// NETWORK_FOOTER_TEXT / FOOTER_TEXT ne sont plus lus (repli portugais en dur, secret
-// supprimé le 19/10). Le rapport est rédigé en pt-BR seul (mail-ptbr-voce,
-// TEXTE_EN_DUR_PT) : le pied suit la langue du corps, pas celle du profil.
-const LANGUE_DU_RAPPORT = "pt-BR";
-function resolveFooterText() {
-  return tMailTexte(LANGUE_DU_RAPPORT, "layout.footerTextNetwork");
-}
+// F26 (19/10/2026) : le pied commun du réseau (layout.footerTextNetwork), rendu
+// dans renderEmail ; NETWORK_FOOTER_TEXT / FOOTER_TEXT ne sont plus lus (repli
+// portugais en dur, secret supprimé le 19/10). Depuis le 20/10, tout le rapport
+// suit la langue du destinataire, le pied avec lui.
 function resolveEnvSenderName() {
   // R.7 : harmonise sur SENDER_NAME canonique (NETWORK_SENDER_NAME etait aligne).
   return (Deno.env.get("SENDER_NAME") || resolveEnvBrandName()).trim();
@@ -102,33 +96,24 @@ function normalizeLibraryContext(input) {
 }
 // Libellés humains du canal de notification (delivery_mode) — évite d'exposer les
 // valeurs techniques (platform_shared, etc.) dans le rapport destiné à la coordination.
-// Enum source : library_mail_channels.delivery_mode.
-const DELIVERY_MODE_LABELS_PT = {
-  platform_shared: "Plataforma (compartilhado)",
-  platform_shared_local_reply: "Plataforma (resposta local)",
-  library_own_transport: "Transporte próprio da biblioteca",
-  disabled: "Desativado"
-};
-function deliveryModeLabel(mode) {
-  const m = String(mode || "").trim();
-  if (!m) return "Plataforma (padrão)";
-  return DELIVERY_MODE_LABELS_PT[m] || m.replace(/_/g, " ");
+// Enum source : library_mail_channels.delivery_mode. Libellés : clés net.mode.*.
+// Une valeur inconnue s'affiche telle quelle, soulignés en espaces.
+function libelleOuBrut(loc, prefixe, valeur) {
+  const cle = `${prefixe}${valeur}`;
+  const t = tMailTexte(loc, cle);
+  return t === cle ? valeur.replace(/_/g, " ") : t;
 }
-// Libellés humains des statuts de PEB (interlibrary_loans_v2.status_global).
-const PEB_STATUS_LABELS_PT = {
-  preparacao: "Em preparação",
-  aguardando_saida: "Aguardando saída",
-  emprestado: "Emprestado",
-  parcialmente_devolvido: "Parcialmente devolvido",
-  em_devolucao: "Em devolução",
-  devolvido: "Devolvido",
-  cancelado: "Cancelado",
-  atrasado: "Atrasado"
-};
-function pebStatusLabel(status) {
+function deliveryModeLabel(mode, loc) {
+  const m = String(mode || "").trim();
+  if (!m) return tMailTexte(loc, "net.mode.default");
+  return libelleOuBrut(loc, "net.mode.", m);
+}
+// Libellés humains des statuts de PEB (interlibrary_loans_v2.status_global) :
+// clés net.ill.*, celles de l'écran (ill.status.*).
+function pebStatusLabel(status, loc) {
   const s = String(status || "").trim();
   if (!s) return "—";
-  return PEB_STATUS_LABELS_PT[s] || s.replace(/_/g, " ");
+  return libelleOuBrut(loc, "net.ill.", s);
 }
 async function fetchAllRows(build) {
   const rows = [];
@@ -161,10 +146,11 @@ function renderTable(title, cols, rows) {
   `.trim();
 }
 function renderEmail(opts) {
+  const footerText = tMailTexte(opts.locale, "layout.footerTextNetwork");
   const logoHtml = opts.routing.logoUrl ? `<img src="${esc(opts.routing.logoUrl)}" alt="${esc(opts.routing.brandName)}" style="display:block;max-width:96px;max-height:60px;width:auto;height:auto;object-fit:contain;">` : `<div style="font-size:20px;font-weight:700;color:#fff;">${esc(opts.routing.brandName)}</div>`;
   const html = `
 <!doctype html>
-<html lang="pt-BR">
+<html lang="${esc(opts.locale)}">
   <head>
     <meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -182,7 +168,7 @@ function renderEmail(opts) {
                   <tr>
                     <td valign="middle" style="width:120px;">${logoHtml}</td>
                     <td valign="middle" style="padding-left:16px;">
-                      <div style="font-size:13px;letter-spacing:.04em;text-transform:uppercase;opacity:.9;">Coordenação de rede</div>
+                      <div style="font-size:13px;letter-spacing:.04em;text-transform:uppercase;opacity:.9;">${esc(tMailTexte(opts.locale, "net.kicker"))}</div>
                       <h1 style="margin:6px 0 0 0;font-size:24px;line-height:1.2;color:#fff;">${esc(opts.title)}</h1>
                     </td>
                   </tr>
@@ -197,7 +183,7 @@ function renderEmail(opts) {
             </tr>
             <tr>
               <td style="padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);font-size:12px;color:#d4d4d8;line-height:1.5;">
-                ${esc(opts.routing.footerText)}
+                ${esc(footerText)}
               </td>
             </tr>
           </table>
@@ -212,7 +198,7 @@ function renderEmail(opts) {
     "",
     opts.preheader,
     "",
-    opts.routing.footerText
+    footerText
   ].join("\n");
   return {
     html,
@@ -228,16 +214,16 @@ function resolveRouting() {
     recipientEmail: resolveEnvNetworkWeeklyRecipient(),
     recipientName: resolveEnvReplyToName() || null,
     brandName: resolveEnvBrandName(),
-    logoUrl: resolveEnvLogoUrl(),
-    footerText: resolveFooterText()
+    logoUrl: resolveEnvLogoUrl()
   };
 }
 function normalizeName(row, ctx) {
   const shortName = String(ctx?.library_short_name || row?.short_name || "").trim();
   const fullName = String(ctx?.library_name || row?.name || "").trim();
+  // sans aucun nom : chaîne vide, le rendu écrit « Bibliothèque » dans la langue du rapport
   return {
-    fullName: fullName || shortName || "Biblioteca sem nome",
-    shortName: shortName || fullName || "Biblioteca"
+    fullName: fullName || shortName,
+    shortName: shortName || fullName
   };
 }
 // ============================================================================
@@ -307,7 +293,8 @@ serve(async (req)=>{
     // F15 (24/09/2026) : le rapport hebdo du réseau part aux admins actif·ves
     // ET à la boîte collective (module partagé _shared/context/network-admins.ts),
     // le destinataire historique NETWORK_WEEKLY_REPORT_EMAIL restant en extra.
-    // Le rapport est rendu en portugais : une seule composition, N envois.
+    // Le rapport est rendu dans la langue de chaque destinataire (20/10/2026) :
+    // une composition par langue, N envois.
     // 422 seulement si PERSONNE n'est résolu·e — avant, une variable vide
     // suffisait à rendre le rapport muet.
     const destinataires = await destinatairesAdminsReseau(sb, {
@@ -500,157 +487,135 @@ serve(async (req)=>{
       inscricoes_leitores: 0,
       saidas_leitores: 0
     });
-    const summaryHtml = `
+    // Suite de F26 (20/10/2026) : le rapport était composé en pt-BR seul. Les
+    // chiffres se calculent une fois ; le rendu se fait dans la langue de chaque
+    // destinataire (profil des admins ; pt-BR pour la boîte collective et le
+    // destinataire historique), une composition par langue.
+    const ligneSynthese = (label, valeur, derniere = false)=>{
+      const bord = derniere ? "" : "border-bottom:1px solid rgba(255,255,255,.08);";
+      return `
+          <tr>
+            <td style="padding:10px;${bord}"><b>${esc(label)}</b></td>
+            <td style="padding:10px;${bord}text-align:right;"><b>${countOr0(valeur)}</b></td>
+          </tr>`;
+    };
+    const rendreRapport = (loc)=>{
+      const t = (cle, params)=>tMailTexte(loc, cle, params);
+      const nomCourt = (row)=>row.library_short_name || row.library_name || t("net.col.library");
+      const summaryHtml = `
       <div style="line-height:1.5;color:#f2f2f2;">
-        <p style="margin:0 0 10px 0;"><b>Rede:</b> ${esc(routing.brandName)}</p>
-        <p style="margin:0 0 10px 0;"><b>Período:</b> ${esc(formatBR(weekStart))} → ${esc(formatBR(weekEnd))} (${esc(tz)})</p>
+        <p style="margin:0 0 10px 0;"><b>${esc(t("net.lbl.network"))}</b> ${esc(routing.brandName)}</p>
+        <p style="margin:0 0 10px 0;"><b>${esc(t("net.lbl.period"))}</b> ${esc(formatDate(weekStart, loc))} → ${esc(formatDate(weekEnd, loc))} (${esc(tz)})</p>
         <table role="presentation" cellspacing="0" cellpadding="0"
-               style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:720px;">
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Bibliotecas ativas na rede</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.bibliotecas)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Bibliotecas com caixa semanal local</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.com_caixa_local)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Bibliotecas sem caixa semanal local</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.sem_caixa_local)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Canais locais desativados</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.canais_desativados)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Novas inscrições de leitores</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.inscricoes_leitores)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Saídas de leitores</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.saidas_leitores)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Reservas criadas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.reservas)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Consultas registradas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.consultas)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas propostas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.trocas)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Empréstimos criados</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.emprestimos_criados)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Renovações</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.renovacoes)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Devoluções</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.devolucoes)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (fim da semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.atrasos_ativos)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB criados na semana (intercâmbios)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebTotals.criados)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;"><b>EEB em circulação na rede (fim da semana)</b></td>
-            <td style="padding:10px;text-align:right;"><b>${countOr0(pebTotals.em_circulacao)}</b></td>
-          </tr>
+               style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:720px;">${[
+          ligneSynthese(t("net.sum.libraries"), totals.bibliotecas),
+          ligneSynthese(t("net.sum.withBox"), totals.com_caixa_local),
+          ligneSynthese(t("net.sum.withoutBox"), totals.sem_caixa_local),
+          ligneSynthese(t("net.sum.disabledChannels"), totals.canais_desativados),
+          ligneSynthese(t("net.sum.readersIn"), totals.inscricoes_leitores),
+          ligneSynthese(t("net.sum.readersOut"), totals.saidas_leitores),
+          ligneSynthese(t("net.sum.reservations"), totals.reservas),
+          ligneSynthese(t("net.sum.consultations"), totals.consultas),
+          ligneSynthese(t("net.sum.exchanges"), totals.trocas),
+          ligneSynthese(t("net.sum.loans"), totals.emprestimos_criados),
+          ligneSynthese(t("net.sum.renewals"), totals.renovacoes),
+          ligneSynthese(t("net.sum.returns"), totals.devolucoes),
+          ligneSynthese(t("net.sum.overdue"), totals.atrasos_ativos),
+          ligneSynthese(t("net.sum.illCreated"), pebTotals.criados),
+          ligneSynthese(t("net.sum.illCirculating"), pebTotals.em_circulacao, true)
+        ].join("")}
         </table>
       </div>
     `;
-    const perLibraryRows = librarySummaries.map((row)=>[
-        row.library_short_name,
-        row.weekly_report_email || "—",
-        row.channel_active ? deliveryModeLabel(row.delivery_mode) : `${deliveryModeLabel(row.delivery_mode)} (desativado)`,
-        countOr0(row.inscricoes_leitores),
-        countOr0(row.saidas_leitores),
-        countOr0(row.reservas),
-        countOr0(row.consultas),
-        countOr0(row.trocas),
-        countOr0(row.emprestimos_criados),
-        countOr0(row.renovacoes),
-        countOr0(row.devolucoes),
-        countOr0(row.atrasos_ativos)
-      ]);
-    const attentionRows = librarySummaries.filter((row)=>!row.weekly_report_email || !row.channel_active).map((row)=>[
-        row.library_short_name,
-        row.weekly_report_email || "sem e-mail de relatório semanal",
-        row.admin_notification_email || "sem e-mail de notificação",
-        row.channel_active ? deliveryModeLabel(row.delivery_mode) : "Canal desativado"
-      ]);
+      const perLibraryRows = librarySummaries.map((row)=>[
+          nomCourt(row),
+          row.weekly_report_email || "—",
+          row.channel_active ? deliveryModeLabel(row.delivery_mode, loc) : t("net.mode.disabledSuffix", { mode: deliveryModeLabel(row.delivery_mode, loc) }),
+          countOr0(row.inscricoes_leitores),
+          countOr0(row.saidas_leitores),
+          countOr0(row.reservas),
+          countOr0(row.consultas),
+          countOr0(row.trocas),
+          countOr0(row.emprestimos_criados),
+          countOr0(row.renovacoes),
+          countOr0(row.devolucoes),
+          countOr0(row.atrasos_ativos)
+        ]);
+      const attentionRows = librarySummaries.filter((row)=>!row.weekly_report_email || !row.channel_active).map((row)=>[
+          nomCourt(row),
+          row.weekly_report_email || t("net.attn.noWeeklyEmail"),
+          row.admin_notification_email || t("net.attn.noAdminEmail"),
+          row.channel_active ? deliveryModeLabel(row.delivery_mode, loc) : t("net.attn.channelDisabled")
+        ]);
 
-    // ─── Lignes du tableau des échanges PEB (#ILL-reports étape 2) ──────────
-    // Résolution des noms via summaryByLibrary, déjà rempli pour toutes les
-    // bibliothèques actives — pas de requête supplémentaire. Une bibliothèque
-    // inactive ou inconnue (cas limite) retombe sur son identifiant.
-    const pebLibLabel = (id)=>{
-      const entry = summaryByLibrary.get(String(id || ""));
-      return entry ? (entry.library_short_name || entry.library_name) : String(id || "—");
+      // ─── Lignes du tableau des échanges PEB (#ILL-reports étape 2) ────────
+      // Résolution des noms via summaryByLibrary, déjà rempli pour toutes les
+      // bibliothèques actives — pas de requête supplémentaire. Une bibliothèque
+      // inactive ou inconnue (cas limite) retombe sur son identifiant.
+      const pebLibLabel = (id)=>{
+        const entry = summaryByLibrary.get(String(id || ""));
+        return entry ? nomCourt(entry) : String(id || "—");
+      };
+      const pebExchangeRows = pebCreated.map((p)=>[
+          pebLibLabel(p.lender_library_id),
+          pebLibLabel(p.borrower_library_id),
+          pebStatusLabel(p.status_global, loc),
+          String(pebItemCountByLoan.get(String(p.id)) || 0),
+          formatDate(String(p.created_at || "").slice(0, 10), loc)
+        ]);
+
+      const subject = t("net.subject", { brand: routing.brandName, start: formatDate(weekStart, loc), end: formatDate(weekEnd, loc) });
+      const { html, text } = renderEmail({
+        locale: loc,
+        subject,
+        title: t("net.title", { brand: routing.brandName }),
+        preheader: t("net.preheader", { brand: routing.brandName }),
+        summaryHtml,
+        tablesHtml: [
+          renderTable(t("net.tbl.perLibrary"), [
+            "net.col.library",
+            "net.col.localBox",
+            "net.col.channel",
+            "net.col.readersIn",
+            "net.col.readersOut",
+            "net.col.reservations",
+            "net.col.consultations",
+            "net.col.exchanges",
+            "net.col.loans",
+            "net.col.renewals",
+            "net.col.returns",
+            "net.col.overdue"
+          ].map((c)=>t(c)), perLibraryRows),
+          renderTable(t("net.tbl.attention"), [
+            "net.col.library",
+            "net.col.weeklyEmail",
+            "net.col.adminEmail",
+            "net.col.state"
+          ].map((c)=>t(c)), attentionRows),
+          renderTable(t("net.tbl.ill"), [
+            "net.col.lender",
+            "net.col.borrower",
+            "net.col.state",
+            "net.col.documents",
+            "net.col.createdAt"
+          ].map((c)=>t(c)), pebExchangeRows)
+        ],
+        routing
+      });
+      return { subject, html, text };
     };
-    const pebExchangeRows = pebCreated.map((p)=>[
-        pebLibLabel(p.lender_library_id),
-        pebLibLabel(p.borrower_library_id),
-        pebStatusLabel(p.status_global),
-        String(pebItemCountByLoan.get(String(p.id)) || 0),
-        String(p.created_at || "").slice(0, 10) || "—"
-      ]);
-
-    const subject = `${routing.brandName} · Relatório semanal da rede (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
-    const title = `Relatório semanal da rede — ${routing.brandName}`;
-    const { html, text } = renderEmail({
-      subject,
-      title,
-      preheader: `${routing.brandName} · resumo global das bibliotecas`,
-      summaryHtml,
-      tablesHtml: [
-        renderTable("Síntese por biblioteca", [
-          "Biblioteca",
-          "Caixa local",
-          "Canal",
-          "Inscrições",
-          "Saídas",
-          "Reservas",
-          "Consultas",
-          "Trocas",
-          "Empréstimos",
-          "Renovações",
-          "Devoluções",
-          "Atrasos"
-        ], perLibraryRows),
-        renderTable("Pontos de atenção de configuração", [
-          "Biblioteca",
-          "E-mail de relatório semanal",
-          "E-mail de notificação (admin)",
-          "Estado"
-        ], attentionRows),
-        renderTable("Intercâmbios interbibliotecas da rede (EEB criados na semana)", [
-          "Biblioteca emprestadora",
-          "Biblioteca tomadora",
-          "Estado",
-          "Documentos",
-          "Criado em"
-        ], pebExchangeRows)
-      ],
-      routing
-    });
+    const rendus = new Map();
+    const rendu = (loc)=>{
+      if (!rendus.has(loc)) rendus.set(loc, rendreRapport(loc));
+      return rendus.get(loc);
+    };
     // Transport mail : envoi via Resend (chantier #110, Brevo retire en R.6).
-    // routing / subject / html / text deja calcules.
     // Un refus n'empêche pas les envois suivants ; il est relevé à la fin,
     // avec l'adresse, et fait 500 (le cron le voit, le transport partagé a
     // déjà noté l'échec pour la sonde mail_transport).
     const refus = [];
     for (const to of destinataires) {
+      const { subject, html, text } = rendu(to.locale || LOCALE_BOITE_COLLECTIVE);
       try {
         await sendEmail({ routing, subject, html, text, to });
       } catch (e) {
@@ -664,7 +629,9 @@ serve(async (req)=>{
       week_start: weekStart,
       week_end: weekEnd,
       recipient_emails: destinataires.map((d)=>d.email),
-      subject,
+      // l'objet dans la langue de référence, et celui de chaque langue rendue
+      subject: rendu(LOCALE_BOITE_COLLECTIVE).subject,
+      subjects: Object.fromEntries([...rendus].map(([loc, r])=>[loc, r.subject])),
       totals,
       peb_totals: pebTotals,
       libraries: librarySummaries

@@ -301,13 +301,20 @@ describe('notify-network-weekly-report — le rapport part aux admins, à la bo�
     body: JSON.stringify({ week_start: '2026-09-21', week_end: '2026-09-27' }),
   }));
 
-  it('trois envois du même rapport ; la réponse nomme les adresses', async () => {
+  // Depuis le 20/10/2026 (suite de F26), le rapport est rendu dans la langue de
+  // chaque destinataire : l'admin en fr, la boîte et le destinataire historique
+  // en pt-BR — deux compositions pour trois envois.
+  it('trois envois, une composition par langue ; la réponse nomme les adresses', async () => {
     const ef = monter({ NETWORK_ADMIN_CC: 'admins@exemplo.test', NETWORK_WEEKLY_REPORT_EMAIL: 'rapport@exemplo.test' });
     const { statut, corps } = await appeler(ef);
     expect(statut, JSON.stringify(corps)).toBe(200);
     expect(corps.recipient_emails).toEqual(['xavier@exemplo.test', 'admins@exemplo.test', 'rapport@exemplo.test']);
     expect(ef.envois.map((e) => e.to[0])).toEqual(['xavier@exemplo.test', 'admins@exemplo.test', 'rapport@exemplo.test']);
-    expect(new Set(ef.envois.map((e) => e.subject)).size).toBe(1);
+    const objet = (adr) => ef.envois.find((e) => e.to[0] === adr).subject;
+    expect(objet('admins@exemplo.test')).toBe(objet('rapport@exemplo.test'));
+    expect(objet('xavier@exemplo.test')).not.toBe(objet('admins@exemplo.test'));
+    expect(Object.keys(corps.subjects).sort()).toEqual(['fr', 'pt-BR']);
+    expect(corps.subject).toBe(objet('admins@exemplo.test'));
   });
 
   it('sans variable ni destinataire historique : les admins actif·ves suffisent (avant, 422)', async () => {

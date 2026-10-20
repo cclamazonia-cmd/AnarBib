@@ -250,3 +250,113 @@ describe('F26 — notify-document-permission-request parle la langue de chaque d
     expect(mailA(ef.envois, 'b@exemplo.test').subject).toBe(`[AnarBib] ${mail.tMailTexte('pt-BR', 'docperm.created.subject', noms)}`);
   });
 });
+
+// ─── Suite de F26 (20/10/2026) : le rapport hebdomadaire du réseau ──────────────
+// notify-network-weekly-report était composé en pt-BR seul, dans le code (son
+// pied suivait donc le pt-BR). Il se rend désormais dans la langue de chaque
+// destinataire : clés net.*, une composition par langue.
+const PROSE_PT_RAPPORT = /\b(relat[oó]rio|semanal|bibliotecas?|empr[eé]stimos?|devolu[cç][oõ]es|renova[cç][oõ]es|atrasos?|inscri[cç][oõ]es|sa[ií]das|caixa|desativad[oa]s?|plataforma|coordena[cç][aã]o|s[ií]ntese|criad[oa]s?|propostas?|pontos|aten[cç][aã]o|configura[cç][aã]o)\b/i;
+const CLES_NET = mail._allKeys().filter((k) => k.startsWith('net.'));
+
+describe('suite de F26 — notify-network-weekly-report n’a plus de texte portugais en dur', () => {
+  it('aucun littéral ne porte de prose portugaise', () => {
+    const fautes = litteraux(code('notify-network-weekly-report/index.ts')).filter((t) => PROSE_PT_RAPPORT.test(t));
+    expect(fautes, fautes.join('\n')).toEqual([]);
+  });
+
+  it('contre-épreuve : la garde voit les phrases d’avant', () => {
+    for (const avant of ['Relatório semanal da rede', 'Bibliotecas com caixa semanal local', 'Pontos de atenção de configuração',
+      'sem e-mail de relatório semanal', 'Coordenação de rede', 'Transporte próprio da biblioteca']) {
+      expect(PROSE_PT_RAPPORT.test(avant), avant).toBe(true);
+    }
+  });
+
+  it('les clés net.* : complètes dans les onze langues, aucune copie du pt-BR', () => {
+    expect(CLES_NET.length).toBeGreaterThanOrEqual(55);
+    expect(CLES_NET.filter((k) => !mail._isComplete(k))).toEqual([]);
+    const copies = [];
+    for (const k of CLES_NET) {
+      const pt = mail.tMailTexte('pt-BR', k);
+      if (pt.length <= 25 || !/\s/.test(pt)) continue;
+      for (const l of LOCALES) if (l !== 'pt-BR' && mail.tMailTexte(l, k) === pt) copies.push(`${k} [${l}]`);
+    }
+    expect(copies).toEqual([]);
+  });
+
+  it('chaque clé citée par la fonction existe, et chaque statut de prêt a son libellé', () => {
+    const src = code('notify-network-weekly-report/index.ts');
+    const citees = [...src.matchAll(/["'](net\.[A-Za-z_.]+[A-Za-z_])["']/g)].map((m) => m[1]);
+    expect(citees.length).toBeGreaterThan(40);
+    expect(citees.filter((k) => !CLES_NET.includes(k))).toEqual([]);
+    for (const s of ['preparacao', 'aguardando_saida', 'emprestado', 'parcialmente_devolvido', 'em_devolucao', 'devolvido', 'cancelado', 'atrasado']) {
+      expect(CLES_NET, s).toContain(`net.ill.${s}`);
+    }
+    for (const m of ['platform_shared', 'platform_shared_local_reply', 'library_own_transport', 'disabled']) {
+      expect(CLES_NET, m).toContain(`net.mode.${m}`);
+    }
+  });
+
+  it('français sans vouvoiement, pt-BR sans « tu »', () => {
+    const fautes = CLES_NET.flatMap((k) => [['fr', mail.tMailTexte('fr', k)], ['pt-BR', mail.tMailTexte('pt-BR', k)]]
+      .filter(([l, v]) => (l === 'fr' ? /\b(vous|votre|vos)\b|\b\p{L}+ez\b/iu : /\b(tu|teu|tua|vós|vosso)\b/i).test(v))
+      .map(([l]) => `${k} [${l}]`));
+    expect(fautes).toEqual([]);
+  });
+});
+
+describe('suite de F26 — le rapport hebdomadaire part dans la langue de chaque destinataire', () => {
+  const SECRET_RAPPORT = 'secret-rapport';
+  const ADMIN_FR = { id: 'u-adm', email: 'xavier@exemplo.test', first_name: 'Xavier', preferred_language: 'fr' };
+  function monterRapport() {
+    return monterEF({
+      entree: 'notify-network-weekly-report/index.ts',
+      env: { WEBHOOK_SECRET_NOTIFY_NETWORK_WEEKLY_REPORT: SECRET_RAPPORT, SENDER_EMAIL: 'no-reply@exemplo.test', NETWORK_ADMIN_CC: 'admins@exemplo.test',
+        FOOTER_TEXT: 'Devise globale à ne plus lire', NETWORK_FOOTER_TEXT: 'Devise réseau à ne plus lire' },
+      repondre: (_s, table, a) => {
+        if (table === 'libraries') return { data: [{ id: 'lib-a', name: 'Bibliothèque A', short_name: 'BA', is_active: true }, { id: 'lib-b', name: 'Bibliotheek B', short_name: 'BB', is_active: true }], error: null };
+        if (table === 'v_library_notification_context') return { data: [
+          { library_id: 'lib-a', library_short_name: 'BA', delivery_mode: 'platform_shared', weekly_report_email: 'ba@exemplo.test', channel_active: true },
+          { library_id: 'lib-b', library_short_name: 'BB', delivery_mode: 'library_own_transport', weekly_report_email: null, channel_active: false },
+        ], error: null };
+        if (table === 'interlibrary_loans_v2') {
+          if (a('in')) return { data: [{ id: 'p-1' }], error: null };
+          return { data: [{ id: 'p-1', lender_library_id: 'lib-a', borrower_library_id: 'lib-b', status_global: 'emprestado', created_at: '2026-10-14T09:00:00Z' }], error: null };
+        }
+        if (table === 'interlibrary_loan_items_v2') return { data: [{ interlibrary_loan_id: 'p-1' }, { interlibrary_loan_id: 'p-1' }], error: null };
+        if (table === 'network_administrators') return { data: [{ user_id: 'u-adm' }], error: null };
+        if (table === 'profiles') return { data: [ADMIN_FR], error: null };
+        return { data: [], error: null };
+      },
+    });
+  }
+  const appelerRapport = (ef) => ef.appeler(new Request('http://ef.local/', {
+    method: 'POST', headers: { 'x-webhook-secret': SECRET_RAPPORT, 'content-type': 'application/json' },
+    body: JSON.stringify({ week_start: '2026-10-12', week_end: '2026-10-18' }),
+  }));
+
+  it('l’admin le lit en français, la boîte collective en pt-BR, pied compris', async () => {
+    const ef = monterRapport();
+    const { statut, corps } = await appelerRapport(ef);
+    expect(statut, JSON.stringify(corps)).toBe(200);
+    const fr = mailA(ef.envois, 'xavier@exemplo.test');
+    const pt = mailA(ef.envois, 'admins@exemplo.test');
+
+    expect(fr.subject).toBe(mail.tMailTexte('fr', 'net.subject', { brand: 'AnarBib', start: '12/10/2026', end: '18/10/2026' }));
+    expect(fr.html).toContain('<html lang="fr">');
+    for (const cle of ['net.kicker', 'net.tbl.perLibrary', 'net.sum.illCreated', 'net.col.lender', 'net.ill.emprestado',
+      'net.attn.channelDisabled', 'net.attn.noWeeklyEmail', 'layout.footerTextNetwork']) {
+      expect(fr.html, cle).toContain(mail.tMailTexte('fr', cle).replace(/'/g, '&#039;'));
+    }
+    expect(fr.html).toContain(mail.tMailTexte('fr', 'net.mode.disabledSuffix', { mode: mail.tMailTexte('fr', 'net.mode.library_own_transport') }));
+    expect(fr.html).not.toMatch(/Relatório|Síntese|Bibliotecas|Coordenação|Emprestado/);
+    expect(fr.text).toContain(mail.tMailTexte('fr', 'layout.footerTextNetwork'));
+
+    expect(pt.subject).toBe(mail.tMailTexte('pt-BR', 'net.subject', { brand: 'AnarBib', start: '12/10/2026', end: '18/10/2026' }));
+    expect(pt.html).toContain('<html lang="pt-BR">');
+    expect(pt.html).toContain(mail.tMailTexte('pt-BR', 'net.ill.emprestado'));
+    for (const e of ef.envois) {
+      expect(e.html).not.toMatch(/Devise (globale|réseau)/);
+      for (const repli of REPLIS_PT) expect(e.html).not.toContain(repli);
+    }
+  });
+});

@@ -232,7 +232,8 @@ describe('courriel de bienvenue = écran de fin d\'inscription', () => {
 // espace est un identifiant (« reserva_cancelada_leitor »), pas de la prose.
 const TEXTE_EN_DUR_PT = [
   'notify-weekly-report/index.ts',
-  'notify-network-weekly-report/index.ts',
+  // 'notify-network-weekly-report/index.ts' en est sorti le 20/10/2026 (suite de
+  // F26) : ses chaînes passent par mail-strings.ts (clés net.*), onze langues.
   // 'notify-document-permission-request/index.ts' en est sorti le 19/10/2026 (F26) :
   // ses chaînes passent par mail-strings.ts (clés docperm.*), onze langues ; la
   // garde f26-pieds-de-courriel veille à ce qu'aucune prose portugaise n'y revienne.
