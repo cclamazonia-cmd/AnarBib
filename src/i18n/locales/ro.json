@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Gata: {posees, plural, one {# copertă pusă} few {# coperte puse} other {# de coperte puse}}, {echecs, plural, one {# PDF ilizibil} few {# PDF-uri ilizibile} other {# de PDF-uri ilizibile}}.",
   "capas.pdf.arretee": "Oprit: {posees, plural, one {# copertă pusă} few {# coperte puse} other {# de coperte puse}}, {echecs, plural, one {# PDF ilizibil} few {# PDF-uri ilizibile} other {# de PDF-uri ilizibile}}. Restul așteaptă următorul clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF neredat} few {# PDF-uri neredate} other {# de PDF-uri neredate}} (fișier ilizibil sau inaccesibil)",
-  "error.capas.sans_pdf": "Această fișă nu are niciun PDF depus și activ: nu există pagina 1 de folosit drept copertă."
+  "error.capas.sans_pdf": "Această fișă nu are niciun PDF depus și activ: nu există pagina 1 de folosit drept copertă.",
+  "capas.pdf.choix": "Biblioteca tratată (administrarea rețelei):",
+  "capas.pdf.bibCourante": "Biblioteca curentă din Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# fișă} few {# fișe} other {# de fișe}}"
 }

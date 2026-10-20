@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Terminé : {posees, plural, one {# couverture posée} other {# couvertures posées}}, {echecs, plural, one {# PDF illisible} other {# PDF illisibles}}.",
   "capas.pdf.arretee": "Arrêté : {posees, plural, one {# couverture posée} other {# couvertures posées}}, {echecs, plural, one {# PDF illisible} other {# PDF illisibles}}. Le reste attend le prochain clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF non rendu} other {# PDF non rendus}} (fichier illisible ou injoignable)",
-  "error.capas.sans_pdf": "Cette notice n’a aucun PDF versé et actif : pas de page 1 à poser comme couverture."
+  "error.capas.sans_pdf": "Cette notice n’a aucun PDF versé et actif : pas de page 1 à poser comme couverture.",
+  "capas.pdf.choix": "Bibliothèque traitée (administration du réseau) :",
+  "capas.pdf.bibCourante": "Bibliothèque courante du Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# notice} other {# notices}}"
 }

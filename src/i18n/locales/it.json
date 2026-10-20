@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Fatto: {posees, plural, one {# copertina applicata} other {# copertine applicate}}, {echecs, plural, one {# PDF illeggibile} other {# PDF illeggibili}}.",
   "capas.pdf.arretee": "Interrotto: {posees, plural, one {# copertina applicata} other {# copertine applicate}}, {echecs, plural, one {# PDF illeggibile} other {# PDF illeggibili}}. Il resto attende il prossimo clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF non renderizzato} other {# PDF non renderizzati}} (file illeggibile o irraggiungibile)",
-  "error.capas.sans_pdf": "Questa scheda non ha alcun PDF depositato e attivo: nessuna pagina 1 da usare come copertina."
+  "error.capas.sans_pdf": "Questa scheda non ha alcun PDF depositato e attivo: nessuna pagina 1 da usare come copertina.",
+  "capas.pdf.choix": "Biblioteca trattata (amministrazione della rete):",
+  "capas.pdf.bibCourante": "Biblioteca corrente del Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# scheda} other {# schede}}"
 }

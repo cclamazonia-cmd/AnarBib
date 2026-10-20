@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Fet: {posees, plural, one {# coberta posada} other {# cobertes posades}}, {echecs, plural, one {# PDF il·legible} other {# PDF il·legibles}}.",
   "capas.pdf.arretee": "Aturat: {posees, plural, one {# coberta posada} other {# cobertes posades}}, {echecs, plural, one {# PDF il·legible} other {# PDF il·legibles}}. La resta espera el proper clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF no renderitzat} other {# PDF no renderitzats}} (fitxer il·legible o inaccessible)",
-  "error.capas.sans_pdf": "Aquesta fitxa no té cap PDF dipositat i actiu: no hi ha pàgina 1 per fer servir de coberta."
+  "error.capas.sans_pdf": "Aquesta fitxa no té cap PDF dipositat i actiu: no hi ha pàgina 1 per fer servir de coberta.",
+  "capas.pdf.choix": "Biblioteca tractada (administració de la xarxa):",
+  "capas.pdf.bibCourante": "Biblioteca actual del Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# fitxa} other {# fitxes}}"
 }

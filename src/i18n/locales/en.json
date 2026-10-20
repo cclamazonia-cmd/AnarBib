@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Done: {posees, plural, one {# cover set} other {# covers set}}, {echecs, plural, one {# unreadable PDF} other {# unreadable PDFs}}.",
   "capas.pdf.arretee": "Stopped: {posees, plural, one {# cover set} other {# covers set}}, {echecs, plural, one {# unreadable PDF} other {# unreadable PDFs}}. The rest waits for the next click.",
   "capas.pdf.echecs": "{n, plural, one {# PDF not rendered} other {# PDFs not rendered}} (file unreadable or unreachable)",
-  "error.capas.sans_pdf": "This record has no active deposited PDF: there is no page 1 to use as a cover."
+  "error.capas.sans_pdf": "This record has no active deposited PDF: there is no page 1 to use as a cover.",
+  "capas.pdf.choix": "Library to process (network administration):",
+  "capas.pdf.bibCourante": "Current Painel library",
+  "capas.pdf.option": "{nom} — {n, plural, one {# record} other {# records}}"
 }

@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Ολοκληρώθηκε: {posees, plural, one {# εξώφυλλο τοποθετήθηκε} other {# εξώφυλλα τοποθετήθηκαν}}, {echecs, plural, one {# μη αναγνώσιμο PDF} other {# μη αναγνώσιμα PDF}}.",
   "capas.pdf.arretee": "Διακόπηκε: {posees, plural, one {# εξώφυλλο τοποθετήθηκε} other {# εξώφυλλα τοποθετήθηκαν}}, {echecs, plural, one {# μη αναγνώσιμο PDF} other {# μη αναγνώσιμα PDF}}. Τα υπόλοιπα περιμένουν το επόμενο κλικ.",
   "capas.pdf.echecs": "{n, plural, one {# PDF δεν αποδόθηκε} other {# PDF δεν αποδόθηκαν}} (αρχείο μη αναγνώσιμο ή απρόσιτο)",
-  "error.capas.sans_pdf": "Αυτή η εγγραφή δεν έχει ενεργό κατατεθειμένο PDF: δεν υπάρχει σελίδα 1 για εξώφυλλο."
+  "error.capas.sans_pdf": "Αυτή η εγγραφή δεν έχει ενεργό κατατεθειμένο PDF: δεν υπάρχει σελίδα 1 για εξώφυλλο.",
+  "capas.pdf.choix": "Βιβλιοθήκη προς επεξεργασία (διαχείριση δικτύου):",
+  "capas.pdf.bibCourante": "Τρέχουσα βιβλιοθήκη του Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# εγγραφή} other {# εγγραφές}}"
 }

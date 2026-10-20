@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Farite: {posees, plural, one {# kovrilo metita} other {# kovriloj metitaj}}, {echecs, plural, one {# nelegebla PDF} other {# nelegeblaj PDF-oj}}.",
   "capas.pdf.arretee": "Haltigita: {posees, plural, one {# kovrilo metita} other {# kovriloj metitaj}}, {echecs, plural, one {# nelegebla PDF} other {# nelegeblaj PDF-oj}}. La resto atendas la sekvan klakon.",
   "capas.pdf.echecs": "{n, plural, one {# PDF ne bildigita} other {# PDF-oj ne bildigitaj}} (dosiero nelegebla aŭ neatingebla)",
-  "error.capas.sans_pdf": "Ĉi tiu katalogero ne havas aktivan deponitan PDF: ne estas paĝo 1 uzebla kiel kovrilo."
+  "error.capas.sans_pdf": "Ĉi tiu katalogero ne havas aktivan deponitan PDF: ne estas paĝo 1 uzebla kiel kovrilo.",
+  "capas.pdf.choix": "Traktata biblioteko (administrado de la reto):",
+  "capas.pdf.bibCourante": "Nuna biblioteko de la Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# katalogero} other {# katalogeroj}}"
 }

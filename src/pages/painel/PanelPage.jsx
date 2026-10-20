@@ -908,7 +908,7 @@ function PanelPageInner() {
 
           {/* ═══ Capas (photographier les couvertures, 27/09/2026) ═══ */}
           {tab === 'capas' && canRecolement && (
-            <TabCapas t={t} libraryId={libraryId} />
+            <TabCapas t={t} libraryId={libraryId} isNetworkAdmin={isNetworkAdmin} />
           )}
 
           </Suspense>

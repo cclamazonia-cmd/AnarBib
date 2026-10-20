@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Klaar: {posees, plural, one {# omslag geplaatst} other {# omslagen geplaatst}}, {echecs, plural, one {# onleesbare PDF} other {# onleesbare PDF’s}}.",
   "capas.pdf.arretee": "Gestopt: {posees, plural, one {# omslag geplaatst} other {# omslagen geplaatst}}, {echecs, plural, one {# onleesbare PDF} other {# onleesbare PDF’s}}. De rest wacht op de volgende klik.",
   "capas.pdf.echecs": "{n, plural, one {# PDF niet weergegeven} other {# PDF’s niet weergegeven}} (bestand onleesbaar of onbereikbaar)",
-  "error.capas.sans_pdf": "Deze fiche heeft geen actieve geüploade PDF: er is geen pagina 1 om als omslag te gebruiken."
+  "error.capas.sans_pdf": "Deze fiche heeft geen actieve geüploade PDF: er is geen pagina 1 om als omslag te gebruiken.",
+  "capas.pdf.choix": "Behandelde bibliotheek (netwerkbeheer):",
+  "capas.pdf.bibCourante": "Huidige bibliotheek van het Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# fiche} other {# fiches}}"
 }

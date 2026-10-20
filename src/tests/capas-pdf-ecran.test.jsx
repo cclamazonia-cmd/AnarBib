@@ -91,16 +91,46 @@ function parDefaut({ resume = { faisables: 2, restreintes: 40, posees: 0 }, pose
   };
 }
 
-function AvecIntl({ onPosees }) {
+function AvecIntl({ onPosees, lib = LIB, admin = false }) {
   const { formatMessage } = useIntl();
-  return <CapasPdfLot t={formatMessage} libraryId={LIB} onPosees={onPosees} />;
+  return <CapasPdfLot t={formatMessage} libraryId={lib} isNetworkAdmin={admin} onPosees={onPosees} />;
 }
-const rendre = (onPosees = vi.fn()) => render(<IntlProvider locale="fr" messages={fr}><AvecIntl onPosees={onPosees} /></IntlProvider>);
+const rendre = (onPosees = vi.fn(), opts = {}) => render(<IntlProvider locale="fr" messages={fr}><AvecIntl onPosees={onPosees} {...opts} /></IntlProvider>);
 const appels = (nom) => etat.appels.filter(([n]) => n === nom).map(([, a]) => a);
 
 beforeEach(() => {
   etat.appels = []; etat.retraits = []; etat.envois = []; etat.rendus = []; etat.illisibles = new Set(); etat.telecharges = [];
   parDefaut();
+});
+
+describe('CapasPdfLot — l’administration du réseau choisit la bibliothèque', () => {
+  const BLMF = 'b1af0000-0000-4000-8000-000000000001';
+
+  it('un compte sans administration réseau ne demande pas la liste', async () => {
+    rendre();
+    await screen.findByRole('button', { name: 'Poser la page 1 comme couverture (2)' });
+    expect(appels('capas_pdf_bibliotheques')).toHaveLength(0);
+    expect(document.querySelector('[data-capas-pdf-choix]')).toBeNull();
+  });
+
+  it('depuis BLMF, l’admin réseau prend Anarchief et la passe porte sur Anarchief', async () => {
+    parDefaut();
+    const resumeAnarchief = etat.reponses.capas_pdf_resume;
+    etat.reponses.capas_pdf_resume = (a) => (a.p_library_id === LIB ? resumeAnarchief : { data: { faisables: 0, restreintes: 0, posees: 2 }, error: null });
+    etat.reponses.capas_pdf_bibliotheques = { data: [{ library_id: LIB, nom: 'Anarchief.Org', faisables: 612, restreintes: 40 }], error: null };
+    const onPosees = vi.fn();
+    rendre(onPosees, { lib: BLMF, admin: true });
+
+    const choix = await waitFor(() => { const el = document.querySelector('[data-capas-pdf-choix]'); expect(el).not.toBeNull(); return el; });
+    expect([...choix.options].map((o) => o.textContent)).toEqual(['Bibliothèque courante du Painel', 'Anarchief.Org — 612 notices']);
+    fireEvent.change(choix, { target: { value: LIB } });
+    fireEvent.click(await screen.findByRole('button', { name: 'Poser la page 1 comme couverture (2)' }));
+    await screen.findByText('Terminé : 2 couvertures posées, 0 PDF illisible.');
+
+    expect(appels('capas_pdf_liste').every((a) => a.p_library_id === LIB)).toBe(true);
+    // Les couvertures posées ne sont pas celles de la bibliothèque du Painel : sa liste photo ne bouge pas.
+    expect(onPosees).not.toHaveBeenCalled();
+  });
 });
 
 describe('CapasPdfLot — la page 1 des PDF en lot', () => {

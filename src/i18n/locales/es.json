@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Terminado: {posees, plural, one {# portada puesta} other {# portadas puestas}}, {echecs, plural, one {# PDF ilegible} other {# PDF ilegibles}}.",
   "capas.pdf.arretee": "Detenido: {posees, plural, one {# portada puesta} other {# portadas puestas}}, {echecs, plural, one {# PDF ilegible} other {# PDF ilegibles}}. El resto espera al próximo clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF no renderizado} other {# PDF no renderizados}} (archivo ilegible o inaccesible)",
-  "error.capas.sans_pdf": "Este registro no tiene ningún PDF depositado y activo: no hay página 1 para usar como portada."
+  "error.capas.sans_pdf": "Este registro no tiene ningún PDF depositado y activo: no hay página 1 para usar como portada.",
+  "capas.pdf.choix": "Biblioteca tratada (administración de la red):",
+  "capas.pdf.bibCourante": "Biblioteca actual del Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# registro} other {# registros}}"
 }

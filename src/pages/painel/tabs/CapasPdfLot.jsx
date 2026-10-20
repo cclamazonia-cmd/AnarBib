@@ -26,11 +26,18 @@ import { SEAU_PDF_PUBLIC, canvasEnJpeg, rendrePage1, urlPdfPublic } from '@/lib/
 //
 // Rien ne s'affiche pour une bibliothèque sans PDF : le bloc ne gêne pas la
 // campagne photo des fonds physiques.
+//
+// L'administration du réseau choisit la bibliothèque traitée (20/10/2026) : le
+// Painel ne se place que là où le compte a une adhésion, et le réseau, qui suit
+// le fonds d'Anarchief, n'y est pas coordinateur. Les RPC l'acceptent déjà pour
+// toute bibliothèque ; api.capas_pdf_bibliotheques dit lesquelles ont à faire.
 // ═══════════════════════════════════════════════════════════
 
 const LOT = 10;
 
-export default function CapasPdfLot({ t, libraryId, onPosees }) {
+export default function CapasPdfLot({ t, libraryId, isNetworkAdmin = false, onPosees }) {
+  const [cible, setCible] = useState(libraryId);   // la bibliothèque traitée
+  const [choix, setChoix] = useState([]);          // admin réseau : où il y a à faire
   const [resume, setResume] = useState(null);
   const [enCours, setEnCours] = useState(false);
   const [courante, setCourante] = useState('');
@@ -38,12 +45,21 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const arret = useRef(false);
 
-  const chargerResume = useCallback(async () => {
-    if (!libraryId) return;
-    const { data, error } = await supabase.schema('api').rpc('capas_pdf_resume', { p_library_id: libraryId });
-    if (!error) setResume(data);
-  }, [libraryId]);
+  useEffect(() => { setCible(libraryId); }, [libraryId]);
 
+  const chargerChoix = useCallback(async () => {
+    if (!isNetworkAdmin) return;
+    const { data, error } = await supabase.schema('api').rpc('capas_pdf_bibliotheques');
+    if (!error) setChoix(data || []);
+  }, [isNetworkAdmin]);
+
+  const chargerResume = useCallback(async () => {
+    if (!cible) return;
+    const { data, error } = await supabase.schema('api').rpc('capas_pdf_resume', { p_library_id: cible });
+    if (!error) setResume(data);
+  }, [cible]);
+
+  useEffect(() => { chargerChoix(); }, [chargerChoix]);
   useEffect(() => { chargerResume(); }, [chargerResume]);
   // Quitter l'onglet arrête la passe à la notice suivante.
   useEffect(() => () => { arret.current = true; }, []);
@@ -113,7 +129,7 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
       for (;;) {
         if (arret.current) break;
         const { data, error } = await supabase.schema('api').rpc('capas_pdf_liste', {
-          p_library_id: libraryId, p_limite: LOT, p_exclure: echecs.map((e) => e.book_id),
+          p_library_id: cible, p_limite: LOT, p_exclure: echecs.map((e) => e.book_id),
         });
         if (error) throw error;
         const lot = data || [];
@@ -143,7 +159,8 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
       setEnCours(false);
       setCourante('');
       await chargerResume();
-      if (posees > 0) onPosees?.();
+      await chargerChoix();
+      if (posees > 0 && cible === libraryId) onPosees?.();
     }
   }
 
@@ -151,7 +168,8 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
   const faisables = Number(resume.faisables ?? 0);
   const restreintes = Number(resume.restreintes ?? 0);
   const deja = Number(resume.posees ?? 0);
-  if (!faisables && !restreintes && !deja && !bilan) return null;
+  const ailleurs = choix.filter((c) => c.library_id !== libraryId);
+  if (!faisables && !restreintes && !deja && !bilan && !ailleurs.length) return null;
 
   const couleur = msg.kind === 'error' ? 'var(--color-danger, #f87171)' : msg.kind === 'ok' ? 'var(--color-success, #4ade80)' : undefined;
 
@@ -159,6 +177,22 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
     <section className="ab-capas-pdf" data-capas-pdf
       style={{ border: '1px solid rgba(255,255,255,.14)', borderRadius: 10, padding: 12, marginBottom: 18, background: 'rgba(0,0,0,.18)' }}>
       <h2 className="ab-painel-section-title" style={{ marginTop: 0 }}>{t({ id: 'capas.pdf.titre' })}</h2>
+      {ailleurs.length > 0 && (
+        <label className="ab-painel-hint" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+          {t({ id: 'capas.pdf.choix' })}
+          <select value={cible || ''} disabled={enCours} data-capas-pdf-choix
+            onChange={(e) => { setCible(e.target.value); setResume(null); setBilan(null); setMsg({ text: '', kind: '' }); }}
+            style={{ minWidth: 0, maxWidth: '100%', fontSize: 16, padding: '6px 10px', borderRadius: 8,
+                     border: '1px solid rgba(255,255,255,.16)', background: 'rgba(0,0,0,.30)', color: 'inherit' }}>
+            {!choix.some((c) => c.library_id === libraryId) && (
+              <option value={libraryId}>{t({ id: 'capas.pdf.bibCourante' })}</option>
+            )}
+            {choix.map((c) => (
+              <option key={c.library_id} value={c.library_id}>{t({ id: 'capas.pdf.option' }, { nom: c.nom, n: Number(c.faisables) })}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <p className="ab-painel-hint">{t({ id: 'capas.pdf.intro' }, { n: faisables })}</p>
       {deja > 0 && <p className="ab-painel-hint">{t({ id: 'capas.pdf.deja' }, { n: deja })}</p>}
       {restreintes > 0 && <p className="ab-painel-hint" data-capas-pdf-restreintes>{t({ id: 'capas.pdf.restreintes' }, { n: restreintes })}</p>}

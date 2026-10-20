@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Concluído: {posees, plural, one {# capa colocada} other {# capas colocadas}}, {echecs, plural, one {# PDF ilegível} other {# PDF ilegíveis}}.",
   "capas.pdf.arretee": "Interrompido: {posees, plural, one {# capa colocada} other {# capas colocadas}}, {echecs, plural, one {# PDF ilegível} other {# PDF ilegíveis}}. O resto espera o próximo clique.",
   "capas.pdf.echecs": "{n, plural, one {# PDF não renderizado} other {# PDF não renderizados}} (arquivo ilegível ou inacessível)",
-  "error.capas.sans_pdf": "Esta ficha não tem PDF depositado e ativo: não há página 1 para usar como capa."
+  "error.capas.sans_pdf": "Esta ficha não tem PDF depositado e ativo: não há página 1 para usar como capa.",
+  "capas.pdf.choix": "Biblioteca tratada (administração da rede):",
+  "capas.pdf.bibCourante": "Biblioteca atual do Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# ficha} other {# fichas}}"
 }

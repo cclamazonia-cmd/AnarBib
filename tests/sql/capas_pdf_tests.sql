@@ -12,7 +12,9 @@
 --   · poser : provenance pdf_page1, dossier de la notice (bib_ref nettoyée,
 --     ou l'id quand elle manque) ; jamais de remplacement ; jamais sans PDF
 --     actif ; une proposition du lot en attente devient sans objet ;
---   · le staff de la bibliothèque seulement ; rien pour anon.
+--   · le staff de la bibliothèque seulement ; rien pour anon ;
+--   · api.capas_pdf_bibliotheques (20261020211530) : l'administration du
+--     réseau seule, qui y voit les bibliothèques ayant à faire.
 -- Convention maison : RAISE EXCEPTION final, tout est annulé.
 --   Bilan OK : 'CAPAS PDF OK : N/N tests passés'
 -- =====================================================================
@@ -24,6 +26,7 @@ DECLARE
   c_reader constant uuid := '33333333-3333-3333-3333-333333333333';
   b1 bigint; b2 bigint; b3 bigint; b4 bigint; b5 bigint;
   v_ids bigint[]; v_txt text; v_err text; v_j jsonb; v_row record;
+  v_admin uuid := gen_random_uuid(); v_n int;
 BEGIN
   -- Un monde à soi : les notices du seed ont une couverture le temps de la suite.
   UPDATE public.books SET cover_object_path = 'books/seed/front.jpg'
@@ -141,6 +144,23 @@ BEGIN
      AND has_function_privilege('authenticated', 'api.capas_pdf_poser(bigint, text)', 'EXECUTE') THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_err, 'rendu')); END IF;
+
+  v_t := 'T10 api.capas_pdf_bibliotheques : l''administration du réseau seule ; la bibliothèque y figure avec ses faisables';
+  -- Remet b3 sans couverture : une faisable, restreinte.
+  UPDATE public.books SET cover_object_path = NULL, cover_source = NULL WHERE id = b3;
+  v_err := NULL;
+  PERFORM set_config('request.jwt.claims', json_build_object('sub', c_staff, 'role', 'authenticated')::text, true);
+  BEGIN PERFORM * FROM api.capas_pdf_bibliotheques(); EXCEPTION WHEN OTHERS THEN v_err := SQLSTATE; END;
+  INSERT INTO auth.users (id, email) VALUES (v_admin, 'capas-pdf-admin-' || substr(replace(v_admin::text, '-', ''), 1, 8) || '@example.invalid');
+  INSERT INTO public.profiles (id) VALUES (v_admin) ON CONFLICT (id) DO NOTHING;
+  INSERT INTO public.network_administrators (user_id, status) VALUES (v_admin, 'active');
+  PERFORM set_config('request.jwt.claims', json_build_object('sub', v_admin, 'role', 'authenticated')::text, true);
+  v_n := NULL;
+  BEGIN SELECT count(*) INTO v_n FROM api.capas_pdf_bibliotheques() WHERE library_id = c_lib AND faisables = 1 AND restreintes = 1;
+  EXCEPTION WHEN OTHERS THEN v_txt := SQLERRM; END;
+  IF v_err = '42501' AND v_n = 1
+     AND NOT has_function_privilege('anon', 'api.capas_pdf_bibliotheques()', 'EXECUTE') THEN v_passed := v_passed + 1;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : staff=' || coalesce(v_err, 'rendu') || ' admin=' || coalesce(v_n::text, v_txt, '?')); END IF;
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'CAPAS PDF ECHEC : %/% OK, % échec(s) | %', v_passed, v_passed + v_failed, v_failed,

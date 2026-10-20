@@ -7764,5 +7764,8 @@
   "capas.pdf.fini": "Fertig: {posees} Cover gesetzt, {echecs, plural, one {# unlesbares PDF} other {# unlesbare PDFs}}.",
   "capas.pdf.arretee": "Angehalten: {posees} Cover gesetzt, {echecs, plural, one {# unlesbares PDF} other {# unlesbare PDFs}}. Der Rest wartet auf den nächsten Klick.",
   "capas.pdf.echecs": "{n, plural, one {# PDF nicht gerendert} other {# PDFs nicht gerendert}} (Datei unlesbar oder nicht erreichbar)",
-  "error.capas.sans_pdf": "Dieser Datensatz hat kein aktives hinterlegtes PDF: Es gibt keine Seite 1, die als Cover dienen könnte."
+  "error.capas.sans_pdf": "Dieser Datensatz hat kein aktives hinterlegtes PDF: Es gibt keine Seite 1, die als Cover dienen könnte.",
+  "capas.pdf.choix": "Bearbeitete Bibliothek (Netzwerkverwaltung):",
+  "capas.pdf.bibCourante": "Aktuelle Bibliothek des Painel",
+  "capas.pdf.option": "{nom} — {n, plural, one {# Datensatz} other {# Datensätze}}"
 }
