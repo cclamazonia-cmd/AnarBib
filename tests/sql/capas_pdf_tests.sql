@@ -1,6 +1,6 @@
 -- =====================================================================
 -- AnarBib — Tests d'acceptation : la page 1 des PDF comme couverture, en lot
--- Date : 2026-10-20 · Migration 20261020175532_capas_la_page_un_des_pdf_en_lot
+-- Date : 2026-10-20 · Migration 20261020203753_capas_la_page_un_des_pdf_en_lot
 -- Session : Anarchief — capas page 1 des PDF
 --
 -- CE QUE LA SUITE GARDE.

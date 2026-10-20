@@ -22,7 +22,7 @@ import { SEAU_PDF_PUBLIC, canvasEnJpeg, rendrePage1, urlPdfPublic } from '@/lib/
 // Les PDF à diffusion restreinte sont rendus aussi (décision de Xavier,
 // 20/10/2026), lus par URL signée ; l'écran annonce combien, parce que leur
 // page 1 devient une image publique (`covers` est un seau public — voir la
-// migration 20261020175532).
+// migration 20261020203753).
 //
 // Rien ne s'affiche pour une bibliothèque sans PDF : le bloc ne gêne pas la
 // campagne photo des fonds physiques.
