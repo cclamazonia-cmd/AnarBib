@@ -4,7 +4,7 @@
  * Deux appelants, un seul rendu :
  *   · le bouton « page 1 du PDF » du formulaire de catalogage (une notice) ;
  *   · le lot de l'onglet « Couvertures » du Painel (20/10/2026, Anarchief.org :
- *     569 notices, aucune couverture, toutes avec un PDF public).
+ *     609 notices sans couverture avec un PDF, dont 40 restreints).
  *
  * Le rendu se fait dans le navigateur avec le pdf.js déjà servi depuis
  * /public/vendor/pdfjs : aucune dépendance serveur, rien qui manque sur une
@@ -17,7 +17,7 @@ import { resolveSupabaseUrl } from './supabaseUrl';
 /** Largeur de la capa rendue, en px : celle du bouton du formulaire depuis P3. */
 export const LARGEUR_CAPA_PDF = 800;
 
-/** Le seau dont la page 1 peut devenir publique (api.capas_pdf_*). */
+/** Le seau des PDF publics : lisibles par leur adresse publique, sans session. */
 export const SEAU_PDF_PUBLIC = 'anarbib-pdf-public';
 
 /**

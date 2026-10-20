@@ -7754,9 +7754,9 @@
   "notif.restrictedOrphan.body": "La última tenencia de este libro acaba de desaparecer: su PDF restringido ya no se abre para nadie. Vincula un ejemplar, o decide retirar el recurso.",
   "error.catalog.wikidata_already_used": "El Wikidata {qid} ya está en la ficha «{name}» (n.º {author_id}). Una persona tiene una sola ficha: si es la misma, fusiona las dos (botón «Reemplazar por otra autoridad…» en la ficha duplicada) en lugar de copiar el identificador; si no, revisa el Wikidata.",
   "capas.pdf.titre": "Página 1 de los PDF",
-  "capas.pdf.intro": "{n, plural, =0 {Ningún registro sin portada tiene un PDF público.} one {# registro sin portada tiene un PDF público: su primera página puede servirle de portada.} other {# registros sin portada tienen un PDF público: la primera página de cada uno puede servirles de portada.}}",
+  "capas.pdf.intro": "{n, plural, =0 {Ningún registro sin portada tiene un PDF depositado.} one {# registro sin portada tiene un PDF: su primera página puede servirle de portada.} other {# registros sin portada tienen un PDF: la primera página de cada uno puede servirles de portada.}}",
   "capas.pdf.deja": "{n, plural, one {# portada ya sacada de un PDF.} other {# portadas ya sacadas de un PDF.}}",
-  "capas.pdf.restreintes": "{n, plural, one {# registro solo tiene un PDF de difusión restringida: su página 1 no se hace pública aquí.} other {# registros solo tienen un PDF de difusión restringida: su página 1 no se hace pública aquí.}}",
+  "capas.pdf.restreintes": "{n, plural, one {Entre ellos, # solo tiene un PDF de difusión restringida: su página 1 se convertirá en una imagen pública.} other {Entre ellos, # solo tienen un PDF de difusión restringida: su página 1 se convertirá en una imagen pública.}}",
   "capas.pdf.lancer": "Usar la página 1 como portada ({n})",
   "capas.pdf.arreter": "Detener",
   "capas.pdf.progression": "{posees, plural, one {# portada puesta} other {# portadas puestas}} · {echecs, plural, one {# PDF ilegible} other {# PDF ilegibles}}",
@@ -7764,5 +7764,5 @@
   "capas.pdf.fini": "Terminado: {posees, plural, one {# portada puesta} other {# portadas puestas}}, {echecs, plural, one {# PDF ilegible} other {# PDF ilegibles}}.",
   "capas.pdf.arretee": "Detenido: {posees, plural, one {# portada puesta} other {# portadas puestas}}, {echecs, plural, one {# PDF ilegible} other {# PDF ilegibles}}. El resto espera al próximo clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF no renderizado} other {# PDF no renderizados}} (archivo ilegible o inaccesible)",
-  "error.capas.pdf_non_public": "Este registro no tiene PDF público: la página 1 de un PDF de difusión restringida no se convierte en portada pública."
+  "error.capas.sans_pdf": "Este registro no tiene ningún PDF depositado y activo: no hay página 1 para usar como portada."
 }

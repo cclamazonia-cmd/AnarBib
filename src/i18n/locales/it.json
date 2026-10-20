@@ -7754,9 +7754,9 @@
   "notif.restrictedOrphan.body": "L’ultimo possesso di questo libro è appena scomparso: il suo PDF riservato non si apre più per nessuno. Collega un esemplare, o decidi di ritirare la risorsa.",
   "error.catalog.wikidata_already_used": "Il Wikidata {qid} è già sulla scheda «{name}» (n. {author_id}). Una persona ha una sola scheda: se è la stessa, unisci le due (pulsante «Sostituire con un’altra autorità…» sulla scheda doppia) invece di copiare l’identificativo; altrimenti, controlla il Wikidata.",
   "capas.pdf.titre": "Pagina 1 dei PDF",
-  "capas.pdf.intro": "{n, plural, =0 {Nessuna scheda senza copertina ha un PDF pubblico.} one {# scheda senza copertina ha un PDF pubblico: la sua prima pagina può farle da copertina.} other {# schede senza copertina hanno un PDF pubblico: la prima pagina di ciascuno può far loro da copertina.}}",
+  "capas.pdf.intro": "{n, plural, =0 {Nessuna scheda senza copertina ha un PDF depositato.} one {# scheda senza copertina ha un PDF: la sua prima pagina può farle da copertina.} other {# schede senza copertina hanno un PDF: la prima pagina di ciascuno può far loro da copertina.}}",
   "capas.pdf.deja": "{n, plural, one {# copertina già ricavata da un PDF.} other {# copertine già ricavate da un PDF.}}",
-  "capas.pdf.restreintes": "{n, plural, one {# scheda ha solo un PDF a diffusione ristretta: la sua pagina 1 non viene resa pubblica qui.} other {# schede hanno solo un PDF a diffusione ristretta: la loro pagina 1 non viene resa pubblica qui.}}",
+  "capas.pdf.restreintes": "{n, plural, one {Tra queste, # ha solo un PDF a diffusione ristretta: la sua pagina 1 diventerà un’immagine pubblica.} other {Tra queste, # hanno solo un PDF a diffusione ristretta: la loro pagina 1 diventerà un’immagine pubblica.}}",
   "capas.pdf.lancer": "Usare la pagina 1 come copertina ({n})",
   "capas.pdf.arreter": "Fermare",
   "capas.pdf.progression": "{posees, plural, one {# copertina applicata} other {# copertine applicate}} · {echecs, plural, one {# PDF illeggibile} other {# PDF illeggibili}}",
@@ -7764,5 +7764,5 @@
   "capas.pdf.fini": "Fatto: {posees, plural, one {# copertina applicata} other {# copertine applicate}}, {echecs, plural, one {# PDF illeggibile} other {# PDF illeggibili}}.",
   "capas.pdf.arretee": "Interrotto: {posees, plural, one {# copertina applicata} other {# copertine applicate}}, {echecs, plural, one {# PDF illeggibile} other {# PDF illeggibili}}. Il resto attende il prossimo clic.",
   "capas.pdf.echecs": "{n, plural, one {# PDF non renderizzato} other {# PDF non renderizzati}} (file illeggibile o irraggiungibile)",
-  "error.capas.pdf_non_public": "Questa scheda non ha un PDF pubblico: la pagina 1 di un PDF a diffusione ristretta non diventa una copertina pubblica."
+  "error.capas.sans_pdf": "Questa scheda non ha alcun PDF depositato e attivo: nessuna pagina 1 da usare come copertina."
 }

@@ -4,13 +4,14 @@
 -- Session : Anarchief — capas page 1 des PDF
 --
 -- CE QUE LA SUITE GARDE.
---   · le compte : faisables = détenues, sans couverture, avec un PDF PUBLIC ;
---     restreintes = sans couverture, PDF dans un autre seau seulement ;
---   · la liste : seulement les faisables, avec le PDF principal d'abord ; un
---     PDF retiré ne compte pas ; `exclure` écarte une notice ;
+--   · le compte : faisables = détenues, sans couverture, avec un PDF versé et
+--     actif ; restreintes = celles d'entre elles sans PDF public (décision du
+--     20/10 : elles sont traitées, l'écran les annonce) ;
+--   · la liste : seulement les faisables, un PDF public d'abord, puis le
+--     principal ; un PDF retiré ne compte pas ; `exclure` écarte une notice ;
 --   · poser : provenance pdf_page1, dossier de la notice (bib_ref nettoyée,
---     ou l'id quand elle manque) ; jamais de remplacement ; jamais depuis un
---     PDF restreint ; une proposition du lot en attente devient sans objet ;
+--     ou l'id quand elle manque) ; jamais de remplacement ; jamais sans PDF
+--     actif ; une proposition du lot en attente devient sans objet ;
 --   · le staff de la bibliothèque seulement ; rien pour anon.
 -- Convention maison : RAISE EXCEPTION final, tout est annulé.
 --   Bilan OK : 'CAPAS PDF OK : N/N tests passés'
@@ -28,8 +29,10 @@ BEGIN
   UPDATE public.books SET cover_object_path = 'books/seed/front.jpg'
    WHERE nullif(btrim(coalesce(cover_object_path, '')), '') IS NULL;
 
-  -- b1 : deux PDF publics (le principal est le second) ; b2 : sans bib_ref ;
+  -- b1 : un PDF public secondaire et un restreint principal — le public passe
+  -- devant ; b2 : sans bib_ref, deux PDF publics — le principal passe devant ;
   -- b3 : PDF restreint seulement ; b4 : déjà couverte ; b5 : PDF public retiré.
+  -- (Un seul PDF principal actif par notice : ux_book_digital_resources_primary_active.)
   INSERT INTO public.books (titulo, bib_ref, tipo_material, owner_library_id)
   VALUES ('Brochure un', 'TEST PDF/1', 'livro', c_lib) RETURNING id INTO b1;
   INSERT INTO public.books (titulo, bib_ref, tipo_material, owner_library_id)
@@ -46,25 +49,28 @@ BEGIN
 
   INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, storage_bucket, storage_path, mime_type, is_primary)
   VALUES (b1, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/annexe.pdf', 'application/pdf', false),
-         (b1, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/principal.pdf', 'application/pdf', true),
-         (b2, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/deux.PDF', 'application/octet-stream', false),
+         (b1, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'active', true, 'pdf-restrito', 'books/t/b1-reserve.pdf', 'application/pdf', true),
+         (b2, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/deux-annexe.pdf', 'application/pdf', false),
+         (b2, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/deux.PDF', 'application/octet-stream', true),
          (b3, 'pdf_restrito', 'leitura_online', 'conta_ativa', 'active', true, 'pdf-restrito', 'books/t/reserve.pdf', 'application/pdf', true),
          (b4, 'pdf_publico', 'leitura_online', 'publico', 'active', true, 'anarbib-pdf-public', 'books/t/quatre.pdf', 'application/pdf', true),
          (b5, 'pdf_publico', 'leitura_online', 'publico', 'retired', false, 'anarbib-pdf-public', 'books/t/cinq.pdf', 'application/pdf', true);
 
   PERFORM set_config('request.jwt.claims', json_build_object('sub', c_staff, 'role', 'authenticated')::text, true);
 
-  v_t := 'T1 compte : deux faisables, une restreinte, aucune page 1 posée';
+  v_t := 'T1 compte : trois faisables, dont une restreinte, aucune page 1 posée';
   BEGIN v_j := api.capas_pdf_resume(c_lib); EXCEPTION WHEN OTHERS THEN v_j := jsonb_build_object('erreur', SQLERRM); END;
-  IF (v_j->>'faisables')::int = 2 AND (v_j->>'restreintes')::int = 1 AND (v_j->>'posees')::int = 0 THEN v_passed := v_passed + 1;
+  IF (v_j->>'faisables')::int = 3 AND (v_j->>'restreintes')::int = 1 AND (v_j->>'posees')::int = 0 THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_j::text); END IF;
 
-  v_t := 'T2 liste : les deux faisables, le PDF principal d''abord, extension en capitales comprise';
+  v_t := 'T2 liste : les trois faisables ; un PDF public d''abord, puis le principal ; extension en capitales comprise';
   v_ids := NULL; v_err := NULL;
   BEGIN SELECT array_agg(book_id ORDER BY book_id) INTO v_ids FROM api.capas_pdf_liste(c_lib, 20, '{}');
   EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
-  IF v_ids = ARRAY[b1, b2]
-     AND (SELECT storage_path FROM api.capas_pdf_liste(c_lib, 20, '{}') WHERE book_id = b1) = 'books/t/principal.pdf' THEN
+  IF v_ids = ARRAY[b1, b2, b3]
+     AND (SELECT storage_path FROM api.capas_pdf_liste(c_lib, 20, '{}') WHERE book_id = b1) = 'books/t/annexe.pdf'
+     AND (SELECT storage_path FROM api.capas_pdf_liste(c_lib, 20, '{}') WHERE book_id = b2) = 'books/t/deux.PDF'
+     AND (SELECT storage_bucket FROM api.capas_pdf_liste(c_lib, 20, '{}') WHERE book_id = b3) = 'pdf-restrito' THEN
     v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, v_err, 'rien')); END IF;
 
@@ -72,7 +78,7 @@ BEGIN
   v_ids := NULL; v_err := NULL;
   BEGIN SELECT array_agg(book_id) INTO v_ids FROM api.capas_pdf_liste(c_lib, 20, ARRAY[b1]);
   EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
-  IF v_ids = ARRAY[b2] THEN v_passed := v_passed + 1;
+  IF v_ids = ARRAY[b2, b3] THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, v_err, 'rien')); END IF;
 
   v_t := 'T4 poser : provenance pdf_page1, dossier de la bib_ref nettoyée, proposition en attente périmée';
@@ -109,19 +115,19 @@ BEGIN
      AND (SELECT cover_object_path FROM public.books WHERE id = b4) = 'books/TEST-PDF-4/front.jpg' THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_txt, '')); END IF;
 
-  v_t := 'T7 un PDF restreint ou retiré ne donne pas de page 1 publique';
-  v_err := NULL;
-  BEGIN PERFORM api.capas_pdf_poser(b3, 'books/TEST-PDF-3/capa-mgz3.jpg'); EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
-  IF v_err = 'capa_pdf_non_public' THEN
+  v_t := 'T7 un PDF restreint donne sa page 1 (décision du 20/10) ; un PDF retiré, non';
+  v_txt := NULL;
+  BEGIN v_txt := api.capas_pdf_poser(b3, 'books/TEST-PDF-3/capa-mgz3.jpg'); EXCEPTION WHEN OTHERS THEN v_txt := SQLERRM; END;
+  IF v_txt = 'posee' THEN
     v_err := NULL;
     BEGIN PERFORM api.capas_pdf_poser(b5, 'books/TEST-PDF-5/capa-mgz5.jpg'); EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
-    IF v_err = 'capa_pdf_non_public' AND (SELECT cover_object_path FROM public.books WHERE id = b3) IS NULL THEN v_passed := v_passed + 1;
+    IF v_err = 'capa_sans_pdf' AND (SELECT cover_object_path FROM public.books WHERE id = b5) IS NULL THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (retiré) : ' || coalesce(v_err, 'accepté')); END IF;
-  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (restreint) : ' || coalesce(v_err, 'accepté')); END IF;
+  ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (restreint) : ' || coalesce(v_txt, '')); END IF;
 
-  v_t := 'T8 le compte suit : plus rien de faisable, deux pages 1 posées, la restreinte reste comptée';
+  v_t := 'T8 le compte suit : plus rien de faisable ni de restreint, trois pages 1 posées';
   BEGIN v_j := api.capas_pdf_resume(c_lib); EXCEPTION WHEN OTHERS THEN v_j := jsonb_build_object('erreur', SQLERRM); END;
-  IF (v_j->>'faisables')::int = 0 AND (v_j->>'posees')::int = 2 AND (v_j->>'restreintes')::int = 1 THEN v_passed := v_passed + 1;
+  IF (v_j->>'faisables')::int = 0 AND (v_j->>'posees')::int = 3 AND (v_j->>'restreintes')::int = 0 THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_j::text); END IF;
 
   v_t := 'T9 une lectrice : refusée (42501) ; rien pour anon';

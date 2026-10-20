@@ -9,7 +9,9 @@
 //     `capa-…` dans le dossier de la notice, vignette dérivée, puis la RPC ;
 //   * un PDF illisible n'arrête pas la passe et ne revient pas (p_exclure) ;
 //   * « deja_une_capa » : le fichier rangé pour rien est retiré ;
-//   * les notices au PDF restreint sont annoncées, jamais traitées.
+//   * un PDF restreint est lu par URL signée (décision du 20/10 : sa page 1
+//     devient publique, l'écran l'annonce), et, si elle échoue, par le
+//     fichier entier.
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -17,7 +19,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { IntlProvider, useIntl } from 'react-intl';
 import fr from '@/i18n/locales/fr.json';
 
-const etat = vi.hoisted(() => ({ appels: [], retraits: [], envois: [], reponses: {}, rendus: [], illisibles: new Set() }));
+const etat = vi.hoisted(() => ({ appels: [], retraits: [], envois: [], reponses: {}, rendus: [], illisibles: new Set(), telecharges: [] }));
 
 vi.mock('@/lib/supabase', () => {
   const rpc = async (nom, args) => {
@@ -32,6 +34,8 @@ vi.mock('@/lib/supabase', () => {
         from: () => ({
           upload: async (chemin, blob, options) => { etat.envois.push({ chemin, options }); return { data: { path: chemin }, error: null }; },
           remove: async (chemins) => { etat.retraits.push(...chemins); return { error: null }; },
+          createSignedUrl: async (chemin) => ({ data: { signedUrl: `https://exemple.test/sign/${chemin}?token=t` }, error: null }),
+          download: async (chemin) => { etat.telecharges.push(chemin); return { data: new Blob(['%PDF']), error: null }; },
         }),
       },
     },
@@ -54,7 +58,7 @@ vi.mock('@/lib/capaPdf', async (importOriginal) => {
     urlPdfPublic: (chemin) => `https://exemple.test/public/anarbib-pdf-public/${chemin}`,
     rendrePage1: vi.fn(async (source) => {
       etat.rendus.push(source);
-      if ([...etat.illisibles].some((c) => source.url.endsWith(c))) throw new Error('Invalid PDF structure');
+      if (source?.url && [...etat.illisibles].some((c) => source.url.includes(c))) throw new Error('Invalid PDF structure');
       return { width: 800, height: 1131 };
     }),
     canvasEnJpeg: vi.fn(async () => new Blob(['jpeg'], { type: 'image/jpeg' })),
@@ -68,14 +72,15 @@ import CapasPdfLot from '@/pages/painel/tabs/CapasPdfLot.jsx';
 const LIB = '1bb157fd-4d1f-415b-9e5d-490f4f8d0895';
 const MAAGD = { book_id: 2751, bib_ref: 'ANARCHIEF-21156', titulo: 'De Roode Maagd', storage_bucket: 'anarbib-pdf-public', storage_path: 'books/2751/maagd.pdf' };
 const LUIS = { book_id: 2752, bib_ref: 'ANARCHIEF-362', titulo: 'De libertaire luis', storage_bucket: 'anarbib-pdf-public', storage_path: 'books/2752/luis.pdf' };
+const RESERVE = { book_id: 2790, bib_ref: 'ANARCHIEF-900', titulo: 'Overige', storage_bucket: 'pdf-restrito', storage_path: 'books/2790/overige.pdf' };
 
 // La liste rend ce qui n'est ni posé ni exclu : comme la vraie RPC.
-function parDefaut({ resume = { faisables: 2, restreintes: 40, posees: 0 }, poser = 'posee' } = {}) {
+function parDefaut({ resume = { faisables: 2, restreintes: 40, posees: 0 }, poser = 'posee', notices = [MAAGD, LUIS] } = {}) {
   const posees = new Set();
   etat.reponses = {
     capas_pdf_resume: { data: resume, error: null },
     capas_pdf_liste: (a) => ({
-      data: [MAAGD, LUIS].filter((n) => !posees.has(n.book_id) && !(a.p_exclure || []).includes(n.book_id)),
+      data: notices.filter((n) => !posees.has(n.book_id) && !(a.p_exclure || []).includes(n.book_id)),
       error: null,
     }),
     capas_pdf_poser: (a) => {
@@ -94,7 +99,7 @@ const rendre = (onPosees = vi.fn()) => render(<IntlProvider locale="fr" messages
 const appels = (nom) => etat.appels.filter(([n]) => n === nom).map(([, a]) => a);
 
 beforeEach(() => {
-  etat.appels = []; etat.retraits = []; etat.envois = []; etat.rendus = []; etat.illisibles = new Set();
+  etat.appels = []; etat.retraits = []; etat.envois = []; etat.rendus = []; etat.illisibles = new Set(); etat.telecharges = [];
   parDefaut();
 });
 
@@ -106,10 +111,27 @@ describe('CapasPdfLot — la page 1 des PDF en lot', () => {
     expect(container.querySelector('[data-capas-pdf]')).toBeNull();
   });
 
-  it('annonce les faisables et les restreintes, sans traiter ces dernières', async () => {
+  it('annonce les faisables, et parmi elles celles dont la page 1 deviendra publique', async () => {
     rendre();
     expect(await screen.findByRole('button', { name: 'Poser la page 1 comme couverture (2)' })).toBeTruthy();
-    expect(screen.getByText(/40 notices n’ont qu’un PDF à diffusion restreinte/)).toBeTruthy();
+    expect(screen.getByText('Parmi elles, 40 n’ont qu’un PDF à diffusion restreinte : leur page 1 deviendra une image publique.')).toBeTruthy();
+  });
+
+  it('un PDF restreint se lit par URL signée ; si elle échoue, par le fichier entier', async () => {
+    parDefaut({ resume: { faisables: 1, restreintes: 1, posees: 0 }, notices: [RESERVE] });
+    rendre();
+    fireEvent.click(await screen.findByRole('button', { name: 'Poser la page 1 comme couverture (1)' }));
+    await screen.findByText('Terminé : 1 couverture posée, 0 PDF illisible.');
+    expect(etat.rendus).toEqual([{ url: 'https://exemple.test/sign/books/2790/overige.pdf?token=t' }]);
+    expect(etat.telecharges).toEqual([]);
+
+    // Seconde passe : l'URL signée ne se lit pas -> repli sur l'API Storage.
+    etat.rendus = [];
+    etat.illisibles.add('/sign/');
+    parDefaut({ resume: { faisables: 1, restreintes: 1, posees: 0 }, notices: [RESERVE] });
+    fireEvent.click(await screen.findByRole('button', { name: 'Poser la page 1 comme couverture (1)' }));
+    await waitFor(() => expect(etat.telecharges).toEqual(['books/2790/overige.pdf']));
+    expect(etat.rendus[1]).toBeInstanceOf(ArrayBuffer);
   });
 
   it('pose la page 1 de chaque notice : adresse publique, nom neuf dans le dossier, puis la RPC', async () => {

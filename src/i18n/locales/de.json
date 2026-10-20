@@ -7754,9 +7754,9 @@
   "notif.restrictedOrphan.body": "Der letzte Bestand dieses Buches ist gerade verschwunden: Sein eingeschränktes PDF öffnet sich für niemanden mehr. Verknüpfe ein Exemplar oder entscheide, die Ressource zurückzuziehen.",
   "error.catalog.wikidata_already_used": "Das Wikidata-Objekt {qid} steht bereits im Datensatz „{name}“ (Nr. {author_id}). Eine Person hat nur einen Datensatz: Ist es dieselbe, führe die beiden zusammen (Schaltfläche „Durch einen anderen Normdatensatz ersetzen…“ am doppelten Datensatz), statt die Kennung zu kopieren; sonst prüfe das Wikidata-Objekt.",
   "capas.pdf.titre": "Seite 1 der PDFs",
-  "capas.pdf.intro": "{n, plural, =0 {Kein Datensatz ohne Cover hat ein öffentliches PDF.} one {# Datensatz ohne Cover hat ein öffentliches PDF: Seine erste Seite kann als Cover dienen.} other {# Datensätze ohne Cover haben ein öffentliches PDF: Die erste Seite kann jeweils als Cover dienen.}}",
+  "capas.pdf.intro": "{n, plural, =0 {Kein Datensatz ohne Cover hat ein hinterlegtes PDF.} one {# Datensatz ohne Cover hat ein PDF: Seine erste Seite kann als Cover dienen.} other {# Datensätze ohne Cover haben ein PDF: Die erste Seite kann jeweils als Cover dienen.}}",
   "capas.pdf.deja": "{n} Cover bereits aus einem PDF gewonnen.",
-  "capas.pdf.restreintes": "{n, plural, one {# Datensatz hat nur ein PDF mit eingeschränkter Verbreitung: Seine Seite 1 wird hier nicht veröffentlicht.} other {# Datensätze haben nur ein PDF mit eingeschränkter Verbreitung: Ihre Seite 1 wird hier nicht veröffentlicht.}}",
+  "capas.pdf.restreintes": "{n, plural, one {Davon hat # nur ein PDF mit eingeschränkter Verbreitung: Seine Seite 1 wird ein öffentliches Bild.} other {Davon haben # nur ein PDF mit eingeschränkter Verbreitung: Ihre Seite 1 wird ein öffentliches Bild.}}",
   "capas.pdf.lancer": "Seite 1 als Cover verwenden ({n})",
   "capas.pdf.arreter": "Anhalten",
   "capas.pdf.progression": "{posees} Cover gesetzt · {echecs, plural, one {# unlesbares PDF} other {# unlesbare PDFs}}",
@@ -7764,5 +7764,5 @@
   "capas.pdf.fini": "Fertig: {posees} Cover gesetzt, {echecs, plural, one {# unlesbares PDF} other {# unlesbare PDFs}}.",
   "capas.pdf.arretee": "Angehalten: {posees} Cover gesetzt, {echecs, plural, one {# unlesbares PDF} other {# unlesbare PDFs}}. Der Rest wartet auf den nächsten Klick.",
   "capas.pdf.echecs": "{n, plural, one {# PDF nicht gerendert} other {# PDFs nicht gerendert}} (Datei unlesbar oder nicht erreichbar)",
-  "error.capas.pdf_non_public": "Dieser Datensatz hat kein öffentliches PDF: Seite 1 eines PDF mit eingeschränkter Verbreitung wird kein öffentliches Cover."
+  "error.capas.sans_pdf": "Dieser Datensatz hat kein aktives hinterlegtes PDF: Es gibt keine Seite 1, die als Cover dienen könnte."
 }

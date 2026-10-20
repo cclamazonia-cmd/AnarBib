@@ -3,7 +3,7 @@ import { Button, Spinner } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { COVER_BUCKET, cheminCapaNeuf, removeCoverThumb, writeCoverThumb } from '@/lib/coverThumbs';
-import { canvasEnJpeg, rendrePage1, urlPdfPublic } from '@/lib/capaPdf';
+import { SEAU_PDF_PUBLIC, canvasEnJpeg, rendrePage1, urlPdfPublic } from '@/lib/capaPdf';
 
 // ═══════════════════════════════════════════════════════════
 // CapasPdfLot — la page 1 des PDF comme couverture, en lot (20/10/2026)
@@ -19,8 +19,10 @@ import { canvasEnJpeg, rendrePage1, urlPdfPublic } from '@/lib/capaPdf';
 // Une couverture posée entre-temps n'est jamais remplacée : « deja_une_capa »,
 // et le fichier rangé pour rien est retiré.
 //
-// Les PDF à diffusion restreinte sont comptés, jamais rendus : `covers` est un
-// seau public (voir la migration 20261020175532).
+// Les PDF à diffusion restreinte sont rendus aussi (décision de Xavier,
+// 20/10/2026), lus par URL signée ; l'écran annonce combien, parce que leur
+// page 1 devient une image publique (`covers` est un seau public — voir la
+// migration 20261020175532).
 //
 // Rien ne s'affiche pour une bibliothèque sans PDF : le bloc ne gêne pas la
 // campagne photo des fonds physiques.
@@ -55,9 +57,29 @@ export default function CapasPdfLot({ t, libraryId, onPosees }) {
     }
   }
 
+  // La page 1, d'où que vienne le PDF. Seau public : son adresse publique, lue
+  // par plages. Seau restreint : une URL signée de courte durée, lue de même —
+  // et, si elle ne passe pas, le fichier entier par l'API Storage, comme le
+  // bouton du formulaire.
+  async function page1(n) {
+    if (n.storage_bucket === SEAU_PDF_PUBLIC) return rendrePage1({ url: urlPdfPublic(n.storage_path) });
+    const seau = supabase.storage.from(n.storage_bucket);
+    const { data: signee } = await seau.createSignedUrl(n.storage_path, 600);
+    if (signee?.signedUrl) {
+      try {
+        return await rendrePage1({ url: signee.signedUrl });
+      } catch (err) {
+        console.warn('[capas pdf] URL signée illisible, repli sur le fichier entier :', err?.message || err);
+      }
+    }
+    const { data: fichier, error } = await seau.download(n.storage_path);
+    if (error) throw error;
+    return rendrePage1(await fichier.arrayBuffer());
+  }
+
   // Une notice : rendre, ranger, attacher. Renvoie le statut de la RPC.
   async function traiter(n) {
-    const canvas = await rendrePage1({ url: urlPdfPublic(n.storage_path) });
+    const canvas = await page1(n);
     const blob = await canvasEnJpeg(canvas);
     const chemin = cheminCapaNeuf(n.bib_ref || n.book_id, 'jpg');
     const { error: eUp } = await supabase.storage.from(COVER_BUCKET)

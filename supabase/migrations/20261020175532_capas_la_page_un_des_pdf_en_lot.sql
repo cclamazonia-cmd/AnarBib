@@ -6,7 +6,8 @@
 -- POURQUOI. Anarchief.org est une archive numérique : 1 002 notices publiées
 -- le 20/10, AUCUNE couverture, et les catalogues ouverts n'ont rien pour des
 -- brochures, tracts et périodiques. Mais 609 d'entre elles portent un PDF
--- versé dans Storage, et la page 1 d'un PDF EST sa couverture. Le bouton
+-- versé dans Storage (569 publics, 40 restreints seulement), et la page 1 d'un
+-- PDF EST sa couverture. Le bouton
 -- « page 1 du PDF » du formulaire de catalogage (capas P3) le savait déjà —
 -- notice par notice : reprendre en brouillon, cliquer, enregistrer, publier.
 -- 609 fois. Comme pour la photo prise en rayon (20260927182008), le geste
@@ -15,10 +16,11 @@
 -- CE QUE FAIT CETTE MIGRATION — trois RPC (staff de la bibliothèque, ou
 -- administration du réseau) :
 --   1. api.capas_pdf_resume(biblio) : combien de notices détenues sans
---      couverture ont un PDF PUBLIC (faisables), combien n'ont qu'un PDF à
---      diffusion restreinte (laissées de côté), combien portent déjà une page 1 ;
+--      couverture ont un PDF versé (faisables), dont combien n'ont qu'un PDF à
+--      diffusion restreinte, et combien portent déjà une page 1 ;
 --   2. api.capas_pdf_liste(biblio, n, exclure) : les prochaines faisables, avec
---      le PDF à rendre (le principal d'abord, puis le plus ancien). `exclure`
+--      le PDF à rendre (un PDF public d'abord, puis le principal, puis le plus
+--      ancien — le seau dit au navigateur comment le lire). `exclure`
 --      porte les notices dont le PDF n'a pas pu être rendu pendant la passe :
 --      sans lui, un fichier illisible resterait en tête de liste et la passe
 --      tournerait sur place ;
@@ -28,12 +30,13 @@
 --      remplacement : une couverture posée entre-temps (photo, lot, à la main)
 --      gagne, réponse « deja_une_capa » et rien n'est écrit.
 --
--- POURQUOI PAS LES PDF RESTREINTS. Le bucket `covers` est PUBLIC, et une capa
--- se sert à 800 px de large : la page 1 d'un tract d'une page, c'est le tract
--- entier, lisible. Un PDF rangé dans `pdf-restrito` n'a pas (encore) d'accord
--- de diffusion (NUMDIF) ; en tirer une image publique contournerait ce statut.
--- Ces notices sont COMPTÉES (l'écran le dit) mais pas traitées. Le bouton du
--- formulaire, geste conscient sur une notice, reste possible.
+-- LES PDF RESTREINTS AUSSI — décision de Xavier, 20/10/2026. Le bucket
+-- `covers` est PUBLIC et une capa se sert à 800 px de large : la page 1 d'un
+-- PDF de `pdf-restrito` (sans accord de diffusion, NUMDIF) devient donc une
+-- image publique — pour un tract d'une page, le tract entier. La question a été
+-- posée avec ce risque en face ; la réponse a été de les inclure. L'écran
+-- annonce combien de faisables n'ont qu'un PDF restreint, pour que le geste
+-- reste conscient ; une capa se retire à tout moment depuis le formulaire.
 --
 -- Le rendu se fait dans le navigateur (pdf.js, src/lib/capaPdf.js), comme le
 -- bouton du formulaire : aucune dépendance serveur nouvelle, rien qui ne
@@ -68,15 +71,14 @@ begin
                       and (r.mime_type = 'application/pdf' or r.storage_path ~* '\.pdf$')) as pdf_public,
            exists (select 1 from public.book_digital_resources r
                     where r.book_id = b.id and r.storage_bucket is not null
-                      and r.storage_bucket <> 'anarbib-pdf-public'
                       and r.status = 'active' and coalesce(r.is_active, true)
-                      and (r.mime_type = 'application/pdf' or r.storage_path ~* '\.pdf$')) as pdf_reserve
+                      and (r.mime_type = 'application/pdf' or r.storage_path ~* '\.pdf$')) as pdf_verse
       from public.books b
       join public.book_holdings h on h.book_id = b.id and h.library_id = p_library_id
   )
   select jsonb_build_object(
-           'faisables',   count(*) filter (where sans_capa and pdf_public),
-           'restreintes', count(*) filter (where sans_capa and not pdf_public and pdf_reserve),
+           'faisables',   count(*) filter (where sans_capa and pdf_verse),
+           'restreintes', count(*) filter (where sans_capa and pdf_verse and not pdf_public),
            'posees',      count(*) filter (where not sans_capa and cover_source = 'pdf_page1'))
     into v
     from n;
@@ -107,10 +109,10 @@ begin
     join lateral (
       select r.storage_bucket, r.storage_path
         from public.book_digital_resources r
-       where r.book_id = b.id and r.storage_bucket = 'anarbib-pdf-public'
+       where r.book_id = b.id and r.storage_bucket is not null
          and r.status = 'active' and coalesce(r.is_active, true)
          and (r.mime_type = 'application/pdf' or r.storage_path ~* '\.pdf$')
-       order by coalesce(r.is_primary, false) desc, r.id
+       order by (r.storage_bucket = 'anarbib-pdf-public') desc, coalesce(r.is_primary, false) desc, r.id
        limit 1
     ) r on true
    where nullif(btrim(coalesce(b.cover_object_path, '')), '') is null
@@ -148,12 +150,12 @@ begin
     raise exception 'capa_chemin_invalide' using hint = 'error.capas.chemin_invalide';
   end if;
 
-  -- La page 1 d'un PDF public seulement (voir l'en-tête).
+  -- La page 1 d'un PDF versé, actif : pas d'image sans le fichier dont elle vient.
   if not exists (select 1 from public.book_digital_resources r
-                  where r.book_id = p_book_id and r.storage_bucket = 'anarbib-pdf-public'
+                  where r.book_id = p_book_id and r.storage_bucket is not null
                     and r.status = 'active' and coalesce(r.is_active, true)
                     and (r.mime_type = 'application/pdf' or r.storage_path ~* '\.pdf$')) then
-    raise exception 'capa_pdf_non_public' using hint = 'error.capas.pdf_non_public';
+    raise exception 'capa_sans_pdf' using hint = 'error.capas.sans_pdf';
   end if;
 
   if nullif(btrim(coalesce(v_book.cover_object_path, '')), '') is not null then
@@ -178,15 +180,15 @@ end;
 $function$;
 
 comment on function api.capas_pdf_resume(uuid) is
-  'Capas page 1 (20/10/2026) : notices détenues sans couverture avec un PDF public (faisables), avec un PDF restreint seulement (laissées de côté), et pages 1 déjà posées.';
+  'Capas page 1 (20/10/2026) : notices détenues sans couverture avec un PDF versé (faisables), dont celles au PDF restreint seulement, et pages 1 déjà posées.';
 comment on function api.capas_pdf_liste(uuid, integer, bigint[]) is
-  'Capas page 1 (20/10/2026) : les prochaines notices détenues sans couverture avec leur PDF public à rendre ; p_exclure écarte celles dont le rendu a échoué pendant la passe.';
+  'Capas page 1 (20/10/2026) : les prochaines notices détenues sans couverture avec le PDF à rendre (public d''abord) ; p_exclure écarte celles dont le rendu a échoué pendant la passe.';
 comment on function api.capas_pdf_poser(bigint, text) is
-  'Capas page 1 (20/10/2026) : attache la page 1 rendue par le navigateur (provenance pdf_page1). Jamais de remplacement ; PDF public exigé.';
+  'Capas page 1 (20/10/2026) : attache la page 1 rendue par le navigateur (provenance pdf_page1). Jamais de remplacement ; un PDF versé et actif exigé.';
 
-revoke all on function api.capas_pdf_resume(uuid) from public, anon;
-revoke all on function api.capas_pdf_liste(uuid, integer, bigint[]) from public, anon;
-revoke all on function api.capas_pdf_poser(bigint, text) from public, anon;
+revoke execute on function api.capas_pdf_resume(uuid) from public, anon;
+revoke execute on function api.capas_pdf_liste(uuid, integer, bigint[]) from public, anon;
+revoke execute on function api.capas_pdf_poser(bigint, text) from public, anon;
 grant execute on function api.capas_pdf_resume(uuid) to authenticated;
 grant execute on function api.capas_pdf_liste(uuid, integer, bigint[]) to authenticated;
 grant execute on function api.capas_pdf_poser(bigint, text) to authenticated;
