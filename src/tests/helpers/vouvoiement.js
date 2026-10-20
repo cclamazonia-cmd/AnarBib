@@ -176,8 +176,12 @@ export const VOUVOIEMENT_IT = new RegExp(
 // et la 1re personne en « -μαστε » (« είμαστε »). 172/172 sur le fichier
 // d'avant, rien d'autre. ANGLE MORT : un nom ou adverbe en « -τε » absent de
 // la liste ferait rougir à tort — on l'y ajoute, avec sa raison.
+// 20/10/2026, courriels (mail-tutoiement.test.js) : « είτε … είτε » (ou… ou),
+// conjonction — aucun verbe ne s'écrit ainsi. « Ορίστε » (voici) N'Y EST PAS,
+// exprès : c'est aussi l'impératif poli de ορίζω (« Ορίστε κωδικό »,
+// définissez) ; les courriels qui le portaient disent « Ακολουθεί » (suit).
 const EL_NON_VERBES = ['τότε', 'Τότε', 'ούτε', 'Ούτε', 'ώστε', 'Ώστε', 'μήτε', 'πέντε', 'εκάστοτε', 'πότε', 'Πότε', 'όποτε',
-  'κάποτε', 'οπότε'];
+  'κάποτε', 'οπότε', 'είτε', 'Είτε'];
 export const VOUVOIEMENT_EL = new RegExp(
   '(?<![\\p{L}])(σας|Σας|σάς|εσείς|Εσείς|εσάς|Εσάς)(?![\\p{L}])' +
     `|(?<![\\p{L}])(?!(?:${EL_NON_VERBES.join('|')})(?![\\p{L}]))(?!\\p{L}*(?:δήποτε|μαστε)(?![\\p{L}]))(\\p{L}+τε)(?![\\p{L}])`,

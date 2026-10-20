@@ -71,7 +71,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     greeting: "Salut !",
     footer: "Ce récapitulatif est envoyé chaque semaine pour qu'aucune action du réseau ne passe inaperçue. Une question ? Réponds à ce message.",
     "library.subject": "Actions du réseau dans la bibliothèque {library} (du {start} au {end})",
-    "library.title": "Ce que le réseau a fait dans votre bibliothèque",
+    "library.title": "Ce que le réseau a fait dans ta bibliothèque",
     "library.intro": "Entre le {start} et le {end}, {count} action(s) ont été menées dans la bibliothèque {library} par des personnes de l'administration du réseau. Voici le détail, pour information.",
     "network.subject": "Actions inter-bibliothèques de la semaine (du {start} au {end})",
     "network.title": "Actions inter-bibliothèques de la semaine",
@@ -86,7 +86,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     // recapitulatif hebdomadaire, pour que les deux etages nomment les
     // memes gestes de la meme facon.
     "immediate.subject": "Action du réseau dans la bibliothèque {library}",
-    "immediate.title": "Une action du réseau dans votre bibliothèque",
+    "immediate.title": "Une action du réseau dans ta bibliothèque",
     "immediate.intro": "Une personne de l'administration du réseau vient de mener une action marquée critique dans la bibliothèque {library}. Cet avertissement part immédiatement, pour que ce qui se décide du dehors soit visible du dedans. Le récapitulatif hebdomadaire continue d'arriver le lundi.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
@@ -130,7 +130,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     // recapitulatif hebdomadaire, pour que les deux etages nomment les
     // memes gestes de la meme facon.
     "immediate.subject": "Acción de la red en la biblioteca {library}",
-    "immediate.title": "Una acción de la red en vuestra biblioteca",
+    "immediate.title": "Una acción de la red en tu biblioteca",
     "immediate.intro": "Una persona de la administración de la red acaba de realizar una acción marcada como crítica en la biblioteca {library}. Este aviso llega de inmediato, para que lo que se decide desde fuera sea visible desde dentro. El resumen semanal sigue llegando los lunes.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
@@ -203,7 +203,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     greeting: "Ciao!",
     footer: "Questo riepilogo è inviato ogni settimana perché nessuna azione della rete passi inosservata. Domande? Rispondi a questo messaggio.",
     "library.subject": "Azioni della rete nella biblioteca {library} (dal {start} al {end})",
-    "library.title": "Ciò che la rete ha fatto nella vostra biblioteca",
+    "library.title": "Ciò che la rete ha fatto nella tua biblioteca",
     "library.intro": "Tra il {start} e il {end}, {count} azione/i sono state svolte nella biblioteca {library} da persone dell'amministrazione della rete. Ecco il dettaglio, per conoscenza.",
     "network.subject": "Azioni fra biblioteche della settimana (dal {start} al {end})",
     "network.title": "Azioni fra biblioteche della settimana",
@@ -218,7 +218,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     // recapitulatif hebdomadaire, pour que les deux etages nomment les
     // memes gestes de la meme facon.
     "immediate.subject": "Azione della rete nella biblioteca {library}",
-    "immediate.title": "Un'azione della rete nella vostra biblioteca",
+    "immediate.title": "Un'azione della rete nella tua biblioteca",
     "immediate.intro": "Una persona dell'amministrazione della rete ha appena compiuto un'azione contrassegnata come critica nella biblioteca {library}. Questo avviso parte subito, perché ciò che si decide da fuori sia visibile da dentro. Il riepilogo settimanale continua ad arrivare il lunedì.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
@@ -291,8 +291,8 @@ export const STRINGS: Record<string, Record<string, string>> = {
     greeting: "Hola!",
     footer: "Aquest resum s'envia cada setmana perquè cap acció de la xarxa passi desapercebuda. Cap dubte? Respon a aquest missatge.",
     "library.subject": "Accions de la xarxa a la biblioteca {library} (del {start} al {end})",
-    "library.title": "El que la xarxa ha fet a la vostra biblioteca",
-    "library.intro": "Entre el {start} i el {end}, s'han dut a terme {count} acció(ns) a la biblioteca {library} per part de persones de l'administració de la xarxa. Aquí teniu el detall, a títol informatiu.",
+    "library.title": "El que la xarxa ha fet a la teva biblioteca",
+    "library.intro": "Entre el {start} i el {end}, s'han dut a terme {count} acció(ns) a la biblioteca {library} per part de persones de l'administració de la xarxa. Aquí tens el detall, a títol informatiu.",
     "network.subject": "Accions entre biblioteques de la setmana (del {start} al {end})",
     "network.title": "Accions entre biblioteques de la setmana",
     "network.intro": "Entre el {start} i el {end}, s'han dut a terme {count} acció(ns) per part de persones de l'administració de la xarxa en biblioteques de les quals no formen part.",
@@ -306,7 +306,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     // recapitulatif hebdomadaire, pour que les deux etages nomment les
     // memes gestes de la meme facon.
     "immediate.subject": "Acció de la xarxa a la biblioteca {library}",
-    "immediate.title": "Una acció de la xarxa a la vostra biblioteca",
+    "immediate.title": "Una acció de la xarxa a la teva biblioteca",
     "immediate.intro": "Una persona de l'administració de la xarxa acaba de dur a terme una acció marcada com a crítica a la biblioteca {library}. Aquest avís surt immediatament, perquè allò que es decideix des de fora sigui visible des de dins. El resum setmanal continua arribant els dilluns.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.
@@ -423,7 +423,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     greeting: "Γεια σου!",
     footer: "Αυτή η σύνοψη στέλνεται κάθε εβδομάδα ώστε καμία ενέργεια του δικτύου να μην περνά απαρατήρητη. Απορίες; Απάντησε σε αυτό το μήνυμα.",
     "library.subject": "Ενέργειες του δικτύου στη βιβλιοθήκη {library} ({start} έως {end})",
-    "library.title": "Τι έκανε το δίκτυο στη βιβλιοθήκη σας",
+    "library.title": "Τι έκανε το δίκτυο στη βιβλιοθήκη σου",
     "library.intro": "Μεταξύ {start} και {end}, πραγματοποιήθηκαν {count} ενέργεια/ες στη βιβλιοθήκη {library} από άτομα της διοίκησης του δικτύου. Ακολουθεί η λεπτομέρεια, προς ενημέρωση.",
     "network.subject": "Διαβιβλιοθηκονομικές ενέργειες της εβδομάδας ({start} έως {end})",
     "network.title": "Διαβιβλιοθηκονομικές ενέργειες της εβδομάδας",
@@ -438,7 +438,7 @@ export const STRINGS: Record<string, Record<string, string>> = {
     // recapitulatif hebdomadaire, pour que les deux etages nomment les
     // memes gestes de la meme facon.
     "immediate.subject": "Ενέργεια του δικτύου στη βιβλιοθήκη {library}",
-    "immediate.title": "Μια ενέργεια του δικτύου στη βιβλιοθήκη σας",
+    "immediate.title": "Μια ενέργεια του δικτύου στη βιβλιοθήκη σου",
     "immediate.intro": "Ένα άτομο από τη διαχείριση του δικτύου μόλις πραγματοποίησε μια ενέργεια που έχει επισημανθεί ως κρίσιμη στη βιβλιοθήκη {library}. Αυτή η ειδοποίηση φεύγει αμέσως, ώστε αυτό που αποφασίζεται απ' έξω να είναι ορατό από μέσα. Η εβδομαδιαία σύνοψη συνεχίζει να φτάνει τις Δευτέρες.",
     // Libellés humains des actions et des objets, ajoutés le 31/08/2026 :
     // le récapitulatif affichait les identifiants de code tels quels.

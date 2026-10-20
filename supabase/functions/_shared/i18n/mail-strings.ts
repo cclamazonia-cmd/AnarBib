@@ -101,7 +101,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "team.invitation_proposed.intro": {
     "pt-BR": "{actorName} propõe acolher {targetName} na equipe de {libraryName}. Seu endosso (coordenação) é necessário para finalizar o acolhimento. Acesse o painel da equipe para endossar.",
-    fr: "{actorName} propose d'accueillir {targetName} dans l'équipe de {libraryName}. Votre endossement (coordination) est nécessaire pour finaliser l'accueil. Rendez-vous dans le panneau de l'équipe pour endosser.",
+    fr: "{actorName} propose d'accueillir {targetName} dans l'équipe de {libraryName}. Ton endossement (coordination) est nécessaire pour finaliser l'accueil. Rends-toi dans le panneau de l'équipe pour endosser.",
     es: "{actorName} propone acoger a {targetName} en el equipo de {libraryName}. Tu respaldo (coordinación) es necesario para finalizar el acogimiento. Entra al panel del equipo para respaldar.",
     en: "{actorName} proposes to welcome {targetName} to the team of {libraryName}. Your endorsement (coordination) is needed to finalize it. Go to the team panel to endorse.",
     it: "{actorName} propone di accogliere {targetName} nella squadra di {libraryName}. Il tuo avallo (coordinamento) è necessario per finalizzare l'accoglienza. Vai al pannello della squadra per avallare.",
@@ -109,7 +109,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} proposa acollir {targetName} a l'equip de {libraryName}. El teu aval (coordinació) és necessari per finalitzar l'acolliment. Vés al tauler de l'equip per avalar.",
     eo: "{actorName} proponas akcepti {targetName} en la teamon de {libraryName}. Via aprobo (kunordigo) necesas por finpretigi. Iru al la teama panelo por aprobi.",
     nl: "{actorName} stelt voor om {targetName} in het team van {libraryName} op te nemen. Jouw steun (coördinatie) is nodig om dit af te ronden. Ga naar het teampaneel om te steunen.",
-    el: "{actorName} προτείνει την ένταξη του ατόμου {targetName} στην ομάδα της {libraryName}. Η υποστήριξή σας (συντονισμός) χρειάζεται για την ολοκλήρωση. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε.",
+    el: "{actorName} προτείνει την ένταξη του ατόμου {targetName} στην ομάδα της {libraryName}. Η υποστήριξή σου (συντονισμός) χρειάζεται για την ολοκλήρωση. Πήγαινε στον πίνακα της ομάδας για να υποστηρίξεις.",
     ro: "{actorName} propune primirea persoanei {targetName} în echipa bibliotecii {libraryName}. Susținerea ta (ca parte din echipa de coordonare) este necesară pentru a finaliza primirea. Mergi în panoul echipei ca s-o susții."
   },
   "team.invitation_ready.sub": {
@@ -127,7 +127,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "team.invitation_ready.intro": {
     "pt-BR": "Seu convite para integrar a equipe de {libraryName} está pronto. Acesse sua conta (Minhas bibliotecas) para aceitar ou recusar.",
-    fr: "Votre invitation à rejoindre l'équipe de {libraryName} est prête. Rendez-vous dans votre compte (Mes bibliothèques) pour l'accepter ou la décliner.",
+    fr: "Ton invitation à rejoindre l'équipe de {libraryName} est prête. Rends-toi dans ton compte (Mes bibliothèques) pour l'accepter ou la décliner.",
     es: "Tu invitación para integrar el equipo de {libraryName} está lista. Entra a tu cuenta (Mis bibliotecas) para aceptarla o rechazarla.",
     en: "Your invitation to join the team of {libraryName} is ready. Go to your account (My libraries) to accept or decline it.",
     it: "Il tuo invito a entrare nella squadra di {libraryName} è pronto. Vai al tuo account (Le mie biblioteche) per accettarlo o rifiutarlo.",
@@ -135,7 +135,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva invitació per formar part de l'equip de {libraryName} està a punt. Vés al teu compte (Les meves biblioteques) per acceptar-la o rebutjar-la.",
     eo: "Via invito aliĝi al la teamo de {libraryName} estas preta. Iru al via konto (Miaj bibliotekoj) por akcepti aŭ rifuzi ĝin.",
     nl: "Je uitnodiging om bij het team van {libraryName} te komen is klaar. Ga naar je account (Mijn bibliotheken) om die te aanvaarden of te weigeren.",
-    el: "Η πρόσκλησή σας για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να την αποδεχτείτε ή να την απορρίψετε.",
+    el: "Η πρόσκλησή σου για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Πήγαινε στον λογαριασμό σου (Οι βιβλιοθήκες μου) για να την αποδεχτείς ή να την απορρίψεις.",
     ro: "Invitația ta de a te alătura echipei bibliotecii {libraryName} este gata. Mergi în contul tău (Bibliotecile mele) ca s-o accepți sau s-o refuzi."
   },
 
@@ -211,7 +211,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "team.invitation_coord_proposed.intro": {
     "pt-BR": "{actorName} propõe que {targetName} passe à coordenação de {libraryName}. Seu endosso é necessário: a coordenação não se dá sozinha. Acesse o painel da equipe para endossar ou deixar correr.",
-    fr: "{actorName} propose que {targetName} passe à la coordination de {libraryName}. Votre endossement est nécessaire : la coordination ne se donne pas seul·e. Rendez-vous dans le panneau de l'équipe pour endosser, ou laisser filer.",
+    fr: "{actorName} propose que {targetName} passe à la coordination de {libraryName}. Ton endossement est nécessaire : la coordination ne se donne pas seul·e. Rends-toi dans le panneau de l'équipe pour endosser, ou laisser filer.",
     es: "{actorName} propone que {targetName} pase a la coordinación de {libraryName}. Tu respaldo es necesario: la coordinación no se da en solitario. Entra al panel del equipo para respaldar o dejar pasar.",
     en: "{actorName} proposes that {targetName} step into the coordination of {libraryName}. Your endorsement is needed: coordination is not handed out alone. Go to the team panel to endorse, or let it lapse.",
     it: "{actorName} propone che {targetName} passi al coordinamento di {libraryName}. Il tuo avallo è necessario: il coordinamento non si dà da sol*. Vai al pannello della squadra per avallare, o lascia scadere.",
@@ -219,12 +219,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{actorName} proposa que {targetName} passi a la coordinació de {libraryName}. El teu aval és necessari: la coordinació no es dona en solitari. Vés al tauler de l'equip per avalar, o deixa-ho caducar.",
     eo: "{actorName} proponas ke {targetName} transiru al la kunordigo de {libraryName}. Via aprobo necesas: kunordigo ne donacigas sole. Iru al la teama panelo por aprobi, aŭ lasu ĝin senvalidiĝi.",
     nl: "{actorName} stelt voor dat {targetName} overstapt naar de coördinatie van {libraryName}. Jouw steun is nodig: coördinatie geef je niet alleen door. Ga naar het teampaneel om te steunen, of laat het vervallen.",
-    el: "{actorName} προτείνει το άτομο {targetName} να περάσει στον συντονισμό της {libraryName}. Η υποστήριξή σας χρειάζεται: ο συντονισμός δεν δίνεται μόνος. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή να το αφήσετε να λήξει.",
+    el: "{actorName} προτείνει το άτομο {targetName} να περάσει στον συντονισμό της {libraryName}. Η υποστήριξή σου χρειάζεται: ο συντονισμός δεν δίνεται μόνος. Πήγαινε στον πίνακα της ομάδας για να υποστηρίξεις ή να το αφήσεις να λήξει.",
     ro: "{actorName} propune ca {targetName} să treacă în echipa de coordonare a bibliotecii {libraryName}. Susținerea ta este necesară: coordonarea nu o acordă o singură persoană. Mergi în panoul echipei ca s-o susții sau ca s-o lași să expire."
   },
   "team.invitation_coord_ready.sub": {
     "pt-BR": "A equipe propõe que você entre na coordenação de {libraryName}",
-    fr: "L'équipe vous propose d'entrer dans la coordination de {libraryName}",
+    fr: "L'équipe te propose d'entrer dans la coordination de {libraryName}",
     es: "El equipe te propone entrar en la coordinación de {libraryName}",
     en: "The team proposes that you join the coordination of {libraryName}",
     it: "La squadra ti propone di entrare nel coordinamento di {libraryName}",
@@ -232,12 +232,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "L'equip et proposa entrar a la coordinació de {libraryName}",
     eo: "La teamo proponas ke vi eniru la kunordigon de {libraryName}",
     nl: "Het team stelt voor dat je toetreedt tot de coördinatie van {libraryName}",
-    el: "Η ομάδα σάς προτείνει να μπείτε στον συντονισμό της {libraryName}",
+    el: "Η ομάδα σού προτείνει να μπεις στον συντονισμό της {libraryName}",
     ro: "Echipa îți propune să intri în echipa de coordonare a bibliotecii {libraryName}"
   },
   "team.invitation_coord_ready.intro": {
     "pt-BR": "A proposta foi endossada: falta só a sua palavra. Coordenar {libraryName} dá acesso aos parâmetros da biblioteca, à gestão da equipe e às decisões de organização — é uma carga, e ela se aceita. Recusar não custa nada, e passar a mão continua sendo um direito depois. Acesse sua conta (Minhas bibliotecas) para responder.",
-    fr: "La proposition a été endossée : il ne manque que votre mot. Coordonner {libraryName} donne accès aux paramètres de la bibliothèque, à la gestion de l'équipe et aux décisions d'organisation — c'est une charge, et elle s'accepte. Refuser ne coûte rien, et passer la main restera un droit ensuite. Rendez-vous dans votre compte (Mes bibliothèques) pour répondre.",
+    fr: "La proposition a été endossée : il ne manque que ton mot. Coordonner {libraryName} donne accès aux paramètres de la bibliothèque, à la gestion de l'équipe et aux décisions d'organisation — c'est une charge, et elle s'accepte. Refuser ne coûte rien, et passer la main restera un droit ensuite. Rends-toi dans ton compte (Mes bibliothèques) pour répondre.",
     es: "La propuesta fue respaldada: solo falta tu palabra. Coordinar {libraryName} da acceso a los parámetros de la biblioteca, a la gestión del equipe y a las decisiones de organización — es una carga, y se acepta. Rechazar no cuesta nada, y pasar la posta seguirá siendo un derecho después. Entra a tu cuenta (Mis bibliotecas) para responder.",
     en: "The proposal has been endorsed: only your word is missing. Coordinating {libraryName} gives access to the library's settings, to team management and to organisational decisions — it is a burden, and it is accepted, not imposed. Declining costs nothing, and stepping back will remain a right afterwards. Go to your account (My libraries) to answer.",
     it: "La proposta è stata avallata: manca solo la tua parola. Coordinare {libraryName} dà accesso ai parametri della biblioteca, alla gestione della squadra e alle decisioni organizzative — è un carico, e si accetta. Rifiutare non costa nulla, e passare la mano resterà un diritto in seguito. Vai al tuo account (Le mie biblioteche) per rispondere.",
@@ -245,7 +245,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta ha estat avalada: només falta la teva paraula. Coordinar {libraryName} dona accés als paràmetres de la biblioteca, a la gestió de l'equip i a les decisions d'organització — és una càrrega, i s'accepta. Rebutjar no costa res, i passar el relleu continuarà sent un dret després. Vés al teu compte (Les meves biblioteques) per respondre.",
     eo: "La propono estis aprobita: mankas nur via vorto. Kunordigi {libraryName} donas aliron al la agordoj de la biblioteko, al la administrado de la teamo kaj al organizaj decidoj — tio estas ŝarĝo, kaj ĝi akceptiĝas. Rifuzi kostas nenion, kaj transdoni restos rajto poste. Iru al via konto (Miaj bibliotekoj) por respondi.",
     nl: "Het voorstel is gesteund: alleen jouw woord ontbreekt nog. De coördinatie van {libraryName} geeft toegang tot de instellingen van de bibliotheek, tot teambeheer en tot organisatorische beslissingen — het is een last, en die aanvaard je. Weigeren kost niets, en het later doorgeven blijft een recht. Ga naar je account (Mijn bibliotheken) om te antwoorden.",
-    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Ο συντονισμός της {libraryName} δίνει πρόσβαση στις ρυθμίσεις της βιβλιοθήκης, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις — είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε.",
+    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σου λόγος. Ο συντονισμός της {libraryName} δίνει πρόσβαση στις ρυθμίσεις της βιβλιοθήκης, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις — είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Πήγαινε στον λογαριασμό σου (Οι βιβλιοθήκες μου) για να απαντήσεις.",
     ro: "Propunerea a fost susținută: mai lipsește doar cuvântul tău. Coordonarea bibliotecii {libraryName} dă acces la setările bibliotecii, la gestionarea echipei și la deciziile de organizare — este o responsabilitate, iar ea se acceptă, nu se impune. Refuzul nu costă nimic, iar a preda ștafeta va rămâne un drept și după aceea. Mergi în contul tău (Bibliotecile mele) ca să răspunzi."
   },
 
@@ -255,20 +255,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // entrerait directement à la coordination. Les sujets restent ceux du circuit.
   "team.invitation_coord_proposed_direct.intro": {
     "pt-BR": "{actorName} propõe que {targetName} — leitora·or de {libraryName}, ainda fora da equipe — passe diretamente à coordenação. Sua biblioteca ativou o salto colegial: o circuito continua inteiro, e seu endosso é necessário. Acesse o painel da equipe para endossar ou deixar correr.",
-    fr: "{actorName} propose que {targetName} — lecteur·rice de {libraryName}, pas encore membre de l'équipe — passe directement à la coordination. Votre biblio a activé le saut collégial : le circuit reste entier, et votre endossement est nécessaire. Rendez-vous dans le panneau de l'équipe pour endosser, ou laisser filer.",
+    fr: "{actorName} propose que {targetName} — lecteur·rice de {libraryName}, pas encore membre de l'équipe — passe directement à la coordination. Ta biblio a activé le saut collégial : le circuit reste entier, et ton endossement est nécessaire. Rends-toi dans le panneau de l'équipe pour endosser, ou laisser filer.",
     es: "{actorName} propone que {targetName} — lectore de {libraryName}, aún fuera del equipo — pase directamente a la coordinación. Tu biblioteca activó el salto colegiado: el circuito sigue entero, y tu respaldo es necesario. Entra al panel del equipo para respaldar o dejar pasar.",
     en: "{actorName} proposes that {targetName} — a reader of {libraryName}, not yet on the team — move directly to coordination. Your library has enabled the collegial jump: the circuit stays whole, and your endorsement is needed. Go to the team panel to endorse, or let it lapse.",
     it: "{actorName} propone che {targetName} — lettore·trice di {libraryName}, non ancora nella squadra — passi direttamente al coordinamento. La tua biblioteca ha attivato il salto collegiale: il circuito resta intero, e il tuo avallo è necessario. Vai al pannello della squadra per avallare, o lascia correre.",
     de: "{actorName} schlägt vor, dass {targetName} — Leser*in von {libraryName}, noch nicht im Team — direkt in die Koordination wechselt. Eure Bibliothek hat den kollegialen Sprung aktiviert: der Ablauf bleibt vollständig, und deine Befürwortung ist nötig. Geh zum Team-Panel, um zu befürworten oder es verstreichen zu lassen.",
-    ca: "{actorName} proposa que {targetName} — lector·a de {libraryName}, encara fora de l'equip — passi directament a la coordinació. La vostra biblioteca ha activat el salt col·legiat: el circuit continua sencer, i cal el teu aval. Vés al panell de l'equip per avalar, o deixa-ho córrer.",
+    ca: "{actorName} proposa que {targetName} — lector·a de {libraryName}, encara fora de l'equip — passi directament a la coordinació. La teva biblioteca ha activat el salt col·legiat: el circuit continua sencer, i cal el teu aval. Vés al panell de l'equip per avalar, o deixa-ho córrer.",
     eo: "{actorName} proponas, ke {targetName} — leganto de {libraryName}, ankoraŭ ekster la teamo — rekte transiru al la kunordigo. Via biblioteko aktivigis la kolegian salton: la cirkvito restas kompleta, kaj via aprobo necesas. Iru al la panelo de la teamo por aprobi, aŭ lasu pasi.",
     nl: "{actorName} stelt voor dat {targetName} — lezer van {libraryName}, nog geen teamlid — rechtstreeks naar de coördinatie gaat. Jullie bibliotheek heeft de collegiale sprong geactiveerd: het traject blijft volledig, en jouw steun is nodig. Ga naar het teampaneel om te steunen, of laat het verlopen.",
-    el: "Ο/Η {actorName} προτείνει ο/η {targetName} — αναγνώστης/στρια της {libraryName}, όχι ακόμη μέλος της ομάδας — να περάσει απευθείας στον συντονισμό. Η βιβλιοθήκη σας έχει ενεργοποιήσει το συλλογικό άλμα: η διαδικασία μένει πλήρης, και χρειάζεται η υποστήριξή σας. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή αφήστε το να λήξει.",
+    el: "Ο/Η {actorName} προτείνει ο/η {targetName} — αναγνώστης/στρια της {libraryName}, όχι ακόμη μέλος της ομάδας — να περάσει απευθείας στον συντονισμό. Η βιβλιοθήκη σου έχει ενεργοποιήσει το συλλογικό άλμα: η διαδικασία μένει πλήρης, και χρειάζεται η υποστήριξή σου. Πήγαινε στον πίνακα της ομάδας για να υποστηρίξεις ή άφησέ το να λήξει.",
     ro: "{actorName} propune ca {targetName} — cititor/cititoare la biblioteca {libraryName}, care încă nu face parte din echipă — să treacă direct în echipa de coordonare. Biblioteca ta a activat saltul colegial: circuitul rămâne întreg, iar susținerea ta este necesară. Mergi în panoul echipei ca s-o susții sau ca s-o lași să expire."
   },
   "team.invitation_coord_ready_direct.intro": {
     "pt-BR": "A proposta foi endossada: falta só a sua palavra. Você entraria na equipe de {libraryName} diretamente pela coordenação — acesso aos parâmetros, à gestão da equipe e às decisões de organização, sem etapa intermediária. É uma carga, e ela se aceita. Recusar não custa nada, e passar a mão continua sendo um direito depois. Acesse sua conta (Minhas bibliotecas) para responder.",
-    fr: "La proposition a été endossée : il ne manque que votre mot. Vous rejoindriez l'équipe de {libraryName} directement à la coordination — accès aux paramètres, à la gestion de l'équipe et aux décisions d'organisation, sans étape intermédiaire. C'est une charge, et elle s'accepte. Refuser ne coûte rien, et passer la main restera un droit ensuite. Rendez-vous dans votre compte (Mes bibliothèques) pour répondre.",
+    fr: "La proposition a été endossée : il ne manque que ton mot. Tu rejoindrais l'équipe de {libraryName} directement à la coordination — accès aux paramètres, à la gestion de l'équipe et aux décisions d'organisation, sans étape intermédiaire. C'est une charge, et elle s'accepte. Refuser ne coûte rien, et passer la main restera un droit ensuite. Rends-toi dans ton compte (Mes bibliothèques) pour répondre.",
     es: "La propuesta fue respaldada: solo falta tu palabra. Entrarías al equipo de {libraryName} directamente por la coordinación — acceso a los parámetros, a la gestión del equipo y a las decisiones de organización, sin etapa intermedia. Es una carga, y se acepta. Rechazar no cuesta nada, y pasar la posta seguirá siendo un derecho después. Entra a tu cuenta (Mis bibliotecas) para responder.",
     en: "The proposal has been endorsed: only your word is missing. You would join the team of {libraryName} directly at coordination — access to the settings, to team management and to organisational decisions, with no intermediate step. It is a burden, and it is accepted, not imposed. Declining costs nothing, and stepping back will remain a right afterwards. Go to your account (My libraries) to answer.",
     it: "La proposta è stata avallata: manca solo la tua parola. Entreresti nella squadra di {libraryName} direttamente al coordinamento — accesso ai parametri, alla gestione della squadra e alle decisioni organizzative, senza tappa intermedia. È un carico, e si accetta. Rifiutare non costa nulla, e passare la mano resterà un diritto in seguito. Vai al tuo account (Le mie biblioteche) per rispondere.",
@@ -276,7 +276,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La proposta ha estat avalada: només falta la teva paraula. Entraries a l'equip de {libraryName} directament per la coordinació — accés als paràmetres, a la gestió de l'equip i a les decisions d'organització, sense etapa intermèdia. És una càrrega, i s'accepta. Rebutjar no costa res, i passar el relleu continuarà sent un dret després. Vés al teu compte (Les meves biblioteques) per respondre.",
     eo: "La propono estis aprobita: mankas nur via vorto. Vi aliĝus al la teamo de {libraryName} rekte ĉe la kunordigo — aliro al la agordoj, al la administrado de la teamo kaj al organizaj decidoj, sen intera ŝtupo. Tio estas ŝarĝo, kaj ĝi akceptiĝas. Rifuzi kostas nenion, kaj transdoni restos rajto poste. Iru al via konto (Miaj bibliotekoj) por respondi.",
     nl: "Het voorstel is gesteund: alleen jouw woord ontbreekt nog. Je zou het team van {libraryName} rechtstreeks in de coördinatie binnenkomen — toegang tot de instellingen, tot teambeheer en tot organisatorische beslissingen, zonder tussenstap. Het is een last, en die aanvaard je. Weigeren kost niets, en het later doorgeven blijft een recht. Ga naar je account (Mijn bibliotheken) om te antwoorden.",
-    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Θα εντασσόσασταν στην ομάδα της {libraryName} απευθείας στον συντονισμό — πρόσβαση στις ρυθμίσεις, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις, χωρίς ενδιάμεσο βήμα. Είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε.",
+    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σου λόγος. Θα εντασσόσουν στην ομάδα της {libraryName} απευθείας στον συντονισμό — πρόσβαση στις ρυθμίσεις, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις, χωρίς ενδιάμεσο βήμα. Είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Πήγαινε στον λογαριασμό σου (Οι βιβλιοθήκες μου) για να απαντήσεις.",
     ro: "Propunerea a fost susținută: mai lipsește doar cuvântul tău. Te-ai alătura echipei bibliotecii {libraryName} direct în echipa de coordonare — acces la setări, la gestionarea echipei și la deciziile de organizare, fără etapă intermediară. Este o responsabilitate, iar ea se acceptă, nu se impune. Refuzul nu costă nimic, iar a preda ștafeta va rămâne un drept și după aceea. Mergi în contul tău (Bibliotecile mele) ca să răspunzi."
   },
 
@@ -984,15 +984,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "rmsg.staff.intro": {
     "pt-BR": "Uma pessoa associada à sua biblioteca enviou um recado pelo sistema.",
-    fr: "Une personne associée à votre bibliothèque vous a écrit via le système.",
+    fr: "Une personne associée à la bibliothèque a écrit via le système.",
     es: "Une persona asociade a tu biblioteca te escribió a través del sistema.",
     en: "Someone connected to your library has sent you a message through the system.",
-    it: "Una persona associata alla vostra biblioteca vi ha scritto tramite il sistema.",
+    it: "Una persona associata alla biblioteca ha scritto tramite il sistema.",
     de: "Eine mit eurer Bibliothek verbundene Person hat euch über das System geschrieben.",
-    ca: "Una persona vinculada a la vostra biblioteca us ha escrit a través del sistema.",
+    ca: "Una persona vinculada a la biblioteca ha escrit a través del sistema.",
     eo: "Persono ligita al via biblioteko skribis al vi per la sistemo.",
     nl: "Iemand die bij jullie bibliotheek hoort heeft via het systeem een bericht gestuurd.",
-    el: "Κάποιο άτομο που σχετίζεται με τη βιβλιοθήκη σας σάς έστειλε μήνυμα μέσω του συστήματος.",
+    el: "Κάποιο άτομο που σχετίζεται με τη βιβλιοθήκη έστειλε μήνυμα μέσω του συστήματος.",
     ro: "O persoană legată de biblioteca voastră v-a scris prin sistem."
   },
   "rmsg.reader.sub": {
@@ -1018,7 +1018,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Hem rebut el teu missatge i hem avisat la biblioteca. Aquí en tens una còpia:",
     eo: "Ni ricevis vian mesaĝon kaj avertis la bibliotekon. Jen kopio:",
     nl: "We hebben je bericht ontvangen en de bibliotheek op de hoogte gebracht. Hier is een kopie:",
-    el: "Λάβαμε το μήνυμά σου και ειδοποιήσαμε τη βιβλιοθήκη. Ορίστε ένα αντίγραφο:",
+    el: "Λάβαμε το μήνυμά σου και ειδοποιήσαμε τη βιβλιοθήκη. Ακολουθεί ένα αντίγραφο:",
     ro: "Am primit mesajul tău și am anunțat biblioteca. Iată o copie:"
   },
 
@@ -3425,7 +3425,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     "wf.checkAccount": {
     "pt-BR": "Confira sua conta para mais detalhes.",
     fr: "Consulte ton compte pour plus de détails.",
-    es: "Consulte tu cuenta para más detalles.",
+    es: "Consulta tu cuenta para más detalles.",
     en: "Check your account for more details.",
     it: "Controlla il tuo account per maggiori dettagli.",
     de: "Sieh in deinem Konto für weitere Details nach.",
@@ -3538,7 +3538,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Diversos intercanvis sense trobar una franja que funcioni per a tothom. Per continuar, el millor és contactar directament la biblioteca per parlar-ne.",
     eo: "Pluraj interŝanĝoj sen trovi tempfendon kiu konvenas al ĉiuj. Por daŭrigi, plej bone estas kontakti rekte la bibliotekon por priparoli.",
     nl: "Meerdere keren heen en weer zonder een tijdslot te vinden dat voor iedereen werkt. Om verder te gaan, kun je het beste rechtstreeks contact opnemen met de bibliotheek om te overleggen.",
-    el: "Αρκετές ανταλλαγές χωρίς να βρεθεί χρόνος που να βολεύει όλους/ες. Για να συνεχίσεις, το καλύτερο είναι να επικοινωνήσεις απευθείας με τη βιβλιοθήκη για να το συζητήσετε.",
+    el: "Αρκετές ανταλλαγές χωρίς να βρεθεί χρόνος που να βολεύει όλους/ες. Για να συνεχίσεις, το καλύτερο είναι να επικοινωνήσεις απευθείας με τη βιβλιοθήκη για να το συζητήσεις μαζί της.",
     ro: "Mai multe schimburi, fără să găsim un interval care să convină tuturor. Ca să mergi mai departe, cel mai bine e să contactezi direct biblioteca pentru a discuta."
   },
   "wf.reader.negotiationTimeout.subject": {
@@ -3610,15 +3610,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "wf.staff.readerCounterProposed.body": {
     "pt-BR": "O(a/e) leitor(a/e) contra-propôs outro horário para a retirada. <b>Resposta esperada</b> : abrir o painel para aceitar, contra-propor por sua vez, ou cancelar.",
-    fr: "Le·la lecteur·rice a contre-proposé un autre créneau pour le retrait. <b>Réponse attendue</b> : ouvrir le tableau de bord pour accepter, contre-proposer à votre tour, ou annuler.",
-    es: "Le lectore contrapropuso otro horario para el retiro. <b>Respuesta esperada</b> : abrir el panel para aceptar, contraproponer a su vez, o cancelar.",
+    fr: "Le·la lecteur·rice a contre-proposé un autre créneau pour le retrait. <b>Réponse attendue</b> : ouvrir le tableau de bord pour accepter, faire une contre-proposition, ou annuler.",
+    es: "Le lectore contrapropuso otro horario para el retiro. <b>Respuesta esperada</b> : abrir el panel para aceptar, hacer una contrapropuesta, o cancelar.",
     en: "The reader has counter-proposed another slot for the pickup. <b>Response expected</b> : open the dashboard to accept, counter-propose in turn, or cancel.",
-    it: "Lə lettorə ha controproposto un altro orario per il ritiro. <b>Risposta attesa</b> : aprire il pannello per accettare, controproporre a vostra volta, o annullare.",
+    it: "Lə lettorə ha controproposto un altro orario per il ritiro. <b>Risposta attesa</b> : aprire il pannello per accettare, fare una controproposta, o annullare.",
     de: "Die*Der Leser*in hat einen anderen Termin für die Abholung vorgeschlagen. <b>Antwort erwartet</b> : Öffnet das Dashboard, um anzunehmen, einen Gegenvorschlag zu machen oder zu stornieren.",
     ca: "Le lector-a-e ha contraproposat una altra franja per a la recollida. <b>Resposta esperada</b> : obrir el tauler per acceptar, contraproposar al teu torn, o cancel·lar.",
     eo: "La legant-in-o kontraŭproponis alian tempfendon por la elpreno. <b>Atendata respondo</b> : malfermi la panelon por akcepti, kontraŭproponi siavice, aŭ nuligi.",
     nl: "De lezer heeft een ander tijdslot voorgesteld voor de afhaling. <b>Reactie verwacht</b>: open het dashboard om te accepteren, zelf een tegenvoorstel te doen of te annuleren.",
-    el: "Ο/Η αναγνώστης/στρια αντιπρότεινε άλλον χρόνο για την παραλαβή. <b>Αναμένεται απάντηση</b> : ανοίξτε τον πίνακα ελέγχου για να αποδεχτείτε, να αντιπροτείνετε με τη σειρά σας ή να ακυρώσετε.",
+    el: "Ο/Η αναγνώστης/στρια αντιπρότεινε άλλον χρόνο για την παραλαβή. <b>Αναμένεται απάντηση</b> : άνοιγμα του πίνακα ελέγχου για αποδοχή, νέα αντιπρόταση ή ακύρωση.",
     ro: "Cititorul/cititoarea a propus un alt interval pentru ridicare. <b>Răspuns așteptat</b>: deschide panoul ca să accepți, să faci la rândul tău o contrapropunere sau să anulezi."
   },
   "wf.staff.readerAccepted.subject": {
@@ -3665,12 +3665,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     fr: "Tu as confirmé le créneau proposé par le·la lecteur·rice. Le créneau est verrouillé — le livre peut être préparé pour le retrait.",
     es: "Confirmaste el horario propuesto por le lectore. El horario está bloqueado — el libro puede ser preparado para el retiro.",
     en: "You have confirmed the slot proposed by the reader. The slot is locked — the book can be prepared for pickup.",
-    it: "Avete confermato l'orario proposto da lə lettorə. L'orario è bloccato — il libro può essere preparato per il ritiro.",
-    de: "Ihr habt den von der*dem Leser*in vorgeschlagenen Termin bestätigt. Der Termin ist festgelegt — das Buch kann für die Abholung vorbereitet werden.",
+    it: "Hai confermato l'orario proposto da lə lettorə. L'orario è bloccato — il libro può essere preparato per il ritiro.",
+    de: "Du hast den von der*dem Leser*in vorgeschlagenen Termin bestätigt. Der Termin ist festgelegt — das Buch kann für die Abholung vorbereitet werden.",
     ca: "Has confirmat la franja proposada per le lector-a-e. La franja està bloquejada — el llibre es pot preparar per a la recollida.",
     eo: "Vi konfirmis la tempfendon proponitan de la legant-in-o. La tempfendo estas ŝlosita — la libro povas esti preparita por la elpreno.",
     nl: "Je hebt het door de lezer voorgestelde tijdslot bevestigd. Het tijdslot is vergrendeld — het boek kan worden voorbereid voor de afhaling.",
-    el: "Επιβεβαιώσατε τον χρόνο που πρότεινε ο/η αναγνώστης/στρια. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή.",
+    el: "Επιβεβαίωσες τον χρόνο που πρότεινε ο/η αναγνώστης/στρια. Ο χρόνος κλειδώθηκε — το βιβλίο μπορεί να προετοιμαστεί για παραλαβή.",
     ro: "Ai confirmat intervalul propus de cititor/cititoare. Intervalul este blocat — cartea poate fi pregătită pentru ridicare."
   },
   "wf.staff.ready.subject": {
@@ -3691,12 +3691,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     fr: "Tu as signalé que le livre est prêt à être retiré. Le·la lecteur·rice a été prévenu·e.",
     es: "Indicaste que el libro está listo para ser retirado. Le lectore fue avisade.",
     en: "You have signaled that the book is ready for pickup. The reader has been notified.",
-    it: "Avete segnalato che il libro è pronto per il ritiro. Lə lettorə è statə avvisatə.",
-    de: "Ihr habt gemeldet, dass das Buch zur Abholung bereit ist. Die*Der Leser*in wurde benachrichtigt.",
+    it: "Hai segnalato che il libro è pronto per il ritiro. Lə lettorə è statə avvisatə.",
+    de: "Du hast gemeldet, dass das Buch zur Abholung bereit ist. Die*Der Leser*in wurde benachrichtigt.",
     ca: "Has indicat que el llibre està llest per ser recollit. Le lector-a-e ha estat avisade.",
     eo: "Vi indikis ke la libro estas preta por elpreno. La legant-in-o estis avertita.",
     nl: "Je hebt aangegeven dat het boek klaarligt om af te halen. De lezer heeft bericht gekregen.",
-    el: "Επισημάνατε ότι το βιβλίο είναι έτοιμο για παραλαβή. Ο/Η αναγνώστης/στρια ειδοποιήθηκε.",
+    el: "Επισήμανες ότι το βιβλίο είναι έτοιμο για παραλαβή. Ο/Η αναγνώστης/στρια ειδοποιήθηκε.",
     ro: "Ai semnalat că cartea este gata de ridicare. Persoana care citește a fost anunțată."
   },
   "wf.staff.noShow.subject": {
@@ -3740,15 +3740,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "wf.staff.closed.body": {
     "pt-BR": "A reserva está encerrada, o livro voltou à circulação livre. Nenhuma ação adicional é esperada de sua parte.",
-    fr: "La réservation est close, le livre repasse en circulation libre. Aucune action supplémentaire n'est attendue de votre part.",
-    es: "La reserva está cerrada, el libro vuelve a la circulación libre. No se espera ninguna acción adicional de su parte.",
+    fr: "La réservation est close, le livre repasse en circulation libre. Aucune action supplémentaire n'est attendue.",
+    es: "La reserva está cerrada, el libro vuelve a la circulación libre. No se espera ninguna acción adicional.",
     en: "The reservation is closed, the book returns to free circulation. No additional action is expected from you.",
-    it: "La prenotazione è chiusa, il libro torna in circolazione libera. Nessuna azione aggiuntiva è attesa da parte vostra.",
+    it: "La prenotazione è chiusa, il libro torna in circolazione libera. Nessuna azione aggiuntiva è attesa.",
     de: "Die Vormerkung ist abgeschlossen, das Buch geht zurück in den freien Umlauf. Keine zusätzliche Aktion eurerseits ist erforderlich.",
     ca: "La reserva està tancada, el llibre torna a la circulació lliure. No s'espera cap acció addicional per part teva.",
     eo: "La rezervo estas fermita, la libro revenas al libera cirkulado. Neniu plia ago estas atendata de vi.",
     nl: "De reservering is afgesloten, het boek gaat terug in vrije circulatie. Er wordt geen verdere actie van je verwacht.",
-    el: "Η κράτηση έκλεισε, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία. Δεν αναμένεται καμία επιπλέον ενέργεια από εσάς.",
+    el: "Η κράτηση έκλεισε, το βιβλίο επιστρέφει στην ελεύθερη κυκλοφορία. Δεν αναμένεται καμία επιπλέον ενέργεια.",
     ro: "Rezervarea este închisă, cartea revine în circulație liberă. Nu se mai așteaptă nicio altă acțiune din partea ta."
   },
   "wf.staff.maxIterations.subject": {
@@ -3766,15 +3766,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "wf.staff.maxIterations.body": {
     "pt-BR": "Várias trocas sem acordo com o(a/e) leitor(a/e). O(a/e) leitor(a/e) foi convidado(a/e) a entrar em contato diretamente para encontrar uma solução.",
-    fr: "Plusieurs allers-retours sans accord avec le·la lecteur·rice. Le·la lecteur·rice a été invité·e à vous contacter directement pour trouver une solution.",
+    fr: "Plusieurs allers-retours sans accord avec le·la lecteur·rice. Le·la lecteur·rice a été invité·e à contacter directement la bibliothèque pour trouver une solution.",
     es: "Varios intercambios sin acuerdo con le lectore. Le lectore fue invitade a contactarles directamente para encontrar una solución.",
     en: "Several exchanges without agreement with the reader. The reader has been invited to contact you directly to find a solution.",
     it: "Diversi scambi senza accordo con lə lettorə. Lə lettorə è statə invitatə a contattarvi direttamente per trovare una soluzione.",
     de: "Mehrere Versuche ohne Einigung mit der*dem Leser*in. Die*Der Leser*in wurde gebeten, sich direkt an euch zu wenden, um eine Lösung zu finden.",
-    ca: "Diversos intercanvis sense acord amb le lector-a-e. Le lector-a-e ha estat convidade a contactar-vos directament per trobar una solució.",
+    ca: "Diversos intercanvis sense acord amb le lector-a-e. Le lector-a-e ha estat convidade a contactar directament la biblioteca per trobar una solució.",
     eo: "Pluraj interŝanĝoj sen interkonsento kun la legant-in-o. La legant-in-o estis invitita kontakti vin rekte por trovi solvon.",
     nl: "Meerdere keren heen en weer zonder akkoord met de lezer. De lezer is uitgenodigd om rechtstreeks contact met je op te nemen om een oplossing te vinden.",
-    el: "Αρκετές ανταλλαγές χωρίς συμφωνία με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια κλήθηκε να επικοινωνήσει απευθείας μαζί σας για να βρεθεί λύση.",
+    el: "Αρκετές ανταλλαγές χωρίς συμφωνία με τον/την αναγνώστη/στρια. Ο/Η αναγνώστης/στρια κλήθηκε να επικοινωνήσει απευθείας με τη βιβλιοθήκη για να βρεθεί λύση.",
     ro: "Mai multe schimburi fără acord cu cititorul/cititoarea. Persoana a fost invitată să ia legătura direct cu biblioteca, pentru a găsi o soluție."
   },
 
@@ -3830,12 +3830,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     fr: "Tu as envoyé une nouvelle contre-proposition de créneau au·à la lecteur·rice en réponse à sa proposition. En attente de sa réponse.",
     es: "Enviaste una nueva contrapropuesta de horario a le lectore en respuesta a su propuesta. Esperando su respuesta.",
     en: "You have sent a new counter-proposal to the reader in response to their proposal. Awaiting their reply.",
-    it: "Avete inviato una nuova controproposta di orario a lə lettorə in risposta alla sua proposta. In attesa della sua risposta.",
-    de: "Ihr habt einen neuen Gegenvorschlag an die*den Leser*in als Antwort auf deren Vorschlag gesendet. Wartet auf Antwort.",
+    it: "Hai inviato una nuova controproposta di orario a lə lettorə in risposta alla sua proposta. In attesa della sua risposta.",
+    de: "Du hast einen neuen Gegenvorschlag an die*den Leser*in als Antwort auf deren Vorschlag gesendet. Antwort ausstehend.",
     ca: "Has enviat una nova contraproposta de franja a le lector-a-e en resposta a la seva proposta. A l'espera de la seva resposta.",
     eo: "Vi sendis novan tempfendan kontraŭproponon al la legant-in-o responde al ĝia propono. Atendante ĝian respondon.",
     nl: "Je hebt een nieuw tegenvoorstel naar de lezer verzonden als reactie op het voorstel. In afwachting van een reactie.",
-    el: "Στείλατε νέα αντιπρόταση χρόνου στον/στην αναγνώστη/στρια ως απάντηση στην πρότασή του/της. Σε αναμονή της απάντησής του/της.",
+    el: "Έστειλες νέα αντιπρόταση χρόνου στον/στην αναγνώστη/στρια ως απάντηση στην πρότασή του/της. Σε αναμονή της απάντησής του/της.",
     ro: "Ai trimis cititorului/cititoarei o nouă contrapropunere de interval, ca răspuns la propunerea sa. Se așteaptă răspunsul."
   },
 
@@ -3900,14 +3900,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   "wf.staff.infoBox.title": {
     "pt-BR": "Para sua informação",
     fr: "Pour information",
-    es: "Para su información",
+    es: "Para información",
     en: "For your information",
-    it: "Per vostra informazione",
-    de: "Zu Ihrer Information",
+    it: "Per informazione",
+    de: "Zur Information",
     ca: "Per a la teva informació",
     eo: "Por via informo",
     nl: "Ter informatie",
-    el: "Προς ενημέρωσή σας",
+    el: "Προς ενημέρωση",
     ro: "Spre informare"
   },
 
@@ -4280,15 +4280,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "membership_validation_requested.intro": {
     "pt-BR": "Uma pessoa solicitou ingressar na sua biblioteca e aguarda validação presencial.",
-    fr: "Une personne demande à rejoindre votre bibliothèque et attend une validation en présentiel.",
-    es: "Una persona ha solicitado unirse a vuestra biblioteca y espera una validación presencial.",
+    fr: "Une personne demande à rejoindre la bibliothèque et attend une validation en présentiel.",
+    es: "Una persona ha solicitado unirse a la biblioteca y espera una validación presencial.",
     en: "Someone has requested to join your library and is awaiting in-person validation.",
-    it: "Una persona ha chiesto di unirsi alla vostra biblioteca e attende una convalida di persona.",
+    it: "Una persona ha chiesto di unirsi alla biblioteca e attende una convalida di persona.",
     de: "Jemand möchte eurer Bibliothek beitreten und wartet auf eine Bestätigung vor Ort.",
-    ca: "Una persona ha sol·licitat unir-se a la vostra biblioteca i espera una validació presencial.",
+    ca: "Una persona ha sol·licitat unir-se a la biblioteca i espera una validació presencial.",
     eo: "Iu petis aliĝi al via biblioteko kaj atendas surlokan validon.",
     nl: "Iemand heeft gevraagd om lid te worden van jullie bibliotheek en wacht op validatie ter plaatse.",
-    el: "Κάποιο άτομο ζήτησε να εγγραφεί στη βιβλιοθήκη σας και αναμένει δια ζώσης επικύρωση.",
+    el: "Κάποιο άτομο ζήτησε να εγγραφεί στη βιβλιοθήκη και αναμένει δια ζώσης επικύρωση.",
     ro: "O persoană cere să se alăture bibliotecii voastre și așteaptă o validare față în față."
   },
   "membership_validation_requested.actionTitle": {
@@ -4348,15 +4348,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "partnership_proposed.intro": {
     "pt-BR": "A biblioteca parceira abaixo propôs uma parceria à sua biblioteca. Você pode aceitá-la ou recusá-la na página da biblioteca.",
-    fr: "La bibliothèque partenaire ci-dessous propose un partenariat à votre bibliothèque. Vous pouvez l'accepter ou la refuser depuis la page de la bibliothèque.",
-    es: "La biblioteca asociada indicada abajo ha propuesto una asociación a vuestra biblioteca. Podéis aceptarla o rechazarla desde la página de la biblioteca.",
+    fr: "La bibliothèque partenaire ci-dessous propose un partenariat. Il s'accepte ou se refuse depuis la page de la bibliothèque.",
+    es: "La biblioteca asociada indicada abajo ha propuesto una asociación. Se acepta o se rechaza desde la página de la biblioteca.",
     en: "The partner library below has proposed a partnership to your library. You can accept or decline it from the library page.",
-    it: "La biblioteca partner qui sotto ha proposto un partenariato alla vostra biblioteca. Potete accettarlo o rifiutarlo dalla pagina della biblioteca.",
+    it: "La biblioteca partner qui sotto ha proposto un partenariato. Si accetta o si rifiuta dalla pagina della biblioteca.",
     de: "Die unten genannte Partnerbibliothek hat eurer Bibliothek eine Partnerschaft vorgeschlagen. Ihr könnt sie auf der Bibliotheksseite annehmen oder ablehnen.",
-    ca: "La biblioteca associada de sota ha proposat un partenariat a la vostra biblioteca. Podeu acceptar-lo o rebutjar-lo des de la pàgina de la biblioteca.",
+    ca: "La biblioteca associada de sota ha proposat un partenariat. S'accepta o es rebutja des de la pàgina de la biblioteca.",
     eo: "La suba partnera biblioteko proponis partnerecon al via biblioteko. Vi povas akcepti aŭ rifuzi ĝin el la bibliotekpaĝo.",
     nl: "De onderstaande partnerbibliotheek heeft jullie bibliotheek een partnerschap voorgesteld. Je kunt het accepteren of weigeren op de bibliotheekpagina.",
-    el: "Η παρακάτω συνεργαζόμενη βιβλιοθήκη πρότεινε συνεργασία στη βιβλιοθήκη σας. Μπορείτε να την αποδεχτείτε ή να την απορρίψετε από τη σελίδα της βιβλιοθήκης.",
+    el: "Η παρακάτω συνεργαζόμενη βιβλιοθήκη πρότεινε συνεργασία. Η αποδοχή ή η απόρριψη γίνεται από τη σελίδα της βιβλιοθήκης.",
     ro: "Biblioteca parteneră de mai jos propune un parteneriat bibliotecii voastre. Propunerea poate fi acceptată sau refuzată din pagina bibliotecii."
   },
   "partnership_accepted.subject": {
@@ -4368,15 +4368,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "partnership_accepted.intro": {
     "pt-BR": "A biblioteca parceira aceitou sua proposta de parceria. A parceria está agora ativa: você pode ativar os direitos recíprocos na página da biblioteca.",
-    fr: "La bibliothèque partenaire a accepté votre proposition de partenariat. Le partenariat est désormais actif : vous pouvez activer les droits réciproques depuis la page de la bibliothèque.",
-    es: "La biblioteca asociada ha aceptado vuestra propuesta de asociación. La asociación está ahora activa: podéis activar los derechos recíprocos desde la página de la biblioteca.",
+    fr: "La bibliothèque partenaire a accepté la proposition de partenariat. Le partenariat est désormais actif : les droits réciproques s'activent depuis la page de la bibliothèque.",
+    es: "La biblioteca asociada ha aceptado la propuesta de asociación. La asociación está ahora activa: los derechos recíprocos se activan desde la página de la biblioteca.",
     en: "The partner library has accepted your partnership proposal. The partnership is now active: you can enable the reciprocal rights from the library page.",
-    it: "La biblioteca partner ha accettato la vostra proposta di partenariato. Il partenariato è ora attivo: potete attivare i diritti reciproci dalla pagina della biblioteca.",
+    it: "La biblioteca partner ha accettato la proposta di partenariato. Il partenariato è ora attivo: i diritti reciproci si attivano dalla pagina della biblioteca.",
     de: "Die Partnerbibliothek hat euren Partnerschaftsvorschlag angenommen. Die Partnerschaft ist nun aktiv: Ihr könnt die gegenseitigen Rechte auf der Bibliotheksseite aktivieren.",
-    ca: "La biblioteca associada ha acceptat la vostra proposta de partenariat. El partenariat ja és actiu: podeu activar els drets recíprocs des de la pàgina de la biblioteca.",
+    ca: "La biblioteca associada ha acceptat la proposta de partenariat. El partenariat ja és actiu: els drets recíprocs s'activen des de la pàgina de la biblioteca.",
     eo: "La partnera biblioteko akceptis vian proponon de partnereco. La partnereco nun estas aktiva: vi povas aktivigi la reciprokajn rajtojn el la bibliotekpaĝo.",
     nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geaccepteerd. Het partnerschap is nu actief: je kunt de wederzijdse rechten op de bibliotheekpagina inschakelen.",
-    el: "Η συνεργαζόμενη βιβλιοθήκη αποδέχτηκε την πρότασή σας για συνεργασία. Η συνεργασία είναι πλέον ενεργή: μπορείτε να ενεργοποιήσετε τα αμοιβαία δικαιώματα από τη σελίδα της βιβλιοθήκης.",
+    el: "Η συνεργαζόμενη βιβλιοθήκη αποδέχτηκε την πρόταση συνεργασίας. Η συνεργασία είναι πλέον ενεργή: τα αμοιβαία δικαιώματα ενεργοποιούνται από τη σελίδα της βιβλιοθήκης.",
     ro: "Biblioteca parteneră a acceptat propunerea voastră de parteneriat. Parteneriatul este acum activ: drepturile reciproce pot fi activate din pagina bibliotecii."
   },
   "partnership_refused.subject": {
@@ -4389,15 +4389,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "partnership_refused.intro": {
     "pt-BR": "A biblioteca parceira recusou sua proposta de parceria. Você pode propor novamente mais tarde, se desejar.",
-    fr: "La bibliothèque partenaire a refusé votre proposition de partenariat. Vous pourrez en proposer une nouvelle plus tard si vous le souhaitez.",
-    es: "La biblioteca asociada ha rechazado vuestra propuesta de asociación. Podréis proponer otra más adelante si lo deseáis.",
+    fr: "La bibliothèque partenaire a refusé la proposition de partenariat. Une nouvelle proposition reste possible plus tard.",
+    es: "La biblioteca asociada ha rechazado la propuesta de asociación. Más adelante se podrá proponer otra.",
     en: "The partner library has declined your partnership proposal. You may propose again later if you wish.",
-    it: "La biblioteca partner ha rifiutato la vostra proposta di partenariato. Potete riproporla più avanti, se lo desiderate.",
+    it: "La biblioteca partner ha rifiutato la proposta di partenariato. Più avanti se ne potrà proporre un'altra.",
     de: "Die Partnerbibliothek hat euren Partnerschaftsvorschlag abgelehnt. Ihr könnt später erneut einen Vorschlag machen, wenn ihr möchtet.",
-    ca: "La biblioteca associada ha rebutjat la vostra proposta de partenariat. Podeu tornar a proposar-ne una més endavant si voleu.",
+    ca: "La biblioteca associada ha rebutjat la proposta de partenariat. Més endavant se'n podrà proposar una altra.",
     eo: "La partnera biblioteko rifuzis vian proponon de partnereco. Vi povas reproponi poste, se vi deziras.",
     nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geweigerd. Je kunt later opnieuw een voorstel doen als je wilt.",
-    el: "Η συνεργαζόμενη βιβλιοθήκη απέρριψε την πρότασή σας για συνεργασία. Μπορείτε να προτείνετε ξανά αργότερα, αν θέλετε.",
+    el: "Η συνεργαζόμενη βιβλιοθήκη απέρριψε την πρόταση συνεργασίας. Μια νέα πρόταση παραμένει δυνατή αργότερα.",
     ro: "Biblioteca parteneră a refuzat propunerea voastră de parteneriat. O nouă propunere poate fi făcută mai târziu, dacă doriți."
   },
   "partnership_broken.subject": {
@@ -4666,7 +4666,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "La teva quota s'ha registrat. Aquí tens el teu comprovant.",
     eo: "Via kotizo estis registrita. Jen via kvitanco.",
     nl: "Je bijdrage is geregistreerd. Hier is je bewijs.",
-    el: "Η συνεισφορά σου καταχωρήθηκε. Ορίστε η απόδειξή σου.",
+    el: "Η συνεισφορά σου καταχωρήθηκε. Ακολουθεί η απόδειξή σου.",
     ro: "Cotizația ta a fost înregistrată. Iată chitanța ta."
   },
   "deposit.collected.subject": {
@@ -4692,7 +4692,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu dipòsit de garantia s'ha registrat. Se't tornarà en retornar l'obra. Aquí tens el teu comprovant.",
     eo: "Via garantia depono estis registrita. Ĝi estos redonita al vi je la repreno de la verko. Jen via kvitanco.",
     nl: "Je waarborg is geregistreerd. Je krijgt deze terug bij het inleveren van het werk. Hier is je bewijs.",
-    el: "Η εγγύησή σου καταχωρήθηκε. Θα σου επιστραφεί κατά την επιστροφή του τεκμηρίου. Ορίστε η απόδειξή σου.",
+    el: "Η εγγύησή σου καταχωρήθηκε. Θα σου επιστραφεί κατά την επιστροφή του τεκμηρίου. Ακολουθεί η απόδειξή σου.",
     ro: "Garanția ta a fost înregistrată. Îți va fi restituită la returnarea documentului. Iată chitanța ta."
   },
   "deposit.refunded.subject": {
@@ -4718,7 +4718,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu dipòsit de garantia se t'ha retornat íntegrament. Aquí tens el teu comprovant.",
     eo: "Via garantia depono estis plene redonita al vi. Jen via kvitanco.",
     nl: "Je waarborg is volledig terugbetaald. Hier is je bewijs.",
-    el: "Η εγγύησή σου επιστράφηκε πλήρως. Ορίστε η απόδειξή σου.",
+    el: "Η εγγύησή σου επιστράφηκε πλήρως. Ακολουθεί η απόδειξή σου.",
     ro: "Garanția ți-a fost restituită integral. Iată chitanța ta."
   },
   "deposit.refunded_partial.subject": {
@@ -4744,7 +4744,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Una part del teu dipòsit de garantia se t'ha retornat. Aquí tens el detall.",
     eo: "Parto de via garantia depono estis redonita al vi. Jen la detaloj.",
     nl: "Een deel van je waarborg is terugbetaald. Hier zijn de details.",
-    el: "Ένα μέρος της εγγύησής σου σου επιστράφηκε. Ορίστε οι λεπτομέρειες.",
+    el: "Ένα μέρος της εγγύησής σου σου επιστράφηκε. Ακολουθούν οι λεπτομέρειες.",
     ro: "O parte din garanția ta ți-a fost restituită. Iată detaliile."
   },
   "deposit.amountLabel": {
@@ -6688,15 +6688,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.cooptation_reminder.intro": {
     "pt-BR": "Uma proposta de cooptação foi aberta há vários dias e ainda aguarda sua decisão. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo.",
-    fr: "Une proposition de cooptation a été ouverte il y a plusieurs jours et attend encore votre décision. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus.",
-    es: "Una propuesta de cooptación fue abierta hace varios días y aún espera vuestra decisión. La unanimidad de les administradores activos es necesaria para cerrar el proceso.",
+    fr: "Une proposition de cooptation a été ouverte il y a plusieurs jours et attend encore ta décision. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus.",
+    es: "Una propuesta de cooptación fue abierta hace varios días y aún espera tu decisión. La unanimidad de les administradores activos es necesaria para cerrar el proceso.",
     en: "A cooptation proposal was opened several days ago and is still awaiting your decision. Unanimity among active network administrators is required to complete the process.",
-    it: "Una proposta di cooptazione è stata aperta diversi giorni fa e attende ancora la vostra decisione. L'unanimità dei compagn* amministratori/trici attiv* è necessaria per concludere il processo.",
-    de: "Ein Kooptationsvorschlag wurde vor mehreren Tagen eröffnet und wartet noch auf Ihre Entscheidung. Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschließen.",
-    ca: "S'ha obert una proposta de cooptació fa diversos dies i encara espera la vostra decisió. La unanimitat de les administradores actives és necessària per concloure el procés.",
+    it: "Una proposta di cooptazione è stata aperta diversi giorni fa e attende ancora la tua decisione. L'unanimità dei compagn* amministratori/trici attiv* è necessaria per concludere il processo.",
+    de: "Ein Kooptationsvorschlag wurde vor mehreren Tagen eröffnet und wartet noch auf deine Entscheidung. Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschließen.",
+    ca: "S'ha obert una proposta de cooptació fa diversos dies i encara espera la teva decisió. La unanimitat de les administradores actives és necessària per concloure el procés.",
     eo: "Kooptad-propono estis malfermita antaŭ pluraj tagoj kaj ankoraŭ atendas vian decidon. La unuanimeco de la aktivaj administrant-in-oj estas necesa por konkludi la procezon.",
     nl: "Een coöptatievoorstel is enkele dagen geleden geopend en wacht nog op je beslissing. Unanimiteit onder de actieve netwerkbeheerders is vereist om het proces af te ronden.",
-    el: "Μια πρόταση κοόπτησης άνοιξε πριν αρκετές ημέρες και αναμένει ακόμη την απόφασή σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία.",
+    el: "Μια πρόταση κοόπτησης άνοιξε πριν αρκετές ημέρες και αναμένει ακόμη την απόφασή σου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία.",
     ro: "O propunere de cooptare a fost deschisă acum câteva zile și încă îți așteaptă decizia. Este nevoie de unanimitatea persoanelor active din administrarea rețelei pentru a încheia procesul."
   },
   "network.cooptation_reminder.cta": {
@@ -6742,15 +6742,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.request_eval_digest.intro_proposal": {
     "pt-BR": "Uma proposta de decisão sobre uma solicitação de adesão aguarda seu voto. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s da rede é necessária.",
-    fr: "Une proposition de décision sur une demande d'adhésion attend votre vote. L'unanimité des administrateur·rices réseau actif·ves est requise.",
-    es: "Una propuesta de decisión sobre una solicitud de adhesión espera vuestro voto. Se requiere la unanimidad de les administradores activos de la red.",
+    fr: "Une proposition de décision sur une demande d'adhésion attend ton vote. L'unanimité des administrateur·rices réseau actif·ves est requise.",
+    es: "Una propuesta de decisión sobre una solicitud de adhesión espera tu voto. Se requiere la unanimidad de les administradores activos de la red.",
     en: "A decision proposal on a membership request is awaiting your vote. Unanimity among active network administrators is required.",
-    it: "Una proposta di decisione su una richiesta di adesione attende il vostro voto. È necessaria l'unanimità degli amministratori/trici attiv* della rete.",
-    de: "Ein Entscheidungsvorschlag zu einem Aufnahmeantrag wartet auf Ihre Stimme. Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich.",
-    ca: "Una proposta de decisió sobre una sol·licitud d'adhesió espera el vostre vot. Cal la unanimitat de les administradores actives de la xarxa.",
+    it: "Una proposta di decisione su una richiesta di adesione attende il tuo voto. È necessaria l'unanimità degli amministratori/trici attiv* della rete.",
+    de: "Ein Entscheidungsvorschlag zu einem Aufnahmeantrag wartet auf deine Stimme. Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich.",
+    ca: "Una proposta de decisió sobre una sol·licitud d'adhesió espera el teu vot. Cal la unanimitat de les administradores actives de la xarxa.",
     eo: "Decid-propono pri aliĝpeto atendas vian voĉdonon. Necesas la unuanimeco de la aktivaj retaj administrant-in-oj.",
     nl: "Een beslissingsvoorstel over een toetredingsaanvraag wacht op je stem. Unanimiteit onder de actieve netwerkbeheerders is vereist.",
-    el: "Μια πρόταση απόφασης για ένα αίτημα ένταξης αναμένει την ψήφο σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου.",
+    el: "Μια πρόταση απόφασης για ένα αίτημα ένταξης αναμένει την ψήφο σου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου.",
     ro: "O propunere de decizie privind o cerere de aderare îți așteaptă votul. Este nevoie de unanimitatea persoanelor active din administrarea rețelei."
   },
   "network.request_eval_digest.intro_backlog": {
@@ -6798,15 +6798,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.collective_removal_proposed.intro": {
     "pt-BR": "{proposerName} abriu uma proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}. Esta é uma decisão política grave que exige unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s (excluíd(o/a/e) (o/a/e) próprio(a/e) target). Seu voto é necessário.",
-    fr: "{proposerName} a ouvert une proposition de retrait collectif de l'administrateur·rice {proposedName}. Il s'agit d'une décision politique grave qui requiert l'unanimité des administrateur·rices actif·ves (à l'exclusion de la personne ciblée). Votre vote est nécessaire.",
-    es: "{proposerName} abrió una propuesta de retiro colectivo de le administrade {proposedName}. Es una decisión política grave que exige la unanimidad de les administradores activos (excluide le propie target). Vuestro voto es necesario.",
+    fr: "{proposerName} a ouvert une proposition de retrait collectif de l'administrateur·rice {proposedName}. Il s'agit d'une décision politique grave qui requiert l'unanimité des administrateur·rices actif·ves (à l'exclusion de la personne ciblée). Ton vote est nécessaire.",
+    es: "{proposerName} abrió una propuesta de retiro colectivo de le administrade {proposedName}. Es una decisión política grave que exige la unanimidad de les administradores activos (excluide le propie target). Tu voto es necesario.",
     en: "{proposerName} has opened a proposal for the collective removal of network administrator {proposedName}. This is a serious political decision requiring unanimity among active administrators (excluding the target). Your vote is needed.",
-    it: "{proposerName} ha aperto una proposta di ritiro collettivo dell'amministratore/trice {proposedName}. È una decisione politica grave che richiede l'unanimità dei compagn* amministratori/trici attiv* (esclu* (il/la/le) compagn* oggetto). Il vostro voto è necessario.",
-    de: "{proposerName} hat einen Vorschlag zum kollektiven Rückzug von Netzwerk-Administrator*in {proposedName} eröffnet. Dies ist eine schwerwiegende politische Entscheidung, die die Einstimmigkeit der aktiven Administrator*innen erfordert (ausgenommen die betroffene Person). Ihre Stimme ist erforderlich.",
-    ca: "{proposerName} ha obert una proposta de retirada col·lectiva de l'administrador-a-e {proposedName}. Es tracta d'una decisió política greu que requereix la unanimitat de les administradores actives (excloent la persona objecte de la proposta). El vostre vot és necessari.",
+    it: "{proposerName} ha aperto una proposta di ritiro collettivo dell'amministratore/trice {proposedName}. È una decisione politica grave che richiede l'unanimità dei compagn* amministratori/trici attiv* (esclu* (il/la/le) compagn* oggetto). Il tuo voto è necessario.",
+    de: "{proposerName} hat einen Vorschlag zum kollektiven Rückzug von Netzwerk-Administrator*in {proposedName} eröffnet. Dies ist eine schwerwiegende politische Entscheidung, die die Einstimmigkeit der aktiven Administrator*innen erfordert (ausgenommen die betroffene Person). Deine Stimme ist erforderlich.",
+    ca: "{proposerName} ha obert una proposta de retirada col·lectiva de l'administrador-a-e {proposedName}. Es tracta d'una decisió política greu que requereix la unanimitat de les administradores actives (excloent la persona objecte de la proposta). El teu vot és necessari.",
     eo: "{proposerName} malfermis proponon de kolektiva forigo de la administrant-in-o {proposedName}. Temas pri grava politika decido kiu postulas la unuanimecon de la aktivaj administrant-in-oj (escepte de la celata persono). Via voĉdono estas necesa.",
     nl: "{proposerName} heeft een voorstel geopend tot collectieve afzetting van netwerkbeheerder {proposedName}. Dit is een ernstige politieke beslissing die unanimiteit vereist onder de actieve beheerders (met uitzondering van de betrokken persoon). Je stem is nodig.",
-    el: "Ο/Η {proposerName} άνοιξε πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας δικτύου {proposedName}. Πρόκειται για σοβαρή πολιτική απόφαση που απαιτεί ομοφωνία των ενεργών διαχειριστών/στριών (εξαιρουμένου/ης του/της εμπλεκόμενου/ης). Η ψήφος σας είναι απαραίτητη.",
+    el: "Ο/Η {proposerName} άνοιξε πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας δικτύου {proposedName}. Πρόκειται για σοβαρή πολιτική απόφαση που απαιτεί ομοφωνία των ενεργών διαχειριστών/στριών (εξαιρουμένου/ης του/της εμπλεκόμενου/ης). Η ψήφος σου είναι απαραίτητη.",
     ro: "{proposerName} a deschis o propunere de retragere colectivă a lui {proposedName} din administrarea rețelei. Este o decizie politică gravă, care cere unanimitatea persoanelor active din administrare (fără persoana vizată). Votul tău este necesar."
   },
   "network.collective_removal_proposed.cta": {
@@ -6856,15 +6856,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.collective_removal_vote_cast.intro": {
     "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar.",
-    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de retrait collectif de l'administrateur·rice {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter.",
+    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de retrait collectif de l'administrateur·rice {proposedName}, ouverte par {proposerName}. Accède à l'app pour voir l'état actuel de la délibération et voter.",
     es: "Une administrade de red acaba de votar sobre la propuesta de retiro colectivo de le administrade {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar.",
     en: "A network administrator has just cast a vote on the collective removal proposal of administrator {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote.",
     it: "Un compagn* amministratore/trice di rete ha appena votato sulla proposta di ritiro collettivo dell'amministratore/trice {proposedName}, aperta da {proposerName}. Accedi all'app per vedere lo stato attuale della deliberazione e votare.",
-    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Vorschlag eines kollektiven Rückzugs von Administrator*in {proposedName} abgestimmt, eröffnet von {proposerName}. Öffnen Sie die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen.",
-    ca: "Una administradora de xarxa acaba de votar sobre la proposta de retirada col·lectiva de l'administrador-a-e {proposedName}, oberta per {proposerName}. Accediu a l'aplicació per veure l'estat actual de la deliberació i votar.",
+    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Vorschlag eines kollektiven Rückzugs von Administrator*in {proposedName} abgestimmt, eröffnet von {proposerName}. Öffne die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen.",
+    ca: "Una administradora de xarxa acaba de votar sobre la proposta de retirada col·lectiva de l'administrador-a-e {proposedName}, oberta per {proposerName}. Accedeix a l'aplicació per veure l'estat actual de la deliberació i votar.",
     eo: "Reta administrant-in-o ĵus voĉdonis pri la propono de kolektiva forigo de la administrant-in-o {proposedName}, malfermita de {proposerName}. Aliru la aplikaĵon por vidi la nunan staton de la pridiskuto kaj voĉdoni.",
     nl: "Een netwerkbeheerder heeft zojuist gestemd over het voorstel tot collectieve afzetting van beheerder {proposedName}, geopend door {proposerName}. Open de app om de huidige stand van de beraadslaging te zien en te stemmen.",
-    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε.",
+    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση συλλογικής απομάκρυνσης του/της διαχειριστή/στριας {proposedName}, που άνοιξε ο/η {proposerName}. Άνοιξε την εφαρμογή για να δεις την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσεις.",
     ro: "O persoană din administrarea rețelei tocmai a votat propunerea de retragere colectivă a lui {proposedName} din administrare, deschisă de {proposerName}. Intră în aplicație ca să vezi stadiul actual al deliberării și să votezi."
   },
   "network.collective_removal_vote_cast.rationale_label": {
@@ -6914,15 +6914,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.collective_removal_unanimous.target_intro": {
     "pt-BR": "Esta mensagem informa que a unanimidade d(o/a/e)s outr(o/a/e)s administrador(a/e)s ativ(o/a/e)s foi alcançada sobre a sua retirada coletiva. Uma carência de 7 dias se aplica antes da efetivação. Sua palavra é livre durante esta janela.",
-    fr: "Ce message vous informe que l'unanimité des autres administrateur·rices actif·ves a été atteinte sur votre retrait collectif. Une carence de 7 jours s'applique avant exécution. Votre parole est libre durant cette fenêtre.",
-    es: "Este mensaje le informa que se alcanzó la unanimidad de les otres administradores activos sobre vuestro retiro colectivo. Se aplica un período de gracia de 7 días antes de la ejecución. Vuestra palabra es libre durante esta ventana.",
+    fr: "Ce message t'informe que l'unanimité des autres administrateur·rices actif·ves a été atteinte sur ton retrait collectif. Une carence de 7 jours s'applique avant exécution. Ta parole est libre durant cette fenêtre.",
+    es: "Este mensaje te informa que se alcanzó la unanimidad de les otres administradores activos sobre tu retiro colectivo. Se aplica un período de gracia de 7 días antes de la ejecución. Tu palabra es libre durante esta ventana.",
     en: "This message informs you that unanimity among the other active network administrators has been reached regarding your collective removal. A 7-day grace period applies before execution. Your voice remains free during this window.",
-    it: "Questo messaggio vi informa che l'unanimità degli/delle altr* compagn* amministratori/trici attiv* è stata raggiunta sul vostro ritiro collettivo. Si applica un periodo di grazia di 7 giorni prima dell'esecuzione. La vostra parola resta libera durante questa finestra.",
-    de: "Diese Nachricht informiert Sie darüber, dass die Einstimmigkeit der anderen aktiven Netzwerk-Administrator*innen über Ihren kollektiven Rückzug erreicht wurde. Eine 7-tägige Karenzfrist gilt vor der Vollziehung. Ihr Wort bleibt frei während dieses Zeitraums.",
-    ca: "Aquest missatge us informa que s'ha assolit la unanimitat de les altres administradores actives sobre la vostra retirada col·lectiva. S'aplica un termini de gràcia de 7 dies abans de l'execució. La vostra paraula és lliure durant aquesta finestra.",
+    it: "Questo messaggio ti informa che l'unanimità degli/delle altr* compagn* amministratori/trici attiv* è stata raggiunta sul tuo ritiro collettivo. Si applica un periodo di grazia di 7 giorni prima dell'esecuzione. La tua parola resta libera durante questa finestra.",
+    de: "Diese Nachricht informiert dich darüber, dass die Einstimmigkeit der anderen aktiven Netzwerk-Administrator*innen über deinen kollektiven Rückzug erreicht wurde. Eine 7-tägige Karenzfrist gilt vor der Vollziehung. Dein Wort bleibt frei während dieses Zeitraums.",
+    ca: "Aquest missatge t'informa que s'ha assolit la unanimitat de les altres administradores actives sobre la teva retirada col·lectiva. S'aplica un termini de gràcia de 7 dies abans de l'execució. La teva paraula és lliure durant aquesta finestra.",
     eo: "Ĉi tiu mesaĝo informas vin ke la unuanimeco de la aliaj aktivaj administrant-in-oj estis atingita pri via kolektiva forigo. Grac-periodo de 7 tagoj validas antaŭ la plenumo. Via parolo estas libera dum ĉi tiu fenestro.",
     nl: "Dit bericht informeert je dat onder de andere actieve netwerkbeheerders unanimiteit is bereikt over je collectieve afzetting. Vóór uitvoering geldt een respijtperiode van 7 dagen. Je stem blijft vrij tijdens dit venster.",
-    el: "Αυτό το μήνυμα σάς ενημερώνει ότι επιτεύχθηκε ομοφωνία μεταξύ των άλλων ενεργών διαχειριστών/στριών του δικτύου σχετικά με τη συλλογική σας απομάκρυνση. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Ο λόγος σας παραμένει ελεύθερος σε αυτό το διάστημα.",
+    el: "Αυτό το μήνυμα σε ενημερώνει ότι επιτεύχθηκε ομοφωνία μεταξύ των άλλων ενεργών διαχειριστών/στριών του δικτύου σχετικά με τη συλλογική σου απομάκρυνση. Ισχύει περίοδος χάριτος 7 ημερών πριν την εκτέλεση. Ο λόγος σου παραμένει ελεύθερος σε αυτό το διάστημα.",
     ro: "Acest mesaj te informează că s-a ajuns la unanimitatea celorlalte persoane active din administrare privind retragerea ta colectivă. Se aplică o perioadă de așteptare de 7 zile înainte de executare. În acest interval, cuvântul tău rămâne liber."
   },
   "network.collective_removal_unanimous.carence_label": {
@@ -7027,15 +7027,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.collective_removal_executed.target_intro": {
     "pt-BR": "A carência de 7 dias terminou e a retirada coletiva votada por unanimidade está agora efetiva. Sua função d(o/a/e) administrador(a/e) de rede no AnarBib foi removida. Esta decisão é registrada no histórico militante.",
-    fr: "La carence de 7 jours est arrivée à terme et le retrait collectif voté à l'unanimité prend effet. Votre fonction d'administrateur·rice de réseau dans AnarBib a été retirée. Cette décision est consignée dans l'historique militant.",
-    es: "Terminó el período de gracia de 7 días y el retiro colectivo votado por unanimidad entra en vigor. Vuestra función de administrade de red en AnarBib fue retirada. Esta decisión queda registrada en el historial militante.",
+    fr: "La carence de 7 jours est arrivée à terme et le retrait collectif voté à l'unanimité prend effet. Ta fonction d'administrateur·rice de réseau dans AnarBib a été retirée. Cette décision est consignée dans l'historique militant.",
+    es: "Terminó el período de gracia de 7 días y el retiro colectivo votado por unanimidad entra en vigor. Tu función de administrade de red en AnarBib fue retirada. Esta decisión queda registrada en el historial militante.",
     en: "The 7-day grace period has ended and the unanimously-voted collective removal now takes effect. Your network administrator role in AnarBib has been removed. This decision is recorded in the militant history.",
-    it: "Il periodo di grazia di 7 giorni è terminato e il ritiro collettivo votato all'unanimità entra in vigore. La vostra funzione di amministratore/trice di rete in AnarBib è stata rimossa. Questa decisione è registrata nella storia militante.",
-    de: "Die 7-tägige Karenzfrist ist abgelaufen, und der einstimmig beschlossene kollektive Rückzug wird wirksam. Ihre Funktion als Netzwerk-Administrator*in in AnarBib wurde entzogen. Diese Entscheidung wird in der militanten Geschichte festgehalten.",
-    ca: "El termini de gràcia de 7 dies ha acabat i la retirada col·lectiva votada per unanimitat entra en vigor. La vostra funció d'administrador-a-e de xarxa a AnarBib ha estat retirada. Aquesta decisió queda registrada a l'historial militant.",
+    it: "Il periodo di grazia di 7 giorni è terminato e il ritiro collettivo votato all'unanimità entra in vigore. La tua funzione di amministratore/trice di rete in AnarBib è stata rimossa. Questa decisione è registrata nella storia militante.",
+    de: "Die 7-tägige Karenzfrist ist abgelaufen, und der einstimmig beschlossene kollektive Rückzug wird wirksam. Deine Funktion als Netzwerk-Administrator*in in AnarBib wurde entzogen. Diese Entscheidung wird in der militanten Geschichte festgehalten.",
+    ca: "El termini de gràcia de 7 dies ha acabat i la retirada col·lectiva votada per unanimitat entra en vigor. La teva funció d'administrador-a-e de xarxa a AnarBib ha estat retirada. Aquesta decisió queda registrada a l'historial militant.",
     eo: "La grac-periodo de 7 tagoj finiĝis kaj la kolektiva forigo voĉdonita unuanime ekvalidas. Via funkcio de reta administrant-in-o en AnarBib estis forigita. Ĉi tiu decido estas registrita en la aktivisma historio.",
     nl: "De respijtperiode van 7 dagen is afgelopen en de unaniem aangenomen collectieve afzetting wordt nu van kracht. Je functie van netwerkbeheerder in AnarBib is verwijderd. Deze beslissing wordt vastgelegd in de militante geschiedenis.",
-    el: "Η περίοδος χάριτος 7 ημερών έληξε και η συλλογική απομάκρυνση που ψηφίστηκε ομόφωνα τίθεται σε ισχύ. Ο ρόλος σας ως διαχειριστής/στρια δικτύου στο AnarBib αφαιρέθηκε. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό.",
+    el: "Η περίοδος χάριτος 7 ημερών έληξε και η συλλογική απομάκρυνση που ψηφίστηκε ομόφωνα τίθεται σε ισχύ. Ο ρόλος σου ως διαχειριστής/στρια δικτύου στο AnarBib αφαιρέθηκε. Αυτή η απόφαση καταγράφεται στο αγωνιστικό ιστορικό.",
     ro: "Perioada de așteptare de 7 zile s-a încheiat, iar retragerea colectivă votată în unanimitate intră în vigoare. Funcția ta în administrarea rețelei AnarBib a fost retrasă. Decizia este consemnată în istoricul militant."
   },
 // ============================================================================
@@ -7075,15 +7075,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.assembleia.convocada.intro": {
     "pt-BR": "Uma assembleia da rede foi convocada: « {title} ». A ordem do dia está se constituindo — é hora de avisar sua biblioteca e preparar o mandato de quem a representará.",
-    fr: "Une assemblée du réseau est convoquée : « {title} ». L'ordre du jour se constitue — c'est le moment de prévenir ta bibliothèque et de préparer le mandat de votre délégué·e.",
-    es: "Se ha convocado una asamblea de la red: « {title} ». El orden del día se está formando — es momento de avisar a tu biblioteca y preparar el mandato de quien os represente.",
+    fr: "Une assemblée du réseau est convoquée : « {title} ». L'ordre du jour se constitue — c'est le moment de prévenir ta bibliothèque et de préparer le mandat de la personne qui la représentera.",
+    es: "Se ha convocado una asamblea de la red: « {title} ». El orden del día se está formando — es momento de avisar a tu biblioteca y preparar el mandato de quien la represente.",
     en: "A network assembly has been convened: “{title}”. The agenda is taking shape — it's time to inform your library and prepare your delegate's mandate.",
     it: "È stata convocata un'assemblea della rete: « {title} ». L'ordine del giorno si sta formando — è il momento di avvisare la tua biblioteca e preparare il mandato di chi vi rappresenterà.",
     de: "Eine Netzwerkversammlung wurde einberufen: « {title} ». Die Tagesordnung entsteht — informiere jetzt deine Bibliothek und bereitet das Mandat eurer Delegation vor.",
-    ca: "S'ha convocat una assemblea de la xarxa: « {title} ». L'ordre del dia s'està constituint — és el moment d'avisar la teva biblioteca i preparar el mandat de qui us representi.",
+    ca: "S'ha convocat una assemblea de la xarxa: « {title} ». L'ordre del dia s'està constituint — és el moment d'avisar la teva biblioteca i preparar el mandat de qui la representi.",
     eo: "Reta asembleo estas kunvokita: « {title} ». La tagordo formiĝas — jen la momento por averti vian bibliotekon kaj prepari la mandaton de via reprezentanto.",
     nl: "Er is een netwerkvergadering bijeengeroepen: « {title} ». De agenda krijgt vorm — informeer nu je bibliotheek en bereid het mandaat van jullie afgevaardigde voor.",
-    el: "Συγκλήθηκε συνέλευση του δικτύου: « {title} ». Η ημερήσια διάταξη διαμορφώνεται — είναι η στιγμή να ενημερώσετε τη βιβλιοθήκη σας και να προετοιμάσετε την εντολή του εκπροσώπου σας.",
+    el: "Συγκλήθηκε συνέλευση του δικτύου: « {title} ». Η ημερήσια διάταξη διαμορφώνεται — είναι η στιγμή να ενημερώσεις τη βιβλιοθήκη σου και να προετοιμάσεις την εντολή του προσώπου που θα την εκπροσωπήσει.",
     ro: "A fost convocată o adunare a rețelei: „{title}”. Ordinea de zi se conturează — acum e momentul să anunți biblioteca ta și să pregătiți mandatul delegatului/delegatei voastre."
   },
   "network.assembleia.convocada.cta": {
@@ -7096,7 +7096,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure l'assemblea",
     eo: "Vidi la asembleon",
     nl: "Vergadering bekijken",
-    el: "Δείτε τη συνέλευση",
+    el: "Δες τη συνέλευση",
     ro: "Vezi adunarea"
   },
   "network.assembleia.agenda_published.sub": {
@@ -7114,15 +7114,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.assembleia.agenda_published.intro": {
     "pt-BR": "A ordem do dia de « {title} » está fixada e traduzida. Tomem conhecimento e mandatem quem representará vocês ponto a ponto antes da realização.",
-    fr: "L'ordre du jour de « {title} » est figé et traduit. Prenez-en connaissance et mandatez votre délégué·e point par point avant la tenue.",
-    es: "El orden del día de « {title} » está fijado y traducido. Tomen conocimiento y manden a quien os represente punto por punto antes de la celebración.",
+    fr: "L'ordre du jour de « {title} » est figé et traduit. Prends-en connaissance et mandate, point par point, la personne qui représentera ta bibliothèque avant la tenue.",
+    es: "El orden del día de « {title} » está fijado y traducido. Toma conocimiento y da mandato, punto por punto, a quien represente a tu biblioteca antes de la celebración.",
     en: "The agenda for “{title}” is finalised and translated. Review it and mandate your delegate point by point before the assembly is held.",
     it: "L'ordine del giorno di « {title} » è fissato e tradotto. Prendetene visione e mandatate chi vi rappresenterà punto per punto prima dello svolgimento.",
     de: "Die Tagesordnung von « {title} » steht fest und ist übersetzt. Nehmt sie zur Kenntnis und mandatiert eure Delegation Punkt für Punkt vor der Durchführung.",
-    ca: "L'ordre del dia de « {title} » està fixat i traduït. Preneu-ne coneixement i mandateu qui us representi punt per punt abans de la realització.",
+    ca: "L'ordre del dia de « {title} » està fixat i traduït. Pren-ne coneixement i dona mandat, punt per punt, a qui representi la teva biblioteca abans de la realització.",
     eo: "La tagordo de « {title} » estas fiksita kaj tradukita. Konatiĝu kun ĝi kaj mandatu vian reprezentanton punkton post punkto antaŭ la okazigo.",
     nl: "De agenda van « {title} » is vastgesteld en vertaald. Neem er kennis van en mandateer jullie afgevaardigde punt voor punt vóór de bijeenkomst.",
-    el: "Η ημερήσια διάταξη της « {title} » οριστικοποιήθηκε και μεταφράστηκε. Λάβετε γνώση και δώστε εντολή στον εκπρόσωπό σας σημείο προς σημείο πριν από τη διεξαγωγή.",
+    el: "Η ημερήσια διάταξη της « {title} » οριστικοποιήθηκε και μεταφράστηκε. Λάβε γνώση και δώσε εντολή, σημείο προς σημείο, στο πρόσωπο που θα εκπροσωπήσει τη βιβλιοθήκη σου πριν από τη διεξαγωγή.",
     ro: "Ordinea de zi pentru „{title}” este fixată și tradusă. Citiți-o și dați-i delegatului/delegatei voastre mandatul punct cu punct, înainte de adunare."
   },
   "network.assembleia.agenda_published.cta": {
@@ -7135,7 +7135,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Llegir l'ordre del dia",
     eo: "Legi la tagordon",
     nl: "Agenda lezen",
-    el: "Διαβάστε την ημερήσια διάταξη",
+    el: "Διάβασε την ημερήσια διάταξη",
     ro: "Citește ordinea de zi"
   },
   "network.assembleia.item_proposed.sub": {
@@ -7174,7 +7174,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Veure l'ordre del dia",
     eo: "Vidi la tagordon",
     nl: "Agenda bekijken",
-    el: "Δείτε την ημερήσια διάταξη",
+    el: "Δες την ημερήσια διάταξη",
     ro: "Vezi ordinea de zi"
   },
   // ===== network.cooptation_proposed ========================================
@@ -7196,15 +7196,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.cooptation_proposed.intro": {
     "pt-BR": "{proposerName} propôs cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo. Seu voto é esperado.",
-    fr: "{proposerName} propose de coopter {proposedName} comme administrateur·rice du réseau. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus. Votre vote est attendu.",
-    es: "{proposerName} propone cooptar a {proposedName} como administrade de red. La unanimidad de les administradores activos es necesaria para cerrar el proceso. Vuestro voto es esperado.",
+    fr: "{proposerName} propose de coopter {proposedName} comme administrateur·rice du réseau. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus. Ton vote est attendu.",
+    es: "{proposerName} propone cooptar a {proposedName} como administrade de red. La unanimidad de les administradores activos es necesaria para cerrar el proceso. Tu voto es esperado.",
     en: "{proposerName} proposes to coopt {proposedName} as a network administrator. Unanimity among active network administrators is required to complete the process. Your vote is expected.",
-    it: "{proposerName} propone di cooptare {proposedName} come amministratore/trice di rete. L'unanimità dei compagn* amministratori/trici attiv* è necessaria per concludere il processo. Il vostro voto è atteso.",
-    de: "{proposerName} schlägt vor, {proposedName} als Netzwerk-Administrator*in zu kooptieren. Die Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschließen. Ihre Stimme wird erwartet.",
-    ca: "{proposerName} proposa cooptar {proposedName} com a administrador-a-e de xarxa. La unanimitat de les administradores actives és necessària per concloure el procés. S'espera el vostre vot.",
+    it: "{proposerName} propone di cooptare {proposedName} come amministratore/trice di rete. L'unanimità dei compagn* amministratori/trici attiv* è necessaria per concludere il processo. Il tuo voto è atteso.",
+    de: "{proposerName} schlägt vor, {proposedName} als Netzwerk-Administrator*in zu kooptieren. Die Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschließen. Deine Stimme wird erwartet.",
+    ca: "{proposerName} proposa cooptar {proposedName} com a administrador-a-e de xarxa. La unanimitat de les administradores actives és necessària per concloure el procés. S'espera el teu vot.",
     eo: "{proposerName} proponas koopti {proposedName} kiel retan administrant-in-on. La unuanimeco de la aktivaj administrant-in-oj estas necesa por konkludi la procezon. Via voĉdono estas atendata.",
     nl: "{proposerName} stelt voor om {proposedName} te coöpteren als netwerkbeheerder. Unanimiteit onder de actieve netwerkbeheerders is vereist om het proces af te ronden. Je stem wordt verwacht.",
-    el: "Ο/Η {proposerName} προτείνει την κοόπτηση του/της {proposedName} ως διαχειριστή/στρια του δικτύου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία. Αναμένεται η ψήφος σας.",
+    el: "Ο/Η {proposerName} προτείνει την κοόπτηση του/της {proposedName} ως διαχειριστή/στρια του δικτύου. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου για να ολοκληρωθεί η διαδικασία. Αναμένεται η ψήφος σου.",
     ro: "{proposerName} propune cooptarea lui {proposedName} în administrarea rețelei. Este nevoie de unanimitatea persoanelor active din administrare pentru a încheia procesul. Votul tău este așteptat."
   },
   "network.cooptation_proposed.cta": {
@@ -7253,15 +7253,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
   "network.cooptation_voted.intro": {
     "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de cooptação de {proposedName}, aberta por {proposerName}. Acesse o aplicativo para ver o estado atual da deliberação e votar se ainda não o fez.",
-    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de cooptation de {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter si ce n'est pas déjà fait.",
+    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de cooptation de {proposedName}, ouverte par {proposerName}. Accède à l'app pour voir l'état actuel de la délibération et voter si ce n'est pas déjà fait.",
     es: "Une administrade de red acaba de votar sobre la propuesta de cooptación de {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar si aún no lo hiciste.",
     en: "A network administrator has just cast a vote on the cooptation proposal of {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote if you haven't already.",
     it: "Un compagn* amministratore/trice di rete ha appena votato sulla proposta di cooptazione di {proposedName}, aperta da {proposerName}. Accedi all'app per vedere lo stato attuale della deliberazione e votare se non l'hai ancora fatto.",
-    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Kooptationsvorschlag von {proposedName} abgestimmt, eröffnet von {proposerName}. Öffnen Sie die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen, falls noch nicht geschehen.",
-    ca: "Una administradora de xarxa acaba de votar sobre la proposta de cooptació de {proposedName}, oberta per {proposerName}. Accediu a l'aplicació per veure l'estat actual de la deliberació i votar si encara no ho heu fet.",
+    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Kooptationsvorschlag von {proposedName} abgestimmt, eröffnet von {proposerName}. Öffne die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen, falls noch nicht geschehen.",
+    ca: "Una administradora de xarxa acaba de votar sobre la proposta de cooptació de {proposedName}, oberta per {proposerName}. Accedeix a l'aplicació per veure l'estat actual de la deliberació i votar si encara no ho has fet.",
     eo: "Reta administrant-in-o ĵus voĉdonis pri la kooptad-propono de {proposedName}, malfermita de {proposerName}. Aliru la aplikaĵon por vidi la nunan staton de la pridiskuto kaj voĉdoni se vi ankoraŭ ne faris tion.",
     nl: "Een netwerkbeheerder heeft zojuist gestemd over het coöptatievoorstel van {proposedName}, geopend door {proposerName}. Open de app om de huidige stand van de beraadslaging te zien en te stemmen als je dat nog niet hebt gedaan.",
-    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}. Ανοίξτε την εφαρμογή για να δείτε την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσετε αν δεν το έχετε ήδη κάνει.",
+    el: "Ένας/Μία διαχειριστής/στρια του δικτύου μόλις ψήφισε για την πρόταση κοόπτησης του/της {proposedName}, που άνοιξε ο/η {proposerName}. Άνοιξε την εφαρμογή για να δεις την τρέχουσα κατάσταση της διαβούλευσης και να ψηφίσεις αν δεν το έχεις ήδη κάνει.",
     ro: "O persoană din administrarea rețelei tocmai a votat propunerea de cooptare a lui {proposedName}, deschisă de {proposerName}. Intră în aplicație ca să vezi stadiul actual al deliberării și să votezi, dacă n-ai făcut-o deja."
   },
   "network.cooptation_voted.rationale_label": {
@@ -7314,7 +7314,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "Hola {targetName}. Una propuesta de cooptación para integrarte como administrade de red AnarBib fue abierta y discutida por les administradores activos. Esta propuesta no obtuvo unanimidad : recibió al menos un voto contrario y el proceso se cierra. Esta decisión es colectiva y política, no personal.",
     en: "Hello {targetName}. A cooptation proposal to integrate you as a network administrator of AnarBib was opened and discussed by the active administrators. This proposal did not reach unanimity: it received at least one opposing vote and the process is closed. This decision is collective and political, not personal.",
     it: "Ciao {targetName}. Una proposta di cooptazione per integrarti come amministratore/trice di rete AnarBib è stata aperta e discussa dai compagn* amministratori/trici attiv*. Questa proposta non ha raggiunto l'unanimità : ha ricevuto almeno un voto contrario e il processo si chiude. Questa decisione è collettiva e politica, non personale.",
-    de: "Hallo {targetName}. Ein Kooptationsvorschlag, um Sie als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde eröffnet und von den aktiven Administrator*innen besprochen. Dieser Vorschlag erreichte keine Einstimmigkeit: er erhielt mindestens eine Gegenstimme und der Prozess wird geschlossen. Diese Entscheidung ist kollektiv und politisch, nicht persönlich.",
+    de: "Hallo {targetName}. Ein Kooptationsvorschlag, um dich als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde eröffnet und von den aktiven Administrator*innen besprochen. Dieser Vorschlag erreichte keine Einstimmigkeit: er erhielt mindestens eine Gegenstimme und der Prozess wird geschlossen. Diese Entscheidung ist kollektiv und politisch, nicht persönlich.",
     ca: "Hola, {targetName}. S'ha obert i discutit una proposta de cooptació per integrar-te com a administrador-a-e de la xarxa AnarBib per part de les administradores actives. Aquesta proposta no ha obtingut la unanimitat: ha rebut almenys un vot contrari i el procés es tanca. Aquesta decisió és col·lectiva i política, no personal.",
     eo: "Saluton, {targetName}. Kooptad-propono por integri vin kiel administrant-in-on de la reto AnarBib estis malfermita kaj pridiskutita de la aktivaj administrant-in-oj. Ĉi tiu propono ne atingis la unuanimecon: ĝi ricevis almenaŭ unu kontraŭan voĉdonon kaj la procezo fermiĝas. Ĉi tiu decido estas kolektiva kaj politika, ne persona.",
     nl: "Hallo {targetName}. Een coöptatievoorstel om jou op te nemen als netwerkbeheerder van AnarBib is geopend en besproken door de actieve beheerders. Dit voorstel heeft geen unanimiteit bereikt: het kreeg minstens één tegenstem en het proces is afgesloten. Deze beslissing is collectief en politiek, niet persoonlijk.",
@@ -7357,7 +7357,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     es: "Hola {targetName}. La propuesta de cooptación para integrarte como administrade de red AnarBib fue concluida por unanimidad. ¡Bienvenide al equipo de administración de red!",
     en: "Hello {targetName}. The cooptation proposal to integrate you as a network administrator of AnarBib has been concluded unanimously. Welcome to the network administration team.",
     it: "Ciao {targetName}. La proposta di cooptazione per integrarti come amministratore/trice di rete AnarBib è stata conclusa all'unanimità. Benvenut* nel team di amministrazione di rete.",
-    de: "Hallo {targetName}. Der Kooptationsvorschlag, um Sie als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde einstimmig abgeschlossen. Willkommen im Netzwerk-Administrationsteam.",
+    de: "Hallo {targetName}. Der Kooptationsvorschlag, um dich als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde einstimmig abgeschlossen. Willkommen im Netzwerk-Administrationsteam.",
     ca: "Hola, {targetName}. La proposta de cooptació per integrar-te com a administrador-a-e de la xarxa AnarBib s'ha conclòs per unanimitat. Benvingut-da-e a l'equip d'administració de la xarxa.",
     eo: "Saluton, {targetName}. La kooptad-propono por integri vin kiel administrant-in-on de la reto AnarBib estis konkludita unuanime. Bonvenon en la retadministran teamon.",
     nl: "Hallo {targetName}. Het coöptatievoorstel om jou op te nemen als netwerkbeheerder van AnarBib is unaniem afgerond. Welkom in het netwerkbeheerteam.",
@@ -9067,54 +9067,54 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // --- Intros de 'created' — matrice à 2 axes (4) --------------------------
   "ill.intro.created.lender_initiator": {
     "pt-BR": "Sua biblioteca acaba de propor um empréstimo de documentos a {borrower}. O pedido {loanRef} está registrado. {borrower} foi informada e responderá para dar seguimento a esta proposta. O detalhe dos documentos envolvidos está abaixo.",
-    fr: "Votre bibliothèque vient de proposer un prêt de documents à {borrower}. La demande {loanRef} est enregistrée. {borrower} en est informée et vous répondra pour donner suite à cette proposition. Le détail des documents concernés figure ci-dessous.",
-    es: "Tu biblioteca acaba de proponer un préstamo de documentos a {borrower}. La solicitud {loanRef} está registrada. {borrower} ha sido informada y os responderá para dar curso a esta propuesta. El detalle de los documentos implicados está abajo.",
+    fr: "{lender} vient de proposer un prêt de documents à {borrower}. La demande {loanRef} est enregistrée. {borrower} en est informée et répondra pour donner suite à cette proposition. Le détail des documents concernés figure ci-dessous.",
+    es: "{lender} acaba de proponer un préstamo de documentos a {borrower}. La solicitud {loanRef} está registrada. {borrower} ha sido informada y responderá para dar curso a esta propuesta. El detalle de los documentos implicados está abajo.",
     en: "Your library has just offered a loan of documents to {borrower}. Request {loanRef} is registered. {borrower} has been notified and will reply to take this offer forward. The list of documents concerned is below.",
-    it: "La vostra biblioteca ha appena proposto un prestito di documenti a {borrower}. La richiesta {loanRef} è registrata. {borrower} è stata informata e vi risponderà per dare seguito a questa proposta. Il dettaglio dei documenti interessati è qui sotto.",
+    it: "{lender} ha appena proposto un prestito di documenti a {borrower}. La richiesta {loanRef} è registrata. {borrower} è stata informata e risponderà per dare seguito a questa proposta. Il dettaglio dei documenti interessati è qui sotto.",
     de: "Eure Bibliothek hat {borrower} soeben eine Ausleihe von Dokumenten angeboten. Die Anfrage {loanRef} ist registriert. {borrower} wurde benachrichtigt und wird antworten, um dieses Angebot weiterzuverfolgen. Die Liste der betreffenden Dokumente steht unten.",
-    ca: "La vostra biblioteca acaba de proposar un préstec de documents a {borrower}. La sol·licitud {loanRef} està registrada. {borrower} ha estat informada i us respondrà per donar curs a aquesta proposta. El detall dels documents implicats és a sota.",
+    ca: "{lender} acaba de proposar un préstec de documents a {borrower}. La sol·licitud {loanRef} està registrada. {borrower} n'ha estat informada i respondrà per donar curs a aquesta proposta. El detall dels documents implicats és a sota.",
     eo: "Via biblioteko ĵus proponis prunton de dokumentoj al {borrower}. La peto {loanRef} estas registrita. {borrower} estis informita kaj respondos por daŭrigi ĉi tiun proponon. La detalo de la koncernaj dokumentoj estas sube.",
     nl: "Je bibliotheek heeft zojuist een uitlening van documenten aangeboden aan {borrower}. Aanvraag {loanRef} is geregistreerd. {borrower} is op de hoogte gebracht en zal reageren om dit voorstel een vervolg te geven. De lijst met betrokken documenten staat hieronder.",
-    el: "Η βιβλιοθήκη σας μόλις πρότεινε δανεισμό τεκμηρίων στη {borrower}. Το αίτημα {loanRef} καταχωρίστηκε. Η {borrower} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτή η πρόταση. Η λίστα των σχετικών τεκμηρίων είναι παρακάτω.",
+    el: "Η {lender} μόλις πρότεινε δανεισμό τεκμηρίων στη {borrower}. Το αίτημα {loanRef} καταχωρίστηκε. Η {borrower} ενημερώθηκε και θα απαντήσει για να προχωρήσει αυτή η πρόταση. Η λίστα των σχετικών τεκμηρίων είναι παρακάτω.",
     ro: "Biblioteca voastră tocmai a propus un împrumut de documente către {borrower}. Cererea {loanRef} este înregistrată. {borrower} a fost informată și vă va răspunde pentru a da curs acestei propuneri. Lista documentelor vizate se află mai jos."
   },
   "ill.intro.created.borrower_partner": {
     "pt-BR": "{lender} propõe à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para aceitar, conversar ou organizar a retirada, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos propostos está mais abaixo.",
-    fr: "{lender} propose à votre bibliothèque un prêt de documents. La demande {loanRef} vient d'être ouverte. Pour accepter, en discuter ou organiser le retrait, contactez la personne indiquée ci-dessous. Le détail des documents proposés figure plus bas.",
+    fr: "{lender} propose à {borrower} un prêt de documents. La demande {loanRef} vient d'être ouverte. Pour accepter, en discuter ou organiser le retrait, il suffit de contacter la personne indiquée ci-dessous. Le détail des documents proposés figure plus bas.",
     es: "{lender} propone a tu biblioteca un préstamo de documentos. La solicitud {loanRef} acaba de abrirse. Para aceptar, conversar u organizar el retiro, contacta a la persona indicada abajo. El detalle de los documentos propuestos está más abajo.",
     en: "{lender} is offering your library a loan of documents. Request {loanRef} has just been opened. To accept, discuss it or arrange pickup, contact the person indicated below. The list of documents offered is further down.",
-    it: "{lender} propone alla vostra biblioteca un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per accettare, discuterne o organizzare il ritiro, contattate la persona indicata qui sotto. Il dettaglio dei documenti proposti è più in basso.",
+    it: "{lender} propone a {borrower} un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per accettare, discuterne o organizzare il ritiro, basta contattare la persona indicata qui sotto. Il dettaglio dei documenti proposti è più in basso.",
     de: "{lender} bietet eurer Bibliothek eine Ausleihe von Dokumenten an. Die Anfrage {loanRef} wurde soeben eröffnet. Um anzunehmen, zu besprechen oder die Abholung zu organisieren, wendet euch an die unten genannte Person. Die Liste der angebotenen Dokumente steht weiter unten.",
-    ca: "{lender} proposa a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per acceptar, parlar-ne o organitzar la recollida, contacteu la persona indicada a sota. El detall dels documents proposats és més avall.",
+    ca: "{lender} proposa a {borrower} un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per acceptar, parlar-ne o organitzar la recollida, cal contactar la persona indicada a sota. El detall dels documents proposats és més avall.",
     eo: "{lender} proponas al via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por akcepti, priparoli aŭ organizi la prenon, kontaktu la personon indikitan sube. La detalo de la proponitaj dokumentoj estas pli sube.",
     nl: "{lender} biedt je bibliotheek een uitlening van documenten aan. Aanvraag {loanRef} is zojuist geopend. Om te accepteren, te overleggen of de afhaling te regelen, neem contact op met de hieronder vermelde persoon. De lijst met aangeboden documenten staat verderop.",
-    el: "Η {lender} προσφέρει στη βιβλιοθήκη σας δανεισμό τεκμηρίων. Το αίτημα {loanRef} μόλις άνοιξε. Για να αποδεχτείτε, να το συζητήσετε ή να οργανώσετε την παραλαβή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των προσφερόμενων τεκμηρίων είναι πιο κάτω.",
+    el: "Η {lender} προσφέρει στη {borrower} δανεισμό τεκμηρίων. Το αίτημα {loanRef} μόλις άνοιξε. Για αποδοχή, συζήτηση ή οργάνωση της παραλαβής, η επικοινωνία γίνεται με το άτομο που αναφέρεται παρακάτω. Η λίστα των προσφερόμενων τεκμηρίων είναι πιο κάτω.",
     ro: "{lender} propune bibliotecii voastre un împrumut de documente. Cererea {loanRef} tocmai a fost deschisă. Ca s-o acceptați, s-o discutați sau să organizați ridicarea, contactați persoana indicată mai jos. Lista documentelor propuse se află mai departe în mesaj."
   },
   "ill.intro.created.borrower_initiator": {
     "pt-BR": "Sua biblioteca acaba de solicitar um empréstimo de documentos a {lender}. O pedido {loanRef} está registrado. {lender} foi informada e responderá para dar seguimento a este pedido. O detalhe dos documentos solicitados está abaixo.",
-    fr: "Votre bibliothèque vient de solliciter un emprunt de documents auprès de {lender}. La demande {loanRef} est enregistrée. {lender} en est informée et vous répondra pour donner suite à cette demande. Le détail des documents demandés figure ci-dessous.",
-    es: "Tu biblioteca acaba de solicitar un préstamo de documentos a {lender}. La solicitud {loanRef} está registrada. {lender} ha sido informada y os responderá para dar curso a esta solicitud. El detalle de los documentos solicitados está abajo.",
+    fr: "{borrower} vient de solliciter un emprunt de documents auprès de {lender}. La demande {loanRef} est enregistrée. {lender} en est informée et répondra pour donner suite à cette demande. Le détail des documents demandés figure ci-dessous.",
+    es: "{borrower} acaba de solicitar un préstamo de documentos a {lender}. La solicitud {loanRef} está registrada. {lender} ha sido informada y responderá para dar curso a esta solicitud. El detalle de los documentos solicitados está abajo.",
     en: "Your library has just requested a loan of documents from {lender}. Request {loanRef} is registered. {lender} has been notified and will reply to take this request forward. The list of documents requested is below.",
-    it: "La vostra biblioteca ha appena richiesto un prestito di documenti a {lender}. La richiesta {loanRef} è registrata. {lender} è stata informata e vi risponderà per dare seguito a questa richiesta. Il dettaglio dei documenti richiesti è qui sotto.",
+    it: "{borrower} ha appena richiesto un prestito di documenti a {lender}. La richiesta {loanRef} è registrata. {lender} è stata informata e risponderà per dare seguito a questa richiesta. Il dettaglio dei documenti richiesti è qui sotto.",
     de: "Eure Bibliothek hat soeben eine Ausleihe von Dokumenten bei {lender} angefragt. Die Anfrage {loanRef} ist registriert. {lender} wurde benachrichtigt und wird antworten, um diese Anfrage weiterzuverfolgen. Die Liste der angefragten Dokumente steht unten.",
-    ca: "La vostra biblioteca acaba de sol·licitar un préstec de documents a {lender}. La sol·licitud {loanRef} està registrada. {lender} ha estat informada i us respondrà per donar curs a aquesta sol·licitud. El detall dels documents sol·licitats és a sota.",
+    ca: "{borrower} acaba de sol·licitar un préstec de documents a {lender}. La sol·licitud {loanRef} està registrada. {lender} n'ha estat informada i respondrà per donar curs a aquesta sol·licitud. El detall dels documents sol·licitats és a sota.",
     eo: "Via biblioteko ĵus petis prunton de dokumentoj de {lender}. La peto {loanRef} estas registrita. {lender} estis informita kaj respondos por daŭrigi ĉi tiun peton. La detalo de la petitaj dokumentoj estas sube.",
     nl: "Je bibliotheek heeft zojuist een uitlening van documenten aangevraagd bij {lender}. Aanvraag {loanRef} is geregistreerd. {lender} is op de hoogte gebracht en zal reageren om deze aanvraag een vervolg te geven. De lijst met aangevraagde documenten staat hieronder.",
-    el: "Η βιβλιοθήκη σας μόλις ζήτησε δανεισμό τεκμηρίων από τη {lender}. Το αίτημα {loanRef} καταχωρίστηκε. Η {lender} ενημερώθηκε και θα σας απαντήσει για να προχωρήσει αυτό το αίτημα. Η λίστα των τεκμηρίων που ζητήθηκαν είναι παρακάτω.",
+    el: "Η {borrower} μόλις ζήτησε δανεισμό τεκμηρίων από τη {lender}. Το αίτημα {loanRef} καταχωρίστηκε. Η {lender} ενημερώθηκε και θα απαντήσει για να προχωρήσει αυτό το αίτημα. Η λίστα των τεκμηρίων που ζητήθηκαν είναι παρακάτω.",
     ro: "Biblioteca voastră tocmai a solicitat un împrumut de documente de la {lender}. Cererea {loanRef} este înregistrată. {lender} a fost informată și vă va răspunde pentru a da curs acestei cereri. Lista documentelor solicitate se află mai jos."
   },
   "ill.intro.created.lender_partner": {
     "pt-BR": "{borrower} solicita à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para responder, conversar ou organizar o envio, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos solicitados está mais abaixo.",
-    fr: "{borrower} sollicite auprès de votre bibliothèque un emprunt de documents. La demande {loanRef} vient d'être ouverte. Pour répondre, en discuter ou organiser l'envoi, contactez la personne indiquée ci-dessous. Le détail des documents demandés figure plus bas.",
+    fr: "{borrower} sollicite auprès de {lender} un emprunt de documents. La demande {loanRef} vient d'être ouverte. Pour répondre, en discuter ou organiser l'envoi, il suffit de contacter la personne indiquée ci-dessous. Le détail des documents demandés figure plus bas.",
     es: "{borrower} solicita a tu biblioteca un préstamo de documentos. La solicitud {loanRef} acaba de abrirse. Para responder, conversar u organizar el envío, contacta a la persona indicada abajo. El detalle de los documentos solicitados está más abajo.",
     en: "{borrower} is requesting a loan of documents from your library. Request {loanRef} has just been opened. To reply, discuss it or arrange dispatch, contact the person indicated below. The list of documents requested is further down.",
-    it: "{borrower} richiede alla vostra biblioteca un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per rispondere, discuterne o organizzare l'invio, contattate la persona indicata qui sotto. Il dettaglio dei documenti richiesti è più in basso.",
+    it: "{borrower} richiede a {lender} un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per rispondere, discuterne o organizzare l'invio, basta contattare la persona indicata qui sotto. Il dettaglio dei documenti richiesti è più in basso.",
     de: "{borrower} fragt bei eurer Bibliothek eine Ausleihe von Dokumenten an. Die Anfrage {loanRef} wurde soeben eröffnet. Um zu antworten, zu besprechen oder den Versand zu organisieren, wendet euch an die unten genannte Person. Die Liste der angefragten Dokumente steht weiter unten.",
-    ca: "{borrower} sol·licita a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per respondre, parlar-ne o organitzar l'enviament, contacteu la persona indicada a sota. El detall dels documents sol·licitats és més avall.",
+    ca: "{borrower} sol·licita a {lender} un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per respondre, parlar-ne o organitzar l'enviament, cal contactar la persona indicada a sota. El detall dels documents sol·licitats és més avall.",
     eo: "{borrower} petas de via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por respondi, priparoli aŭ organizi la sendon, kontaktu la personon indikitan sube. La detalo de la petitaj dokumentoj estas pli sube.",
     nl: "{borrower} vraagt je bibliotheek een uitlening van documenten aan. Aanvraag {loanRef} is zojuist geopend. Om te reageren, te overleggen of de verzending te regelen, neem contact op met de hieronder vermelde persoon. De lijst met aangevraagde documenten staat verderop.",
-    el: "Η {borrower} ζητά δανεισμό τεκμηρίων από τη βιβλιοθήκη σας. Το αίτημα {loanRef} μόλις άνοιξε. Για να απαντήσετε, να το συζητήσετε ή να οργανώσετε την αποστολή, επικοινωνήστε με το άτομο που αναφέρεται παρακάτω. Η λίστα των τεκμηρίων που ζητήθηκαν είναι πιο κάτω.",
+    el: "Η {borrower} ζητά δανεισμό τεκμηρίων από τη {lender}. Το αίτημα {loanRef} μόλις άνοιξε. Για απάντηση, συζήτηση ή οργάνωση της αποστολής, η επικοινωνία γίνεται με το άτομο που αναφέρεται παρακάτω. Η λίστα των τεκμηρίων που ζητήθηκαν είναι πιο κάτω.",
     ro: "{borrower} solicită bibliotecii voastre un împrumut de documente. Cererea {loanRef} tocmai a fost deschisă. Ca să răspundeți, s-o discutați sau să organizați trimiterea, contactați persoana indicată mai jos. Lista documentelor solicitate se află mai departe în mesaj."
   },
 
@@ -9214,15 +9214,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // --- ActionBox (1) -------------------------------------------------------
   "ill.actionBox.contactPartner": {
     "pt-BR": "Para dar seguimento, entre em contato com: {contact}",
-    fr: "Pour donner suite, contactez : {contact}",
+    fr: "Contact pour donner suite : {contact}",
     es: "Para dar curso, contacta con: {contact}",
     en: "To take this forward, contact: {contact}",
     it: "Per dare seguito, contattate: {contact}",
     de: "Um fortzufahren, wendet euch an: {contact}",
-    ca: "Per donar curs, contacteu amb: {contact}",
+    ca: "Contacte per donar curs: {contact}",
     eo: "Por daŭrigi, kontaktu: {contact}",
     nl: "Neem voor het vervolg contact op: {contact}",
-    el: "Για να προχωρήσει, επικοινωνήστε: {contact}",
+    el: "Επαφή για τη συνέχεια: {contact}",
     ro: "Pentru a da curs, contactați: {contact}"
   },
 
@@ -10019,17 +10019,17 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Texte francais valide par la coordination ; les neuf autres en sont la
   // declinaison. Registre : « vous » de collectif — on ecrit a une bibliotheque,
   // pas a une personne. Cf. CADRAGE_invitation_bibliotheque_2026-08-27.
-  "invitation.subject": { "pt-BR": "{libraryName} — um convite para entrar na rede AnarBib", fr: "{libraryName} — une invitation à rejoindre le réseau AnarBib", es: "{libraryName} — una invitación a sumarse a la red AnarBib", en: "{libraryName} — an invitation to join the AnarBib network", it: "{libraryName} — un invito a entrare nella rete AnarBib", de: "{libraryName} — eine Einladung, dem AnarBib-Netzwerk beizutreten", ca: "{libraryName} — una invitació a unir-se a la xarxa AnarBib", eo: "{libraryName} — invito aliĝi al la reto AnarBib", nl: "{libraryName} — een uitnodiging om je bij het AnarBib-netwerk aan te sluiten", el: "{libraryName} — μια πρόσκληση να ενταχθείτε στο δίκτυο AnarBib", ro: "{libraryName} — o invitație de a vă alătura rețelei AnarBib" },
-  "invitation.title": { "pt-BR": "Um convite para entrar na rede", fr: "Une invitation à rejoindre le réseau", es: "Una invitación a sumarse a la red", en: "An invitation to join the network", it: "Un invito a entrare nella rete", de: "Eine Einladung, dem Netzwerk beizutreten", ca: "Una invitació a unir-se a la xarxa", eo: "Invito aliĝi al la reto", nl: "Een uitnodiging om je bij het netwerk aan te sluiten", el: "Μια πρόσκληση να ενταχθείτε στο δίκτυο", ro: "O invitație de a vă alătura rețelei" },
-  "invitation.greeting": { "pt-BR": "Olá, companheir@s,", fr: "Bonjour camarades,", es: "Hola, compañeres,", en: "Hello comrades,", it: "Ciao compagn*,", de: "Hallo Genoss*innen,", ca: "Hola, companyes i companys,", eo: "Saluton, gekamaradoj,", nl: "Dag kameraden,", el: "Γεια σας, σύντροφοι και συντρόφισσες,", ro: "Salut, tovarăși și tovarășe," },
+  "invitation.subject": { "pt-BR": "{libraryName} — um convite para entrar na rede AnarBib", fr: "{libraryName} — une invitation à rejoindre le réseau AnarBib", es: "{libraryName} — una invitación a sumarse a la red AnarBib", en: "{libraryName} — an invitation to join the AnarBib network", it: "{libraryName} — un invito a entrare nella rete AnarBib", de: "{libraryName} — eine Einladung, dem AnarBib-Netzwerk beizutreten", ca: "{libraryName} — una invitació a unir-se a la xarxa AnarBib", eo: "{libraryName} — invito aliĝi al la reto AnarBib", nl: "{libraryName} — een uitnodiging om je bij het AnarBib-netwerk aan te sluiten", el: "{libraryName} — μια πρόσκληση ένταξης στο δίκτυο AnarBib", ro: "{libraryName} — o invitație de a vă alătura rețelei AnarBib" },
+  "invitation.title": { "pt-BR": "Um convite para entrar na rede", fr: "Une invitation à rejoindre le réseau", es: "Una invitación a sumarse a la red", en: "An invitation to join the network", it: "Un invito a entrare nella rete", de: "Eine Einladung, dem Netzwerk beizutreten", ca: "Una invitació a unir-se a la xarxa", eo: "Invito aliĝi al la reto", nl: "Een uitnodiging om je bij het netwerk aan te sluiten", el: "Μια πρόσκληση ένταξης στο δίκτυο", ro: "O invitație de a vă alătura rețelei" },
+  "invitation.greeting": { "pt-BR": "Olá, companheir@s,", fr: "Bonjour camarades,", es: "Hola, compañeres,", en: "Hello comrades,", it: "Ciao compagn*,", de: "Hallo Genoss*innen,", ca: "Hola, companyes i companys,", eo: "Saluton, gekamaradoj,", nl: "Dag kameraden,", el: "Γεια, σύντροφοι και συντρόφισσες,", ro: "Salut, tovarăși și tovarășe," },
   "invitation.intro": { "pt-BR": "A coordenação do AnarBib — rede de bibliotecas libertárias, e sistema integrado para geri-las — convida {libraryName} a entrar na rede.", fr: "La coordination d'AnarBib — réseau de bibliothèques libertaires, et système intégré pour les gérer — invite {libraryName} à rejoindre le réseau.", es: "La coordinación de AnarBib — red de bibliotecas libertarias, y sistema integrado para gestionarlas — invita a {libraryName} a sumarse a la red.", en: "The AnarBib coordination — a network of libertarian libraries, and an integrated system to run them — invites {libraryName} to join the network.", it: "Il coordinamento di AnarBib — rete di biblioteche libertarie, e sistema integrato per gestirle — invita {libraryName} a entrare nella rete.", de: "Die Koordination von AnarBib — Netzwerk libertärer Bibliotheken und integriertes System zu ihrer Verwaltung — lädt {libraryName} ein, dem Netzwerk beizutreten.", ca: "La coordinació d'AnarBib — xarxa de biblioteques llibertàries, i sistema integrat per gestionar-les — convida {libraryName} a unir-se a la xarxa.", eo: "La kunordigo de AnarBib — reto de liberecanaj bibliotekoj, kaj integrita sistemo por administri ilin — invitas {libraryName} aliĝi al la reto.", nl: "De coördinatie van AnarBib — netwerk van libertaire bibliotheken, en geïntegreerd systeem om ze te beheren — nodigt {libraryName} uit om zich bij het netwerk aan te sluiten.", el: "Ο συντονισμός του AnarBib — δίκτυο ελευθεριακών βιβλιοθηκών και ολοκληρωμένο σύστημα για τη διαχείρισή τους — προσκαλεί τη {libraryName} να ενταχθεί στο δίκτυο.", ro: "Echipa de coordonare AnarBib — rețea de biblioteci libertare și sistem integrat pentru gestionarea lor — invită {libraryName} să se alăture rețelei." },
   "invitation.cta": { "pt-BR": "Responder ao convite", fr: "Répondre à l'invitation", es: "Responder a la invitación", en: "Respond to the invitation", it: "Rispondere all'invito", de: "Auf die Einladung antworten", ca: "Respondre a la invitació", eo: "Respondi al la invito", nl: "Op de uitnodiging reageren", el: "Απάντησε στην πρόσκληση", ro: "Răspunde la invitație" },
   "invitation.validity": { "pt-BR": "Link válido até {date}.", fr: "Lien valable jusqu'au {date}.", es: "Enlace válido hasta el {date}.", en: "Link valid until {date}.", it: "Link valido fino al {date}.", de: "Link gültig bis {date}.", ca: "Enllaç vàlid fins al {date}.", eo: "Ligilo valida ĝis {date}.", nl: "Link geldig tot {date}.", el: "Ο σύνδεσμος ισχύει έως {date}.", ro: "Link valabil până la {date}." },
-  "invitation.whatOpens": { "pt-BR": "O que esse link abre: quem o seguir cria a sua conta. Uma conta pessoal, não uma conta de biblioteca — é ela que vai carregar o pedido, receber as nossas respostas e, se a biblioteca entrar, o mandato de coordenação. Depois preenche um formulário que descreve a sua biblioteca e o modo como vocês já a fazem viver: são vocês que descrevem o funcionamento, e o aplicativo se adapta, não o contrário.", fr: "Ce que ce lien ouvre : la personne qui le suit crée son compte. Un compte personnel, pas un compte de bibliothèque — c'est lui qui portera la demande, recevra nos réponses et, si la bibliothèque entre, le mandat de coordination. Elle remplit ensuite un formulaire qui décrit votre bibliothèque et la façon dont vous la faites déjà vivre : c'est vous qui décrivez votre fonctionnement, l'application s'y adapte, et non l'inverse.", es: "Lo que abre este enlace: quien lo siga crea su cuenta. Una cuenta personal, no una cuenta de biblioteca — es la que va a llevar el pedido, recibir nuestras respuestas y, si la biblioteca entra, el mandato de coordinación. Luego completa un formulario que describe su biblioteca y la forma en que ustedes ya la hacen vivir: son ustedes quienes describen su funcionamiento, y la aplicación se adapta, no al revés.", en: "What this link opens: whoever follows it creates their own account. A personal account, not a library account — it carries the request, receives our replies and, if the library joins, the coordination mandate. They then fill in a form describing your library and the way you already make it live: you describe how you work, and the application adapts to it, not the other way round.", it: "Cosa apre questo link: chi lo segue crea il proprio account. Un account personale, non un account di biblioteca — è quello che porterà la richiesta, riceverà le nostre risposte e, se la biblioteca entra, il mandato di coordinamento. Poi compila un modulo che descrive la vostra biblioteca e il modo in cui la fate già vivere: siete voi a descrivere il vostro funzionamento, e l'applicazione vi si adatta, non il contrario.", de: "Was dieser Link öffnet: Wer ihm folgt, erstellt ein eigenes Konto. Ein persönliches Konto, kein Bibliothekskonto — es trägt den Antrag, empfängt unsere Antworten und, wenn die Bibliothek beitritt, das Koordinationsmandat. Danach füllt diese Person ein Formular aus, das eure Bibliothek und die Art beschreibt, wie ihr sie schon jetzt lebendig haltet: ihr beschreibt eure Arbeitsweise, und die Anwendung passt sich ihr an, nicht umgekehrt.", ca: "El que obre aquest enllaç: qui el segueixi crea el seu compte. Un compte personal, no un compte de biblioteca — és el que portarà la sol·licitud, rebrà les nostres respostes i, si la biblioteca hi entra, el mandat de coordinació. Després omple un formulari que descriu la vostra biblioteca i la manera com ja la feu viure: sou vosaltres qui descriviu el vostre funcionament, i l'aplicació s'hi adapta, no a l'inrevés.", eo: "Kion malfermas ĉi tiu ligilo: kiu sekvas ĝin kreas sian propran konton. Personan konton, ne bibliotekan konton — ĝi portas la peton, ricevas niajn respondojn kaj, se la biblioteko aliĝas, la kunordigan mandaton. Poste tiu persono plenigas formularon priskribantan vian bibliotekon kaj la manieron kiel vi jam vivigas ĝin: vi priskribas vian funkciadon, kaj la aplikaĵo adaptiĝas al ĝi, ne inverse.", nl: "Wat deze link opent: wie hem volgt, maakt zijn eigen account aan. Een persoonlijke account, geen bibliotheekaccount — die draagt de aanvraag, ontvangt onze antwoorden en, als de bibliotheek toetreedt, het coördinatiemandaat. Daarna vult die persoon een formulier in dat jullie bibliotheek beschrijft en de manier waarop jullie haar al laten leven: jullie beschrijven jullie werkwijze, en de toepassing past zich daaraan aan, niet andersom.", el: "Τι ανοίγει αυτός ο σύνδεσμος: όποιος τον ακολουθήσει δημιουργεί τον δικό του λογαριασμό. Έναν προσωπικό λογαριασμό, όχι λογαριασμό βιβλιοθήκης — αυτός κρατά το αίτημα, λαμβάνει τις απαντήσεις μας και, αν η βιβλιοθήκη ενταχθεί, την εντολή συντονισμού. Έπειτα συμπληρώνει μια φόρμα που περιγράφει τη βιβλιοθήκη σας και τον τρόπο με τον οποίο ήδη τη ζωντανεύετε: εσείς περιγράφετε τη λειτουργία σας, και η εφαρμογή προσαρμόζεται σε αυτήν, όχι το αντίστροφο.", ro: "Ce deschide acest link: persoana care îl urmează își creează contul. Un cont personal, nu un cont de bibliotecă — el va purta cererea, va primi răspunsurile noastre și, dacă biblioteca intră în rețea, mandatul de coordonare. Apoi completează un formular care descrie biblioteca voastră și felul în care o faceți deja să trăiască: voi descrieți cum funcționați, iar aplicația se adaptează, nu invers." },
-  "invitation.examined": { "pt-BR": "Esse pedido é depois examinado coletivamente pela coordenação, que conversa com vocês antes de qualquer decisão. Nós convidamos vocês; não admitimos de antemão.", fr: "Cette demande est ensuite examinée collectivement par la coordination, qui en discute avec vous avant toute décision. Nous vous invitons ; nous ne vous admettons pas d'avance.", es: "Ese pedido es luego examinado colectivamente por la coordinación, que conversa con ustedes antes de cualquier decisión. Les invitamos; no les admitimos de antemano.", en: "That request is then examined collectively by the coordination, which talks it through with you before any decision. We are inviting you; we are not admitting you in advance.", it: "Quella richiesta viene poi esaminata collettivamente dal coordinamento, che ne parla con voi prima di ogni decisione. Vi invitiamo; non vi ammettiamo in anticipo.", de: "Dieser Antrag wird anschließend gemeinsam von der Koordination geprüft, die vor jeder Entscheidung mit euch spricht. Wir laden euch ein; wir nehmen euch nicht im Voraus auf.", ca: "Aquesta sol·licitud és després examinada col·lectivament per la coordinació, que en parla amb vosaltres abans de qualsevol decisió. Us convidem; no us admetem per endavant.", eo: "Tiu peto poste estas kolektive ekzamenata de la kunordigo, kiu priparolas ĝin kun vi antaŭ ĉia decido. Ni invitas vin; ni ne akceptas vin anticipe.", nl: "Die aanvraag wordt vervolgens collectief onderzocht door de coördinatie, die er met jullie over spreekt vóór enige beslissing. We nodigen jullie uit; we laten jullie niet op voorhand toe.", el: "Αυτό το αίτημα εξετάζεται στη συνέχεια συλλογικά από τον συντονισμό, ο οποίος το συζητά μαζί σας πριν από κάθε απόφαση. Σας προσκαλούμε· δεν σας δεχόμαστε εκ των προτέρων.", ro: "Cererea este apoi examinată colectiv de echipa de coordonare, care o discută cu voi înainte de orice decizie. Vă invităm; nu vă admitem dinainte." },
-  "invitation.noPressure": { "pt-BR": "Nada é obrigatório. Não dar seguimento é uma resposta, e ela nos serve: o link vai expirar sozinho, sem cobrança. Se preferirem olhar primeiro, o aplicativo está aberto à consulta ({appUrl}), e vocês podem nos escrever em {contactEmail}.", fr: "Rien n'est impératif. Ne pas donner suite est une réponse, et elle nous convient : le lien expirera de lui-même, sans relance. Si vous préférez d'abord regarder, l'application est ouverte à la consultation ({appUrl}), et vous pouvez nous écrire à {contactEmail}.", es: "Nada es obligatorio. No dar seguimiento es una respuesta, y nos sirve: el enlace va a expirar solo, sin insistencia. Si prefieren mirar primero, la aplicación está abierta a la consulta ({appUrl}), y pueden escribirnos a {contactEmail}.", en: "Nothing here is binding. Not following up is an answer, and it suits us: the link will expire on its own, with no reminder. If you would rather look first, the application is open to browse ({appUrl}), and you can write to us at {contactEmail}.", it: "Niente è vincolante. Non dare seguito è una risposta, e ci va bene: il link scadrà da solo, senza solleciti. Se preferite prima guardare, l'applicazione è aperta alla consultazione ({appUrl}), e potete scriverci a {contactEmail}.", de: "Nichts davon ist verpflichtend. Nicht zu antworten ist eine Antwort, und sie ist uns recht: der Link läuft von selbst ab, ohne Erinnerung. Wenn ihr lieber zuerst schauen wollt, die Anwendung steht zum Stöbern offen ({appUrl}), und ihr könnt uns unter {contactEmail} schreiben.", ca: "Res no és obligatori. No donar-hi resposta és una resposta, i ens va bé: l'enllaç caducarà tot sol, sense insistència. Si preferiu mirar primer, l'aplicació és oberta a la consulta ({appUrl}), i ens podeu escriure a {contactEmail}.", eo: "Nenio estas deviga. Ne respondi estas respondo, kaj ĝi konvenas al ni: la ligilo mem eksvalidiĝos, sen memorigo. Se vi preferas unue rigardi, la aplikaĵo estas malferma al konsulto ({appUrl}), kaj vi povas skribi al ni ĉe {contactEmail}.", nl: "Niets is verplicht. Er geen gevolg aan geven is een antwoord, en dat is voor ons prima: de link verloopt vanzelf, zonder herinnering. Als jullie liever eerst kijken, de toepassing staat open om te bekijken ({appUrl}), en jullie kunnen ons schrijven op {contactEmail}.", el: "Τίποτα δεν είναι υποχρεωτικό. Το να μην απαντήσετε είναι μια απάντηση, και μας ταιριάζει: ο σύνδεσμος θα λήξει από μόνος του, χωρίς υπενθύμιση. Αν προτιμάτε να δείτε πρώτα, η εφαρμογή είναι ανοιχτή για περιήγηση ({appUrl}), και μπορείτε να μας γράψετε στο {contactEmail}.", ro: "Nimic nu e obligatoriu. Să nu dați curs este tot un răspuns, și ne convine: linkul va expira de la sine, fără niciun memento. Dacă preferați să vă uitați mai întâi, aplicația este deschisă pentru consultare ({appUrl}), iar adresa noastră de contact este {contactEmail}." },
+  "invitation.whatOpens": { "pt-BR": "O que esse link abre: quem o seguir cria a sua conta. Uma conta pessoal, não uma conta de biblioteca — é ela que vai carregar o pedido, receber as nossas respostas e, se a biblioteca entrar, o mandato de coordenação. Depois preenche um formulário que descreve a sua biblioteca e o modo como vocês já a fazem viver: são vocês que descrevem o funcionamento, e o aplicativo se adapta, não o contrário.", fr: "Ce que ce lien ouvre : la personne qui le suit crée son compte. Un compte personnel, pas un compte de bibliothèque — c'est lui qui portera la demande, recevra nos réponses et, si la bibliothèque entre, le mandat de coordination. Elle remplit ensuite un formulaire qui décrit la bibliothèque et la façon dont elle vit déjà : c'est la bibliothèque qui décrit son fonctionnement, l'application s'y adapte, et non l'inverse.", es: "Lo que abre este enlace: quien lo siga crea su cuenta. Una cuenta personal, no una cuenta de biblioteca — es la que va a llevar el pedido, recibir nuestras respuestas y, si la biblioteca entra, el mandato de coordinación. Luego completa un formulario que describe la biblioteca y la forma en que ya vive: es la biblioteca quien describe su funcionamiento, y la aplicación se adapta, no al revés.", en: "What this link opens: whoever follows it creates their own account. A personal account, not a library account — it carries the request, receives our replies and, if the library joins, the coordination mandate. They then fill in a form describing your library and the way you already make it live: you describe how you work, and the application adapts to it, not the other way round.", it: "Cosa apre questo link: chi lo segue crea il proprio account. Un account personale, non un account di biblioteca — è quello che porterà la richiesta, riceverà le nostre risposte e, se la biblioteca entra, il mandato di coordinamento. Poi compila un modulo che descrive la biblioteca e il modo in cui già vive: è la biblioteca a descrivere il proprio funzionamento, e l'applicazione vi si adatta, non il contrario.", de: "Was dieser Link öffnet: Wer ihm folgt, erstellt ein eigenes Konto. Ein persönliches Konto, kein Bibliothekskonto — es trägt den Antrag, empfängt unsere Antworten und, wenn die Bibliothek beitritt, das Koordinationsmandat. Danach füllt diese Person ein Formular aus, das eure Bibliothek und die Art beschreibt, wie ihr sie schon jetzt lebendig haltet: ihr beschreibt eure Arbeitsweise, und die Anwendung passt sich ihr an, nicht umgekehrt.", ca: "El que obre aquest enllaç: qui el segueixi crea el seu compte. Un compte personal, no un compte de biblioteca — és el que portarà la sol·licitud, rebrà les nostres respostes i, si la biblioteca hi entra, el mandat de coordinació. Després omple un formulari que descriu la biblioteca i la vida que ja té: és la biblioteca qui descriu el seu funcionament, i l'aplicació s'hi adapta, no a l'inrevés.", eo: "Kion malfermas ĉi tiu ligilo: kiu sekvas ĝin kreas sian propran konton. Personan konton, ne bibliotekan konton — ĝi portas la peton, ricevas niajn respondojn kaj, se la biblioteko aliĝas, la kunordigan mandaton. Poste tiu persono plenigas formularon priskribantan vian bibliotekon kaj la manieron kiel vi jam vivigas ĝin: vi priskribas vian funkciadon, kaj la aplikaĵo adaptiĝas al ĝi, ne inverse.", nl: "Wat deze link opent: wie hem volgt, maakt zijn eigen account aan. Een persoonlijke account, geen bibliotheekaccount — die draagt de aanvraag, ontvangt onze antwoorden en, als de bibliotheek toetreedt, het coördinatiemandaat. Daarna vult die persoon een formulier in dat jullie bibliotheek beschrijft en de manier waarop jullie haar al laten leven: jullie beschrijven jullie werkwijze, en de toepassing past zich daaraan aan, niet andersom.", el: "Τι ανοίγει αυτός ο σύνδεσμος: όποιος τον ακολουθήσει δημιουργεί τον δικό του λογαριασμό. Έναν προσωπικό λογαριασμό, όχι λογαριασμό βιβλιοθήκης — αυτός κρατά το αίτημα, λαμβάνει τις απαντήσεις μας και, αν η βιβλιοθήκη ενταχθεί, την εντολή συντονισμού. Έπειτα συμπληρώνει μια φόρμα που περιγράφει τη βιβλιοθήκη και τον τρόπο με τον οποίο ήδη ζει: η βιβλιοθήκη περιγράφει τη λειτουργία της, και η εφαρμογή προσαρμόζεται σε αυτήν, όχι το αντίστροφο.", ro: "Ce deschide acest link: persoana care îl urmează își creează contul. Un cont personal, nu un cont de bibliotecă — el va purta cererea, va primi răspunsurile noastre și, dacă biblioteca intră în rețea, mandatul de coordonare. Apoi completează un formular care descrie biblioteca voastră și felul în care o faceți deja să trăiască: voi descrieți cum funcționați, iar aplicația se adaptează, nu invers." },
+  "invitation.examined": { "pt-BR": "Esse pedido é depois examinado coletivamente pela coordenação, que conversa com vocês antes de qualquer decisão. Nós convidamos vocês; não admitimos de antemão.", fr: "Cette demande est ensuite examinée collectivement par la coordination, qui en discute avec la bibliothèque avant toute décision. C'est une invitation, pas une admission d'avance.", es: "Ese pedido es luego examinado colectivamente por la coordinación, que lo conversa con la biblioteca antes de cualquier decisión. Es una invitación, no una admisión de antemano.", en: "That request is then examined collectively by the coordination, which talks it through with you before any decision. We are inviting you; we are not admitting you in advance.", it: "Quella richiesta viene poi esaminata collettivamente dal coordinamento, che ne parla con la biblioteca prima di ogni decisione. È un invito, non un'ammissione in anticipo.", de: "Dieser Antrag wird anschließend gemeinsam von der Koordination geprüft, die vor jeder Entscheidung mit euch spricht. Wir laden euch ein; wir nehmen euch nicht im Voraus auf.", ca: "Aquesta sol·licitud és després examinada col·lectivament per la coordinació, que en parla amb la biblioteca abans de qualsevol decisió. És una invitació, no una admissió per endavant.", eo: "Tiu peto poste estas kolektive ekzamenata de la kunordigo, kiu priparolas ĝin kun vi antaŭ ĉia decido. Ni invitas vin; ni ne akceptas vin anticipe.", nl: "Die aanvraag wordt vervolgens collectief onderzocht door de coördinatie, die er met jullie over spreekt vóór enige beslissing. We nodigen jullie uit; we laten jullie niet op voorhand toe.", el: "Αυτό το αίτημα εξετάζεται στη συνέχεια συλλογικά από τον συντονισμό, ο οποίος το συζητά με τη βιβλιοθήκη πριν από κάθε απόφαση. Είναι πρόσκληση, όχι εκ των προτέρων αποδοχή.", ro: "Cererea este apoi examinată colectiv de echipa de coordonare, care o discută cu voi înainte de orice decizie. Vă invităm; nu vă admitem dinainte." },
+  "invitation.noPressure": { "pt-BR": "Nada é obrigatório. Não dar seguimento é uma resposta, e ela nos serve: o link vai expirar sozinho, sem cobrança. Se preferirem olhar primeiro, o aplicativo está aberto à consulta ({appUrl}), e vocês podem nos escrever em {contactEmail}.", fr: "Rien n'est impératif. Ne pas donner suite est une réponse, et elle nous convient : le lien expirera de lui-même, sans relance. Pour regarder d'abord, l'application est ouverte à la consultation ({appUrl}) ; pour nous écrire : {contactEmail}.", es: "Nada es obligatorio. No dar seguimiento es una respuesta, y nos sirve: el enlace va a expirar solo, sin insistencia. Si prefieren mirar primero, la aplicación está abierta a la consulta ({appUrl}), y pueden escribirnos a {contactEmail}.", en: "Nothing here is binding. Not following up is an answer, and it suits us: the link will expire on its own, with no reminder. If you would rather look first, the application is open to browse ({appUrl}), and you can write to us at {contactEmail}.", it: "Niente è vincolante. Non dare seguito è una risposta, e ci va bene: il link scadrà da solo, senza solleciti. Per guardare prima, l'applicazione è aperta alla consultazione ({appUrl}); per scriverci: {contactEmail}.", de: "Nichts davon ist verpflichtend. Nicht zu antworten ist eine Antwort, und sie ist uns recht: der Link läuft von selbst ab, ohne Erinnerung. Wenn ihr lieber zuerst schauen wollt, die Anwendung steht zum Stöbern offen ({appUrl}), und ihr könnt uns unter {contactEmail} schreiben.", ca: "Res no és obligatori. No donar-hi resposta és una resposta, i ens va bé: l'enllaç caducarà tot sol, sense insistència. Per mirar primer, l'aplicació és oberta a la consulta ({appUrl}); per escriure'ns: {contactEmail}.", eo: "Nenio estas deviga. Ne respondi estas respondo, kaj ĝi konvenas al ni: la ligilo mem eksvalidiĝos, sen memorigo. Se vi preferas unue rigardi, la aplikaĵo estas malferma al konsulto ({appUrl}), kaj vi povas skribi al ni ĉe {contactEmail}.", nl: "Niets is verplicht. Er geen gevolg aan geven is een antwoord, en dat is voor ons prima: de link verloopt vanzelf, zonder herinnering. Als jullie liever eerst kijken, de toepassing staat open om te bekijken ({appUrl}), en jullie kunnen ons schrijven op {contactEmail}.", el: "Τίποτα δεν είναι υποχρεωτικό. Η μη απάντηση είναι κι αυτή μια απάντηση, και μας ταιριάζει: ο σύνδεσμος θα λήξει από μόνος του, χωρίς υπενθύμιση. Για μια πρώτη ματιά, η εφαρμογή είναι ανοιχτή για περιήγηση ({appUrl})· για επικοινωνία: {contactEmail}.", ro: "Nimic nu e obligatoriu. Să nu dați curs este tot un răspuns, și ne convine: linkul va expira de la sine, fără niciun memento. Dacă preferați să vă uitați mai întâi, aplicația este deschisă pentru consultare ({appUrl}), iar adresa noastră de contact este {contactEmail}." },
   "invitation.signature": { "pt-BR": "Saudações libertárias,<br>A coordenação do AnarBib", fr: "Salutations libertaires,<br>La coordination d'AnarBib", es: "Saludos libertarios,<br>La coordinación de AnarBib", en: "Libertarian greetings,<br>The AnarBib coordination", it: "Saluti libertari,<br>Il coordinamento di AnarBib", de: "Libertäre Grüße,<br>Die Koordination von AnarBib", ca: "Salutacions llibertàries,<br>La coordinació d'AnarBib", eo: "Liberecanaj salutoj,<br>La kunordigo de AnarBib", nl: "Libertaire groeten,<br>De coördinatie van AnarBib", el: "Ελευθεριακοί χαιρετισμοί,<br>Ο συντονισμός του AnarBib", ro: "Salutări libertare,<br>Echipa de coordonare AnarBib" },
-  "invitation.fallback": { "pt-BR": "Se o botão não funcionar, copiem este link no navegador:", fr: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", es: "Si el botón no funciona, copien este enlace en el navegador:", en: "If the button does not work, copy this link into your browser:", it: "Se il pulsante non funziona, copiate questo link nel browser:", de: "Falls die Schaltfläche nicht funktioniert, kopiert diesen Link in euren Browser:", ca: "Si el botó no funciona, copieu aquest enllaç al navegador:", eo: "Se la butono ne funkcias, kopiu ĉi tiun ligilon en vian retumilon:", nl: "Als de knop niet werkt, kopieer deze link in jullie browser:", el: "Αν το κουμπί δεν λειτουργεί, αντιγράψτε αυτόν τον σύνδεσμο στον περιηγητή σας:", ro: "Dacă butonul nu funcționează, copiați acest link în browserul vostru:" },
+  "invitation.fallback": { "pt-BR": "Se o botão não funcionar, copiem este link no navegador:", fr: "Si le bouton ne fonctionne pas, ce lien peut être copié dans le navigateur :", es: "Si el botón no funciona, copien este enlace en el navegador:", en: "If the button does not work, copy this link into your browser:", it: "Se il pulsante non funziona, copiate questo link nel browser:", de: "Falls die Schaltfläche nicht funktioniert, kopiert diesen Link in euren Browser:", ca: "Si el botó no funciona, aquest enllaç es pot copiar al navegador:", eo: "Se la butono ne funkcias, kopiu ĉi tiun ligilon en vian retumilon:", nl: "Als de knop niet werkt, kopieer deze link in jullie browser:", el: "Αν το κουμπί δεν λειτουργεί, ο σύνδεσμος μπορεί να αντιγραφεί στον περιηγητή:", ro: "Dacă butonul nu funcționează, copiați acest link în browserul vostru:" },
   "invitation.accompanying": { "pt-BR": "Recado da coordenação:", fr: "Mot de la coordination :", es: "Mensaje de la coordinación:", en: "A word from the coordination:", it: "Messaggio del coordinamento:", de: "Ein Wort der Koordination:", ca: "Missatge de la coordinació:", eo: "Vorto de la kunordigo:", nl: "Bericht van de coördinatie:", el: "Μήνυμα από τον συντονισμό:", ro: "Un cuvânt de la echipa de coordonare:" },
 
   // ── Cycle de l'emprunt : rappels, relance, invitation à écrire ────────────

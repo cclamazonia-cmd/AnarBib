@@ -19,14 +19,14 @@
 // le chargement décroche : un test qui ne trouve pas l'objet qu'il garde ne
 // garde rien.
 //
-// PAS ENCORE GARDÉS, mesurés le 20/10/2026 par ce même test : mail-strings.ts
-// (163 valeurs : fr 34, es 17, ca 26, it 24, de 11, el 51) et
-// cross-library-strings.ts (10). Beaucoup s'adressent à une ÉQUIPE (« votre
-// bibliothèque », « attend votre vote ») : chaque valeur demande de trancher
-// entre singulier et pluriel légitime, ou de l'écrire sans adresse directe
-// (règle du 08/10, G19 lot 4) ; et le grec a ses faux positifs (« Ορίστε »,
-// « είτε »). Une passe à part ; on ajoutera ces modules à MODULES quand elle
-// sera faite.
+// mail-strings.ts et cross-library-strings.ts y sont entrés le 20/10/2026,
+// après une passe valeur par valeur (173 valeurs). Qui reçoit décide : un
+// courriel à UNE personne (endossement, vote réseau, alerte à la coordination)
+// tutoie ; un courriel à l'ADRESSE d'une bibliothèque (adminTarget :
+// partenariats, prêt entre bibliothèques, réservations, message reçu,
+// adhésion à valider) ou à un collectif invité (« Bonjour camarades ») s'écrit
+// sans adresse directe — règle du 08/10 (G19 lot 4) — plutôt que d'allonger
+// PLURIEL_LEGITIME.
 // ─────────────────────────────────────────────────────────────────────────────
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -53,12 +53,17 @@ function feuilles(o, pfx = '') {
 // TASK_STRINGS n'est pas exporté : on l'expose le temps du chargement.
 const task = charger('_shared/i18n/task-mail-strings.ts', '\nexport const __TASK_STRINGS = TASK_STRINGS;\n');
 const demandes = charger('notify-library-request/strings.ts');
+// S (clé → locale → texte) n'est pas exporté non plus.
+const courriels = charger('_shared/i18n/mail-strings.ts', '\nexport const __S = S;\n');
+const reseau = charger('_shared/i18n/cross-library-strings.ts');
 
 // module → (locale → [[clé, texte]]), plancher de valeurs par locale.
 // Valeurs PROPRES à la locale seulement : un repli pt-BR n'est pas du français.
 const MODULES = {
   'task-mail-strings.ts': [(l) => feuilles(task.__TASK_STRINGS[l]), 30],
   'notify-library-request/strings.ts': [(l) => feuilles(demandes.STRINGS[l]), 60],
+  'mail-strings.ts': [(l) => Object.entries(courriels.__S).flatMap(([k, v]) => (typeof v[l] === 'string' ? [[k, v[l]]] : [])), 700],
+  'cross-library-strings.ts': [(l) => feuilles(reseau.STRINGS[l]), 35],
 };
 
 // Ce qui n'est pas de la prose : balises, URL, adresses, placeholders {…}.
