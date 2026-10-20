@@ -5,7 +5,8 @@
 --
 -- Aucune règle n'est posée ici : la disponibilité d'un fonds (exemplaires
 -- publics non retirés, moins prêts, réservations et PEB ouverts), celle d'une
--- notice (le dernier fonds recompté), le numéro d'inventaire (le plus grand
+-- notice (le dernier fonds recompté ; depuis B41, 20/10/2026, la somme de
+-- tous ses fonds), le numéro d'inventaire (le plus grand
 -- jamais attribué sous le préfixe, plus un — C17, CAT-E21) et les gardes de
 -- la publication d'un lot sont ceux d'avant ; la suite prouve que la
 -- publication les rend tels quels, puis mesure.
@@ -29,8 +30,8 @@
 -- T02 disponibilité : chaque fonds du réseau égale, colonne par colonne,
 --     le compte de la définition d'avant (exemplaires publics non retirés,
 --     prêts, réservations, PEB — copiée ici, sur tout le réseau) ; chaque
---     notice touchée vaut son fonds de BLMF (le dernier recompté, comme
---     avant) ; un fonds et une notice que le lot ne touche pas sont intacts
+--     notice touchée vaut la somme de tous ses fonds (B41, 20/10/2026 ;
+--     avant, le dernier recompté) ; un fonds et une notice que le lot ne touche pas sont intacts
 --     (le fonds 21 garde son 99 : pas de recompte du réseau).
 -- T03 une fois par fonds touché : pendant la publication, le déclencheur de
 --     l'exemplaire tire 560 fois et ne recompte rien ; la disponibilité est
@@ -55,9 +56,9 @@
 --     verrou d'avis par préfixe est pris (pg_locks).
 -- T09 aides fermées : private.fn_h34_noter_fonds et
 --     private.fn_h34_recompter_fonds_notes refusées à authenticated et anon.
--- T10 une notice à deux fonds notés : recomptés un par un, dans l'ordre du
---     dernier geste ; la notice vaut le dernier (comme le recompte par
---     exemplaire) ; le drapeau tombe.
+-- T10 une notice à deux fonds notés : recomptés (depuis B41, d'un seul appel) ;
+--     la notice vaut la somme des deux (B41, 20/10/2026 ; avant, le dernier
+--     recompté) ; le drapeau tombe.
 -- T11 pendant un lot, un exemplaire qui change de fonds fait noter le nouveau
 --     puis l'ancien, une suppression le sien ; rien n'est recompté avant la
 --     fin ; puis chacun l'est (même choix de fonds que le recompte immédiat).
@@ -287,11 +288,13 @@ BEGIN
                               WHERE x.batch_id = v_lot AND b.k = 1) THEN
       v_e := v_e || ' fonds-1(' || coalesce(v_x, '∅') || ')';
     END IF;
-    -- chaque notice touchée vaut son fonds de BLMF (le dernier recompté)
+    -- chaque notice touchée vaut la somme de TOUS ses fonds (B41, 20/10/2026 :
+    -- avant, le dernier recompté seulement — les notices 1 à 20 perdaient B)
     SELECT count(*) INTO v_n
       FROM public.exemplar_drafts x JOIN public.exemplares e ON e.id = x.published_exemplar_id
       JOIN public.book_holdings h ON h.id = e.holding_id JOIN public.books bk ON bk.id = h.book_id
-     WHERE x.batch_id = v_lot AND bk.available_count IS DISTINCT FROM h.available_count;
+     WHERE x.batch_id = v_lot
+       AND bk.available_count IS DISTINCT FROM (SELECT sum(t.available_count) FROM public.book_holdings t WHERE t.book_id = bk.id);
     IF v_n <> 0 THEN v_e := v_e || ' notices-ecart(' || v_n || ')'; END IF;
     -- le non-touché : fonds 21 (99), fonds de B, notices 21..2700, intacts (updated_at compris)
     IF (SELECT h.exemplares_total || '/' || h.available_count FROM public.book_holdings h JOIN h34_b b ON b.id = h.book_id
@@ -524,7 +527,8 @@ BEGIN
     END IF;
     v_r := private.fn_h34_recompter_fonds_notes();
     IF v_r <> 2 THEN v_e := v_e || ' rendu(' || v_r || ')'; END IF;
-    IF (SELECT available_count FROM public.books WHERE id = v_b) IS DISTINCT FROM (SELECT available_count FROM public.book_holdings WHERE id = v_hB)
+    -- B41 (20/10/2026) : la notice vaut la somme de ses deux fonds
+    IF (SELECT available_count FROM public.books WHERE id = v_b) IS DISTINCT FROM (SELECT sum(available_count) FROM public.book_holdings WHERE id IN (v_hA, v_hB))
        OR (SELECT exemplares_total FROM public.book_holdings WHERE id = v_hA) = 50
        OR (SELECT exemplares_total FROM public.book_holdings WHERE id = v_hB) <> 1 THEN
       v_e := v_e || ' comptes';
