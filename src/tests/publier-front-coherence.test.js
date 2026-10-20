@@ -20,7 +20,9 @@ const script = readFileSync(new URL('scripts/ci/publier-front.sh', racine), 'utf
 
 const horsCommentaires = (s) => s.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n');
 
-const sitesCi = [...horsCommentaires(ci).matchAll(/^\s*site:\s*(https:\/\/\S+)\s*$/gm)].map((m) => m[1]).sort();
+// Dédoublonnée : depuis I34 (20/10/2026), chaque site a un pas de second
+// essai, qui republie le même `site:`.
+const sitesCi = [...new Set([...horsCommentaires(ci).matchAll(/^\s*site:\s*(https:\/\/\S+)\s*$/gm)].map((m) => m[1]))].sort();
 const blocSites = script.slice(script.indexOf('SITES_PAR_DEFAUT=('), script.indexOf(')', script.indexOf('SITES_PAR_DEFAUT=(')));
 const sitesScript = [...blocSites.matchAll(/"(https:\/\/[^"]+)"/g)].map((m) => m[1]).sort();
 

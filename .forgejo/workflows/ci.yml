@@ -96,6 +96,9 @@ jobs:
     runs-on: anarbib-local
     container:
       image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
+    # L'empreinte du index.html construit, relue par `front-en-ligne` (I34).
+    outputs:
+      index_sha: ${{ steps.empreinte.outputs.sha }}
     steps:
       - name: Outils système (git, curl, tar)
         run: |
@@ -150,6 +153,13 @@ jobs:
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
           echo "✓ build OK"
 
+      - name: Empreinte du index.html construit
+        id: empreinte
+        run: |
+          SHA=$(sha256sum dist/index.html | cut -d' ' -f1)
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "index.html construit : ${SHA}"
+
       # ─────────── BASCULE git-pages sur app.anarbib.org (21/08/2026) ───────────
       # Remplace la poussée d'un delta sur la branche `pages` (ancien moteur v2).
       # Étape 3 de PLAN_migration_git_pages_2026-08-19, après l'essai concluant du
@@ -194,6 +204,7 @@ jobs:
       # l'ancien moteur comme sous le nouveau — un vert qui ne prouve rien. La
       # seule preuve est qu'une modification de contenu apparaisse en ligne.
       - name: Deploy Pages (git-pages)
+        id: pages_org
         if: github.event_name == 'push'
         continue-on-error: true
         timeout-minutes: 10
@@ -215,6 +226,7 @@ jobs:
       # Pour ajouter un domaine : DNS d'abord (A + les deux TXT), vérifié à
       # l'autorité, PUIS un pas ici — jamais l'inverse.
       - name: Deploy Pages (git-pages) — repli app.anarbib.is
+        id: pages_is
         if: github.event_name == 'push'
         continue-on-error: true
         timeout-minutes: 10
@@ -228,6 +240,7 @@ jobs:
       # DNS publié et vérifié aux deux serveurs d'autorité (d.sec.dns.br,
       # f.sec.dns.br) le 21/09/2026.
       - name: Deploy Pages (git-pages) — repli app.anarbib.org.br
+        id: pages_br
         if: github.event_name == 'push'
         continue-on-error: true
         timeout-minutes: 10
@@ -237,6 +250,151 @@ jobs:
           server: codeberg.page
           token: ${{ forge.token }}
           source: dist/
+
+      # ─────────── SECOND ESSAI (I34, 20/10/2026) ───────────
+      # Le 12/10 (run 1693), les trois pas ont échoué en deux secondes sur un
+      # 503 de l'API de Codeberg : `app` est resté vert, le site a servi
+      # l'ancien build vingt minutes, et rien ne l'a dit. Ces 503 sont
+      # d'ordinaire brefs : un pas qui échoue est rejoué UNE fois après 60 s,
+      # toujours non bloquant. `outcome` (pas `conclusion`) : avec
+      # continue-on-error, la conclusion d'un pas échoué est « success ».
+      # Ce qui reste en échec après ce second essai, `front-en-ligne` le voit.
+      - name: Pause avant le second essai de publication
+        if: github.event_name == 'push' && (steps.pages_org.outcome == 'failure' || steps.pages_is.outcome == 'failure' || steps.pages_br.outcome == 'failure')
+        run: |
+          echo "::warning::publication du front en échec (org=${{ steps.pages_org.outcome }}, is=${{ steps.pages_is.outcome }}, br=${{ steps.pages_br.outcome }}) : second essai dans 60 s"
+          sleep 60
+
+      - name: Deploy Pages (git-pages) — second essai app.anarbib.org
+        if: github.event_name == 'push' && steps.pages_org.outcome == 'failure'
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@60f4cfc62f09fdbca129b4bad32c9f96a1991fbe  # branche v2 au 19/10/2026
+        with:
+          site: https://app.anarbib.org/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
+      - name: Deploy Pages (git-pages) — second essai app.anarbib.is
+        if: github.event_name == 'push' && steps.pages_is.outcome == 'failure'
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@60f4cfc62f09fdbca129b4bad32c9f96a1991fbe  # branche v2 au 19/10/2026
+        with:
+          site: https://app.anarbib.is/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
+      - name: Deploy Pages (git-pages) — second essai app.anarbib.org.br
+        if: github.event_name == 'push' && steps.pages_br.outcome == 'failure'
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@60f4cfc62f09fdbca129b4bad32c9f96a1991fbe  # branche v2 au 19/10/2026
+        with:
+          site: https://app.anarbib.org.br/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
+  # ──────────── Job : front-en-ligne — le site sert-il ce build ? ────────────
+  # I34 (20/10/2026). Une CI verte ne prouvait pas que le front était en ligne :
+  # les pas de publication sont non bloquants (à dessein, pour ne pas priver
+  # `backend` des migrations). Ce job compare, sur chacun des trois domaines,
+  # le index.html servi (requête sans cache) à celui que `app` vient de
+  # construire, pendant au plus six minutes. Il tourne À CÔTÉ de `backend`
+  # (needs: app seulement) : il ne retient aucune migration.
+  #
+  # Écart persistant → ticket « [Front non publié] ci » ouvert ou rouvert,
+  # même modèle que l'alerte de rouge (REGISTRE OPS-8) ; accord → ce ticket,
+  # s'il est ouvert, se referme. `continue-on-error` : le job ne fait jamais
+  # rougir un run dont le code et les migrations sont passés ; un échec de
+  # la forge elle-même s'écrit en ::error:: dans le journal.
+  # Parade connue : docs/journal/operations/RUNBOOK_front_non_publie_2026-10-20.md.
+  front-en-ligne:
+    needs: app
+    if: github.event_name == 'push' && needs.app.result == 'success'
+    runs-on: anarbib-local
+    container:
+      image: node:22@sha256:8a34c4ab3ea2c5cd194f07e317b2a8f09461d3c8b05c4e34c8ccd56d56024c4d  # node:22 tel qu'en cache sur le runner (tiré le 25/08/2026)
+    continue-on-error: true
+    timeout-minutes: 10
+    steps:
+      - name: Comparer le front servi au build
+        env:
+          FORGE_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          ATTENDU: ${{ needs.app.outputs.index_sha }}
+        run: |
+          set -u
+          DOMAINES="app.anarbib.org app.anarbib.is app.anarbib.org.br"
+          if [ -z "${ATTENDU:-}" ]; then
+            echo "::error::empreinte du build absente : impossible de vérifier le front."
+            exit 1
+          fi
+
+          # Douze passes, 30 s d'écart : le temps que git-pages serve le neuf.
+          ECARTS=""
+          for passe in $(seq 1 12); do
+            ECARTS=""
+            for d in $DOMAINES; do
+              SERVI=$(curl -sS --max-time 20 -H 'Cache-Control: no-cache' "https://${d}/index.html?ci=${GITHUB_RUN_ID}-${passe}" | sha256sum | cut -d' ' -f1)
+              [ "$SERVI" = "$ATTENDU" ] || ECARTS="${ECARTS} ${d}"
+            done
+            [ -z "$ECARTS" ] && break
+            echo "passe ${passe} : pas encore à jour sur${ECARTS}"
+            [ "$passe" -lt 12 ] && sleep 30
+          done
+
+          API="${GITHUB_SERVER_URL}/api/v1/repos/${GITHUB_REPOSITORY}"
+          MARQUEUR="[Front non publié] ci"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          if [ -z "${FORGE_TOKEN:-}" ]; then
+            [ -z "$ECARTS" ] && { echo "✓ les trois domaines servent ce build"; exit 0; }
+            echo "::error::front non publié sur${ECARTS}, et GITEA_TOKEN absent : signalé nulle part."
+            exit 1
+          fi
+          curl -sS -o /tmp/tickets.json -H "Authorization: token ${FORGE_TOKEN}" "${API}/issues?state=all&limit=50&sort=recentupdate" \
+            || { echo "::error::lecture des tickets impossible (écarts :${ECARTS:- aucun})."; exit 1; }
+          LIGNE=$(node -e 'const fs=require("fs");let l=[];try{l=JSON.parse(fs.readFileSync("/tmp/tickets.json","utf8"))}catch(e){};const h=Array.isArray(l)?l.find(i=>i&&i.title===process.argv[1]):null;process.stdout.write(h?(h.number+" "+h.state):"")' "$MARQUEUR")
+          NUM="${LIGNE%% *}"
+          ETAT="${LIGNE##* }"
+
+          if [ -z "$ECARTS" ]; then
+            echo "✓ les trois domaines servent ce build (${ATTENDU})"
+            if [ "$ETAT" = "open" ]; then
+              node -e 'const fs=require("fs");fs.writeFileSync("/tmp/c.json",JSON.stringify({body:process.argv[1]}))' "Les trois domaines servent à nouveau le build de ${GITHUB_SHA} (${RUN_URL}). Refermé automatiquement."
+              curl -sS -o /dev/null -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/c.json "${API}/issues/${NUM}/comments" || true
+              CODE=$(curl -sS -o /dev/null -w '%{http_code}' -X PATCH -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data '{"state":"closed"}' "${API}/issues/${NUM}" || echo 000)
+              echo "Fermeture du ticket #${NUM} : HTTP ${CODE}"
+            fi
+            exit 0
+          fi
+
+          echo "::warning::après six minutes, le front servi n'est pas ce build sur${ECARTS}"
+          CORPS="Le front construit pour ${GITHUB_SHA} n'est pas servi, six minutes après la publication, sur :${ECARTS}.
+
+          - Run : ${RUN_URL}
+          - Empreinte attendue de index.html : \`${ATTENDU}\`
+
+          La base et les fonctions, elles, ont pu être déployées : l'écran peut être en retard sur elles.
+          Parade : un commit vide \`ci: republier le front\` (docs/journal/operations/RUNBOOK_front_non_publie_2026-10-20.md).
+          Ce ticket se referme seul quand les trois domaines servent à nouveau le build courant."
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/c.json",JSON.stringify({body:process.argv[1]}))' "$CORPS"
+          if [ -n "$NUM" ]; then
+            curl -sS -o /dev/null -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/c.json "${API}/issues/${NUM}/comments" || true
+            CODE=$(curl -sS -o /tmp/r.json -w '%{http_code}' -X PATCH -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data '{"state":"open"}' "${API}/issues/${NUM}" || echo 000)
+            echo "Réouverture du ticket #${NUM} : HTTP ${CODE}"
+          else
+            node -e 'const fs=require("fs");const c=JSON.parse(fs.readFileSync("/tmp/c.json","utf8"));fs.writeFileSync("/tmp/i.json",JSON.stringify({title:process.argv[1],body:c.body}))' "$MARQUEUR"
+            CODE=$(curl -sS -o /tmp/r.json -w '%{http_code}' -X POST -H "Authorization: token ${FORGE_TOKEN}" -H "Content-Type: application/json" --data @/tmp/i.json "${API}/issues" || echo 000)
+            echo "Création du ticket : HTTP ${CODE}"
+          fi
+          case "$CODE" in
+            200|201) exit 0 ;;
+            *) echo "::error::front non publié sur${ECARTS}, et le ticket n'a pas pu être posé (HTTP ${CODE}) : signalé nulle part."
+               head -c 400 /tmp/r.json; exit 1 ;;
+          esac
 
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
   # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
