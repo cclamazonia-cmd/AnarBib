@@ -877,3 +877,6 @@ tests/sql/wikidata_une_seule_fiche_tests.sql
 # B41 (20/10/2026) : une notice partagée compte tous ses fonds — recompter un seul fonds (prêt, réservation) ne fait plus oublier
 # à la notice les exemplaires des autres bibliothèques ; fn_h34_recompter_fonds_notes recompte d'un seul appel.
 tests/sql/b41_notice_partagee_tous_ses_fonds_tests.sql
+# E40 (20/10/2026) : l'état de service d'une bibliothèque publique se lit sans compte — politique de lecture anon/authenticated limitée aux
+# bibliothèques actives et publiques, anon réduit aux colonnes des vues publiques ; rien d'une privée, l'équipe garde tout.
+tests/sql/e40_etat_de_service_public_tests.sql
