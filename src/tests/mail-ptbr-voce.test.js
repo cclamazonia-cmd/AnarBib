@@ -231,7 +231,9 @@ describe('courriel de bienvenue = écran de fin d\'inscription', () => {
 // texte HTML et les littéraux, lignes de gabarit comprises ; un morceau sans
 // espace est un identifiant (« reserva_cancelada_leitor »), pas de la prose.
 const TEXTE_EN_DUR_PT = [
-  'notify-weekly-report/index.ts',
+  // 'notify-weekly-report/index.ts' en est sorti le 20/10/2026 (suite de F26) : le
+  // rapport d'une bibliothèque passe par mail-strings.ts (clés wr.* et net.*), dans
+  // la langue de la bibliothèque ; f26-pieds-de-courriel veille sur sa prose.
   // 'notify-network-weekly-report/index.ts' en est sorti le 20/10/2026 (suite de
   // F26) : ses chaînes passent par mail-strings.ts (clés net.*), onze langues.
   // 'notify-document-permission-request/index.ts' en est sorti le 19/10/2026 (F26) :

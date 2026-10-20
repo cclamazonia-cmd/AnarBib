@@ -1,6 +1,13 @@
 // ============================================================================
-// notify-weekly-report — Relatório semanal por biblioteca
+// notify-weekly-report — rapport hebdomadaire d'UNE bibliothèque
 // ============================================================================
+// Suite de F26 (20/10/2026) : le rapport était composé en pt-BR seul, dans le
+// code. Il part désormais dans la langue de la bibliothèque (default_locale de
+// v_library_notification_context, comme les autres notify-*) : clés wr.* et
+// net.* de _shared/i18n/mail-strings.ts, dates par formatDateLocale, pied du
+// routage partagé dans la même langue. Un seul destinataire (weekly_report_email,
+// à défaut admin_notification_email puis ADMIN_EMAIL) : une seule langue.
+//
 // Refactor du 06/05/2026 :
 //   - Imports _shared/ racine pour la résolution du contexte de notification
 //     (élimination de ~150 lignes de duplication avec _shared/context/)
@@ -24,6 +31,9 @@ import {
 import { resolveLibraryNotificationContext } from "../_shared/context/library-notification-context.ts";
 import { resolveMailRouting } from "../_shared/context/library-mail-routing.ts";
 import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
+import { localeDeProfil } from "../_shared/context/network-admins.ts";
+import { tMailTexte, formatDateLocale } from "../_shared/i18n/mail-strings.ts";
+import { esc as echapperHtml, desechapper } from "../_shared/shared/format.ts";
 
 // ─── Helpers locaux ─────────────────────────────────────────────────────────
 
@@ -41,13 +51,8 @@ function json(status, data) {
 }
 
 function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[c]);
+  // l'esc partagé, qui n'échappe pas deux fois une phrase de tMail
+  return echapperHtml(s);
 }
 
 function isValidEmail(email) {
@@ -76,17 +81,25 @@ function addDaysISO(dateStr, days) {
   return d.toISOString();
 }
 
-function formatBR(dateStr) {
-  const [y, m, d] = String(dateStr || "").split("-");
-  return y && m && d ? `${d}/${m}/${y}` : String(dateStr || "—");
+// Une date « AAAA-MM-JJ » dans la langue du rapport (même format que les autres courriels).
+function formatDate(dateStr, loc) {
+  const s = String(dateStr || "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return s || "—";
+  return formatDateLocale(`${s}T00:00:00.000Z`, loc);
 }
 
-function isoDateOnly(value) {
-  return String(value || "").trim().slice(0, 10) || "—";
+// Le jour d'un horodatage (ou d'une date) de la base, dans la langue du rapport.
+function dateCourte(value, loc) {
+  const s = String(value || "").trim();
+  return s ? formatDate(s.slice(0, 10), loc) : "—";
 }
 
-function isoDateTime(value) {
-  return String(value || "").trim().slice(0, 19) || "—";
+// Jour et heure d'un horodatage de la base. PostgREST le rend en UTC : on le dit.
+function dateHeure(value, loc) {
+  const s = String(value || "").trim();
+  if (!s) return "—";
+  const heure = /^\d{4}-\d{2}-\d{2}T(\d{2}:\d{2})/.exec(s);
+  return heure ? `${formatDate(s.slice(0, 10), loc)} ${heure[1]} UTC` : dateCourte(s, loc);
 }
 
 function fullName(row) {
@@ -118,34 +131,29 @@ function compactTitleList(values) {
 // Libellés humains des statuts de PEB (interlibrary_loans_v2.status_global) et des
 // partages numériques (ill_digital_shares.flux_state) — évite d'exposer les valeurs
 // techniques (snake_case / tokens) dans le rapport destiné à la bibliothèque.
-const PEB_STATUS_LABELS_PT = {
-  preparacao: "Em preparação",
-  aguardando_saida: "Aguardando saída",
-  emprestado: "Emprestado",
-  parcialmente_devolvido: "Parcialmente devolvido",
-  em_devolucao: "Em devolução",
-  devolvido: "Devolvido",
-  cancelado: "Cancelado",
-  atrasado: "Atrasado"
-};
-function pebStatusLabel(status) {
+// Libellés : clés net.ill.* (celles du rapport du réseau et de l'écran) et
+// wr.flux.* (celles de l'écran, digishare.state.*). Une valeur inconnue
+// s'affiche telle quelle, soulignés en espaces.
+function libelleOuBrut(loc, prefixe, valeur) {
+  const cle = `${prefixe}${valeur}`;
+  const t = tMailTexte(loc, cle);
+  return t === cle ? valeur.replace(/_/g, " ") : t;
+}
+function pebStatusLabel(status, loc) {
   const s = String(status || "").trim();
   if (!s) return "—";
-  return PEB_STATUS_LABELS_PT[s] || s.replace(/_/g, " ");
+  return libelleOuBrut(loc, "net.ill.", s);
 }
-const ILL_FLUX_STATE_LABELS_PT = {
-  demande: "Pedido",
-  accepte: "Aceito",
-  refuse: "Recusado",
-  indisponible: "Indisponível",
-  numerisation: "Digitalização",
-  transmis: "Transmitido",
-  cloture: "Encerrado"
-};
-function illFluxStateLabel(state) {
+function illFluxStateLabel(state, loc) {
   const s = String(state || "").trim();
   if (!s) return "—";
-  return ILL_FLUX_STATE_LABELS_PT[s] || s.replace(/_/g, " ");
+  return libelleOuBrut(loc, "wr.flux.", s);
+}
+// Statut d'un départ de lecteur·rice (reader_membership_events.new_status) : clés wr.exit.*.
+function exitStatusLabel(status, loc) {
+  const s = String(status || "").trim();
+  if (!s) return "—";
+  return libelleOuBrut(loc, "wr.exit.", s);
 }
 function renderTable(title, cols, rows) {
   const header = cols.map((c) => `<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);color:#ffffff;">${esc(c)}</th>`).join("");
@@ -166,9 +174,11 @@ function renderTable(title, cols, rows) {
 
 // ─── Wrapper local pour ajouter recipient* au routing partagé ──────────────
 // Le routing _shared/ ne couvre pas weekly_report_email. On enrichit ici.
+// La locale fait le pied (signature traduite, sinon layout.footerText) dans la
+// langue du rapport.
 
-function resolveWeeklyMailRouting(ctx) {
-  const baseRouting = resolveMailRouting(ctx);
+function resolveWeeklyMailRouting(ctx, loc) {
+  const baseRouting = resolveMailRouting(ctx, loc);
   const recipientEmail = String(
     ctx?.weekly_report_email
       || ctx?.admin_notification_email
@@ -194,7 +204,7 @@ function renderReportEmail(opts) {
   const networkLogoHtml = showNetworkLogo ? `<img src="${esc(opts.routing.networkLogoUrl)}" alt="AnarBib" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const libraryLogoHtml = showLibraryLogo ? `<img src="${esc(opts.routing.libraryLogoUrl)}" alt="${esc(opts.routing.brandName)}" style="display:block;max-width:84px;max-height:52px;width:auto;height:auto;object-fit:contain;">` : "";
   const html = `<!doctype html>
-<html><head>
+<html lang="${esc(opts.locale)}"><head>
 <meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(opts.subject)}</title>
@@ -212,7 +222,7 @@ function renderReportEmail(opts) {
                   ${networkLogoHtml}
                   <div>
                     <div style="font-size:18px;font-weight:800;line-height:1.2;">${esc(opts.routing.brandName)}</div>
-                    <div style="font-size:13px;color:#cfcfcf;line-height:1.2;">Relatório semanal automático</div>
+                    <div style="font-size:13px;color:#cfcfcf;line-height:1.2;">${esc(tMailTexte(opts.locale, "wr.kicker"))}</div>
                   </div>
                 </div>
                 ${showLibraryLogo ? `<div style="display:flex;align-items:center;justify-content:flex-end;">${libraryLogoHtml}</div>` : ""}
@@ -236,14 +246,17 @@ function renderReportEmail(opts) {
     </tr>
   </table>
 </body></html>`;
-  const summaryText = opts.summaryHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+  // le texte brut sans balises NI entités (« d&#039;inscription » → « d'inscription »),
+  // une ligne par libellé et par nombre, sans l'indentation du gabarit HTML
+  const summaryText = desechapper(opts.summaryHtml.replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " "))
+    .split("\n").map((ligne) => ligne.trim()).filter(Boolean).join("\n");
   const textParts = [
     `${opts.routing.brandName} (${opts.routing.subjectTag})`,
     opts.title,
     "",
     summaryText,
     "",
-    `Rodapé local: ${opts.routing.footerText}`
+    opts.routing.footerText
   ];
   return { html, text: textParts.join("\n") };
 }
@@ -371,7 +384,10 @@ serve(async (req) => {
 
     // Résolution du contexte et du routing via _shared/
     const ctx = await resolveLibraryNotificationContext(libraryId);
-    const routing = resolveWeeklyMailRouting(ctx);
+    // La langue du rapport : celle de la bibliothèque (pt-BR si absente ou inconnue).
+    const loc = localeDeProfil(ctx?.default_locale);
+    const t = (cle, params = undefined) => tMailTexte(loc, cle, params);
+    const routing = resolveWeeklyMailRouting(ctx, loc);
 
     if (!routing.channelActive) {
       return json(409, { ok: false, error: "Weekly report channel is disabled for this library", library_id: libraryId });
@@ -397,7 +413,7 @@ serve(async (req) => {
       const items = reservationItemsByReserva.get(Number(r.id || 0)) || [];
       return [
         String(r.id ?? "—"),
-        isoDateOnly(r.created_at),
+        dateCourte(r.created_at, loc),
         compactTitleList(items.map((it) => String(it.titulo || it.bib_ref || "").trim()).filter(Boolean)),
         String(profile?.email || "—"),
         fullName(profile) || "—"
@@ -415,7 +431,7 @@ serve(async (req) => {
       const profile = consultasProfiles.get(String(c.user_id || ""));
       return [
         String(c.id ?? "—"),
-        isoDateOnly(c.created_at),
+        dateCourte(c.created_at, loc),
         String(profile?.email || "—"),
         fullName(profile) || "—"
       ];
@@ -439,8 +455,8 @@ serve(async (req) => {
       const profile = loansCreatedProfiles.get(String(l.user_id || ""));
       return [
         String(l.id ?? "—"),
-        isoDateOnly(l.created_at),
-        String(l.due_at || firstItem?.due_at || "—"),
+        dateCourte(l.created_at, loc),
+        dateCourte(l.due_at || firstItem?.due_at, loc),
         compactTitleList(items.map((it) => String(it.titulo || it.bib_ref || "").trim()).filter(Boolean)),
         String(firstItem?.user_name || firstNameOnly(profile) || fullName(profile) || "—")
       ];
@@ -464,8 +480,8 @@ serve(async (req) => {
       const profile = renewalsProfiles.get(String(l.user_id || ""));
       return [
         String(l.id ?? "—"),
-        isoDateTime(l.extended_at),
-        String(l.due_at || firstItem?.due_at || "—"),
+        dateHeure(l.extended_at, loc),
+        dateCourte(l.due_at || firstItem?.due_at, loc),
         compactTitleList(items.map((it) => String(it.titulo || it.bib_ref || "").trim()).filter(Boolean)),
         String(firstItem?.user_name || firstNameOnly(profile) || fullName(profile) || "—")
       ];
@@ -485,7 +501,7 @@ serve(async (req) => {
       const profile = returnProfiles.get(String(first?.emprestimos_v2?.user_id || ""));
       return [
         String(emprestimoId || "—"),
-        isoDateTime(first?.returned_at),
+        dateHeure(first?.returned_at, loc),
         compactTitleList(items.map((it) => String(it.titulo_cache || it.bib_ref || "").trim()).filter(Boolean)),
         fullName(profile) || firstNameOnly(profile) || "—"
       ];
@@ -504,7 +520,7 @@ serve(async (req) => {
       const profile = overdueProfiles.get(String(first?.emprestimos_v2?.user_id || ""));
       return [
         String(emprestimoId || "—"),
-        String(first?.due_at || "—"),
+        dateCourte(first?.due_at, loc),
         compactTitleList(items.map((it) => String(it.titulo_cache || it.bib_ref || "").trim()).filter(Boolean)),
         fullName(profile) || firstNameOnly(profile) || "—"
       ];
@@ -582,9 +598,9 @@ serve(async (req) => {
       const partnerId = isLender ? p.borrower_library_id : p.lender_library_id;
       return [
         String(p.request_id || p.id || "—"),
-        isLender ? "Emprestadora" : "Tomadora",
+        t(isLender ? "wr.role.lender" : "wr.role.borrower"),
         pebLibNames.get(String(partnerId)) || "—",
-        pebStatusLabel(p.status_global),
+        pebStatusLabel(p.status_global, loc),
         String(pebItemCountByLoan.get(String(p.id)) || 0)
       ];
     });
@@ -673,9 +689,9 @@ serve(async (req) => {
       const partner = isSource ? s.requester : s.source;
       return [
         String(s.books?.titulo || "—"),
-        isSource ? "Fornecedora" : "Solicitante",
+        t(isSource ? "wr.role.provider" : "wr.role.requester"),
         String(partner?.short_name || partner?.name || "—"),
-        illFluxStateLabel(s.flux_state)
+        illFluxStateLabel(s.flux_state, loc)
       ];
     });
 
@@ -720,121 +736,76 @@ serve(async (req) => {
       ...inscricoes.map((e) => String(e.user_id || "")),
       ...saidas.map((e) => String(e.user_id || ""))
     ].filter(Boolean));
-    const saidaStatusLabels: Record<string, string> = {
-      removed: "Removido(a/e)",
-      inactive: "Inativo(a/e)",
-      terminated: "Encerrado(a/e)",
-      left_with_pending_circulation: "Saída com circulação pendente"
-    };
     const inscricoesRows = inscricoes.map((e) => {
       const p = churnProfiles.get(String(e.user_id || ""));
-      return [isoDateOnly(e.changed_at), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—")];
+      return [dateCourte(e.changed_at, loc), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—")];
     });
     const saidasRows = saidas.map((e) => {
       const p = churnProfiles.get(String(e.user_id || ""));
-      return [isoDateOnly(e.changed_at), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—"), saidaStatusLabels[String(e.new_status || "")] || String(e.new_status || "—")];
+      return [dateCourte(e.changed_at, loc), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—"), exitStatusLabel(e.new_status, loc)];
     });
 
     // ─── Composition du mail ───────────────────────────────────────────────
-    const subject = `${routing.subjectTag} · Relatório semanal (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
-    const title = `Relatório semanal — ${routing.brandName}`;
+    // Suite de F26 (20/10/2026) : tout dans la langue de la bibliothèque (loc),
+    // clés wr.* et, pour les libellés qu'il partage avec lui, celles du rapport
+    // du réseau (net.*).
+    const ligneSynthese = (label, valeur, derniere = false) => {
+      const bord = derniere ? "" : "border-bottom:1px solid rgba(255,255,255,.08);";
+      return `
+          <tr>
+            <td style="padding:10px;${bord}"><b>${esc(label)}</b></td>
+            <td style="padding:10px;${bord}text-align:right;"><b>${countOr0(valeur)}</b></td>
+          </tr>`;
+    };
+    const colonnes = (cles) => cles.map((c) => (c.includes(".") ? t(c) : c));
+    const periode = { start: formatDate(weekStart, loc), end: formatDate(weekEnd, loc) };
+    const subject = t("wr.subject", { tag: routing.subjectTag, ...periode });
+    const title = t("wr.title", { brand: routing.brandName });
     const summaryHtml = `
       <div style="line-height:1.5;color:#f2f2f2;">
-        <p style="margin:0 0 10px 0;"><b>Biblioteca:</b> ${esc(routing.brandName)}</p>
-        <p style="margin:0 0 10px 0;"><b>Período:</b> ${esc(formatBR(weekStart))} → ${esc(formatBR(weekEnd))} (${esc(tz)})</p>
+        <p style="margin:0 0 10px 0;"><b>${esc(t("wr.lbl.library"))}</b> ${esc(routing.brandName)}</p>
+        <p style="margin:0 0 10px 0;"><b>${esc(t("net.lbl.period"))}</b> ${esc(periode.start)} → ${esc(periode.end)} (${esc(tz)})</p>
         <table role="presentation" cellspacing="0" cellpadding="0"
-               style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:640px;">
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Novas inscrições de leitores</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(inscricoesCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Saídas de leitores</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(saidasCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Solicitações pendentes recebidas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(solicitacoesPendentesCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Reservas criadas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(reservasCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Consultas registradas</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(consultasCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Empréstimos criados</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(loansCreatedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Renovações</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(renewalsCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Devoluções</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(returnsCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (fim da semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(overdueActiveCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB concedidos (como emprestadora)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebLentCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB solicitados (como tomadora)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebBorrowedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>EEB em circulação (fim da semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais fornecidos (semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdProvidedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais solicitados (semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdRequestedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Compartilhamentos digitais em curso (fim da semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdOngoingCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas propostas (semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(trocasProposedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas aceitas (semana)</b></td>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(trocasAcceptedCount)}</b></td>
-          </tr>
-          <tr>
-            <td style="padding:10px;"><b>Trocas em curso</b></td>
-            <td style="padding:10px;text-align:right;"><b>${countOr0(trocasOngoingCount)}</b></td>
-          </tr>
+               style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:640px;">${[
+          ligneSynthese(t("net.sum.readersIn"), inscricoesCount),
+          ligneSynthese(t("net.sum.readersOut"), saidasCount),
+          ligneSynthese(t("wr.sum.pendingRequests"), solicitacoesPendentesCount),
+          ligneSynthese(t("net.sum.reservations"), reservasCount),
+          ligneSynthese(t("net.sum.consultations"), consultasCount),
+          ligneSynthese(t("net.sum.loans"), loansCreatedCount),
+          ligneSynthese(t("net.sum.renewals"), renewalsCount),
+          ligneSynthese(t("net.sum.returns"), returnsCount),
+          ligneSynthese(t("net.sum.overdue"), overdueActiveCount),
+          ligneSynthese(t("wr.sum.illLent"), pebLentCount),
+          ligneSynthese(t("wr.sum.illBorrowed"), pebBorrowedCount),
+          ligneSynthese(t("wr.sum.illCirculating"), pebInCirculationCount),
+          ligneSynthese(t("wr.sum.digitalProvided"), pdProvidedCount),
+          ligneSynthese(t("wr.sum.digitalRequested"), pdRequestedCount),
+          ligneSynthese(t("wr.sum.digitalOngoing"), pdOngoingCount),
+          ligneSynthese(t("net.sum.exchanges"), trocasProposedCount),
+          ligneSynthese(t("wr.sum.exchangesAccepted"), trocasAcceptedCount),
+          ligneSynthese(t("wr.sum.exchangesOngoing"), trocasOngoingCount, true)
+        ].join("")}
         </table>
       </div>
     `;
     const { html: htmlContent, text: textContent } = renderReportEmail({
+      locale: loc,
       subject,
       title,
-      preheader: `${routing.brandName} · relatório semanal`,
+      preheader: t("wr.preheader", { brand: routing.brandName }),
       summaryHtml,
       tablesHtml: [
-        renderTable("Novas inscrições de leitores (semana, últimas 50)", ["Data", "Leitor(a/e)", "Email"], inscricoesRows),
-        renderTable("Saídas de leitores (semana, últimas 50)", ["Data", "Leitor(a/e)", "Email", "Estado de saída"], saidasRows),
-        renderTable("Reservas criadas (últimas 50)", ["ID", "Data", "Livro", "Email", "Leitor(a/e)"], reservasRows),
-        renderTable("Consultas registradas (últimas 50)", ["ID", "Data", "Email", "Leitor(a/e)"], consultasRows),
-        renderTable("Empréstimos criados (últimos 50)", ["ID", "Criado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], loansCreatedRows),
-        renderTable("Renovações (últimas 50)", ["ID", "Renovado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], renewalsRows),
-        renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
-        renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows),
-        renderTable("Intercâmbios interbibliotecas (EEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows),
-        renderTable("Compartilhamentos digitais (pedidos da semana, últimos 50)", ["Documento", "Papel", "Biblioteca parceira", "Estado"], pdRows)
+        renderTable(t("wr.tbl.readersIn"), colonnes(["wr.col.date", "wr.col.reader", "wr.col.email"]), inscricoesRows),
+        renderTable(t("wr.tbl.readersOut"), colonnes(["wr.col.date", "wr.col.reader", "wr.col.email", "wr.col.exitStatus"]), saidasRows),
+        renderTable(t("wr.tbl.reservations"), colonnes(["ID", "wr.col.date", "wr.col.book", "wr.col.email", "wr.col.reader"]), reservasRows),
+        renderTable(t("wr.tbl.consultations"), colonnes(["ID", "wr.col.date", "wr.col.email", "wr.col.reader"]), consultasRows),
+        renderTable(t("wr.tbl.loans"), colonnes(["ID", "net.col.createdAt", "wr.col.dueDate", "wr.col.books", "wr.col.reader"]), loansCreatedRows),
+        renderTable(t("wr.tbl.renewals"), colonnes(["ID", "wr.col.renewedAt", "wr.col.dueDate", "wr.col.books", "wr.col.reader"]), renewalsRows),
+        renderTable(t("wr.tbl.returns"), colonnes(["wr.col.loan", "wr.col.returnedAt", "wr.col.books", "wr.col.reader"]), returnsRows),
+        renderTable(t("wr.tbl.overdue"), colonnes(["wr.col.loan", "wr.col.dueDate", "wr.col.books", "wr.col.reader"]), overdueRows),
+        renderTable(t("wr.tbl.ill"), colonnes(["wr.col.reference", "wr.col.role", "wr.col.partner", "net.col.state", "net.col.documents"]), pebRows),
+        renderTable(t("wr.tbl.digital"), colonnes(["wr.col.document", "wr.col.role", "wr.col.partner", "net.col.state"]), pdRows)
       ],
       context: ctx,
       routing
@@ -850,6 +821,7 @@ serve(async (req) => {
       week_start: weekStart,
       week_end: weekEnd,
       recipient_email: routing.recipientEmail,
+      locale: loc,
       subject,
       summary: {
         novas_inscricoes_leitores: inscricoesCount ?? 0,

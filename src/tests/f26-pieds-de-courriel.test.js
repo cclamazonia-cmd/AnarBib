@@ -360,3 +360,147 @@ describe('suite de F26 — le rapport hebdomadaire part dans la langue de chaque
     }
   });
 });
+
+// ─── Suite de F26 (20/10/2026) : le rapport hebdomadaire d'UNE bibliothèque ─────
+// notify-weekly-report, le dernier rapport rédigé en pt-BR seul dans le code : il
+// part à la coordination d'une bibliothèque (weekly_report_email), dans la langue
+// de cette bibliothèque (default_locale de la vue de contexte). Clés wr.*, et net.*
+// pour les libellés qu'il partage avec le rapport du réseau.
+// Mots portugais du courriel d'avant ; (?<!\p{L}) plutôt que \b, qui ignore « últimas ».
+const PROSE_PT_BIBLIO = /(?<!\p{L})(relat[oó]rio|semanal|leitor(?:es)?|empr[eé]stimos?|devolu[cç][oõ]es|renova[cç][oõ]es|atrasos|inscri[cç][oõ]es|sa[ií]das?|solicita[cç][oõ]es|pendentes|compartilhamentos?|digitais|emprestadora|tomadora|fornecedora|vencimento|parceira|papel|livros?|[uú]ltim[oa]s|agrupadas|rodap[eé]|per[ií]odo|criad[oa]s|registradas|aceitas|removido|inativo|encerrado|recusado|indispon[ií]vel)(?!\p{L})/iu;
+const CLES_WR = mail._allKeys().filter((k) => k.startsWith('wr.'));
+
+describe('suite de F26 — notify-weekly-report n’a plus de texte portugais en dur', () => {
+  it('aucun littéral ne porte de prose portugaise', () => {
+    const fautes = litteraux(code('notify-weekly-report/index.ts')).filter((t) => PROSE_PT_BIBLIO.test(t));
+    expect(fautes, fautes.join('\n')).toEqual([]);
+  });
+
+  it('contre-épreuve : la garde voit les phrases d’avant', () => {
+    for (const avant of ['Relatório semanal automático', 'Solicitações pendentes recebidas', 'Compartilhamentos digitais em curso (fim da semana)',
+      'Devoluções (últimas 50 linhas agrupadas por empréstimo)', 'Leitor(a/e)', 'Biblioteca parceira', 'Saída com circulação pendente',
+      'Rodapé local:', 'Período:', 'Emprestadora', 'Indisponível']) {
+      expect(PROSE_PT_BIBLIO.test(avant), avant).toBe(true);
+    }
+  });
+
+  it('les clés wr.* : complètes dans les onze langues, aucune copie du pt-BR', () => {
+    expect(CLES_WR.length).toBeGreaterThanOrEqual(50);
+    expect(CLES_WR.filter((k) => !mail._isComplete(k))).toEqual([]);
+    const copies = [];
+    for (const k of CLES_WR) {
+      const pt = mail.tMailTexte('pt-BR', k);
+      if (pt.length <= 25 || !/\s/.test(pt)) continue;
+      for (const l of LOCALES) if (l !== 'pt-BR' && mail.tMailTexte(l, k) === pt) copies.push(`${k} [${l}]`);
+    }
+    expect(copies).toEqual([]);
+  });
+
+  it('chaque clé citée par la fonction existe, et chaque état a son libellé', () => {
+    const src = code('notify-weekly-report/index.ts');
+    const citees = [...src.matchAll(/["']((?:wr|net)\.[A-Za-z_.]+[A-Za-z_])["']/g)].map((m) => m[1]);
+    expect(citees.length).toBeGreaterThan(50);
+    const toutes = mail._allKeys();
+    expect(citees.filter((k) => !toutes.includes(k))).toEqual([]);
+    for (const s of ['demande', 'accepte', 'refuse', 'indisponible', 'numerisation', 'transmis', 'cloture']) expect(CLES_WR, s).toContain(`wr.flux.${s}`);
+    for (const s of ['removed', 'inactive', 'terminated', 'left_with_pending_circulation']) expect(CLES_WR, s).toContain(`wr.exit.${s}`);
+    for (const s of ['preparacao', 'aguardando_saida', 'emprestado', 'parcialmente_devolvido', 'em_devolucao', 'devolvido', 'cancelado', 'atrasado']) {
+      expect(CLES_NET, s).toContain(`net.ill.${s}`);
+    }
+  });
+
+  it('français sans vouvoiement, pt-BR sans « tu »', () => {
+    const fautes = CLES_WR.flatMap((k) => [['fr', mail.tMailTexte('fr', k)], ['pt-BR', mail.tMailTexte('pt-BR', k)]]
+      .filter(([l, v]) => (l === 'fr' ? /\b(vous|votre|vos)\b|\b\p{L}+ez\b/iu : /\b(tu|teu|tua|vós|vosso)\b/i).test(v))
+      .map(([l]) => `${k} [${l}]`));
+    expect(fautes).toEqual([]);
+  });
+});
+
+describe('suite de F26 — le rapport d’une bibliothèque part dans la langue de la bibliothèque', () => {
+  const SECRET_BIBLIO = 'secret-rapport-biblio';
+  const LECTRICE = { id: 'u-1', email: 'louise@exemplo.test', first_name: 'Louise', last_name: 'Michel' };
+  const avecOp = (chaine, op, col, val) => chaine.some((c) => c.op === op && c.args[0] === col && (val === undefined || c.args[1] === val));
+  function monterBiblio(default_locale) {
+    return monterEF({
+      entree: 'notify-weekly-report/index.ts',
+      env: { WEBHOOK_SECRET_NOTIFY_WEEKLY_REPORT: SECRET_BIBLIO, SENDER_EMAIL: 'no-reply@exemplo.test',
+        FOOTER_TEXT: 'Devise globale à ne plus lire', NETWORK_FOOTER_TEXT: 'Devise réseau à ne plus lire' },
+      repondre: (schema, table, a, chaine) => {
+        if (a('select')?.args[1]?.head) return { data: null, error: null, count: 2 };
+        if (table === 'library_document_governance') return { data: { config: { reports: { weekly_library_summary_enabled: true } } }, error: null };
+        if (table === 'v_library_notification_context') return { data: {
+          library_id: 'lib-a', library_name: 'De Vrije Gedachte', library_short_name: 'DVG', delivery_mode: 'platform_shared',
+          weekly_report_email: 'rapport@exemplo.test', channel_active: true, default_locale,
+        }, error: null };
+        if (table === 'reader_membership_events') {
+          return avecOp(chaine, 'eq', 'event_type', 'saida')
+            ? { data: [{ user_id: 'u-1', changed_at: '2026-10-15T10:00:00Z', new_status: 'left_with_pending_circulation' }], error: null }
+            : { data: [{ user_id: 'u-1', changed_at: '2026-10-13T08:00:00Z' }], error: null };
+        }
+        if (table === 'profiles') return { data: [LECTRICE], error: null };
+        if (table === 'emprestimos_v2') return { data: [{ id: 12, user_id: 'u-1', created_at: '2026-10-13T09:00:00Z', due_at: '2026-11-03', extended_at: '2026-10-16T14:30:00Z' }], error: null };
+        if (schema === 'api' && table === 'emprestimo_itens_painel_ui') return { data: [{ emprestimo_id: 12, line_no: 1, titulo: 'Dieu et l’État', user_name: 'Louise' }], error: null };
+        if (table === 'interlibrary_loans_v2') return { data: [{ id: 'p-1', request_id: 'EEB-7', lender_library_id: 'lib-a', borrower_library_id: 'lib-b', status_global: 'emprestado', created_at: '2026-10-14T09:00:00Z' }], error: null };
+        if (table === 'interlibrary_loan_items_v2') return { data: [{ interlibrary_loan_id: 'p-1' }, { interlibrary_loan_id: 'p-1' }], error: null };
+        if (table === 'libraries') return { data: [{ id: 'lib-b', name: 'Bibliothèque B', short_name: 'BB' }], error: null };
+        if (table === 'ill_digital_shares') return { data: [{ id: 'd-1', requester_library_id: 'lib-b', source_library_id: 'lib-a', flux_state: 'numerisation',
+          requested_at: '2026-10-14T11:00:00Z', books: { titulo: "L'Anarchie & l'ordre" }, requester: { short_name: 'BB' }, source: { short_name: 'DVG' } }], error: null };
+        return { data: table === 'library_public_contact' ? null : [], error: null };
+      },
+    });
+  }
+  const appelerBiblio = (ef) => ef.appeler(new Request('http://ef.local/', {
+    method: 'POST', headers: { 'x-webhook-secret': SECRET_BIBLIO, 'content-type': 'application/json' },
+    body: JSON.stringify({ library_id: 'lib-a', week_start: '2026-10-12', week_end: '2026-10-18' }),
+  }));
+  const html = (l, cle, params) => mail.tMailTexte(l, cle, params).replace(/&/g, '&amp;').replace(/'/g, '&#039;');
+  const jour = (iso, l) => mail.formatDateLocale(`${iso}T00:00:00.000Z`, l);
+
+  for (const l of ['nl', 'fr']) {
+    it(`bibliothèque en ${l} : objet, corps, états et pied dans sa langue`, async () => {
+      const ef = monterBiblio(l);
+      const { statut, corps } = await appelerBiblio(ef);
+      expect(statut, JSON.stringify(corps)).toBe(200);
+      expect(corps.locale).toBe(l);
+      expect(ef.envois).toHaveLength(1);
+      const e = mailA(ef.envois, 'rapport@exemplo.test');
+
+      const periode = { start: jour('2026-10-12', l), end: jour('2026-10-18', l) };
+      expect(e.subject).toBe(corps.subject);
+      expect(e.subject.endsWith(mail.tMailTexte(l, 'wr.subject', { tag: '', ...periode }).trim())).toBe(true);
+      expect(e.html).toContain(`<html lang="${l}">`);
+      for (const cle of ['wr.kicker', 'wr.lbl.library', 'net.lbl.period', 'wr.sum.pendingRequests', 'net.sum.readersIn', 'wr.sum.digitalOngoing',
+        'wr.tbl.readersOut', 'wr.tbl.digital', 'wr.col.reader', 'wr.col.dueDate', 'wr.col.partner', 'net.col.createdAt',
+        'net.ill.emprestado', 'wr.flux.numerisation', 'wr.exit.left_with_pending_circulation', 'wr.role.lender', 'wr.role.provider',
+        'layout.footerText']) {
+        expect(e.html, cle).toContain(html(l, cle));
+      }
+      expect(e.html).toContain(html(l, 'wr.title', { brand: '' }).trim());
+      // dates de la langue : le jour seul, ou le jour et l'heure (UTC) d'un horodatage
+      expect(e.html).toContain(jour('2026-11-03', l));
+      expect(e.html).toContain(`${jour('2026-10-16', l)} 14:30 UTC`);
+      expect(e.html).toContain('L&#039;Anarchie &amp; l&#039;ordre');
+      expect(e.html).not.toMatch(/Relatório|Biblioteca:|Período|Leitor\(a\/e\)|Empréstimo|Devoluções|Compartilhamento|Emprestadora|Fornecedora|Rodapé|Digitalização/);
+
+      expect(e.text).toContain(mail.tMailTexte(l, 'layout.footerText'));
+      expect(e.text).toContain(mail.tMailTexte(l, 'wr.sum.pendingRequests'));
+      expect(e.text).not.toMatch(/&#0?39;|&amp;|Rodapé/);
+      expect(e.html).not.toMatch(/Devise (globale|réseau)/);
+      for (const repli of REPLIS_PT) expect(e.html).not.toContain(repli);
+    });
+  }
+
+  it('langue absente ou inconnue : le rapport part en pt-BR, la langue de référence', async () => {
+    for (const l of [null, 'xx']) {
+      const ef = monterBiblio(l);
+      const { statut, corps } = await appelerBiblio(ef);
+      expect(statut).toBe(200);
+      expect(corps.locale).toBe('pt-BR');
+      const e = mailA(ef.envois, 'rapport@exemplo.test');
+      expect(e.html).toContain('<html lang="pt-BR">');
+      expect(e.html).toContain(mail.tMailTexte('pt-BR', 'wr.kicker'));
+      expect(e.html).toContain(jour('2026-11-03', 'pt-BR'));
+    }
+  });
+});
