@@ -166,7 +166,6 @@ if [ "$FRONT" = "1" ]; then
       . "$DEPLOY_DIR/scripts/version.sh"
       if [ "$(canal_courant)" = "version" ]; then
         v_tag="$(version_courante)"
-        [ -z "$v_tag" ] && v_tag="$(derniere_version)"
         [ -n "$v_tag" ] && TAG_CIBLE="$v_tag"
       fi
     fi
@@ -243,13 +242,31 @@ if [ "$CONTROLE" = "1" ]; then
   # Front : ce que Caddy sert est-il le commit du dépôt ? (21/09/2026)
   FRONT_SERVI=$(docker compose exec -T caddy cat /srv/.version-front 2>/dev/null | tr -d '\r\n' || true)
   TETE_DEPOT=$(git -C "$RACINE" rev-parse HEAD)
+  MODE_PREBUILT=0
+  WEB_TAG_ATTENDU=""
+  COMMIT_ATTENDU=""
+  if grep -q "compose.prebuilt.yml" "$DEPLOY_DIR/.env" 2>/dev/null; then
+    MODE_PREBUILT=1
+    WEB_TAG_ATTENDU=$(sed -n 's/^WEB_TAG=//p' "$DEPLOY_DIR/.env" | tail -1)
+    if [ -n "$WEB_TAG_ATTENDU" ]; then
+      COMMIT_ATTENDU=$(git -C "$RACINE" rev-parse "${WEB_TAG_ATTENDU}^{commit}" 2>/dev/null || true)
+    fi
+  fi
   if [ -z "$FRONT_SERVI" ]; then
     echo "⚠ Front : version inconnue (dist/.version-front absent) — relancer deploy/deploy.sh --front"
     SANTE_OK=0
+  elif [ "$MODE_PREBUILT" = "1" ]; then
+    if [ -z "$COMMIT_ATTENDU" ]; then
+      echo "⚠ Front : l'étiquette ${WEB_TAG_ATTENDU:-inconnue} ne correspond à aucun commit Git vérifiable"
+      SANTE_OK=0
+    elif [ "$FRONT_SERVI" = "$COMMIT_ATTENDU" ]; then
+      echo "✓ Front : image pré-compilée conforme à ${WEB_TAG_ATTENDU} (${COMMIT_ATTENDU:0:8})"
+    else
+      echo "⚠ Front : image ${FRONT_SERVI:0:8}, mais ${WEB_TAG_ATTENDU} doit servir ${COMMIT_ATTENDU:0:8}"
+      SANTE_OK=0
+    fi
   elif [ "$FRONT_SERVI" = "$TETE_DEPOT" ]; then
     echo "✓ Front : construit depuis le commit du dépôt (${TETE_DEPOT:0:8})"
-  elif grep -q "compose.prebuilt.yml" "$DEPLOY_DIR/.env" 2>/dev/null; then
-    echo "✓ Front : image pré-compilée active (${FRONT_SERVI:0:8})"
   else
     echo "⚠ Front : construit depuis ${FRONT_SERVI:0:8}, dépôt à ${TETE_DEPOT:0:8} — relancer deploy/deploy.sh --front"
     SANTE_OK=0

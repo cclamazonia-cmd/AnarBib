@@ -803,6 +803,30 @@ t() {
     el:ok_prebuilt)    echo "Προκατασκευασμένη εικόνα ιστού ενεργή (λειτουργία zero-build, δεν απαιτείται Node.js στον διακομιστή)." ;;
     ro:ok_prebuilt)    echo "Imagine web precompilată activă (modul zero-build, fără Node.js pe gazdă)." ;;
 
+    fr:err_prebuilt_pull) echo "Impossible de télécharger l'image web:$2 depuis le registre." ;;
+    en:err_prebuilt_pull) echo "Unable to download the web:$2 image from the registry." ;;
+    pt:err_prebuilt_pull) echo "Não foi possível baixar a imagem web:$2 do registro." ;;
+    es:err_prebuilt_pull) echo "No se pudo descargar la imagen web:$2 del registro." ;;
+    it:err_prebuilt_pull) echo "Impossibile scaricare l'immagine web:$2 dal registro." ;;
+    de:err_prebuilt_pull) echo "Das Image web:$2 konnte nicht aus der Registry geladen werden." ;;
+    ca:err_prebuilt_pull) echo "No s'ha pogut baixar la imatge web:$2 del registre." ;;
+    eo:err_prebuilt_pull) echo "Ne eblis elŝuti la bildon web:$2 el la registrejo." ;;
+    nl:err_prebuilt_pull) echo "De web:$2-image kon niet uit het register worden gedownload." ;;
+    el:err_prebuilt_pull) echo "Δεν ήταν δυνατή η λήψη της εικόνας web:$2 από το μητρώο." ;;
+    ro:err_prebuilt_pull) echo "Imaginea web:$2 nu a putut fi descărcată din registru." ;;
+
+    fr:prebuilt_help) echo "Publiez cette révision, choisissez une étiquette existante avec WEB_TAG=<étiquette>, ou construisez-la localement avec make build-web." ;;
+    en:prebuilt_help) echo "Publish this revision, select an existing tag with WEB_TAG=<tag>, or build it locally with make build-web." ;;
+    pt:prebuilt_help) echo "Publique esta revisão, escolha uma etiqueta existente com WEB_TAG=<etiqueta>, ou compile-a localmente com make build-web." ;;
+    es:prebuilt_help) echo "Publique esta revisión, elija una etiqueta existente con WEB_TAG=<etiqueta>, o compílela localmente con make build-web." ;;
+    it:prebuilt_help) echo "Pubblicare questa revisione, scegliere un'etichetta esistente con WEB_TAG=<etichetta>, oppure compilarla localmente con make build-web." ;;
+    de:prebuilt_help) echo "Veröffentlichen Sie diese Revision, wählen Sie mit WEB_TAG=<Tag> ein vorhandenes Tag oder bauen Sie sie lokal mit make build-web." ;;
+    ca:prebuilt_help) echo "Publiqueu aquesta revisió, trieu una etiqueta existent amb WEB_TAG=<etiqueta>, o compileu-la localment amb make build-web." ;;
+    eo:prebuilt_help) echo "Publikigu ĉi tiun revizion, elektu ekzistantan etikedon per WEB_TAG=<etikedo>, aŭ konstruu ĝin loke per make build-web." ;;
+    nl:prebuilt_help) echo "Publiceer deze revisie, kies een bestaand label met WEB_TAG=<label>, of bouw deze lokaal met make build-web." ;;
+    el:prebuilt_help) echo "Δημοσιεύστε αυτή την αναθεώρηση, επιλέξτε υπάρχουσα ετικέτα με WEB_TAG=<ετικέτα> ή δημιουργήστε την τοπικά με make build-web." ;;
+    ro:prebuilt_help) echo "Publicați această revizie, alegeți o etichetă existentă cu WEB_TAG=<etichetă> sau construiți-o local cu make build-web." ;;
+
     # ── step 4 ───────────────────────────────────────────────────────────────
     fr:step4)          echo "4/4 · Déploiement et démarrage de la pile complète (Docker)" ;;
     en:step4)          echo "4/4 · Deployment and startup of the full stack (Docker)" ;;
@@ -1140,14 +1164,12 @@ while [ $# -gt 0 ]; do
       PREBUILT=1
       export COMPOSE_FILE="compose.yml:compose.prebuilt.yml"
       if [ -z "${WEB_TAG:-}" ]; then
+        TAG_STABLE=""
         if [ -f deploy/scripts/version.sh ]; then
           . deploy/scripts/version.sh
           TAG_STABLE="$(version_courante)"
-          [ -z "$TAG_STABLE" ] && TAG_STABLE="$(derniere_version)"
-          export WEB_TAG="${TAG_STABLE:-latest}"
-        else
-          export WEB_TAG="latest"
         fi
+        export WEB_TAG="${TAG_STABLE:-$(git rev-parse HEAD)}"
       fi
       ;;
     --lang)
@@ -1306,6 +1328,15 @@ if [ "$PREBUILT" = "1" ]; then
     echo "WEB_TAG=${WEB_TAG}" >> deploy/.env
   fi
 fi
+
+pull_prebuilt_web() {
+  [ "$PREBUILT" = "1" ] || return 0
+  if ! docker compose pull caddy; then
+    erreur "$(t err_prebuilt_pull "$WEB_TAG")"
+    echo "  $(t prebuilt_help)" >&2
+    return 1
+  fi
+}
 
 # Mail configuration (interactive, only if not already set)
 #
@@ -1481,6 +1512,7 @@ fi
 if [ "$START" = "1" ]; then
   dire "$(t step4)"
   cd deploy
+  pull_prebuilt_web
 
   if [ "$REBUILD" = "1" ]; then
     if [ "$ASSUME_YES" = "0" ] && [ -t 0 ]; then
@@ -1516,15 +1548,6 @@ if [ "$START" = "1" ]; then
 
     if [ "$NB_TABLES" -gt 0 ]; then
       echo "$(t db_existing "$NB_TABLES")"
-      if [ "$PREBUILT" = "1" ]; then
-        if ! docker compose pull caddy 2>/dev/null; then
-          echo "⚠ L'image web:${WEB_TAG} n'a pas pu être téléchargée depuis le registre." >&2
-          echo "  Solutions :" >&2
-          echo "  - Spécifier une autre version : WEB_TAG=v2026.10 ./install.sh --prebuilt" >&2
-          echo "  - Utiliser l'image latest : WEB_TAG=latest ./install.sh --prebuilt" >&2
-          echo "  - Ou la construire localement : make build-web" >&2
-        fi
-      fi
       docker compose up -d
       docker compose exec -T db sh /scripts/apply-pending-migrations.sh
       # Les triggers de profil sur auth.users ne viennent d'aucune migration :

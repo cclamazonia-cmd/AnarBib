@@ -10,8 +10,9 @@ SHELL := /bin/bash
 
 REGISTRY ?= hub.unionlibertaireanarchiste.org/anarbib
 IMAGE_WEB ?= $(REGISTRY)/web
-VERSION ?= $(shell git describe --tags --always 2>/dev/null || echo "latest")
 COMMIT_SHA ?= $(shell git rev-parse HEAD 2>/dev/null || echo "")
+VERSION ?= $(shell tag=$$(git describe --tags --exact-match --match 'v[0-9]*' 2>/dev/null || true); if [ -n "$$tag" ]; then printf '%s\n' "$$tag"; else printf '%s\n' "$(COMMIT_SHA)"; fi)
+COMMIT_TAG_ARG = $(if $(filter $(VERSION),$(COMMIT_SHA)),,$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),))
 PLATFORMS ?= linux/amd64,linux/arm64
 BUILDER ?= anarco-multi
 
@@ -32,6 +33,20 @@ check-builder:
 		docker buildx create --name $(BUILDER) --driver docker-container --bootstrap --use; \
 	else \
 		docker buildx use $(BUILDER) >/dev/null 2>&1 || true; \
+	fi
+
+.PHONY: check-version-tag
+check-version-tag:
+	@if [[ "$(VERSION)" =~ ^[0-9]+\.[0-9]+\.[0-9]+$$ ]]; then \
+		echo "✕ Refus de publier l'étiquette historique $(VERSION) : utilisez le format vAAAA.MM ou vAAAA.MM.N." >&2; \
+		exit 1; \
+	elif [[ "$(VERSION)" =~ ^v[0-9]{4}\.[0-9]{2}(\.[0-9]+)?$$ ]]; then \
+		tag_commit="$$(git rev-parse "$(VERSION)^{commit}" 2>/dev/null || true)"; \
+		if [ -z "$$tag_commit" ] || [ "$$tag_commit" != "$(COMMIT_SHA)" ]; then \
+			echo "✕ Refus de publier $(VERSION) : cette étiquette doit désigner exactement le commit courant." >&2; \
+			echo "  Placez-vous sur le tag Git $(VERSION), puis relancez la publication." >&2; \
+			exit 1; \
+		fi; \
 	fi
 
 .PHONY: help
@@ -63,7 +78,7 @@ build-web:
 		-f Dockerfile.web \
 		-t $(IMAGE_WEB):local \
 		-t $(IMAGE_WEB):$(VERSION) \
-		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
+		$(COMMIT_TAG_ARG) \
 		.
 	@echo "✓ Image construite avec succès : $(IMAGE_WEB):$(VERSION)"
 
@@ -77,12 +92,12 @@ build-web-multi: check-builder
 		-f Dockerfile.web \
 		-t $(IMAGE_WEB):$(VERSION) \
 		-t $(IMAGE_WEB):latest \
-		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
+		$(COMMIT_TAG_ARG) \
 		.
 	@echo "✓ Image multi-architecture compilée."
 
 .PHONY: push-web
-push-web: check-builder
+push-web: check-version-tag check-builder
 	@echo "› Compilation et publication sur $(REGISTRY)/web..."
 	docker buildx build \
 		--builder $(BUILDER) \
@@ -91,7 +106,7 @@ push-web: check-builder
 		-f Dockerfile.web \
 		-t $(IMAGE_WEB):$(VERSION) \
 		-t $(IMAGE_WEB):latest \
-		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
+		$(COMMIT_TAG_ARG) \
 		--push \
 		.
 	@echo "✓ Image anarbib/web publiée avec succès sur $(REGISTRY)."
