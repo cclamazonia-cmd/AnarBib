@@ -14,7 +14,7 @@ name: anarbib-selfhost
 
 services:
   caddy:
-    image: ${IMAGE_WEB:-${IMAGE_PREFIX_WEB:-${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}}web}:${WEB_TAG:-latest}
+    image: ${IMAGE_WEB:-${IMAGE_PREFIX_WEB:-hub.unionlibertaireanarchiste.org/anarbib/}web}:${WEB_TAG:-latest}
     environment:
       ANON_KEY: ${ANON_KEY}
     volumes: !override

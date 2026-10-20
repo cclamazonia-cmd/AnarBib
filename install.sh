@@ -1139,11 +1139,16 @@ while [ $# -gt 0 ]; do
     --prebuilt)
       PREBUILT=1
       export COMPOSE_FILE="compose.yml:compose.prebuilt.yml"
-      GIT_SHA="$(git rev-parse HEAD 2>/dev/null || echo "")"
-      if [ -n "$GIT_SHA" ] && [ -z "${WEB_TAG:-}" ]; then
-        export WEB_TAG="$GIT_SHA"
+      if [ -z "${WEB_TAG:-}" ]; then
+        if [ -f deploy/scripts/version.sh ]; then
+          . deploy/scripts/version.sh
+          TAG_STABLE="$(version_courante)"
+          [ -z "$TAG_STABLE" ] && TAG_STABLE="$(derniere_version)"
+          export WEB_TAG="${TAG_STABLE:-latest}"
+        else
+          export WEB_TAG="latest"
+        fi
       fi
-      [ -z "${WEB_TAG:-}" ] && export WEB_TAG="latest"
       ;;
     --lang)
       shift
@@ -1511,6 +1516,15 @@ if [ "$START" = "1" ]; then
 
     if [ "$NB_TABLES" -gt 0 ]; then
       echo "$(t db_existing "$NB_TABLES")"
+      if [ "$PREBUILT" = "1" ]; then
+        if ! docker compose pull caddy 2>/dev/null; then
+          echo "⚠ L'image web:${WEB_TAG} n'a pas pu être téléchargée depuis le registre." >&2
+          echo "  Solutions :" >&2
+          echo "  - Spécifier une autre version : WEB_TAG=v2026.10 ./install.sh --prebuilt" >&2
+          echo "  - Utiliser l'image latest : WEB_TAG=latest ./install.sh --prebuilt" >&2
+          echo "  - Ou la construire localement : make build-web" >&2
+        fi
+      fi
       docker compose up -d
       docker compose exec -T db sh /scripts/apply-pending-migrations.sh
       # Les triggers de profil sur auth.users ne viennent d'aucune migration :
