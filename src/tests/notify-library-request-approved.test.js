@@ -23,6 +23,7 @@ import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 import { avecLocales } from './helpers/locales-ts.js';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const tsToCjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/index.ts', import.meta.url));
@@ -276,5 +277,78 @@ describe("notify-library-request — le mail d'acceptation mène au guide d'accu
       expect(e.html).not.toMatch(/Em caso de dúvida|répond(?:ez|s) à cet e-mail|antworte einfach/i);
       expect(e.reply_to ?? null).toBeNull();
     }
+  });
+});
+
+// Suite de F26 (20/10/2026) : l'intro `more_info` disait encore « Répondez à cet
+// e-mail » dans les onze langues. Or ces courriels partent sans Reply-To (F14),
+// depuis l'expéditeur d'environnement : une réponse par courriel n'atteint pas
+// la coordination. La candidate a TOUJOURS un compte (library_requests.
+// submitted_by_user_id NOT NULL) et répond dans l'app : Mon compte → bloc « Ma
+// demande » (MinhaSolicitacaoPanel → fn_request_solicitante_message →
+// library_request_messages). L'intro nomme cet écran, avec SES libellés.
+//
+// Motif : un verbe « répondre » suivi, à deux mots près, de « ce/cet e-mail »
+// (ou message, courriel…), dans les onze langues. Il voit aussi le passé
+// (« respondeu a este e-mail ») : plus strict que nécessaire, à dessein.
+const REPONDRE_AU_COURRIEL = new RegExp(
+  '(?:respond|répond|respon|rispond|antwort|antwoord|reply|răspun|απάντη)\\p{L}*(?:-\\p{L}+)?\\s+(?:\\p{L}+\\s+){0,2}' +
+  '(?:este|esta|cet|cette|ce|questa|questo|diese|diesen|dieses|aquest|aquesta|tiu|this|deze|dit|αυτό|acest|această)\\s+(?:το\\s+)?' +
+  '(?:e-?mail|courriel|correo|correu|retmesaĝo|mesaĝo|message|mensagem|mensaje|missatge|messaggio|nachricht|bericht|mesaj|μήνυμα)',
+  'iu',
+);
+
+describe("notify-library-request — aucune chaîne n'invite à répondre au courriel", () => {
+  it('le motif est vivant : il voit les onze anciennes intros more_info et le vieux pied', () => {
+    for (const faute of [
+      'Responda a este e-mail.', 'Répondez à cet e-mail.', 'Responde a este correo.',
+      'Please reply to this email.', 'Rispondi a questa e-mail.', 'Bitte antworte auf diese E-Mail.',
+      'Respon a aquest correu.', 'Bonvolu respondi al ĉi tiu retmesaĝo.', 'Antwoord op deze e-mail.',
+      'Απάντησε σε αυτό το email.', 'Răspunde la acest e-mail.',
+      'En cas de doute, réponds à cet e-mail.', 'Em caso de dúvida, responda a este e-mail.',
+    ]) {
+      expect(REPONDRE_AU_COURRIEL.test(faute), faute).toBe(true);
+    }
+    for (const juste of [
+      'La coordination a répondu à l\'invitation à échanger.', 'Reply to your invitation',
+      'Die Koordination hat auf die Gesprächseinladung geantwortet.', 'La biblioteca respondeu na sua solicitação.',
+    ]) {
+      expect(REPONDRE_AU_COURRIEL.test(juste), juste).toBe(false);
+    }
+  });
+
+  it('aucune valeur de strings.ts, dans aucune langue', () => {
+    const fautes = [];
+    for (const [loc, table] of Object.entries(strings.STRINGS)) {
+      for (const [cle, v] of Object.entries(table)) {
+        if (REPONDRE_AU_COURRIEL.test(v)) fautes.push(`${loc} ${cle} « ${v.slice(0, 90)} »`);
+      }
+    }
+    expect(Object.keys(strings.STRINGS).length).toBeGreaterThanOrEqual(LOCALE_CODES.length);
+    expect(fautes, fautes.join('\n')).toEqual([]);
+  });
+
+  it("more_info.intro mène à l'écran réel, avec les libellés de l'app, dans les onze langues", () => {
+    const ecarts = [];
+    for (const l of LOCALE_CODES) {
+      const front = JSON.parse(readFileSync(new URL(`../i18n/locales/${l}.json`, import.meta.url), 'utf8'));
+      const intro = strings.STRINGS[l]?.['more_info.intro'] || '';
+      for (const cle of ['nav.account', 'conta.demande.title']) {
+        if (!front[cle] || !intro.includes(front[cle])) ecarts.push(`${l} : « ${front[cle]} » (${cle}) absent de « ${intro} »`);
+      }
+      // jamais d'adresse : ni .org, ni URL — le chemin, c'est l'écran
+      if (/@|https?:|\.org/.test(intro)) ecarts.push(`${l} : adresse dans « ${intro} »`);
+    }
+    expect(ecarts, ecarts.join('\n')).toEqual([]);
+  });
+
+  it('le courriel more_info rendu (fr) porte cette intro, sans adresse de réponse', async () => {
+    const appeler = monterEF({ langueDemandeuse: 'fr' });
+    const { envois } = await appeler('library_request_more_info');
+    const m = envois.find((e) => e.to[0] === 'louise@exemplo.test');
+    expect(m.html).toContain(esc(tr('fr', 'more_info.intro', { library: DEMANDE.library_name })));
+    expect(m.html).toContain(esc('« Mon compte » › « Ma demande »'));
+    expect(m.html).not.toMatch(REPONDRE_AU_COURRIEL);
+    expect(m.reply_to ?? null).toBeNull();
   });
 });
