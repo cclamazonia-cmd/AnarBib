@@ -35,7 +35,8 @@
 # Sous-commandes :
 #   check                    Prerequis + FILET (aucune ecriture, aucun envoi).
 #   backup long|court|storage|lourd|all
-#   restore-test             Test reel en sequence auth -> long -> court (Docker jetable).
+#   restore-test             Test reel en sequence auth -> long -> court (Docker jetable),
+#                            puis un echantillon des flux storage et lourd (I39).
 #
 set -euo pipefail
 
@@ -905,7 +906,65 @@ SQL
         | grep '^[<>]' | sed -e 's/^/        /' -e 's/ detail / /' | cut -c1-200 | awk 'NR <= 20' >&2 || true   # diff rend 1 : pipefail + set -e
     done
   fi
+
+  # I39 (20/10/2026) : les deux flux de fichiers entrent au restore-test. Le
+  # 19/10, 14 PDF et le fond de carte avaient ete restaures une fois, a la main ;
+  # rien ne le refaisait.
+  echo; info "FICHIERS : un echantillon de chaque flux, restaure et compare a Storage"
+  verifier_fichiers storage "$RESTIC_BASE/anarbib-storage" "$STORAGE_WORK" "${BUCKETS[@]}"
+  if [ -f "$LOURD_REPO/config" ]; then
+    verifier_fichiers lourd "$LOURD_REPO" "$LOURD_WORK" "${BUCKETS_LOURDS[@]}"
+  else
+    echo "    !!! fichiers lourd : depot local introuvable ($LOURD_REPO) — E: est-il monte ?" >&2
+  fi
   info "Nettoyage du bac a sable"
+}
+
+# verifier_fichiers <flux> <depot restic> <racine du miroir> <bucket>...
+# Tire au sort BG2_RT_ECHANTILLON objets (4 par defaut) parmi ceux que le
+# dernier instantane du flux doit porter — poses plus de 3 h avant lui (la
+# synchronisation precede restic ; lourd peut durer 3 h), de 1 octet a 50 Mo
+# (pas les 33 Go du fond de carte) —, les restaure depuis restic, les
+# retelecharge de Storage, et compare les deux empreintes SHA-256. Le verdict
+# ne nomme ni l'objet ni son contenu (un PDF reserve a un titre) : le bucket,
+# la taille, le debut de l'empreinte. Les fichiers meurent avec le bac a sable
+# (RT_DIR). Ne fait jamais echouer le test : il le dit, comme le reste du verdict.
+verifier_fichiers() {
+  local flux="$1" repo="$2" racine="$3"; shift 3
+  local cible="$RT_DIR/fichiers-$flux" vif="$RT_DIR/vif-$flux" nb="${BG2_RT_ECHANTILLON:-4}"
+  local quand in liste b nom taille rest live i=0 ok=0 ko=0 nc=0
+  mkdir -p "$cible" "$vif"
+  quand="$(RESTIC_REPOSITORY="$repo" restic snapshots latest --tag "flux-$flux" --json 2>/dev/null | tr ',' '\n' | grep -m1 '"time":' | cut -d'"' -f4 || true)"
+  if [ -z "$quand" ]; then echo "    !!! fichiers $flux : aucun instantane lisible" >&2; return 0; fi
+  in="$(printf "'%s'," "$@")"; in="${in%,}"
+  liste="$(psql "$PGCONN" -X -q -t -A -F $'\t' -c \
+    "select bucket_id, name, metadata->>'size' from storage.objects
+      where bucket_id in ($in) and name !~ '[[:cntrl:]]' and translate(name, '*?[', '') = name
+        and coalesce((metadata->>'size')::bigint, 0) between 1 and 52428800
+        and updated_at < '$quand'::timestamptz - interval '3 hours'
+      order by random() limit $nb" 2>/dev/null || true)"
+  if [ -z "$liste" ]; then echo "    !!! fichiers $flux : aucun objet a echantillonner avant l'instantane du $(date -d "$quand" '+%d/%m %H:%M' 2>/dev/null)" >&2; return 0; fi
+  while IFS=$'\t' read -r b nom taille; do
+    [ -n "$nom" ] || continue
+    i=$((i + 1))
+    RESTIC_REPOSITORY="$repo" restic restore latest --tag "flux-$flux" --include "$racine/$b/$nom" --target "$cible" >/dev/null 2>&1 || true
+    rest="$cible$racine/$b/$nom"; live="$vif/$i"
+    ( cd "$SUPABASE_REPO" && supabase storage cp --linked --experimental "ss:///$b/$nom" "$live" ) >/dev/null 2>&1 || true
+    if [ ! -f "$rest" ]; then
+      ko=$((ko + 1)); echo "    !!! fichiers $flux : $b, $taille o — ABSENT de l'instantane" >&2
+    elif [ ! -f "$live" ]; then
+      nc=$((nc + 1)); echo "    ??  fichiers $flux : $b, $taille o — restaure, mais Storage ne l'a pas rendu : non compare" >&2
+    elif [ "$(sha256sum < "$rest" | cut -d' ' -f1)" = "$(sha256sum < "$live" | cut -d' ' -f1)" ]; then
+      ok=$((ok + 1)); echo "    fichiers $flux : $b, $taille o — identique a Storage ($(sha256sum < "$rest" | cut -c1-12))"
+    else
+      ko=$((ko + 1)); echo "    !!! fichiers $flux : $b, $taille o — DIFFERENT de Storage" >&2
+    fi
+  done <<< "$liste"
+  if [ "$ko" -eq 0 ] && [ "$nc" -eq 0 ]; then
+    echo "    fichiers $flux : $ok/$i identiques a Storage (instantane du $(date -d "$quand" '+%d/%m %H:%M' 2>/dev/null)) : OK"
+  else
+    echo "    !!! fichiers $flux : $ok/$i identiques, $ko en ecart, $nc non compare(s) : ECART" >&2
+  fi
 }
 
 # Nombre de tables d'un schema qu'une restauration long + court doit recreer :
