@@ -6,6 +6,7 @@
 #
 # USAGE:
 #   ./install.sh                       # full install and start
+#   ./install.sh --prebuilt            # zero-build start using prebuilt web image (no host Node.js/npm required)
 #   ./install.sh --lang CODE           # force display language (see the list below)
 #   ./install.sh --local               # force localhost configuration
 #   ./install.sh --prod DOMAIN         # configure for a public domain
@@ -790,6 +791,42 @@ t() {
     el:ok_build_exist) echo "Η εφαρμογή ιστού είναι ήδη έτοιμη (dist/)" ;;
     ro:ok_build_exist) echo "Aplicația web este deja pregătită (dist/)" ;;
 
+    fr:ok_prebuilt)    echo "Image web pré-compilée active (mode Zero-Build, sans Node.js sur l'hôte)." ;;
+    en:ok_prebuilt)    echo "Prebuilt web image active (zero-build mode, no host Node.js required)." ;;
+    pt:ok_prebuilt)    echo "Imagem web pré-compilada ativa (modo zero-build, sem Node.js no host)." ;;
+    es:ok_prebuilt)    echo "Imagen web precompilada activa (modo zero-build, sin Node.js en el host)." ;;
+    it:ok_prebuilt)    echo "Immagine web precompilata attiva (modalità zero-build, nessun Node.js sull'host)." ;;
+    de:ok_prebuilt)    echo "Vorgebautes Web-Image aktiv (Zero-Build-Modus, kein Node.js auf dem Host erforderlich)." ;;
+    ca:ok_prebuilt)    echo "Imatge web precompilada activa (mode zero-build, sense Node.js a l'amfitrió)." ;;
+    eo:ok_prebuilt)    echo "Antaŭkonstruita retbildo aktiva (senkonstrua reĝimo, sen Node.js sur la gastiganto)." ;;
+    nl:ok_prebuilt)    echo "Voorafgebouwd web-image actief (zero-build-modus, geen Node.js op host vereist)." ;;
+    el:ok_prebuilt)    echo "Προκατασκευασμένη εικόνα ιστού ενεργή (λειτουργία zero-build, δεν απαιτείται Node.js στον διακομιστή)." ;;
+    ro:ok_prebuilt)    echo "Imagine web precompilată activă (modul zero-build, fără Node.js pe gazdă)." ;;
+
+    fr:err_prebuilt_pull) echo "Impossible de télécharger l'image web:$2 depuis le registre." ;;
+    en:err_prebuilt_pull) echo "Unable to download the web:$2 image from the registry." ;;
+    pt:err_prebuilt_pull) echo "Não foi possível baixar a imagem web:$2 do registro." ;;
+    es:err_prebuilt_pull) echo "No se pudo descargar la imagen web:$2 del registro." ;;
+    it:err_prebuilt_pull) echo "Impossibile scaricare l'immagine web:$2 dal registro." ;;
+    de:err_prebuilt_pull) echo "Das Image web:$2 konnte nicht aus der Registry geladen werden." ;;
+    ca:err_prebuilt_pull) echo "No s'ha pogut baixar la imatge web:$2 del registre." ;;
+    eo:err_prebuilt_pull) echo "Ne eblis elŝuti la bildon web:$2 el la registrejo." ;;
+    nl:err_prebuilt_pull) echo "De web:$2-image kon niet uit het register worden gedownload." ;;
+    el:err_prebuilt_pull) echo "Δεν ήταν δυνατή η λήψη της εικόνας web:$2 από το μητρώο." ;;
+    ro:err_prebuilt_pull) echo "Imaginea web:$2 nu a putut fi descărcată din registru." ;;
+
+    fr:prebuilt_help) echo "Publiez cette révision, choisissez une étiquette existante avec WEB_TAG=<étiquette>, ou construisez-la localement avec make build-web." ;;
+    en:prebuilt_help) echo "Publish this revision, select an existing tag with WEB_TAG=<tag>, or build it locally with make build-web." ;;
+    pt:prebuilt_help) echo "Publique esta revisão, escolha uma etiqueta existente com WEB_TAG=<etiqueta>, ou compile-a localmente com make build-web." ;;
+    es:prebuilt_help) echo "Publique esta revisión, elija una etiqueta existente con WEB_TAG=<etiqueta>, o compílela localmente con make build-web." ;;
+    it:prebuilt_help) echo "Pubblicare questa revisione, scegliere un'etichetta esistente con WEB_TAG=<etichetta>, oppure compilarla localmente con make build-web." ;;
+    de:prebuilt_help) echo "Veröffentlichen Sie diese Revision, wählen Sie mit WEB_TAG=<Tag> ein vorhandenes Tag oder bauen Sie sie lokal mit make build-web." ;;
+    ca:prebuilt_help) echo "Publiqueu aquesta revisió, trieu una etiqueta existent amb WEB_TAG=<etiqueta>, o compileu-la localment amb make build-web." ;;
+    eo:prebuilt_help) echo "Publikigu ĉi tiun revizion, elektu ekzistantan etikedon per WEB_TAG=<etikedo>, aŭ konstruu ĝin loke per make build-web." ;;
+    nl:prebuilt_help) echo "Publiceer deze revisie, kies een bestaand label met WEB_TAG=<label>, of bouw deze lokaal met make build-web." ;;
+    el:prebuilt_help) echo "Δημοσιεύστε αυτή την αναθεώρηση, επιλέξτε υπάρχουσα ετικέτα με WEB_TAG=<ετικέτα> ή δημιουργήστε την τοπικά με make build-web." ;;
+    ro:prebuilt_help) echo "Publicați această revizie, alegeți o etichetă existentă cu WEB_TAG=<etichetă> sau construiți-o local cu make build-web." ;;
+
     # ── step 4 ───────────────────────────────────────────────────────────────
     fr:step4)          echo "4/4 · Déploiement et démarrage de la pile complète (Docker)" ;;
     en:step4)          echo "4/4 · Deployment and startup of the full stack (Docker)" ;;
@@ -1116,11 +1153,24 @@ ASSUME_YES=0
 START=1
 START_FRONT=1
 ACTION="install"
+PREBUILT=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -y|--yes)
       ASSUME_YES=1
+      ;;
+    --prebuilt)
+      PREBUILT=1
+      export COMPOSE_FILE="compose.yml:compose.prebuilt.yml"
+      if [ -z "${WEB_TAG:-}" ]; then
+        TAG_STABLE=""
+        if [ -f deploy/scripts/version.sh ]; then
+          . deploy/scripts/version.sh
+          TAG_STABLE="$(version_courante)"
+        fi
+        export WEB_TAG="${TAG_STABLE:-$(git rev-parse HEAD)}"
+      fi
       ;;
     --lang)
       shift
@@ -1232,10 +1282,12 @@ if ! docker info >/dev/null 2>&1; then
 fi
 succes "$(t ok_daemon)"
 
-if ! command -v npm >/dev/null 2>&1; then
-  erreur "$(t err_node)"; exit 1
+if [ "$PREBUILT" = "0" ]; then
+  if ! command -v npm >/dev/null 2>&1; then
+    erreur "$(t err_node)"; exit 1
+  fi
+  succes "$(t ok_node "$(node --version) / npm $(npm --version)")"
 fi
-succes "$(t ok_node "$(node --version) / npm $(npm --version)")"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Environment & secrets
@@ -1263,6 +1315,28 @@ if [ "$MODE" = "prod" ] && [ -n "$DOMAINE_PROD" ]; then
   sed -i "s|^API_EXTERNAL_URL=.*|API_EXTERNAL_URL=https://${DOMAINE_PROD}|" deploy/.env
   succes "$(t ok_prod_domain "$DOMAINE_PROD")"
 fi
+
+if [ "$PREBUILT" = "1" ]; then
+  if grep -q '^COMPOSE_FILE=' deploy/.env; then
+    sed -i "s|^COMPOSE_FILE=.*|COMPOSE_FILE=compose.yml:compose.prebuilt.yml|" deploy/.env
+  else
+    echo "COMPOSE_FILE=compose.yml:compose.prebuilt.yml" >> deploy/.env
+  fi
+  if grep -q '^WEB_TAG=' deploy/.env; then
+    sed -i "s|^WEB_TAG=.*|WEB_TAG=${WEB_TAG}|" deploy/.env
+  else
+    echo "WEB_TAG=${WEB_TAG}" >> deploy/.env
+  fi
+fi
+
+pull_prebuilt_web() {
+  [ "$PREBUILT" = "1" ] || return 0
+  if ! docker compose pull caddy; then
+    erreur "$(t err_prebuilt_pull "$WEB_TAG")"
+    echo "  $(t prebuilt_help)" >&2
+    return 1
+  fi
+}
 
 # Mail configuration (interactive, only if not already set)
 #
@@ -1409,23 +1483,27 @@ else
 fi
 succes "$(t ok_envlocal "auto")"
 
-if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
-  echo "$(t npm_install)"
-  npm ci
-  succes "$(t ok_deps)"
-else
-  succes "$(t ok_deps_exist)"
-fi
+if [ "$PREBUILT" = "0" ]; then
+  if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
+    echo "$(t npm_install)"
+    npm ci
+    succes "$(t ok_deps)"
+  else
+    succes "$(t ok_deps_exist)"
+  fi
 
-if [ ! -d "dist" ] || [ "$REBUILD" = "1" ] || [ ! -f "dist/index.html" ]; then
-  echo "$(t npm_build)"
-  npm run build
-  # Le commit construit : deploy/deploy.sh s'en sert pour savoir si le front
-  # servi par Caddy est en retard sur le dépôt (21/09/2026).
-  git rev-parse HEAD > dist/.version-front 2>/dev/null || true
-  succes "$(t ok_build)"
+  if [ ! -d "dist" ] || [ "$REBUILD" = "1" ] || [ ! -f "dist/index.html" ]; then
+    echo "$(t npm_build)"
+    npm run build
+    # Le commit construit : deploy/deploy.sh s'en sert pour savoir si le front
+    # servi par Caddy est en retard sur le dépôt (21/09/2026).
+    git rev-parse HEAD > dist/.version-front 2>/dev/null || true
+    succes "$(t ok_build)"
+  else
+    succes "$(t ok_build_exist)"
+  fi
 else
-  succes "$(t ok_build_exist)"
+  succes "$(t ok_prebuilt)"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1434,6 +1512,7 @@ fi
 if [ "$START" = "1" ]; then
   dire "$(t step4)"
   cd deploy
+  pull_prebuilt_web
 
   if [ "$REBUILD" = "1" ]; then
     if [ "$ASSUME_YES" = "0" ] && [ -t 0 ]; then

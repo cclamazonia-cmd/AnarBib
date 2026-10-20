@@ -235,6 +235,31 @@ Le préfixe précède le nom de chaque image : `supabase/gotrue:v2.197.0` devien
 
 Un registre zot mutualisé avec AnarcosyndicalismeBOOK peut tenir ce rôle : il recopie chaque image à la première demande, puis la sert lui-même. Vérifier le résultat avant de redémarrer : `docker compose config --images`.
 
+Le miroir Zot de l'Union Libertaire Anarchiste met à disposition les images en miroir direct de Docker Hub :
+```bash
+IMAGE_PREFIX=hub.unionlibertaireanarchiste.org/miroir/docker.io/
+```
+
+---
+
+### Déploiement Zero-Build (sans Node.js ni compilation sur l'hôte)
+
+Pour installer et exécuter AnarBib sur une machine sans Node.js ni `npm` (ou pour économiser les ressources d'une machine modeste lors du build Vite) :
+
+```bash
+# Installation automatique via la pile pré-compilée
+./install.sh --prebuilt
+
+# Ou lancement direct avec Docker Compose (surcharge légère)
+docker compose -f deploy/compose.yml -f deploy/compose.prebuilt.yml up -d
+```
+
+Dans ce mode :
+- Le service `caddy` utilise l'image pré-compilée `hub.unionlibertaireanarchiste.org/anarbib/web:<sha>` (ou `:latest`) qui intègre directement l'application web statique pré-compilée et la passerelle Caddy.
+- La clé anonyme `ANON_KEY` propre à l'instance est injectée au démarrage du conteneur dans `/srv/config.js`.
+- Aucun montage du dossier local `dist/` n'est requis sur l'hôte.
+- Les conteneurs démarrent immédiatement en s'appuyant sur les versions épinglées.
+
 ## 3. Sécurité & Routeur `main`
 
 Le routeur Deno (`supabase/functions/main/index.ts`) est le point d'entrée unique de `edge-runtime` :

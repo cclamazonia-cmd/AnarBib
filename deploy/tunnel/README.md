@@ -9,7 +9,7 @@ ou derrière un pare-feu/NAT).
 
 ## 1. La doctrine de sécurité : Tunnel de couche 4 (Passthrough TCP)
 
-Pour préserver la souveraineté des données et l'étanchéité de l'infrastructure,
+Pour préserver l'autonomie collective et l'émancipation de l'infrastructure,
 le modèle recommandé est le **passthrough TCP de niveau 4** :
 
 ```
@@ -116,6 +116,11 @@ Pour lancer le client Rathole à côté de la pile AnarBib :
 ```bash
 docker compose -f compose.yml -f tunnel/rathole/docker-compose.tunnel.yml up -d
 ```
+
+> **Mode pré-compilé (Zero-Build)** : Comme l'argument `-f` explicite en ligne de commande fait ignorer la variable `COMPOSE_FILE` de `deploy/.env`, ajoutez explicitement `-f compose.prebuilt.yml` :
+> ```bash
+> docker compose -f compose.yml -f compose.prebuilt.yml -f tunnel/rathole/docker-compose.tunnel.yml up -d
+> ```
 
 ---
 

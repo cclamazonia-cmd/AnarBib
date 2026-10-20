@@ -154,44 +154,78 @@ fi
 # fichiers neufs d'abord, périmés ensuite, pour qu'aucun index.html servi ne
 # pointe vers un bundle absent. `dist/.version-front` porte le commit construit.
 if [ "$FRONT" = "1" ]; then
-  dire "Front (dist/ servi par Caddy)"
-  cd "$RACINE"
-  TETE="$(git rev-parse HEAD)"
-  CONSTRUIT="$(cat dist/.version-front 2>/dev/null || echo aucun)"
-  if [ "$FRONT_FORCE" = "0" ] && [ "$CONSTRUIT" = "$TETE" ]; then
-    echo "✓ Front déjà construit depuis ce commit (${TETE:0:8})."
-  elif ! command -v npm >/dev/null 2>&1; then
-    echo "⚠ npm introuvable : le front N'A PAS été reconstruit (il date de ${CONSTRUIT:0:8})."
-    echo "  Base et fonctions sont à jour, l'interface ne l'est pas."
-    FRONT_KO=1
-  elif [ ! -f .env.local ]; then
-    echo "⚠ .env.local absent (install.sh le pose) : front non reconstruit."
-    FRONT_KO=1
-  else
-    if [ ! -x node_modules/.bin/vite ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
-      echo "→ npm ci"
-      npm ci --no-audit --no-fund >/dev/null || { echo "✗ npm ci a échoué." >&2; exit 1; }
+  # Détection du mode pré-compilé (Zero-Build)
+  if grep -q "compose.prebuilt.yml" "$DEPLOY_DIR/.env" 2>/dev/null || [[ "${COMPOSE_FILE:-}" == *"compose.prebuilt.yml"* ]]; then
+    dire "Front (image pré-compilée anarbib/web)"
+    cd "$RACINE"
+    TETE="$(git rev-parse HEAD)"
+
+    # En mode pré-compilé, on met WEB_TAG au commit courant dans deploy/.env
+    TAG_CIBLE="$TETE"
+    if [ -f "$DEPLOY_DIR/scripts/version.sh" ]; then
+      . "$DEPLOY_DIR/scripts/version.sh"
+      if [ "$(canal_courant)" = "version" ]; then
+        v_tag="$(version_courante)"
+        [ -n "$v_tag" ] && TAG_CIBLE="$v_tag"
+      fi
     fi
-    rm -rf dist.neuf
-    # `--` transmet --outDir à `vite build` ; prebuild tourne comme d'habitude.
-    if npm run build -- --outDir dist.neuf --emptyOutDir >/tmp/anarbib-front-build.log 2>&1 \
-       && [ -f dist.neuf/index.html ]; then
-      printf '%s\n' "$TETE" > dist.neuf/.version-front
-      mkdir -p dist
-      if command -v rsync >/dev/null 2>&1; then
-        rsync -a --delete-after dist.neuf/ dist/
-      else
-        cp -a dist.neuf/. dist/
-        echo "  (rsync absent : les anciens bundles restent dans dist/ — sans effet, mais ils s'accumulent)"
+
+    echo "→ Mise à jour de WEB_TAG vers : ${TAG_CIBLE:0:12}"
+    if grep -q '^WEB_TAG=' "$DEPLOY_DIR/.env"; then
+      sed -i "s|^WEB_TAG=.*|WEB_TAG=${TAG_CIBLE}|" "$DEPLOY_DIR/.env"
+    else
+      echo "WEB_TAG=${TAG_CIBLE}" >> "$DEPLOY_DIR/.env"
+    fi
+
+    cd "$DEPLOY_DIR"
+    if docker compose pull caddy >/dev/null 2>&1 && docker compose up -d caddy >/dev/null 2>&1; then
+      FRONT_SERVI=$(docker compose exec -T caddy cat /srv/.version-front 2>/dev/null | tr -d '\r\n' || true)
+      echo "✓ Image web pré-compilée mise à jour (${FRONT_SERVI:0:8})."
+    else
+      echo "⚠ Impossible de tirer l'image web:${TAG_CIBLE} (non encore publiée sur le registre ?)."
+      echo "  L'ancienne version reste servie."
+      FRONT_KO=1
+    fi
+  else
+    dire "Front (dist/ servi par Caddy)"
+    cd "$RACINE"
+    TETE="$(git rev-parse HEAD)"
+    CONSTRUIT="$(cat dist/.version-front 2>/dev/null || echo aucun)"
+    if [ "$FRONT_FORCE" = "0" ] && [ "$CONSTRUIT" = "$TETE" ]; then
+      echo "✓ Front déjà construit depuis ce commit (${TETE:0:8})."
+    elif ! command -v npm >/dev/null 2>&1; then
+      echo "⚠ npm introuvable : le front N'A PAS été reconstruit (il date de ${CONSTRUIT:0:8})."
+      echo "  Base et fonctions sont à jour, l'interface ne l'est pas."
+      FRONT_KO=1
+    elif [ ! -f .env.local ]; then
+      echo "⚠ .env.local absent (install.sh le pose) : front non reconstruit."
+      FRONT_KO=1
+    else
+      if [ ! -x node_modules/.bin/vite ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
+        echo "→ npm ci"
+        npm ci --no-audit --no-fund >/dev/null || { echo "✗ npm ci a échoué." >&2; exit 1; }
       fi
       rm -rf dist.neuf
-      echo "✓ Front reconstruit depuis ${TETE:0:8} (avant : ${CONSTRUIT:0:8})."
-    else
-      rm -rf dist.neuf
-      echo "✗ La construction du front a échoué — dist/ n'a PAS été touché, l'ancien front reste servi."
-      echo "  Journal : /tmp/anarbib-front-build.log"
-      tail -5 /tmp/anarbib-front-build.log | sed 's/^/    /'
-      FRONT_KO=1
+      # `--` transmet --outDir à `vite build` ; prebuild tourne comme d'habitude.
+      if npm run build -- --outDir dist.neuf --emptyOutDir >/tmp/anarbib-front-build.log 2>&1 \
+         && [ -f dist.neuf/index.html ]; then
+        printf '%s\n' "$TETE" > dist.neuf/.version-front
+        mkdir -p dist
+        if command -v rsync >/dev/null 2>&1; then
+          rsync -a --delete-after dist.neuf/ dist/
+        else
+          cp -a dist.neuf/. dist/
+          echo "  (rsync absent : les anciens bundles restent dans dist/ — sans effet, mais ils s'accumulent)"
+        fi
+        rm -rf dist.neuf
+        echo "✓ Front reconstruit depuis ${TETE:0:8} (avant : ${CONSTRUIT:0:8})."
+      else
+        rm -rf dist.neuf
+        echo "✗ La construction du front a échoué — dist/ n'a PAS été touché, l'ancien front reste servi."
+        echo "  Journal : /tmp/anarbib-front-build.log"
+        tail -5 /tmp/anarbib-front-build.log | sed 's/^/    /'
+        FRONT_KO=1
+      fi
     fi
   fi
   cd "$DEPLOY_DIR"
@@ -208,9 +242,29 @@ if [ "$CONTROLE" = "1" ]; then
   # Front : ce que Caddy sert est-il le commit du dépôt ? (21/09/2026)
   FRONT_SERVI=$(docker compose exec -T caddy cat /srv/.version-front 2>/dev/null | tr -d '\r\n' || true)
   TETE_DEPOT=$(git -C "$RACINE" rev-parse HEAD)
+  MODE_PREBUILT=0
+  WEB_TAG_ATTENDU=""
+  COMMIT_ATTENDU=""
+  if grep -q "compose.prebuilt.yml" "$DEPLOY_DIR/.env" 2>/dev/null; then
+    MODE_PREBUILT=1
+    WEB_TAG_ATTENDU=$(sed -n 's/^WEB_TAG=//p' "$DEPLOY_DIR/.env" | tail -1)
+    if [ -n "$WEB_TAG_ATTENDU" ]; then
+      COMMIT_ATTENDU=$(git -C "$RACINE" rev-parse "${WEB_TAG_ATTENDU}^{commit}" 2>/dev/null || true)
+    fi
+  fi
   if [ -z "$FRONT_SERVI" ]; then
     echo "⚠ Front : version inconnue (dist/.version-front absent) — relancer deploy/deploy.sh --front"
     SANTE_OK=0
+  elif [ "$MODE_PREBUILT" = "1" ]; then
+    if [ -z "$COMMIT_ATTENDU" ]; then
+      echo "⚠ Front : l'étiquette ${WEB_TAG_ATTENDU:-inconnue} ne correspond à aucun commit Git vérifiable"
+      SANTE_OK=0
+    elif [ "$FRONT_SERVI" = "$COMMIT_ATTENDU" ]; then
+      echo "✓ Front : image pré-compilée conforme à ${WEB_TAG_ATTENDU} (${COMMIT_ATTENDU:0:8})"
+    else
+      echo "⚠ Front : image ${FRONT_SERVI:0:8}, mais ${WEB_TAG_ATTENDU} doit servir ${COMMIT_ATTENDU:0:8}"
+      SANTE_OK=0
+    fi
   elif [ "$FRONT_SERVI" = "$TETE_DEPOT" ]; then
     echo "✓ Front : construit depuis le commit du dépôt (${TETE_DEPOT:0:8})"
   else

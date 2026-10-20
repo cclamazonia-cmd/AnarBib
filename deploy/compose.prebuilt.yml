@@ -1,0 +1,23 @@
+# =============================================================================
+# AnarBib — Surcharge Compose pour mode Zero-Build (image pré-compilée)
+# =============================================================================
+# À utiliser conjointement avec compose.yml :
+#   docker compose -f compose.yml -f compose.prebuilt.yml up -d
+# (ou automatiquement configuré par ./install.sh --prebuilt via COMPOSE_FILE)
+#
+# Remplace l'image de passerelle standard par l'image anarbib/web (contenant
+# le frontend SPA pré-compilé et l'injection dynamique d'ANON_KEY au démarrage)
+# et retire le montage de ../dist sur l'hôte.
+# =============================================================================
+
+name: anarbib-selfhost
+
+services:
+  caddy:
+    image: ${IMAGE_WEB:-${IMAGE_PREFIX_WEB:-hub.unionlibertaireanarchiste.org/anarbib/}web}:${WEB_TAG:-latest}
+    environment:
+      ANON_KEY: ${ANON_KEY}
+    volumes: !override
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
