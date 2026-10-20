@@ -13,12 +13,12 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { LOCALE_CODES } from '../i18n/locales.js';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (rel) => readFileSync(path.join(RACINE, rel), 'utf8');
 const EF = lire('supabase/functions/deposit-digital-candidate/index.ts');
 const ECRAN = lire('src/pages/importacoes/CandidatsPdfPanel.jsx');
-const LOCALES = ['fr', 'pt-BR', 'es', 'it', 'en', 'de', 'ca', 'eo', 'nl', 'el', 'ro'];
 
 const valeur = (src, nom) => {
   const m = src.match(new RegExp(`${nom} = (\\d+) \\* 1000 \\* 1000;`));
@@ -52,8 +52,9 @@ describe('D27 — une seule limite par appel, dite avant l’essai', () => {
     expect(ECRAN).toContain('disabled={occupe || tropLourd}');
   });
 
-  it('les onze langues disent la même limite, et la clé neuve existe partout', () => {
-    for (const l of LOCALES) {
+  it('toutes les langues disent la même limite, et la clé neuve existe partout', () => {
+    expect(LOCALE_CODES.length).toBeGreaterThanOrEqual(11);
+    for (const l of LOCALE_CODES) {
       const d = JSON.parse(lire(`src/i18n/locales/${l}.json`));
       expect(d['error.edge.file_too_large'], l).toContain('140');
       expect(d['error.edge.file_too_large'], l).not.toContain('150');
