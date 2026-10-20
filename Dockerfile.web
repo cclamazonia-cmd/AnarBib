@@ -6,8 +6,12 @@
 # Permet un déploiement 100% conteneurisé sans Node.js ni compilation sur l'hôte.
 # =============================================================================
 
+ARG COMMIT_SHA=""
+
 # --- Étape 1 : Construction du frontend SPA ----------------------------------
 FROM node:20-alpine AS builder
+
+ARG COMMIT_SHA
 
 WORKDIR /app
 
@@ -26,18 +30,28 @@ COPY . .
 ENV VITE_SUPABASE_URL=auto
 RUN npm run build
 
+# Enregistrement du commit du front pour deploy/deploy.sh
+RUN if [ -n "$COMMIT_SHA" ]; then \
+      printf '%s\n' "$COMMIT_SHA" > /app/dist/.version-front; \
+    elif [ -d .git ]; then \
+      git rev-parse HEAD > /app/dist/.version-front 2>/dev/null || true; \
+    fi
+
 # --- Étape 2 : Image d'exécution de production (Caddy) ------------------------
 FROM caddy:2-alpine
+
+ARG COMMIT_SHA
 
 # Métadonnées OCI standardisées
 LABEL org.opencontainers.image.title="AnarBib Web & Passerelle" \
       org.opencontainers.image.description="Application web et passerelle d'accès pour le SIGB libertaire AnarBib" \
-      org.opencontainers.image.vendor="Union Libertaire Anarchiste" \
+      org.opencontainers.image.vendor="AnarBib" \
       org.opencontainers.image.licenses="GPL-3.0-or-later" \
-      org.opencontainers.image.authors="AnarBib Contributors <contact@anarbib.org>" \
+      org.opencontainers.image.authors="AnarBib Contributors <anarbib@proton.me>" \
       org.opencontainers.image.url="https://anarbib.org" \
       org.opencontainers.image.source="https://codeberg.org/AnarBib/anarbib" \
-      org.opencontainers.image.documentation="https://codeberg.org/AnarBib/anarbib"
+      org.opencontainers.image.documentation="https://codeberg.org/AnarBib/anarbib" \
+      org.opencontainers.image.revision="${COMMIT_SHA}"
 
 # Durcissement et élimination des vulnérabilités de l'image de base
 RUN apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*
@@ -48,6 +62,11 @@ COPY deploy/Caddyfile /etc/caddy/Caddyfile
 # Application web pré-compilée
 COPY --from=builder /app/dist /srv
 
+# Script d'entrée pour l'injection dynamique d'ANON_KEY au démarrage
+COPY deploy/docker-entrypoint-web.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 80 443
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

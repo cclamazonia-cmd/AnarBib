@@ -1,190 +1,23 @@
 # =============================================================================
-# AnarBib — Pile auto-hébergée pré-compilée (Zero-Build)
+# AnarBib — Surcharge Compose pour mode Zero-Build (image pré-compilée)
 # =============================================================================
-# SIX conteneurs prêts à l'emploi.
-# Déploiement 100% conteneurisé sans Node.js, sans npm ni compilation sur l'hôte.
-# Le service Caddy utilise l'image pré-compilée embarquant les assets web statiques.
-# Images tirées directement depuis le registre autonome Zot de l'ULA.
+# À utiliser conjointement avec compose.yml :
+#   docker compose -f compose.yml -f compose.prebuilt.yml up -d
+# (ou automatiquement configuré par ./install.sh --prebuilt via COMPOSE_FILE)
+#
+# Remplace l'image de passerelle standard par l'image anarbib/web (contenant
+# le frontend SPA pré-compilé et l'injection dynamique d'ANON_KEY au démarrage)
+# et retire le montage de ../dist sur l'hôte.
 # =============================================================================
 
 name: anarbib-selfhost
 
 services:
-
-  # ---------------------------------------------------------------------------
-  # Postgres avec extensions Supabase (vault, pg_cron)
-  # ---------------------------------------------------------------------------
-  db:
-    image: ${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}postgres:${POSTGRES_TAG:-17.6.1.136}
-    restart: unless-stopped
-    mem_limit: 1536m
-    command:
-      - postgres
-      - -D
-      - /etc/postgresql
-      - -c
-      - shared_buffers=512MB
-      - -c
-      - effective_cache_size=1536MB
-      - -c
-      - work_mem=8MB
-      - -c
-      - maintenance_work_mem=128MB
-      - -c
-      - max_connections=100
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: postgres
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXP: ${JWT_EXPIRY:-3600}
-    volumes:
-      - db-data:/var/lib/postgresql/data
-      - ../supabase/migrations:/migrations:ro
-      - ./init-db/01-roles.sh:/docker-entrypoint-initdb.d/99-roles.sh:ro
-      - ./scripts:/scripts:ro
-      - ./dumps:/dumps:ro
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h localhost -U supabase_admin -d postgres && psql -U supabase_admin -d postgres -tAc \"select 1 from pg_roles where rolname='authenticator'\" | grep -q 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    expose:
-      - "5432"
-
-  # ---------------------------------------------------------------------------
-  # PostgREST — API REST et RPC
-  # ---------------------------------------------------------------------------
-  rest:
-    image: ${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}postgrest:${POSTGREST_TAG:-v14.12}
-    restart: unless-stopped
-    mem_limit: 384m
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
-      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,storage,graphql_public}
-      PGRST_DB_ANON_ROLE: anon
-      PGRST_JWT_SECRET: ${JWT_SECRET}
-      PGRST_DB_USE_LEGACY_GUCS: "false"
-      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
-      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY:-3600}
-    expose:
-      - "3000"
-
-  # ---------------------------------------------------------------------------
-  # GoTrue — Authentification usagers
-  # ---------------------------------------------------------------------------
-  auth:
-    image: ${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}gotrue:${GOTRUE_TAG:-v2.197.0}
-    restart: unless-stopped
-    mem_limit: 192m
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      GOTRUE_API_HOST: 0.0.0.0
-      GOTRUE_API_PORT: "9999"
-      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
-      GOTRUE_DB_DRIVER: postgres
-      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
-      GOTRUE_SITE_URL: ${SITE_URL}
-      GOTRUE_URI_ALLOW_LIST: ${URI_ALLOW_LIST:-}
-      GOTRUE_JWT_SECRET: ${JWT_SECRET}
-      GOTRUE_JWT_EXP: ${JWT_EXPIRY:-3600}
-      GOTRUE_JWT_AUD: authenticated
-      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
-      GOTRUE_DISABLE_SIGNUP: "false"
-      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
-      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
-      GOTRUE_MAILER_AUTOCONFIRM: "true"
-      GOTRUE_SMS_AUTOCONFIRM: "true"
-    expose:
-      - "9999"
-
-  # ---------------------------------------------------------------------------
-  # Storage API — Stockage fichiers
-  # ---------------------------------------------------------------------------
-  storage:
-    image: ${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}storage-api:${STORAGE_TAG:-v1.78.0}
-    restart: unless-stopped
-    mem_limit: 768m
-    depends_on:
-      db:
-        condition: service_healthy
-      rest:
-        condition: service_started
+  caddy:
+    image: ${IMAGE_WEB:-${IMAGE_PREFIX_WEB:-${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}}web}:${WEB_TAG:-latest}
     environment:
       ANON_KEY: ${ANON_KEY}
-      SERVICE_KEY: ${SERVICE_ROLE_KEY}
-      PGRST_JWT_SECRET: ${JWT_SECRET}
-      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@db:5432/postgres
-      POSTGREST_URL: http://rest:3000
-      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT:-52428800}
-      STORAGE_BACKEND: file
-      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
-      TENANT_ID: anarbib
-      REGION: local
-      GLOBAL_S3_BUCKET: anarbib
-      ENABLE_IMAGE_TRANSFORMATION: "false"
-    volumes:
-      - storage-data:/var/lib/storage
-    expose:
-      - "5000"
-
-  # ---------------------------------------------------------------------------
-  # Edge runtime — Deno Edge Functions
-  # ---------------------------------------------------------------------------
-  functions:
-    image: ${IMAGE_PREFIX:-hub.unionlibertaireanarchiste.org/anarbib/}edge-runtime:${EDGE_RUNTIME_TAG:-v1.74.0}
-    restart: unless-stopped
-    mem_limit: 512m
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - ./functions.env
-    environment:
-      SUPABASE_URL: http://caddy
-      SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
-      SUPABASE_SECRET_KEYS: '{"default":"${SERVICE_ROLE_KEY}"}'
-      SUPABASE_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/postgres
-      SUPABASE_JWT_SECRET: ${JWT_SECRET}
-      ALLOWED_ORIGIN: ${SITE_URL}
-      VERIFY_JWT: "false"
-      IP_CLIENT_HEADER: x-real-ip
-    volumes:
-      - ../supabase/functions:/home/deno/functions:ro
-      - ../supabase/config.toml:/home/deno/config.toml:ro
-    command: ["start", "--main-service", "/home/deno/functions/main"]
-    expose:
-      - "9000"
-
-  # ---------------------------------------------------------------------------
-  # Caddy & Web SPA — Image autonome pré-embarquant l'application web
-  # ---------------------------------------------------------------------------
-  caddy:
-    image: ${WEB_IMAGE:-hub.unionlibertaireanarchiste.org/anarbib/web:latest}
-    restart: unless-stopped
-    mem_limit: 128m
-    depends_on:
-      - rest
-      - auth
-      - storage
-      - functions
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      API_DOMAIN: ${API_DOMAIN}
-    volumes:
+    volumes: !override
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
       - caddy-config:/config
-
-volumes:
-  db-data:
-  storage-data:
-  caddy-data:
-  caddy-config:

@@ -11,8 +11,18 @@ SHELL := /bin/bash
 REGISTRY ?= hub.unionlibertaireanarchiste.org/anarbib
 IMAGE_WEB ?= $(REGISTRY)/web
 VERSION ?= $(shell git describe --tags --always 2>/dev/null || echo "latest")
+COMMIT_SHA ?= $(shell git rev-parse HEAD 2>/dev/null || echo "")
 PLATFORMS ?= linux/amd64,linux/arm64
 BUILDER ?= anarco-multi
+
+# Versions épinglées lues dynamiquement depuis deploy/.env.example
+ENV_EXAMPLE := deploy/.env.example
+POSTGRES_TAG ?= $(shell grep -E '^POSTGRES_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
+POSTGREST_TAG ?= $(shell grep -E '^POSTGREST_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
+GOTRUE_TAG ?= $(shell grep -E '^GOTRUE_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
+STORAGE_TAG ?= $(shell grep -E '^STORAGE_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
+EDGE_RUNTIME_TAG ?= $(shell grep -E '^EDGE_RUNTIME_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
+CADDY_TAG ?= $(shell grep -E '^CADDY_TAG=' $(ENV_EXAMPLE) | cut -d= -f2)
 
 # Détection et création du compilateur buildx si nécessaire
 .PHONY: check-builder
@@ -35,7 +45,7 @@ help:
 	@echo "  build-web            Construire l'image anarbib-web localement (architecture hôte)"
 	@echo "  build-web-multi      Construire l'image anarbib-web en multi-arch ($(PLATFORMS))"
 	@echo "  push-web             Construire et publier anarbib-web vers Zot ($(REGISTRY)/web)"
-	@echo "  sync-backend         Synchroniser les 5 conteneurs Supabase et Caddy vers Zot via Skopeo"
+	@echo "  sync-backend         Synchroniser les 6 conteneurs backend (multi-arch) vers Zot via Skopeo"
 	@echo "  up-prebuilt          Démarrer la pile complète pré-compilée (Zero-Build)"
 	@echo "  down                 Arrêter les conteneurs en cours d'exécution"
 	@echo ""
@@ -48,7 +58,13 @@ help:
 .PHONY: build-web
 build-web:
 	@echo "› Construction locale de l'image web..."
-	docker build -f Dockerfile.web -t $(IMAGE_WEB):local -t $(IMAGE_WEB):$(VERSION) .
+	docker build \
+		--build-arg COMMIT_SHA=$(COMMIT_SHA) \
+		-f Dockerfile.web \
+		-t $(IMAGE_WEB):local \
+		-t $(IMAGE_WEB):$(VERSION) \
+		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
+		.
 	@echo "✓ Image construite avec succès : $(IMAGE_WEB):$(VERSION)"
 
 .PHONY: build-web-multi
@@ -57,9 +73,11 @@ build-web-multi: check-builder
 	docker buildx build \
 		--builder $(BUILDER) \
 		--platform $(PLATFORMS) \
+		--build-arg COMMIT_SHA=$(COMMIT_SHA) \
 		-f Dockerfile.web \
 		-t $(IMAGE_WEB):$(VERSION) \
 		-t $(IMAGE_WEB):latest \
+		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
 		.
 	@echo "✓ Image multi-architecture compilée."
 
@@ -69,9 +87,11 @@ push-web: check-builder
 	docker buildx build \
 		--builder $(BUILDER) \
 		--platform $(PLATFORMS) \
+		--build-arg COMMIT_SHA=$(COMMIT_SHA) \
 		-f Dockerfile.web \
 		-t $(IMAGE_WEB):$(VERSION) \
 		-t $(IMAGE_WEB):latest \
+		$(if $(COMMIT_SHA),-t $(IMAGE_WEB):$(COMMIT_SHA),) \
 		--push \
 		.
 	@echo "✓ Image anarbib/web publiée avec succès sur $(REGISTRY)."
@@ -79,13 +99,13 @@ push-web: check-builder
 .PHONY: sync-backend
 sync-backend:
 	@echo "› Synchronisation des images backend vers $(REGISTRY)..."
-	skopeo copy --src-no-creds --all docker://docker.io/supabase/postgres:17.6.1.136 docker://$(REGISTRY)/postgres:17.6.1.136
-	skopeo copy --src-no-creds --all docker://docker.io/postgrest/postgrest:v14.12 docker://$(REGISTRY)/postgrest:v14.12
-	skopeo copy --src-no-creds --all docker://docker.io/supabase/gotrue:v2.197.0 docker://$(REGISTRY)/gotrue:v2.197.0
-	skopeo copy --src-no-creds --all docker://docker.io/supabase/storage-api:v1.78.0 docker://$(REGISTRY)/storage-api:v1.78.0
-	skopeo copy --src-no-creds --all docker://docker.io/supabase/edge-runtime:v1.74.0 docker://$(REGISTRY)/edge-runtime:v1.74.0
-	skopeo copy --src-no-creds --override-os linux docker://docker.io/library/caddy:2 docker://$(REGISTRY)/caddy:2
-	@echo "✓ Toutes les images backend sont synchronisées sur $(REGISTRY)."
+	skopeo copy --src-no-creds --all docker://docker.io/supabase/postgres:$(POSTGRES_TAG) docker://$(REGISTRY)/postgres:$(POSTGRES_TAG)
+	skopeo copy --src-no-creds --all docker://docker.io/postgrest/postgrest:$(POSTGREST_TAG) docker://$(REGISTRY)/postgrest:$(POSTGREST_TAG)
+	skopeo copy --src-no-creds --all docker://docker.io/supabase/gotrue:$(GOTRUE_TAG) docker://$(REGISTRY)/gotrue:$(GOTRUE_TAG)
+	skopeo copy --src-no-creds --all docker://docker.io/supabase/storage-api:$(STORAGE_TAG) docker://$(REGISTRY)/storage-api:$(STORAGE_TAG)
+	skopeo copy --src-no-creds --all docker://docker.io/supabase/edge-runtime:$(EDGE_RUNTIME_TAG) docker://$(REGISTRY)/edge-runtime:$(EDGE_RUNTIME_TAG)
+	skopeo copy --src-no-creds --all docker://docker.io/library/caddy:$(CADDY_TAG) docker://$(REGISTRY)/caddy:$(CADDY_TAG)
+	@echo "✓ Toutes les images backend sont synchronisées en multi-architecture sur $(REGISTRY)."
 
 .PHONY: up-prebuilt
 up-prebuilt:

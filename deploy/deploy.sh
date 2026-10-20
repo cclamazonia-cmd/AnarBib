@@ -161,9 +161,14 @@ if [ "$FRONT" = "1" ]; then
   if [ "$FRONT_FORCE" = "0" ] && [ "$CONSTRUIT" = "$TETE" ]; then
     echo "✓ Front déjà construit depuis ce commit (${TETE:0:8})."
   elif ! command -v npm >/dev/null 2>&1; then
-    echo "⚠ npm introuvable : le front N'A PAS été reconstruit (il date de ${CONSTRUIT:0:8})."
-    echo "  Base et fonctions sont à jour, l'interface ne l'est pas."
-    FRONT_KO=1
+    ACTUEL=$(docker compose exec -T caddy cat /srv/.version-front 2>/dev/null | tr -d '\r\n' || true)
+    if [ -n "$ACTUEL" ] && [ "$ACTUEL" = "$TETE" ]; then
+      echo "✓ Front pré-compilé déjà à jour depuis ce commit (${TETE:0:8})."
+    else
+      echo "⚠ npm introuvable : le front N'A PAS été reconstruit (il date de ${ACTUEL:-${CONSTRUIT:0:8}})."
+      echo "  Base et fonctions sont à jour, l'interface ne l'est pas."
+      FRONT_KO=1
+    fi
   elif [ ! -f .env.local ]; then
     echo "⚠ .env.local absent (install.sh le pose) : front non reconstruit."
     FRONT_KO=1

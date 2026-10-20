@@ -9,7 +9,9 @@ import { resolveSupabaseUrl } from './supabaseUrl';
 export { resolveSupabaseUrl };
 
 export const SUPABASE_URL = resolveSupabaseUrl();
-export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+export const SUPABASE_ANON_KEY =
+  (typeof window !== 'undefined' && window.__ANARBIB_CONFIG__?.anonKey) ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!SUPABASE_URL) {
   throw new Error(
@@ -19,8 +21,8 @@ if (!SUPABASE_URL) {
 }
 if (!SUPABASE_ANON_KEY) {
   throw new Error(
-    'VITE_SUPABASE_PUBLISHABLE_KEY est requis mais non défini. ' +
-    'Vérifie ton fichier .env (local) ou la configuration de build (prod).'
+    'VITE_SUPABASE_PUBLISHABLE_KEY ou ANON_KEY est requis mais non défini. ' +
+    'Vérifie ton fichier .env (local) ou la variable d\'environnement du conteneur (Zero-Build).'
   );
 }
 

@@ -1138,7 +1138,12 @@ while [ $# -gt 0 ]; do
       ;;
     --prebuilt)
       PREBUILT=1
-      export COMPOSE_FILE="compose.prebuilt.yml"
+      export COMPOSE_FILE="compose.yml:compose.prebuilt.yml"
+      GIT_SHA="$(git rev-parse HEAD 2>/dev/null || echo "")"
+      if [ -n "$GIT_SHA" ] && [ -z "${WEB_TAG:-}" ]; then
+        export WEB_TAG="$GIT_SHA"
+      fi
+      [ -z "${WEB_TAG:-}" ] && export WEB_TAG="latest"
       ;;
     --lang)
       shift
@@ -1282,6 +1287,19 @@ if [ "$MODE" = "prod" ] && [ -n "$DOMAINE_PROD" ]; then
   sed -i "s|^API_DOMAIN=.*|API_DOMAIN=${DOMAINE_PROD}|" deploy/.env
   sed -i "s|^API_EXTERNAL_URL=.*|API_EXTERNAL_URL=https://${DOMAINE_PROD}|" deploy/.env
   succes "$(t ok_prod_domain "$DOMAINE_PROD")"
+fi
+
+if [ "$PREBUILT" = "1" ]; then
+  if grep -q '^COMPOSE_FILE=' deploy/.env; then
+    sed -i "s|^COMPOSE_FILE=.*|COMPOSE_FILE=compose.yml:compose.prebuilt.yml|" deploy/.env
+  else
+    echo "COMPOSE_FILE=compose.yml:compose.prebuilt.yml" >> deploy/.env
+  fi
+  if grep -q '^WEB_TAG=' deploy/.env; then
+    sed -i "s|^WEB_TAG=.*|WEB_TAG=${WEB_TAG}|" deploy/.env
+  else
+    echo "WEB_TAG=${WEB_TAG}" >> deploy/.env
+  fi
 fi
 
 # Mail configuration (interactive, only if not already set)

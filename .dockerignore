@@ -1,0 +1,24 @@
+# =============================================================================
+# AnarBib — Règles d'exclusion pour le contexte Docker
+# =============================================================================
+
+# Fichiers sensibles, secrets et configurations d'environnement
+.env*
+deploy/.env*
+deploy/functions.env*
+deploy/dumps/
+deploy/.initial_admin_creds
+
+# Dépendances et artefacts locaux
+node_modules/
+dist/
+dist.neuf/
+dist.vieux/
+coverage/
+*.log
+
+# Outils de développement, éditeurs et historique VCS
+.git/
+.codex/
+.cursor/
+.gemini/
