@@ -16,7 +16,7 @@
 //   - le vrai _shared/transport/email.ts (modèle mail-transport-rejeu-cadence)
 //     avec un faux sendViaSmtp qui rejoue un scénario.
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 
@@ -105,9 +105,11 @@ describe('smtp.ts — chaque erreur porte son étape et son code', () => {
 
 // ─── Le transport partagé, chemin SMTP ─────────────────────────────────────
 // Une fausse base : la table mail_transport_failures (insert, et la lecture de
-// la garde d'authentification) et, si demandé, fn_mail_cadence_creneau.
-function fausseBase({ cadence = false } = {}) {
-  const lignes = []; const appels = []; const prochains = {};
+// la garde d'authentification), si demandé fn_mail_cadence_creneau, et toujours
+// le témoin de succès fn_mail_envoi_reussi (21/10), noté à part dans `temoins` ;
+// `temoin` le fait répondre en erreur, lever ou ne jamais répondre.
+function fausseBase({ cadence = false, temoin = 'ok' } = {}) {
+  const lignes = []; const appels = []; const prochains = {}; const temoins = [];
   const requete = () => {
     const filtres = [];
     const q = {
@@ -124,16 +126,22 @@ function fausseBase({ cadence = false } = {}) {
       select: () => requete(),
     }),
   };
-  if (cadence) {
-    admin.rpc = async (nom, args) => {
-      appels.push({ nom, ...args });
-      const maintenant = Date.now();
-      const creneau = Math.max(prochains[args.p_canal] ?? 0, maintenant);
-      prochains[args.p_canal] = creneau + args.p_intervalle_ms;
-      return { data: creneau - maintenant, error: null };
-    };
-  }
-  return { admin, lignes, appels };
+  admin.rpc = async (nom, args) => {
+    if (nom === 'fn_mail_envoi_reussi') {
+      temoins.push(args.p_canal);
+      if (temoin === 'erreur') return { data: null, error: { message: 'Could not find the function public.fn_mail_envoi_reussi' } };
+      if (temoin === 'exception') throw new Error('fetch failed');
+      if (temoin === 'muet') return new Promise(() => {});
+      return { data: null, error: null };
+    }
+    if (!cadence) throw new TypeError('rpc indisponible');
+    appels.push({ nom, ...args });
+    const maintenant = Date.now();
+    const creneau = Math.max(prochains[args.p_canal] ?? 0, maintenant);
+    prochains[args.p_canal] = creneau + args.p_intervalle_ms;
+    return { data: creneau - maintenant, error: null };
+  };
+  return { admin, lignes, appels, temoins };
 }
 
 // Un faux client SMTP : un scénario d'issues servies dans l'ordre, puis le succès.
@@ -163,7 +171,7 @@ function monter(env = {}, base = fausseBase(), scenario = []) {
     (spec) => { if (!stubs[spec]) throw new Error(`import inattendu : ${spec}`); return stubs[spec]; }, mod, mod.exports,
     { env: { get: (k) => fakeEnv[k] || '' } },
   );
-  return { ...mod.exports, appels, notes: base.lignes };
+  return { ...mod.exports, appels, notes: base.lignes, temoins: base.temoins };
 }
 const opts = (label = 'user_mail') => ({ toEmail: 'lectrice@exemple.invalid', subject: 'Essai', html: '<p>x</p>', text: 'x', label });
 
@@ -304,7 +312,7 @@ describe('transport SMTP — cadence commune, canal smtp', () => {
     expect(base.appels[0]).toMatchObject({ p_canal: 'smtp', p_intervalle_ms: 1000 });
   });
 
-  it('un rejeu réserve aussi son créneau ; SMTP_CADENCE_COMMUNE=off ne consulte pas la base', async () => {
+  it('un rejeu réserve aussi son créneau ; SMTP_CADENCE_COMMUNE=off ne consulte pas la cadence en base', async () => {
     let base = fausseBase({ cadence: true });
     let m = monter({}, base, [erreurSmtp('SMTP banner inattendue : 421 busy', 'connexion', 421)]);
     await expect(m.sendEmail(opts())).resolves.toMatch(/^250/);
@@ -315,5 +323,77 @@ describe('transport SMTP — cadence commune, canal smtp', () => {
     m = monter({ SMTP_CADENCE_COMMUNE: 'off' }, base);
     await m.sendEmail(opts());
     expect(base.appels).toHaveLength(0);
+  });
+});
+
+// ─── Le témoin de succès (21/10/2026) ──────────────────────────────────────
+// Les journaux des fonctions ne remontent qu'à 24 h, mail_transport_failures ne
+// note que les échecs : chaque courriel accepté par le relais est compté en base
+// (fn_mail_envoi_reussi, canal `smtp`). Une fois par message, jamais sur un
+// échec, et le témoin ne fait jamais échouer l'envoi.
+describe('transport SMTP — témoin de succès', () => {
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  it('un envoi accepté compte une fois au canal smtp ; un succès après deux rejeux aussi une seule fois', async () => {
+    let m = monter();
+    await expect(m.sendEmail(opts())).resolves.toBe('250 2.0.0 Ok: queued as X');
+    expect(m.temoins).toEqual(['smtp']);
+
+    m = monter({}, fausseBase(), [
+      erreurSmtp('SMTP banner inattendue : 421 too busy', 'connexion', 421),
+      erreurSmtp('Connection reset by peer', 'livraison'),
+    ]);
+    await expect(m.sendEmail(opts())).resolves.toMatch(/^250/);
+    expect(m.appels).toHaveLength(3);
+    expect(m.temoins).toEqual(['smtp']);
+  });
+
+  it('jamais sur un échec : 5xx, rejeu raté, échec auth, suspension', async () => {
+    const t = () => erreurSmtp('Timeout SMTP (1000ms) dépassé lors de : connexion à relais.test:465', 'connexion');
+    for (const scenario of [
+      [erreurSmtp('Échec RCPT TO : 550 5.1.1 unknown user', 'rcpt', 550)],
+      [t(), t(), t()],
+    ]) {
+      const m = monter({}, fausseBase(), scenario);
+      await expect(m.sendEmail(opts())).rejects.toThrow();
+      expect(m.temoins).toEqual([]);
+    }
+    const m = monter({}, fausseBase(), [erreurSmtp('Échec auth SMTP (mot de passe) : 535 failed', 'auth', 535)]);
+    await expect(m.sendEmail(opts())).rejects.toThrow(/535/);
+    await expect(m.sendEmail(opts())).rejects.toThrow(/SMTP suspendu/);
+    expect(m.temoins).toEqual([]);
+  });
+
+  it('un témoin en erreur ou qui lève ne casse pas l’envoi : la réponse du relais (string) est rendue, rien n’est noté, un avertissement par isolat', async () => {
+    for (const temoin of ['erreur', 'exception']) {
+      const avert = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const m = monter({}, fausseBase({ temoin }));
+      await expect(m.sendEmail(opts())).resolves.toBe('250 2.0.0 Ok: queued as X');
+      const r = await m.safeSendEmail({ email: 'lectrice@exemple.invalid' }, 'Essai', '<p>x</p>', 'x', 'user_mail', null);
+      expect(r).toMatchObject({ ok: true, response: '250 2.0.0 Ok: queued as X' });
+      expect(m.appels).toHaveLength(2);
+      expect(m.temoins).toEqual(['smtp', 'smtp']);
+      expect(m.notes).toHaveLength(0);
+      expect(avert.mock.calls.filter(([s]) => String(s).includes('témoin de succès smtp'))).toHaveLength(1);
+      avert.mockRestore();
+    }
+  });
+
+  it('un témoin qui ne répond pas ne retient l’envoi que deux secondes', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const m = monter({}, fausseBase({ temoin: 'muet' }));
+    const debut = Date.now();
+    await expect(m.sendEmail(opts())).resolves.toMatch(/^250/);
+    const duree = Date.now() - debut;
+    expect(duree).toBeGreaterThanOrEqual(1990);
+    expect(duree).toBeLessThan(4000);
+  });
+
+  it('la simulation (MAIL_TRANSPORT=mock) ne compte pas', async () => {
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    const m = monter({ MAIL_TRANSPORT: 'mock' });
+    await m.sendEmail(opts());
+    expect(m.appels).toHaveLength(0);
+    expect(m.temoins).toEqual([]);
   });
 });

@@ -73,6 +73,33 @@ where occurred_at > now() - interval '1 day'
 order by occurred_at desc;
 ```
 
+Succès comptés par le transport (depuis le 21/10/2026, migration
+`20261021191721_le_courrier_garde_un_temoin_de_succes`). Les journaux ne remontent qu'à
+24 h et la table ci-dessus ne note que les échecs : chaque courriel accepté (Resend 2xx,
+relais « 250 ») est compté par `public.fn_mail_envoi_reussi`, par canal et par jour UTC,
+trente-et-un jours gardés, sans adresse ni libellé. Un message compte une fois, rejeux
+compris ; la simulation (`MAIL_TRANSPORT=mock`) ne compte pas.
+
+```sql
+-- Dernier succès par canal, et ce que chaque canal a fait sur les 7 derniers jours UTC
+select canal,
+       max(dernier_succes)                                          as dernier_succes,
+       sum(envois) filter (where jour > current_date - 7)           as envois_7_jours,
+       string_agg(jour || ' : ' || envois, ' · ' order by jour desc)
+         filter (where jour > current_date - 7)                     as par_jour
+from private.mail_temoin_jour
+group by canal
+order by canal;
+```
+
+(L'éditeur SQL de Supabase tourne en UTC : `current_date` y est le jour UTC.) Après la
+bascule, `smtp` doit prendre le relais et `resend` cesser de monter. Un canal actif sans
+succès depuis plus d'un jour ouvré, alors que des échecs sont notés, veut dire que plus
+rien ne part ; sans échecs ni succès, que personne n'a rien envoyé. Une ligne
+`témoin de succès … non noté` dans les journaux dit que le témoin lui-même a échoué
+(l'envoi, lui, n'en dépend pas). La sonde `fn_healthcheck_mail_transport` ne lit pas
+encore cette table ; elle pourra le faire si on le décide.
+
 À lire pendant les deux à quatre semaines qui suivent :
 
 - **La boîte anarbib@nodo50.org, deux fois par semaine.** C'est là que reviennent les

@@ -12,7 +12,7 @@
 // avec un `require` détourné (modèle correspondance-prevenir.test.js) ; un faux
 // Resend par `fetch` remplacé, qui note l'instant de chaque appel ; aucun réseau.
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { transformSync } from 'esbuild';
@@ -22,14 +22,18 @@ const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', fo
 const RACINE = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '../..');
 
 function monter(env = {}, base = null) {
-  const notes = [];
+  const notes = []; const temoins = [];
   const fakeEnv = { RESEND_API_KEY: 're_test', RESEND_MIN_INTERVAL_MS: '20', RESEND_RETRY_BASE_MS: '5', RESEND_API_URL: 'http://resend.test/emails', ...env };
   const stubs = {
     '../context/library-mail-routing.ts': { resolveMailRouting: () => ({ senderEmail: 'no-reply@exemple.invalid', senderName: 'AnarBib', adminEmail: '', replyToEmail: null }), transportDisabledReason: () => null },
     '../mail/inline-images.ts': { inlineLogosInHtml: async (h) => h },
     '../shared/format.ts': { firstNameOnly: (s) => s, fullName: (p) => p?.name || '', isValidEmail: (e) => /^[^@\s]+@[^@\s]+$/.test(e), desechapper: (s) => String(s ?? '') },
     '../mail/smtp.ts': { sendViaSmtp: async () => '', resolveTimeout: () => 1000 },
-    '../core/env.ts': { supabaseAdmin: { from: () => ({ insert: async (row) => { notes.push(row); return { error: null }; } }), ...(base ? { rpc: base.rpc } : {}) } },
+    // Sans fausse base, le témoin de succès (21/10) est noté dans `temoins` et la cadence commune manque.
+    '../core/env.ts': { supabaseAdmin: { from: () => ({ insert: async (row) => { notes.push(row); return { error: null }; } }), rpc: base ? base.rpc : async (nom, args) => {
+      if (nom !== 'fn_mail_envoi_reussi') throw new TypeError('rpc indisponible');
+      temoins.push(args.p_canal); return { data: null, error: null };
+    } } },
     './restriction.ts': { dejaServi: () => false },
     '../core/journal-masque.ts': { masquerAdresse: (s) => s },
   };
@@ -38,7 +42,7 @@ function monter(env = {}, base = null) {
     (spec) => { if (!stubs[spec]) throw new Error(`import inattendu : ${spec}`); return stubs[spec]; }, mod, mod.exports,
     { env: { get: (k) => fakeEnv[k] || '' } },
   );
-  return { ...mod.exports, notes };
+  return { ...mod.exports, notes, temoins: base ? base.temoins : temoins };
 }
 
 // Un faux Resend : une liste de réponses à servir dans l'ordre, puis 200 ; chaque appel horodaté.
@@ -56,11 +60,19 @@ const opts = (label = 'user_mail') => ({ toEmail: 'lectrice@exemple.invalid', su
 
 // Une fausse base qui tient le créneau commun comme public.fn_mail_cadence_creneau (F25, 17/10) :
 // une ligne par canal, le prochain créneau libre, les millisecondes à attendre en retour.
-function baseCommune({ erreur = null } = {}) {
-  const prochains = {}; const appels = [];
+// Le témoin de succès (fn_mail_envoi_reussi, 21/10) est noté à part, dans `temoins` ;
+// `temoin` le fait répondre en erreur ou lever.
+function baseCommune({ erreur = null, temoin = 'ok' } = {}) {
+  const prochains = {}; const appels = []; const temoins = [];
   return {
-    appels,
+    appels, temoins,
     rpc: async (nom, args) => {
+      if (nom === 'fn_mail_envoi_reussi') {
+        temoins.push(args.p_canal);
+        if (temoin === 'erreur') return { data: null, error: { message: 'permission denied for function fn_mail_envoi_reussi' } };
+        if (temoin === 'exception') throw new Error('fetch failed');
+        return { data: null, error: null };
+      }
       appels.push({ nom, ...args });
       if (erreur) return { data: null, error: { message: erreur } };
       const maintenant = Date.now();
@@ -173,7 +185,7 @@ describe('transport Resend — rejeu et cadence (F25)', () => {
     for (let i = 0; i < t.length; i++) expect(t[i] - debut, `envoi ${i}`).toBeGreaterThanOrEqual(i * 20 - 2);
   });
 
-  it('RESEND_CADENCE_COMMUNE=off : la base n’est pas consultée', async () => {
+  it('RESEND_CADENCE_COMMUNE=off : la cadence en base n’est pas consultée', async () => {
     const base = baseCommune();
     const { sendEmail } = monter({ RESEND_CADENCE_COMMUNE: 'off' }, base);
     fauxResend([]);
@@ -186,6 +198,55 @@ describe('transport Resend — rejeu et cadence (F25)', () => {
       const src = readFileSync(path.join(RACINE, f), 'utf8');
       expect(src, f).not.toMatch(/safeSendEmail\([^;]*\);\s*\n\s*sent\+\+/);
       expect(src, f).toContain('if (r?.ok === true) sent++');
+    }
+  });
+});
+
+// ─── Le témoin de succès (21/10/2026) ──────────────────────────────────────
+// Chaque courriel accepté par Resend est compté en base (fn_mail_envoi_reussi,
+// canal `resend`) : une fois par message, jamais sur un échec, et le témoin ne
+// fait jamais échouer — ni rejouer — l'envoi.
+describe('transport Resend — témoin de succès', () => {
+  it('un envoi accepté compte une fois ; deux 429 puis un 200 aussi une seule fois', async () => {
+    let m = monter();
+    fauxResend([]);
+    await m.sendEmail(opts());
+    expect(m.temoins).toEqual(['resend']);
+
+    m = monter();
+    const appels = fauxResend([{ status: 429 }, { status: 429 }]);
+    await expect(m.sendEmail(opts())).resolves.toBe('{"id":"ok"}');
+    expect(appels).toHaveLength(3);
+    expect(m.temoins).toEqual(['resend']);
+  });
+
+  it('jamais sur un échec : rejeu raté (quatre 429), 401 définitif, Resend injoignable', async () => {
+    for (const reponses of [
+      [{ status: 429 }, { status: 429 }, { status: 429 }, { status: 429 }],
+      [{ status: 401, body: '{"name":"missing_api_key"}' }],
+      [{ reseau: true }, { reseau: true }, { reseau: true }, { reseau: true }],
+    ]) {
+      const m = monter();
+      fauxResend(reponses);
+      await expect(m.sendEmail(opts())).rejects.toThrow(/Resend/);
+      expect(m.temoins).toEqual([]);
+      expect(m.notes).toHaveLength(1);
+    }
+  });
+
+  it('un témoin en erreur ou qui lève ne casse ni ne rejoue l’envoi ; un avertissement par isolat', async () => {
+    for (const temoin of ['erreur', 'exception']) {
+      const avert = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const base = baseCommune({ temoin });
+      const m = monter({}, base);
+      const appels = fauxResend([]);
+      await expect(m.sendEmail(opts())).resolves.toBe('{"id":"ok"}');
+      await expect(m.sendEmail(opts())).resolves.toBe('{"id":"ok"}');
+      expect(appels).toHaveLength(2);
+      expect(base.temoins).toEqual(['resend', 'resend']);
+      expect(m.notes).toHaveLength(0);
+      expect(avert.mock.calls.filter(([s]) => String(s).includes('témoin de succès resend'))).toHaveLength(1);
+      avert.mockRestore();
     }
   });
 });

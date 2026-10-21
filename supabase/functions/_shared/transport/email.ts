@@ -103,6 +103,39 @@ async function cadencer(canal: Canal): Promise<void> {
   prochainCreneau[canal] = creneau + intervalle;
   if (creneau > maintenant) await dormir(creneau - maintenant);
 }
+
+// ─── Un succès se compte aussi (21/10/2026, sortie de Resend par Nodo50) ────
+// Les journaux des fonctions ne remontent qu'à vingt-quatre heures et
+// mail_transport_failures ne note que les échecs : le 21/10, on ne pouvait pas
+// dire si le courrier partait. Chaque envoi accepté (Resend 2xx, relais « 250 »)
+// est compté en base, `public.fn_mail_envoi_reussi(canal)` : un nombre par canal
+// et par jour UTC, l'heure du dernier succès, aucune adresse. Un message compte
+// une fois, rejeux compris ; un échec et la simulation ne comptent pas. Le
+// témoin ne fait jamais échouer ni attendre l'envoi au-delà de deux secondes :
+// son erreur est avalée et dite une fois par isolat.
+const TEMOIN_ATTENTE_MAX_MS = 2000;
+const temoinSignale: Partial<Record<Canal, boolean>> = {};
+async function noterSucces(canal: Canal): Promise<void> {
+  let raison = "";
+  let minuteur: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const delai = new Promise<{ error: { message: string } }>((r) => {
+      minuteur = setTimeout(() => r({ error: { message: "délai dépassé" } }), TEMOIN_ATTENTE_MAX_MS);
+    });
+    const { error } = await Promise.race([supabaseAdmin.rpc("fn_mail_envoi_reussi", { p_canal: canal }), delai]);
+    if (!error) return;
+    raison = String(error.message || error);
+  } catch (e) {
+    raison = String((e as Error)?.message ?? e);
+  } finally {
+    clearTimeout(minuteur);
+  }
+  if (!temoinSignale[canal]) {
+    temoinSignale[canal] = true;
+    console.warn(`[transport] témoin de succès ${canal} non noté (${raison.slice(0, 120)}) : l'envoi n'en dépend pas`);
+  }
+}
+
 export function rejouable(status: number): boolean {
   return status === 429 || status === 0 || (status >= 500 && status <= 599);
 }
@@ -178,7 +211,7 @@ async function sendViaResend(opts) {
   let tentative = 0;
   for (;;) {
     await cadencer("resend");
-    let status = 0, body = "", retryAfter: string | null = null;
+    let status = 0, body = "", retryAfter: string | null = null, accepte = false;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -189,9 +222,14 @@ async function sendViaResend(opts) {
         body: JSON.stringify(payload)
       });
       status = res.status; body = await res.text(); retryAfter = res.headers?.get?.("retry-after") ?? null;
-      if (res.ok) return body;
+      accepte = res.ok;
     } catch (err) {
       status = 0; body = String((err as Error)?.message ?? err);
+    }
+    // Hors du try : une erreur du témoin ne doit jamais passer pour une connexion rompue (et rejouer l'envoi).
+    if (accepte) {
+      await noterSucces("resend");
+      return body;
     }
     if (rejouable(status) && tentative < REJEUX_MAX) {
       const attente = attenteAvantRejeu(retryAfter, tentative, base);
@@ -270,8 +308,9 @@ async function sendViaConfiguredSmtp(opts) {
   let tentative = 0;
   for (;;) {
     await cadencer("smtp");
+    let reponse: string;
     try {
-      return await sendViaSmtp({
+      reponse = await sendViaSmtp({
         host,
         port,
         user,
@@ -303,6 +342,8 @@ async function sendViaConfiguredSmtp(opts) {
       }
       throw err;
     }
+    await noterSucces("smtp");
+    return reponse;
   }
 }
 
