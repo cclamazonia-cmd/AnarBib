@@ -127,3 +127,20 @@ deploy/dumps/*
 *.sql.gz
 
 tmp-ficedl/
+
+# Secrets d'exploitation et cles (21/10/2026) : jamais dans le depot.
+# Les modeles *.example, eux, restent suivis.
+deploy/ops/temoin.env
+deploy/ops/vm/sauvegarde.env
+.env.staging
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+id_ecdsa
+id_ecdsa.pub
+*dashlane*.csv
+_SECRETS*/
+dump.sql

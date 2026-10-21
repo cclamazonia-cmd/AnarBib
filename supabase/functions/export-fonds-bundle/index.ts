@@ -15,7 +15,7 @@
 
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
-import JSZip from 'npm:jszip@3';
+import JSZip from 'npm:jszip@3.10.1';   // version exacte, celle du front (21/10/2026)
 import { serializeCatalog, SUPPORTED_FORMATS } from '../export-catalog-lote/serialize.ts';
 
 // Bornes MVP synchrone (JSZip garde tout en mémoire → l'EF OOM au-delà). Pour les

@@ -14,7 +14,7 @@ import { safeSendEmail } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
 import { appUrl } from "../core/app-url.ts";
 import { verdictEnvois, champsEchec } from "./outbox-verdict.ts";
-import { marked } from "https://esm.sh/marked@12";
+import { marked } from "https://esm.sh/marked@12.0.2";   // version exacte (21/10/2026)
 
 import { esc as echapperHtml } from "../shared/format.ts";
 const OUTBOX = "lettre_notification_outbox";
