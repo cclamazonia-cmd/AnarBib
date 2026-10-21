@@ -66,8 +66,14 @@ const CSV_COLUMNS = [
   { header: 'notes', get: (r) => s(r.notes) },
 ];
 
+// Injection de formules (21/10/2026) : un tableur exécute une cellule qui
+// commence par = + - @ (ou tabulation, retour chariot) — un titre de notice
+// comme « =HYPERLINK(…) » devenait un lien actif à l'ouverture de l'export. On
+// préfixe ces valeurs d'une apostrophe, que le tableur n'affiche pas
+// (recommandation OWASP « CSV Injection »).
 function csvEscape(value) {
-  const v = s(value);
+  let v = s(value);
+  if (/^[=+\-@\t\r]/.test(v)) v = "'" + v;
   return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
 }
 

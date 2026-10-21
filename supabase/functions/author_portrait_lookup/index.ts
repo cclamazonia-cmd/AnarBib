@@ -144,6 +144,15 @@ Deno.serve(async (req) => {
     if (!wikidataId && !name) {
       return jsonResponse({ ok: false, error: 'Provide wikidata_id or name.' }, 400);
     }
+    // 21/10/2026 : un identifiant Wikidata est « Q » suivi de chiffres, rien
+    // d'autre — il entre dans l'URL de l'API (ids=…), où un « | » ou un « & »
+    // ajoutait des entités ou des paramètres à la requête.
+    if (wikidataId && !/^Q[1-9]\d{0,11}$/.test(wikidataId)) {
+      return jsonResponse({ ok: false, error: 'Invalid wikidata_id.' }, 400);
+    }
+    if (name.length > 200) {
+      return jsonResponse({ ok: false, error: 'Name too long.' }, 400);
+    }
 
     let candidates: any[] = [];
 
