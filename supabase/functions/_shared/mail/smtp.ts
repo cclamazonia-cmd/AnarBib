@@ -170,6 +170,19 @@ export function encodeAddress(address: string): string {
   return name ? `${encodeUtf8Header(name)} <${addr}>` : `<${addr}>`;
 }
 
+// ─── Message-ID sur le domaine de l'expéditeur (21/10/2026) ───────────────
+// Le premier courriel réel parti par le relais Nodo50 est arrivé chez Gmail
+// sans Message-ID (Gmail en a posé un : « …SMTPIN_ADDED_MISSING@mx.google.com »),
+// alors que ce client en écrivait un sur le nom du relais (@correo.nodo50.org).
+// La règle (RFC 5322 §3.6.4, consignes d'envoi de Gmail) : un identifiant
+// unique, à droite le domaine de l'expéditeur — c'est aussi celui que le DKIM
+// signe. Sans domaine lisible dans le From, on garde le repli (le relais).
+export function identifiantMessage(from: string, repli: string): string {
+  const domaine = (extractEmail(from).split("@")[1] || "").trim().toLowerCase();
+  const droite = /^[a-z0-9.-]+\.[a-z]{2,}$/.test(domaine) ? domaine : repli;
+  return `<${Date.now()}.${Math.random().toString(36).slice(2)}@${droite}>`;
+}
+
 export function toBase64Wrapped(str: string): string {
   const b64 = btoa(unescape(encodeURIComponent(str)));
   return b64.replace(/(.{76})/g, "$1\r\n");
@@ -274,7 +287,7 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
       `Subject: ${encodeUtf8Header(opts.subject)}`,
       `Date: ${new Date().toUTCString()}`,
       `MIME-Version: 1.0`,
-      `Message-ID: <${Date.now()}.${Math.random().toString(36).slice(2)}@${host}>`
+      `Message-ID: ${identifiantMessage(opts.from, host)}`
     ];
 
     if (opts.replyTo) {

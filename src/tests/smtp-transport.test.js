@@ -24,7 +24,29 @@ function loadSmtpModule() {
   return mod.exports;
 }
 
-const { encodeAddress, encodeUtf8Header, toBase64Wrapped, extractEmail, resolveTimeout } = loadSmtpModule();
+const { encodeAddress, encodeUtf8Header, toBase64Wrapped, extractEmail, resolveTimeout, identifiantMessage } = loadSmtpModule();
+
+describe('smtp.ts — Message-ID sur le domaine de l’expéditeur (21/10/2026)', () => {
+  it('prend le domaine du From, pas celui du relais', () => {
+    const id = identifiantMessage('AnarBib <no-reply@notifications.anarbib.org>', 'correo.nodo50.org');
+    expect(id).toMatch(/^<\d+\.[a-z0-9]+@notifications\.anarbib\.org>$/);
+  });
+
+  it('un From sans chevrons ni nom marche aussi, et le domaine passe en minuscules', () => {
+    expect(identifiantMessage('No-Reply@Notifications.AnarBib.org', 'relais.test')).toMatch(/@notifications\.anarbib\.org>$/);
+  });
+
+  it('sans domaine lisible dans le From, repli sur le relais', () => {
+    expect(identifiantMessage('AnarBib', 'correo.nodo50.org')).toMatch(/@correo\.nodo50\.org>$/);
+    expect(identifiantMessage('x@localhost', 'correo.nodo50.org')).toMatch(/@correo\.nodo50\.org>$/);
+  });
+
+  it('deux identifiants de suite ne se répètent pas', () => {
+    const a = identifiantMessage('a@exemple.org', 'r.test');
+    const b = identifiantMessage('a@exemple.org', 'r.test');
+    expect(a).not.toBe(b);
+  });
+});
 
 describe('smtp.ts — conformité RFC 2047 (encodage display-name)', () => {
   it('n’encode que le display-name avec accents et laisse l’adresse en clair', () => {

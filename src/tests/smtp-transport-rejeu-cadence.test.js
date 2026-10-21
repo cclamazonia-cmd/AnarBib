@@ -29,6 +29,7 @@ const cjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', fo
 function fauxRelais(reponses) {
   const enc = new TextEncoder();
   const commandes = [];
+  const brut = [];
   let ctrl;
   const repondre = () => {
     const r = reponses.length ? reponses.shift() : '250 OK';
@@ -36,10 +37,10 @@ function fauxRelais(reponses) {
   };
   const conn = {
     readable: new ReadableStream({ start(c) { ctrl = c; repondre(); } }),
-    writable: new WritableStream({ write(chunk) { commandes.push(new TextDecoder().decode(chunk).split('\r\n')[0]); repondre(); } }),
+    writable: new WritableStream({ write(chunk) { const t = new TextDecoder().decode(chunk); brut.push(t); commandes.push(t.split('\r\n')[0]); repondre(); } }),
     close() {},
   };
-  return { conn, commandes };
+  return { conn, commandes, brut };
 }
 
 function smtpReel(connectTls) {
@@ -60,6 +61,17 @@ describe('smtp.ts — chaque erreur porte son étape et son code', () => {
     const { sendViaSmtp } = smtpReel(async () => conn);
     await expect(sendViaSmtp(envoi())).resolves.toBe('250 2.0.0 Ok: queued as B462C300A8F');
     expect(commandes).toContain('MAIL FROM:<no-reply@exemple.invalid>');
+  });
+
+  it('le message porte un Message-ID sur le domaine de l’expéditeur, dans ses en-têtes (21/10/2026)', async () => {
+    const { conn, brut } = fauxRelais(['220 relais', '250 relais', ...AUTH_OK, '250 ok', '250 ok', '354 go', '250 2.0.0 Ok: queued as X']);
+    const { sendViaSmtp } = smtpReel(async () => conn);
+    await sendViaSmtp(envoi());
+    const message = brut.find((t) => t.startsWith('From: '));
+    expect(message).toBeTruthy();
+    const entetes = message.split('\r\n\r\n')[0];
+    expect(entetes).toMatch(/^Message-ID: <\d+\.[a-z0-9]+@exemple\.invalid>$/m);
+    expect(entetes).not.toContain('@relais.test>');
   });
 
   it('535 au mot de passe : étape auth, code 535, message inchangé', async () => {
