@@ -8,7 +8,8 @@ import { localizeError } from '@/lib/localizeError';
 // ReadingNotesSection — notes de lecture partagees sur une ŒUVRE (works.id).
 // Cadrage : docs/journal/cadrages/CADRAGE_notes_de_lecture_2026-08-01.md (Lot 2).
 //
-// - Lecture : notes 'published' du reseau (RLS -> visible aux comptes connectes).
+// - Lecture : notes 'published' du reseau, par api.reading_notes_published_v1,
+//   ouverte aux seuls comptes connectes -> aucun appel sans session.
 // - Rediger : reserve aux lecteur·rices valide·es d'une biblio ayant active la
 //   fonction ; le serveur (fn_my_reading_note_target) dit SI et SOUS QUELLE
 //   biblio ecrire + pre-remplit le pseudonyme. Une note par personne et par
@@ -32,7 +33,13 @@ export default function ReadingNotesSection({ workId }) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
 
+  const userId = user?.id ?? null;
   const load = useCallback(async () => {
+    // Lecture réservée aux comptes connectés (cadrage adopté en AG : « visibles
+    // par tout compte authentifié du réseau »). Sans session, pas d'appel : la
+    // fonction n'est pas ouverte à anon et répondait 401 à chaque visite d'une
+    // notice (96 refus le 21/10/2026) ; l'invitation à se connecter suffit.
+    if (!userId) { setNotes([]); setLoading(false); return; }
     setLoading(true);
     try {
       // Notes publiées sans l'identifiant de leur auteur·rice : la fonction
@@ -41,7 +48,7 @@ export default function ReadingNotesSection({ workId }) {
         .rpc('reading_notes_published_v1', { p_work_id: workId });
       setNotes(Array.isArray(data) ? data : []);
     } finally { setLoading(false); }
-  }, [workId]);
+  }, [workId, userId]);
 
   useEffect(() => { load(); }, [load]);
 
