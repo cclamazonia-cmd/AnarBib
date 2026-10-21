@@ -7,6 +7,7 @@ import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 import { tMailTexte } from "../_shared/i18n/mail-strings.ts";
 import { siteUrl } from "../_shared/core/site-url.ts";
 import { destinatairesAdminsReseau } from "../_shared/context/network-admins.ts";
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustSecretKey();
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_LIBRARY_REQUEST");
@@ -100,7 +101,7 @@ async function parsePayload(req) {
 // Seul le secret webhook autorise désormais l'appel.
 function authorizeWebhook(req, manualTest) {
   const gotSecret = String(req.headers.get("x-webhook-secret") || "").trim();
-  const webhookOk = !!WEBHOOK_SECRET && !!gotSecret && gotSecret === WEBHOOK_SECRET;
+  const webhookOk = secretValide(WEBHOOK_SECRET, gotSecret);
   return {
     ok: webhookOk,
     webhookOk,

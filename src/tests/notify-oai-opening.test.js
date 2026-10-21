@@ -36,6 +36,7 @@ import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 import { avecLocales } from './helpers/locales-ts.js';
+import { EGALITE } from './helpers/egalite-constante.js';
 
 const SRC = new URL('../../supabase/functions/notify-oai-opening/index.ts', import.meta.url);
 const WEBHOOK = new URL('../../supabase/functions/_shared/core/webhook.ts', import.meta.url);
@@ -108,6 +109,7 @@ function monterEF(monde) {
       return { safeSendEmail: async (cible, sujet) => { envois.push({ email: cible.email, nom: cible.name, sujet }); } };
     }
     if (spec.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
+    if (spec.endsWith('egalite-constante.ts')) return EGALITE; // 21/10/2026 : secrets à durée constante
     throw new Error(`import inattendu : ${spec}`);
   };
 

@@ -24,6 +24,7 @@ import { transformSync } from 'esbuild';
 import { JOURNAL_MASQUE } from './helpers/journal-masque.js';
 import { avecLocales } from './helpers/locales-ts.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
+import { EGALITE } from './helpers/egalite-constante.js';
 
 const tsToCjs = (url) => transformSync(readFileSync(url, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2022' }).code;
 const CODE = tsToCjs(new URL('../../supabase/functions/notify-library-request/index.ts', import.meta.url));
@@ -142,12 +143,14 @@ function monterEF({ langueDemandeuse = 'fr', admins = [{ email: 'admin@exemplo.t
         // F12 (25/09/2026) : la restriction des rejeux ; hors rejeu, personne n'est « déjà servi ».
         if (sp.endsWith('restriction.ts')) return { dejaServi: () => false };
         if (sp.endsWith('core/journal-masque.ts')) return JOURNAL_MASQUE; // F19
+        if (sp.endsWith('egalite-constante.ts')) return EGALITE; // 21/10/2026 : secrets à durée constante
         throw new Error(`import inattendu (transport) : ${sp}`);
       };
       const m = { exports: {} };
       new Function('require', 'module', 'exports', 'Deno', 'fetch', TRANSPORT_CODE)(avecLocales(requireTransport), m, m.exports, DenoStub, fetchStub);
       return m.exports;
     }
+    if (spec.endsWith('egalite-constante.ts')) return EGALITE; // 21/10/2026 : secrets à durée constante
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };

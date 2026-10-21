@@ -34,6 +34,7 @@ import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
 import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
 import { AdresseRefusee, ReponseTropLourde, fetchSortant, lireTexteBorne } from "../_shared/core/adresse-sortante.ts";
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 
 const LOCALES: readonly string[] = LOCALE_CODES;
 const TRANSLATE_TARGETS = LOCALES.filter((l) => l !== "fr"); // fr = original curé
@@ -880,7 +881,7 @@ async function upsertLocale(number: number, locale: string, content: unknown, ts
 Deno.serve(async (req) => {
   // Un secret absent ou vide n'ouvre rien : sans lui, un en-tête vide suffisait.
   const secret = Deno.env.get("GAZETTE_CRON_SECRET") ?? "";
-  if (!secret || req.headers.get("x-cron-secret") !== secret) {
+  if (!secretValide(secret, req.headers.get("x-cron-secret"))) {
     return new Response("forbidden", { status: 403 });
   }
   const { step, issue_number } = await req.json().catch(() => ({ step: "tick" }));

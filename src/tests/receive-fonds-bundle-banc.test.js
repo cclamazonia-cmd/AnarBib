@@ -68,7 +68,8 @@ import { monterEF } from './helpers/monter-ef.js';
 vi.mock('esbuild', async (importOriginal) => {
   const reel = await importOriginal();
   const transformSync = (code, options) =>
-    reel.transformSync(String(code).replace(/(['"])npm:jszip@3\1/g, '$1./npm:jszip@3$1'), options);
+    // 21/10/2026 : la version est exacte (npm:jszip@3.10.1) — même réécriture.
+    reel.transformSync(String(code).replace(/(['"])npm:jszip@3(?:\.\d+\.\d+)?\1/g, '$1./npm:jszip@3$1'), options);
   return { ...reel, transformSync };
 });
 

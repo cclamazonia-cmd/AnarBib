@@ -19,6 +19,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from "../_shared/deps.ts";
 import { LOCALE_CODES } from "../_shared/i18n/locales.ts";
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 
 const LOCALES: readonly string[] = LOCALE_CODES;
 const LOCALE_NAMES: Record<string, string> = {
@@ -110,7 +111,7 @@ async function fillOne(w: Pending): Promise<number> {
 }
 
 Deno.serve(async (req) => {
-  if (req.headers.get("x-cron-secret") !== Deno.env.get("GAZETTE_CRON_SECRET")) {
+  if (!secretValide(Deno.env.get("GAZETTE_CRON_SECRET"), req.headers.get("x-cron-secret"))) {
     return new Response("forbidden", { status: 403 });
   }
   const { work_id } = await req.json().catch(() => ({}));

@@ -26,6 +26,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
+import { EGALITE } from './helpers/egalite-constante.js';
 
 const SRC = new URL('../../supabase/functions/harvest-oai-pmh/index.ts', import.meta.url);
 const MARC = new URL('../../supabase/functions/process-partner-catalog-import/marc.ts', import.meta.url);
@@ -161,6 +162,7 @@ function monterEF(etat, reponses) {
     // Le vrai garde des appels sortants (19/10/2026), sur le fetch du banc.
     if (spec.endsWith('core/adresse-sortante.ts')) return evaluer(cjs(new URL('../../supabase/functions/_shared/core/adresse-sortante.ts', import.meta.url)), {});
     if (spec.includes('edge-runtime.d.ts')) return {};
+    if (spec.endsWith('egalite-constante.ts')) return EGALITE; // 21/10/2026 : secrets à durée constante
     throw new Error(`import inattendu : ${spec}`);
   };
 

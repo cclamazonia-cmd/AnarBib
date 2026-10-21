@@ -5,6 +5,7 @@ import { sendEmail as sendEmailPartage } from "../_shared/transport/email.ts";
 import { destinatairesAdminsReseau, localeDeProfil, LOCALE_BOITE_COLLECTIVE } from "../_shared/context/network-admins.ts";
 import { tMail, tMailTexte } from "../_shared/i18n/mail-strings.ts";
 import { esc as echapperHtml, desechapper } from "../_shared/shared/format.ts";
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 // F26 (19/10/2026) : le courriel était rédigé en pt-BR seul, dans le code, et son
 // pied lisait FOOTER_TEXT (secret supprimé le 19/10, repli portugais en dur).
 // Toutes les chaînes passent désormais par tMail (clés docperm.*), dans la langue
@@ -149,7 +150,7 @@ async function parsePayload(req) {
 // Seul le secret webhook autorise désormais l'appel.
 function authorizeWebhook(req, manualTest) {
   const gotSecret = String(req.headers.get("x-webhook-secret") || "").trim();
-  const webhookOk = !!WEBHOOK_SECRET && !!gotSecret && gotSecret === WEBHOOK_SECRET;
+  const webhookOk = secretValide(WEBHOOK_SECRET, gotSecret);
   return {
     ok: webhookOk,
     webhookOk,

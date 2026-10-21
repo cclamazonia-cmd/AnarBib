@@ -19,10 +19,11 @@
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
 import { TAILLE_LOT, traiterLot } from './lot.ts';
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 
 Deno.serve(async (req) => {
   const attendu = Deno.env.get('GAZETTE_CRON_SECRET');
-  if (!attendu || req.headers.get('x-cron-secret') !== attendu) {
+  if (!secretValide(attendu, req.headers.get('x-cron-secret'))) {
     return new Response('forbidden', { status: 403 });
   }
   const corps = await req.json().catch(() => ({}));

@@ -12,6 +12,7 @@
 
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { createClient } from '../_shared/deps.ts';
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 
 const DEPOSIT_BUCKET = 'partner-catalog-deposits';
 const IMPORT_SECRET_HEADER = 'x-import-secret';
@@ -37,7 +38,7 @@ Deno.serve(async (req) => {
   // Auth interne (server-to-server depuis le cron SQL).
   const expectedSecret = Deno.env.get(IMPORT_SECRET_ENV);
   if (!expectedSecret) return json({ error: `Missing secret ${IMPORT_SECRET_ENV}` }, 500);
-  if (req.headers.get(IMPORT_SECRET_HEADER) !== expectedSecret) return json({ error: 'Unauthorized' }, 401);
+  if (!secretValide(expectedSecret, req.headers.get(IMPORT_SECRET_HEADER))) return json({ error: 'Unauthorized' }, 401);
 
   let body: any = {};
   try { body = await req.json(); } catch { /* corps optionnel */ }

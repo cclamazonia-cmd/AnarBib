@@ -22,6 +22,7 @@ import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { avecLocales } from './helpers/locales-ts.js';
 import { LOCALE_CODES } from '../i18n/locales.js';
+import { EGALITE } from './helpers/egalite-constante.js';
 
 const SRC = new URL('../../supabase/functions/gazette-monthly-build/index.ts', import.meta.url);
 const CODE = transformSync(readFileSync(SRC, 'utf8'), {
@@ -150,6 +151,7 @@ function monterEF(etat) {
       );
       return m.exports;
     }
+    if (spec.endsWith('egalite-constante.ts')) return EGALITE; // 21/10/2026 : secrets à durée constante
     if (!spec.includes('supabase-js') && !spec.endsWith('deps.ts')) throw new Error(`import inattendu : ${spec}`);
     return { createClient: () => ({ from: requete }) };
   };

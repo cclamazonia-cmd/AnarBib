@@ -4,6 +4,7 @@ import { createClient } from '../_shared/deps.ts';
 import { parseMarcFile, MARC_PARSER_VERSION, unimarcCharsetWarnings, marcCoverage, mappedExtras } from './marc.ts';
 import { decodeImportBytes, encodingWarning, normalizeForcedEncoding } from './encoding.ts';
 import { csvCoverage, risCoverage, coverageCounts } from './coverage.ts';
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-import-secret',
@@ -495,7 +496,7 @@ Deno.serve(async (req)=>{
     }, 500);
   }
   const providedSecret = req.headers.get(IMPORT_SECRET_HEADER);
-  if (!providedSecret || providedSecret !== expectedSecret) {
+  if (!secretValide(expectedSecret, providedSecret)) {
     return json({
       error: 'Unauthorized'
     }, 401);

@@ -41,6 +41,7 @@ import {
   isMarcPrefix, buildOaiUrl, mapDublinCore, hasBibliographicContent,
 } from './oai.ts';
 import { fetchSortant, lireTexteBorne } from '../_shared/core/adresse-sortante.ts';
+import { secretValide } from "../_shared/core/egalite-constante.ts";
 
 const IMPORT_SECRET_HEADER = 'x-import-secret';
 const IMPORT_SECRET_ENV = 'ANARBIB_PARTNER_IMPORT_SECRET';
@@ -155,7 +156,7 @@ Deno.serve(async (req) => {
   const expectedSecret = Deno.env.get(IMPORT_SECRET_ENV);
   if (!expectedSecret) return json({ error: `Missing secret ${IMPORT_SECRET_ENV}` }, 500);
   const providedSecret = req.headers.get(IMPORT_SECRET_HEADER);
-  if (!providedSecret || providedSecret !== expectedSecret) return json({ error: 'Unauthorized' }, 401);
+  if (!secretValide(expectedSecret, providedSecret)) return json({ error: 'Unauthorized' }, 401);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const serviceRoleKey = secretKey();
