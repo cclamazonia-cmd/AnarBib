@@ -3679,6 +3679,7 @@
   "libctx.label": "Biblioteca actual",
   "login.reason.idle": "Se t'ha desconnectat després de 60 minuts d'inactivitat. Torna a iniciar la sessió per continuar.",
   "login.reason.sessionEnded": "La teva sessió ha acabat: les sessions de l'equip de la biblioteca no es conserven en tancar el navegador. Torna a iniciar la sessió per continuar.",
+  "login.reason.sessionLost": "La teva sessió ja no és vàlida en aquesta pestanya: s'ha tancat o substituït des d'una altra pestanya o un altre dispositiu. Torna a iniciar la sessió per continuar.",
   "material.arquivo": "Arxius",
   "material.audio": "Àudio",
   "material.audiovisual": "Audiovisual",

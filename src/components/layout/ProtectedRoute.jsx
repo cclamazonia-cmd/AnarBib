@@ -11,7 +11,7 @@ import { etapeDoubleFacteur } from '@/lib/doubleFacteur';
 const CONSTITUTION_ALLOWED = ['/atelier', '/conta'];
 
 export function ProtectedRoute({ children }) {
-  const { session, user, profile, loading, recovery, doubleFacteur } = useAuth();
+  const { session, user, profile, loading, recovery, doubleFacteur, lostSession } = useAuth();
   const { pathname, search, hash } = useLocation();
   // 05/10/2026 : le lien d'un courriel ouvert sans session menait à la
   // connexion, puis à /conta : la page demandée (et son #tab) était perdue.
@@ -43,6 +43,14 @@ export function ProtectedRoute({ children }) {
     // deconnecter va vers /login, seule page qui sache dire POURQUOI. Sans ca,
     // la course entre cette redirection et celle du minuteur decidait, au
     // hasard, si l'explication s'affichait ou non.
+    // Session disparue de CET onglet sans déconnexion (stockage vidé ou
+    // remplacé depuis un autre onglet, cf. AuthContext) : /login le dit, au
+    // lieu d'une page qui empile des « Impossible de charger » (21/10/2026).
+    // L'avis voyage dans l'adresse, propre à l'onglet : les autres onglets,
+    // dont celui qui s'est déconnecté exprès, ne le voient pas.
+    if (lostSession) {
+      return <Navigate to={`/login?reason=lost&${next.slice(1)}`} replace />;
+    }
     if (readSessionEndNotice()) {
       return <Navigate to={`/login${next}`} replace />;
     }

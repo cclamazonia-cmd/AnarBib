@@ -167,6 +167,80 @@ export function AuthProvider({ children }) {
     return loadProfile(userId, { syncLocale: false });
   }, [session, loadProfile]);
 
+  // ── La session affichée est celle que le client ENVERRA ─────────────────
+  //
+  // 21/10/2026 : un tableau de bord /painel a envoyé ses requêtes SANS jeton
+  // (401 en série, « Impossible de charger les messages ») alors qu'il se
+  // croyait connecté. Cause : onAuthStateChange relaie aussi les événements
+  // des AUTRES onglets (BroadcastChannel de supabase-js), avec LEUR session.
+  // Or la session d'équipe vit en sessionStorage, propre à chaque onglet
+  // (staffStorage.js) : l'onglet qui recevait le SIGNED_IN /
+  // MFA_CHALLENGE_VERIFIED d'à côté prenait le compte pour lui, sans rien dans
+  // son propre stockage — chaque requête partait en anon. Même faille dans
+  // l'autre sens : un onglet resté sur la session d'un compte de test après
+  // un « mot de passe oublié » fait ailleurs.
+  //
+  // Règle : l'état React ne prend JAMAIS la session portée par l'événement ;
+  // il relit celle du client de CET onglet (getSession lit son stockage). On
+  // relit aussi quand le stockage partagé change sous nos pieds (événement
+  // `storage` : déconnexion ou bascule en sessionStorage dans un autre onglet)
+  // et au retour sur l'onglet. Une session qui disparaît SANS SIGNED_OUT
+  // (stockage vidé par un autre onglet) est dite « perdue » : ProtectedRoute
+  // envoie vers /login?reason=lost, qui l'explique, au lieu de laisser la page
+  // empiler des erreurs de chargement. Un SIGNED_OUT, lui, est une
+  // déconnexion connue (bouton, minuteur, reset, jeton révoqué) : pas d'avis
+  // de plus que ceux qui existent.
+  const userIdRef = useRef(null); // compte que l'état React affiche
+  const [lostSession, setLostSession] = useState(false);
+
+  const syncFromClient = useCallback(async ({ trigger = null, recoveryOf = null } = {}) => {
+    const fromEvent = trigger !== null && trigger !== 'storage' && trigger !== 'visible';
+    let s = null;
+    try {
+      ({ data: { session: s } } = await supabase.auth.getSession());
+    } catch {
+      return; // client indisponible : on ne déduit rien d'un échec de lecture
+    }
+    const before = userIdRef.current;
+    const after = s?.user?.id ?? null;
+    userIdRef.current = after;
+    // Lien de récupération MDP : on marque le mode recovery (persistant) pour que
+    // LoginPage affiche le formulaire « nouveau mot de passe » ET que ProtectedRoute
+    // BLOQUE tout accès à l'app tant que le MDP n'est pas changé. Seulement si la
+    // session de récup est bien celle de CET onglet (pas un relais d'à côté), et
+    // dans le même tour que setSession : jamais d'instant « recovery sans
+    // session », que le filet anti-piège plus haut prendrait pour une impasse.
+    if (recoveryOf && after === recoveryOf) {
+      try { localStorage.setItem('anarbib:pw-recovery', '1'); } catch { /* ignore */ }
+      setRecovery(true);
+      // Le jeton vient d'être consommé : on le sort de l'URL. Tant qu'il y reste,
+      // LoginPage le relit à chaque montage et repropose la redéfinition du mot de
+      // passe avec un jeton mort — l'usager est bouclé sur le formulaire de reset.
+      clearAuthHash();
+    }
+    if (after) {
+      setLostSession(false);
+      // Hors événement (retour d'onglet, stockage), même compte = rien à
+      // faire : un jeton rafraîchi ne doit pas relancer les vues my_*_v2
+      // (cf. TOKEN_REFRESHED ignoré plus bas).
+      if (!fromEvent && after === before) return;
+      setSession(s);
+      // Après un événement on relit le profil (après le code de double
+      // authentification, celui lu en aal1 était refusé).
+      loadProfile(after);
+      return;
+    }
+    if (!before && !fromEvent) return;
+    setSession(null);
+    setProfile(null);
+    if (before) {
+      // Reset la garde locale pour permettre une re-synchro de la langue à la
+      // prochaine connexion (potentiellement avec un autre user).
+      syncedForUserRef.current = null;
+      if (trigger !== 'SIGNED_OUT') setLostSession(true);
+    }
+  }, [loadProfile]);
+
   useEffect(() => {
     // Récupérer la session existante au boot.
     // setLoading(false) est fait dès qu'on a la session (pas en attente du
@@ -174,6 +248,7 @@ export function AuthProvider({ children }) {
     // tâche de fond ; les composants qui en dépendent doivent gérer
     // profile === null pendant la latence (~100-200ms).
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      userIdRef.current = s?.user?.id ?? null;
       setSession(s);
       setLoading(false);
       if (s?.user?.id) {
@@ -203,43 +278,45 @@ export function AuthProvider({ children }) {
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
-        // Lien de récupération MDP : on marque le mode recovery (persistant) pour que
-        // LoginPage affiche le formulaire « nouveau mot de passe » ET que ProtectedRoute
-        // BLOQUE tout accès à l'app tant que le MDP n'est pas changé.
         // Reconnexion reussie : l'avis « vous avez ete deconnecte·e » a fait son
         // office, on l'efface. Uniquement sur SIGNED_IN : INITIAL_SESSION se
         // declenche a chaque demarrage et effacerait un avis pas encore lu.
         if (event === 'SIGNED_IN') {
           clearSessionEndNotice();
         }
-        if (event === 'PASSWORD_RECOVERY') {
-          try { localStorage.setItem('anarbib:pw-recovery', '1'); } catch { /* ignore */ }
-          setRecovery(true);
-          // Le jeton vient d'être consommé : on le sort de l'URL. Tant qu'il y reste,
-          // LoginPage le relit à chaque montage et repropose la redéfinition du mot de
-          // passe avec un jeton mort — l'usager est bouclé sur le formulaire de reset.
-          clearAuthHash();
-        }
-        setSession(s);
-        if (s?.user?.id) {
-          // setTimeout 0 obligatoire — sinon deadlock supabase-js (cf. ci-dessus)
-          setTimeout(() => { loadProfile(s.user.id); }, 0);
-        } else {
-          // SIGNED_OUT ou tout événement sans user : clear le profil
-          setProfile(null);
-        }
-        // Au signOut, reset la garde locale pour permettre une re-synchro à la
-        // prochaine connexion (potentiellement avec un autre user)
+        // Au signOut, sortie du mode récup (le reset réussi et le bouton
+        // « annuler » passent tous deux par un signOut).
         if (event === 'SIGNED_OUT') {
-          syncedForUserRef.current = null;
           try { localStorage.removeItem('anarbib:pw-recovery'); } catch { /* ignore */ }
           setRecovery(false);
         }
+        // `s` peut être la session d'un AUTRE onglet : on ne la prend pas, on
+        // relit celle du client (cf. syncFromClient). setTimeout 0 obligatoire —
+        // sinon deadlock supabase-js (cf. ci-dessus).
+        const recoveryOf = event === 'PASSWORD_RECOVERY' ? (s?.user?.id ?? null) : null;
+        setTimeout(() => { syncFromClient({ trigger: event, recoveryOf }); }, 0);
       }
     );
-    return () => subscription.unsubscribe();
-     
-  }, [loadProfile]);
+
+    // Le stockage partagé (localStorage) a changé dans un autre onglet : une
+    // déconnexion, une connexion, ou la bascule d'une session d'équipe en
+    // sessionStorage. supabase-js ne l'écoute pas ; on relit.
+    const onStorage = (e) => {
+      if (e.key === null || (typeof e.key === 'string' && e.key.startsWith('sb-'))) {
+        syncFromClient({ trigger: 'storage' });
+      }
+    };
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') syncFromClient({ trigger: 'visible' });
+    };
+    window.addEventListener('storage', onStorage);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('storage', onStorage);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [loadProfile, syncFromClient]);
 
   // B42, lot 2 (13/10/2026) — l'état de la double authentification pour la
   // session (api.fn_mon_etat_double_facteur, seule RPC que la fonction
@@ -263,6 +340,8 @@ export function AuthProvider({ children }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    userIdRef.current = null;
+    setLostSession(false);
     clearStaffSession();
     // Deconnexion voulue : on efface le battement sans poser de raison, pour ne
     // pas expliquer au prochain passage un depart que l'usager·e a decide.
@@ -284,6 +363,7 @@ export function AuthProvider({ children }) {
         recovery,
         exitRecovery,
         doubleFacteur,
+        lostSession,
         signOut,
         refreshProfile,
       }}

@@ -3679,6 +3679,7 @@
   "libctx.label": "Biblioteca corrente",
   "login.reason.idle": "Sei stat*o disconness*o dopo 60 minuti di inattività. Riconnettiti per continuare.",
   "login.reason.sessionEnded": "La tua sessione è terminata: le sessioni dello staff della biblioteca non vengono conservate alla chiusura del browser. Riconnettiti per continuare.",
+  "login.reason.sessionLost": "La tua sessione non è più valida in questa scheda: è stata chiusa o sostituita da un'altra scheda o da un altro dispositivo. Riconnettiti per continuare.",
   "material.arquivo": "Archivio",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovisivo",

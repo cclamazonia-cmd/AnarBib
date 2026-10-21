@@ -66,7 +66,10 @@ export default function LoginPage() {
   // session meurt sans que l'app soit la pour le voir (navigateur ferme — les
   // tokens de l'equipe vivent en sessionStorage). On lit donc aussi le marqueur
   // persistant, une seule fois au montage pour que l'avis ne clignote pas.
-  const [endNotice] = useState(() => (reason === 'idle' ? 'idle' : readSessionEndNotice()));
+  // `lost` : la session a disparu de cet onglet sans déconnexion (ProtectedRoute).
+  const [endNotice] = useState(() => (
+    reason === 'idle' || reason === 'lost' ? reason : readSessionEndNotice()
+  ));
   // Profile + session via AuthContext (paquet 25.6 fix deadlock + zombie session).
   // Au lieu de fetcher profiles depuis handleLogin (double requete qui creait
   // un deadlock supabase-js sporadique), on attend que AuthContext charge tout
@@ -605,7 +608,9 @@ export default function LoginPage() {
               lineHeight: 1.45,
             }}
           >
-            {t({ id: endNotice === 'idle' ? 'login.reason.idle' : 'login.reason.sessionEnded' })}
+            {t({ id: endNotice === 'idle' ? 'login.reason.idle'
+              : endNotice === 'lost' ? 'login.reason.sessionLost'
+                : 'login.reason.sessionEnded' })}
           </div>
         )}
         <Card>

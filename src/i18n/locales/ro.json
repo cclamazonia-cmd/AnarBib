@@ -3679,6 +3679,7 @@
   "libctx.label": "Biblioteca curentă",
   "login.reason.idle": "Sesiunea ta a fost închisă după 60 de minute de inactivitate. Conectează-te din nou pentru a continua.",
   "login.reason.sessionEnded": "Sesiunea ta s-a încheiat: sesiunile echipei bibliotecii nu se păstrează la închiderea browserului. Conectează-te din nou pentru a continua.",
+  "login.reason.sessionLost": "Sesiunea ta nu mai este valabilă în această filă: a fost închisă sau înlocuită dintr-o altă filă sau de pe alt dispozitiv. Conectează-te din nou pentru a continua.",
   "material.arquivo": "Arhive",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovizual",

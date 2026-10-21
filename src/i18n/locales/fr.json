@@ -3685,6 +3685,7 @@
   "libctx.label": "Bibliothèque courante",
   "login.reason.idle": "Tu as été déconnecté·e après 60 minutes d'inactivité. Reconnecte-toi pour continuer.",
   "login.reason.sessionEnded": "Ta session s'est terminée : les sessions de l'équipe de bibliothèque ne sont pas conservées à la fermeture du navigateur. Reconnecte-toi pour continuer.",
+  "login.reason.sessionLost": "Ta session n'est plus valable dans cet onglet : elle a été fermée ou remplacée depuis un autre onglet ou un autre appareil. Reconnecte-toi pour continuer.",
   "material.arquivo": "Archives",
   "material.audio": "Audio",
   "material.audiovisual": "Audiovisuel",

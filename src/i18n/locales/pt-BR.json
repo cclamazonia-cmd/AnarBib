@@ -3679,6 +3679,7 @@
   "libctx.label": "Biblioteca atual",
   "login.reason.idle": "Você foi desconectado(a/e) após 60 minutos de inatividade. Reconecte-se para continuar.",
   "login.reason.sessionEnded": "Sua sessão terminou: as sessões da equipe da biblioteca não são mantidas quando o navegador é fechado. Reconecte-se para continuar.",
+  "login.reason.sessionLost": "Sua sessão não é mais válida nesta aba: ela foi encerrada ou substituída em outra aba ou em outro aparelho. Reconecte-se para continuar.",
   "material.arquivo": "Arquivo",
   "material.audio": "Áudio",
   "material.audiovisual": "Audiovisual",
