@@ -89,7 +89,9 @@ function monterRegister({ env = {}, biblio = BIBLIO, canal = CANAL, existant = f
     // F25 (17/10/2026) : le transport réserve un créneau d'envoi en base avant chaque courriel
     // (fn_mail_cadence_creneau) ; ce banc juge les appels de register, pas ceux du transport.
     // 19/10/2026 : les frappes de compteur (fn_compteur_frapper) sont rangées à part.
-    const rpcs = ef.rpcs.filter((x) => x.nom !== 'fn_mail_cadence_creneau' && x.nom !== 'fn_compteur_frapper');
+    // 21/10/2026 : le témoin d'envoi réussi (fn_mail_envoi_reussi) est lui aussi un appel du transport.
+    const TRANSPORT = new Set(['fn_mail_cadence_creneau', 'fn_mail_envoi_reussi']);
+    const rpcs = ef.rpcs.filter((x) => !TRANSPORT.has(x.nom) && x.nom !== 'fn_compteur_frapper');
     const frappes = ef.rpcs.filter((x) => x.nom === 'fn_compteur_frapper').map((x) => x.args);
     return { ...r, ecrits: [...ef.ecrits], rpcs, frappes, envois: [...ef.envois], comptes: [...comptes], liensDemandes: [...liensDemandes] };
   }
