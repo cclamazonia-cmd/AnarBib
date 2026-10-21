@@ -140,6 +140,10 @@ export default function RedePage() {
       const { data: libs } = await supabase.from('libraries').select('id, name, slug, short_name, city, state, country, is_active, created_at').order('name');
       const { data: commons } = await supabase.from('library_commons').select('library_id, display_name, contact_email, logo_file_key');
       const { data: svcStates } = await supabase.from('library_service_state').select('library_id, service_mode, allows_new_loans, allows_new_reservations, public_message');
+      // Ateliers de constitution (21/10/2026) : une biblio dont l'atelier n'a
+      // franchi aucune des deux portes ne s'active pas par le bouton nu — la
+      // base le refuse. La ligne montre alors l'activation anticipée, motivée.
+      const { data: ateliers } = await supabase.from('library_constitution_progress').select('request_id, library_id, completed_at, early_activated_at');
 
       // Per-library counts — vue canonique api.library_circulation_stats (même
       // source que BibliotecaPage onglet Rapports). Garantit cohérence cross-pages.
@@ -170,8 +174,11 @@ export default function RedePage() {
         const commRow = (commons || []).find(c => c.library_id === lib.id);
         const svcRow = (svcStates || []).find(s => s.library_id === lib.id);
         const s = statsByLib.get(lib.id) || {};
+        const atelier = (ateliers || []).find(a => a.library_id === lib.id);
         return {
           ...lib, ...commRow, ...svcRow,
+          constitutionRequestId: atelier && !lib.is_active && !atelier.completed_at && !atelier.early_activated_at
+            ? atelier.request_id : null,
           readers: s.readers_active || 0,
           staff: s.librarians_active || 0,
           // Documents = notices tenues par la biblio (book_holdings), même
@@ -421,8 +428,23 @@ export default function RedePage() {
   async function toggleLibraryActive(libId, currentState) {
     if (!confirm(currentState ? t({ id: 'rede.deactivateConfirm' }) : t({ id: 'rede.reactivateConfirm' }))) return;
     try {
-      await supabase.from('libraries').update({ is_active: !currentState }).eq('id', libId);
+      // L'erreur n'était pas lue : un refus de la base passait pour un succès.
+      const { error } = await supabase.from('libraries').update({ is_active: !currentState }).eq('id', libId);
+      if (error) throw error;
       setMsg({ text: currentState ? t({id:'biblioteca.deactivated'}) : t({id:'biblioteca.reactivated'}), kind: 'ok' });
+      await loadAll();
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+  }
+
+  // Porte 2 (21/10/2026) : activer une biblio avant la fin de son atelier, motif
+  // obligatoire. L'atelier reste ouvert, la coordination sort de la constitution.
+  async function activateEarly(requestId) {
+    const reason = window.prompt(t({ id: 'rede.activateEarlyPrompt' }));
+    if (reason === null) return;
+    try {
+      const { error } = await apiRpc('fn_constitution_activate_early', { p_request_id: requestId, p_reason: reason });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'rede.activatedEarly' }), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
@@ -718,7 +740,7 @@ export default function RedePage() {
               <Fragment key={lib.id}>
               <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr)', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span></div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):lib.constitutionRequestId?t({ id: 'rede.libraryInConstitution' }):t({ id: 'rede.libraryInactive' })}</span></div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>{lib.slug} · {lib.city||'—'} · {lib.contact_email||'—'}</div>
                 </div>
                 <div style={{ textAlign:'center' }}><span className={`cat-pill ${lib.service_mode==='funcionamento_normal'?'ok':'warn'}`} style={{ fontSize:'.65rem' }}>{SERVICE_LABELS[lib.service_mode]||'—'}</span></div>
@@ -729,9 +751,15 @@ export default function RedePage() {
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.loansOverdue>0?'#f87171':'inherit' }}>{lib.loansOverdue||0}</div>
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.resActive>0?'#60a5fa':'inherit' }}>{lib.resActive}</div>
                 <div style={{ textAlign:'center' }}>
-                  <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color: lib.is_active?'#f87171':'#4ade80' }} onClick={()=>toggleLibraryActive(lib.id, lib.is_active)}>
-                    {lib.is_active ? t({ id: 'rede.deactivate' }) : t({ id: 'rede.reactivate' })}
-                  </button>
+                  {lib.constitutionRequestId ? (
+                    <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color:'#4ade80' }} onClick={()=>activateEarly(lib.constitutionRequestId)}>
+                      {t({ id: 'rede.activateEarly' })}
+                    </button>
+                  ) : (
+                    <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color: lib.is_active?'#f87171':'#4ade80' }} onClick={()=>toggleLibraryActive(lib.id, lib.is_active)}>
+                      {lib.is_active ? t({ id: 'rede.deactivate' }) : t({ id: 'rede.reactivate' })}
+                    </button>
+                  )}
                   <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', marginTop:4 }}
                     aria-expanded={numberingLibId === lib.id}
                     onClick={()=>setNumberingLibId(numberingLibId === lib.id ? null : lib.id)}>

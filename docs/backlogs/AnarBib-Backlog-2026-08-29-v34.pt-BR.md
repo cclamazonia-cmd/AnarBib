@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-20** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-21** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -21,7 +21,7 @@
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 10
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 9
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
-    - [G — Rede, governança, federação](#g--rede-governança-federação) · 9
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
     - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
@@ -64,7 +64,7 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 **Levantamento de 20 de outubro de 2026 à noite** (produção às 20h54 UTC, repositório em `5c67ec55`) — **todas as linhas remedidas** (anterior: 19/10, `7d6475b6`). **541 migrações aplicadas, 541 no repositório.** Um dia mais calmo: **+25 commits, +11 migrações**. O que mudou: **o catálogo** — doze fichas da Anarchief, uma autoridade duplicada fundida, as 308 autoridades da Anarchief na fila de revisão (C33), um registro compartilhado conta todos os seus acervos (B41), duas datas de direitos conferidas (D23); **o banco** — +1 policy (E40), +1 vista, +2 funções; **a CI** — o front servido comparado ao build (I34); **a exploração** — o restore-test cobre os arquivos (I39), `~/anarbib` divergiu e foi realinhado pela própria sessão durante o levantamento (I36). **A conta**: **68 itens** e 275 linhas de fechamento. **O que aperta**: D3, I38, B36, I36, G23, A7, I35; *a Xavier*: D28, K1.
 
-**Frescor dos constatos em 2026-10-20.** **61 itens de 68** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Os **7** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-21.** **62 itens de 69** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Os **7** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1128,6 +1128,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G22** | Fazer cada biblioteca informar seu telefone público | `P3` | Aberto |
 | **G23** | Declarar o uso da Anthropic como subcontratada, ou retirá-lo | `P1` | Aberto |
 | **G24** | Decidir a governança dos dados que a auditoria de 17/10 remete ao coletivo (P10) | `P2` | Aberto |
+| **G25** | Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina | `P1` | Em curso |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1321,6 +1322,28 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 **Dependências.** Após A1 ou em AG (G20).
 
 *Remissões : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### G25 — Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina
+
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+
+**Estado.** Constatado em 21/10 em produção. A conclusão da oficina não ativava nada; a única ativação era o botão bruto da página Rede, que deixava a coordenação presa na constituição (Solidaires, Anarchief).
+
+*Verificado : 21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`.*
+
+**O que é.** Decisão de Xavier (21/10): duas portas — a coordenação conclui a oficina (perfil + regimento) ou a administração da rede ativa antes, com motivo obrigatório. Na base: UPDATE bruto recusado; a ativação tira a coordenação da constituição. Regularização das duas bibliotecas.
+
+**Por que importa.** Sem isso, nenhuma biblioteca nasce pelo percurso previsto, e cada ativação manual deixa uma coordenação sem acesso à própria biblioteca.
+
+**O que conta como terminado.**
+
+- Migração aplicada pela CI; nenhuma coordenação em constituição para biblioteca ativa.
+- Suíte `constitution_activation_tests.sql` verde.
+- As coordenações de Solidaires e Anarchief voltam a acessar Biblioteca e Painel.
+
+**Dependências.** Nenhuma. Vizinho de **G1**.
+
+*Remissões : `supabase/migrations/20261021193002_l_atelier_active_la_bibliotheque.sql` · `tests/sql/constitution_activation_tests.sql` · `src/pages/atelier/AtelierConstituicaoPage.jsx` · `src/pages/rede/RedePage.jsx` · `src/components/account/MinhaSolicitacaoPanel.jsx`*
 
 ---
 
@@ -2266,4 +2289,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-20. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5c67ec55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-21. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-20 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5c67ec55`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

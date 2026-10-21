@@ -4,6 +4,8 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { apiQuery, apiRpc, supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import LibraryProfileWizard from '@/components/LibraryProfileWizard';
@@ -22,10 +24,11 @@ import { siteUrl } from '@/lib/siteUrl';
 // la décision est politique). Persistance via les RPC fn_constitution_* (paquet
 // ATELIER-A1) ; lecture via api.my_constitution_progress_v1.
 //
-// NB : pendant la constitution la biblio n'existe pas encore comme row libraries
-// → les champs des volets restent des LEURRES (cadrage : « champs des panneaux →
-// vrais composants ONBO-Q2 » = lot ultérieur, suppose une biblio pré-active).
-// Ici on porte la mécanique « marquer comme discutido em coletivo » de la maquette.
+// Les volets éditent la biblio pré-active (ONBO-Q2, AtelierVoletEditor).
+// Terminer l'atelier ACTIVE la bibliothèque (spec §6.4, 21/10/2026) : la
+// coordination quitte la constitution, on recharge donc son profil pour que
+// ProtectedRoute cesse de la ramener ici. Une bibliothèque activée avant la fin
+// par l'administration du réseau garde son atelier ouvert, sans échéance.
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Volets 1-10 : applicabilité = conception validée de la maquette.
@@ -47,6 +50,7 @@ const RING_C = 2 * Math.PI * 36;
 export default function AtelierConstituicaoPage() {
   const { formatMessage: t } = useIntl();
   const { notifySuccess, notifyError } = useToast();
+  const { refreshProfile } = useAuth();
   useDocumentTitle(t({ id: 'atelier.pageTitle' }));
 
   const [loading, setLoading] = useState(true);
@@ -130,7 +134,11 @@ export default function AtelierConstituicaoPage() {
     p_request_id: prog.request_id, p_url: regUrl.trim() || null,
   }), 'atelier.toast.regimentoSaved');
 
-  const complete = () => run(() => apiRpc('fn_constitution_complete', { p_request_id: prog.request_id }), 'atelier.toast.completed');
+  const complete = async () => {
+    if (await run(() => apiRpc('fn_constitution_complete', { p_request_id: prog.request_id }), 'atelier.toast.completed')) {
+      await refreshProfile();
+    }
+  };
 
   // Décisions provisoires réellement saisies aux volets, agrégées pour le regimento
   // (ONBO-Q2 Lot 3). Lecture best-effort sur la biblio pré-active (RLS staff) ;
@@ -232,6 +240,7 @@ export default function AtelierConstituicaoPage() {
   }
 
   const completed = !!prog.completed_at;
+  const activeEarly = !completed && !!prog.library_is_active;
   const cur = VOLETS.find(v => v.n === openVolet);
 
   return (
@@ -242,7 +251,7 @@ export default function AtelierConstituicaoPage() {
 
       <div className="ab-atl-wrap">
         {/* Bandeau échéance (ONBO-Q5) */}
-        {!completed && daysLeft != null && (
+        {!completed && !activeEarly && daysLeft != null && (
           <div className={`ab-atl-deadline${daysLeft < 0 ? ' is-frozen' : ''}`}>
             <span className="ab-atl-dot" aria-hidden="true" />
             {daysLeft >= 0
@@ -250,7 +259,11 @@ export default function AtelierConstituicaoPage() {
               : t({ id: 'atelier.deadline.frozen' })}
           </div>
         )}
+        {activeEarly && <div className="ab-atl-deadline is-done">{t({ id: 'atelier.activeEarly' })}</div>}
         {completed && <div className="ab-atl-deadline is-done">{t({ id: 'atelier.completed' })}</div>}
+        {(completed || activeEarly) && (
+          <p style={{ margin: '0 0 14px' }}><Link to="/biblioteca" className="ab-atl-btn primary">{t({ id: 'atelier.openLibrary' })}</Link></p>
+        )}
 
         {/* Guide d'accueil des coordinations (16/09/2026) : chaque volet est une
             décision du collectif ; le guide, publié sur la vitrine, dit ce que
@@ -297,6 +310,7 @@ export default function AtelierConstituicaoPage() {
                 <h2>{t({ id: 'atelier.volet0.title' })}</h2>
               </div>
               <p className="ab-atl-profile-sub">{t({ id: 'atelier.volet0.sub' })}</p>
+              {activeEarly && <p className="ab-atl-profile-sub">{t({ id: 'atelier.volet0.appliesNow' })}</p>}
               <LibraryProfileWizard value={axes} onChange={completed ? () => {} : setAxes} />
               <div className="ab-atl-profile-foot">
                 <button className="ab-atl-btn primary" disabled={busy || completed} onClick={saveProfile}>

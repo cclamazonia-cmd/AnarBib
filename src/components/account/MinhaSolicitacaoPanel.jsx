@@ -104,8 +104,10 @@ export default function MinhaSolicitacaoPanel() {
               pas embarqué : l'app n'en porte que le lien, dans la langue de la
               personne (account.constitution.guidePath varie par locale ; la base vient de src/lib/siteUrl.js). */}
           <div className="ab-guide-banner" style={{ marginTop: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)' }}>
-            <div style={{ fontSize: '.9rem', fontWeight: 600 }}>{t({ id: 'account.constitution.banner.title' })}</div>
-            <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', margin: '4px 0 8px' }}>{t({ id: 'account.constitution.banner.body' })}</p>
+            {/* Activée avant la fin de l'atelier (21/10/2026) : la bibliothèque n'est
+                plus pré-active, l'atelier reste ouvert. */}
+            <div style={{ fontSize: '.9rem', fontWeight: 600 }}>{t({ id: prog?.library_is_active ? 'account.constitution.banner.titleActive' : 'account.constitution.banner.title' })}</div>
+            <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', margin: '4px 0 8px' }}>{t({ id: prog?.library_is_active ? 'account.constitution.banner.bodyActive' : 'account.constitution.banner.body' })}</p>
             <a className="cat-btn" href={siteUrl(t({ id: 'account.constitution.guidePath' }))} target="_blank" rel="noreferrer">{t({ id: 'account.constitution.banner.cta' })}</a>
           </div>
         </div>

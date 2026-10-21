@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-20",
+    "maj": "2026-10-21",
     "releve": {
       "date": "2026-10-20",
       "commit": "5c67ec55"
@@ -7019,6 +7019,60 @@
         "Relecture des sessions du 16 au 19/10/2026"
       ],
       "verif": []
+    },
+    {
+      "id": "G25",
+      "d": "G",
+      "p": "P1",
+      "s": "en-cours",
+      "e": "M",
+      "sk": [
+        "sql",
+        "front"
+      ],
+      "t": {
+        "fr": "Terminer l’atelier de constitution n’activait pas la bibliothèque : les deux bibliothèques passées par l’atelier ont été activées à la main, et leurs coordinations sont restées enfermées dans l’atelier",
+        "pt": "Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina"
+      },
+      "v": {
+        "fr": "Constaté le 21/10 en production (lecture seule). Le lot 4 du cadrage ONBO-Q2 (« activation finale », 13/06) n’a jamais été fait : `api.fn_constitution_complete` datait `completed_at` et rien d’autre, et `fn_activate_approved_library_request` (la bascule complète) n’était appelée par personne, exécutable par `service_role` seul. La seule activation possible était le bouton « Réactiver » de la page Réseau, un `UPDATE libraries.is_active` nu : Solidaires (approuvée le 14/09) et Anarchief (24/09) ont été activées ainsi, ateliers à 0/10 et 3/10, et leurs coordinations sont restées `coordenador_em_constituicao` — `ProtectedRoute` les renvoie vers `/atelier` depuis toute page sauf `/conta`, Biblioteca et Painel de leur propre bibliothèque compris. Le chemin prévu menait à une impasse : terminer l’atelier figeait les volets, laissait la bibliothèque pré-active et la personne enfermée.",
+        "pt": "Constatado em 21/10 em produção. A conclusão da oficina não ativava nada; a única ativação era o botão bruto da página Rede, que deixava a coordenação presa na constituição (Solidaires, Anarchief)."
+      },
+      "w": {
+        "fr": "Décision de Xavier (21/10, spec onboarding §6.4) : deux portes et deux seulement. (1) La coordination termine l’atelier — profil (volet 0) et règlement (volet 10) exigés — et la bibliothèque devient active. (2) L’administration du réseau active avant la fin, motif obligatoire (`api.fn_constitution_activate_early`), l’atelier reste ouvert sans échéance. Dans la base : un `UPDATE` nu de `is_active` est refusé pour une bibliothèque dont l’atelier n’a franchi aucune porte, et toute activation sort la coordination de la constitution. Régularisation des deux bibliothèques en « activation anticipée » datée et signée d’après le journal des actions transverses.",
+        "pt": "Decisão de Xavier (21/10): duas portas — a coordenação conclui a oficina (perfil + regimento) ou a administração da rede ativa antes, com motivo obrigatório. Na base: UPDATE bruto recusado; a ativação tira a coordenação da constituição. Regularização das duas bibliotecas."
+      },
+      "y": {
+        "fr": "Sans cela, aucune bibliothèque ne peut naître par le parcours prévu, et chaque activation faite à la main laisse une coordination privée de sa propre bibliothèque.",
+        "pt": "Sem isso, nenhuma biblioteca nasce pelo percurso previsto, e cada ativação manual deixa uma coordenação sem acesso à própria biblioteca."
+      },
+      "f": {
+        "fr": [
+          "Migration appliquée par la CI ; plus aucune coordination en constitution pour une bibliothèque active (vérifié en production).",
+          "Suite `constitution_activation_tests.sql` verte en CI (18 tests : les deux portes, le mur, la sortie de constitution, les droits).",
+          "Les coordinations de Solidaires et d’Anarchief retrouvent Biblioteca et Painel sans être renvoyées vers l’atelier."
+        ],
+        "pt": [
+          "Migração aplicada pela CI; nenhuma coordenação em constituição para biblioteca ativa.",
+          "Suíte `constitution_activation_tests.sql` verde.",
+          "As coordenações de Solidaires e Anarchief voltam a acessar Biblioteca e Painel."
+        ]
+      },
+      "dep": {
+        "fr": "Aucune. Voisin de **G1** (emprunter les circuits jamais utilisés) : c’est l’un d’eux, et il était cassé.",
+        "pt": "Nenhuma. Vizinho de **G1**."
+      },
+      "r": [
+        "supabase/migrations/20261021193002_l_atelier_active_la_bibliotheque.sql",
+        "tests/sql/constitution_activation_tests.sql",
+        "src/pages/atelier/AtelierConstituicaoPage.jsx",
+        "src/pages/rede/RedePage.jsx",
+        "src/components/account/MinhaSolicitacaoPanel.jsx"
+      ],
+      "verif": {
+        "fr": "21/10 — ouvert sur constat en production. **21/10 — préparé** sur la branche `fix/activation-constitution` (worktree `~/anarbib-wt-activation-constitution`), **non poussé** : migration `20261021193002`, suite SQL 18/18 au banc local (image de la CI), page Réseau (bouton « Activer avant la fin de l’atelier » avec motif, l’erreur d’un `UPDATE` refusé enfin lue), atelier (bandeau « déjà active », lien vers la bibliothèque, profil de la personne rechargé après la fin), bandeau de `/conta`, 16 clés × 11 locales. Doctrine : `ONBO-D4` au registre.",
+        "pt": "21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`."
+      }
     }
   ]
 }

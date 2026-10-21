@@ -890,3 +890,7 @@ tests/sql/e40_etat_de_service_public_tests.sql
 # C33 (20/10/2026) : les 308 autorités créées pour Anarchief entrent dans la file de revue de l'Atelier — personnes au lot autorite_forme,
 # collectivités au lot autorite_collectivite ; ligne existante intacte, second passage sans effet, valider/corriger puis appliquer.
 tests/sql/c33_autorites_anarchief_en_revue_tests.sql
+# L'atelier active la bibliothèque (21/10/2026) : deux portes seulement — la coordination termine l'atelier (profil + règlement exigés),
+# ou l'administration du réseau active avant la fin avec un motif ; un UPDATE nu de is_active est refusé pour une biblio en constitution ;
+# l'activation sort la coordination de la constitution et trace l'appartenance sur la demande ; volet 0 appliqué tout de suite si déjà active.
+tests/sql/constitution_activation_tests.sql

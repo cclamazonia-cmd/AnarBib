@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-20** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-21** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -21,7 +21,7 @@
     - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 10
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 9
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
-    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 9
+    - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
     - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 20 octobre 2026 au soir** (production mesurée à 20 h 54 UTC, dépôt recompté sur `5c67ec55`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 19/10 au soir, `7d6475b6`). **541 migrations appliquées, 541 au dépôt** au moment de la mesure ; une 542e (couvertures, CAPAS-7) est arrivée dans la file juste après. Une journée plus calme : **+25 commits, +11 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — douze notices d'Anarchief de plus (lot 69), une autorité en double fusionnée, un Wikidata n'a plus qu'une fiche ; les 308 autorités d'Anarchief versées à la file de revue de l'Atelier (C33) ; une notice partagée compte enfin tous ses fonds (B41) ; deux dates de droits recoupées (D23) ; **la base** — +1 policy (l'état de service lisible sans compte, E40), +1 vue, +2 fonctions, avis inchangés ; **la CI** — le front servi est désormais comparé au build (I34), un rouge de `sql-tests` venu d'E40, corrigé dans l'heure ; **l'exploitation** — le test de restauration couvre les fichiers (I39) ; `~/anarbib` a divergé dans la soirée (4 commits locaux d'une session voisine, I36), puis cette session les a poussés depuis un worktree pendant le relevé (`4c2d442d` à `5031a4d6`, migration réhorodatée) : le checkout n'a plus qu'un commit de retard. **Le compte** : **68 items** et 275 lignes de clôture — B41, E40, D23, I39 et D27 clos le 20/10. **Ce qui presse** : D3 (Solidaires, avant le 26/10 — la révision n'a pas commencé), I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), I36 (le passage automatique du miroir à vérifier), G23 (une API d'IA à déclarer), A7 (réunion Lyon / Herbes Folles / ASR), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et décider d'un ramassage), K1 (le document signé de Belém).
 
-**Fraîcheur des constats au 2026-10-20.** **61 items sur 68** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **7** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-21.** **62 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **7** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -1128,6 +1128,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **G22** | Faire saisir le téléphone public de chaque bibliothèque | `P3` | Ouvert |
 | **G23** | Déclarer l'usage d'Anthropic comme sous-traitant, ou le retirer | `P1` | Ouvert |
 | **G24** | Trancher la gouvernance des données que l'audit du 17/10 renvoie au collectif (P10) | `P2` | Ouvert |
+| **G25** | Terminer l’atelier de constitution n’activait pas la bibliothèque : les deux bibliothèques passées par l’atelier ont été activées à la main, et leurs coordinations sont restées enfermées dans l’atelier | `P1` | En cours |
 
 #### G1 — Emprunter les circuits construits et jamais utilisés
 
@@ -1321,6 +1322,28 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Après A1 (une décision à trois) ou en AG (G20).
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### G25 — Terminer l’atelier de constitution n’activait pas la bibliothèque : les deux bibliothèques passées par l’atelier ont été activées à la main, et leurs coordinations sont restées enfermées dans l’atelier
+
+`P1` Prioritaire · État : **En cours** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL, React / JavaScript
+
+**État.** Constaté le 21/10 en production (lecture seule). Le lot 4 du cadrage ONBO-Q2 (« activation finale », 13/06) n’a jamais été fait : `api.fn_constitution_complete` datait `completed_at` et rien d’autre, et `fn_activate_approved_library_request` (la bascule complète) n’était appelée par personne, exécutable par `service_role` seul. La seule activation possible était le bouton « Réactiver » de la page Réseau, un `UPDATE libraries.is_active` nu : Solidaires (approuvée le 14/09) et Anarchief (24/09) ont été activées ainsi, ateliers à 0/10 et 3/10, et leurs coordinations sont restées `coordenador_em_constituicao` — `ProtectedRoute` les renvoie vers `/atelier` depuis toute page sauf `/conta`, Biblioteca et Painel de leur propre bibliothèque compris. Le chemin prévu menait à une impasse : terminer l’atelier figeait les volets, laissait la bibliothèque pré-active et la personne enfermée.
+
+*Vérifié : 21/10 — ouvert sur constat en production. **21/10 — préparé** sur la branche `fix/activation-constitution` (worktree `~/anarbib-wt-activation-constitution`), **non poussé** : migration `20261021193002`, suite SQL 18/18 au banc local (image de la CI), page Réseau (bouton « Activer avant la fin de l’atelier » avec motif, l’erreur d’un `UPDATE` refusé enfin lue), atelier (bandeau « déjà active », lien vers la bibliothèque, profil de la personne rechargé après la fin), bandeau de `/conta`, 16 clés × 11 locales. Doctrine : `ONBO-D4` au registre.*
+
+**Ce que c'est.** Décision de Xavier (21/10, spec onboarding §6.4) : deux portes et deux seulement. (1) La coordination termine l’atelier — profil (volet 0) et règlement (volet 10) exigés — et la bibliothèque devient active. (2) L’administration du réseau active avant la fin, motif obligatoire (`api.fn_constitution_activate_early`), l’atelier reste ouvert sans échéance. Dans la base : un `UPDATE` nu de `is_active` est refusé pour une bibliothèque dont l’atelier n’a franchi aucune porte, et toute activation sort la coordination de la constitution. Régularisation des deux bibliothèques en « activation anticipée » datée et signée d’après le journal des actions transverses.
+
+**Pourquoi ça compte.** Sans cela, aucune bibliothèque ne peut naître par le parcours prévu, et chaque activation faite à la main laisse une coordination privée de sa propre bibliothèque.
+
+**Ce qui compte comme fini.**
+
+- Migration appliquée par la CI ; plus aucune coordination en constitution pour une bibliothèque active (vérifié en production).
+- Suite `constitution_activation_tests.sql` verte en CI (18 tests : les deux portes, le mur, la sortie de constitution, les droits).
+- Les coordinations de Solidaires et d’Anarchief retrouvent Biblioteca et Painel sans être renvoyées vers l’atelier.
+
+**Dépendances.** Aucune. Voisin de **G1** (emprunter les circuits jamais utilisés) : c’est l’un d’eux, et il était cassé.
+
+*Renvois : `supabase/migrations/20261021193002_l_atelier_active_la_bibliotheque.sql` · `tests/sql/constitution_activation_tests.sql` · `src/pages/atelier/AtelierConstituicaoPage.jsx` · `src/pages/rede/RedePage.jsx` · `src/components/account/MinhaSolicitacaoPanel.jsx`*
 
 ---
 
@@ -2276,4 +2299,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-20. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5c67ec55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-21. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-20 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5c67ec55` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
