@@ -1128,7 +1128,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **G22** | Fazer cada biblioteca informar seu telefone público | `P3` | Aberto |
 | **G23** | Declarar o uso da Anthropic como subcontratada, ou retirá-lo | `P1` | Aberto |
 | **G24** | Decidir a governança dos dados que a auditoria de 17/10 remete ao coletivo (P10) | `P2` | Aberto |
-| **G25** | Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina | `P1` | Em curso |
+| **G25** | Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina | `P1` | A verificar |
 
 #### G1 — Percorrer os circuitos construídos e jamais usados
 
@@ -1325,11 +1325,11 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 #### G25 — Concluir a oficina de constituição não ativava a biblioteca: as duas bibliotecas que passaram pela oficina foram ativadas à mão, e as suas coordenações ficaram presas na oficina
 
-`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
+`P1` Prioritário · Estado : **A verificar** · Carga : alguns dias · O que exige : SQL / PostgreSQL, React / JavaScript
 
 **Estado.** Constatado em 21/10 em produção. A conclusão da oficina não ativava nada; a única ativação era o botão bruto da página Rede, que deixava a coordenação presa na constituição (Solidaires, Anarchief).
 
-*Verificado : 21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`.*
+*Verificado : 21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`. 21/10 — entregue e implantado (`4d94784b`, CI verde); verificado em produção: nenhuma coordenação em constituição, Solidaires e Anarchief regularizadas. Falta a confirmação das duas coordenações.*
 
 **O que é.** Decisão de Xavier (21/10): duas portas — a coordenação conclui a oficina (perfil + regimento) ou a administração da rede ativa antes, com motivo obrigatório. Na base: UPDATE bruto recusado; a ativação tira a coordenação da constituição. Regularização das duas bibliotecas.
 

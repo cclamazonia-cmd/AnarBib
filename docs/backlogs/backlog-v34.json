@@ -7024,7 +7024,7 @@
       "id": "G25",
       "d": "G",
       "p": "P1",
-      "s": "en-cours",
+      "s": "a-verifier",
       "e": "M",
       "sk": [
         "sql",
@@ -7070,8 +7070,8 @@
         "src/components/account/MinhaSolicitacaoPanel.jsx"
       ],
       "verif": {
-        "fr": "21/10 — ouvert sur constat en production. **21/10 — préparé** sur la branche `fix/activation-constitution` (worktree `~/anarbib-wt-activation-constitution`), **non poussé** : migration `20261021193002`, suite SQL 18/18 au banc local (image de la CI), page Réseau (bouton « Activer avant la fin de l’atelier » avec motif, l’erreur d’un `UPDATE` refusé enfin lue), atelier (bandeau « déjà active », lien vers la bibliothèque, profil de la personne rechargé après la fin), bandeau de `/conta`, 16 clés × 11 locales. Doctrine : `ONBO-D4` au registre.",
-        "pt": "21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`."
+        "fr": "21/10 — ouvert sur constat en production. **21/10 — préparé** sur la branche `fix/activation-constitution` (worktree `~/anarbib-wt-activation-constitution`), **non poussé** : migration `20261021193002`, suite SQL 18/18 au banc local (image de la CI), page Réseau (bouton « Activer avant la fin de l’atelier » avec motif, l’erreur d’un `UPDATE` refusé enfin lue), atelier (bandeau « déjà active », lien vers la bibliothèque, profil de la personne rechargé après la fin), bandeau de `/conta`, 16 clés × 11 locales. Doctrine : `ONBO-D4` au registre. **21/10 — livré et déployé** (`4d94784b`, `ci.yml` #1951 et `sql-tests.yml` #1952 verts). Vérifié en production le soir même : migration `20261021193002` appliquée, les deux triggers en place, `fn_constitution_activer`/`fn_constitution_sortir` fermées à `authenticated` et `anon`, la porte anticipée ouverte à `authenticated` seul ; **plus aucune coordination en constitution** ; Solidaires et Anarchief régularisées (activation anticipée datée d’après le journal — 15/09 et 01/10 —, signée, motivée), `approved_membership_ref` posé ; libellé « Activer avant la fin de l’atelier » servi par le chunk `fr` d’app.anarbib.org. **Reste** : que les deux coordinations confirment retrouver Biblioteca et Painel, et la première activation par la porte 1 en conditions réelles.",
+        "pt": "21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`. 21/10 — entregue e implantado (`4d94784b`, CI verde); verificado em produção: nenhuma coordenação em constituição, Solidaires e Anarchief regularizadas. Falta a confirmação das duas coordenações."
       }
     }
   ]
