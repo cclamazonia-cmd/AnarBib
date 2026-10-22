@@ -6,6 +6,7 @@
 --           supabase/migrations/20261019*_les_deux_dates_que_le_503_avait_cachees (2, 19/10),
 --           supabase/migrations/20261021*_trente_cinq_descripteurs_de_plus (35, 21/10),
 --           supabase/migrations/20261022*_la_quatrieme_facette_les_langues (53, 22/10),
+--           supabase/migrations/20261022*_les_liens_que_la_liste_d_hotes_avait_jetes (520 UPDATE, 22/10),
 --           scripts/ficedl_thesaurus_sync.mjs (le mapping), docs/journal/ficedl/
 --
 -- CE QUE CETTE SUITE PROUVE.
@@ -25,7 +26,7 @@
 --
 -- CE QU'ELLE NE PROUVE PAS.
 --   Rien sur la production elle-même. L'empreinte de référence ci-dessous est
---   celle du DÉPÔT rejoué (relevée le 22/10/2026 sur le rejeu local, et les 658
+--   celle du DÉPÔT rejoué (relevée le 22/10/2026 au soir sur le rejeu local, après la relecture des liens ; et les 658
 --   lignes antérieures aux cinquante-trois langues du 22/10 y rendent exactement
 --   e771dd1a6c8c951e8cb438cf826ce371, l'empreinte de la production avant
 --   déploiement : c'est ce qui permet d'affirmer l'égalité sans toucher à la
@@ -47,7 +48,7 @@ DO $$
 DECLARE
   ok int := 0; total int := 7;
   n int; d int; h int; empreinte text; sujet int; lien int;
-  attendu_empreinte constant text := 'd630f47639524d0e9f9c7dfc3e4e40c4';
+  attendu_empreinte constant text := '922544eb68a9396427fbe243328b1711';
   mot_date text;
 BEGIN
   -- T1 : 623 termes
