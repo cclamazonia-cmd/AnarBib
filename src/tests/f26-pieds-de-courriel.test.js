@@ -307,9 +307,10 @@ describe('suite de F26 — notify-network-weekly-report n’a plus de texte port
 describe('suite de F26 — le rapport hebdomadaire part dans la langue de chaque destinataire', () => {
   const SECRET_RAPPORT = 'secret-rapport';
   const ADMIN_FR = { id: 'u-adm', email: 'xavier@exemplo.test', first_name: 'Xavier', preferred_language: 'fr' };
-  function monterRapport() {
+  function monterRapport(rpc) {
     return monterEF({
       entree: 'notify-network-weekly-report/index.ts',
+      ...(rpc ? { rpc } : {}),
       env: { WEBHOOK_SECRET_NOTIFY_NETWORK_WEEKLY_REPORT: SECRET_RAPPORT, SENDER_EMAIL: 'no-reply@exemplo.test', NETWORK_ADMIN_CC: 'admins@exemplo.test',
         FOOTER_TEXT: 'Devise globale à ne plus lire', NETWORK_FOOTER_TEXT: 'Devise réseau à ne plus lire' },
       repondre: (_s, table, a) => {
@@ -358,6 +359,33 @@ describe('suite de F26 — le rapport hebdomadaire part dans la langue de chaque
       expect(e.html).not.toMatch(/Devise (globale|réseau)/);
       for (const repli of REPLIS_PT) expect(e.html).not.toContain(repli);
     }
+  });
+
+  // D28 (22/10/2026) : les fichiers orphelins des seaux PDF/EPUB, lus par
+  // fn_stockage_orphelins_v1 ; une lecture en échec n'empêche pas le rapport.
+  it('D28 — les fichiers orphelins sont listés, sans rien supprimer', async () => {
+    const ef = monterRapport((_s, nom) => (nom === 'fn_stockage_orphelins_v1'
+      ? { data: [{ bucket: 'anarbib-pdf-public', chemin: 'books/7594/essai.pdf', octets: 18700000, depose_le: '2026-10-17T10:00:00Z' }], error: null }
+      : { data: [], error: null }));
+    const { statut, corps } = await appelerRapport(ef);
+    expect(statut, JSON.stringify(corps)).toBe(200);
+    expect(corps.orphelins).toBe(1);
+    expect(ef.rpcs.map((r) => r.nom)).toContain('fn_stockage_orphelins_v1');
+    const fr = mailA(ef.envois, 'xavier@exemplo.test');
+    for (const cle of ['net.sum.orphans', 'net.tbl.orphans', 'net.col.bucket', 'net.col.file', 'net.col.sizeMb', 'net.col.depositedAt']) {
+      expect(fr.html, cle).toContain(mail.tMailTexte('fr', cle).replace(/'/g, '&#039;'));
+    }
+    expect(fr.html).toContain('books/7594/essai.pdf');
+    expect(fr.html).toContain('18.7');
+    expect(fr.html).toContain('17/10/2026');
+  });
+
+  it('D28 — une lecture des orphelins en échec laisse partir le rapport, avec « — »', async () => {
+    const ef = monterRapport(() => ({ data: null, error: { message: 'permission denied' } }));
+    const { statut, corps } = await appelerRapport(ef);
+    expect(statut, JSON.stringify(corps)).toBe(200);
+    expect(corps.orphelins).toBeNull();
+    expect(ef.envois.length).toBeGreaterThan(0);
   });
 });
 

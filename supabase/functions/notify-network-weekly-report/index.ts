@@ -454,6 +454,17 @@ serve(async (req)=>{
       if (row.event_type === "inscricao") entry.inscricoes_leitores += 1;
       else if (row.event_type === "saida") entry.saidas_leitores += 1;
     }
+    // D28 (22/10/2026) : les fichiers des seaux PDF/EPUB qu'aucune ressource ne
+    // cite, à l'administration du réseau — rien n'est supprimé. Une erreur de
+    // lecture n'empêche pas le rapport : la ligne affiche « — ».
+    let orphelins = null;
+    try {
+      const { data, error } = await sb.rpc("fn_stockage_orphelins_v1");
+      if (error) throw new Error(error.message);
+      orphelins = data || [];
+    } catch (e) {
+      console.error("network weekly report: orphelins illisibles", String(e?.message ?? e));
+    }
     const librarySummaries = Array.from(summaryByLibrary.values()).sort((a, b)=>a.library_name.localeCompare(b.library_name, "pt-BR", {
         sensitivity: "base"
       }));
@@ -522,7 +533,8 @@ serve(async (req)=>{
           ligneSynthese(t("net.sum.returns"), totals.devolucoes),
           ligneSynthese(t("net.sum.overdue"), totals.atrasos_ativos),
           ligneSynthese(t("net.sum.illCreated"), pebTotals.criados),
-          ligneSynthese(t("net.sum.illCirculating"), pebTotals.em_circulacao, true)
+          ligneSynthese(t("net.sum.illCirculating"), pebTotals.em_circulacao),
+          ligneSynthese(t("net.sum.orphans"), orphelins ? orphelins.length : "—", true)
         ].join("")}
         </table>
       </div>
@@ -564,6 +576,13 @@ serve(async (req)=>{
           formatDate(String(p.created_at || "").slice(0, 10), loc)
         ]);
 
+      const orphelinRows = (orphelins || []).map((o)=>[
+          String(o.bucket || "—"),
+          String(o.chemin || "—"),
+          o.octets == null ? "—" : (Number(o.octets) / 1e6).toFixed(1),
+          formatDate(String(o.depose_le || "").slice(0, 10), loc)
+        ]);
+
       const subject = t("net.subject", { brand: routing.brandName, start: formatDate(weekStart, loc), end: formatDate(weekEnd, loc) });
       const { html, text } = renderEmail({
         locale: loc,
@@ -598,7 +617,13 @@ serve(async (req)=>{
             "net.col.state",
             "net.col.documents",
             "net.col.createdAt"
-          ].map((c)=>t(c)), pebExchangeRows)
+          ].map((c)=>t(c)), pebExchangeRows),
+          renderTable(t("net.tbl.orphans"), [
+            "net.col.bucket",
+            "net.col.file",
+            "net.col.sizeMb",
+            "net.col.depositedAt"
+          ].map((c)=>t(c)), orphelinRows)
         ],
         routing
       });
@@ -634,6 +659,7 @@ serve(async (req)=>{
       subjects: Object.fromEntries([...rendus].map(([loc, r])=>[loc, r.subject])),
       totals,
       peb_totals: pebTotals,
+      orphelins: orphelins ? orphelins.length : null,
       libraries: librarySummaries
     });
   } catch (error) {

@@ -900,3 +900,9 @@ tests/sql/c33_source_nta_tests.sql
 # C27 (22/10/2026) : les sujets d'une copie d'import posés sur les notices d'un préfixe (private.fn_indexer_sujets_importes) — ordre du wiki,
 # formes doubles, existant gardé, rejouable, refus vers une matière proposée ou absente, hors préfixe intact, aucune matière créée.
 tests/sql/c27_sujets_importes_tests.sql
+# D28 (22/10/2026) : le relevé des fichiers orphelins des seaux PDF/EPUB (fn_stockage_orphelins_v1) — orphelin relevé avec sa taille,
+# fichiers cités (notice, brouillon, actif) écartés, récent / marqueur de dossier / autre seau écartés, lecture seule, service_role seul.
+tests/sql/d28_fichiers_orphelins_tests.sql
+# J10 / DOC-GEL-2 (22/10/2026) : les appels aux flux OPDS et RSS comptés par jour, route et famille d'application (fn_flux_compter_v1),
+# un compteur par jour, client hors forme en « autre », refus, table et fonction fermées au lectorat.
+tests/sql/flux_appels_comptes_tests.sql
