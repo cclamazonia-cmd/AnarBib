@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildServerFilters, SEARCH_COLS } from '@/lib/catalogFilters';
+import { lireFiltresURL, buildServerFilters, SEARCH_COLS } from '@/lib/catalogFilters';
 
 // Base : tous les filtres « neutres » (équivalent d'un écran de catalogue vierge).
 const base = {
@@ -11,6 +11,42 @@ const base = {
 };
 
 const orGroup = (term) => `or(${SEARCH_COLS.map(c => `${c}.ilike.%${term}%`).join(',')})`;
+
+// E6 : la lecture de l'URL est sortie de CatalogPage, qui était à 256 octets de
+// la limite de 65 Ko que sa garde fige. L'URL est la source de vérité d'un lien
+// profond : ce qu'elle ne porte pas ne doit pas être hérité de la session.
+describe("lireFiltresURL — les filtres d'un lien profond", () => {
+  const sp = (s) => new URLSearchParams(s);
+
+  it("sans intention, le dit — l'appelant ne doit alors rien remettre à zéro", () => {
+    expect(lireFiltresURL(sp('')).hasIntent).toBe(false);
+    expect(lireFiltresURL(sp('tri=titre')).hasIntent).toBe(false);
+  });
+
+  it('rend des chaînes vides, jamais null', () => {
+    const u = lireFiltresURL(sp('q=kropotkine'));
+    expect(u.q).toBe('kropotkine');
+    expect(u.autor).toBe('');
+    expect(u.idioma).toBe('');
+    expect(u.library).toBe('');
+  });
+
+  it('idioma porte un code de langue, et compte comme une intention', () => {
+    const u = lireFiltresURL(sp('idioma=nl'));
+    expect(u.idioma).toBe('nl');
+    expect(u.hasIntent).toBe(true);
+  });
+
+  it('un paramètre présent mais vide est une intention : il remet le filtre à zéro', () => {
+    expect(lireFiltresURL(sp('q=')).hasIntent).toBe(true);
+  });
+
+  it('la bibliothèque de la route primé sur ?biblioteca=', () => {
+    expect(lireFiltresURL(sp('biblioteca=cira'), 'ccl').library).toBe('ccl');
+    expect(lireFiltresURL(sp('biblioteca=cira')).library).toBe('cira');
+    expect(lireFiltresURL(sp(''), 'ccl').hasIntent).toBe(true);
+  });
+});
 
 describe('buildServerFilters — recherche multi-mots', () => {
   it('un seul mot → un groupe or() sur toutes les colonnes, sous and', () => {
@@ -75,6 +111,35 @@ describe('buildServerFilters — recherche multi-mots', () => {
   it('guillemet orphelin nettoyé → mots séparés, aucun motif pollué', () => {
     const f = buildServerFilters({ ...base, search: '"apoio mútuo' });
     expect(f.and).toBe(`(${orGroup('apoio')},${orGroup('mútuo')})`);
+  });
+});
+
+// Le pont entre les descripteurs de langue du thésaurus FICEDL (22/10/2026) et
+// le catalogue : le thésaurus nomme ses langues par le code court (« pt »), le
+// référentiel des notices par le code complet (« pt-BR »). Un filtre d'égalité
+// stricte sur « pt » ne rendait AUCUNE des 1 278 notices lusophones.
+describe('buildServerFilters — filtre de langue', () => {
+  it('« pt », absent du référentiel qui dit « pt-BR », atteint ses variantes', () => {
+    const f = buildServerFilters({ ...base, languageFilter: 'pt' });
+    expect(f.and).toBe('(or(idioma.eq.pt,idioma.like.pt-*))');
+    expect(f.idioma).toBeUndefined();
+  });
+
+  it('un code DU référentiel reste en égalité stricte (CONV-7)', () => {
+    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).idioma).toBe('eq.fr');
+    expect(buildServerFilters({ ...base, languageFilter: 'nl' }).idioma).toBe('eq.nl');
+    expect(buildServerFilters({ ...base, languageFilter: 'pt-BR' }).idioma).toBe('eq.pt-BR');
+    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).and).toBeUndefined();
+  });
+
+  it('une saisie libre reste atteignable (résidu d\'avant la normalisation)', () => {
+    const f = buildServerFilters({ ...base, languageFilter: 'Português' });
+    expect(f.idioma).toBe('ilike.%Português%');
+  });
+
+  it('ne filtre rien sur une valeur vide ou faite d\'espaces', () => {
+    expect(buildServerFilters({ ...base, languageFilter: '   ' }).idioma).toBeUndefined();
+    expect(buildServerFilters({ ...base, languageFilter: '   ' }).and).toBeUndefined();
   });
 });
 

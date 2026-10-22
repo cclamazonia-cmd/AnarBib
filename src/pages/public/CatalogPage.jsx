@@ -5,7 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, apiRpc, SUPABASE_URL } from '@/lib/supabase';
 import { bibliothequesDesReseaux, bibliothequesFiltrees } from '@/lib/reseaux';
 import { localizeError } from '@/lib/localizeError';
-import { buildServerFilters } from '@/lib/catalogFilters';
+import { lireFiltresURL, buildServerFilters } from '@/lib/catalogFilters';
 import { resoudreFiltreAuteur, intersecterContraintes } from '@/lib/catalogAuthorFilter';
 import { buildWorksFilters, worksSortParam, groupBooksIntoWorks, WORKS_PAGE_SIZE } from '@/lib/catalogWorks';
 import { catalogueDeSecours } from '@/lib/catalogueFallback';
@@ -170,14 +170,12 @@ export default function CatalogPage() {
   // et la vue serveur ne contient que des biblios légitimes.
   // [] en deps : exécution unique, volontaire (montage seulement).
   useEffect(() => {
-    const qpLibrary = urlSearchParams.get('biblioteca');
-    const libFromUrl = routeLibrarySlug || qpLibrary;
-    // Si l'URL ne porte aucune intention (ni slug ni query param),
-    // on ne touche à rien : comportement historique préservé.
-    const hasUrlIntent = libFromUrl
-      || urlSearchParams.has('q') || urlSearchParams.has('autor')
-      || urlSearchParams.has('editora') || urlSearchParams.has('ano') || urlSearchParams.has('subject');
-    if (!hasUrlIntent) return;
+    // La lecture est dans catalogFilters (lireFiltresURL) : la page porte son
+    // état, pas l'analyse de l'URL. Sans intention dans l'URL, on ne touche à
+    // rien — comportement historique préservé.
+    const u = lireFiltresURL(urlSearchParams, routeLibrarySlug);
+    if (!u.hasIntent) return;
+    const libFromUrl = u.library;
 
     // Filtre bibliothèque : URL prioritaire, sinon __all__.
     setLibraryFilter(libFromUrl ? [libFromUrl] : []);
@@ -185,15 +183,16 @@ export default function CatalogPage() {
     // pourrait cacher la bibliothèque demandée.
     setNetworkFilter([]);
     // Autres filtres : valeur de l'URL si présente, sinon remise à zéro.
-    setSearch(urlSearchParams.get('q') || '');
-    setAuthorFilter(urlSearchParams.get('autor') || '');
+    setSearch(u.q);
+    setAuthorFilter(u.autor);
     setAuthorIdFilter('');
-    setPublisherFilter(urlSearchParams.get('editora') || '');
-    setYearFilter(urlSearchParams.get('ano') || '');
-    setSubjectFilter(urlSearchParams.get('subject') || ''); setSubjectLabel('');
+    setPublisherFilter(u.editora);
+    setYearFilter(u.ano);
+    setSubjectFilter(u.subject); setSubjectLabel('');
+    setLanguageFilter(u.idioma);   // les descripteurs de langue du thésaurus y renvoient
     // Filtres sans représentation URL : remis à zéro pour un écran propre.
     setAvailabilityFilter('__all__');
-    setIsbnFilter(''); setLanguageFilter(''); setCddFilter('');
+    setIsbnFilter(''); setCddFilter('');
     setSubjectsFilter(''); setMaterialFilter('__all__');
     setCollectionFilter(''); setPlaceFilter('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -832,6 +831,7 @@ export default function CatalogPage() {
     if (dPublisher) url.searchParams.set('editora', dPublisher);
     if (dYear) url.searchParams.set('ano', dYear);
     if (subjectFilter) url.searchParams.set('subject', subjectFilter);
+    if (dLanguage) url.searchParams.set('idioma', dLanguage);
     return url.toString();
   }
   function copySearchLink() {

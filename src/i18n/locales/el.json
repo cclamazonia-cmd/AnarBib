@@ -37,6 +37,8 @@
   "ficedl.backToIndex": "Όλοι οι περιγραφείς",
   "ficedl.term.notFound": "Ο περιγραφέας δεν βρέθηκε.",
   "ficedl.term.hierarchy": "Ιεραρχία",
+  "ficedl.term.inAnarbib": "Στον κατάλογο του AnarBib",
+  "ficedl.term.inCatalog": "{count, plural, one {# τίτλος σε αυτή τη γλώσσα} other {# τίτλοι σε αυτή τη γλώσσα}}",
   "ficedl.term.allLanguages": "{count, plural, one {Όρος} other {Όροι, σε # γλώσσες}}",
   "ficedl.term.proposed": "Πρόταση του AnarBib, δεν περιλαμβάνεται ακόμη στον θησαυρό της FICEDL",
   "ficedl.term.partnerCatalogs": "Στους συνεργαζόμενους καταλόγους",

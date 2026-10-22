@@ -37,6 +37,8 @@
   "ficedl.backToIndex": "Tots els descriptors",
   "ficedl.term.notFound": "Descriptor no trobat.",
   "ficedl.term.hierarchy": "Jerarquia",
+  "ficedl.term.inAnarbib": "Al catàleg d'AnarBib",
+  "ficedl.term.inCatalog": "{count, plural, one {# registre en aquesta llengua} other {# registres en aquesta llengua}}",
   "ficedl.term.allLanguages": "{count, plural, one {Terme} other {Termes, en # llengües}}",
   "ficedl.term.proposed": "Proposat per AnarBib, encara no és al tesaurus de la FICEDL",
   "ficedl.term.partnerCatalogs": "Als catàlegs associats",

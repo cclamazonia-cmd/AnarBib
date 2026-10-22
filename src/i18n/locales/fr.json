@@ -37,6 +37,8 @@
   "ficedl.backToIndex": "Tous les descripteurs",
   "ficedl.term.notFound": "Descripteur introuvable.",
   "ficedl.term.hierarchy": "Hiérarchie",
+  "ficedl.term.inAnarbib": "Dans le catalogue d'AnarBib",
+  "ficedl.term.inCatalog": "{count, plural, one {# notice dans cette langue} other {# notices dans cette langue}}",
   "ficedl.term.allLanguages": "{count, plural, one {Libellé} other {Libellés, en # langues}}",
   "ficedl.term.proposed": "Proposé par AnarBib, pas encore dans le thésaurus de la FICEDL",
   "ficedl.term.partnerCatalogs": "Dans les catalogues partenaires",

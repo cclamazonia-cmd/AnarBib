@@ -37,6 +37,8 @@
   "ficedl.backToIndex": "Ĉiuj priskribiloj",
   "ficedl.term.notFound": "Priskribilo ne trovita.",
   "ficedl.term.hierarchy": "Hierarkio",
+  "ficedl.term.inAnarbib": "En la katalogo de AnarBib",
+  "ficedl.term.inCatalog": "{count, plural, one {# registro en tiu lingvo} other {# registroj en tiu lingvo}}",
   "ficedl.term.allLanguages": "{count, plural, one {Termino} other {Terminoj, en # lingvoj}}",
   "ficedl.term.proposed": "Proponita de AnarBib, ankoraŭ ne en la tezaŭro de FICEDL",
   "ficedl.term.partnerCatalogs": "En la partneraj katalogoj",

@@ -37,6 +37,8 @@
   "ficedl.backToIndex": "Alle descriptoren",
   "ficedl.term.notFound": "Descriptor niet gevonden.",
   "ficedl.term.hierarchy": "Hiërarchie",
+  "ficedl.term.inAnarbib": "In de catalogus van AnarBib",
+  "ficedl.term.inCatalog": "{count, plural, one {# titel in deze taal} other {# titels in deze taal}}",
   "ficedl.term.allLanguages": "{count, plural, one {Term} other {Termen, in # talen}}",
   "ficedl.term.proposed": "Voorgesteld door AnarBib, nog niet in de thesaurus van de FICEDL",
   "ficedl.term.partnerCatalogs": "In de partnercatalogi",

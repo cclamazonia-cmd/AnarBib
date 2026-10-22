@@ -48,7 +48,7 @@ export default function FicedlTermPage() {
     (async () => {
       const { data } = await supabase
         .from('ficedl_thesaurus_terms')
-        .select('mot_id, facet, labels, labels_proposes, el_roman, hierarchy, catalog_links, source_url')
+        .select('mot_id, facet, labels, labels_proposes, el_roman, hierarchy, catalog_links, source_url, import_flags')
         .eq('mot_id', motId)
         .maybeSingle();
       if (!cancelled) setTerm(data || null);
@@ -65,6 +65,33 @@ export default function FicedlTermPage() {
   // Les langues que CETTE fiche porte vraiment : une date ou un descripteur que
   // la source n'a pas traduit n'en a qu'une, et le titre de la section le dit.
   const languesPortees = LANGS.filter((code) => term && term.labels && term.labels[code]);
+
+  // Descripteur de la facette « langues » : son code vit dans les drapeaux, pas
+  // dans une colonne. On ne garde que ce qui a la forme d'un code de langue —
+  // « barese » porte « * » à la source, qu'on a recopié tel quel.
+  const codeLangue = (() => {
+    if (!term || !(term.facet || []).includes('langues')) return null;
+    const d = (term.import_flags || []).find((f) => typeof f === 'string' && f.startsWith('code_de_langue:'));
+    const brut = d ? d.slice('code_de_langue:'.length) : '';
+    return /^[a-z]{2,3}$/.test(brut) ? brut : null;
+  })();
+
+  // Combien de notices publiques AnarBib décrit-il dans cette langue ? On compte
+  // sur la RACINE : le descripteur « portugais » porte « pt » là où les notices
+  // portent « pt-BR ».
+  const [nbNotices, setNbNotices] = useState(null);
+  useEffect(() => {
+    if (!codeLangue) { setNbNotices(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { count } = await supabase
+        .from('v_books_public_catalog_v2')
+        .select('id', { count: 'exact', head: true })
+        .or(`idioma.eq.${codeLangue},idioma.like.${codeLangue}-*`);
+      if (!cancelled) setNbNotices(typeof count === 'number' ? count : null);
+    })();
+    return () => { cancelled = true; };
+  }, [codeLangue]);
   useDocumentTitle(label || t({ id: 'pageTitle.ficedl' }));
 
   const panel = {
@@ -147,6 +174,18 @@ export default function FicedlTermPage() {
                       </div>
                     ))}
                   </dl>
+                </>
+              )}
+
+              {/* Le catalogue d'AnarBib dans cette langue (facette « langues ») */}
+              {codeLangue && nbNotices > 0 && (
+                <>
+                  <div style={sectionTitle}>{t({ id: 'ficedl.term.inAnarbib' })}</div>
+                  <p style={{ margin: 0, fontSize: '.92rem' }}>
+                    <Link to={`/?idioma=${codeLangue}`} style={{ ...linkBlue }}>
+                      {t({ id: 'ficedl.term.inCatalog' }, { count: nbNotices })}
+                    </Link>
+                  </p>
                 </>
               )}
 

@@ -4,7 +4,33 @@
 //
 // Session : Catalogue longue traîne (recherche + fiche auteur)
 
+// Le référentiel des langues de notice (CONV-7) : il dit si un code est au
+// référentiel, ce dont le filtre de langue a besoin.
+import { LANGUAGE_CODES } from './languages';
+
 // Colonnes balayées par la recherche libre (texte brut).
+// Les filtres que l'URL porte, et eux seuls. L'URL est la source de vérité d'un
+// lien profond : un lien partagé doit produire le même écran chez tout le monde,
+// sans rien hériter de ce qui traîne en session. `biblioteca` est à part, la
+// route pouvant la porter comme segment.
+export const URL_FILTER_KEYS = ['q', 'autor', 'editora', 'ano', 'subject', 'idioma'];
+
+/**
+ * Lit les filtres d'un lien profond. Rend des chaînes (jamais null), et dit si
+ * l'URL porte une intention — sans quoi l'appelant ne doit RIEN remettre à zéro.
+ *
+ * @param {URLSearchParams} sp
+ * @param {string} routeLibrarySlug  bibliothèque portée par la route, prioritaire
+ */
+export function lireFiltresURL(sp, routeLibrarySlug = '') {
+  const get = (k) => sp.get(k) || '';
+  const library = routeLibrarySlug || get('biblioteca');
+  const filtres = { library };
+  for (const k of URL_FILTER_KEYS) filtres[k] = get(k);
+  filtres.hasIntent = Boolean(library) || URL_FILTER_KEYS.some((k) => sp.has(k));
+  return filtres;
+}
+
 export const SEARCH_COLS = ['titulo', 'autor', 'editora', 'bib_ref', 'cdd', 'assuntos', 'subtitulo', 'isbn'];
 
 /**
@@ -97,7 +123,27 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
   // correspondance reste ainsi atteignable.
   if (languageFilter.trim()) {
     const lang = languageFilter.trim();
-    f['idioma'] = /^[a-z]{2}(-[A-Z]{2})?$/.test(lang) ? `eq.${lang}` : `ilike.%${lang}%`;
+    // CONV-7 : un code du référentiel donne une égalité stricte. UN SEUL cas
+    // demande d'élargir — un code court qui n'EST PAS au référentiel alors
+    // qu'une de ses variantes régionales y est. Aujourd'hui c'est « pt » et lui
+    // seul : le référentiel écrit le portugais « pt-BR », et les 1 278 notices
+    // lusophones (sur 3 216 décrites au 22/10/2026) portent ce code-là. Les
+    // descripteurs de langue du thésaurus FICEDL, eux, nomment par le code
+    // court : sans cet élargissement, « portugais » renverrait zéro notice.
+    // « fr », « nl », « es » restent en égalité stricte, puisqu'ils SONT au
+    // référentiel — élargir n'y changerait rien et contredirait la doctrine.
+    const courtSansVariante = /^[a-z]{2}$/.test(lang)
+      && !LANGUAGE_CODES.includes(lang)
+      && LANGUAGE_CODES.some((c) => c.startsWith(`${lang}-`));
+    if (courtSansVariante) {
+      andClauses.push(`or(idioma.eq.${lang},idioma.like.${lang}-*)`);
+    } else if (/^[a-z]{2}(-[A-Z]{2})?$/.test(lang)) {
+      f['idioma'] = `eq.${lang}`;
+    } else {
+      // Saisie libre (URL forgée à la main, favori d'avant la normalisation) :
+      // le résidu hors table de correspondance reste atteignable.
+      f['idioma'] = `ilike.%${lang}%`;
+    }
   }
   if (cddFilter.trim()) f['cdd'] = `ilike.${cddFilter.trim()}%`;
   if (subjectsFilter.trim()) f['assuntos'] = `ilike.%${subjectsFilter.trim()}%`;
