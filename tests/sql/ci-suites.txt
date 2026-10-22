@@ -894,3 +894,6 @@ tests/sql/c33_autorites_anarchief_en_revue_tests.sql
 # ou l'administration du réseau active avant la fin avec un motif ; un UPDATE nu de is_active est refusé pour une biblio en constitution ;
 # l'activation sort la coordination de la constitution et trace l'appartenance sur la demande ; volet 0 appliqué tout de suite si déjà active.
 tests/sql/constitution_activation_tests.sql
+# C33 (22/10/2026) : le NTA de la KB, troisième source de private.fn_enrichir_autorites — NTA seul, NTA + Wikidata de ses liens
+# (tout attribué au NTA), rejouable, conflit de NTA, refus, chemin Wikidata intact.
+tests/sql/c33_source_nta_tests.sql

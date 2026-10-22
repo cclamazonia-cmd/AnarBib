@@ -1,0 +1,242 @@
+[
+ {
+  "id": 11586,
+  "nom": "Boudewijn Chorus",
+  "decision": "nta_deux_signaux",
+  "nta": "p068716184",
+  "preuve_nta": "titre « de colonne eenmaal in beweging »",
+  "viaf": "280922533"
+ },
+ {
+  "id": 11591,
+  "nom": "Alexander Schapiro",
+  "decision": "nta_deux_signaux",
+  "nta": "p07157767X",
+  "preuve_nta": "titre « waarom verloren wij de revolutie »",
+  "viaf": "3763731",
+  "qid": "Q821655",
+  "isni": "0000000030094248"
+ },
+ {
+  "id": 11617,
+  "nom": "John M. Swomley Jr.",
+  "decision": "nta_deux_signaux",
+  "nta": "p067861512",
+  "preuve_nta": "titre « bevrijdend geweld bevrijdt niet »",
+  "viaf": "6175292",
+  "qid": "Q55721058",
+  "isni": "0000000084203219",
+  "naissance": 1915
+ },
+ {
+  "id": 11618,
+  "nom": "H. Kolthek Jr.",
+  "decision": "nta_deux_signaux",
+  "nta": "p069240620",
+  "preuve_nta": "titre « de opruier »",
+  "viaf": "80752006",
+  "qid": "Q13654577",
+  "isni": "0000000114619961",
+  "naissance": 1872,
+  "mort": 1946,
+  "pays": "NL"
+ },
+ {
+  "id": 11625,
+  "nom": "Ruud Uittenhout",
+  "decision": "nta_deux_signaux",
+  "nta": "p069625492",
+  "preuve_nta": "titre « gustav landauer »",
+  "viaf": "280497931",
+  "isni": "0000000387512334"
+ },
+ {
+  "id": 11630,
+  "nom": "Johny Lenaerts",
+  "decision": "nta_deux_signaux",
+  "nta": "p089885872",
+  "preuve_nta": "titre « libertair municipalisme »",
+  "viaf": "289336058",
+  "isni": "0000000394732191"
+ },
+ {
+  "id": 11632,
+  "nom": "Simon Radius",
+  "decision": "nta_deux_signaux",
+  "nta": "p071922369",
+  "preuve_nta": "titre « proudhon over kerk en samenleving »",
+  "viaf": "289223848",
+  "isni": "000000039463433X"
+ },
+ {
+  "id": 11634,
+  "nom": "André Bons",
+  "decision": "nta_deux_signaux",
+  "nta": "p073364460",
+  "preuve_nta": "titre « niet alleen vrijheid »",
+  "viaf": "286110660",
+  "isni": "000000039214533X"
+ },
+ {
+  "id": 11662,
+  "nom": "B. Damme",
+  "decision": "nta_deux_signaux",
+  "nta": "p069820082",
+  "preuve_nta": "titre « al zaaiende voorwaarts »",
+  "viaf": "280468722",
+  "isni": "0000000387496768"
+ },
+ {
+  "id": 11664,
+  "nom": "Bas Moreel",
+  "decision": "nta_deux_signaux",
+  "nta": "p070247587",
+  "preuve_nta": "titre « zelfbestuur »",
+  "viaf": "289567003",
+  "isni": "0000000394919095"
+ },
+ {
+  "id": 11672,
+  "nom": "C. Drossaart van Dusseldorp",
+  "decision": "nta_deux_signaux",
+  "nta": "p072778644",
+  "preuve_nta": "titre « peter kropotkin »",
+  "viaf": "207630361",
+  "isni": "0000000393529810"
+ },
+ {
+  "id": 11684,
+  "nom": "E. Zandstra",
+  "decision": "nta_deux_signaux",
+  "nta": "p070259496",
+  "preuve_nta": "titre « vrijheid het leven van f domela nieuwenhuis »",
+  "viaf": "194171011",
+  "qid": "Q5709162",
+  "isni": "0000000140712238",
+  "naissance": 1897,
+  "mort": 1974,
+  "pays": "NL"
+ },
+ {
+  "id": 11692,
+  "nom": "F. Boenders",
+  "decision": "nta_deux_signaux",
+  "nta": "p068631340",
+  "preuve_nta": "titre « de volle vrijheid »",
+  "qid": "Q2548537",
+  "isni": "0000000107823649",
+  "naissance": 1942
+ },
+ {
+  "id": 11709,
+  "nom": "Han Kuysten",
+  "decision": "nta_deux_signaux",
+  "nta": "p097044032",
+  "preuve_nta": "titre « eerst kanonnen dan boter »",
+  "viaf": "280076680",
+  "isni": "0000000387213908"
+ },
+ {
+  "id": 11711,
+  "nom": "Hans Jar",
+  "decision": "nta_deux_signaux",
+  "nta": "p079276083",
+  "preuve_nta": "titre « fascisme »",
+  "viaf": "211630410",
+  "isni": "0000000391396129"
+ },
+ {
+  "id": 11713,
+  "nom": "Harmen van Houten",
+  "decision": "nta_deux_signaux",
+  "nta": "p071337490",
+  "preuve_nta": "titre « anarchisme in drenthe »",
+  "viaf": "16232165",
+  "isni": "0000000028285619",
+  "naissance": 1900,
+  "pays": "NL"
+ },
+ {
+  "id": 11714,
+  "nom": "Henri Haenen",
+  "decision": "nta_deux_signaux",
+  "nta": "p070888248",
+  "preuve_nta": "titre « stemmen is toestemmen »",
+  "viaf": "206700628",
+  "isni": "0000000393226772"
+ },
+ {
+  "id": 11722,
+  "nom": "J. H. Mackay",
+  "decision": "nta_deux_signaux",
+  "nta": "p071119396",
+  "preuve_nta": "titre « de anarchisten »",
+  "viaf": "50017706",
+  "naissance": 1864,
+  "mort": 1933
+ },
+ {
+  "id": 11725,
+  "nom": "Jane Meyerding",
+  "decision": "nta_deux_signaux",
+  "nta": "p072951354",
+  "preuve_nta": "titre « geweldloosheid opnieuw opeisen »",
+  "viaf": "274792219",
+  "isni": "0000000067314574",
+  "naissance": 1950
+ },
+ {
+  "id": 11730,
+  "nom": "Jeanne Duprat",
+  "decision": "nta_deux_signaux",
+  "nta": "p112487106",
+  "preuve_nta": "titre « over oorlog en vrede in den geest van proudhon »",
+  "viaf": "291559146",
+  "isni": "0000000396600184"
+ },
+ {
+  "id": 11742,
+  "nom": "L. J. Bot",
+  "decision": "nta_deux_signaux",
+  "nta": "p370677978",
+  "preuve_nta": "titre « nederland in de mist »",
+  "viaf": "309883408",
+  "qid": "Q1801443",
+  "naissance": 1897,
+  "mort": 1988
+ },
+ {
+  "id": 11743,
+  "nom": "L. Lichtveld",
+  "decision": "nta_deux_signaux",
+  "nta": "p068332629",
+  "preuve_nta": "titre « de sfinx van spanje »",
+  "viaf": "24146284474415332263",
+  "qid": "Q436463",
+  "isni": "0000000449436294",
+  "naissance": 1903,
+  "mort": 1996,
+  "pays": "NL"
+ },
+ {
+  "id": 11750,
+  "nom": "Louis Sinner",
+  "decision": "nta_deux_signaux",
+  "nta": "p069958688",
+  "preuve_nta": "titre « provo s en justitie »",
+  "viaf": "189232670",
+  "isni": "0000000398062500",
+  "naissance": 1926
+ },
+ {
+  "id": 11775,
+  "nom": "S. M. Sheehan",
+  "decision": "nta_deux_signaux",
+  "nta": "p11443834X",
+  "preuve_nta": "titre « anarchisme »",
+  "viaf": "98208283",
+  "qid": "Q93238332",
+  "isni": "0000000114628040",
+  "naissance": 1951
+ }
+]
