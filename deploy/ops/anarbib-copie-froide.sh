@@ -99,6 +99,14 @@ VERROU="${OPS_DIR:-$HOME/anarbib-ops}/.bg2.lock"
 CACHE_LOURD="$BASE_LOCALE/.empreintes-lourd.tsv"
 LOURD=1
 
+# --- LE TEMOIN DE LA REPLIQUE HORS LIGNE (22/10/2026) ------------------------
+# Le controle de fraicheur ne peut pas lire un disque debranche : il lit ce
+# temoin (premier champ = epoch), et alerte au-dela de 35 jours. On ne l'ecrit
+# que si la replique a ete REVALIDEE SUR LE DISQUE, petits depots ET depot
+# lourd : une replique partielle n'est pas une replique. Avec --vers, ce script
+# l'ecrit lui-meme ; sinon, la derniere commande Windows qu'il imprime le fait.
+TEMOIN_HL="${OPS_DIR:-$HOME/anarbib-ops}/.replique-hors-ligne"
+
 VERS=""
 RELECTURE=1
 while [ $# -gt 0 ]; do
@@ -367,6 +375,10 @@ if [ -n "$VERS" ] && [ -d "$VERS" ] && [ -w "$VERS" ]; then
       ETAT=1
     fi
   fi
+  if [ "$ETAT" -eq 0 ] && [ "$LOURD_OK" -eq 1 ]; then
+    mkdir -p "$(dirname "$TEMOIN_HL")" && printf '%s %s\n' "$(date +%s)" "$VERS" > "$TEMOIN_HL"
+    info "    replique hors ligne consignee ($TEMOIN_HL)"
+  fi
 else
   [ -n "$VERS" ] && alerte "    $VERS inaccessible en ecriture"
   cat <<TXT
@@ -392,6 +404,11 @@ TXT
 
     /MIR retire aussi de F: les paquets que le prune a retires de E: : la
     replique reste un depot restic coherent, pas un empilement.
+
+    Enfin, consigner la replique pour le controle de fraicheur (qui alerte
+    au-dela de 35 jours). Elle ne s'ecrit que si les deux revalidations passent :
+
+      cd "/f/anarbib-backups/restic-$JOUR" && sha256sum --quiet -c SHA256SUMS.txt && cd /f/anarbib-backups && sha256sum --quiet -c "restic-$JOUR/SHA256SUMS-lourd.txt" && date +%s > "//wsl.localhost/Ubuntu-26.04$TEMOIN_HL" && echo REPLIQUE CONSIGNEE
 TXT
   fi
   echo

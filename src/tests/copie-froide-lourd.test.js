@@ -194,4 +194,46 @@ describe.skipIf(!BASH)('#BG2 — copie froide du dépôt lourd (19/10/2026)', { 
     expect(lire(path.join(disque, 'anarbib-lourd', 'config'))).toBe('config-lourd');
     expect(existsSync(path.join(disque, 'anarbib-lourd', 'locks'))).toBe(false);
   });
+
+  // 22/10/2026 : le contrôle de fraîcheur alerte quand la réplique hors ligne
+  // vieillit. Il lit un témoin, que seule une réplique REVALIDÉE sur le disque
+  // a le droit d'écrire.
+  it('--vers réussi : le témoin de réplique hors ligne est écrit (epoch, puis le disque)', () => {
+    const cas = nouveauCas();
+    const disque = path.join(cas.dir, 'disque-f');
+    mkdirSync(disque, { recursive: true });
+    const avant = Math.floor(Date.now() / 1000);
+    const r = tir(cas, ['--vers', posix(disque)]);
+    expect(r.code).toBe(0);
+    expect(r.sortie).toMatch(/replique hors ligne consignee/);
+    const [quand, ou] = lire(path.join(cas.dir, 'ops', '.replique-hors-ligne')).trim().split(' ');
+    expect(Number(quand)).toBeGreaterThanOrEqual(avant);
+    expect(ou).toBe(posix(disque));
+  });
+
+  it('dépôt lourd illisible : même avec --vers, aucun témoin n’est écrit', () => {
+    const cas = nouveauCas();
+    const disque = path.join(cas.dir, 'disque-f');
+    mkdirSync(disque, { recursive: true });
+    const r = tir(cas, ['--vers', posix(disque)], { RESTIC_KO: posix(cas.lourd) });
+    expect(r.code).toBe(1);
+    expect(existsSync(path.join(cas.dir, 'ops', '.replique-hors-ligne'))).toBe(false);
+  });
+
+  it('--sans-lourd avec --vers : réplique partielle, aucun témoin', () => {
+    const cas = nouveauCas();
+    const disque = path.join(cas.dir, 'disque-f');
+    mkdirSync(disque, { recursive: true });
+    const r = tir(cas, ['--sans-lourd', '--vers', posix(disque)]);
+    expect(r.code).toBe(0);
+    expect(existsSync(path.join(cas.dir, 'ops', '.replique-hors-ligne'))).toBe(false);
+  });
+
+  it('disque non monté : la dernière commande Windows imprimée revalide les deux et consigne la réplique', () => {
+    const cas = nouveauCas();
+    const r = tir(cas);
+    const ligne = r.sortie.split('\n').find((l) => /REPLIQUE CONSIGNEE/.test(l)) || '';
+    expect(ligne).toMatch(/sha256sum --quiet -c SHA256SUMS\.txt && .*sha256sum --quiet -c "restic-\d{4}-\d\d-\d\d\/SHA256SUMS-lourd\.txt" && date \+%s > /);
+    expect(ligne).toContain(`${posix(path.join(cas.dir, 'ops'))}/.replique-hors-ligne`);
+  });
 });

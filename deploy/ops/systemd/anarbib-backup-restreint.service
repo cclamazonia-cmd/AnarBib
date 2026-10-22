@@ -1,0 +1,17 @@
+[Unit]
+Description=AnarBib #BG2 — sauvegarde flux restreint (PDF et EPUB restreints -> Herbes Folles, retention 7/4/6)
+Documentation=file:%h/anarbib/deploy/ops/README.md
+OnFailure=anarbib-backup-failure@%n.service
+# PREPARE LE 22/10/2026, PAS ENCORE ACTIF : ni lie ni active tant que Les Herbes
+# Folles n'ont pas dit oui. L'activation, dans l'ordre, est au README
+# (« Le flux restreint »).
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+# 1 h, comme storage : ~2,4 Go au premier tir, quelques minutes ensuite (le
+# miroir D: est partage avec le flux lourd, seul le neuf se telecharge).
+TimeoutStartSec=3600
+ExecStartPre=-/bin/rm -f %h/anarbib-ops/.last-failure
+ExecStart=%h/anarbib-ops/anarbib-bg2.sh backup restreint

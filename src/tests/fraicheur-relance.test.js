@@ -66,7 +66,8 @@ beforeAll(() => {
   // systemctl : journalise ce qu'on lui demande. `show -p ActiveState` répond
   // selon ETATS (« unité=état », défaut `inactive`) ; `is-active` ne sert
   // qu'aux minuteurs, actifs sauf s'ils sont dans ARRETES ; `start` échoue pour
-  // les unités de REFUS.
+  // les unités de REFUS ; `is-enabled` (22/10/2026, flux restreint) ne répond
+  // oui que pour les unités d'ACTIVES — par défaut, aucune.
   writeFileSync(
     path.join(stub, 'systemctl'),
     [
@@ -78,6 +79,7 @@ beforeAll(() => {
       '    for e in ${ETATS:-}; do [ "${e%%=*}" = "$u" ] && { echo "${e#*=}"; exit 0; }; done',
       '    echo inactive; exit 0 ;;',
       '  *" is-active "*) case " ${ARRETES:-} " in *" $u "*) exit 3 ;; esac; exit 0 ;;',
+      '  *" is-enabled "*) case " ${ACTIVES:-} " in *" $u "*) exit 0 ;; esac; exit 1 ;;',
       '  *" start "*) case " ${REFUS:-} " in *" $u "*) echo "Failed to start $u: Unit $u is masked." >&2; exit 1 ;; esac; exit 0 ;;',
       'esac',
       'exit 0',
@@ -94,7 +96,10 @@ afterAll(() => {
 let n = 0;
 // Un passage du contrôle dans un OPS_DIR neuf. `marqueurs` : { flux: [âge en
 // minutes, pid ('' = sans pid)] } ; `proc` : { pid: ligne de commande }.
-function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '', refus = '', env = {} } = {}) {
+// `replique` (22/10/2026) : âge en jours du témoin de réplique hors ligne,
+// 'absent' pour aucun témoin, 'illisible' pour un témoin sans nombre ; non
+// fourni, la garde est coupée (REPLIQUE_MAX_J=0) et les autres cas l'ignorent.
+function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '', refus = '', env = {}, replique } = {}) {
   const dir = path.join(racine, `cas-${++n}`);
   const ops = path.join(dir, 'ops');
   const procDir = path.join(dir, 'proc');
@@ -103,6 +108,10 @@ function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '
   mkdirSync(procDir, { recursive: true });
   writeFileSync(path.join(dir, 'pass'), 'x\n');
   const maintenant = Math.floor(Date.now() / 1000);
+  if (replique === 'illisible') writeFileSync(path.join(ops, '.replique-hors-ligne'), 'pas-un-nombre\n');
+  else if (replique !== undefined && replique !== 'absent') {
+    writeFileSync(path.join(ops, '.replique-hors-ligne'), `${maintenant - replique * 86400} /f/anarbib-backups\n`);
+  }
   for (const [flux, [minutes, pid]] of Object.entries(marqueurs)) {
     const suite = pid === '' ? '' : ` ${pid}`;
     writeFileSync(path.join(ops, `.en-cours-${flux}`), `${maintenant - minutes * 60}${suite}\n`);
@@ -140,6 +149,7 @@ function passage({ ages = {}, marqueurs = {}, proc = {}, etats = '', arretes = '
         ETATS: etats,
         ARRETES: arretes,
         REFUS: refus,
+        REPLIQUE_MAX_J: replique === undefined ? '0' : '35',
         ...env,
       },
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -263,7 +273,7 @@ describe.skipIf(!BASH)('contrôle de fraîcheur #BG2 — la relance d’un tir t
     expect(r.essais).toEqual([]);
     expect(r.drapeau).toBe('');
     expect(r.code).toBe(0);
-    expect(r.sortie).toMatch(/Les quatre flux sont frais/);
+    expect(r.sortie).toMatch(/Les flux sont frais \(court long storage lourd\)/);
     expect(r.sortie).toMatch(/OK\s+lourd/);
   });
 
@@ -312,6 +322,70 @@ describe.skipIf(!BASH)('contrôle de fraîcheur #BG2 — la relance d’un tir t
     expect(r.code).toBe(0);
     expect(r.drapeau).toBe('');
     expect(r.sortie).toMatch(/OK\s+place\s+.*disque-ok/);
+  });
+
+  // Réplique hors ligne (22/10/2026) : le disque débranché ne se lit pas, son
+  // témoin si. Vieux ou absent, il se dit — seul (code 5) ou à côté d'une autre
+  // alerte, sans la cacher — et ne fait jamais relancer quoi que ce soit.
+  it('réplique hors ligne récente (10 j) : une ligne OK, pas de drapeau', () => {
+    const r = passage({ replique: 10 });
+    expect(r.code).toBe(0);
+    expect(r.drapeau).toBe('');
+    expect(r.sortie).toMatch(/OK\s+hors-lig\s+\d\d\/\d\d — 10 j \(seuil 35 j\)/);
+  });
+
+  it('réplique hors ligne vieille (40 j) : drapeau HORS LIGNE, code 5, rien n’est relancé', () => {
+    const r = passage({ replique: 40 });
+    expect(r.code).toBe(5);
+    expect(r.essais).toEqual([]);
+    expect(r.drapeau).toMatch(/^HORS LIGNE /);
+    expect(r.drapeau).toMatch(/HORS LIGNE : derniere replique verifiee le \d\d\/\d\d\/\d{4}, il y a 40 j \(seuil 35 j\)/);
+    expect(r.drapeau).toMatch(/echanger les disques/);
+  });
+
+  it('aucun témoin de réplique : c’est une alerte, pas un silence', () => {
+    const r = passage({ replique: 'absent' });
+    expect(r.code).toBe(5);
+    expect(r.drapeau).toMatch(/aucune replique hors ligne consignee/);
+  });
+
+  it('témoin illisible : traité comme absent', () => {
+    const r = passage({ replique: 'illisible' });
+    expect(r.code).toBe(5);
+    expect(r.drapeau).toMatch(/aucune replique hors ligne consignee/);
+  });
+
+  it('réplique vieille ET retard : le drapeau du retard porte aussi la ligne HORS LIGNE', () => {
+    const r = passage({ ages: { court: 40 }, replique: 40 });
+    expect(r.code).toBe(1);
+    expect(r.drapeau).toMatch(/^RETARD /);
+    expect(r.drapeau).toMatch(/HORS LIGNE : derniere replique verifiee/);
+  });
+
+  // Flux restreint (22/10/2026, préparé) : jugé seulement quand son minuteur
+  // est activé — avant, son dépôt n'existe pas.
+  it('flux restreint inactif (minuteur non activé) : ni lu ni jugé', () => {
+    const r = passage({ ages: { restreint: 'illisible' } });
+    expect(r.code).toBe(0);
+    expect(r.sortie).not.toMatch(/restreint/);
+  });
+
+  it('flux restreint actif et en retard : jugé, relancé par sa propre unité', () => {
+    const r = passage({ ages: { restreint: 300 }, env: { ACTIVES: 'anarbib-backup-restreint.timer' } });
+    expect(r.relances).toEqual(['anarbib-backup-restreint.service']);
+    expect(r.drapeau).toMatch(/RETARD .*restreint/);
+  });
+
+  it('flux restreint actif et frais : compté parmi les flux frais', () => {
+    const r = passage({ env: { ACTIVES: 'anarbib-backup-restreint.timer' } });
+    expect(r.code).toBe(0);
+    expect(r.sortie).toMatch(/Les flux sont frais \(court long storage lourd restreint\)/);
+  });
+
+  it('REPLIQUE_MAX_J=0 : garde coupée, même sans témoin', () => {
+    const r = passage({ replique: 'absent', env: { REPLIQUE_MAX_J: '0' } });
+    expect(r.code).toBe(0);
+    expect(r.sortie).not.toMatch(/hors-lig/);
   });
 
   it('flux lourd : disque absent (dépôt illisible) → jamais relancé', () => {

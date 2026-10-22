@@ -120,6 +120,12 @@ BUCKETS=(library-ui-assets authors covers
 # l'outillage de scripts/maptiles/ et une extraction planetaire, longue.
 BUCKETS_LOURDS=(pdf-restrito anarbib-pdf-public anarbib-epub-public
   anarbib-epub-restricted map-tiles)
+# restreint (22/10/2026, prepare, pas encore actif) : les buckets lourds a acces
+# RESTREINT, sous-ensemble de BUCKETS_LOURDS, copies en plus chez un tiers.
+# Un nouveau bucket lourd restreint doit entrer dans LES DEUX listes
+# (src/tests/bg2-flux-restreint.test.js le verifie sur les noms).
+BUCKETS_RESTREINTS=(pdf-restrito anarbib-epub-restricted)
+RESTREINT_REPO="${BG2_RESTREINT_REPO:-$RESTIC_BASE/anarbib-restreint}"
 
 # Temoins pour les controles anti-fuite
 PII_CANARIES='profiles|loan_deposits|emprestimos_v2|reservas_v2|membership_payments|reader_card_tokens|user_library_memberships'
@@ -733,6 +739,46 @@ backup_lourd() {
   info "Flux lourd termine. (miroir sur $LOURD_WORK, depot sur $LOURD_REPO)"
 }
 
+# ------------------------- BACKUP RESTREINT ----------------------------
+# PREPARE LE 22/10/2026, PAS ENCORE ACTIF. Les buckets lourds RESTREINTS
+# (BUCKETS_RESTREINTS, ~2,4 Go) chez un tiers : le depot SFTP des Herbes Folles,
+# a cote des trois autres, quand elles auront dit oui (reunion « sortie de
+# Supabase »). C'est le « cas C » de la note du 22/10 : le fond de carte se
+# reconstruit, les PDF publics iront dans une reserve partagee, et seuls ces
+# fichiers-la ne se retrouveraient nulle part ailleurs.
+#
+# Il ne remplace PAS le flux lourd : le depot local garde tout, fond de carte
+# compris, et c'est lui que la copie froide replique hors ligne. Celui-ci en
+# est la copie CHEZ UN TIERS, pour la seule partie qui l'exige.
+#
+# Il relit le MEME miroir que le flux lourd (D:) : la synchronisation ne
+# retelecharge que le neuf, et le verrou fait passer les deux tirs l'un apres
+# l'autre. Comme pour lourd, le depot n'est jamais cree par le tir.
+#
+# Pour l'activer (README, « Le flux restreint ») : accord ecrit, restic init,
+# migration du temoin, minuteur — dans cet ordre. Avant la migration, son
+# temoin serait refuse par la base (contrainte sur `flow`), sans bloquer le tir.
+backup_restreint() {
+  preflight; require supabase
+  [ -d "$(dirname "$LOURD_WORK")" ] \
+    || die "disque du miroir lourd absent : $(dirname "$LOURD_WORK") — D: est-il monte dans WSL ?"
+  export RESTIC_REPOSITORY="$RESTREINT_REPO"
+  restic cat config >/dev/null 2>&1 \
+    || die "depot restic restreint introuvable : $RESTREINT_REPO — initialise ? (README, « Le flux restreint »)"
+  heartbeat restreint started
+  synchro_flux "$LOURD_WORK" "${BUCKETS_RESTREINTS[@]}"
+
+  local chemins=() b
+  for b in "${BUCKETS_RESTREINTS[@]}"; do chemins+=("$LOURD_WORK/$b"); done
+  unlock_stale
+  restic backup "${chemins[@]}" --ignore-inode --ignore-ctime --tag flux-restreint --tag bg2
+  restic forget --tag flux-restreint --group-by tags \
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+  [ "$SYNCHRO_ECHECS" -eq 0 ] || die "$SYNCHRO_ECHECS bucket(s) restreint(s) incomplet(s) : sauvegarde faite avec ce qui est la, mais INCOMPLETE (voir ci-dessus)"
+  heartbeat restreint ok "$(snapshot_id_de flux-restreint)"
+  info "Flux restreint termine. (miroir sur $LOURD_WORK, depot sur $RESTREINT_REPO)"
+}
+
 # -------------------------- RESTORE-TEST -------------------------------
 # Test REEL de la sequence de sinistre : squelette auth + roles -> long -> court.
 # Nettoyage du restore-test : variables GLOBALES, pas les `local` de la
@@ -1043,10 +1089,12 @@ case "${1:-}" in
       court)   backup_court ;;
       storage) backup_storage ;;
       lourd)   backup_lourd ;;
+      # restreint : prepare le 22/10/2026, hors de `all` tant qu'il n'est pas actif.
+      restreint) backup_restreint ;;
       all)     backup_long; backup_court; backup_storage; backup_lourd; info "=== Les quatre flux sont sauvegardes. ===" ;;
-      *) echo "Usage: $0 backup {long|court|storage|lourd|all}" >&2; exit 2 ;;
+      *) echo "Usage: $0 backup {long|court|storage|lourd|restreint|all}" >&2; exit 2 ;;
     esac ;;
   prune)        prune_repos ;;
   restore-test) cmd_restore_test ;;
-  *) echo "Usage: $0 {check | backup long|court|storage|lourd|all | prune | restore-test}" >&2; exit 2 ;;
+  *) echo "Usage: $0 {check | backup long|court|storage|lourd|restreint|all | prune | restore-test}" >&2; exit 2 ;;
 esac

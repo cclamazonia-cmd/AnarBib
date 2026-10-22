@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# anarbib-bg2-fraicheur.sh — controle de fraicheur des quatre flux #BG2
+# anarbib-bg2-fraicheur.sh — controle de fraicheur des flux #BG2 (quatre, cinq avec le restreint)
 #
 # CE FICHIER EST LA SOURCE DE VERITE — versionne. `~/anarbib-ops/` n'en a qu'un
 # lien symbolique. Voir deploy/ops/README.md.
@@ -50,6 +50,7 @@
 #
 # Sorties : 0 = tout frais · 1 = au moins un flux en retard · 3 = aveugle trop
 #           longtemps · 4 = disque du flux lourd presque plein (19/10/2026) ·
+#           5 = replique hors ligne trop vieille (22/10/2026) ·
 #           2 = erreur d'usage/prerequis.
 # --------------------------------------------------------------------------
 set -euo pipefail
@@ -62,6 +63,14 @@ RESTIC_BASE="${RESTIC_BASE:-sftp:anarbib@bricolage.herbesfolles.org:/data}"
 export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-$HOME/.config/restic-anarbib.pass}"
 
 FLUX=(court long storage lourd)
+
+# Le flux restreint (prepare le 22/10/2026, README « Le flux restreint ») n'est
+# juge qu'une fois actif, c'est-a-dire son minuteur active. Avant, son depot
+# n'existe pas : le juger ferait dire « injoignable » chaque jour d'un flux qui
+# n'a jamais tire — le bruit qu'on apprend a ignorer.
+if "${SYSTEMCTL:-systemctl}" --user is-enabled --quiet anarbib-backup-restreint.timer 2>/dev/null; then
+  FLUX+=(restreint)
+fi
 
 # Le flux lourd (18/10/2026) a son depot sur un disque du poste, pas chez Herbes
 # Folles. MEME chemin que LOURD_REPO dans anarbib-bg2.sh, meme variable pour le
@@ -79,10 +88,13 @@ depot_de() {
 #   long    hebdo      -> 9 j   (une semaine sautee, plus la marge du dimanche)
 #   storage hebdo      -> 9 j
 #   lourd   hebdo      -> 9 j
+#   restreint hebdo    -> 9 j  (22/10/2026 ; la sonde en base ne le juge qu'a
+#                               son activation, par sa migration)
 SEUIL_court=36
 SEUIL_long=216
 SEUIL_storage=216
 SEUIL_lourd=216
+SEUIL_restreint=216
 
 # Age au-dela duquel un marqueur « tir en cours » signale un tir MORT et non un
 # tir qui travaille. Aligne sur la regle `interrompu` de la sonde en base (60 min),
@@ -107,6 +119,22 @@ MAX_AVEUGLE_H="${MAX_AVEUGLE_H:-72}"
 # Un disque absent n'est pas juge ici : le depot illisible le dit deja (??).
 PLACE_MIN_GO="${PLACE_MIN_GO:-50}"
 DISQUES_LOURD=("$(dirname "$DEPOT_lourd")" "${BG2_LOURD_WORK:-/mnt/d/anarbib-sauvegardes/miroir-lourd}")
+
+# --- REPLIQUE HORS LIGNE (22/10/2026) ----------------------------------------
+# La copie froide (anarbib-copie-froide.sh) pose les quatre depots sur un disque
+# qu'on debranche. C'est la seule copie qui resiste a une cle volee : le disque
+# range ailleurs n'est branche nulle part. Mais rien ne disait quand elle avait
+# ete faite pour la derniere fois : la rotation des deux disques (l'un au
+# poste, l'autre hors du lieu, echanges chaque mois) reposait sur la memoire.
+#
+# Le disque est le plus souvent debranche : on ne peut pas le lire. On lit donc
+# un TEMOIN, que la copie froide ecrit quand la replique a ete REVALIDEE sur le
+# disque (empreintes des petits depots ET du depot lourd) : premier champ =
+# epoch. Absent ou plus vieux que REPLIQUE_MAX_J jours -> drapeau HORS LIGNE.
+# 35 jours : un mois de rotation, plus une semaine de marge. 0 = garde coupee
+# (une machine qui ne fait pas de copie hors ligne).
+REPLIQUE_HL="$OPS_DIR/.replique-hors-ligne"
+REPLIQUE_MAX_J="${REPLIQUE_MAX_J:-35}"
 
 info() { echo ">>> $*"; }
 die()  { echo "ERREUR: $*" >&2; exit 2; }
@@ -213,6 +241,31 @@ done
 ligne_place() {
   local p
   for p in "${place[@]}"; do echo "PLACE : $p — le flux lourd echouera quand le disque sera plein"; done
+}
+
+hors_ligne=""   # vide = replique recente (ou garde coupee)
+if [ "$REPLIQUE_MAX_J" != 0 ]; then
+  quand=""
+  [ -f "$REPLIQUE_HL" ] && read -r quand _ < "$REPLIQUE_HL" 2>/dev/null || true
+  case "$quand" in ''|*[!0-9]*) quand="" ;; esac
+  if [ -z "$quand" ]; then
+    hors_ligne="aucune replique hors ligne consignee ($REPLIQUE_HL absent ou illisible)"
+    printf '    !!  %-8s aucune replique consignee\n' "hors-lig"
+  else
+    age_j=$(( (maintenant - quand) / 86400 ))
+    if [ "$age_j" -gt "$REPLIQUE_MAX_J" ]; then
+      hors_ligne="derniere replique verifiee le $(date -d "@$quand" '+%d/%m/%Y'), il y a ${age_j} j (seuil ${REPLIQUE_MAX_J} j)"
+      printf '    !!  %-8s %s — %s j (seuil %s j)\n' "hors-lig" "$(date -d "@$quand" '+%d/%m')" "$age_j" "$REPLIQUE_MAX_J"
+    else
+      printf '    OK  %-8s %s — %s j (seuil %s j)\n' "hors-lig" "$(date -d "@$quand" '+%d/%m')" "$age_j" "$REPLIQUE_MAX_J"
+    fi
+  fi
+fi
+# Comme la place : ajoutee a tout drapeau, pour ne pas se perdre derriere un
+# retard, et sans le cacher.
+ligne_hors_ligne() {
+  [ -n "$hors_ligne" ] || return 0
+  echo "HORS LIGNE : $hors_ligne — brancher le disque, deploy/ops/anarbib-copie-froide.sh, puis echanger les disques"
 }
 
 # --- TIRS INTERROMPUS -------------------------------------------------------
@@ -353,6 +406,7 @@ if [ ${#interrompus[@]} -gt 0 ]; then
     echo "Un rattrapage tue ne se rejoue pas tout seul (Persistent= ne rejoue que les tirs MANQUES)."
     ligne_relance
     ligne_place
+    ligne_hors_ligne
     for i in "${interrompus[@]}"; do
       echo "  Relancer a la main : systemctl --user start anarbib-backup-${i%% *}.service"
     done
@@ -376,6 +430,7 @@ if [ ${#retard[@]} -gt 0 ]; then
     echo "Un flux n'a pas produit de snapshot depuis plus longtemps que prevu."
     ligne_relance
     ligne_place
+    ligne_hors_ligne
     echo "Relancer a la main : systemctl --user start anarbib-backup-<flux>.service"
     echo "Verifier : journalctl --user -u anarbib-backup-<flux>.service -n 40"
   } > "$FLAG"
@@ -392,6 +447,7 @@ if [ "$lecture_ok" = 0 ] && [ "$aveugle_depuis_h" -gt "$MAX_AVEUGLE_H" ]; then
     echo "Hote de sauvegarde injoignable, cle SSH, ou depot restic casse."
     echo "Verifier : restic -r $RESTIC_BASE/anarbib-court snapshots"
     ligne_place
+    ligne_hors_ligne
   } > "$FLAG"
   info "AVEUGLE depuis ${aveugle_depuis_h} h — drapeau pose."
   exit 3
@@ -407,10 +463,29 @@ if [ ${#place[@]} -gt 0 ]; then
     echo "lourd passe sous le seuil : faire de la place, deplacer le depot"
     echo "(BG2_LOURD_REPO / BG2_LOURD_WORK), ou trouver la place hors site (I21)."
     ligne_place
+    ligne_hors_ligne
   } > "$FLAG"
   info "PLACE : ${place[*]}"
   info "Drapeau pose ($FLAG) — il s'affichera a l'ouverture du terminal."
   exit 4
+fi
+
+# Les flux sont frais et les disques ont de la place, mais la copie qu'on range
+# hors du lieu vieillit : son propre drapeau, son propre code (5).
+if [ -n "$hors_ligne" ]; then
+  {
+    echo "HORS LIGNE $(date -u +%Y-%m-%dT%H:%M:%SZ) : replique hors ligne trop vieille"
+    echo "--- ce que cela veut dire ---"
+    echo "Les sauvegardes sont a jour. Mais la copie sur disque debranche, la seule"
+    echo "qui resiste a une cle volee, n'a pas ete refaite depuis trop longtemps."
+    echo "Brancher le disque present, lancer deploy/ops/anarbib-copie-froide.sh, passer"
+    echo "les commandes Windows qu'elle imprime (la derniere consigne la replique),"
+    echo "puis echanger ce disque avec celui qui est range hors du lieu."
+    ligne_hors_ligne
+  } > "$FLAG"
+  info "HORS LIGNE : $hors_ligne"
+  info "Drapeau pose ($FLAG) — il s'affichera a l'ouverture du terminal."
+  exit 5
 fi
 
 # Tout est frais : on retire le drapeau. Un drapeau qui survit a la reparation
@@ -426,6 +501,6 @@ if [ "$lecture_ok" = 0 ]; then
 elif [ ${#aveugle[@]} -gt 0 ]; then
   info "Flux lus : frais. NON VERIFIE(S) : ${aveugle[*]}."
 else
-  info "Les quatre flux sont frais."
+  info "Les flux sont frais (${FLUX[*]})."
 fi
 exit 0

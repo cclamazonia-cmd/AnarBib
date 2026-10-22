@@ -125,6 +125,10 @@ Trois issues, et les confondre serait refaire le bug :
 - **aveuglement prolongé** → au-delà de 72 h sans avoir pu lire un dépôt,
   l'impossibilité de vérifier devient elle-même l'alerte, sortie `3`.
 
+S'y ajoutent deux gardes qui ne parlent pas des flux eux-mêmes : la **place**
+sur les disques du flux lourd (sortie `4`, section « flux lourd ») et l'âge de
+la **réplique hors ligne** (sortie `5`, section « La rotation des disques »).
+
 **Et il relance (30/09/2026, backlog I24).** Constater ne suffisait pas : le
 15/09, le tir `storage` rattrapé au démarrage a été tué par l'arrêt de la
 session, le drapeau nommait la commande de relance, et personne ne l'a lue —
@@ -482,10 +486,64 @@ du lieu. Le jour où un tiers aura la place (I21), le flux `lourd` y partira —
 c'est un changement de `LOURD_REPO`, plus une copie de l'historique
 (`restic copy`).
 
+*Le 22/10/2026, la question a changé de forme* : plutôt qu'un tiers qui ait la
+place de tout, on trie (note « Sortir des services états-uniens » v4.3, §4 bis).
+Le fond de carte se reconstruit et n'a pas besoin de copie tierce ; les PDF
+publics iraient dans une réserve partagée Garage (banc :
+`deploy/scripts/banc-garage.sh`) ; les **restreints**, eux, partent chez Les
+Herbes Folles par le flux suivant. Le flux `lourd` reste tel quel, en local :
+c'est la copie complète, celle que la copie froide emporte hors ligne.
+
+## Le flux restreint : les PDF restreints chez un tiers (préparé le 22/10/2026, inactif)
+
+**Ce que c'est.** `anarbib-bg2.sh backup restreint` sauvegarde les buckets
+lourds à accès restreint (`BUCKETS_RESTREINTS` : `pdf-restrito`,
+`anarbib-epub-restricted`, ~2,4 Go le 22/10) dans un cinquième dépôt restic,
+`anarbib-restreint`, **sur le SFTP des Herbes Folles**, à côté des trois autres.
+Il relit le miroir `D:` du flux lourd (seul le neuf se télécharge) et passe
+derrière le même verrou. Rétention 7/4/6. Minuteur prévu le **samedi 21:00**,
+hors de la soirée du dimanche. Ces fichiers sont les seuls du flux lourd qu'on ne
+retrouverait nulle part ailleurs : c'est pour eux que la copie tierce est
+indispensable.
+
+**Pourquoi il n'est pas actif.** L'espace des Herbes Folles est partagé avec
+d'autres (14,1 Go libres sur 39,2 le 22/10 ; nos trois dépôts y pèsent ~0,9 Go).
+2,4 Go de plus y tiennent, mais c'est à elles et eux de dire oui — question
+posée dans l'invitation du 22/10 à la réunion « sortie de Supabase ». D'ici là :
+pas de dépôt, pas de minuteur, et le contrôle de fraîcheur ne le juge pas (il
+ne le compte que si son minuteur est activé). Il reste hors de `backup all`.
+
+**L'activer, dans cet ordre** (chaque étape suppose la précédente) :
+
+1. **L'accord écrit** des Herbes Folles, avec leur plafond pour nous.
+2. **Le dépôt**, une fois, à la main — le tir ne le crée jamais :
+   `RESTIC_PASSWORD_FILE=~/.config/restic-anarbib.pass restic init --repo sftp:anarbib@bricolage.herbesfolles.org:/data/anarbib-restreint`
+3. **Le témoin en base** : une migration, horodatée à sa création, qui admet
+   `restreint` dans `backup_heartbeats_flow_check` et `fn_record_backup_heartbeat`,
+   l'ajoute aux seuils de `fn_backup_heartbeat_status()` (9 jours, borne 60 min)
+   et sème sa ligne d'amorçage — sur le modèle exact de
+   `20261018213744_le_flux_lourd_a_son_temoin.sql`. Avant elle, le témoin du
+   flux est refusé par la base, sans bloquer le tir.
+4. **Le minuteur** :
+   ```bash
+   ln -sf "$PWD/deploy/ops/systemd/anarbib-backup-restreint.service" ~/.config/systemd/user/
+   ln -sf "$PWD/deploy/ops/systemd/anarbib-backup-restreint.timer"   ~/.config/systemd/user/
+   systemctl --user daemon-reload
+   systemctl --user enable --now anarbib-backup-restreint.timer
+   ```
+   Dès cet instant, le contrôle de fraîcheur le juge (seuil 9 jours).
+5. **Un premier tir à la main**, puis vérifier son témoin en base :
+   `systemctl --user start anarbib-backup-restreint.service`
+6. **Les trois scripts qui listent les dépôts** : l'ajouter à `prune_repos` et
+   à `restore-test` (`verifier_fichiers restreint …`) dans `anarbib-bg2.sh`, à
+   `DEPOTS` dans `anarbib-copie-froide.sh`, puis à `backup all`. Le test
+   `src/tests/bg2-flux-restreint.test.js` garde aujourd'hui l'absence de
+   `backup all` : le retourner dans le même commit.
+
 ## Les horaires
 
 `19:00`, `dimanche 20:00`, `dimanche 21:00`, `dimanche 21:30` (flux lourd, depuis
-le 18/10) — **en `Europe/Paris`**, fuseau nommé dans les unités. L'heure de tir suit la personne qui exploite la chaîne, pas le
+le 18/10), et `samedi 21:00` pour le flux restreint quand il sera actif — **en `Europe/Paris`**, fuseau nommé dans les unités. L'heure de tir suit la personne qui exploite la chaîne, pas le
 fuseau du portable, qui change en voyage ; et l'heure d'été se gère seule.
 
 Avant le 20/08 les tirs étaient à 2 h, 3 h et 4 h heure machine — ils ne
@@ -559,6 +617,34 @@ a passé la vérification.
 Ce n'est **pas** un `restic copy` : celui-ci recrée des instantanés avec de
 nouveaux identifiants, et la copie cesserait d'être comparable à l'original. Ici
 c'est une réplique fichier à fichier — mêmes identifiants, même lignée.
+
+### La rotation des disques, et son témoin (22/10/2026)
+
+Un disque débranché rangé **au poste** protège du compte SFTP qui ferme et de la
+manœuvre qui efface, pas du vol ni de l'incendie : c'est une copie hors du
+poste, pas hors du **lieu**. D'où une rotation à deux disques : l'un au poste,
+qui reçoit la copie froide ; l'autre rangé ailleurs (chez un·e camarade, au local
+du CCLA), et on les échange chaque mois. C'est aussi la seule copie qui résiste
+à une clé volée — le disque rangé ailleurs n'est branché nulle part — et la
+réserve partagée Garage envisagée pour les PDF publics n'a pas cette propriété
+(ni versionnement ni verrouillage : note « Sortir des services états-uniens »
+v4.3, §4 bis ; banc `deploy/scripts/banc-garage.sh`).
+
+Une rotation qu'on oublie ne protège plus rien, et un disque débranché ne se
+lit pas. La copie froide écrit donc un **témoin**,
+`~/anarbib-ops/.replique-hors-ligne` (epoch, puis le disque), **seulement** quand
+la réplique a été revalidée sur le disque, petits dépôts **et** dépôt lourd :
+
+- avec `--vers`, le script l'écrit lui-même ;
+- sinon, la dernière des commandes Windows qu'il imprime revalide les deux et
+  l'écrit (`… && date +%s > //wsl.localhost/…/.replique-hors-ligne`).
+
+Le contrôle de fraîcheur le lit : absent, illisible ou plus vieux que
+**35 jours** (`REPLIQUE_MAX_J` ; `0` coupe la garde sur une machine sans copie
+hors ligne), il pose le drapeau `HORS LIGNE`, sortie **5**, ou ajoute la ligne
+au drapeau d'une autre alerte sans la cacher. Il ne relance rien : refaire la
+copie demande une personne et un disque. Premier témoin posé le 22/10/2026 à
+la main, pour la réplique de ce soir-là (21 h 49, revalidée).
 
 ### La troisième copie, sur le poste
 

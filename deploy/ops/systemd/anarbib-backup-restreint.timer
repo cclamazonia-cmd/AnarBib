@@ -1,0 +1,16 @@
+[Unit]
+Description=AnarBib #BG2 — declencheur flux restreint (hebdomadaire samedi 21:00 Europe/Paris)
+
+[Timer]
+# PREPARE LE 22/10/2026, PAS ENCORE ACTIF (voir le service).
+#
+# Le samedi, et non le dimanche : la soiree du dimanche porte deja long (20:00),
+# storage (21:00) et lourd (21:30), qui peut durer trois heures. Le samedi soir
+# est libre ; les tirs passent de toute facon un par un derriere le verrou
+# d'anarbib-bg2.sh.
+OnCalendar=Sat *-*-* 21:00:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target
