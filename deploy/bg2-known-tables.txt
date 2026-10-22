@@ -224,3 +224,6 @@ private.mail_temoin_jour
 # J10 / DOC-GEL-2 (22/10/2026) : les appels aux flux OPDS et RSS, par jour, route et famille d'application.
 # Des comptes, aucune donnée personnelle (ni IP ni User-Agent).
 private.flux_appels
+# Alertes (22/10/2026) : le journal des consultations nominatives — uuid du compte qui consulte,
+# fonction, bibliothèque, nombre de fiches. JAMAIS la personne consultée. Gardé 12 mois (RET-3).
+private.consultations_nominatives

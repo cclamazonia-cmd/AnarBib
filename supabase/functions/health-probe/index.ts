@@ -21,7 +21,11 @@
 import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerOps } from '../_shared/mail/layout.ts';
 import { safeSendEmail } from '../_shared/transport/email.ts';
-import { destinatairesAdminsReseau } from '../_shared/context/network-admins.ts';
+import {
+  destinatairesAdminsReseau,
+  boiteCollectiveReseau,
+  adressesSupplementaires,
+} from '../_shared/context/network-admins.ts';
 import { decisionSondeCapas, sonderSourcesCapas } from '../_shared/capas/sources.ts';
 import type { BilanCapas } from '../_shared/capas/sources.ts';
 import { lireTachesForgejo, diagnostiquerCi, decisionSondeCi } from '../_shared/ci/forgejo-tasks.ts';
@@ -142,12 +146,20 @@ async function mesurer(s: Sonde) {
 // health-probe garde SA variable, distincte de la boîte institutionnelle
 // NETWORK_ADMIN_CC : la supervision peut un jour partir ailleurs que le reste.
 // Séparateurs admis : virgule, point-virgule, espace.
-async function destinataires() {
-  return await destinatairesAdminsReseau(supabaseAdmin, { cc: Deno.env.get('HEALTH_ALERT_CC') ?? '' });
+//
+// `avecBoiteReseau` (22/10/2026, sondes `abus` et `consultations`) : ces alertes
+// partent AUSSI à la boîte institutionnelle du réseau, toujours en même temps
+// qu'aux admins — décision de Xavier. Une alerte qui viserait un·e admin ne doit
+// pas dépendre de la seule boîte de supervision pour être lue par d'autres.
+async function destinataires(opts: { avecBoiteReseau?: boolean } = {}) {
+  const extras = opts.avecBoiteReseau
+    ? adressesSupplementaires(boiteCollectiveReseau()).map((email) => ({ email }))
+    : [];
+  return await destinatairesAdminsReseau(supabaseAdmin, { cc: Deno.env.get('HEALTH_ALERT_CC') ?? '', extras });
 }
 
-async function alerter(sujet: string, titre: string, corpsHtml: string) {
-  const cibles = await destinataires();
+async function alerter(sujet: string, titre: string, corpsHtml: string, opts: { avecBoiteReseau?: boolean } = {}) {
+  const cibles = await destinataires(opts);
   // F2 : pied d'exploitation, pas le pied lectrice — ces messages vont aux
   // operateur·rices du reseau, pas a une lectrice de bibliotheque.
   const ops = footerOps('fr');
@@ -275,6 +287,7 @@ Deno.serve(async (req: Request) => {
            )
            .join('')}</ul>
          <p style="margin:0">Un e-mail de rétablissement suivra dès que la sonde repassera au vert.</p>`,
+        { avecBoiteReseau: sonde.vigilance === true },
       );
       await supabaseAdmin
         .from('service_health_incidents')
@@ -630,6 +643,10 @@ Deno.serve(async (req: Request) => {
     deQuoi: string;
     // Facultatif : ce qu'il y a à FAIRE, quand l'alerte seule ne le dit pas.
     conseil?: string;
+    // Facultatif : une sonde de VIGILANCE (abus, consultations) ne signale pas
+    // une incohérence mais une activité inhabituelle ; ses courriels le disent,
+    // et partent aussi à la boîte institutionnelle du réseau.
+    vigilance?: boolean;
   }[] = [
     {
       kind: 'notifications',
@@ -696,6 +713,29 @@ Deno.serve(async (req: Request) => {
       conseil:
         "DOC-DEPLOY-1 interdit apply_migration (MCP), le tableau de bord et la CLI à la main : git push déploie tout. Pour chaque version jointe : vérifier que son fichier est au dépôt sous la MÊME version (sinon la prochaine db push la rejouera ou échouera), puis verser une migration qui l'inscrit dans deploiement_ecarts_acquittes avec son motif. L'incident ne se referme pas de lui-même.",
     },
+    // 22/10/2026 — la sonde ne voyait que les pannes : une fuite silencieuse ou
+    // un essai de force brute ne déclenchait rien. Deux sondes de vigilance
+    // (migration 20261022223116, qui élargit aussi la CHECK). Le bilan joint ne
+    // porte ni clé de compteur ni personne consultée : des genres, des nombres,
+    // et l'identifiant du compte qui CONSULTE.
+    {
+      kind: 'abus',
+      rpc: 'fn_healthcheck_abus',
+      sujetOuvert: 'AnarBib — les freins anti-abus sont éprouvés',
+      titreOuvert: 'Freins : pic de tentatives refusées',
+      quoi: 'les freins anti-abus',
+      deQuoi: 'des freins anti-abus',
+      vigilance: true,
+    },
+    {
+      kind: 'consultations',
+      rpc: 'fn_healthcheck_consultations',
+      sujetOuvert: 'AnarBib — un compte consulte des données nominatives en grand nombre',
+      titreOuvert: 'Consultations nominatives : un seuil est dépassé',
+      quoi: 'les consultations nominatives',
+      deQuoi: 'des consultations nominatives',
+      vigilance: true,
+    },
   ];
 
   const actionsStructurelles: Record<string, string> = {};
@@ -754,10 +794,13 @@ Deno.serve(async (req: Request) => {
         continue;
       }
 
+      const intro = sonde.vigilance
+        ? `Le contrôle automatique ${esc(sonde.deQuoi)} signale une activité inhabituelle. <strong>Ce n'est pas une panne :</strong> le site répond normalement. Ce peut être un usage légitime ou le début d'un abus ; ce message part aux admins du réseau et à la boîte collective en même temps, pour qu'aucune personne seule n'ait à en décider.`
+        : `Le contrôle automatique ${esc(sonde.deQuoi)} signale une incohérence. <strong>Ce n'est pas une panne de service :</strong> le site répond normalement. C'est un état interne qui ne fait pas ce qu'il annonce, et qui ne se verrait autrement pas.`;
       const n = await alerter(
         sonde.sujetOuvert,
         sonde.titreOuvert,
-        `<p style="margin:0 0 10px">Le contrôle automatique ${esc(sonde.deQuoi)} signale une incohérence. <strong>Ce n'est pas une panne de service :</strong> le site répond normalement. C'est un état interne qui ne fait pas ce qu'il annonce, et qui ne se verrait autrement pas.</p>
+        `<p style="margin:0 0 10px">${intro}</p>
          <p style="margin:0 0 10px">Rubriques concernées : ${esc(raison)}</p>
          ${sonde.conseil ? `<p style="margin:0 0 10px"><strong>Que faire :</strong> ${esc(sonde.conseil)}</p>` : ''}
          <p style="margin:0 0 10px">Bilan complet de la sonde :</p>
@@ -778,10 +821,13 @@ Deno.serve(async (req: Request) => {
         .eq('id', inc.id);
       const depuis = new Date(inc.opened_at).toLocaleString('fr-FR');
       const n = await alerter(
-        `AnarBib — ${sonde.quoi} : incohérence résolue`,
-        'Cohérence rétablie',
+        sonde.vigilance
+          ? `AnarBib — ${sonde.quoi} : activité revenue sous les seuils`
+          : `AnarBib — ${sonde.quoi} : incohérence résolue`,
+        sonde.vigilance ? 'Activité revenue sous les seuils' : 'Cohérence rétablie',
         `<p style="margin:0 0 10px">Le contrôle automatique ${esc(sonde.deQuoi)} est repassé au vert. L'incident ouvert le ${esc(depuis)} est clos.</p>
          <p style="margin:0">Cause relevée à l'ouverture : ${esc(inc.reason)}</p>`,
+        { avecBoiteReseau: sonde.vigilance === true },
       );
       action = `incident ${sonde.kind} clos, ${n} destinataire(s) prévenu(s)`;
     }
@@ -928,6 +974,9 @@ Deno.serve(async (req: Request) => {
   const limite = new Date(Date.now() - RETENTION_JOURS * 86400_000).toISOString();
   await supabaseAdmin.from('service_health_probes').delete().lt('checked_at', limite);
   await supabaseAdmin.from('mail_transport_failures').delete().lt('occurred_at', limite);
+  // Journal des consultations nominatives : 12 mois (RET-3), dans le schéma
+  // private, hors de portée de .from() — d'où la fonction.
+  await supabaseAdmin.rpc('fn_consultations_purger');
 
   return jsonResponse(200, {
     ok: true,

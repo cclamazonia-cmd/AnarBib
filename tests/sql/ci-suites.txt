@@ -484,6 +484,9 @@ tests/sql/gazette_correction_staff_tests.sql
 # B25/B26 (16/09) : les compteurs d abus comptent — 7 kinds fermes (login, geocode, cartographie, gazette),
 # la cle est une empreinte SHA-256 (jamais IP ni courriel), une cle brute ou un kind inconnu sont refuses.
 tests/sql/compteurs_d_abus_tests.sql
+# 22/10/2026 (migration 20261022223116) : le journal des consultations nominatives compte sans nommer ;
+# les sondes abus et consultations de health-probe, leurs seuils, leurs droits, la purge à 12 mois.
+tests/sql/alertes_comportements_tests.sql
 # B27 (21/09) : le catalogue par oeuvre repond au visiteur anonyme. La RPC depassait les 3 s du role anon
 # (sous-requete correlee par groupe de la page + fn_work_display_title par oeuvre du catalogue) ; recrite sans
 # changer son resultat. Garde les motifs couteux, la requete dynamique, et la cascade du titre dans ses 3 branches.
