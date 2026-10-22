@@ -37,7 +37,7 @@
   "ficedl.backToIndex": "Toți descriptorii",
   "ficedl.term.notFound": "Descriptorul nu a fost găsit.",
   "ficedl.term.hierarchy": "Ierarhie",
-  "ficedl.term.allLanguages": "În cele zece limbi",
+  "ficedl.term.allLanguages": "{count, plural, one {Termen} few {Termeni, în # limbi} other {Termeni, în # de limbi}}",
   "ficedl.term.proposed": "Propus de AnarBib, încă nu figurează în tezaurul FICEDL",
   "ficedl.term.partnerCatalogs": "În cataloagele partenere",
   "ficedl.term.source": "Vezi în tezaurul FICEDL",

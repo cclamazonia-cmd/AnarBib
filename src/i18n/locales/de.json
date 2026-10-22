@@ -37,7 +37,7 @@
   "ficedl.backToIndex": "Alle Deskriptoren",
   "ficedl.term.notFound": "Deskriptor nicht gefunden.",
   "ficedl.term.hierarchy": "Hierarchie",
-  "ficedl.term.allLanguages": "In allen zehn Sprachen",
+  "ficedl.term.allLanguages": "{count, plural, one {Bezeichnung} other {Bezeichnungen, in # Sprachen}}",
   "ficedl.term.proposed": "Von AnarBib vorgeschlagen, noch nicht im Thesaurus der FICEDL",
   "ficedl.term.partnerCatalogs": "In den Partnerkatalogen",
   "ficedl.term.source": "Im FICEDL-Thesaurus ansehen",

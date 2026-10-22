@@ -4,7 +4,9 @@
 // Surface anon (route /thesaurus-ficedl/:motId). Lecture seule de
 // public.ficedl_thesaurus_terms. motId = identifiant FICEDL = clé de fédération.
 //
-// Affiche : libellé dans la locale active, les 10 langues du vocabulaire partagé
+// Affiche : libellé dans la locale active, les langues du vocabulaire partagé
+// que la fiche porte (dix au plus ; une seule pour les dates et les descripteurs
+// que la source n'a pas traduits)
 // (feature : c'est un thésaurus multilingue), la hiérarchie, et — fédération
 // ENTRANTE — les liens vers le même terme dans les catalogues partenaires
 // (catalog_links : CIRA, Marseille, Placard, CCL…). ANTI-FORK : libellés tels
@@ -60,6 +62,9 @@ export default function FicedlTermPage() {
     ? Object.entries(term.labels_proposes || {}).filter(([code, v]) => v && !(term.labels && term.labels[code]))
     : [];
   const partnerLinks = term ? normalizePartnerLinks(term.catalog_links) : [];
+  // Les langues que CETTE fiche porte vraiment : une date ou un descripteur que
+  // la source n'a pas traduit n'en a qu'une, et le titre de la section le dit.
+  const languesPortees = LANGS.filter((code) => term && term.labels && term.labels[code]);
   useDocumentTitle(label || t({ id: 'pageTitle.ficedl' }));
 
   const panel = {
@@ -115,10 +120,10 @@ export default function FicedlTermPage() {
                 </>
               )}
 
-              {/* Les 10 langues du vocabulaire partagé */}
-              <div style={sectionTitle}>{t({ id: 'ficedl.term.allLanguages' })}</div>
+              {/* Les langues du vocabulaire partagé que cette fiche porte */}
+              <div style={sectionTitle}>{t({ id: 'ficedl.term.allLanguages' }, { count: languesPortees.length })}</div>
               <dl style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr)', gap: '4px 14px', margin: 0, fontSize: '.92rem' }}>
-                {LANGS.filter((code) => term.labels && term.labels[code]).map((code) => (
+                {languesPortees.map((code) => (
                   <div key={code} style={{ display: 'contents' }}>
                     <dt style={{ color: 'var(--brand-muted)', textTransform: 'capitalize' }}>{langName(code, locale)}</dt>
                     <dd style={{ margin: 0, color: '#f4f4f4' }}>
