@@ -5147,10 +5147,16 @@
         "claude/GLB_v17_releve_et_constats_2026-09-01",
         "REGISTRE §0 DOC-GEL-1"
       ],
-      "verif": {
-        "fr": "**12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.",
-        "pt": "**12/10 — o que a v18 diz** (capítulo 9.3): os sete domínios relidos um a um com «o que falta para prová-los». Dois estão exercidos (sondas, fila das convenções); os outros cinco esperam um fato. A arbitragem «terminar ou congelar» continua a escrever."
-      }
+      "verif": [
+        {
+          "fr": "**12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.",
+          "pt": "**12/10 — o que a v18 diz** (capítulo 9.3): os sete domínios relidos um a um com «o que falta para prová-los». Dois estão exercidos (sondas, fila das convenções); os outros cinco esperam um fato. A arbitragem «terminar ou congelar» continua a escrever."
+        },
+        {
+          "fr": "**22/10 — la table d'arbitrage est écrite, à trancher par Xavier** (`1abd4889`, `docs/journal/arbitrages/ARBITRAGE_j10_sept_domaines_2026-10-22.md`), mesurée en production : sondes (43 180 relevés, 27 incidents) et témoin (187 battements) **finis par l'usage** ; périodiques (7 titres, 5 états de collection) et file des conventions (2 168 lignes, 712 appliquées, 572 à revoir) **à finir sans code** (D3, relecture) ; notes de lecture (**0 note**, 2 bibliothèques les ont activées) et OPDS/RSS (aucune mesure d'audience) **à geler** ; moisson OAI (aucune source réelle) **à finir par le seul pilote H35**, sinon geler. **Reste** : les cinq verdicts de Xavier, puis le REGISTRE (`DOC-GEL-1`).",
+          "pt": "**22/10 — a tabela de arbitragem está escrita** (`1abd4889`): sondas e testemunha terminadas pelo uso; periódicos e fila a terminar sem código; notas de leitura e OPDS/RSS a congelar; OAI pelo piloto H35. Faltam os cinco veredictos."
+        }
+      ]
     },
     {
       "id": "E20",
@@ -5798,7 +5804,12 @@
         "clôture C7",
         "docs/journal/arbitrages/C7_propositions_matieres_2026-09-27.md"
       ],
-      "verif": null
+      "verif": [
+        {
+          "fr": "**22/10 — une proposition pour les 1 014 notices d'Anarchief, tirée de leur propre wiki** (`1abd4889`, `docs/journal/audits/PROPOSITION_c27_sujets_anarchief_2026-10-22.md`). Les copies d'import gardent les sujets du wiki : 326 notices, 128 sujets. Rapprochés du vocabulaire matière (57 termes actifs) : **168 notices** recevraient un sujet par correspondance exacte (183 affectations), **28 de plus** par correspondance proche, à confirmer ligne à ligne ; « Mundaneum » (60 notices) est une provenance, pas un sujet ; des genres, des lieux et des termes absents (Kapitalisme, Economie, Democratie…) sont listés à part. **Reste** : la décision de Xavier (exactes oui/non, proches, termes absents), puis une migration avec banc. Rien d'écrit en base.",
+          "pt": "**22/10 — uma proposta para as 1 014 fichas da Anarchief, tirada do próprio wiki** (`1abd4889`): 168 fichas por correspondência exata, 28 por correspondência próxima. Falta a decisão de Xavier."
+        }
+      ]
     },
     {
       "id": "E30",
@@ -6268,6 +6279,10 @@
         {
           "fr": "**20/10 — les 308 sont dans la file de revue** (`33d60c59`, migration `20261020194156`) : 197 personnes au lot `autorite_forme` (proposition de forme de l'outil), 111 collectivités au lot `autorite_collectivite`, contexte « Anarchief », note qui dit le Wikidata à confirmer ou son absence ; aucun écran ne change, « valider » confirme, « corriger » donne la forme retenue, `conv_revue_appliquer` l'écrit. « Wayne Prize » vérifié : les trois notices (ANARCHIEF-988, -3052, -3053) sont liées à Wayne Price (11615), la graphie de la source gardée en variante — rien à corriger. **Reste** : la relecture elle-même, dans l'Atelier.",
           "pt": "**20/10 — as 308 estão na fila de revisão** (`33d60c59`): 197 pessoas no lote `autorite_forme`, 111 coletividades em `autorite_collectivite`. « Wayne Prize » verificado: ligado a Wayne Price (11615). Falta a revisão no Atelier."
+        },
+        {
+          "fr": "**22/10 — une troisième source, le NTA de la KB : 24 autorités de plus** (`b5b4d4e3`, migration `20261022190340`, en production par le run 1958). Le thésaurus des noms d'auteurs de la Bibliothèque royale néerlandaise (SPARQL `data.bibliotheken.nl`, CC0) donne nom, prénoms, dates, nationalité, liens Wikidata/VIAF/ISNI et les titres de la personne au catalogue national. Règle de C4 : nom identique ET un titre de nos notices parmi ses titres à la KB, un seul candidat. Sur les 114 personnes restées sans identifiant : **24 à deux signaux, relues une à une et appliquées** (8 avec un Wikidata tiré des liens du NTA : Schapiro, Swomley, Kolthek, Zandstra, Boenders, Bot, Lichtveld/Albert Helman, Sheehan) ; 24 à un seul signal et 9 homonymes laissés à la relecture ; 55 sans correspondance. `private.fn_enrichir_autorites` connaît désormais la source `nta` (trace `nta_releve` avec preuve et champs, tout attribué au NTA). En production : 102 des 308 autorités d'Anarchief ont un Wikidata, 118 ont reçu au moins un identifiant. Relevé : `docs/journal/operations/enrichissement-autorites-2026-09-26/anarchief-nta-2026-10-22/`. **Reste** : la relecture des 308 dans l'Atelier (au lot `autorite_forme` et `autorite_collectivite`), et les 100 collectifs, que le NTA ne décrit pas.",
+          "pt": "**22/10 — terceira fonte, o NTA da KB: mais 24 autoridades** (`b5b4d4e3`). Regra de C4 (nome idêntico e um título nosso entre os da KB). 24 aplicadas (8 com Wikidata); 102 das 308 têm Wikidata. Falta a revisão no Atelier e os 100 coletivos."
         }
       ]
     },
@@ -6494,6 +6509,10 @@
         {
           "fr": "**20/10 — la cause de l'orphelin n'est pas dans la base.** L'objet `books/7594/…` porte le dossier du brouillon de reprise 7594 et un nom d'Archive.org ; ni la file des candidats (`ingest.digital_candidates`) ni les ressources de brouillon ne le citent — le brouillon 7594 cite le fichier de la ressource 980. Le chemin le plus probable : un versement dans le formulaire du brouillon (`DigitalResourcesPanel`, `books/<brouillon>/<horodatage>_<nom>`) remplacé ensuite sans retrait de l'objet. La garantie demandée (« une reprise ne dépose plus de fichier ») suppose un ramassage des objets qu'aucune ressource ni brouillon ne cite après un délai — plus qu'une reprise : à décider.",
           "pt": "**20/10 — a causa do órfão não está no banco**: provável envio pelo formulário do rascunho, depois substituído sem remover o objeto. A garantia pede uma coleta periódica dos objetos não citados — a decidir."
+        },
+        {
+          "fr": "**22/10, soir — les deux objets sont retirés** (par Xavier, tableau de bord Storage, revérifié en base) : plus aucun objet sans ressource ni brouillon dans les quatre seaux PDF et EPUB — restent deux marqueurs de dossier vides de 0 octet (`.emptyFolderPlaceholder`) laissés par le tableau de bord, sans conséquence ; aucune table ne citait les deux fichiers. **Reste la seconde moitié**, à décider : (a) rien, (b) un relevé hebdomadaire des orphelins à l'administration du réseau, sans suppression (recommandé), (c) une suppression automatique après 30 jours.",
+          "pt": "**22/10, noite — os dois objetos foram retirados** (por Xavier, painel Storage). Falta decidir a segunda metade: (a) nada, (b) um levantamento semanal dos órfãos (recomendado), (c) supressão automática."
         }
       ]
     },

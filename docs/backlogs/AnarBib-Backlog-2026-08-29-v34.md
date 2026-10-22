@@ -64,7 +64,7 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 **Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém).
 
-**Fraîcheur des constats au 2026-10-22.** **62 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **7** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-22.** **63 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J10, J13, K1, K7). Les **6** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -582,7 +582,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** C7 (27/09) a indexé 851 notices dans le vocabulaire existant et laissé de côté celles dont le sujet n'y est pas — littérature générale, philosophie, sciences sociales, espéranto, spiritualité, histoire du Brésil : 466 ce jour-là, « l'étendre serait un autre item » (clôture C7). Cet item n'existait pas. **Mesuré le 05/10 au soir** : 463 notices sur 2 607 n'ont aucun sujet.
 
-*Constat du 29/08, non revérifié depuis.*
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Lire les notices sans sujet par grands ensembles ; proposer les termes à ajouter au vocabulaire et les affectations, sur une fiche validée par Xavier comme celle de C7 ; hors du thésaurus FICEDL, sans créer de fork (décision de Xavier du 27/09).
 
@@ -623,7 +623,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `1704c05c` (19/10) a créé 308 autorités (197 personnes, 111 collectifs), source « Anarchief.org · import 2026-10 », aucune avec un identifiant Wikidata. La décision de Xavier prévoyait de les marquer pour relecture dans l'Atelier : aucune ligne de file n'a été créée. L'enrichissement (Wikidata, IdRef) a été renvoyé à plus tard. Une lecture à vérifier : « Wayne Prize » pris pour Wayne Price (3 notices) ; 50 graphies restent en texte.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Verser les 308 dans la file de revue ; rejouer l'enrichissement à deux signaux (règle de C4) ; vérifier « Wayne Prize ».
 
@@ -851,7 +851,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vus le 19/10 : `anarbib-pdf-public/books/7594/…` (19,6 Mo, déposé le 17/10 par un brouillon de reprise publié dans la notice 1127, qui avait déjà sa ressource 980 du même ouvrage) ; un objet de test de mars dans `pdf-restrito/test/`. Aucun ne correspond à une ressource.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Sur accord de Xavier, les retirer ; vérifier au banc qu'une reprise publiée sur une notice qui a déjà sa ressource ne dépose plus de fichier.
 
@@ -1770,7 +1770,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Le relevé du GLB v17 (01/09) le dit sans action datée : périodiques, notes de lecture, moisson OAI entrante, OPDS, sondes, témoin de sauvegarde, file des conventions — « aucun n'a été arbitré contre son coût d'achèvement ». Depuis, H5 (OAI) et I4 (témoin) sont clos ; les cinq autres sont livrés en partie et non arbitrés.
 
-*Vérifié : **12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Cinq lignes : ce qui est livré, ce qui manque pour que ce soit fini, ce que ça coûte, et si on le finit ou si on le gèle avec la raison écrite (`P3`).
 
