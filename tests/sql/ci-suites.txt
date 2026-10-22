@@ -897,3 +897,6 @@ tests/sql/constitution_activation_tests.sql
 # C33 (22/10/2026) : le NTA de la KB, troisième source de private.fn_enrichir_autorites — NTA seul, NTA + Wikidata de ses liens
 # (tout attribué au NTA), rejouable, conflit de NTA, refus, chemin Wikidata intact.
 tests/sql/c33_source_nta_tests.sql
+# C27 (22/10/2026) : les sujets d'une copie d'import posés sur les notices d'un préfixe (private.fn_indexer_sujets_importes) — ordre du wiki,
+# formes doubles, existant gardé, rejouable, refus vers une matière proposée ou absente, hors préfixe intact, aucune matière créée.
+tests/sql/c27_sujets_importes_tests.sql

@@ -1,7 +1,8 @@
 # C27 — des sujets pour les notices d'Anarchief, tirés de leur propre wiki (proposition, 22/10/2026)
 
-> **À valider par Xavier** (fiche C27 : « Xavier, pour la validation »). Rien n'est écrit en base.
-> Une fois validée, une migration posera les sujets retenus (`book_subjects`), avec un banc.
+> **Tranché le 22/10/2026 par Xavier** — voir « La décision » en fin de document. Les correspondances
+> exactes, la provenance Mundaneum et les propositions de termes sont posées par la migration
+> `20261022203129` ; **les correspondances proches attendent sa relecture** (cases ci-dessous).
 
 ## Le constat
 
@@ -44,18 +45,21 @@ en créer d'office.
 
 ### Correspondances proches — une à une (28 notices de plus, 34 affectations)
 
-| Sujet du wiki | Terme proposé | Pourquoi « proche » |
-|---|---|---|
-| Spaanse Burgeroorlog | Révolution espagnole (26) | la guerre civile n'est pas la révolution ; AnarBib n'a pas de terme « guerre civile » |
-| Pacifisme, Sociale Defensie | Antimilitarisme (7) | voisins, pas identiques |
-| Bolshevisme, Lenin | Révolution russe (28) | la critique du bolchevisme y est rangée d'ordinaire ; « Communisme » (48) possible |
-| I.A.A., I.W.M.A. (l'AIT) | Anarchosyndicalisme (17) | l'organisation, pas la doctrine |
-| Platformisme | Organisation (47) | le plateformisme est une doctrine d'organisation |
-| Criminologie | Abolitionnisme pénal (11) | la « criminologie radicale » de Leuven est abolitionniste ; à vérifier notice par notice |
-| Pedagogie, Opvoeding, Educatie | Éducation libertaire (4) | à condition que l'éducation dont il s'agit soit libertaire |
-| Kraken | Mouvement de quartier (35) | le squat n'a pas de terme à lui |
-| Situationisme, Autonomen | Contre-culture (15) | rangement large |
-| Sexualiteit | Révolution sexuelle (53) | rangement large |
+> **À relire par Xavier** : remplacer ☐ par ☑ sur les lignes retenues (ou ☒ pour les écarter) ;
+> seules les lignes ☑ seront posées, par la même fonction que les exactes.
+
+| Retenir | Sujet du wiki | Terme proposé | Pourquoi « proche » |
+|---|---|---|---|
+| ☐ | Spaanse Burgeroorlog | Révolution espagnole (26) | la guerre civile n'est pas la révolution ; AnarBib n'a pas de terme « guerre civile » |
+| ☐ | Pacifisme, Sociale Defensie | Antimilitarisme (7) | voisins, pas identiques |
+| ☐ | Bolshevisme, Lenin | Révolution russe (28) | la critique du bolchevisme y est rangée d'ordinaire ; « Communisme » (48) possible |
+| ☐ | I.A.A., I.W.M.A. (l'AIT) | Anarchosyndicalisme (17) | l'organisation, pas la doctrine |
+| ☐ | Platformisme | Organisation (47) | le plateformisme est une doctrine d'organisation |
+| ☐ | Criminologie | Abolitionnisme pénal (11) | la « criminologie radicale » de Leuven est abolitionniste ; à vérifier notice par notice |
+| ☐ | Pedagogie, Opvoeding, Educatie | Éducation libertaire (4) | à condition que l'éducation dont il s'agit soit libertaire |
+| ☐ | Kraken | Mouvement de quartier (35) | le squat n'a pas de terme à lui |
+| ☐ | Situationisme, Autonomen | Contre-culture (15) | rangement large |
+| ☐ | Sexualiteit | Révolution sexuelle (53) | rangement large |
 
 ### Ce qui ne se rapproche pas
 
@@ -85,3 +89,22 @@ en créer d'office.
 1. Poser les **correspondances exactes** (168 notices) : oui / non.
 2. Poser les **correspondances proches** : toutes, aucune, ou ligne à ligne.
 3. Les **termes absents** : en créer (lesquels), ou laisser ces notices sans sujet pour ces thèmes.
+
+## La décision (22/10/2026)
+
+Xavier, par questionnaire, le 22/10 au soir :
+
+1. **Correspondances exactes : oui, toutes** — 168 notices, 183 affectations, posées par
+   `private.fn_indexer_sujets_importes` (migration `20261022203129`). Elles se retrouvent par leur
+   date de pose et se re-dérivent de la copie d'import ; chacune se retire à la main.
+2. **Correspondances proches : relues par Xavier**, ligne à ligne (cases ci-dessus). Les lignes
+   retenues seront posées par la même fonction, dans une migration à part.
+3. **« Mundaneum » : note de provenance** sur les 60 notices (« Fonds du Mundaneum (Mons), d'après le
+   wiki d'Anarchief.org. »), jamais en sujet.
+4. **Termes absents : proposés**, au statut `proposto` (REGISTRE `THES-6`) — douze termes, libellés en
+   onze langues : Capitalisme, Démocratie, Congrès, Révolution, Nationalisme, Matérialisme,
+   Abstentionnisme (« Stemmen »), Classe ouvrière, Violence et non-violence, Provo (mouvement),
+   Libération animale, Alternatives. Économie et Anti/impérialisme ont déjà leur proposition (62, 64).
+   La coordination du catalogage les valide ou non dans la gouvernance des matières (Catalogage) ;
+   un terme validé s'affecte ensuite aux notices qui le portent. Les personnes prises pour sujets
+   relèvent de l'indexation par autorité, pas du thésaurus.
