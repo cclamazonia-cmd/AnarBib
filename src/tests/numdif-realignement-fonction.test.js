@@ -53,6 +53,18 @@ describe('realign-digital-resource — l’ordre des gestes', () => {
     expect(aligne).toBeLessThan(i('createClient(supabaseUrl, serviceKey'));
   });
 
+  // J13 (22/10/2026) : une ressource sans candidat (administration du réseau,
+  // vers le restreint seulement — la base en décide) n'a pas toujours
+  // d'empreinte enregistrée : le fichier en place devient la référence AVANT la
+  // copie, jamais après, et seulement dans ce cas.
+  it('sans candidat : l’empreinte du fichier en place sert de référence, avant la copie', () => {
+    expect(SRC).toContain('(!g.sha256 && !g.sans_candidat)');
+    const reference = i('if (g.sans_candidat && !g.sha256) g.sha256 = avant.sha256;');
+    expect(reference).toBeGreaterThan(i('const avant = await empreinte(service, de, chemin);'));
+    expect(reference).toBeLessThan(i('if (avant.sha256 !== g.sha256)'));
+    expect(reference).toBeLessThan(i('.copy(chemin, chemin, { destinationBucket: vers })'));
+  });
+
   it('empreintes natives (node:crypto), pas de JavaScript pur', () => {
     expect(SRC).toContain("import { createHash } from 'node:crypto';");
   });

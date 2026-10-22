@@ -906,3 +906,6 @@ tests/sql/d28_fichiers_orphelins_tests.sql
 # J10 / DOC-GEL-2 (22/10/2026) : les appels aux flux OPDS et RSS comptés par jour, route et famille d'application (fn_flux_compter_v1),
 # un compteur par jour, client hors forme en « autre », refus, table et fonction fermées au lectorat.
 tests/sql/flux_appels_comptes_tests.sql
+# J13 (22/10/2026) : restreindre une ressource publique sans candidat NUMDIF (administration du réseau, décision écrite dans la ressource,
+# vers le restreint seulement) — garde, refus de l'enregistrement, restriction faite puis « aligned », chemin des candidats intact.
+tests/sql/numdif_restreindre_sans_candidat_tests.sql

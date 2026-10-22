@@ -118,7 +118,9 @@ Deno.serve(async (req) => {
 
     // 1. la garde, sous le jeton de l'appelant — échec fermé, et AVANT la clé de service
     const { data: g, error: gardeErr } = await userClient.rpc('fn_digital_resource_realign_garde', { p_resource_id: id });
-    if (gardeErr || !g || !g.sha256 || !g.from?.bucket || !g.from?.path || !g.destination?.storage_bucket) {
+    // J13 (22/10/2026) : une ressource sans candidat (sans_candidat, administration
+    // du réseau, vers le restreint seulement) peut n'avoir aucune empreinte enregistrée.
+    if (gardeErr || !g || (!g.sha256 && !g.sans_candidat) || !g.from?.bucket || !g.from?.path || !g.destination?.storage_bucket) {
       issues.push(echec(id, 'forbidden', gardeErr?.message || 'Accès refusé.', { hint: gardeErr?.hint ?? null }));
       continue;
     }
@@ -133,6 +135,9 @@ Deno.serve(async (req) => {
     const avant = await empreinte(service, de, chemin);
     if ('erreur' in avant) { issues.push(echec(id, 'server_error', `Lecture de ${de}/${chemin} échouée : ${avant.erreur}`)); continue; }
     if (avant.octets > MAX_OCTETS) { issues.push(echec(id, 'file_too_large', 'Fichier trop lourd pour un appel.', { bytes: avant.octets, max: MAX_OCTETS })); continue; }
+    // sans empreinte enregistrée (J13, sans candidat) : le fichier en place devient la
+    // référence, et la copie devra lui être identique ; l'enregistrement la garde
+    if (g.sans_candidat && !g.sha256) g.sha256 = avant.sha256;
     if (avant.sha256 !== g.sha256) {
       issues.push(echec(id, 'fingerprint_mismatch', 'Le fichier en place n\'est pas celui qui a été versé.',
         { algorithm: 'SHA-256', expected: g.sha256, actual: avant.sha256, moment: 'avant' }));
