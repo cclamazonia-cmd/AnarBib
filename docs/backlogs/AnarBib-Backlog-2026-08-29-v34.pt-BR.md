@@ -325,7 +325,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `.forgejo/workflows/ci.yml` e `sql-tests.yml` trazem ambos `runs-on: anarbib-local` — um `act_runner` auto-hospedado no WSL2 do mantenedor. Máquina desligada, **nada se implanta**, e a falha às vezes é silenciosa. **28/09 —** medido: em 27/09 às 22h40 o portátil entrou em suspensão durante um job `app`; a tarefa foi dada como falha às 23h45, o `backend` nunca correu, uma migração esperou até ao push do dia seguinte, sem aviso. Os runners hospedados da Codeberg não servem (10 min por job, sem Docker). Três gestos sem máquina: `deploy/ops/RUNNER.md` (procedimento para quem não o instalou, mudança de máquina sem corte), a sonda `ci_en_retard` do `health-probe` (uma leitura por hora das tarefas da forja, e-mail «o que fazer: religar, verificar, relançar»), `deploy/runner/compose.yml` (runner em contêiner). Falta a máquina: Xavier tenta o outro portátil. **Implantado em produção em 28/09 às 12h48** (migração pela CI, nenhum incidente) — depois de dois pushes de código que a Forgejo saltou sem um vermelho porque um commit do lote trazia `[skip ci]`; o hook `.githooks/pre-push` recusa agora esse lote misto para a Codeberg.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Rodar o runner em outro lugar que não uma estação de trabalho pessoal: máquina do provedor, segunda máquina da rede, ou runner compartilhado. A lógica de implantação já está extraída em `scripts/ci/deployer-backend.sh` e é reexecutável à mão — metade do trabalho está feita.
 
@@ -1566,7 +1566,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 | | | | |
 |---|---|---|---|
 | **I2** | Manter a pilha auto-hospedada pronta para a produção na ASR — impressões, proxy, reconstrução (repartição de 19/10) | `P1` | Aberto |
-| **I21** | O que precisa ser verdade antes da mudança — os backups em Lyon primeiro, depois a produção na ASR (repartição de 19/10) | `P1` | Aberto |
+| **I21** | O que precisa ser verdade antes da mudança — os backups em um terceiro primeiro (Lille, e uma reserva compartilhada para os PDF públicos), depois a produção na ASR (repartição de 21/10) | `P1` | Aberto |
 | **I32** | Estabelecer a causa da queda de 07/10 e dimensionar a instância do banco | `P1` | Aberto |
 | **I34** | Avisar quando a publicação do front falha (Deploy Pages não bloqueante) | `P1` | A verificar |
 | **I35** | Tirar as consequências da « via (a) » na CI | `P1` | Aberto |
@@ -1599,13 +1599,13 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 *Remissões : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
-#### I21 — O que precisa ser verdade antes da mudança — os backups em Lyon primeiro, depois a produção na ASR (repartição de 19/10)
+#### I21 — O que precisa ser verdade antes da mudança — os backups em um terceiro primeiro (Lille, e uma reserva compartilhada para os PDF públicos), depois a produção na ASR (repartição de 21/10)
 
 `P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : administração de sistemas, deliberação coletiva
 
 **Estado.** A decisão de 07/09 (oferta confirmada: VM IPv4, Debian, backups já lá) e a nota de 05-06/09 deixam uma lista que nada mantém junta. **Verificado em 07/09 em `deploy/`**: nenhum rastro de `unattended-upgrades`, firewall nem autenticação só por chave. O resto é humano ou local: a conexão autenticada na pilha local nunca retestada desde a retirada do Turnstile; `deploy/.env` sobrescrito por `install.sh` (domínios em `localhost`) sem cópia conhecida; o teste a partir de uma rede móvel brasileira (NAT64) nunca feito; o prazo de intervenção de Les Herbes Folles nunca pedido; o meio de lhes pagar «pedido desde julho, sem resposta»; um segundo detentor dos acessos; e a regra posta em 07/09: **não se vira antes que o backup tenha ido para um terceiro** — hoje os três fluxos restic estão no próprio hospedeiro de destino.
 
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Manter a lista aqui, marcar cada condição com sua prova (arquivo, e-mail, teste datado). O endurecimento entra em `deploy/`; o depósito de backup terceiro pede-se em Bolonha (**I12** diz o que o espelho frio cobre, e não é isso).
 

@@ -325,7 +325,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `.forgejo/workflows/ci.yml` et `sql-tests.yml` portent tous deux `runs-on: anarbib-local` — un `act_runner` auto-hébergé sur le WSL2 du mainteneur. Machine éteinte, **rien ne se déploie**, et l'échec est parfois silencieux. **28/09 — ce que l'échec silencieux vaut, mesuré : le 27/09 à 22 h 40 min 30 s le portable s'est mis en veille pendant le job `app` de 911ad1db** (journal WSL : fin du boot à cette seconde ; à 22 h 37 déjà `ReportLog error: deadline_exceeded`). Codeberg a déclaré la tâche en échec à 23 h 45 ; le `backend` n'a jamais tourné ; la migration de ce commit a attendu le push suivant, le lendemain à 11 h 37 — sans qu'un mot ne parte. Les runners hébergés par Codeberg ne conviennent pas (mesuré sur `codeberg.org/actions/meta` : 10 min par job au plus, pas de Docker ; `sql-tests` et `rejeu-image` en ont besoin et durent 6 à 12 min). **Trois gestes faits sans machine, sur décision de Xavier** : (1) `deploy/ops/RUNNER.md` — ce que c'est, où il vit (relu sur la machine : binaire v12.10.2, `~/.runner`, unités = liens vers `deploy/ops/systemd/`), le savoir vivant en deux minutes (`journalctl`, jamais `systemctl`), la remise en route, l'installation sur une autre machine avec **le même label** (deux runners peuvent coexister, la bascule se fait sans coupure) et un drop-in local pour l'utilisateur ; (2) la sonde **`ci_en_retard`** de `health-probe` (`_shared/ci/forgejo-tasks.ts`, migration `20260928095045`) : une fois par heure, la liste des tâches de la forge — une tâche non terminée depuis plus de 2 h, ou le dernier `app`/`backend` en échec depuis plus de 30 min sans run plus récent, ouvre l'incident et envoie « que faire : allumer, vérifier, **relancer** » ; un `[skip ci]` n'est pas une fausse alerte (on ne compare pas au marqueur), un 504 de l'API ne change rien ; banc de 15 cas dont la vraie soirée du 27/09 ; (3) `deploy/runner/compose.yml` — le runner en conteneur (`code.forgejo.org/forgejo/runner:12.10.2`, socket Docker partagée), `compose config` valide et image éprouvée ; l'enregistrement demande le jeton du dépôt. **Reste la machine** : Xavier essaie son autre portable ; la VM des Herbes Folles attend I21. Et le runner reste unique, en série : sortir du poste règle la disponibilité, pas la lenteur (`rejeu-image` la nuit, ou un second runner). **Déployé en prod le 28/09 à 12 h 48** (migration `20260928095045` par la CI, CHECK élargie, aucun incident `ci_en_retard`) — après deux pushes de code que Forgejo a sautés sans un rouge parce qu'un commit du lot portait `[skip ci]` (le backlog par-dessus, puis un commit voisin ramené par le rebase) ; le hook `.githooks/pre-push` refuse désormais ce lot mixte vers Codeberg (le miroir GitHub, sans CI, passe).
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Faire tourner le runner ailleurs que sur un poste de travail personnel : machine de l'hébergeur, seconde machine du réseau, ou runner partagé. La logique de déploiement est déjà extraite dans `scripts/ci/deployer-backend.sh` et rejouable à la main — la moitié du travail est faite.
 
@@ -1566,7 +1566,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **I2** | Tenir la pile auto-hébergée prête pour la production à l'ASR — empreintes, proxy, reconstruction (répartition du 19/10) | `P1` | Ouvert |
-| **I21** | Ce qui doit être vrai avant la bascule — les sauvegardes à Lyon d'abord, puis la production à l'ASR (répartition du 19/10) | `P1` | Ouvert |
+| **I21** | Ce qui doit être vrai avant la bascule — les sauvegardes chez un tiers d'abord (Lille, et une réserve partagée pour les PDF publics), puis la production à l'ASR (répartition du 21/10) | `P1` | Ouvert |
 | **I32** | Établir la cause de la panne du 07/10 et dimensionner l'instance de base | `P1` | Ouvert |
 | **I34** | Faire savoir quand la publication du front échoue (Deploy Pages non bloquant) | `P1` | À vérifier |
 | **I35** | Tirer les conséquences de la « voie (a) » dans la CI | `P1` | Ouvert |
@@ -1599,13 +1599,13 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 *Renvois : `docs/CHANTIERS_OUVERTS.md §2` · `deploy/README.md` · `REPRISE_bascule_autohebergee_2026-08-26` · `SETUP_fonds_de_carte_pmtiles_2026-09-07` · `REGISTRE FED-O9 (08/09)`*
 
-#### I21 — Ce qui doit être vrai avant la bascule — les sauvegardes à Lyon d'abord, puis la production à l'ASR (répartition du 19/10)
+#### I21 — Ce qui doit être vrai avant la bascule — les sauvegardes chez un tiers d'abord (Lille, et une réserve partagée pour les PDF publics), puis la production à l'ASR (répartition du 21/10)
 
 `P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : administration système, délibération collective
 
 **État.** La décision du 07/09 (offre confirmée : VM IPv4, Debian, sauvegardes déjà chez eux) et la note du 05-06/09 laissent une liste que rien ne tient ensemble. **Vérifié le 07/09 dans `deploy/`** : aucune trace d'`unattended-upgrades`, de pare-feu ni d'authentification par clé seule. Le reste est humain ou local : la connexion authentifiée sur la pile locale jamais retestée depuis le retrait de Turnstile ; `deploy/.env` écrasé par `install.sh` (domaines sur `localhost`) sans copie connue ; l'essai depuis un réseau mobile brésilien (NAT64) jamais fait ; le délai d'intervention des Herbes Folles jamais demandé ; le moyen de leur verser de l'argent « demandé depuis juillet, sans réponse » ; un second détenteur des accès ; et la règle posée le 07/09 : **on ne bascule pas avant que la sauvegarde soit partie chez un tiers** — aujourd'hui les trois flux restic sont chez l'hébergeur de destination lui-même.
 
-*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Tenir la liste ici, cocher chaque condition avec sa preuve (fichier, courriel, essai daté). Le durcissement entre dans `deploy/` ; le dépôt de sauvegarde tiers se demande à Bologne (**I12** dit ce que le miroir froid couvre, et ce n'est pas ça).
 
