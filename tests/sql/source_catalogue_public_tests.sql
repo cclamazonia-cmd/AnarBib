@@ -42,6 +42,13 @@
 --      propose la source, sous anon comme connecté·e ; pas la privée ordinaire ;
 --      la publique oui ; libraries_public_v1 (annuaire du filtre d'avant, RSS) reste sans la source.
 --
+--   T13 une bibliothèque de formation (is_training) sort du filtre pour tout le
+--      monde (décision de Xavier, 22/10/2026 ; migration
+--      20261022204656_une_bibliotheque_de_formation_sort_du_filtre_du_catalogue) :
+--      ni anon, ni l'administration du réseau, ni sa propre équipe ne l'y
+--      voient — même source active ; sans l'étiquette, anon et l'équipe la
+--      verraient (contrôle à vide).
+--
 -- Toutes les écritures sont annulées : la suite se termine par un RAISE.
 --   Bilan OK : 'SOURCE-CATALOGUE-PUBLIC OK : N/N'
 -- =====================================================================
@@ -51,6 +58,7 @@ DECLARE
   c_src    constant uuid := '5c5c5c5c-0000-4000-8000-0000000000a1';  -- source : privée, observatrice, inscription fermée
   c_priv   constant uuid := '5c5c5c5c-0000-4000-8000-0000000000a2';  -- privée ordinaire
   c_pub    constant uuid := '5c5c5c5c-0000-4000-8000-0000000000a3';  -- publique ordinaire
+  c_form   constant uuid := '5c5c5c5c-0000-4000-8000-0000000000a4';  -- bibliothèque de formation (T13)
   c_coord  constant uuid := '5c5c5c5c-0000-4000-8000-000000000011';  -- coordination de la source
   c_admin  constant uuid := '5c5c5c5c-0000-4000-8000-000000000012';  -- administration du réseau
   c_sans   constant uuid := '5c5c5c5c-0000-4000-8000-000000000013';  -- compte sans adhésion
@@ -408,6 +416,44 @@ BEGIN
     IF EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_src) THEN v_txt := concat_ws(',', v_txt, 'source retirée encore dans le filtre'); END IF;
     EXECUTE 'RESET ROLE';
     UPDATE public.libraries SET catalog_public = true WHERE id = c_src;
+    IF v_txt IS NULL THEN v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
+  EXCEPTION WHEN OTHERS THEN BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+    PERFORM set_config('request.jwt.claims', '', true);
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T13 une bibliothèque de formation sort du filtre, pour tout le monde';
+  BEGIN
+    v_txt := NULL;
+    -- privée, isolée comme blmf-teste, avec son équipe (branche « membre »), et
+    -- source active (branche ouverte à tous) : seule is_training la retient.
+    -- Slug sans segment « formation » : le normaliseur forcerait is_training,
+    -- et le contrôle à vide ci-dessous ne pourrait plus le lever.
+    INSERT INTO public.libraries (id, slug, name, short_name, visibility_level, network_mode, catalog_mode, accepts_public_signup, is_active, is_training)
+    VALUES (c_form, 'src-essai-atelier', 'Atelier d''essai (test source)', 'AtelierEssai', 'private', 'isolated', 'local_only', false, true, true);
+    INSERT INTO public.library_service_state (library_id) VALUES (c_form) ON CONFLICT (library_id) DO NOTHING;
+    UPDATE public.libraries SET catalog_public = true WHERE id = c_form;
+    INSERT INTO public.user_library_memberships (user_id, library_id, role, status) VALUES (c_sans, c_form, 'coordenador', 'active');
+    FOR r IN SELECT * FROM (VALUES ('anon', '', 'anon'),
+                                   ('admin', json_build_object('sub', c_admin, 'role', 'authenticated')::text, 'authenticated'),
+                                   ('equipe', json_build_object('sub', c_sans, 'role', 'authenticated')::text, 'authenticated')) x(nom, claims, role) LOOP
+      PERFORM set_config('request.jwt.claims', r.claims, true);
+      EXECUTE format('SET LOCAL ROLE %I', r.role);
+      IF EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_form) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : formation dans le filtre'); END IF;
+      IF NOT EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_pub) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : publique absente du filtre'); END IF;
+      EXECUTE 'RESET ROLE';
+    END LOOP;
+    -- contrôle à vide : sans l'étiquette, l'équipe et anon la verraient
+    UPDATE public.libraries SET is_training = false WHERE id = c_form;
+    FOR r IN SELECT * FROM (VALUES ('anon', '', 'anon'),
+                                   ('equipe', json_build_object('sub', c_sans, 'role', 'authenticated')::text, 'authenticated')) x(nom, claims, role) LOOP
+      PERFORM set_config('request.jwt.claims', r.claims, true);
+      EXECUTE format('SET LOCAL ROLE %I', r.role);
+      IF NOT EXISTS (SELECT 1 FROM api.catalog_filter_libraries_v1 WHERE id = c_form) THEN v_txt := concat_ws(',', v_txt, r.nom || ' : contrôle à vide, l''atelier non étiqueté manque'); END IF;
+      EXECUTE 'RESET ROLE';
+    END LOOP;
+    PERFORM set_config('request.jwt.claims', '', true);
     IF v_txt IS NULL THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
   EXCEPTION WHEN OTHERS THEN BEGIN EXECUTE 'RESET ROLE'; EXCEPTION WHEN OTHERS THEN NULL; END;
