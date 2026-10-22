@@ -37,6 +37,9 @@
 // faudra une, `?limit`/`?offset` sont déjà lus et bornés.
 import { createClient } from '../_shared/deps.ts';
 import { APP_BASE_URL as APP_URL } from '../_shared/core/app-url.ts';
+// J10 / DOC-GEL-2 (22/10/2026) : les appels servis sont comptés un mois, sans
+// donnée personnelle ; le compteur a son propre client et ne lit rien.
+import { compterAppel } from '../_shared/core/compter-flux.ts';
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 // La clé publique (en production, la plateforme sert sous ce nom la clé
@@ -183,7 +186,10 @@ Deno.serve(async (req) => {
   // Le routeur des fonctions livre le chemin après /opds ; racine = navigation.
   const sub = url.pathname.replace(/^.*\/opds/, "").replace(/\/+$/, "");
 
-  if (sub === "" || sub === "/") return atom("navigation", navigationFeed(base));
+  if (sub === "" || sub === "/") {
+    await compterAppel("opds", "racine", req);
+    return atom("navigation", navigationFeed(base));
+  }
 
   if (sub === "/all") {
     const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 100, 1), 200);
@@ -234,6 +240,7 @@ Deno.serve(async (req) => {
 ${entries}
 </feed>
 `;
+    await compterAppel("opds", "tout", req);
     return atom("acquisition", feed);
   }
 

@@ -221,3 +221,6 @@ private.mail_cadence
 # Sortie de Resend (21/10/2026) : le témoin de succès des envois, par canal et par jour UTC (31 jours).
 # Un nombre et deux horodatages par ligne, aucune donnée personnelle.
 private.mail_temoin_jour
+# J10 / DOC-GEL-2 (22/10/2026) : les appels aux flux OPDS et RSS, par jour, route et famille d'application.
+# Des comptes, aucune donnée personnelle (ni IP ni User-Agent).
+private.flux_appels

@@ -25,6 +25,9 @@
 import { createClient } from '../_shared/deps.ts';
 import { secretKey } from '../_shared/core/secret-key.ts';
 import { APP_BASE_URL as APP_URL } from '../_shared/core/app-url.ts';
+// J10 / DOC-GEL-2 (22/10/2026) : les appels servis sont comptés un mois, par
+// bibliothèque et famille d'application, sans donnée personnelle.
+import { compterAppel } from '../_shared/core/compter-flux.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 // B20 (20/09/2026) : la clé secrète se lit par secretKey(), un seul chemin pour
@@ -139,5 +142,6 @@ Deno.serve(async (req) => {
   if (error) return json(500, { ok: false, error: error.message });
 
   const self = `${SUPABASE_URL}/functions/v1/rss-novidades/${slug}`;
+  await compterAppel('rss', slug, req);
   return rss(feedXml(lib as Lib, (rows ?? []) as Row[], self));
 });

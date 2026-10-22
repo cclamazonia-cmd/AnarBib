@@ -27,6 +27,7 @@ const LIVRES = [
 
 function monterEF(opts = {}) {
   const appels = [];
+  const comptes = [];
   const chaine = (table) => {
     const etapes = [];
     const proxy = new Proxy(function () {}, {
@@ -68,21 +69,24 @@ function monterEF(opts = {}) {
       new Function('require', 'module', 'exports', 'Deno', APPURL_CODE)(fauxRequire, m, m.exports, Deno);
       return m.exports;
     }
+    // J10 / DOC-GEL-2 (22/10/2026) : le compteur d'appels, relevé sans réseau.
+    if (p.endsWith('compter-flux.ts')) return { compterAppel: async (flux, route) => { comptes.push([flux, route]); } };
     throw new Error('import inattendu : ' + p);
   };
   const mod = { exports: {} };
   new Function('require', 'module', 'exports', 'Deno', CODE)(fauxRequire, mod, mod.exports, Deno);
-  return { handler, appels, exports: mod.exports };
+  return { handler, appels, comptes, exports: mod.exports };
 }
 
 const GET = (chemin) => new Request('http://stub/functions/v1/rss-novidades' + chemin, { method: 'GET' });
 
 describe('rss-novidades — le flux des nouveautés d’une bibliothèque', () => {
   it('rend 404 pour une bibliothèque qui n’est pas publique — sans lire le catalogue', async () => {
-    const { handler, appels } = monterEF();
+    const { handler, appels, comptes } = monterEF();
     const res = await handler(GET('/blmf-teste'));
     expect(res.status).toBe(404);
     expect(appels.map((a) => a.table)).toEqual(['libraries_public_v1']);
+    expect(comptes).toEqual([]);   // un 404 ne compte pas
   });
 
   it('rend 404 pour un slug malformé, avant toute lecture', async () => {
@@ -93,9 +97,10 @@ describe('rss-novidades — le flux des nouveautés d’une bibliothèque', () =
   });
 
   it('rend un RSS 2.0 : titre échappé, autorité sinon transcription, lien vers la notice', async () => {
-    const { handler, appels } = monterEF();
+    const { handler, appels, comptes } = monterEF();
     const res = await handler(GET('/blmf'));
     expect(res.status).toBe(200);
+    expect(comptes).toEqual([['rss', 'blmf']]);   // J10 : un appel servi, compté par bibliothèque
     expect(res.headers.get('content-type')).toContain('application/rss+xml');
     const xml = await res.text();
     expect(xml).toContain('<rss version="2.0"');
