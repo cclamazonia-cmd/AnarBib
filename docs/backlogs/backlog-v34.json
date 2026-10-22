@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém).",
-      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1."
+      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) — **68 items, 276 clôtures**.",
+      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** — **68 itens, 276 fechamentos**."
     },
     "photo": [
       {
@@ -3462,6 +3462,14 @@
           "fr": "**Clos le 20/10 : la limite est dite avant l'essai** (critère, seconde branche). `14ec3c01` : une seule limite, `LIMITE_APPEL` = 140 Mo par appel (la fonction meurt à 2 s de CPU vers 150-180 Mo). `deposit-digital-candidate` refuse sur la taille relevée à la validation AVANT de télécharger, puis sur la taille annoncée par la source, puis en flux ; le refus est noté sur le candidat (`file_too_large`) au lieu d'un appel mort en route avec un objet partiel dans la zone privée. L'écran des candidats le dit avant l'appel et retire le bouton (clé `importacoes.pdfCandidates.deposit.tooLarge`, onze langues) ; `error.edge.file_too_large` dit 140 au lieu de 150. Un plus gros fichier se verse à la main, par morceaux (`scripts/maptiles/televerser-tus.mjs`). Garde : `src/tests/numdif-limite-appel.test.js`. En production, aucun candidat au-dessus de 98 Mo ; le versement par morceaux CÔTÉ SERVEUR reste possible si le besoin vient (nouvelle fiche alors).",
           "pt": "**Fechado em 20/10: o limite é dito antes da tentativa** (`14ec3c01`): 140 MB por chamada; a função recusa antes de baixar, a tela avisa antes da chamada (onze línguas). Um arquivo maior vai à mão, em partes."
         }
+      ],
+      [
+        "J10",
+        "2026-10-22",
+        {
+          "fr": "**Clos le 22/10 sur décision de Xavier : les sept domaines entrés pendant le gel sont jugés** (REGISTRE `DOC-GEL-2`, `docs/journal/arbitrages/ARBITRAGE_j10_sept_domaines_2026-10-22.md`). Mesurés en production le même jour : **sondes de santé** (43 180 relevés, 27 incidents) et **témoin de sauvegarde** (187 battements) finis par l'usage ; **périodiques** à finir par D3, sans code, gelés si rien n'a commencé au 26/10 ; **notes de lecture** (0 note) gelées, retrait de l'écran *proposé* à la v19 s'il n'y en a toujours aucune ; **moisson OAI** à finir par le seul pilote H35, gelée sans pilote à la v19 ; **OPDS/RSS** gelés en l'état, appels comptés un mois avant tout travail ; **file des conventions** à finir par la relecture (C3, C33). Xavier a demandé ce que « geler » veut dire avant de trancher ; la réponse est inscrite au REGISTRE : un domaine gelé **reste en ligne et utilisable**, garde ses données, reçoit corrections et traductions — seul l'ajout de nouveauté exige une décision datée. Échéances à relire : 26/10 (périodiques), v19 (notes de lecture, OAI).",
+          "pt": "**Fechado em 22/10 por decisão de Xavier: os sete domínios que entraram durante o congelamento foram julgados** (REGISTRE `DOC-GEL-2`). Sondas e testemunha terminadas pelo uso; periódicos a terminar por D3 (congelados se nada começar até 26/10); notas de leitura congeladas (retirada da tela *proposta* na v19 se continuar sem nota); OAI pelo piloto H35; OPDS/RSS congelados e medidos durante um mês; fila de convenções a terminar pela revisão. Um domínio congelado **continua no ar e utilizável**; só o acréscimo de novidade exige decisão datada."
+        }
       ]
     ]
   },
@@ -5103,58 +5111,6 @@
         {
           "fr": "**20/10 — l'intitulé disait une dette déjà réglée.** `sendViaBrevo` n'est plus dans le code (il n'en reste que deux commentaires sur le bogue des logos de mai) ; `sendViaSmtp` (`_shared/mail/smtp.ts`) et l'aiguillage par `MAIL_TRANSPORT` sont en place dans `_shared/transport/email.ts`. Des quatre gestes de la fiche, seul reste le dernier : la bascule (étape 7 du runbook Nodo50).",
           "pt": "**20/10 — o título falava de uma dívida já paga**: `sendViaBrevo` saiu do código; `sendViaSmtp` e o roteamento por `MAIL_TRANSPORT` estão no lugar. Falta só a mudança (etapa 7)."
-        }
-      ]
-    },
-    {
-      "id": "J10",
-      "d": "J",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Sept domaines sont entrés dans le v17 sans avoir été arbitrés contre leur coût d'achèvement",
-        "pt": "Sete domínios entraram no v17 sem terem sido arbitrados contra seu custo de conclusão"
-      },
-      "v": {
-        "fr": "Le relevé du GLB v17 (01/09) le dit sans action datée : périodiques, notes de lecture, moisson OAI entrante, OPDS, sondes, témoin de sauvegarde, file des conventions — « aucun n'a été arbitré contre son coût d'achèvement ». Depuis, H5 (OAI) et I4 (témoin) sont clos ; les cinq autres sont livrés en partie et non arbitrés.",
-        "pt": "O levantamento do GLB v17 (01/09) o diz sem ação datada: periódicos, notas de leitura, coleta OAI de entrada, OPDS, sondas, testemunha de backup, fila das convenções — «nenhum foi arbitrado contra seu custo de conclusão». Desde então, H5 (OAI) e I4 (testemunha) estão fechados; os outros cinco estão entregues em parte e não arbitrados."
-      },
-      "w": {
-        "fr": "Cinq lignes : ce qui est livré, ce qui manque pour que ce soit fini, ce que ça coûte, et si on le finit ou si on le gèle avec la raison écrite (`P3`).",
-        "pt": "Cinco linhas: o que está entregue, o que falta para estar pronto, o que custa, e se se termina ou se congela com a razão escrita (`P3`)."
-      },
-      "y": {
-        "fr": "Le gel de périmètre (`DOC-GEL-1`) ne vaut que si ce qui est entré pendant le gel est jugé — sinon il n'y a pas eu de gel.",
-        "pt": "O congelamento de perímetro (`DOC-GEL-1`) só vale se o que entrou durante o congelamento for julgado — senão não houve congelamento."
-      },
-      "f": {
-        "fr": [
-          "Cinq verdicts au registre ou au backlog, datés."
-        ],
-        "pt": [
-          "Cinco veredictos no registro ou no backlog, datados."
-        ]
-      },
-      "dep": {
-        "fr": "Après Bologne. Sans dépendance technique.",
-        "pt": "Depois de Bolonha. Sem dependência técnica."
-      },
-      "r": [
-        "claude/GLB_v17_releve_et_constats_2026-09-01",
-        "REGISTRE §0 DOC-GEL-1"
-      ],
-      "verif": [
-        {
-          "fr": "**12/10 — ce que la v18 en dit** (chapitre 9.3) : les sept domaines sont relus un à un avec « ce qui manque pour l'éprouver » — périodiques (une revue réelle avec son état de collection), notes de lecture (une note sur un emprunt réel), moisson OAI (une source réelle en production, six tirs à vide), OPDS/RSS (une application tierce qui s'abonne), sondes et témoin (exercés : 40 415 relevés, 23 incidents, 156 battements), file des conventions (exercée : 931 entrées, 712 appliquées). Deux sont donc exercés ; les cinq autres attendent un fait. L'arbitrage « finir ou geler, avec la raison » reste à écrire.",
-          "pt": "**12/10 — o que a v18 diz** (capítulo 9.3): os sete domínios relidos um a um com «o que falta para prová-los». Dois estão exercidos (sondas, fila das convenções); os outros cinco esperam um fato. A arbitragem «terminar ou congelar» continua a escrever."
-        },
-        {
-          "fr": "**22/10 — la table d'arbitrage est écrite, à trancher par Xavier** (`1abd4889`, `docs/journal/arbitrages/ARBITRAGE_j10_sept_domaines_2026-10-22.md`), mesurée en production : sondes (43 180 relevés, 27 incidents) et témoin (187 battements) **finis par l'usage** ; périodiques (7 titres, 5 états de collection) et file des conventions (2 168 lignes, 712 appliquées, 572 à revoir) **à finir sans code** (D3, relecture) ; notes de lecture (**0 note**, 2 bibliothèques les ont activées) et OPDS/RSS (aucune mesure d'audience) **à geler** ; moisson OAI (aucune source réelle) **à finir par le seul pilote H35**, sinon geler. **Reste** : les cinq verdicts de Xavier, puis le REGISTRE (`DOC-GEL-1`).",
-          "pt": "**22/10 — a tabela de arbitragem está escrita** (`1abd4889`): sondas e testemunha terminadas pelo uso; periódicos e fila a terminar sem código; notas de leitura e OPDS/RSS a congelar; OAI pelo piloto H35. Faltam os cinco veredictos."
         }
       ]
     },
