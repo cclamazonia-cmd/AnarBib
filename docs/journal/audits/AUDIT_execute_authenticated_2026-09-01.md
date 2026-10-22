@@ -2128,3 +2128,63 @@ administration comprise, avant la règle (b), par le même refus
 **Compte au 14/10, après le déploiement de `20261014181057`.** 0029 = **430**,
 tous justifiés (437 − 7 fermées, dont celle-ci reste ouverte et justifiée) ;
 0028 = **22** ; 0011 = **1** (voulu).
+
+## Complément du 23/10/2026 — quatorze DEFINER nées depuis le 14/10, et la passe refaite (444 → 441)
+
+Relevé du Security Advisor le 23/10 : 466 WARN = **444** (0029) + **22** (0028) ;
+0011 = **0** ; `rls_enabled_no_policy` = **33** (INFO). (La page « Health
+Advisor » du tableau de bord, qui affichait 0, ne porte pas ces avis.)
+
+**Les quatorze nouvelles**, retrouvées par `oid` décroissant après
+`fn_attach_received_asset_garde`, lues dans leur définition de production
+(catalogue seulement). Aucune n'avait de verdict. Toutes **saines** :
+
+| Fonction | Né le (migration) | Garde | Verdict |
+|---|---|---|---|
+| `fn_digital_candidates_propose(uuid, jsonb)` | 15/10 (`20261015172008`, NUMDIF D13-D16) | `auth.uid()` non nul ; coordination active de la bibliothèque visée, ou administration du réseau ; sinon 42501 `coord_only` ; liste ≤ 200 | **Saine.** Écrit des candidats dans `ingest.digital_candidates` pour SA bibliothèque. |
+| `fn_digital_candidates_list(uuid, text, bigint, int, int)` | 15/10 (idem) | hors coordination et administration : vide, sans erreur ; périmètre = bibliothèques coordonnées | **Saine.** Pagination bornée (≤ 200). |
+| `fn_digital_candidate_decide(bigint, text, …)` | 15/10 (idem) | `auth.uid()` ; candidat hors périmètre = « introuvable » (P0002), comme un candidat inexistant | **Saine.** La décision inconnue est refusée avant toute lecture du candidat : rien ne se dit d'un identifiant. |
+| `fn_digital_candidate_deposit_garde(bigint)` | 15/10 (`20261015182432`) | idem, puis détention (`fn_numdif_peut_agir`) | **Saine.** Garde de l'Edge Function `deposit-digital-candidate`, appelée sous le jeton avant la clé de service (patron B42). Les refus distincts (« plus détentrice », « déjà versé ») ne viennent qu'après le contrôle de périmètre. |
+| `fn_digital_candidate_deposit_failed(bigint, text)` | 15/10 (idem) | idem ; candidat validé seulement | **Saine.** N'écrit que la raison de l'échec (≤ 500 caractères). |
+| `fn_restricted_resources_without_holder()` | 15/10 (`20261015202816`, D19) | administration du réseau ; vide pour tout autre compte | **Saine.** RPC d'administration voulue sans écran (comme F12) : le canal principal est la notification du déclencheur. |
+| `fn_rede_library_counters()` | 16/10 (`20261016085021`) | `fn_assert_network_admin()` | **Saine.** Compteurs par bibliothèque de `/rede`, administration seule. |
+| `api.reading_notes_published_v1(bigint)` | 17-18/10 (`20261018211324`) | compte connecté | **Saine.** Remplace la lecture directe des notes publiées, que la politique de `book_reading_notes` restreint désormais (sa note ou staff de la bibliothèque d'origine) : même visibilité qu'avant pour les comptes connectés, **sans** l'identifiant de l'auteur·rice (pseudonyme et `is_mine` seulement) — une amélioration. |
+| `fn_digital_resource_realign_garde(bigint)` | 19/10 (`20261019145347`) | ressource versée d'un candidat, active ; coordination ou administration ; sinon « introuvable » ; puis détention | **Saine.** Garde de l'Edge Function `realign-digital-resource`, sous le jeton. |
+| `api.capas_pdf_resume(uuid)`, `api.capas_pdf_liste(uuid, int, bigint[])` | 20/10 (`20261020203753`) | administration, ou staff de la bibliothèque passée en paramètre (`user_has_library_staff_role`) | **Saines.** La liste rend le chemin de stockage du PDF (restreint compris) d'un livre **détenu par cette bibliothèque** : le staff de la détentrice y a déjà accès, c'est ce qui permet d'en tirer la couverture. |
+| `api.capas_pdf_poser(bigint, text)` | 20/10 (idem) | staff ou administration ; `fn_capas_dans_le_perimetre` ; chemin imposé `books/<clé de la notice>/capa-….jpg` | **Saine.** |
+| `api.capas_pdf_bibliotheques()` | 20/10 (`20261020211530`) | administration du réseau | **Saine.** |
+| `api.fn_constitution_activate_early(uuid, text)` | 21/10 (`20261021193002`) | administration du réseau ; motif obligatoire ; trace avant la bascule | **Saine.** |
+
+`get_accessible_digital_asset_by_id_v2` a été **recréée** entre-temps (oid neuf) :
+NUMDIF-3 y retire l'adresse du fichier d'une ressource restreinte servie
+depuis le stockage. C'est un resserrement ; son verdict anon (section B)
+tient.
+
+**La passe refaite.** Sur les 444 : 391 sans appelant SQL sous le rôle du
+lecteur ; 388 appelées par le front, une Edge Function ou un script ; trois
+sans aucun appel, toutes des RPC d'administration voulues sans écran
+(`api.fn_outbox_abandonnees`, `api.fn_outbox_acquitter`,
+`fn_restricted_resources_without_holder`) : elles restent.
+
+**Tri neuf : avec quelle clé l'Edge Function appelle-t-elle ?** Treize
+fonctions ne sont appelées que par des Edge Functions. Dix passent par le
+jeton de l'appelant (`userClient`, `asCaller`) et ont besoin
+d'`authenticated`. Trois passent par la **clé de service** et n'ont aucun
+autre appelant sous `anon` ou `authenticated` : `fn_oai_harvestable_libraries`,
+`fn_oai_harvestable_records` (Edge Function `oai-pmh-provider`, `secretKey()`)
+et `fn_authority_using_libraries` (`supabaseAdmin`, et la porte DEFINER
+`api.fn_authority_object`). Fermées à `PUBLIC`, `anon` et `authenticated` par
+`20261022221428`, `service_role` conservé ; éprouvée en production dans une
+transaction annulée. Les deux fonctions OAI quittent aussi la liste anon
+(addendum du 23/10 de `AUDIT_execute_anon_2026-08-30.md`).
+
+**À signaler, hors de cette passe.** Le 0011 n'a pas été soldé par une
+correction : `5be16393` (21/10) a figé le `search_path` de
+`fn_locale_from_idioma`, que B32 avait voulue sans `SET` pour qu'elle
+s'insère en ligne dans `api.catalog_works_v1` (appel par ligne de la vue du
+catalogue). Question de performance à mesurer, pas de droits.
+
+Comptes attendus au prochain relevé : **0029 = 441**, tous justifiés ;
+**0028 = 20** ; **0011 = 0** ; INFO = **33** (les quatre tables neuves,
+`private.flux_appels`, `private.mail_temoin_jour`, `private.mail_cadence`,
+`ingest.digital_candidates`, sont fermées à tous et lues par des DEFINER).

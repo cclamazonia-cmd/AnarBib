@@ -246,6 +246,11 @@ BEGIN
   -- portes DEFINER qui restent ouvertes (fn_oai_harvestable_*,
   -- fn_submit_library_request_via_claim, fn_book_restricted_pdf_state_for_current_user) ;
   -- elles-memes n'avaient aucun appelant sous anon ni authenticated. 29 -> 22.
+  -- 23/10/2026 (20261022221428) : fn_oai_harvestable_libraries et
+  -- fn_oai_harvestable_records sortent a leur tour de T10 et T12 -- l'Edge
+  -- Function oai-pmh-provider les appelle avec la cle de service (secretKey),
+  -- personne ne les appelle sous anon : l'OAI-PMH est anonyme pour le
+  -- moissonneur, pas pour la base. 22 -> 20.
   v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
   BEGIN
     WITH nommees(fn) AS (VALUES
@@ -263,8 +268,6 @@ BEGIN
       ('public.fn_caller_is_network_admin'),
       ('public.fn_get_library_request_claim_context'),
       ('public.fn_library_visible_to_caller'),
-      ('public.fn_oai_harvestable_libraries'),
-      ('public.fn_oai_harvestable_records'),
       ('public.fn_serial_caller_is_library_staff'),
       ('public.fn_submit_library_request'),
       ('public.fn_submit_library_request_via_claim'),
@@ -423,8 +426,6 @@ BEGIN
       ('public.fn_library_visible_to_caller'),
       ('public.fn_locale_from_idioma'),
       ('public.fn_normalize_name'),
-      ('public.fn_oai_harvestable_libraries'),
-      ('public.fn_oai_harvestable_records'),
       ('public.fn_serial_caller_is_library_staff'),
       -- 21/10/2026 (20261021052640) : fn_set_retention_policy, les six fn_task_* et
       -- fn_touch_draft_opened sortent de la liste — des écritures INVOKER d'écrans staff.

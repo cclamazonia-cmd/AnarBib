@@ -1,5 +1,5 @@
 -- =====================================================================
--- AnarBib — Suite : trente-sept fonctions SECURITY DEFINER fermées aux
+-- AnarBib — Suite : quarante-sept fonctions SECURITY DEFINER fermées aux
 -- comptes connectés (trente-quatre le 06/10, advisor 0029 451 → 417 ; trois
 -- de plus le 09/10, fermées dès leur naissance).
 -- Date : 2026-10-06
@@ -33,6 +33,11 @@
 --    `fn_correspondance_poser_message` — rejoignent les fermées (34 → 37) :
 --    T1 et T2 valent pour elles aussi. Leurs seuls appelants sont DEFINER
 --    (`fn_correspondance_lit` et les cinq portes de `api`).
+--
+-- 23/10/2026 — trois de plus (44 → 47, migration 20261022221428) : les deux
+--    fonctions de l'OAI-PMH et fn_authority_using_libraries, que seule la clé
+--    de service appelle (Edge Functions oai-pmh-provider, authority.ts). Elles
+--    quittent les portes anonymes ; T1 vérifie que service_role les garde.
 --
 -- 14/10/2026 — sept de plus (37 → 44, migration 20261014181057), ouvertes
 --    jusque-là à anon par la liste T10 : les quatre lecteurs de mode,
@@ -101,12 +106,21 @@ DECLARE
     'public.fn_library_network_mode(uuid)',
     'public.fn_oai_library_is_harvest_eligible(uuid)',
     'public.fn_consume_library_request_claim(text, uuid)',
-    'public.fn_book_restricted_pdf_state(text)'
+    'public.fn_book_restricted_pdf_state(text)',
+    -- 23/10/2026 (20261022221428) : appelées par la seule clé de service
+    'public.fn_oai_harvestable_libraries()',
+    'public.fn_oai_harvestable_records(text, timestamp with time zone, timestamp with time zone, integer, integer, bigint)',
+    'public.fn_authority_using_libraries(text, bigint)'
+  ];
+  -- Celles-là doivent garder service_role : l'Edge Function qui les sert
+  -- (oai-pmh-provider, _shared/domain/authority.ts) l'emploie.
+  c_service  text[] := ARRAY[
+    'public.fn_oai_harvestable_libraries()',
+    'public.fn_oai_harvestable_records(text, timestamp with time zone, timestamp with time zone, integer, integer, bigint)',
+    'public.fn_authority_using_libraries(text, bigint)'
   ];
   -- Les portes par lesquelles le public (anon) atteint les sept du 14/10.
   c_portes_anon text[] := ARRAY[
-    'public.fn_oai_harvestable_libraries()',
-    'public.fn_oai_harvestable_records(text, timestamp with time zone, timestamp with time zone, integer, integer, bigint)',
     'public.fn_submit_library_request_via_claim(text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, boolean, boolean, text, text, text, text, text)',
     'public.fn_book_restricted_pdf_state_for_current_user(text)'
   ];
@@ -130,10 +144,10 @@ DECLARE
   ];
 BEGIN
   -- ── T1 ──────────────────────────────────────────────────────────────
-  v_t := 'T1 les 44 existent et sont fermees a anon, authenticated et PUBLIC';
+  v_t := 'T1 les 47 existent et sont fermees a anon, authenticated et PUBLIC';
   BEGIN
     v_txt := '';
-    IF cardinality(c_fermees) <> 44 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
+    IF cardinality(c_fermees) <> 47 THEN v_txt := 'liste:' || cardinality(c_fermees) || ' '; END IF;
     FOREACH v_f IN ARRAY c_fermees LOOP
       v_oid := to_regprocedure(v_f);
       IF v_oid IS NULL THEN v_txt := v_txt || 'absente:' || v_f || ' '; CONTINUE; END IF;
@@ -142,6 +156,11 @@ BEGIN
       IF EXISTS (SELECT 1 FROM pg_proc p, aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) a
                   WHERE p.oid = v_oid AND a.grantee = 0) THEN
         v_txt := v_txt || 'PUBLIC:' || v_f || ' ';
+      END IF;
+    END LOOP;
+    FOREACH v_f IN ARRAY c_service LOOP
+      IF to_regprocedure(v_f) IS NOT NULL AND NOT has_function_privilege('service_role', to_regprocedure(v_f), 'EXECUTE') THEN
+        v_txt := v_txt || 'service_role-perdu:' || v_f || ' ';
       END IF;
     END LOOP;
     IF v_txt = '' THEN v_passed := v_passed + 1;
@@ -273,8 +292,9 @@ BEGIN
   END;
 
   -- ── T5 ──────────────────────────────────────────────────────────────
-  -- 14/10 : le public (anon, sans session) frappe aux portes de l'OAI, de la
-  -- fiche et de la candidature. Elles appellent les sept fermées du 14/10 ;
+  -- 14/10 : le public (anon, sans session) frappe aux portes de la fiche et
+  -- de la candidature (l'OAI n'en est plus une depuis le 23/10 : la clé de
+  -- service seule l'appelle). Elles appellent des fermées du 14/10 ;
   -- elles doivent répondre ou refuser pour une raison métier, jamais buter
   -- sur le privilège d'une fermée.
   v_t := 'T5 les portes anonymes, sous anon, ne butent jamais sur le privilege d une fermee';
@@ -282,11 +302,6 @@ BEGIN
     v_txt := '';
     PERFORM set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
     EXECUTE 'SET LOCAL ROLE anon';
-
-    v_err := NULL;
-    BEGIN PERFORM public.fn_oai_harvestable_libraries();
-    EXCEPTION WHEN OTHERS THEN v_err := SQLERRM; END;
-    IF v_err ~* 'permission denied for function' THEN v_txt := v_txt || 'oai-bibliotheques:' || v_err || ' '; END IF;
 
     v_err := NULL;
     BEGIN PERFORM public.fn_book_restricted_pdf_state_for_current_user('B-inconnue-0001');

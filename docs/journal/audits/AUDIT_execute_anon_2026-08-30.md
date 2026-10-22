@@ -257,3 +257,20 @@ fermés à `anon`) ; `aides_definer_fermees_tests` les tient fermées (T1, T2) e
 joue les portes sous le rôle `anon` (T5).
 
 Compte attendu au prochain relevé : **0028 = 22**.
+
+---
+
+## Addendum — 23/10/2026 : l'OAI-PMH n'a pas besoin d'`anon` (0028 : 22 → 20)
+
+La section B ouvrait `fn_oai_harvestable_libraries` et
+`fn_oai_harvestable_records` à `anon` parce que « OAI-PMH est un protocole
+anonyme par construction ». C'est vrai pour le moissonneur, pas pour la base :
+l'Edge Function `oai-pmh-provider` les appelle avec la **clé de service**
+(`secretKey()`, `index.ts` l. 113-117), et leur propre commentaire le dit
+(« Consommée par l'EF oai-pmh-provider (service_role) »). Aucun appel du
+front ni de la vitrine. Fermées par `20261022221428` (avec
+`fn_authority_using_libraries`, côté `authenticated`), `service_role`
+conservé ; listes T10 et T12 de `grants_herites_tests.sql` réduites
+d'autant. Le moissonnage ne change pas.
+
+Compte attendu au prochain relevé : **0028 = 20**.
