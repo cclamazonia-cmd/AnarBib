@@ -1,6 +1,6 @@
 # J10 — les sept domaines entrés dans le v17 : finir ou geler (proposition, 22/10/2026)
 
-> **Proposition à arbitrer par Xavier.** La fiche J10 demande, par domaine, cinq lignes : ce qui est
+> **Tranché le 22/10/2026 par Xavier : les propositions sont retenues telles quelles** (voir la fin du document ; REGISTRE `DOC-GEL-2`). *Proposition initiale :* La fiche J10 demande, par domaine, cinq lignes : ce qui est
 > livré, ce qui manque pour que ce soit fini, ce que ça coûte, et le verdict — finir ou geler, avec la
 > raison écrite. Le gel de périmètre (`DOC-GEL-1`) ne vaut que si ce qui est entré pendant le gel est
 > jugé. Mesures : production lue le 22/10/2026, en lecture seule.
@@ -20,3 +20,21 @@
 Cinq domaines restent à juger (sondes et témoin le sont par l'usage). Pour chacun : **finir** (avec
 l'échéance ou la condition écrite ci-dessus) ou **geler** (avec la raison). Une fois tranché, les
 verdicts entrent au REGISTRE (`DOC-GEL-1`) et J10 se clôt.
+
+## Tranché le 22/10/2026
+
+Xavier retient les sept propositions telles quelles, après avoir demandé ce que « geler » veut dire.
+La réponse, inscrite au REGISTRE (`DOC-GEL-2`) : **un domaine gelé reste en ligne et utilisable**, ses
+données restent, il reçoit les corrections de défauts et de sécurité, les traductions et la
+maintenance ; **rien de neuf ne s'y ajoute** sans une décision datée ici, qui lève le gel quand elle
+veut. Retirer une fonctionnalité est une autre décision, jamais un effet du gel.
+
+| Domaine | Verdict |
+|---|---|
+| Sondes de santé | **Fini** (par l'usage) |
+| Témoin de sauvegarde | **Fini** (par l'usage) |
+| Périodiques | **À finir par D3**, sans code ; gelé si rien n'a commencé au 26/10 |
+| Notes de lecture | **Gelé** ; à la v19, s'il n'y a toujours aucune note, le retrait de l'écran sera *proposé* |
+| Moisson OAI entrante | **À finir par le pilote H35** ; gelé sans pilote à la v19 |
+| OPDS / RSS | **Gelé en l'état**, appels comptés pendant un mois avant tout travail |
+| File des conventions | **À finir par la relecture** (C3, C33), sans code |
