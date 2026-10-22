@@ -13,7 +13,9 @@
 //
 // Le lien pointe au bon endroit, seul le NOM ment. On ne touche donc pas à la
 // donnée aspirée : on nomme le partenaire d'après son HÔTE au moment de
-// l'affichage. Noms propres uniquement — ils se lisent dans les 10 locales, le
+// l'affichage. Deux hôtes de plus mentent de la même façon depuis qu'ils sont
+// relevés (22/10/2026) : canto et ephemera s'annoncent « mot canto » et
+// « mot ephemera », et ficedl.info « mot ficedl ». Noms propres uniquement — ils se lisent dans les 10 locales, le
 // titre de section (« dans les catalogues partenaires ») étant déjà traduit.
 //
 // Au passage : ml.ficedl.info sert deux URL pour la même cible (`?motN` et
@@ -35,6 +37,20 @@ export const FICEDL_PARTNERS = [
   { id: 'placard', name: 'Placard', host: /^placard\.ficedl\.info$/i },
   { id: 'cartoliste', name: 'Cartoliste', host: /^cartoliste\.ficedl\.info$/i },
   { id: 'monde-libertaire', name: 'Le Monde libertaire', host: /^ml\.ficedl\.info$/i },
+  // Huit hôtes de plus depuis le 22/10/2026. Ils étaient dans les fiches depuis
+  // le début : c'est NOTRE relevé qui les jetait, parce qu'il reconnaissait un
+  // catalogue du réseau par une liste de sept hôtes écrite à la main. Sur les
+  // fiches relues ce jour-là, 62 % des liens partaient ainsi en silence. Les
+  // noms ci-dessous sont ceux que la source donne elle-même, raccourcis au nom
+  // propre comme les précédents ; le nom complet est en commentaire.
+  { id: 'bianco', name: 'Bianco', host: /^bianco\.ficedl\.info$/i },                   // presse anarchiste francophone
+  { id: 'bettini', name: 'Bettini', host: /^bettini\.ficedl\.info$/i },                // periodici anarchici
+  { id: 'madrid-santos', name: 'Madrid Santos', host: /^madrid-santos\.ficedl\.info$/i }, // prensa anarquista y anarcosindicalista en España (1869-1939)
+  { id: 'lidiap', name: 'LIDIAP', host: /^lidiap\.ficedl\.info$/i },                   // List of digitized anarchist periodicals
+  { id: 'canto', name: 'Canto', host: /^canto\.ficedl\.info$/i },                      // chansons
+  { id: 'ephemera', name: 'Ephemera', host: /^ephemera\.ficedl\.info$/i },              // artefacts & ephemera
+  { id: 'cgecaf', name: 'Cgécaf', host: /^cgecaf\.ficedl\.info$/i },                   // Catalogue général des éditions et collections anarchistes francophones
+  { id: 'ficedl', name: 'FICEDL', host: /^(www\.)?ficedl\.info$/i },                   // le site de la fédération, qui tient son propre index par mot-clé
 ];
 
 function parse(href) {

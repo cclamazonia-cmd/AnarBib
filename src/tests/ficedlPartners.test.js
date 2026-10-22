@@ -16,12 +16,38 @@ const MOT1 = [
 ];
 
 describe('partnerOf — le partenaire se lit sur l\'hôte, pas sur le libellé', () => {
-  it('reconnaît les sept catalogues du réseau', () => {
+  it('reconnaît les sept catalogues que porte mot1', () => {
     const ids = MOT1.map((l) => partnerOf(l.href)?.id);
     expect(ids).toEqual([
       'cira-lausanne', 'cira-marseille', 'placard', 'cartoliste',
       'monde-libertaire', 'ccl-lille', 'raforum', 'monde-libertaire',
     ]);
+  });
+
+  // 22/10/2026 : huit hôtes que le relevé jetait en silence avant la correction
+  // de la liste. Le test les tient par leur hôte ET par leur nom, parce que la
+  // source nomme trois d'entre eux « mot canto », « mot ephemera » et
+  // « mot ficedl » — des libellés qu'on remplace, comme pour le CIRA Marseille.
+  it('reconnaît les huit hôtes relevés le 22/10/2026', () => {
+    const attendus = [
+      ['https://bianco.ficedl.info/mot9819.html', 'bianco', 'Bianco'],
+      ['https://bettini.ficedl.info/mot9.html', 'bettini', 'Bettini'],
+      ['https://madrid-santos.ficedl.info/mot1.html', 'madrid-santos', 'Madrid Santos'],
+      ['https://lidiap.ficedl.info/', 'lidiap', 'LIDIAP'],
+      ['https://canto.ficedl.info/mot177.html', 'canto', 'Canto'],
+      ['https://ephemera.ficedl.info/mot1391.html', 'ephemera', 'Ephemera'],
+      ['https://cgecaf.ficedl.info/spip.php?page=parution&date=1881', 'cgecaf', 'Cgécaf'],
+      ['https://ficedl.info/mot12.html', 'ficedl', 'FICEDL'],
+    ];
+    for (const [href, id, name] of attendus) {
+      expect(partnerOf(href)?.id, href).toBe(id);
+      expect(partnerLinkName({ name: 'mot canto', href }), href).toBe(name);
+    }
+  });
+
+  it('ne prend pas un domaine qui ressemble pour un hôte du réseau', () => {
+    expect(partnerOf('https://ficedl.info.exemple.org/mot1')).toBe(null);
+    expect(partnerOf('https://pas-bianco.ficedl.info.exemple.org/')).toBe(null);
   });
 
   it('ne confond pas les deux hôtes du CIRA Marseille', () => {
