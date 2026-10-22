@@ -24,15 +24,28 @@ DO $$
 DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
   a int; b int; c int; v_b boolean; v_state text;
+  t0 timestamptz; t2 timestamptz; t3 timestamptz;
 BEGIN
   -- ── T1 ──
   v_t := 'T1 créneaux enchaînés';
   BEGIN
+    -- 22/10/2026 : la fonction lit clock_timestamp() ; l'attente rendue est le
+    -- pas MOINS le temps écoulé depuis l'appel précédent. Une tolérance fixe
+    -- (50 ms) faisait rougir la suite sur un poste chargé (0/424/924 au run
+    -- sql-tests du 22/10, ~76 ms par appel). On borne donc par le temps
+    -- réellement mesuré autour des appels.
+    t0 := clock_timestamp();
     a := public.fn_mail_cadence_creneau('essai-f25-a', 500);
     b := public.fn_mail_cadence_creneau('essai-f25-a', 500);
+    t2 := clock_timestamp();
     c := public.fn_mail_cadence_creneau('essai-f25-a', 500);
-    IF a = 0 AND b BETWEEN 450 AND 500 AND c BETWEEN 950 AND 1000 THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||a||'/'||b||'/'||c); END IF;
+    t3 := clock_timestamp();
+    IF a = 0
+       AND b BETWEEN 500 - ceil(extract(epoch FROM t2 - t0) * 1000)::int - 1 AND 500
+       AND c BETWEEN 1000 - ceil(extract(epoch FROM t3 - t0) * 1000)::int - 1 AND 1000
+       AND c > b
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||a||'/'||b||'/'||c||' en '||round(extract(epoch FROM t3 - t0) * 1000)||' ms'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ── T2 ──
