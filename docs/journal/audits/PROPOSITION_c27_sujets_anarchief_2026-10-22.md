@@ -2,7 +2,7 @@
 
 > **Tranché le 22/10/2026 par Xavier** — voir « La décision » en fin de document. Les correspondances
 > exactes, la provenance Mundaneum et les propositions de termes sont posées par la migration
-> `20261022203129` ; **les correspondances proches attendent sa relecture** (cases ci-dessous).
+> `20261022203129` ; les correspondances proches retenues à sa relecture, par `20261022210254`.
 
 ## Le constat
 
@@ -45,21 +45,21 @@ en créer d'office.
 
 ### Correspondances proches — une à une (28 notices de plus, 34 affectations)
 
-> **À relire par Xavier** : remplacer ☐ par ☑ sur les lignes retenues (ou ☒ pour les écarter) ;
-> seules les lignes ☑ seront posées, par la même fonction que les exactes.
+> **Relu par Xavier le 22/10** (questionnaire) : ☑ retenue, ☒ écartée. Les cinq lignes retenues
+> sont posées par la migration `20261022210254` (18 affectations, 18 notices, dont 15 sans sujet jusque-là).
 
 | Retenir | Sujet du wiki | Terme proposé | Pourquoi « proche » |
 |---|---|---|---|
-| ☐ | Spaanse Burgeroorlog | Révolution espagnole (26) | la guerre civile n'est pas la révolution ; AnarBib n'a pas de terme « guerre civile » |
-| ☐ | Pacifisme, Sociale Defensie | Antimilitarisme (7) | voisins, pas identiques |
-| ☐ | Bolshevisme, Lenin | Révolution russe (28) | la critique du bolchevisme y est rangée d'ordinaire ; « Communisme » (48) possible |
-| ☐ | I.A.A., I.W.M.A. (l'AIT) | Anarchosyndicalisme (17) | l'organisation, pas la doctrine |
-| ☐ | Platformisme | Organisation (47) | le plateformisme est une doctrine d'organisation |
-| ☐ | Criminologie | Abolitionnisme pénal (11) | la « criminologie radicale » de Leuven est abolitionniste ; à vérifier notice par notice |
-| ☐ | Pedagogie, Opvoeding, Educatie | Éducation libertaire (4) | à condition que l'éducation dont il s'agit soit libertaire |
-| ☐ | Kraken | Mouvement de quartier (35) | le squat n'a pas de terme à lui |
-| ☐ | Situationisme, Autonomen | Contre-culture (15) | rangement large |
-| ☐ | Sexualiteit | Révolution sexuelle (53) | rangement large |
+| ☑ | Spaanse Burgeroorlog | Révolution espagnole (26) | la guerre civile n'est pas la révolution ; AnarBib n'a pas de terme « guerre civile » |
+| ☑ | Pacifisme, Sociale Defensie | Antimilitarisme (7) | voisins, pas identiques |
+| ☑ | Bolshevisme, Lenin | Révolution russe (28) | la critique du bolchevisme y est rangée d'ordinaire ; « Communisme » (48) possible |
+| ☑ | I.A.A., I.W.M.A. (l'AIT) | Anarchosyndicalisme (17) | l'organisation, pas la doctrine |
+| ☑ | Platformisme | Organisation (47) | le plateformisme est une doctrine d'organisation |
+| ☒ | Criminologie | Abolitionnisme pénal (11) | la « criminologie radicale » de Leuven est abolitionniste ; à vérifier notice par notice |
+| ☒ | Pedagogie, Opvoeding, Educatie | Éducation libertaire (4) | à condition que l'éducation dont il s'agit soit libertaire |
+| ☒ | Kraken | Mouvement de quartier (35) | le squat n'a pas de terme à lui |
+| ☒ | Situationisme, Autonomen | Contre-culture (15) | rangement large |
+| ☒ | Sexualiteit | Révolution sexuelle (53) | rangement large |
 
 ### Ce qui ne se rapproche pas
 
@@ -97,8 +97,9 @@ Xavier, par questionnaire, le 22/10 au soir :
 1. **Correspondances exactes : oui, toutes** — 168 notices, 183 affectations, posées par
    `private.fn_indexer_sujets_importes` (migration `20261022203129`). Elles se retrouvent par leur
    date de pose et se re-dérivent de la copie d'import ; chacune se retire à la main.
-2. **Correspondances proches : relues par Xavier**, ligne à ligne (cases ci-dessus). Les lignes
-   retenues seront posées par la même fonction, dans une migration à part.
+2. **Correspondances proches : relues par Xavier**, ligne à ligne (cases ci-dessus) : cinq retenues
+   (guerre civile d'Espagne, pacifisme, bolchevisme, AIT, plateformisme), cinq écartées ; posées par
+   `20261022210254`.
 3. **« Mundaneum » : note de provenance** sur les 60 notices (« Fonds du Mundaneum (Mons), d'après le
    wiki d'Anarchief.org. »), jamais en sujet.
 4. **Termes absents : proposés**, au statut `proposto` (REGISTRE `THES-6`) — douze termes, libellés en
