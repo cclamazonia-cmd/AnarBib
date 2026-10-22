@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Onderwerpsvocabulaire gedeeld tussen anarchistische bibliotheken. De referentiebron is de FICEDL-thesaurus; AnarBib toont een kopie, zonder die te wijzigen.",
   "ficedl.facet.sujets": "Onderwerpen",
   "ficedl.facet.geo": "Plaatsen",
+  "ficedl.facet.langues": "Talen",
   "ficedl.search.placeholder": "Zoek een descriptor…",
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptoren}}",
   "ficedl.empty": "Geen descriptoren.",

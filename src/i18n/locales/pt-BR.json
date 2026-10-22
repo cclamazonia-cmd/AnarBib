@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Vocabulário de assuntos compartilhado entre bibliotecas anarquistas. A fonte de referência é o tesauro FICEDL; o AnarBib exibe uma cópia, sem modificá-la.",
   "ficedl.facet.sujets": "Assuntos",
   "ficedl.facet.geo": "Lugares",
+  "ficedl.facet.langues": "Idiomas",
   "ficedl.search.placeholder": "Pesquisar um descritor…",
   "ficedl.count": "{count, plural, one {# descritor} other {# descritores}}",
   "ficedl.empty": "Nenhum descritor.",

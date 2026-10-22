@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Temvortaro komuna inter anarkiismaj bibliotekoj. La referenca fonto estas la tezaŭro FICEDL; AnarBib montras kopion, sen modifi ĝin.",
   "ficedl.facet.sujets": "Temoj",
   "ficedl.facet.geo": "Lokoj",
+  "ficedl.facet.langues": "Lingvoj",
   "ficedl.search.placeholder": "Serĉi priskribilon…",
   "ficedl.count": "{count, plural, one {# priskribilo} other {# priskribiloj}}",
   "ficedl.empty": "Neniu priskribilo.",

@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Subject vocabulary shared among anarchist libraries. The reference source is the FICEDL thesaurus; AnarBib displays a copy without modifying it.",
   "ficedl.facet.sujets": "Subjects",
   "ficedl.facet.geo": "Places",
+  "ficedl.facet.langues": "Languages",
   "ficedl.search.placeholder": "Search for a descriptor…",
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptors}}",
   "ficedl.empty": "No descriptors.",

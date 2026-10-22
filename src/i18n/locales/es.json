@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Vocabulario de materias compartido entre bibliotecas anarquistas. La fuente de referencia es el tesauro FICEDL; AnarBib muestra una copia, sin modificarla.",
   "ficedl.facet.sujets": "Materias",
   "ficedl.facet.geo": "Lugares",
+  "ficedl.facet.langues": "Lenguas",
   "ficedl.search.placeholder": "Buscar un descriptor…",
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptores}}",
   "ficedl.empty": "Ningún descriptor.",

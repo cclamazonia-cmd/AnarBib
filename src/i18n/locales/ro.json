@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Vocabular de subiecte comun bibliotecilor anarhiste. Sursa de referință este tezaurul FICEDL; AnarBib afișează o copie a lui, fără s-o modifice.",
   "ficedl.facet.sujets": "Subiecte",
   "ficedl.facet.geo": "Locuri",
+  "ficedl.facet.langues": "Limbi",
   "ficedl.search.placeholder": "Caută un descriptor…",
   "ficedl.count": "{count, plural, one {# descriptor} few {# descriptori} other {# de descriptori}}",
   "ficedl.empty": "Niciun descriptor.",

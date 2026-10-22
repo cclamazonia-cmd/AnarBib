@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Gemeinsames Schlagwortvokabular anarchistischer Bibliotheken. Die Referenzquelle ist der FICEDL-Thesaurus; AnarBib zeigt eine Kopie, ohne sie zu verändern.",
   "ficedl.facet.sujets": "Schlagwörter",
   "ficedl.facet.geo": "Orte",
+  "ficedl.facet.langues": "Sprachen",
   "ficedl.search.placeholder": "Deskriptor suchen…",
   "ficedl.count": "{count, plural, one {# Deskriptor} other {# Deskriptoren}}",
   "ficedl.empty": "Keine Deskriptoren.",

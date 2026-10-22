@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Vocabulari de matèries compartit entre biblioteques anarquistes. La font de referència és el tesaurus FICEDL; AnarBib en mostra una còpia, sense modificar-la.",
   "ficedl.facet.sujets": "Matèries",
   "ficedl.facet.geo": "Llocs",
+  "ficedl.facet.langues": "Llengües",
   "ficedl.search.placeholder": "Cercar un descriptor…",
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptors}}",
   "ficedl.empty": "Cap descriptor.",

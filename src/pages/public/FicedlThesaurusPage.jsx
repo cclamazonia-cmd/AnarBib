@@ -17,8 +17,10 @@ import { supabase } from '@/lib/supabase';
 import { pickLabel, libellesFicedl } from '@/lib/i18nLabel';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
-// « dates » depuis le 03/09 (H1) : les 159 années du thésaurus sont en base, avec libellé et liens.
-const FACETS = ['sujets', 'geo', 'dates'];
+// « dates » depuis le 03/09 (H1) : les 181 années du thésaurus sont en base, avec libellé et liens.
+// « langues » depuis le 22/10/2026 : quatrième groupe ouvert à la source la veille, 53 langues.
+// Cette liste est FERMÉE : un cinquième groupe apparaîtrait en base sans apparaître ici.
+const FACETS = ['sujets', 'geo', 'dates', 'langues'];
 
 // Normalisation pour recherche insensible aux accents et à la casse.
 function norm(s) {

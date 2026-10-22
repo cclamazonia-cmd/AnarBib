@@ -28,6 +28,7 @@
   "ficedl.subtitle": "Λεξιλόγιο θεμάτων κοινό μεταξύ αναρχικών βιβλιοθηκών. Η πηγή αναφοράς είναι ο θησαυρός FICEDL· το AnarBib εμφανίζει ένα αντίγραφο, χωρίς να το τροποποιεί.",
   "ficedl.facet.sujets": "Θέματα",
   "ficedl.facet.geo": "Τόποι",
+  "ficedl.facet.langues": "Γλώσσες",
   "ficedl.search.placeholder": "Αναζήτηση περιγραφέα…",
   "ficedl.count": "{count, plural, one {# περιγραφέας} other {# περιγραφείς}}",
   "ficedl.empty": "Κανένας περιγραφέας.",
