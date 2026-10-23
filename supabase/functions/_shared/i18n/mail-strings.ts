@@ -9837,17 +9837,17 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ro: "Conform politicii noastre de păstrare a datelor, istoricul vechilor tale consultări pe loc va fi șters peste 30 de zile."
   },
   "rgpd.purge.windowExplain": {
-    "pt-BR": "Esta exclusão é automática e definitiva. Não há nenhuma cópia conservada após o prazo.",
-    fr: "Cette suppression est automatique et définitive. Aucune copie n'est conservée au-delà du délai.",
-    es: "Esta eliminación es automática y definitiva. No se conserva ninguna copia después del plazo.",
-    en: "This deletion is automatic and final. No copy is kept beyond the deadline.",
-    it: "Questa cancellazione è automatica e definitiva. Nessuna copia viene conservata dopo la scadenza.",
-    de: "Diese Löschung ist automatisch und endgültig. Nach Ablauf der Frist wird keine Kopie aufbewahrt.",
-    ca: "Aquesta supressió és automàtica i definitiva. No es conserva cap còpia després del termini.",
-    eo: "Tiu ĉi forviŝo estas aŭtomata kaj definitiva. Neniu kopio estas konservita post la limdato.",
-    nl: "Deze verwijdering is automatisch en definitief. Er wordt geen kopie bewaard na de termijn.",
-    el: "Αυτή η διαγραφή είναι αυτόματη και οριστική. Κανένα αντίγραφο δεν διατηρείται μετά την προθεσμία.",
-    ro: "Această ștergere este automată și definitivă. Nu se păstrează nicio copie după acest termen."
+    "pt-BR": "Esta exclusão é automática e definitiva. As cópias de segurança criptografadas só guardam uma cópia por mais 7 dias.",
+    fr: "Cette suppression est automatique et définitive. Les sauvegardes chiffrées n'en gardent une copie que 7 jours de plus.",
+    es: "Esta eliminación es automática y definitiva. Las copias de seguridad cifradas solo guardan una copia 7 días más.",
+    en: "This deletion is automatic and final. The encrypted backups keep a copy for only 7 more days.",
+    it: "Questa cancellazione è automatica e definitiva. I backup cifrati ne conservano una copia solo per altri 7 giorni.",
+    de: "Diese Löschung ist automatisch und endgültig. Die verschlüsselten Sicherungen bewahren eine Kopie nur noch 7 Tage auf.",
+    ca: "Aquesta supressió és automàtica i definitiva. Les còpies de seguretat xifrades només en guarden una còpia 7 dies més.",
+    eo: "Tiu ĉi forviŝo estas aŭtomata kaj definitiva. La ĉifritaj sekurkopioj konservas kopion nur dum 7 pliaj tagoj.",
+    nl: "Deze verwijdering is automatisch en definitief. De versleutelde back-ups bewaren nog maar 7 dagen een kopie.",
+    el: "Αυτή η διαγραφή είναι αυτόματη και οριστική. Τα κρυπτογραφημένα αντίγραφα ασφαλείας κρατούν ένα αντίγραφο μόνο για 7 ακόμη ημέρες.",
+    ro: "Această ștergere este automată și definitivă. Copiile de siguranță criptate mai păstrează o copie doar 7 zile."
   },
   "rgpd.purge.howToCancel": {
     "pt-BR": "Se quiser exportar seus dados antes da exclusão, entre em contato com a biblioteca pelos canais habituais.",
@@ -9861,6 +9861,71 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Als je je gegevens vóór verwijdering wilt exporteren, neem dan contact op met de bibliotheek via de gebruikelijke kanalen.",
     el: "Αν θέλεις να εξαγάγεις τα δεδομένα σου πριν τη διαγραφή, επικοινώνησε με τη βιβλιοθήκη μέσω των συνηθισμένων καναλιών.",
     ro: "Dacă vrei să-ți exporți datele înainte de ștergere, contactează biblioteca pe canalele obișnuite."
+  },
+  "rgpd.purge.messages.title": {
+    "pt-BR": "Aviso de exclusão de dados — mensagens",
+    fr: "Avis de suppression de données — messages",
+    es: "Aviso de eliminación de datos — mensajes",
+    en: "Data deletion notice — messages",
+    it: "Avviso di cancellazione dei dati — messaggi",
+    de: "Hinweis zur Datenlöschung — Nachrichten",
+    ca: "Avís de supressió de dades — missatges",
+    eo: "Avizo pri forviŝo de datumoj — mesaĝoj",
+    nl: "Melding van gegevensverwijdering — berichten",
+    el: "Ειδοποίηση διαγραφής δεδομένων — μηνύματα",
+    ro: "Notificare de ștergere a datelor — mesaje"
+  },
+  "rgpd.purge.messages.intro": {
+    "pt-BR": "Conforme nossa política de retenção de dados, suas conversas com a biblioteca, sem nova mensagem há quase 12 meses, serão excluídas em 30 dias.",
+    fr: "Conformément à notre politique de rétention de données, tes échanges de messages avec la bibliothèque, sans nouveau message depuis bientôt 12 mois, seront supprimés dans 30 jours.",
+    es: "Conforme a nuestra política de retención de datos, tus conversaciones con la biblioteca, sin mensajes nuevos desde hace casi 12 meses, serán eliminadas en 30 días.",
+    en: "In line with our data retention policy, your conversations with the library, with no new message for almost 12 months, will be deleted in 30 days.",
+    it: "In conformità con la nostra politica di conservazione dei dati, le tue conversazioni con la biblioteca, senza nuovi messaggi da quasi 12 mesi, saranno cancellate tra 30 giorni.",
+    de: "Gemäß unserer Richtlinie zur Datenaufbewahrung wird dein Austausch mit der Bibliothek, ohne neue Nachricht seit fast 12 Monaten, in 30 Tagen gelöscht.",
+    ca: "D'acord amb la nostra política de retenció de dades, els teus intercanvis amb la biblioteca, sense cap missatge nou des de fa gairebé 12 mesos, se suprimiran d'aquí a 30 dies.",
+    eo: "Laŭ nia politiko pri konservado de datumoj, viaj interŝanĝoj kun la biblioteko, sen nova mesaĝo de preskaŭ 12 monatoj, estos forviŝitaj post 30 tagoj.",
+    nl: "Volgens ons beleid voor gegevensbewaring worden je gesprekken met de bibliotheek, zonder nieuw bericht sinds bijna 12 maanden, over 30 dagen verwijderd.",
+    el: "Σύμφωνα με την πολιτική διατήρησης δεδομένων μας, οι συνομιλίες σου με τη βιβλιοθήκη, χωρίς νέο μήνυμα εδώ και σχεδόν 12 μήνες, θα διαγραφούν σε 30 ημέρες.",
+    ro: "Conform politicii noastre de păstrare a datelor, conversațiile tale cu biblioteca, fără niciun mesaj nou de aproape 12 luni, vor fi șterse peste 30 de zile."
+  },
+  "rgpd.purge.reading.title": {
+    "pt-BR": "Aviso de exclusão de dados — leituras em andamento e lista de desejos",
+    fr: "Avis de suppression de données — lecture en cours et liste d'envies",
+    es: "Aviso de eliminación de datos — lecturas en curso y lista de deseos",
+    en: "Data deletion notice — reading in progress and wishlist",
+    it: "Avviso di cancellazione dei dati — letture in corso e lista dei desideri",
+    de: "Hinweis zur Datenlöschung — laufende Lektüre und Wunschliste",
+    ca: "Avís de supressió de dades — lectures en curs i llista de desitjos",
+    eo: "Avizo pri forviŝo de datumoj — legado en progreso kaj dezirlisto",
+    nl: "Melding van gegevensverwijdering — lopende lectuur en verlanglijst",
+    el: "Ειδοποίηση διαγραφής δεδομένων — ανάγνωση σε εξέλιξη και λίστα επιθυμιών",
+    ro: "Notificare de ștergere a datelor — lecturi în curs și listă de dorințe"
+  },
+  "rgpd.purge.reading.intro": {
+    "pt-BR": "Sem acesso à sua conta há quase dois anos, sua leitura em andamento e sua lista de desejos serão excluídas em 30 dias, conforme nossa política de retenção de dados.",
+    fr: "Faute de connexion à ton compte depuis bientôt deux ans, ta lecture en cours et ta liste d'envies seront supprimées dans 30 jours, conformément à notre politique de rétention de données.",
+    es: "Sin conexión a tu cuenta desde hace casi dos años, tu lectura en curso y tu lista de deseos serán eliminadas en 30 días, conforme a nuestra política de retención de datos.",
+    en: "With no sign-in to your account for almost two years, your reading in progress and your wishlist will be deleted in 30 days, in line with our data retention policy.",
+    it: "Senza accessi al tuo account da quasi due anni, la tua lettura in corso e la tua lista dei desideri saranno cancellate tra 30 giorni, in conformità con la nostra politica di conservazione dei dati.",
+    de: "Da du dich seit fast zwei Jahren nicht angemeldet hast, werden deine laufende Lektüre und deine Wunschliste gemäß unserer Richtlinie zur Datenaufbewahrung in 30 Tagen gelöscht.",
+    ca: "Sense cap connexió al teu compte des de fa gairebé dos anys, la teva lectura en curs i la teva llista de desitjos se suprimiran d'aquí a 30 dies, d'acord amb la nostra política de retenció de dades.",
+    eo: "Sen ensaluto en via konto de preskaŭ du jaroj, via legado en progreso kaj via dezirlisto estos forviŝitaj post 30 tagoj, laŭ nia politiko pri konservado de datumoj.",
+    nl: "Omdat je al bijna twee jaar niet bent aangemeld, worden je lopende lectuur en je verlanglijst volgens ons beleid voor gegevensbewaring over 30 dagen verwijderd.",
+    el: "Χωρίς σύνδεση στον λογαριασμό σου εδώ και σχεδόν δύο χρόνια, η ανάγνωση σε εξέλιξη και η λίστα επιθυμιών σου θα διαγραφούν σε 30 ημέρες, σύμφωνα με την πολιτική διατήρησης δεδομένων μας.",
+    ro: "Fără nicio conectare la contul tău de aproape doi ani, lectura ta în curs și lista ta de dorințe vor fi șterse peste 30 de zile, conform politicii noastre de păstrare a datelor."
+  },
+  "rgpd.purge.reading.howToKeep": {
+    "pt-BR": "Para mantê-las, basta acessar sua conta antes dessa data.",
+    fr: "Pour les garder, il suffit de te connecter à ton compte avant cette date.",
+    es: "Para conservarlas, basta con que entres en tu cuenta antes de esa fecha.",
+    en: "To keep them, simply sign in to your account before then.",
+    it: "Per conservarle, basta accedere al tuo account prima di quella data.",
+    de: "Um sie zu behalten, melde dich einfach vorher in deinem Konto an.",
+    ca: "Per conservar-les, n'hi ha prou que entris al teu compte abans d'aquesta data.",
+    eo: "Por konservi ilin, sufiĉas ensaluti en vian konton antaŭ tiu dato.",
+    nl: "Om ze te bewaren, hoef je je alleen vóór die datum aan te melden.",
+    el: "Για να τα κρατήσεις, αρκεί να συνδεθείς στον λογαριασμό σου πριν από αυτή την ημερομηνία.",
+    ro: "Ca să le păstrezi, e suficient să te conectezi la cont înainte de această dată."
   },
 
   // ========================================================================

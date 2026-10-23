@@ -13,6 +13,9 @@ import { greeting, tMail } from "../i18n/mail-strings.ts";
 //   - rgpd_purge_warning_loans
 //   - rgpd_purge_warning_reservations
 //   - rgpd_purge_warning_consultations
+//   - rgpd_purge_warning_messages  (RET-3, 23/10/2026 : messagerie lectorat ↔ bibliothèque)
+//   - rgpd_purge_warning_reading   (RET-3 : lecture en cours et liste d'envies, sans
+//                                   bibliothèque — notif.library_id est NULL)
 //
 // Pour chaque ligne user_notifications créée par la phase 1, ce handler :
 //   1. lit la notification (user_id, library_id, category)
@@ -33,12 +36,22 @@ const CATEGORY_FROM_EVENT: Record<string, string> = {
   rgpd_purge_warning_loans: "rgpd_retention_loans",
   rgpd_purge_warning_reservations: "rgpd_retention_reservations",
   rgpd_purge_warning_consultations: "rgpd_retention_consultations",
+  rgpd_purge_warning_messages: "rgpd_retention_messages",
+  rgpd_purge_warning_reading: "rgpd_retention_reading",
 };
 
 const CATEGORY_LABEL_KEY: Record<string, string> = {
   rgpd_retention_loans: "rgpd.purge.loans",
   rgpd_retention_reservations: "rgpd.purge.reservations",
   rgpd_retention_consultations: "rgpd.purge.consultations",
+  rgpd_retention_messages: "rgpd.purge.messages",
+  rgpd_retention_reading: "rgpd.purge.reading",
+};
+
+// Ce que la personne peut faire avant la purge. La lecture en cours et la liste
+// d'envies ne partent que faute de connexion : se connecter suffit à les garder.
+const HOW_TO_KEY: Record<string, string> = {
+  rgpd_retention_reading: "rgpd.purge.reading.howToKeep",
 };
 
 export async function handleRgpdPurgeWarning(recordId: number, event: string) {
@@ -94,7 +107,7 @@ export async function handleRgpdPurgeWarning(recordId: number, event: string) {
   const title = tMail(locale, `${categoryKey}.title`);
   const introHtml = `<p>${tMail(locale, `${categoryKey}.intro`)}</p>` +
                     `<p>${tMail(locale, "rgpd.purge.windowExplain")}</p>` +
-                    `<p>${tMail(locale, "rgpd.purge.howToCancel")}</p>`;
+                    `<p>${tMail(locale, HOW_TO_KEY[notif.category] || "rgpd.purge.howToCancel")}</p>`;
 
   const { html, text } = renderEmail({
     locale,

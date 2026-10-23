@@ -931,3 +931,6 @@ tests/sql/effacement_journaux_reseau_tests.sql
 # d'un compte (tables re-pointées par fn_delete_my_account ou mises à NULL par une FK SET NULL) ;
 # profil des bibliothèques au jeton, notes de lecture à NULL, refus hors du geste exact.
 tests/sql/effacement_declencheurs_garde_tests.sql
+# RET-3 (23/10/2026) : le préavis de purge suit la rétention (fn_notify_users_before_purge) — toutes les bibliothèques,
+# durées bornées, messagerie et lecture en cours/envies prévenues, pas de doublon, droits fermés.
+tests/sql/preavis_purge_tests.sql

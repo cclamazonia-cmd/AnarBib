@@ -54,6 +54,8 @@ const VIVANTS = [
   'consulta_v2_criada', 'consulta_v2_realizada', 'consulta_v2_cancelada', 'consulta_v2_expirada',
   'consulta_v2_em_preparacao', 'consulta_v2_agendada', 'consulta_v2_nao_compareceu', 'consulta_v2_resposta_creneau',
   'rgpd_purge_warning_loans', 'rgpd_purge_warning_reservations', 'rgpd_purge_warning_consultations',
+  // RET-3 (23/10/2026) : préavis de la messagerie et de la lecture en cours
+  'rgpd_purge_warning_messages', 'rgpd_purge_warning_reading',
   'partnership_proposed', 'partnership_accepted', 'partnership_refused', 'partnership_broken',
   'partnership_transparence_enabled', 'partnership_config_expanded',
   'entraide_request_circle',
