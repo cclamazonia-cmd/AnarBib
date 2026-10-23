@@ -1,36 +1,44 @@
 -- =====================================================================
 -- AnarBib — Tests d'acceptation : AUCUN DÉCLENCHEUR DE REFUS NE BLOQUE L'EFFACEMENT
--- Date    : 2026-10-23  ·  Réf : migrations 20261023203225_l_effacement_traverse_les_journaux_du_reseau.sql
---                                et 20261023220625_l_effacement_traverse_profil_et_notes_de_lecture.sql
+-- Date    : 2026-10-23  ·  Réf : migrations 20261023203225_l_effacement_traverse_les_journaux_du_reseau.sql,
+--                                20261023220625_l_effacement_traverse_profil_et_notes_de_lecture.sql
+--                                et 20261023230357_l_effacement_traverse_les_votes_sur_le_profil.sql
 --
 -- fn_delete_my_account met à jour des tables directement (re-pointage vers le
--- jeton, compte « removido ») et, en supprimant le profil et le compte, par
--- les FK en ON DELETE SET NULL / SET DEFAULT. Un déclencheur BEFORE UPDATE qui
--- refuse cet UPDATE annule tout l'effacement : vécu le 23/10/2026 sur les deux
--- journaux du réseau, puis trouvé au banc sur le profil des bibliothèques et
--- les notes de lecture.
+-- jeton, compte « removido »), en vide d'autres (DELETE FROM), et en
+-- supprimant le profil et le compte déclenche les FK : ON DELETE CASCADE (de
+-- proche en proche) et SET NULL / SET DEFAULT. Un déclencheur qui refuse l'un
+-- de ces UPDATE ou DELETE — BEFORE comme AFTER — annule tout l'effacement :
+-- vécu le 23/10/2026 sur les deux journaux du réseau, puis trouvé au banc sur
+-- le profil des bibliothèques, les notes de lecture et les votes sur le profil.
 --
 -- Couvre :
---   T1  liste VIVANTE — tout déclencheur BEFORE UPDATE actif d'une table que
---       l'effacement met à jour, et dont la fonction peut lever, connaît le
---       drapeau anarbib.effacement_compte ou figure dans la liste close des
---       refus conditionnels (avec leur motif). Un nouveau journal en ajout
---       seul fait rougir cette suite, pas la personne qui s'efface.
+--   T1  liste VIVANTE — tout déclencheur actif, BEFORE ou AFTER, dont la
+--       fonction peut lever, sur l'UPDATE d'une table mise à jour par
+--       l'effacement ou le DELETE d'une table qu'il supprime (directement ou
+--       en cascade), connaît le drapeau anarbib.effacement_compte, ou figure
+--       dans la liste close des refus conditionnels (avec leur motif) ; pour
+--       un DELETE en cascade, il suffit aussi que la fonction sorte les lignes
+--       de la cascade avant (colonnes de la FK traitées dans son corps). Un
+--       nouveau journal en ajout seul fait rougir cette suite, pas la
+--       personne qui s'efface.
 --   T2  la liste close ne désigne que des refus réels, encore attachés à une
 --       table visée, et qui ne connaissent pas encore le drapeau.
---   T3  toute colonne en SET NULL / SET DEFAULT vers profiles ou auth.users
---       qui est NOT NULL, ou dont la table porte un déclencheur de refus, est
---       traitée dans le corps de fn_delete_my_account (avant la suppression).
+--   T3  toute FK vers une table supprimée qui ferait échouer la suppression —
+--       NO ACTION / RESTRICT, SET NULL sur une colonne NOT NULL ou sur une
+--       table à déclencheur de refus — est traitée dans le corps de
+--       fn_delete_my_account (avant la suppression).
 --   T4  effacement réel d'une coordinatrice qui a changé et proposé un profil
---       de bibliothèque, annulé une proposition, écrit et masqué une note :
---       ok=true.
---   T5  après : profil au jeton, notes à NULL, reste des lignes intact.
+--       de bibliothèque, annulé une proposition, voté, écrit et masqué une
+--       note : ok=true.
+--   T5  après : profil et vote au jeton, notes à NULL, reste des lignes intact.
 --   T6  historique du profil, toujours refusé hors du re-pointage exact.
 --   T7  propositions : verrou de proposed_by, toujours refusé hors du
 --       re-pointage exact ; DELETE refusé.
 --   T8  propositions : une colonne libre (status) se modifie comme avant.
 --   T9  notes : refusé hors du passage exact à NULL ; l'autrice édite encore
 --       sa note sous authenticated (SECURITY INVOKER sans régression).
+--   T10 votes : refusé hors du re-pointage exact ; DELETE refusé.
 --   Bilan OK : 'EFFACEMENT-DECLENCHEURS OK : N/N tests passés'
 -- =====================================================================
 DO $$
@@ -54,34 +62,63 @@ DECLARE
   v_tok  uuid; v_tok_o uuid;
   h_u uuid; h_o uuid; p_u uuid; p_annulee uuid; p_o uuid;
   n_autrice bigint; n_masquee bigint; n_o bigint;
+  vo_u uuid; vo_o uuid; v_avant_vu text; v_avant_vo text;
   v_avant_h text; v_avant_p text; v_avant_pa text; v_avant_na text; v_avant_nm text; v_avant_ho text; v_avant_po text; v_avant_no text;
   v_json jsonb; v_err text; v_n int;
 BEGIN
   SELECT prosrc INTO v_src FROM pg_proc WHERE oid = 'public.fn_delete_my_account()'::regprocedure;
 
-  -- Tables visées : celles que la fonction met à jour, et celles qu'une FK
-  -- SET NULL / SET DEFAULT vers profiles ou auth.users fait mettre à jour.
+  -- Tables supprimées : celles que la fonction vide (DELETE FROM), et, de
+  -- proche en proche, celles qu'une FK ON DELETE CASCADE vers l'une d'elles
+  -- fait supprimer.
+  CREATE TEMP TABLE _supprimees ON COMMIT DROP AS
+  WITH RECURSIVE dep(rel) AS (
+    SELECT to_regclass(CASE WHEN m[1] LIKE '%.%' THEN m[1] ELSE 'public.' || m[1] END)
+      FROM regexp_matches(v_src, '\mDELETE\s+FROM\s+([a-z_][a-z0-9_.]*)', 'gi') AS m
+    UNION
+    SELECT c.conrelid FROM dep d
+      JOIN pg_constraint c ON c.contype = 'f' AND c.confrelid = d.rel AND c.confdeltype = 'c'
+  )
+  SELECT DISTINCT rel FROM dep;
+
+  -- Tables mises à jour : celles que la fonction met à jour, et celles qu'une
+  -- FK SET NULL / SET DEFAULT vers une table supprimée fait mettre à jour.
   CREATE TEMP TABLE _visees ON COMMIT DROP AS
   SELECT DISTINCT to_regclass(CASE WHEN m[1] LIKE '%.%' THEN m[1] ELSE 'public.' || m[1] END) AS rel
     FROM regexp_matches(v_src, '\mUPDATE\s+([a-z_][a-z0-9_.]*)', 'gi') AS m
   UNION
-  SELECT c.conrelid FROM pg_constraint c
-   WHERE c.contype = 'f' AND c.confrelid IN ('auth.users'::regclass, 'public.profiles'::regclass)
-     AND c.confdeltype IN ('n', 'd');
+  SELECT c.conrelid FROM pg_constraint c JOIN _supprimees s ON c.confrelid = s.rel
+   WHERE c.contype = 'f' AND c.confdeltype IN ('n', 'd');
 
+  -- Déclencheurs qui peuvent lever, BEFORE comme AFTER (un AFTER qui lève
+  -- annule tout autant), sur l'UPDATE d'une table visée ou le DELETE d'une
+  -- table supprimée.
   CREATE TEMP TABLE _refus ON COMMIT DROP AS
-  SELECT v.rel, t.tgname, p.proname,
+  SELECT x.rel, x.ev, t.tgname, p.proname,
          p.prosrc LIKE '%anarbib.effacement_compte%' AS connait
-    FROM _visees v
-    JOIN pg_trigger t ON t.tgrelid = v.rel AND NOT t.tgisinternal AND t.tgenabled <> 'D'
-                     AND (t.tgtype & 2) = 2 AND (t.tgtype & 16) = 16
+    FROM (SELECT rel, 'UPDATE' AS ev, 16 AS bit FROM _visees
+          UNION ALL SELECT rel, 'DELETE', 8 FROM _supprimees) x
+    JOIN pg_trigger t ON t.tgrelid = x.rel AND NOT t.tgisinternal AND t.tgenabled <> 'D'
+                     AND (t.tgtype & x.bit) = x.bit
     JOIN pg_proc p ON p.oid = t.tgfoid
    WHERE p.prosrc ~* '\mRAISE\M(?!\s+(NOTICE|WARNING|INFO|LOG|DEBUG)\M)';
 
   -- ── T1 ─────────────────────────────────────────────────────────────────
-  v_t:='T1 tout déclencheur BEFORE UPDATE de refus sur une table visée connaît le drapeau d''effacement';
-  SELECT array_agg(rel::text || '.' || tgname || ' (' || proname || ')' ORDER BY 1) INTO v_x
-    FROM _refus WHERE NOT connait AND proname <> ALL (v_conditionnels);
+  -- UPDATE : le déclencheur doit connaître le drapeau. DELETE en cascade : il
+  -- doit le connaître, ou bien la fonction doit déjà avoir sorti les lignes
+  -- de la cascade (toute colonne de FK CASCADE vers une table supprimée est
+  -- traitée dans son corps).
+  v_t:='T1 aucun déclencheur de refus (UPDATE, DELETE en cascade) ne bloque l''effacement';
+  SELECT array_agg(r.ev || ' ' || r.rel::text || '.' || r.tgname || ' (' || r.proname || ')' ORDER BY 1) INTO v_x
+    FROM _refus r
+   WHERE NOT r.connait AND r.proname <> ALL (v_conditionnels)
+     AND NOT (r.ev = 'DELETE'
+              AND EXISTS (SELECT 1 FROM pg_constraint c JOIN _supprimees s ON c.confrelid = s.rel
+                           WHERE c.conrelid = r.rel AND c.contype = 'f' AND c.confdeltype = 'c')
+              AND NOT EXISTS (SELECT 1 FROM pg_constraint c JOIN _supprimees s ON c.confrelid = s.rel
+                                JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY (c.conkey)
+                               WHERE c.conrelid = r.rel AND c.contype = 'f' AND c.confdeltype = 'c'
+                                 AND NOT (v_src ~ ('\m' || (SELECT relname FROM pg_class WHERE oid = c.conrelid) || '\M[^;]*\m' || a.attname || '\M'))));
   IF v_x IS NULL THEN v_passed:=v_passed+1;
   ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : bloquerait l''effacement = '||array_to_string(v_x, ', '));
   END IF;
@@ -96,14 +133,21 @@ BEGIN
   END IF;
 
   -- ── T3 ─────────────────────────────────────────────────────────────────
-  v_t:='T3 les colonnes SET NULL qui ne peuvent pas passer à NULL d''elles-mêmes sont traitées par la fonction';
-  SELECT array_agg(c.conrelid::regclass::text || '.' || a.attname ORDER BY 1) INTO v_x
+  -- Toute FK vers une table supprimée qui ferait échouer la suppression :
+  -- NO ACTION / RESTRICT, ou SET NULL / SET DEFAULT sur une colonne NOT NULL
+  -- ou sur une table dont un déclencheur refuse l'UPDATE. (Le schéma auth est
+  -- celui de GoTrue : hors de notre main, comme dans effacement_compte_fk.)
+  v_t:='T3 les FK qui bloqueraient une suppression (directe ou en cascade) sont traitées par la fonction';
+  SELECT array_agg(c.conrelid::regclass::text || '.' || a.attname || ' → ' || c.confrelid::regclass::text ORDER BY 1) INTO v_x
     FROM pg_constraint c
+    JOIN _supprimees s ON c.confrelid = s.rel
     JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY (c.conkey)
    WHERE c.contype = 'f'
-     AND c.confrelid IN ('auth.users'::regclass, 'public.profiles'::regclass)
-     AND c.confdeltype IN ('n', 'd')
-     AND (a.attnotnull OR EXISTS (SELECT 1 FROM _refus r WHERE r.rel = c.conrelid AND r.proname <> ALL (v_conditionnels)))
+     AND c.conrelid::regclass::text NOT LIKE 'auth.%'
+     AND (c.confdeltype IN ('a', 'r')
+          OR (c.confdeltype IN ('n', 'd')
+              AND (a.attnotnull OR EXISTS (SELECT 1 FROM _refus r WHERE r.rel = c.conrelid AND r.ev = 'UPDATE'
+                                                                  AND r.proname <> ALL (v_conditionnels)))))
      AND NOT (v_src ~ ('\m' || (SELECT relname FROM pg_class WHERE oid = c.conrelid) || '\M[^;]*\m' || a.attname || '\M'));
   IF v_x IS NULL THEN v_passed:=v_passed+1;
   ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : non traitées = '||array_to_string(v_x, ', '));
@@ -142,6 +186,11 @@ BEGIN
           'cancelled', now(), v_u, 'annulée par u') RETURNING id INTO p_annulee;
   INSERT INTO public.library_profile_proposals (library_id, axis, old_value, new_value, transition_type, governance_required, motivation, proposed_by, expires_at)
   VALUES (v_lib, 'governance_mode', 'a', 'b', 1, 'direct', 'témoin o', v_o, now() + interval '7 days') RETURNING id INTO p_o;
+  -- Votes : u sur la proposition de o (re-pointé), o sur celle de u (témoin).
+  INSERT INTO public.library_profile_votes (proposal_id, voter_id, vote, voted_at)
+  VALUES (p_o, v_u, 'for', now()) RETURNING id INTO vo_u;
+  INSERT INTO public.library_profile_votes (proposal_id, voter_id, vote, voted_at, rationale_against)
+  VALUES (p_u, v_o, 'against', now(), 'contre, pour l''essai de la garde') RETURNING id INTO vo_o;
 
   -- Les notes prennent leur autrice de auth.uid() (déclencheur d'INSERT) ;
   -- le masquage se pose sans le déclencheur d'UPDATE, qui n'est pas l'objet ici.
@@ -166,6 +215,8 @@ BEGIN
   SELECT (to_jsonb(r) - 'author_user_id')::text INTO v_avant_na FROM public.book_reading_notes r WHERE id = n_autrice;
   SELECT (to_jsonb(r) - 'hidden_by')::text  INTO v_avant_nm FROM public.book_reading_notes r WHERE id = n_masquee;
   SELECT to_jsonb(r)::text                  INTO v_avant_no FROM public.book_reading_notes r WHERE id = n_o;
+  SELECT (to_jsonb(r) - 'voter_id')::text   INTO v_avant_vu FROM public.library_profile_votes r WHERE id = vo_u;
+  SELECT to_jsonb(r)::text                  INTO v_avant_vo FROM public.library_profile_votes r WHERE id = vo_o;
 
   -- ── T4 ─────────────────────────────────────────────────────────────────
   v_t:='T4 fn_delete_my_account rend ok=true pour la coordinatrice';
@@ -196,9 +247,38 @@ BEGIN
      AND (SELECT to_jsonb(r)::text FROM public.library_profile_history r WHERE id = h_o) = v_avant_ho
      AND (SELECT to_jsonb(r)::text FROM public.library_profile_proposals r WHERE id = p_o) = v_avant_po
      AND (SELECT to_jsonb(r)::text FROM public.book_reading_notes r WHERE id = n_o) = v_avant_no
+     AND (SELECT voter_id FROM public.library_profile_votes WHERE id = vo_u) = v_tok
+     AND (SELECT (to_jsonb(r) - 'voter_id')::text FROM public.library_profile_votes r WHERE id = vo_u) = v_avant_vu
+     AND (SELECT to_jsonb(r)::text FROM public.library_profile_votes r WHERE id = vo_o) = v_avant_vo
      AND COALESCE(current_setting('anarbib.effacement_compte', true), '') = ''
     THEN v_passed:=v_passed+1;
     ELSE v_failed:=v_failed+1; v_failures:=v_failures||v_t;
+  END IF;
+
+  -- ── T10 : votes, le vote témoin de v_o ──────────────────────────────────
+  v_t:='T10 les votes refusent tout ce qui n''est pas le re-pointage exact ; DELETE refusé';
+  v_n := 0;
+  BEGIN UPDATE public.library_profile_votes SET voter_id = v_tok_o WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  PERFORM set_config('anarbib.effacement_compte', v_u::text, true);
+  BEGIN UPDATE public.library_profile_votes SET voter_id = v_tok_o WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  PERFORM set_config('anarbib.effacement_compte', v_o::text, true);
+  BEGIN UPDATE public.library_profile_votes SET voter_id = v_tok WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  BEGIN UPDATE public.library_profile_votes SET voter_id = v_tok_o, vote = 'abstain', rationale_against = NULL WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  BEGIN DELETE FROM public.library_profile_votes WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  SET LOCAL ROLE service_role;
+  BEGIN UPDATE public.library_profile_votes SET voter_id = v_tok_o WHERE id = vo_o;
+  EXCEPTION WHEN OTHERS THEN IF SQLERRM LIKE 'LIBRARY_PROFILE_VOTES_IS_IMMUTABLE%' THEN v_n := v_n + 1; END IF; END;
+  RESET ROLE;
+  PERFORM set_config('anarbib.effacement_compte', '', true);
+  IF v_n = 6 AND (SELECT to_jsonb(r)::text FROM public.library_profile_votes r WHERE id = vo_o) = v_avant_vo
+     AND has_table_privilege('service_role', 'public.library_profile_votes', 'UPDATE')
+    THEN v_passed:=v_passed+1;
+    ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||v_n||'/6 refus');
   END IF;
 
   -- ── T6 : historique du profil, ligne témoin de v_o ───────────────────────
