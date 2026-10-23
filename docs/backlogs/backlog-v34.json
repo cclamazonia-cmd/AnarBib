@@ -4261,6 +4261,10 @@
         {
           "fr": "**20/10, soir — la règle est appliquée** (`6a3847bc`) : dans `it.json` et les lignes italiennes de `mail-strings.ts`, 51 astérisques fautifs (`amministratori*`, `coordinatori*`, `autor*`, `relator*`, `Lettor*rice`…), 6 paires développées (`autore/autrice` → `autore/trice`), 4 points médians (`lettore·trice`, proscrits par la charte) et les masculins nus qui désignent des personnes dans l'interface (« Accesso riservato ai coordinatori », « Annullata dal lettore », « Lettori »…), l'accord compris (`del/la`, `un*`, singulier ou pluriel). Garde : `src/tests/i18n-it-paires-irregulieres.test.js`. Laissés tels quels, à trier avec la personne italophone : les doublets complets (« lettrici e lettori »), les appareils (« Lettore PDF »), les mots-clés de recherche, `editore` (la maison d'édition) et `autore` comme rôle de catalogage. **Restent** : cette relecture, et le critère 3 (trois chaînes restées en français), non revérifié.",
           "pt": "**20/10, noite — a regra está aplicada** (`6a3847bc`): 51 asteriscos errados, 6 pares desenvolvidos, 4 pontos médios e os masculinos nus de pessoas corrigidos, com a concordância; guarda `i18n-it-paires-irregulieres`. Faltam a revisão italófona e o critério 3."
+        },
+        {
+          "fr": "**23/10 — critère 3 tenu** : aucune valeur de `it.json` n'est égale au français (hors sigles), aucune ne porte de marqueur français, sauf une mention voulue (« Autorités », le nom du menu dans un PMB en français) ; les 819 lignes italiennes de `mail-strings.ts` non plus. **Reste** la relecture par une personne italophone de l'application de la règle (critère 2).",
+          "pt": "**23/10 — critério 3 cumprido** (nenhuma cadeia francesa no italiano). Falta a releitura por uma pessoa italófona."
         }
       ]
     },
@@ -6140,7 +6144,12 @@
       "r": [
         "Relecture des sessions du 16 au 19/10/2026"
       ],
-      "verif": []
+      "verif": [
+        {
+          "fr": "**23/10 — relevé : P9 est en production depuis le 21/10**, la fiche était en retard. Le rapport hors dépôt (`~/anarbib/_handoff/securite/AUDIT_phase1_2026-10-17.md`, section « Suivi des corrections ») le date : quatre commits `8b909326..5be16393`, runs 1944 et 1945 verts — comparaison des secrets en temps constant (onze `===` remplacés), garde avant lecture du corps et erreur interne générique, injection CSV, identifiant Wikidata borné, imports Deno épinglés, `react-router-dom` à jour, `.gitignore` des secrets, migration `20261021052640` (huit écritures fermées à `anon`), `search_path` de `fn_locale_from_idioma` ; banc `hygiene-p9` (10 tests). **Critère 1 tenu.** Critère 2 : le canal privé existe de fait — ce rapport, hors dépôt, tenu par la session « Sécurité et résistance d'AnarBib », qui y cadre la phase 2 (`PHASE2_cadrage_2026-10-23.md`) ; reste à le faire connaître de qui doit le lire (Xavier ne savait pas où il était).",
+          "pt": "**23/10 — P9 em produção desde 21/10** (`8b909326..5be16393`, runs 1944/1945). Critério 1 cumprido. Canal privado: o relatório fora do repositório (`_handoff/securite/`); falta torná-lo conhecido."
+        }
+      ]
     },
     {
       "id": "C33",
@@ -6835,6 +6844,10 @@
         {
           "fr": "**23/10 — inventaire fait, rien retiré** (accord de Xavier : retirer après vérification, liste montrée d'abord). **Sans rien d'unique, retirables** : `~/anarbib-wt-d17` (branche fusionnée, propre) ; `.claude/worktrees/angry-elion-997849` et `charming-curie-4fa39c` (branches fusionnées, propres, outillage identique) ; `.claude/worktrees/intelligent-swirles-60c380` (branche fusionnée, copie = branche à deux droits de fichier près, outillage plus ancien que celui du checkout) ; le clone Windows `Codeberg\u0007narbib` et ses deux worktrees (propres, tous leurs commits dans `main`). **Laissés, au doute** : `adoring-clarke-e85e06` (un commit du jour absent de `main` : une session active), `bold-blackwell-365dda` (copie très différente de sa branche), `fervent-diffie-380c13` (outillage `.claude` modifié le même jour que celui du checkout). Une suppression de fichiers se fait par Xavier : commandes données.",
           "pt": "**23/10 — inventário feito, nada retirado.** Retiráveis sem nada único: wt-d17, três dossiês .claude/worktrees, o clone Windows. Mantidos na dúvida: adoring-clarke, bold-blackwell, fervent-diffie."
+        },
+        {
+          "fr": "**23/10, après-midi — ménage fait par Xavier** (commandes WSL) : `~/anarbib-wt-d17`, `angry-elion`, `charming-curie`, `intelligent-swirles` et le clone Windows retirés. **Les trois douteux relus** contre les sessions de l'application : `adoring-clarke-e85e06` est le dossier de la session « Retirer test.anarbib.org », active — **gardé** ; `fervent-diffie-380c13` (plus de gitdir, contenu tout entier dans l'historique) est celui de la session épinglée « Cadence et rejeu pour le transport SMTP Nodo50 » — retirable seulement si Xavier archive cette session ; `bold-blackwell-365dda` (plus de gitdir, aucune session ; son seul fichier différent, `run-sql-suites.sh` au dossier temporaire propre, est dans `main` sous la même forme) — **retirable**. Piège : `git worktree prune` lancé depuis WSL retirerait l'enregistrement d'`adoring-clarke` (inscrit par Windows en `//wsl.localhost/ubuntu-26.04/…`, que WSL voit « prunable ») — ne pas le lancer. Les sessions « Requêtes 401 anon » et « Témoin durable des envois » ont perdu leur dossier au ménage du matin (travail fusionné) : à archiver.",
+          "pt": "**23/10 — limpeza feita.** `adoring-clarke` = sessão ativa, mantido; `fervent-diffie` = sessão fixada (retirar só arquivando-a); `bold-blackwell` retirável. Não usar `git worktree prune` no WSL."
         }
       ]
     },

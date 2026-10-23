@@ -441,7 +441,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** L'audit de sécurité du 17/10 a donné dix chantiers : P1 à P8 sont livrés (18-19/10). **P9, l'hygiène, n'est pas commencé.** Le détail vit dans le rapport hors dépôt ; par règle de l'audit, les constats ne sont pas inscrits ici avant leur correction.
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Traiter les points du chantier P9 du rapport, un commit par point ; ne décrire ici que ce qui est corrigé. Décider le canal privé de suivi des constats ouverts.
 
@@ -868,7 +868,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** `it.json` n'est pas conforme à la convention de l'astérisque final : les paires irrégulières comme `lettore` / `lettrice` ne se réduisent pas à `lettor*`. Le test de charte vérifie une seule chose sur l'italien — que `camerata` et `camerati` n'y figurent jamais, terme fasciste, échec dur — et rien d'autre.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Décider du traitement des paires irrégulières avec un locuteur natif, puis l'appliquer aux chaînes concernées. C'est un travail de langue, pas de code.
 
@@ -1654,7 +1654,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** `vitest.config.js` n'exclut que `node_modules`, `dist` et `supabase/functions` : une suite complète lancée depuis `~/anarbib` ramasse les tests des worktrees d'autres sessions (14 faux échecs le 18/10, 7 le 19/10) et charge le poste. Restent aussi des dossiers sous `.claude/worktrees/` qui ne sont plus des worktrees, un worktree `~/anarbib-wt-d17` signalé « peut être retiré », et un clone Windows indépendant (`Codeberg\anarbib`, avec deux worktrees) contraire à la règle du dépôt unique.
 
-*Vérifié : [object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Ajouter `.claude/**` à l'exclusion ; retirer, sur l'accord de Xavier, les copies mortes et le clone Windows après vérification qu'ils ne portent rien d'unique.
 

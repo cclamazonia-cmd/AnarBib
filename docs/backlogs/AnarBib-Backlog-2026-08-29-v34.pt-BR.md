@@ -441,7 +441,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** A auditoria de 17/10 deu dez canteiros; P1 a P8 entregues. P9 (higiene) não começou. Detalhe fora do repositório.
 
-*Verificado : *
+*Verificado : [object Object]*
 
 **O que é.** Tratar os pontos de P9, um commit por ponto; descrever aqui só o corrigido. Decidir o canal privado de acompanhamento.
 
@@ -868,7 +868,7 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 **Estado.** `it.json` não está conforme à convenção do asterisco final: os pares irregulares como `lettore` / `lettrice` não se reduzem a `lettor*`. O teste de carta verifica uma só coisa no italiano — que `camerata` e `camerati` nunca apareçam, termo fascista, falha dura — e nada mais.
 
-*Verificado : [object Object],[object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object],[object Object]*
 
 **O que é.** Decidir o tratamento dos pares irregulares com um falante nativo, depois aplicá-lo às cadeias envolvidas. É um trabalho de língua, não de código.
 
@@ -1654,7 +1654,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 **Estado.** vitest não exclui `.claude/`: falsos fracassos e carga. Restam cópias de trabalho mortas e um clone Windows independente.
 
-*Verificado : [object Object],[object Object]*
+*Verificado : [object Object],[object Object],[object Object]*
 
 **O que é.** Excluir `.claude/**`; retirar as cópias mortas após verificação.
 
