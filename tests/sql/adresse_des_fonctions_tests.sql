@@ -11,10 +11,10 @@
 -- remplacé le littéral par `private.fn_functions_base_url()`, qui lit le
 -- réglage `anarbib.functions_base_url` et se replie sur l'adresse cloud.
 --
---   T1 réglage absent/vide → repli : l'adresse cloud historique (la
---      production ne change pas de comportement)
+--   T1 réglage absent/vide, pas de secret → NULL : aucun repli sur la
+--      production (P2-O1, 23/10/2026 — avant : l'adresse cloud historique)
 --   T2 réglage posé pour la session → le helper le rend tel quel
---   T3 plus AUCUN corps de fonction (hors le helper) ne porte le littéral
+--   T3 plus AUCUN corps de fonction, helper compris, ne porte l'adresse cloud
 --   T4 les douze fonctions nommées appellent le helper
 --   T5 le job cron `anarbib-health-probe` appelle le helper (déclaré « sur
 --      stub » si cron.is_ci_stub() existe — DOC-SILENCE-1)
@@ -22,6 +22,10 @@
 --   T7 la fonction de dispatch de la moisson construit bien son URL avec le
 --      réglage : on lit `pg_get_functiondef` et on vérifie la forme
 --      « helper || '/functions/v1/harvest-oai-pmh' »
+--   T8 sans réglage, le secret Vault FUNCTIONS_BASE_URL fait l'adresse
+--   T9 le réglage l'emporte sur le secret
+--   T10 la barre finale est retirée (l'appelant ajoute « /functions/v1/… »)
+--   (P2-O1, migration 20261023122511 ; tout est annulé par le RAISE final)
 --
 --   Bilan OK : 'ADRESSE-FONCTIONS OK : N/N tests passés'
 -- =====================================================================
@@ -38,9 +42,9 @@ DECLARE
   v_stub     boolean := false;
 BEGIN
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T1 réglage absent → repli cloud';
+  v_t := 'T1 réglage absent, pas de secret → NULL, aucun repli';
   PERFORM set_config('anarbib.functions_base_url', '', true);
-  IF private.fn_functions_base_url() = 'https://uflwmikiyjfnikiphtcp.supabase.co' THEN
+  IF private.fn_functions_base_url() IS NULL THEN
     v_passed := v_passed + 1;
   ELSE
     v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(private.fn_functions_base_url(), '∅'));
@@ -57,11 +61,10 @@ BEGIN
   PERFORM set_config('anarbib.functions_base_url', '', true);
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T3 plus aucun corps de fonction ne porte le littéral cloud';
+  v_t := 'T3 plus aucun corps de fonction, helper compris, ne porte l''adresse cloud';
   SELECT string_agg(n.nspname || '.' || p.proname, ', ') INTO v_txt
     FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
-   WHERE p.prosrc LIKE '%uflwmikiyjfnikiphtcp.supabase.co/functions/v1/%'
-     AND NOT (n.nspname = 'private' AND p.proname = 'fn_functions_base_url');
+   WHERE p.prosrc LIKE '%uflwmikiyjfnikiphtcp.supabase.co%';
   IF v_txt IS NULL THEN
     v_passed := v_passed + 1;
   ELSE
@@ -131,6 +134,41 @@ BEGIN
     v_passed := v_passed + 1;
   ELSE
     v_failed := v_failed + 1; v_failures := v_failures || v_t;
+  END IF;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- T8 à T10 : le secret Vault. Vrai Vault : vault.create_secret ; banc de la
+  -- CI : vault.decrypted_secrets est une table bouchon, on y écrit.
+  IF to_regprocedure('vault.create_secret(text, text, text, uuid)') IS NOT NULL THEN
+    PERFORM vault.create_secret('https://instance.exemple.invalid/', 'FUNCTIONS_BASE_URL', 'banc P2-O1');
+  ELSE
+    INSERT INTO vault.decrypted_secrets (name, description, decrypted_secret)
+    VALUES ('FUNCTIONS_BASE_URL', 'banc P2-O1', 'https://instance.exemple.invalid/');
+  END IF;
+
+  v_t := 'T8 sans réglage, le secret Vault fait l''adresse';
+  PERFORM set_config('anarbib.functions_base_url', '', true);
+  v_txt := private.fn_functions_base_url();
+  IF v_txt LIKE 'https://instance.exemple.invalid%' THEN
+    v_passed := v_passed + 1;
+  ELSE
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_txt, '∅'));
+  END IF;
+
+  v_t := 'T9 le réglage l''emporte sur le secret';
+  PERFORM set_config('anarbib.functions_base_url', 'http://reglage.exemple.invalid', true);
+  IF private.fn_functions_base_url() = 'http://reglage.exemple.invalid' THEN
+    v_passed := v_passed + 1;
+  ELSE
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(private.fn_functions_base_url(), '∅'));
+  END IF;
+  PERFORM set_config('anarbib.functions_base_url', '', true);
+
+  v_t := 'T10 la barre finale est retirée';
+  IF v_txt = 'https://instance.exemple.invalid' THEN
+    v_passed := v_passed + 1;
+  ELSE
+    v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_txt, '∅'));
   END IF;
 
   -- ─── Bilan ────────────────────────────────────────────────────────

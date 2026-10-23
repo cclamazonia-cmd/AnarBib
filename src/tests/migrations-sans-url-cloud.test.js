@@ -58,6 +58,21 @@ describe('I20 — aucune migration nouvelle ne code en dur l’adresse des fonct
     expect(fautives, 'construire l’URL avec private.fn_functions_base_url() || \'/functions/v1/<nom>\'').toEqual([]);
   });
 
+  // P2-O1 (23/10/2026) : le repli sur le projet cloud est retiré. Une pile
+  // rejouée sans réglage envoyait ses dépêches à la production ; la dernière
+  // définition du helper ne doit plus porter aucune adresse cloud.
+  it('la dernière définition du helper ne retombe sur aucune adresse cloud', () => {
+    const definitions = files.filter((f) =>
+      /CREATE OR REPLACE FUNCTION private\.fn_functions_base_url\(\)/.test(readFileSync(path.join(MIG_DIR, f), 'utf8'))
+    );
+    const derniere = definitions[definitions.length - 1];
+    expect(derniere).not.toBe('20260907123000_l_adresse_des_fonctions_n_est_plus_codee_en_dur.sql');
+    const src = readFileSync(path.join(MIG_DIR, derniere), 'utf8');
+    const corps = src.slice(src.indexOf('CREATE OR REPLACE FUNCTION private.fn_functions_base_url()'));
+    expect(corps.slice(0, corps.indexOf('$$;'))).not.toMatch(/supabase\.co/);
+    expect(corps).toMatch(/FUNCTIONS_BASE_URL/);
+  });
+
   it('la migration I20 définit bien le helper et son repli', () => {
     const src = readFileSync(
       path.join(MIG_DIR, '20260907123000_l_adresse_des_fonctions_n_est_plus_codee_en_dur.sql'),
