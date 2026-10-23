@@ -45,6 +45,10 @@ describe('les écrans', () => {
     const src = lire('supabase/functions/read-digital-asset/index.ts');
     expect(src).toMatch(/viewerKind === "document" \? \{ download: nomDeTelechargement\(storagePath\) \} : undefined/);
   });
+  it('D24 : le lecteur EPUB a une hauteur dans la page de lecture (il se lisait sur 0 px)', () => {
+    expect(lire('src/pages/public/ReaderPage.css')).toMatch(/\.ab-reader-viewer-shell > \.ab-epub \{\s*height: max\(420px, calc\(100dvh - 170px\)\);/);
+    expect(lire('src/pages/public/BookPage.jsx')).toContain("'application/epub+zip': 'EPUB'");
+  });
   it('le lecteur a sa branche document, la notice appelle la porte', () => {
     expect(lire('src/pages/public/ReaderPage.jsx')).toMatch(/viewerKind === 'document' && accessUrl/);
     const page = lire('src/pages/public/BookPage.jsx');

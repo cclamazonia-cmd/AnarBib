@@ -241,6 +241,14 @@
   padding: 0 16px 32px;
 }
 
+/* Le lecteur EPUB prend `height: 100%` de son conteneur, qui n'en a pas : la
+   page se lisait sur 0 px (constaté le 23/10/2026, D24, sur les premiers EPUB
+   versés). Ici, la hauteur de l'écran moins l'en-tête de la page ; en plein
+   écran, le navigateur impose la sienne. */
+.ab-reader-viewer-shell > .ab-epub {
+  height: max(420px, calc(100dvh - 170px));
+}
+
 @media (max-width: 720px) {
   .ab-reader-viewer-shell {
     padding: 0 8px 16px;
