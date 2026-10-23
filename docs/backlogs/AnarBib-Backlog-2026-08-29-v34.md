@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-23** · 65 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-23** · 64 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -18,7 +18,7 @@
     - [A — Soutenabilité collective](#a--soutenabilité-collective) · 4
     - [B — Base de données, sécurité, RLS](#b--base-de-données-sécurité-rls) · 3
     - [C — Catalogage et données documentaires](#c--catalogage-et-données-documentaires) · 6
-    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 10
+    - [D — Périodiques, éphémères, ressources numériques](#d--périodiques-éphémères-ressources-numériques) · 9
     - [E — Front, OPAC, i18n, accessibilité](#e--front-opac-i18n-accessibilité) · 8
     - [F — Courriel et notifications](#f--courriel-et-notifications) · 1
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
@@ -62,9 +62,9 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ## L'état réel au 22 octobre 2026
 
-**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31, E41 et C16 clos le 23/10** — **65 items, 280 clôtures**.
+**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31, E41 et C16 clos le 23/10** ; **D25 clos le 23/10** (Word/ODT en téléchargement, 28 fichiers d'Anarchief versés) — **64 items, 281 clôtures**.
 
-**Fraîcheur des constats au 2026-10-23.** **59 items sur 65** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Les **6** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-23.** **58 items sur 64** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D24, D28, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Les **6** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -610,7 +610,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **D21** | Faire choisir à la BTL le tome de De Greef (notice 415) | `P3` | Ouvert |
 | **D22** | Reprendre à la main les sources fermées aux automates | `P3` | Ouvert |
 | **D24** | Publier les textes intégraux du wiki d'Anarchief en EPUB | `P2` | Ouvert |
-| **D25** | Décider du sort des 24 fichiers Word/ODT d'Anarchief | `P3` | Ouvert |
 | **D28** | Retirer deux objets orphelins des seaux PDF, et vérifier qu'une reprise n'en laisse plus | `P3` | Ouvert |
 
 #### D3 — Rattacher les 43 fascicules du lot SOLIDAIRES à leurs 3 revues, et trancher les 9 numéros en double
@@ -779,26 +778,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 - Les textes ouverts sont lisibles en EPUB depuis leur notice ; les restreints sous compte.
 
 **Dépendances.** Après le feu vert de Xavier ; suit les réponses de J/M (G21).
-
-*Renvois : `Relecture des sessions du 16 au 19/10/2026`*
-
-#### D25 — Décider du sort des 24 fichiers Word/ODT d'Anarchief
-
-`P3` Différé · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** 20 fichiers Word/ODT écartés le 15/10 (les seaux n'acceptent que le PDF), plus 4 ODT des pages en doublon (*Nacht over Rusland* ×3, *La conquête du pain*). Personne n'a décidé.
-
-*Vérifié : [object Object]*
-
-**Ce que c'est.** Trancher : conversion en PDF, admission de ces formats, ou lien vers le wiki seulement.
-
-**Pourquoi ça compte.** Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.
-
-**Ce qui compte comme fini.**
-
-- La décision est prise et appliquée aux 24 fichiers.
-
-**Dépendances.** —
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
 
@@ -2188,6 +2167,7 @@ CI verte : lint et suite unitaire. |
 | C31 | 2026-10-23 | **Clos le 23/10 sur décision de Xavier (questionnaire) : la postface a son rôle, « posfaciador »** (`f4991ad9`, migration `20261023121922`, en production à 14 h 51). Au menu des écrits après l'avant-propos, libellé dans les onze langues (Postface, Posfácio, Epílogo, Afterword, Postfazione, Nachwort, Epíleg, Postparolo, Nawoord, Επίμετρο, Postfață) ; MARC21 `waw` (et `aft`, auteur d'une postface, à la lecture), UNIMARC `075`, à l'import comme à l'export ; termes en clair reconnus (postface, posfácio, afterword, Nachwort, nawoord…). L'import le garde dans sa liste fermée (patch par ancre, deux occurrences vérifiées en production). Les notices existantes ne changent pas : une postface rangée en préface le reste jusqu'à reprise. Bancs : vitest complet (3 423 tests), 236 suites SQL. |
 | E41 | 2026-10-23 | **Clos le 23/10 sur décision de Xavier : le nom de famille est facultatif** (`13149de7`, en production à 14 h 51). Il n'est plus exigé à la création de compte (contrôles et champ), dans « Mes données », au compte contributeur, ni par la fonction `register` ; un nom vide s'enregistre absent (`null`). La base l'acceptait déjà (colonne nullable, aucune fonction ne l'exigeait) ; les affichages retombaient déjà sur le prénom ou le courriel (`filter(Boolean).join(' ')`, `trim()`). Banc : `src/tests/e41-nom-facultatif.test.js` ; exercé au banc, pas encore par une inscription réelle sous un seul nom. |
 | C16 | 2026-10-23 | **Clos le 23/10 sur décisions de Xavier (questionnaire).** Critère 1 : les 244 couvertures publiées sans provenance portent `cover_source = 'unknown'`, assumé (`59becb8a`, migration `20261023121721`, en production à 14 h 51) ; plus aucune couverture publiée sans provenance. Critère 2 : la licence des 18 images venues d'Inventaire n'est pas vérifiée — Inventaire publie ses données en CC0, mais ses images sont déposées par ses utilisateur·rices ; c'est assumé par écrit, une image étant retirée à la première demande de son ayant droit. Les deux règles au REGISTRE : `CAPAS-8` (v1.01). |
+| D25 | 2026-10-23 | **Clos le 23/10 : Word et ODT admis, en téléchargement seulement, et les 28 fichiers d'Anarchief versés.** Décision de Xavier (questionnaire) ; REGISTRE `NUMDIF-7` (v1.02). Inventaire : 28 fichiers, pas 24 (`INVENTAIRE_d25_word_odt_anarchief_2026-10-23.md`). Outil (`abbe185e`, migration `20261023130916`) : seaux de la file ouverts à .doc/.docx/.odt, type `documento` / usage `telechargement`, versement par la file avec contrôle de la signature du contenu, réalignement qui garde le type, un document n'est jamais le bouton « Lire » (403 ressources sur des notices sans principale), porte publique `api.book_documents_v1` (0028 = 21, 0029 = 442, verdicts écrits), « Fichiers à télécharger » sur la notice, « Télécharger » au lecteur. Données (`20261023133121`) : 28 candidats validés, versés le 23/10 depuis l'onglet de Xavier (aal2), ressources 2013 à 2040 : **12 publics** (9 par lettre A + B, dont les deux textes de PP ; Proudhon, Kropotkine, *Vrede als daad* en domaine public), **16 restreints**. Vérifié en production : objets présents, aucun principal, lecture anonyme du public en téléchargement (fichier OLE intact), restreint refusé. Question à J/M (15 restreints et *De Syndicalist*) **envoyée par Xavier le 23/10**. Reste ouvert, hors D25 : `rejeu-image` rouge depuis `a45a20c5` (autre session), qui ne pourra attester ces migrations qu'une fois levé. |
 
 ---
 
@@ -2219,4 +2199,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-23. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 65 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-22 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5e292baf` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-23. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 64 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-22 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5e292baf` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
