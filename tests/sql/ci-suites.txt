@@ -915,3 +915,6 @@ tests/sql/numdif_restreindre_sans_candidat_tests.sql
 # D25 (23/10/2026) : les fichiers Word et ODT, en téléchargement — versement en « documento » (jamais principal), PDF inchangé,
 # réalignement qui garde le type, porte api.book_documents_v1 sous anon, contraintes et seaux.
 tests/sql/d25_documents_word_odt_tests.sql
+# D24 (23/10/2026) : le seau EPUB restreint s'ouvre au versement par l'administration du réseau (books/<n>/<nom>.epub) ;
+# lecture et gestion par la règle des espaces réservés (fn_objet_reserve_gerable). Expressions des politiques évaluées.
+tests/sql/d24_epub_restreint_tests.sql
