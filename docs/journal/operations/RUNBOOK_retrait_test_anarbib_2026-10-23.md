@@ -88,6 +88,18 @@ Attendu : rien sous les deux noms `test`, et **toujours les deux TXT** sous
 Rien à faire : `test.anarbib.org` n'est ni dans les *Redirect URLs*, ni dans les origines des
 fonctions à CORS fermé (relevé du 23/10 ci-dessus).
 
+## Fait le 23/10/2026
+
+- **Site** : `--delete` lancé par Xavier → `result: deleted`, code 0. Ensuite `/`, le bundle
+  `index-DGmoP40U.js` et `sw.js` répondent **424** (« Failed Dependency », la page de Codeberg
+  pour un nom sans site publié) : c'est l'effet attendu, pas une panne.
+- **DNS** : les trois enregistrements supprimés chez OVH par Xavier. Vérifié aux **deux**
+  serveurs d'autorité (`dns14.ovh.net`, `ns14.ovh.net`) : plus rien sous `test.anarbib.org` ni
+  sous `_git-pages-forge-allowlist.test.anarbib.org` ; les deux TXT
+  `_git-pages-forge-allowlist.app.anarbib.org` et le A de `app.anarbib.org` sont intacts.
+- **Production** : `app.anarbib.org`, `app.anarbib.is`, `app.anarbib.org.br` en 200 après les
+  deux gestes.
+
 ## Ce qui reste après le retrait
 
 - **Service worker.** Le vieux front enregistrait `sw.js`. Un navigateur qui l'aurait ouvert
