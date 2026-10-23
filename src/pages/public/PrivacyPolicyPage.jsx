@@ -149,6 +149,9 @@ export default function PrivacyPolicyPage() {
         </section>
 
         {/* ── Durée de conservation (rétention RGPD) ──────────────────── */}
+        {/* RET-2/RET-3 (23/10/2026) : des plafonds, toutes les familles de
+            données, et ce que les sauvegardes prolongent (BG2). Même liste
+            côté vitrine (build-privacy-pages.cjs, constante RET). */}
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.retention.title' })}</h2>
           <p style={pStyle}>{t({ id: 'privacy.retention.body' })}</p>
@@ -156,10 +159,17 @@ export default function PrivacyPolicyPage() {
             <li>{t({ id: 'privacy.retention.loans' })}</li>
             <li>{t({ id: 'privacy.retention.reservations' })}</li>
             <li>{t({ id: 'privacy.retention.consultations' })}</li>
+            <li>{t({ id: 'privacy.retention.interlibrary' })}</li>
             <li>{t({ id: 'privacy.retention.notifications' })}</li>
+            <li>{t({ id: 'privacy.retention.messages' })}</li>
+            <li>{t({ id: 'privacy.retention.reading' })}</li>
+            <li>{t({ id: 'privacy.retention.bugReports' })}</li>
+            <li>{t({ id: 'privacy.retention.outbox' })}</li>
+            <li>{t({ id: 'privacy.retention.logs' })}</li>
             <li>{t({ id: 'privacy.retention.profile' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.retention.override' })}</p>
+          <p style={pStyle}>{t({ id: 'privacy.retention.backups' })}</p>
         </section>
 
         <section style={sectionStyle}>
