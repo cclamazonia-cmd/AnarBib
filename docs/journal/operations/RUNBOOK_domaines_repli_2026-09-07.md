@@ -444,6 +444,14 @@ ligne `failed`** ; le jour où on l'écrit : rejouer par destinataire refusé, j
 entière. Et `request-password-reset` n'avait plus de limite de débit depuis le 16/09 (clés en
 clair refusées par la contrainte d'empreinte) : rétablie le 21/09 (`1659230e`).
 
+## Retirer un domaine — l'inverse, dans l'ordre inverse
+
+Ajouter : DNS, puis publication. Retirer : **publication d'abord** (`git-pages-cli … --delete`,
+autorisé par le TXT `_git-pages-forge-allowlist`), **DNS ensuite** — sinon le site reste stocké
+chez Codeberg sans plus personne pour le retirer. Puis les *Redirect URLs* de l'authentification
+et `APP_ALLOWED_ORIGINS` s'il y figurait. Cas traité : `test.anarbib.org`, vieux front de l'essai
+du 20/08 resté branché sur la production — `RUNBOOK_retrait_test_anarbib_2026-10-23.md`.
+
 ## Annexe A — Toutes les vérifications en un bloc
 
 ```bash
