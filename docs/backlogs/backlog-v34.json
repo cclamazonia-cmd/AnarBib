@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31 et E41 clos le 23/10** — **66 items, 279 clôtures**.",
-      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31 e E41 fechados em 23/10** — **66 itens, 279 fechamentos**."
+      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31, E41 et C16 clos le 23/10** — **65 items, 280 clôtures**.",
+      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** — **65 itens, 280 fechamentos**."
     },
     "photo": [
       {
@@ -3494,6 +3494,14 @@
           "fr": "**Clos le 23/10 sur décision de Xavier : le nom de famille est facultatif** (`13149de7`, en production à 14 h 51). Il n'est plus exigé à la création de compte (contrôles et champ), dans « Mes données », au compte contributeur, ni par la fonction `register` ; un nom vide s'enregistre absent (`null`). La base l'acceptait déjà (colonne nullable, aucune fonction ne l'exigeait) ; les affichages retombaient déjà sur le prénom ou le courriel (`filter(Boolean).join(' ')`, `trim()`). Banc : `src/tests/e41-nom-facultatif.test.js` ; exercé au banc, pas encore par une inscription réelle sous un seul nom.",
           "pt": "**Fechado em 23/10 por decisão de Xavier: o sobrenome é facultativo** (`13149de7`): criação de conta, « Meus dados », conta de contribuidor·a e register; um sobrenome vazio é gravado ausente."
         }
+      ],
+      [
+        "C16",
+        "2026-10-23",
+        {
+          "fr": "**Clos le 23/10 sur décisions de Xavier (questionnaire).** Critère 1 : les 244 couvertures publiées sans provenance portent `cover_source = 'unknown'`, assumé (`59becb8a`, migration `20261023121721`, en production à 14 h 51) ; plus aucune couverture publiée sans provenance. Critère 2 : la licence des 18 images venues d'Inventaire n'est pas vérifiée — Inventaire publie ses données en CC0, mais ses images sont déposées par ses utilisateur·rices ; c'est assumé par écrit, une image étant retirée à la première demande de son ayant droit. Les deux règles au REGISTRE : `CAPAS-8` (v1.01).",
+          "pt": "**Fechado em 23/10 por decisões de Xavier.** 244 capas sem proveniência em « unknown »; licença das 18 imagens do Inventaire não verificada, assumida por escrito (retirada a pedido). REGISTRE CAPAS-8."
+        }
       ]
     ]
   },
@@ -3860,63 +3868,6 @@
         {
           "fr": "**19/10, soir — d'autres notices à reprendre livre en main**, relevées par la campagne de fac-similés et la session D17 (16-17/10), non corrigées : **BTL** — 2126 (éditeur Masson et Cie ; co-auteur manquant), 1764 (1884 ou 1894), 1672 (« Porto Editora » en 1925 ?), 1084/1085 (doublon probable, éditeur et imprimeur confondus), 2742 (BD récente de Partage Noir décrite comme journal de 1911), 2071 (« Letra Livre », maison moderne), 1774 (Madrid seul ?), 1776 (autre tirage), 1773-1775 (« cinq volumes ») ; **BLMF** — 2384 (année 2019, aucun tirage connu : 2016, 2018, 2020). Par les coordinations, au formulaire, jamais par migration.",
           "pt": "**19/10, noite** — outros registros a retomar com o livro na mão (BTL: 2126, 1764, 1672, 1084/1085, 2742, 2071, 1774, 1776, 1773-1775; BLMF: 2384)."
-        }
-      ]
-    },
-    {
-      "id": "C16",
-      "d": "C",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "M",
-      "sk": [
-        "biblio",
-        "sql"
-      ],
-      "t": {
-        "fr": "Attribuer les couvertures posées avant le 27/09",
-        "pt": "Atribuir as capas postas antes de 27/09"
-      },
-      "v": {
-        "fr": "La spec des capas (§4.3) fait de l'attribution — la source et la licence de chaque couverture — une exigence éthique et de conformité. **Mesuré le 27/09 en production : 0 couverture attribuée sur les 250 notices publiées qui en ont une, et 0 sur les 132 brouillons dans le même cas.** Le formulaire ne mettait pas la paire dans le brouillon (`fd5d2f0e`), et ni la publication ni la reprise ne la recopiaient (`76c6ae3f`, migration `20260927130518`). Depuis, provenance et licence suivent l'image par paire (`CAPAS-4`) — pour les couvertures posées après le 27/09 seulement : aucune migration ne reprend le stock. Et Inventaire ne dit pas la licence de ses images : elle est posée à null, « à vérifier » (`2a80d43b`).",
-        "pt": "A spec das capas (§4.3) faz da atribuição — a fonte e a licença de cada capa — uma exigência ética e de conformidade. **Medido em 27/09 em produção: 0 capa atribuída entre os 250 registros publicados que têm uma, e 0 entre os 132 rascunhos no mesmo caso.** O formulário não punha o par no rascunho (`fd5d2f0e`), e nem a publicação nem a retomada o copiavam (`76c6ae3f`, migração `20260927130518`). Desde então, procedência e licença seguem a imagem em par (`CAPAS-4`) — só para as capas postas depois de 27/09: nenhuma migração retoma o estoque. E o Inventaire não diz a licença das suas imagens: fica nula, «a verificar» (`2a80d43b`)."
-      },
-      "w": {
-        "fr": "Relever combien de couvertures publiées restent sans provenance. Puis écrire une règle pour le stock, décidée par Xavier : une provenance retrouvée là où une trace la donne, sinon « inconnue », posée et assumée par écrit. Pour les images d'Inventaire, vérifier la licence à la source, ou assumer son absence par écrit.",
-        "pt": "Levantar quantas capas publicadas continuam sem procedência. Depois escrever uma regra para o estoque, decidida por Xavier: uma procedência recuperada onde um rastro a dá, senão «desconhecida», posta e assumida por escrito. Para as imagens do Inventaire, verificar a licença na fonte, ou assumir sua ausência por escrito."
-      },
-      "y": {
-        "fr": "Une couverture est l'image d'un tiers : sans sa source, on ne peut ni la créditer ni la retirer si on nous le demande. La règle par paire tient les poses nouvelles ; le stock d'avant le 27/09 reste muet, et aucun item ne le portait.",
-        "pt": "Uma capa é a imagem de um terceiro: sem a fonte, não se pode nem creditá-la nem retirá-la se pedirem. A regra em par vale para as capas novas; o estoque de antes de 27/09 continua mudo, e nenhum item o carregava."
-      },
-      "f": {
-        "fr": [
-          "Chaque couverture publiée a une provenance, ou une raison écrite de n'en pas avoir.",
-          "La licence des images d'Inventaire est vérifiée, ou son absence assumée par écrit."
-        ],
-        "pt": [
-          "Cada capa publicada tem uma procedência, ou um motivo escrito para não ter.",
-          "A licença das imagens do Inventaire está verificada, ou sua ausência assumida por escrito."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune : la règle par paire (`20260927130518`) est en production.",
-        "pt": "Nenhuma: a regra em par (`20260927130518`) está em produção."
-      },
-      "r": [
-        "docs/specs/archive/spec-module-capas.md §4.3",
-        "REGISTRE §43 CAPAS-4",
-        "docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md",
-        "commits fd5d2f0e, 76c6ae3f, 2a80d43b"
-      ],
-      "verif": [
-        {
-          "fr": "**12/10, mesuré en production** : 245 notices publiées sur 423 avec couverture sont sans provenance ; la règle pour le stock (retrouvée là où une trace la donne, sinon « inconnue » assumée) attend la décision de Xavier.",
-          "pt": "**12/10, medido**: 245 em 423 sem proveniência; a regra para o estoque espera a decisão de Xavier."
-        },
-        {
-          "fr": "**23/10 — critère 1 tenu sur décision de Xavier (questionnaire) : « unknown » pour tout le stock sans trace** (`59becb8a`, migration `20261023121721`, en production à 14 h 51) : les 244 couvertures publiées sans provenance portent `cover_source = 'unknown'`, licence vide, sans recherche notice par notice ; plus aucune couverture publiée sans provenance. Règle inscrite au REGISTRE : `CAPAS-8` (v1.01). **Reste le critère 2** : les 18 couvertures venues d'Inventaire — licence à vérifier à la source, ou absence assumée par écrit (décision de Xavier).",
-          "pt": "**23/10 — critério 1 cumprido**: 244 capas sem proveniência em « unknown » (CAPAS-8). Falta o critério 2: licença das 18 capas do Inventaire."
         }
       ]
     },

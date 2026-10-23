@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-23** · 66 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-23** · 65 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -17,7 +17,7 @@
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 4
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
-    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 7
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 6
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 10
     - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 8
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 22 de outubro de 2026
 
-**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31 e E41 fechados em 23/10** — **66 itens, 279 fechamentos**.
+**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** — **65 itens, 280 fechamentos**.
 
-**Frescor dos constatos em 2026-10-23.** **60 itens de 66** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-23.** **59 itens de 65** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -466,7 +466,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 |---|---|---|---|
 | **C3** | Conduzir a revisão humana das autoridades: sobrenomes, caixa, títulos | `P1` | Aberto |
 | **C15** | Corrigir oito registros da BTL, com o livro na mão | `P2` | Aberto |
-| **C16** | Atribuir as capas postas antes de 27/09 | `P2` | Aberto |
 | **C18** | Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas? | `P2` | Bloqueado |
 | **C26** | Revisar e publicar os 24 rascunhos do acervo histórico do CCLA (BLMF) | `P2` | Aberto |
 | **C27** | Indexar as notícias que o vocabulário de assuntos não cobre | `P2` | Aberto |
@@ -514,27 +513,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Ter os livros na mão (acervo da BTL); Xavier, no formulário.
 
 *Remissões : `docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md (« à corriger dans le formulaire, livre en main »)` · `REGISTRE §43 CAPAS` · `commit 027e6903 (BTL-TL-002335)`*
-
-#### C16 — Atribuir as capas postas antes de 27/09
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : biblioteconomia, SQL / PostgreSQL
-
-**Estado.** A spec das capas (§4.3) faz da atribuição — a fonte e a licença de cada capa — uma exigência ética e de conformidade. **Medido em 27/09 em produção: 0 capa atribuída entre os 250 registros publicados que têm uma, e 0 entre os 132 rascunhos no mesmo caso.** O formulário não punha o par no rascunho (`fd5d2f0e`), e nem a publicação nem a retomada o copiavam (`76c6ae3f`, migração `20260927130518`). Desde então, procedência e licença seguem a imagem em par (`CAPAS-4`) — só para as capas postas depois de 27/09: nenhuma migração retoma o estoque. E o Inventaire não diz a licença das suas imagens: fica nula, «a verificar» (`2a80d43b`).
-
-*Verificado : [object Object],[object Object]*
-
-**O que é.** Levantar quantas capas publicadas continuam sem procedência. Depois escrever uma regra para o estoque, decidida por Xavier: uma procedência recuperada onde um rastro a dá, senão «desconhecida», posta e assumida por escrito. Para as imagens do Inventaire, verificar a licença na fonte, ou assumir sua ausência por escrito.
-
-**Por que importa.** Uma capa é a imagem de um terceiro: sem a fonte, não se pode nem creditá-la nem retirá-la se pedirem. A regra em par vale para as capas novas; o estoque de antes de 27/09 continua mudo, e nenhum item o carregava.
-
-**O que conta como terminado.**
-
-- Cada capa publicada tem uma procedência, ou um motivo escrito para não ter.
-- A licença das imagens do Inventaire está verificada, ou sua ausência assumida por escrito.
-
-**Dependências.** Nenhuma: a regra em par (`20260927130518`) está em produção.
-
-*Remissões : `docs/specs/archive/spec-module-capas.md §4.3` · `REGISTRE §43 CAPAS-4` · `docs/journal/chantiers/LIVRAISON_capas_2026-09-27.md` · `commits fd5d2f0e, 76c6ae3f, 2a80d43b`*
 
 #### C18 — Revisar catorze aproximações de obras: uma mesma obra dividida em duas fichas?
 
@@ -2199,6 +2177,7 @@ CI verde. |
 | J13 | 2026-10-23 | **Fechado em 23/10: NUMDIF-2 descreve os casos que a fila aplica, e os recursos foram relidos.** (d) domínio público = autor·a e tradutor·a mortos há mais de 70 anos. De 123 recursos: 39 restritos (Rocker, De Boe, SNI, Díaz, La Cecilia, Commune van Parijs, de Ligt 1958, De Syndicalist 1940, Schleuning, El mundo libertario) e realinhados (impressão idêntica); 5 requalificados em caso (a). Restam 79 em domínio público. Pergunta a J/M sobre De Syndicalist redigida, a enviar por Xavier. |
 | C31 | 2026-10-23 | **Fechado em 23/10 por decisão de Xavier: o posfácio tem o seu papel, « posfaciador »** (`f4991ad9`): menu, onze idiomas, MARC21 waw/aft, UNIMARC 075, importação. As fichas existentes não mudam. |
 | E41 | 2026-10-23 | **Fechado em 23/10 por decisão de Xavier: o sobrenome é facultativo** (`13149de7`): criação de conta, « Meus dados », conta de contribuidor·a e register; um sobrenome vazio é gravado ausente. |
+| C16 | 2026-10-23 | **Fechado em 23/10 por decisões de Xavier.** 244 capas sem proveniência em « unknown »; licença das 18 imagens do Inventaire não verificada, assumida por escrito (retirada a pedido). REGISTRE CAPAS-8. |
 
 ---
 
@@ -2230,4 +2209,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 66 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 65 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
