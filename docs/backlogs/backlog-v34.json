@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-22",
+    "maj": "2026-10-23",
     "releve": {
       "date": "2026-10-22",
       "commit": "5e292baf"
@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) — **68 items, 276 clôtures**.",
-      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** — **68 itens, 276 fechamentos**."
+      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **69 items, 276 clôtures**.",
+      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **69 itens, 276 fechamentos**."
     },
     "photo": [
       {
@@ -5772,6 +5772,10 @@
         {
           "fr": "**22/10 — une proposition pour les 1 014 notices d'Anarchief, tirée de leur propre wiki** (`1abd4889`, `docs/journal/audits/PROPOSITION_c27_sujets_anarchief_2026-10-22.md`). Les copies d'import gardent les sujets du wiki : 326 notices, 128 sujets. Rapprochés du vocabulaire matière (57 termes actifs) : **168 notices** recevraient un sujet par correspondance exacte (183 affectations), **28 de plus** par correspondance proche, à confirmer ligne à ligne ; « Mundaneum » (60 notices) est une provenance, pas un sujet ; des genres, des lieux et des termes absents (Kapitalisme, Economie, Democratie…) sont listés à part. **Reste** : la décision de Xavier (exactes oui/non, proches, termes absents), puis une migration avec banc. Rien d'écrit en base.",
           "pt": "**22/10 — uma proposta para as 1 014 fichas da Anarchief, tirada do próprio wiki** (`1abd4889`): 168 fichas por correspondência exata, 28 por correspondência próxima. Falta a decisão de Xavier."
+        },
+        {
+          "fr": "**22/10, soir — décision de Xavier (questionnaire) et pose en production à 23 h 00 (exactes) puis 00 h 12 (proches)** (`b47cb279, 17a27a52`, migration `20261022203129`, appliquée par la CI). (1) **Correspondances exactes posées** : 183 affectations sur 168 notices d'Anarchief, par `private.fn_indexer_sujets_importes` — matières actives seulement, ordre du wiki, sujets existants gardés, aucune matière créée (THES-4), rejouable ; banc `c27_sujets_importes` (6/6). (2) **« Mundaneum » en note de provenance** sur les 60 notices, jamais en sujet. (3) **Douze termes absents proposés** au statut `proposto` (REGISTRE `THES-6`, nouveau) : Capitalisme, Démocratie, Congrès, Révolution, Nationalisme, Matérialisme, Abstentionnisme, Classe ouvrière, Violence et non-violence, Provo, Libération animale, Alternatives — libellés en onze langues, invisibles du public, à valider par la coordination du catalogage (gouvernance des matières). (4) **Correspondances proches relues par Xavier**, ligne à ligne, le même soir : cinq retenues (guerre civile d'Espagne → révolution espagnole, pacifisme → antimilitarisme, bolchevisme → révolution russe, AIT → anarchosyndicalisme, plateformisme → organisation), cinq écartées (criminologie, pédagogie, squat, situationnisme/autonomes, sexualité) ; posées par `20261022210254` (18 affectations, dont 15 notices qui n'avaient aucun sujet). **Reste** : l'affectation des termes proposés, une fois validés par la coordination du catalogage.",
+          "pt": "**22/10, noite — decisão de Xavier e aplicação em produção às 23 h 00 (exactes) puis 00 h 12 (proches)** (`b47cb279, 17a27a52`): 183 atribuições exatas (168 fichas), « Mundaneum » como nota de proveniência (60), doze termos propostos (`proposto`, THES-6); cinco correspondências próximas retidas por Xavier (18 atribuições). Falta a atribuição dos termos validados."
         }
       ]
     },
@@ -6477,6 +6481,10 @@
         {
           "fr": "**22/10, soir — les deux objets sont retirés** (par Xavier, tableau de bord Storage, revérifié en base) : plus aucun objet sans ressource ni brouillon dans les quatre seaux PDF et EPUB — restent deux marqueurs de dossier vides de 0 octet (`.emptyFolderPlaceholder`) laissés par le tableau de bord, sans conséquence ; aucune table ne citait les deux fichiers. **Reste la seconde moitié**, à décider : (a) rien, (b) un relevé hebdomadaire des orphelins à l'administration du réseau, sans suppression (recommandé), (c) une suppression automatique après 30 jours.",
           "pt": "**22/10, noite — os dois objetos foram retirados** (por Xavier, painel Storage). Falta decidir a segunda metade: (a) nada, (b) um levantamento semanal dos órfãos (recomendado), (c) supressão automática."
+        },
+        {
+          "fr": "**22/10, soir — seconde moitié tranchée par Xavier : (b), un relevé hebdomadaire, sans suppression** (`de89cdab, fd7eda60`, migration `20261022203644`). `public.fn_stockage_orphelins_v1()` (lecture seule, service_role seul) liste les fichiers des quatre seaux PDF/EPUB qu'aucune ressource de notice ou de brouillon ni aucun actif numérique ne cite, de plus de 24 h (un versement en cours n'est pas un orphelin), hors marqueurs de dossier vides ; le **rapport hebdomadaire du réseau** (lundi, `notify-network-weekly-report`) porte désormais une ligne « Fichiers sans notice dans le stockage » et un tableau (seau, fichier, taille, date), dans la langue de chaque destinataire (six clés `net.*` en onze langues). Une lecture en échec n'empêche pas le rapport (« — »). Bancs : `d28_fichiers_orphelins` (4/4), `f26-pieds-de-courriel` (deux cas D28). **Reste** : le premier rapport du lundi 26/10, à lire (attendu : aucun orphelin).",
+          "pt": "**22/10, noite — segunda metade decidida: (b), levantamento semanal sem supressão** (`de89cdab, fd7eda60`): o relatório semanal da rede lista os arquivos órfãos dos baldes PDF/EPUB (mais de 24 h, sem recurso nem ativo). Falta ler o primeiro relatório, segunda 26/10."
         }
       ]
     },
@@ -7006,7 +7014,12 @@
       "r": [
         "Relecture des sessions du 16 au 19/10/2026"
       ],
-      "verif": []
+      "verif": [
+        {
+          "fr": "**22-23/10 — NUMDIF-2 a son quatrième cas, et les ressources sont relues contre lui** (décisions de Xavier par questionnaire, 22/10 au soir ; `9792c557`, `253bb3db`). REGISTRE `NUMDIF-2` amendé (v0.99) : *(d)* domaine public = l'auteur·rice ET le·la traducteur·rice morts depuis plus de 70 ans (œuvre collective ou anonyme : 70 ans depuis la publication), dates citées dans la justification, le doute va à *(c)*. Relues en production : **123** ressources actives sous ce cas (et non 87) — 69 tiennent ; **15 restreintes** (Rocker †1958 ×9, protégé jusqu'au 1er janvier 2029 ; De Boe †1974 ×4, « in principe copyright » selon J/M elle-même ; document du SNI de 1994 ; Díaz †2021) ; **5 requalifiées en cas (a)**, toujours publiques (CCLA ×4, FARJ). La fonction `realign-digital-resource` restreint désormais aussi une ressource **sans candidat** (décision écrite dans la ressource, administration du réseau seule, vers le restreint seulement ; banc `numdif_restreindre_sans_candidat`). **Réalignements faits le 23/10 depuis l'onglet de Xavier (session aal2), vérifiés à 12 h 26** : les 15 dans `pdf-restrito`, `conta_ativa`, `sob_direitos`, empreinte identique avant et après la copie, originaux publics effacés, un historique chacun ; 103 ressources restent en domaine public. Deux accrocs : un PDF de 65,6 Mo mort en parallèle (relancé seul) ; une copie cassée côté stockage pour le SNI (supprimée par Xavier, relancé). **Reste** (liste et propositions dans `docs/journal/audits/RELECTURE_j13_domaine_public_2026-10-22.md`) : lire les PDF de La Cecilia (1982), Schleuning (2011) et *Commune van Parijs* (sans date) — mention imprimée → *(b)*, sinon *(c)* ; *El Mundo libertario* (*Le Monde diplomatique*) → *(c)* ; corriger l'année de la brochure de Ligt, séparer les autorités Delage et Goldsmith, vérifier les articles signés de *De Syndicalist*.",
+          "pt": "**22-23/10 — NUMDIF-2 ganha o quarto caso (domínio público: autor·a e tradutor·a mortos há mais de 70 anos)**; 123 recursos relidos: 15 restritos (Rocker, De Boe, SNI, Díaz) e realinhados em 23/10 (empreinte idêntica), 5 requalificados em caso (a). Faltam quatro PDF a ler e três fichas a corrigir."
+        }
+      ]
     },
     {
       "id": "G25",
@@ -7061,6 +7074,48 @@
         "fr": "21/10 — ouvert sur constat en production. **21/10 — préparé** sur la branche `fix/activation-constitution` (worktree `~/anarbib-wt-activation-constitution`), **non poussé** : migration `20261021193002`, suite SQL 18/18 au banc local (image de la CI), page Réseau (bouton « Activer avant la fin de l’atelier » avec motif, l’erreur d’un `UPDATE` refusé enfin lue), atelier (bandeau « déjà active », lien vers la bibliothèque, profil de la personne rechargé après la fin), bandeau de `/conta`, 16 clés × 11 locales. Doctrine : `ONBO-D4` au registre. **21/10 — livré et déployé** (`4d94784b`, `ci.yml` #1951 et `sql-tests.yml` #1952 verts). Vérifié en production le soir même : migration `20261021193002` appliquée, les deux triggers en place, `fn_constitution_activer`/`fn_constitution_sortir` fermées à `authenticated` et `anon`, la porte anticipée ouverte à `authenticated` seul ; **plus aucune coordination en constitution** ; Solidaires et Anarchief régularisées (activation anticipée datée d’après le journal — 15/09 et 01/10 —, signée, motivée), `approved_membership_ref` posé ; libellé « Activer avant la fin de l’atelier » servi par le chunk `fr` d’app.anarbib.org. **Reste** : que les deux coordinations confirment retrouver Biblioteca et Painel, et la première activation par la porte 1 en conditions réelles.",
         "pt": "21/10 — preparado na branch `fix/activation-constitution`, não enviado. Doutrina: `ONBO-D4`. 21/10 — entregue e implantado (`4d94784b`, CI verde); verificado em produção: nenhuma coordenação em constituição, Solidaires e Anarchief regularizadas. Falta a confirmação das duas coordenações."
       }
+    },
+    {
+      "id": "J15",
+      "d": "J",
+      "p": "P2",
+      "s": "ouvert",
+      "e": "S",
+      "sk": [
+        "collectif"
+      ],
+      "t": {
+        "fr": "Relire aux dates dites les trois échéances du gel (DOC-GEL-2) : périodiques le 26/10, OPDS/RSS le 23/11, notes de lecture et OAI à la v19",
+        "pt": "Reler nas datas ditas os três prazos do congelamento (DOC-GEL-2): periódicos em 26/10, OPDS/RSS em 23/11, notas de leitura e OAI na v19"
+      },
+      "v": {
+        "fr": "J10 a été clos le 22/10 sur les verdicts de Xavier (REGISTRE `DOC-GEL-2`) ; trois d'entre eux portent une échéance, qui ne vaut que si quelqu'un la relit. **Périodiques** : finis par D3 si Solidaires a commencé au 26/10, sinon gelés. **OPDS/RSS** : gelés en l'état, et **comptés un mois** depuis le 22/10 (`de89cdab, fd7eda60` : `private.flux_appels`, appels servis par jour, route et famille d'application — KOReader, Thorium, agrégateur, robot, navigateur… —, aucune adresse IP ni User-Agent complet ; cache HTTP d'une heure, ce sont des appels reçus). **Notes de lecture** (0 note) et **moisson OAI** (pilote H35) : relues à la v19.",
+        "pt": "J10 fechado em 22/10 (DOC-GEL-2); três vereditos têm prazo. Periódicos em 26/10 (D3); OPDS/RSS contados durante um mês desde 22/10 (`private.flux_appels`, sem dado pessoal); notas de leitura e OAI na v19."
+      },
+      "w": {
+        "fr": "26/10 : constater où en est D3 et inscrire « fini » ou « gelé » au REGISTRE. 23/11 : lire `select flux, route, client, sum(n) from private.flux_appels group by 1,2,3` et proposer à Xavier garder / retirer / travailler. v19 : relire notes de lecture et OAI.",
+        "pt": "26/10: ver D3 e inscrever no REGISTRE. 23/11: ler os contadores e propor a Xavier. v19: notas de leitura e OAI."
+      },
+      "y": {
+        "fr": "Un gel sans échéance relue est une décision qui s'oublie ; DOC-GEL-2 dit que les échéances se relisent à la date dite.",
+        "pt": "Um congelamento sem prazo relido é uma decisão esquecida."
+      },
+      "f": {
+        "fr": [
+          "Les trois échéances relues et leur issue inscrite au REGISTRE (DOC-GEL-2)."
+        ],
+        "pt": [
+          "Os três prazos relidos e o resultado inscrito no REGISTRE."
+        ]
+      },
+      "dep": {
+        "fr": "D3 (périodiques), H35 (OAI).",
+        "pt": "D3, H35."
+      },
+      "r": [
+        "Arbitrage J10 du 22/10/2026 (DOC-GEL-2)"
+      ],
+      "verif": []
     }
   ]
 }

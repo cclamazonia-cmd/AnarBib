@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-10-22** · 68 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-10-23** · 69 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 9
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 9
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 1
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 4
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -62,9 +62,9 @@ Ce travail a produit un résultat qui commande la lecture de tout le reste : **l
 
 ## L'état réel au 22 octobre 2026
 
-**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) — **68 items, 276 clôtures**.
+**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **69 items, 276 clôtures**.
 
-**Fraîcheur des constats au 2026-10-22.** **62 items sur 68** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J13, K1, K7). Les **6** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
+**Fraîcheur des constats au 2026-10-23.** **63 items sur 69** portent une vérification datée qui leur est propre (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J13, J15, K1, K7). Les **6** autres reposent encore sur le relevé du 2026-08-29 et sont signalés comme tels sous chaque fiche. Un constat non revérifié n'est pas faux : il est seulement vieux, et la différence se voit ici plutôt qu'à l'usage. Cette ligne est recalculée à chaque engendrement du document.
 
 ### Base
 
@@ -582,7 +582,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** C7 (27/09) a indexé 851 notices dans le vocabulaire existant et laissé de côté celles dont le sujet n'y est pas — littérature générale, philosophie, sciences sociales, espéranto, spiritualité, histoire du Brésil : 466 ce jour-là, « l'étendre serait un autre item » (clôture C7). Cet item n'existait pas. **Mesuré le 05/10 au soir** : 463 notices sur 2 607 n'ont aucun sujet.
 
-*Vérifié : [object Object]*
+*Vérifié : [object Object],[object Object]*
 
 **Ce que c'est.** Lire les notices sans sujet par grands ensembles ; proposer les termes à ajouter au vocabulaire et les affectations, sur une fiche validée par Xavier comme celle de C7 ; hors du thésaurus FICEDL, sans créer de fork (décision de Xavier du 27/09).
 
@@ -851,7 +851,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **État.** Vus le 19/10 : `anarbib-pdf-public/books/7594/…` (19,6 Mo, déposé le 17/10 par un brouillon de reprise publié dans la notice 1127, qui avait déjà sa ressource 980 du même ouvrage) ; un objet de test de mars dans `pdf-restrito/test/`. Aucun ne correspond à une ressource.
 
-*Vérifié : [object Object],[object Object],[object Object]*
+*Vérifié : [object Object],[object Object],[object Object],[object Object]*
 
 **Ce que c'est.** Sur accord de Xavier, les retirer ; vérifier au banc qu'une reprise publiée sur une notice qui a déjà sa ressource ne dépose plus de fichier.
 
@@ -1762,6 +1762,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 | | | | |
 |---|---|---|---|
 | **J13** | Inscrire au REGISTRE le quatrième cas de source, « domaine public » | `P3` | Ouvert |
+| **J15** | Relire aux dates dites les trois échéances du gel (DOC-GEL-2) : périodiques le 26/10, OPDS/RSS le 23/11, notes de lecture et OAI à la v19 | `P2` | Ouvert |
 
 #### J13 — Inscrire au REGISTRE le quatrième cas de source, « domaine public »
 
@@ -1769,7 +1770,7 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 
 **État.** Le 15/10, la file de candidats a reçu un cas `domaine_public`, sans l'inscrire au REGISTRE (« à toi de dire si ça fait doctrine »). NUMDIF-2 dit toujours « trois cas de source », alors que la file, les versements de Reclus et NUMDIF-6 utilisent le quatrième (87 ressources versées sous ce cas).
 
-*Vérifié : *
+*Vérifié : [object Object]*
 
 **Ce que c'est.** Décider si c'est doctrine ; amender NUMDIF-2 en conséquence.
 
@@ -1782,6 +1783,26 @@ Les six autres blocs sont inchangés au 31/08, vérifiés table par table : asse
 **Dépendances.** Relève aussi de G20 (AG).
 
 *Renvois : `Relecture des sessions du 16 au 19/10/2026`*
+
+#### J15 — Relire aux dates dites les trois échéances du gel (DOC-GEL-2) : périodiques le 26/10, OPDS/RSS le 23/11, notes de lecture et OAI à la v19
+
+`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
+
+**État.** J10 a été clos le 22/10 sur les verdicts de Xavier (REGISTRE `DOC-GEL-2`) ; trois d'entre eux portent une échéance, qui ne vaut que si quelqu'un la relit. **Périodiques** : finis par D3 si Solidaires a commencé au 26/10, sinon gelés. **OPDS/RSS** : gelés en l'état, et **comptés un mois** depuis le 22/10 (`de89cdab, fd7eda60` : `private.flux_appels`, appels servis par jour, route et famille d'application — KOReader, Thorium, agrégateur, robot, navigateur… —, aucune adresse IP ni User-Agent complet ; cache HTTP d'une heure, ce sont des appels reçus). **Notes de lecture** (0 note) et **moisson OAI** (pilote H35) : relues à la v19.
+
+*Vérifié : *
+
+**Ce que c'est.** 26/10 : constater où en est D3 et inscrire « fini » ou « gelé » au REGISTRE. 23/11 : lire `select flux, route, client, sum(n) from private.flux_appels group by 1,2,3` et proposer à Xavier garder / retirer / travailler. v19 : relire notes de lecture et OAI.
+
+**Pourquoi ça compte.** Un gel sans échéance relue est une décision qui s'oublie ; DOC-GEL-2 dit que les échéances se relisent à la date dite.
+
+**Ce qui compte comme fini.**
+
+- Les trois échéances relues et leur issue inscrite au REGISTRE (DOC-GEL-2).
+
+**Dépendances.** D3 (périodiques), H35 (OAI).
+
+*Renvois : `Arbitrage J10 du 22/10/2026 (DOC-GEL-2)`*
 
 ---
 
@@ -2279,4 +2300,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-22. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 68 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-22 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5e292baf` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-10-23. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 69 items sur 11 domaines. L'état chiffré a été relevé le 2026-10-22 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `5e292baf` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
