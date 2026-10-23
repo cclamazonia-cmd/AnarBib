@@ -18,7 +18,7 @@
 --   T11 lectures en cours et envies : 24 mois sans connexion ;
 --   T12 journaux à 12 mois ; le journal de l'administration du réseau reste ;
 --   T13 le journal inter-bibliothèques reste inaltérable hors de la purge ;
---   T14 le cron hebdomadaire n'appelle pas encore la nouvelle purge.
+--   T14 le cron du dimanche appelle la nouvelle purge, plus l'ancienne (20261023201346).
 -- Convention maison : RAISE EXCEPTION final, tout est annulé.
 --   Bilan OK : 'RETENTION-PLAFONDS OK : N/N tests passés'
 -- =====================================================================
@@ -337,9 +337,14 @@ BEGIN
   ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||'/3 refus'); END IF;
 
   -- ── T14 ────────────────────────────────────────────────────────────────
-  v_t := 'T14 le cron n''appelle pas encore la nouvelle purge';
-  IF NOT EXISTS (SELECT 1 FROM cron.job WHERE command ILIKE '%fn_purge_retention%')
-     AND NOT EXISTS (SELECT 1 FROM private.fn_crons_attendus() c WHERE c.command ILIKE '%fn_purge_retention%') THEN
+  -- 20261023201346 : la purge hebdomadaire passe à fn_purge_retention.
+  v_t := 'T14 le cron du dimanche appelle la nouvelle purge, plus l''ancienne';
+  IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'anarbib-rgpd-purge-weekly' AND active
+               AND schedule = '0 3 * * 0' AND command ILIKE '%fn_purge_retention(p_dry_run := false)%')
+     AND EXISTS (SELECT 1 FROM private.fn_crons_attendus() c
+                  WHERE c.jobname = 'anarbib-rgpd-purge-weekly' AND c.command ILIKE '%fn_purge_retention(p_dry_run := false)%')
+     AND NOT EXISTS (SELECT 1 FROM cron.job WHERE command ILIKE '%fn_purge_expired_data%')
+     AND NOT EXISTS (SELECT 1 FROM private.fn_crons_attendus() c WHERE c.command ILIKE '%fn_purge_expired_data%') THEN
     v_passed := v_passed+1;
   ELSE v_failed := v_failed+1; v_failures := v_failures||v_t; END IF;
 

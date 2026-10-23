@@ -61,7 +61,8 @@ describe('Bibliothèque › Confidentialité — un seul message sur la purge, e
       const sql = readFileSync(path.join(dirMig, f), 'utf8');
       if (!sql.includes('anarbib-rgpd-purge-weekly')) continue;
       expect(sql, f).not.toMatch(/unschedule\(\s*'anarbib-rgpd-purge-weekly'/);
-      expect(sql, f).not.toMatch(/fn_purge_expired_data\(\s*p_dry_run\s*:=\s*true/);
+      // 23/10/2026 (RET-2/RET-3) : la commande passe à fn_purge_retention, jamais à blanc non plus
+      expect(sql, f).not.toMatch(/fn_purge_(expired_data|retention)\(\s*p_dry_run\s*:=\s*true/);
     }
   });
 });
