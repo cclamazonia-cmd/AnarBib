@@ -114,35 +114,6 @@ describe('buildServerFilters — recherche multi-mots', () => {
   });
 });
 
-// Le pont entre les descripteurs de langue du thésaurus FICEDL (22/10/2026) et
-// le catalogue : le thésaurus nomme ses langues par le code court (« pt »), le
-// référentiel des notices par le code complet (« pt-BR »). Un filtre d'égalité
-// stricte sur « pt » ne rendait AUCUNE des 1 278 notices lusophones.
-describe('buildServerFilters — filtre de langue', () => {
-  it('« pt », absent du référentiel qui dit « pt-BR », atteint ses variantes', () => {
-    const f = buildServerFilters({ ...base, languageFilter: 'pt' });
-    expect(f.and).toBe('(or(idioma.eq.pt,idioma.like.pt-*))');
-    expect(f.idioma).toBeUndefined();
-  });
-
-  it('un code DU référentiel reste en égalité stricte (CONV-7)', () => {
-    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).idioma).toBe('eq.fr');
-    expect(buildServerFilters({ ...base, languageFilter: 'nl' }).idioma).toBe('eq.nl');
-    expect(buildServerFilters({ ...base, languageFilter: 'pt-BR' }).idioma).toBe('eq.pt-BR');
-    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).and).toBeUndefined();
-  });
-
-  it('une saisie libre reste atteignable (résidu d\'avant la normalisation)', () => {
-    const f = buildServerFilters({ ...base, languageFilter: 'Português' });
-    expect(f.idioma).toBe('ilike.%Português%');
-  });
-
-  it('ne filtre rien sur une valeur vide ou faite d\'espaces', () => {
-    expect(buildServerFilters({ ...base, languageFilter: '   ' }).idioma).toBeUndefined();
-    expect(buildServerFilters({ ...base, languageFilter: '   ' }).and).toBeUndefined();
-  });
-});
-
 describe('buildServerFilters — filtre texte par auteur·rice', () => {
   // Chaque mot : dans la saisie libre OU dans le nom d'autorité affiché.
   const mot = (w) => `or(autor.ilike.%${w}%,author_display.ilike.%${w}%)`;
@@ -202,10 +173,33 @@ describe('buildServerFilters — filtre texte par auteur·rice', () => {
   });
 });
 
+// CONV-7 protège qu'un code de langue ne tombe pas dans un ILIKE large, et
+// l'exprimait par une égalité stricte. Mais une égalité stricte sur un code
+// COURT rate ses variantes régionales : « pt » ne trouvait aucune des 1 278
+// notices en « pt-BR », ce qui s'est vu le 23/10/2026 quand les descripteurs de
+// langue du thésaurus FICEDL — nommés par le code court — ont mené au catalogue.
+// Un code court prend donc ses variantes, par un or() borné, jamais par un
+// ILIKE. ⚠️ La MÊME règle est dans `api.catalog_works_v1` (migration du 23/10),
+// qui filtre le mode « œuvres » : les deux doivent bouger ensemble.
 describe('buildServerFilters — filtre de langue (CONV-7)', () => {
-  it('un code BCP-47 → égalité stricte, pas ilike', () => {
-    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).idioma).toBe('eq.fr');
+  it('un code court prend ses variantes régionales, par un or() borné', () => {
+    expect(buildServerFilters({ ...base, languageFilter: 'pt' }).and)
+      .toBe('(or(idioma.eq.pt,idioma.like.pt-*))');
+    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).and)
+      .toBe('(or(idioma.eq.fr,idioma.like.fr-*))');
+    expect(buildServerFilters({ ...base, languageFilter: 'pt' }).idioma).toBeUndefined();
+  });
+
+  it('un code COMPLET reste une égalité stricte', () => {
     expect(buildServerFilters({ ...base, languageFilter: 'pt-BR' }).idioma).toBe('eq.pt-BR');
+    expect(buildServerFilters({ ...base, languageFilter: 'pt-BR' }).and).toBeUndefined();
+  });
+
+  it('aucun code ne tombe dans un ilike large — ce que CONV-7 protège', () => {
+    for (const lang of ['pt', 'fr', 'pt-BR']) {
+      const f = buildServerFilters({ ...base, languageFilter: lang });
+      expect(String(f.idioma ?? '') + String(f.and ?? ''), lang).not.toContain('ilike');
+    }
   });
 
   it('une saisie libre héritée reste tolérée en ilike', () => {
@@ -217,5 +211,6 @@ describe('buildServerFilters — filtre de langue (CONV-7)', () => {
 
   it('vide → aucune clause', () => {
     expect(buildServerFilters({ ...base, languageFilter: '   ' }).idioma).toBeUndefined();
+    expect(buildServerFilters({ ...base, languageFilter: '   ' }).and).toBeUndefined();
   });
 });

@@ -4,10 +4,6 @@
 //
 // Session : Catalogue longue traîne (recherche + fiche auteur)
 
-// Le référentiel des langues de notice (CONV-7) : il dit si un code est au
-// référentiel, ce dont le filtre de langue a besoin.
-import { LANGUAGE_CODES } from './languages';
-
 // Colonnes balayées par la recherche libre (texte brut).
 // Les filtres que l'URL porte, et eux seuls. L'URL est la source de vérité d'un
 // lien profond : un lien partagé doit produire le même écran chez tout le monde,
@@ -123,19 +119,18 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
   // correspondance reste ainsi atteignable.
   if (languageFilter.trim()) {
     const lang = languageFilter.trim();
-    // CONV-7 : un code du référentiel donne une égalité stricte. UN SEUL cas
-    // demande d'élargir — un code court qui n'EST PAS au référentiel alors
-    // qu'une de ses variantes régionales y est. Aujourd'hui c'est « pt » et lui
-    // seul : le référentiel écrit le portugais « pt-BR », et les 1 278 notices
-    // lusophones (sur 3 216 décrites au 22/10/2026) portent ce code-là. Les
-    // descripteurs de langue du thésaurus FICEDL, eux, nomment par le code
-    // court : sans cet élargissement, « portugais » renverrait zéro notice.
-    // « fr », « nl », « es » restent en égalité stricte, puisqu'ils SONT au
-    // référentiel — élargir n'y changerait rien et contredirait la doctrine.
-    const courtSansVariante = /^[a-z]{2}$/.test(lang)
-      && !LANGUAGE_CODES.includes(lang)
-      && LANGUAGE_CODES.some((c) => c.startsWith(`${lang}-`));
-    if (courtSansVariante) {
+    // Un code de langue SANS région désigne la langue, donc ses variantes
+    // régionales : « pt » prend « pt-BR » (1 278 notices sur 3 216 décrites au
+    // 23/10/2026), « fr » prendrait « fr-CA ». CONV-7 garde ce qu'elle
+    // protégeait — un code ne tombe pas dans un ILIKE large — mais l'égalité
+    // stricte sur un code court ratait ses variantes, ce qui s'est vu quand les
+    // descripteurs de langue du thésaurus FICEDL, nommés par le code court, ont
+    // commencé à mener au catalogue : « portugais » rendait zéro notice.
+    //
+    // ⚠️ LA MÊME RÈGLE EST DANS `api.catalog_works_v1` (migration du 23/10) : le
+    // mode « œuvres » filtre côté serveur, et n'avoir corrigé qu'ici laissait le
+    // défaut entier sur l'écran par défaut. Les deux doivent bouger ensemble.
+    if (/^[a-z]{2}$/.test(lang)) {
       andClauses.push(`or(idioma.eq.${lang},idioma.like.${lang}-*)`);
     } else if (/^[a-z]{2}(-[A-Z]{2})?$/.test(lang)) {
       f['idioma'] = `eq.${lang}`;
