@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-23** · 62 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-23** · 61 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -19,7 +19,7 @@
     - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 3
     - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 6
     - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 8
-    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 7
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 6
     - [F — E-mail e notificações](#f--e-mail-e-notificações) · 1
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 22 de outubro de 2026
 
-**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** ; **D25 fechado em 23/10** ; **E20 fechado em 23/10** ; **D24 fechado em 23/10** — **62 itens, 283 fechamentos**.
+**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** ; **D25 fechado em 23/10** ; **E20 fechado em 23/10** ; **D24 fechado em 23/10** ; **E6 fechado em 23/10** — **61 itens, 284 fechamentos**.
 
-**Frescor dos constatos em 2026-10-23.** **56 itens de 62** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D28, E1, E2, E4, E6, E10, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-23.** **55 itens de 61** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C18, C26, C27, C33, D3, D4, D8, D15, D21, D22, D28, E1, E2, E4, E10, E39, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -791,7 +791,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **E1** | Fazer auditar a acessibilidade por alguém que não escreveu o código | `P1` | Aberto |
 | **E2** | Decidir as convenções neerlandesa e grega | `P1` | Aberto |
 | **E4** | Resolver os pares irregulares do italiano | `P2` | Aberto |
-| **E6** | Dividir as cinco telas que pesam mais de cem quilobytes | `P2` | Em curso |
 | **E10** | O resto da base de campo: plantão móvel, notificação push, prancha de códigos | `P3` | Aberto |
 | **E30** | Fazer revisar o guia de governança em espanhol | `P3` | Aberto |
 | **E39** | Adicionar o romeno (ro), décima primeira língua — anunciado, revisão por último | `P3` | Aberto |
@@ -861,28 +860,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Antes de 08/09 se possível, senão outubro.
 
 *Remissões : `CLAUDE.md, piège connu n°9` · `CALENDRIER_bologne_2026-08-27`*
-
-#### E6 — Dividir as cinco telas que pesam mais de cem quilobytes
-
-`P2` Corrente · Estado : **Em curso** · Carga : alguns dias · O que exige : React / JavaScript
-
-**Estado.** Em 29/08, `BookDraftForm.jsx` tinha **197 KB**, `BibliotecaPage.jsx` 184 KB, `AccountPage.jsx` 154 KB, `PanelPage.jsx` 114 KB, `ImportacoesPage.jsx` 109 KB. 29 das 38 rotas já estão em carregamento preguiçoso, e `vite.config.js` declara quatro lotes de dependências — o problema não é o carregamento inicial, é o tamanho de um arquivo único. **Lote 1 em 27/09:** constantes e funções puras de `BookDraftForm` (214 Ko) passam para `src/lib/catalogacao/bookDraft.js` (`486c71a1`); o formulário cai para 198 Ko. Falta o essencial: dividir o JSX em componentes, verificado na tela. **Lote 2 em 28/09:** o painel de recursos digitais passa a `DigitalResourcesPanel.jsx` (`305a7922`); o formulário cai para 173 Ko. **Lote 3 em 28/09:** o painel de pesquisa catalográfica passa a `LookupPanel.jsx` (o painel nunca escreve o formulário: três retornos ao pai); o formulário cai para 167 Ko. Lotes 2 e 3 vistos na tela por Xavier em 28/09: ok. **Lote 4 em 28/09:** o bloco de contribuidores passa a `ContributorsPanel.jsx` (a lista fica no pai, o painel avisa por `onDirty`); o formulário cai para 157 Ko. **Lote 5 em 28/09:** o painel de revisão da ficha passa a `ReviewPanel.jsx` (só exibe; ISBD e sua preparação ficam no pai); o formulário cai para 146 Ko. **Lote 6 em 28/09:** a prévia de cota e os exemplares iniciais passam a `ShelfLabelPreview.jsx` e `InitialCopiesBlock.jsx`; o formulário cai para 142 Ko. **Lotes 7 e 8 em 28/09:** a reatribuição de um registro publicado passa a `ReassignPanel.jsx` e os cartões «para informação» da prévia a `InfoCards.jsx`; o formulário cai para 130 Ko. As seções de material já eram renderizadas pelo registro. Falta o cabeçalho (capa), o mais acoplado. **`BibliotecaPage.jsx`, lote 1 em 28/09:** a aba dos empréstimos entre bibliotecas (PEB) passa a `IllSection.jsx` (`3c33b9f6`); a página cai de 184 para 152 Ko. **Lote 2 em 28/09:** a aba das tarefas internas passa a `TasksSection.jsx` (`22083073`); a página cai para 117 Ko. **Lote 3 em 29/09:** a cotização e o depósito de garantia passam a `MembershipSection.jsx` e `DepositSection.jsx` (`2ae132fe`); a página cai para 83 Ko. Faltam relatórios, identidade e comunicações.
-
-*Verificado : [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]*
-
-**O que é.** Extrair os subformulários e as abas em componentes separados, sem mudar o comportamento. Começar por `BookDraftForm`, o maior e o mais editado.
-
-**Por que importa.** Um arquivo de 197 KB não é relegível por quem chega, e duas pessoas não podem trabalhar nele ao mesmo tempo sem conflito. É um obstáculo à contribuição antes de ser um problema de performance.
-
-**O que conta como terminado.**
-
-- Nenhum arquivo de `src/` passa de 60 KB.
-- O comportamento está inalterado, verificado tela por tela.
-- Divisão por lotes, uma tela por vez, nunca uma refundação.
-
-**Dependências.** Retoma `#PERF-accountpage-split`, herdado do v32.
-
-*Remissões : `AnarBib-Backlog-2026-06-17-v33 §2.5` · `Relevé du 29/08/2026`*
 
 #### E10 — O resto da base de campo: plantão móvel, notificação push, prancha de códigos
 
@@ -2113,6 +2090,7 @@ CI verde. |
 | D25 | 2026-10-23 | **Fechado em 23/10: Word e ODT admitidos, só para download, e os 28 arquivos da Anarchief depositados.** REGISTRE `NUMDIF-7`. 12 públicos, 16 restritos (recursos 2013 a 2040). Pergunta a J/M enviada por Xavier em 23/10. |
 | E20 | 2026-10-23 | **Fechado em 23/10: barra agrupada (Público, Eu, Trabalho).** |
 | D24 | 2026-10-23 | **Fechado em 23/10: 494 textos integrais da Anarchief em EPUB (206 abertos, 288 restritos sob conta).** |
+| E6 | 2026-10-23 | **Fechado em 23/10: todas as telas grandes abaixo de 60 Ko** — Importações 25,5 Ko, ficha de documento 56,5 Ko (capa incluída), testes montados com gestos; visto por Xavier em produção. |
 
 ---
 
@@ -2144,4 +2122,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 62 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 61 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
