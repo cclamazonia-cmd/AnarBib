@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-10-23** · 69 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-10-23** · 68 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 9
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 9
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 1
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 4
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -62,9 +62,9 @@ Este trabalho produziu um resultado que comanda a leitura de todo o resto: **a d
 
 ## O estado real em 22 de outubro de 2026
 
-**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **69 itens, 276 fechamentos**.
+**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** — **68 itens, 277 fechamentos**.
 
-**Frescor dos constatos em 2026-10-23.** **63 itens de 69** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J13, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
+**Frescor dos constatos em 2026-10-23.** **62 itens de 68** trazem uma verificação datada própria (A1, A3, A7, A8, B36, B42, B46, C3, C15, C16, C18, C26, C27, C31, C33, D3, D4, D8, D15, D21, D22, D24, D25, D28, E1, E2, E4, E6, E10, E20, E39, E41, F10, G1, G6, G8, G15, G21, G22, G23, G24, G25, H6, H15, H16, H21, H28, H29, H34, H35, I2, I21, I32, I34, I35, I36, I37, I38, I40, J15, K1, K7). Os **6** outros ainda repousam sobre o levantamento de 2026-08-29 e são assinalados como tais em cada ficha. Um constato não reverificado não é falso: é apenas velho, e a diferença vê-se aqui em vez de no uso. Esta linha é recalculada a cada geração do documento.
 
 ### Banco
 
@@ -1761,28 +1761,7 @@ Os seis outros blocos estão inalterados em 31/08, verificados tabela a tabela: 
 
 | | | | |
 |---|---|---|---|
-| **J13** | Inscrever no REGISTRE o quarto caso de fonte, « domínio público » | `P3` | Aberto |
 | **J15** | Reler nas datas ditas os três prazos do congelamento (DOC-GEL-2): periódicos em 26/10, OPDS/RSS em 23/11, notas de leitura e OAI na v19 | `P2` | Aberto |
-
-#### J13 — Inscrever no REGISTRE o quarto caso de fonte, « domínio público »
-
-`P3` Adiado · Estado : **Aberto** · Carga : uma noite · O que exige : deliberação coletiva
-
-**Estado.** O caso `domaine_public` é usado (87 recursos) mas NUMDIF-2 diz « três casos ».
-
-*Verificado : [object Object]*
-
-**O que é.** Decidir se é doutrina; emendar NUMDIF-2.
-
-**Por que importa.** Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega.
-
-**O que conta como terminado.**
-
-- NUMDIF-2 descreve os casos que a fila aplica.
-
-**Dependências.** Também de G20.
-
-*Remissões : `Relecture des sessions du 16 au 19/10/2026`*
 
 #### J15 — Reler nas datas ditas os três prazos do congelamento (DOC-GEL-2): periódicos em 26/10, OPDS/RSS em 23/11, notas de leitura e OAI na v19
 
@@ -2259,6 +2238,7 @@ CI verde. |
 | I39 | 2026-10-20 | **Fechado em 20/10: o restore-test também restaura arquivos** (`2e41a66e`): uma amostra de cada fluxo (`storage`, `lourd`) restaurada e comparada por SHA-256 ao Storage. Testado nos repositórios reais: 3/3 e 3/3. |
 | D27 | 2026-10-20 | **Fechado em 20/10: o limite é dito antes da tentativa** (`14ec3c01`): 140 MB por chamada; a função recusa antes de baixar, a tela avisa antes da chamada (onze línguas). Um arquivo maior vai à mão, em partes. |
 | J10 | 2026-10-22 | **Fechado em 22/10 por decisão de Xavier: os sete domínios que entraram durante o congelamento foram julgados** (REGISTRE `DOC-GEL-2`). Sondas e testemunha terminadas pelo uso; periódicos a terminar por D3 (congelados se nada começar até 26/10); notas de leitura congeladas (retirada da tela *proposta* na v19 se continuar sem nota); OAI pelo piloto H35; OPDS/RSS congelados e medidos durante um mês; fila de convenções a terminar pela revisão. Um domínio congelado **continua no ar e utilizável**; só o acréscimo de novidade exige decisão datada. |
+| J13 | 2026-10-23 | **Fechado em 23/10: NUMDIF-2 descreve os casos que a fila aplica, e os recursos foram relidos.** (d) domínio público = autor·a e tradutor·a mortos há mais de 70 anos. De 123 recursos: 39 restritos (Rocker, De Boe, SNI, Díaz, La Cecilia, Commune van Parijs, de Ligt 1958, De Syndicalist 1940, Schleuning, El mundo libertario) e realinhados (impressão idêntica); 5 requalificados em caso (a). Restam 79 em domínio público. Pergunta a J/M sobre De Syndicalist redigida, a enviar por Xavier. |
 
 ---
 
@@ -2290,4 +2270,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 69 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-10-23. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 68 itens em 11 domínios. O estado numérico foi levantado em 2026-10-22 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `5e292baf`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
