@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) — **68 items, 277 clôtures**.",
-      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** — **68 itens, 277 fechamentos**."
+      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31 et E41 clos le 23/10** — **66 items, 279 clôtures**.",
+      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31 e E41 fechados em 23/10** — **66 itens, 279 fechamentos**."
     },
     "photo": [
       {
@@ -3478,6 +3478,22 @@
           "fr": "**Clos le 23/10 : NUMDIF-2 décrit les cas que la file applique, et les ressources ont été relues contre lui.** Décisions de Xavier par questionnaire (22 et 23/10). REGISTRE `NUMDIF-2` amendé (v0.99) : *(d)* domaine public = auteur·rice ET traducteur·rice morts depuis plus de 70 ans (œuvre collective ou anonyme : 70 ans depuis la publication), dates citées, le doute va à *(c)*. Sur **123** ressources actives sous ce cas : **39 restreintes** — Rocker ×9 (jusqu'au 1er janvier 2029), De Boe ×4, SNI, Díaz (22-23/10), puis, **PDF ouverts un par un le 23/10**, La Cecilia 1982, *Commune van Parijs* (texte récent), brochure *Bart de Ligt* (1958, collective, jusqu'en 2029), 19 numéros de *De Syndicalist* 1940 (rédaction d'Albert de Jong, †1970 ; question à J/M rédigée, à envoyer par Xavier), Schleuning 2011, *El mundo libertario* (© 2009) ; **5 requalifiées** en cas (a), publiques (CCLA ×4, FARJ). Toutes **réalignées depuis l'onglet de Xavier** (session aal2) : `pdf-restrito`, `conta_ativa`, empreinte SHA-256 identique avant et après la copie, originaux effacés (15 le 23/10 au matin, 24 à 13 h 06). La fonction `realign-digital-resource` sait désormais restreindre une ressource **sans candidat** (administration du réseau, vers le restreint seulement). Fiches corrigées : année 1958 pour la brochure de Ligt, Yves Delage (1854-1920) et Marie Goldsmith séparés. Il reste **79** ressources en domaine public, toutes à contributeur·rices morts avant 1956. Correction tracée : le 22/10, j'avais proposé « (d) tient » pour de Ligt et *De Syndicalist* sans les avoir ouverts ; la lecture a montré le contraire. Relecture : `docs/journal/audits/RELECTURE_j13_domaine_public_2026-10-22.md`.",
           "pt": "**Fechado em 23/10: NUMDIF-2 descreve os casos que a fila aplica, e os recursos foram relidos.** (d) domínio público = autor·a e tradutor·a mortos há mais de 70 anos. De 123 recursos: 39 restritos (Rocker, De Boe, SNI, Díaz, La Cecilia, Commune van Parijs, de Ligt 1958, De Syndicalist 1940, Schleuning, El mundo libertario) e realinhados (impressão idêntica); 5 requalificados em caso (a). Restam 79 em domínio público. Pergunta a J/M sobre De Syndicalist redigida, a enviar por Xavier."
         }
+      ],
+      [
+        "C31",
+        "2026-10-23",
+        {
+          "fr": "**Clos le 23/10 sur décision de Xavier (questionnaire) : la postface a son rôle, « posfaciador »** (`f4991ad9`, migration `20261023121922`, en production à 14 h 51). Au menu des écrits après l'avant-propos, libellé dans les onze langues (Postface, Posfácio, Epílogo, Afterword, Postfazione, Nachwort, Epíleg, Postparolo, Nawoord, Επίμετρο, Postfață) ; MARC21 `waw` (et `aft`, auteur d'une postface, à la lecture), UNIMARC `075`, à l'import comme à l'export ; termes en clair reconnus (postface, posfácio, afterword, Nachwort, nawoord…). L'import le garde dans sa liste fermée (patch par ancre, deux occurrences vérifiées en production). Les notices existantes ne changent pas : une postface rangée en préface le reste jusqu'à reprise. Bancs : vitest complet (3 423 tests), 236 suites SQL.",
+          "pt": "**Fechado em 23/10 por decisão de Xavier: o posfácio tem o seu papel, « posfaciador »** (`f4991ad9`): menu, onze idiomas, MARC21 waw/aft, UNIMARC 075, importação. As fichas existentes não mudam."
+        }
+      ],
+      [
+        "E41",
+        "2026-10-23",
+        {
+          "fr": "**Clos le 23/10 sur décision de Xavier : le nom de famille est facultatif** (`13149de7`, en production à 14 h 51). Il n'est plus exigé à la création de compte (contrôles et champ), dans « Mes données », au compte contributeur, ni par la fonction `register` ; un nom vide s'enregistre absent (`null`). La base l'acceptait déjà (colonne nullable, aucune fonction ne l'exigeait) ; les affichages retombaient déjà sur le prénom ou le courriel (`filter(Boolean).join(' ')`, `trim()`). Banc : `src/tests/e41-nom-facultatif.test.js` ; exercé au banc, pas encore par une inscription réelle sous un seul nom.",
+          "pt": "**Fechado em 23/10 por decisão de Xavier: o sobrenome é facultativo** (`13149de7`): criação de conta, « Meus dados », conta de contribuidor·a e register; um sobrenome vazio é gravado ausente."
+        }
       ]
     ]
   },
@@ -3897,6 +3913,10 @@
         {
           "fr": "**12/10, mesuré en production** : 245 notices publiées sur 423 avec couverture sont sans provenance ; la règle pour le stock (retrouvée là où une trace la donne, sinon « inconnue » assumée) attend la décision de Xavier.",
           "pt": "**12/10, medido**: 245 em 423 sem proveniência; a regra para o estoque espera a decisão de Xavier."
+        },
+        {
+          "fr": "**23/10 — critère 1 tenu sur décision de Xavier (questionnaire) : « unknown » pour tout le stock sans trace** (`59becb8a`, migration `20261023121721`, en production à 14 h 51) : les 244 couvertures publiées sans provenance portent `cover_source = 'unknown'`, licence vide, sans recherche notice par notice ; plus aucune couverture publiée sans provenance. Règle inscrite au REGISTRE : `CAPAS-8` (v1.01). **Reste le critère 2** : les 18 couvertures venues d'Inventaire — licence à vérifier à la source, ou absence assumée par écrit (décision de Xavier).",
+          "pt": "**23/10 — critério 1 cumprido**: 244 capas sem proveniência em « unknown » (CAPAS-8). Falta o critério 2: licença das 18 capas do Inventaire."
         }
       ]
     },
@@ -6164,49 +6184,6 @@
       "verif": []
     },
     {
-      "id": "C31",
-      "d": "C",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "biblio",
-        "front"
-      ],
-      "t": {
-        "fr": "Trancher un rôle « Postface » distinct de la préface",
-        "pt": "Decidir um papel « Posfácio » distinto do prefácio"
-      },
-      "v": {
-        "fr": "MARC21 a un code propre pour la postface (`waw`) ; elle est aujourd'hui rangée en préface. Proposé le 17/10 lors de l'ajout des rôles « Introduction » et « Avant-propos » (`580d49da`), sans réponse.",
-        "pt": "MARC21 tem código próprio para o posfácio (`waw`); hoje fica em prefácio. Proposto em 17/10, sem resposta."
-      },
-      "w": {
-        "fr": "Décider ; si oui, ajouter le rôle (registre des rôles, onze locales, export MARC).",
-        "pt": "Decidir; se sim, acrescentar o papel (registro, onze locales, MARC)."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "La décision est prise ; si oui, le rôle existe dans les onze langues et à l'export."
-        ],
-        "pt": [
-          "Decisão tomada; se sim, o papel existe nas onze línguas e na exportação."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
-    },
-    {
       "id": "C33",
       "d": "C",
       "p": "P2",
@@ -6435,7 +6412,12 @@
       "r": [
         "Relecture des sessions du 16 au 19/10/2026"
       ],
-      "verif": []
+      "verif": [
+        {
+          "fr": "**23/10 — décision de Xavier (questionnaire) : admettre Word/ODT, en téléchargement seulement, à la portée de la lettre du lot** (pas de lecture en ligne ; public ou restreint comme les PDF ; empreinte SHA-256 au versement, même file NUMDIF). Relevé en production : les seaux PDF n'admettent que `application/pdf`, les seaux EPUB `application/epub+zip` ; le type de ressource est fermé (`pdf_publico`, `pdf_restrito`, `audio`, `video`, `image`, `link_externo`, `recurso_digital`, `epub`) ; aucun des 24 fichiers n'est entré dans la file (1 475 candidats d'Anarchief, tous PDF). **Chantier à mener** : un type de ressource et des seaux (ou des MIME admis) pour Word/ODT, le versement par la file (empreinte, taille, contrôle du type réel), un bouton « Télécharger » dans la notice, la liste des 24 fichiers avec leur lot.",
+          "pt": "**23/10 — decisão de Xavier: admitir Word/ODT, só para download, com o alcance da letra do lote.** Falta o canteiro: tipo de recurso, baldes, fila, botão."
+        }
+      ]
     },
     {
       "id": "D28",
@@ -6495,48 +6477,6 @@
           "pt": "**22/10, noite — segunda metade decidida: (b), levantamento semanal sem supressão** (`de89cdab, fd7eda60`): o relatório semanal da rede lista os arquivos órfãos dos baldes PDF/EPUB (mais de 24 h, sem recurso nem ativo). Falta ler o primeiro relatório, segunda 26/10."
         }
       ]
-    },
-    {
-      "id": "E41",
-      "d": "E",
-      "p": "P3",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "front"
-      ],
-      "t": {
-        "fr": "Rendre le nom de famille facultatif au profil",
-        "pt": "Tornar o sobrenome facultativo no perfil"
-      },
-      "v": {
-        "fr": "Le formulaire « Mes données » exige un nom de famille. Une personne qui ne veut qu'un pseudonyme ne peut pas s'y inscrire telle qu'elle se nomme (cas posé le 19/10 par un partenaire).",
-        "pt": "O formulário « Meus dados » exige sobrenome; quem usa só pseudônimo não consegue."
-      },
-      "w": {
-        "fr": "Décider ; si oui, rendre le champ facultatif partout où il est requis (front, contraintes, gabarits de courriel qui l'utilisent).",
-        "pt": "Decidir; se sim, tornar facultativo em todo lugar."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Un compte peut exister sous un seul nom, sans erreur ni affichage cassé."
-        ],
-        "pt": [
-          "Uma conta pode existir com um só nome."
-        ]
-      },
-      "dep": {
-        "fr": "—",
-        "pt": "—"
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": []
     },
     {
       "id": "G21",
@@ -6979,6 +6919,10 @@
         {
           "fr": "**19/10, soir — l'exclusion est faite** (`58c65a43`) : `**/.claude/**` exclu de vitest, prouvé par un test factice (ramassé sans, ignoré avec ; 262 fichiers inchangés). **Reste le ménage**, sur l'accord de Xavier : les dossiers morts sous `.claude/worktrees/`, `~/anarbib-wt-d17`, et le clone Windows indépendant. Les trois worktrees de septembre (`dette`, `e21`, `lot-biblio`) et leurs branches ont été retirés le 19/10.",
           "pt": "**19/10, noite — a exclusão está feita** (`58c65a43`). Falta a arrumação das cópias mortas."
+        },
+        {
+          "fr": "**23/10 — inventaire fait, rien retiré** (accord de Xavier : retirer après vérification, liste montrée d'abord). **Sans rien d'unique, retirables** : `~/anarbib-wt-d17` (branche fusionnée, propre) ; `.claude/worktrees/angry-elion-997849` et `charming-curie-4fa39c` (branches fusionnées, propres, outillage identique) ; `.claude/worktrees/intelligent-swirles-60c380` (branche fusionnée, copie = branche à deux droits de fichier près, outillage plus ancien que celui du checkout) ; le clone Windows `Codeberg\u0007narbib` et ses deux worktrees (propres, tous leurs commits dans `main`). **Laissés, au doute** : `adoring-clarke-e85e06` (un commit du jour absent de `main` : une session active), `bold-blackwell-365dda` (copie très différente de sa branche), `fervent-diffie-380c13` (outillage `.claude` modifié le même jour que celui du checkout). Une suppression de fichiers se fait par Xavier : commandes données.",
+          "pt": "**23/10 — inventário feito, nada retirado.** Retiráveis sem nada único: wt-d17, três dossiês .claude/worktrees, o clone Windows. Mantidos na dúvida: adoring-clarke, bold-blackwell, fervent-diffie."
         }
       ]
     },
