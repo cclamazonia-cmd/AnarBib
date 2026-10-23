@@ -44,6 +44,14 @@ BEGIN
   -- ─────────────────────────────────────────────────────────────────
   v_t := 'T1 réglage absent, pas de secret → NULL, aucun repli';
   PERFORM set_config('anarbib.functions_base_url', '', true);
+  -- Le bouchon Vault de la CI porte FUNCTIONS_BASE_URL (comme la production) :
+  -- on le retire le temps de la suite (annulé par le RAISE final). Sur un vrai
+  -- Vault, la vue n'est pas modifiable : on passe par vault.secrets.
+  IF to_regclass('vault.secrets') IS NOT NULL THEN
+    DELETE FROM vault.secrets WHERE name = 'FUNCTIONS_BASE_URL';
+  ELSE
+    DELETE FROM vault.decrypted_secrets WHERE name = 'FUNCTIONS_BASE_URL';
+  END IF;
   IF private.fn_functions_base_url() IS NULL THEN
     v_passed := v_passed + 1;
   ELSE

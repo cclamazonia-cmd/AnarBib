@@ -52,3 +52,17 @@ SELECT 'ANARBIB_PARTNER_IMPORT_SECRET', 'CI test stub — NOT a real secret',
 WHERE NOT EXISTS (
   SELECT 1 FROM vault.decrypted_secrets WHERE name = 'ANARBIB_PARTNER_IMPORT_SECRET'
 );
+
+-- FUNCTIONS_BASE_URL — l'adresse des Edge Functions de l'instance (P2-O1,
+-- 23/10/2026, migration 20261023122511). private.fn_functions_base_url() ne se
+-- replie plus sur la production : sans réglage ni secret elle rend NULL, et
+-- net.http_post refuse une URL nulle. Le banc porte donc le secret comme la
+-- production le porte. Adresse en .invalid : aucun appel ne peut en sortir.
+-- tests/sql/adresse_des_fonctions_tests.sql (T1) le retire le temps d'éprouver
+-- le cas « ni réglage ni secret ».
+INSERT INTO vault.decrypted_secrets (name, description, decrypted_secret)
+SELECT 'FUNCTIONS_BASE_URL', 'CI test stub — NOT a real address',
+       'http://fonctions.ci.invalid'
+WHERE NOT EXISTS (
+  SELECT 1 FROM vault.decrypted_secrets WHERE name = 'FUNCTIONS_BASE_URL'
+);
