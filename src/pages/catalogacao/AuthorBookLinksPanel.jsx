@@ -17,7 +17,6 @@ export default function AuthorBookLinksPanel({ authorId, onMessage }) {
 
   // ── Rattachement aux oeuvres (liaison autorite<->livres) ────────────────
   async function findAuthorBookMatches() {
-    const authorId = authorId;
     if (!authorId) return;
     setLinkLoading(true); setLinkSelected(new Set());
     try {
@@ -32,7 +31,6 @@ export default function AuthorBookLinksPanel({ authorId, onMessage }) {
   }
 
   async function confirmAuthorLinks() {
-    const authorId = authorId;
     if (!authorId || linkSelected.size === 0) return;
     setLinkBusy(true);
     let ok = 0;

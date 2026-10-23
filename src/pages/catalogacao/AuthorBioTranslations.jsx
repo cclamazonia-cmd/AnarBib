@@ -27,7 +27,6 @@ export default function AuthorBioTranslations({ authorId, bioTranslations, setBi
 
   // Recharge les traductions bio (après save ou bascule de revue).
   async function reloadBioTranslations() {
-    const authorId = authorId;
     if (!authorId) return;
     const { data } = await supabase.from('author_translations')
       .select('lang, biography, author_id, status, reviewed_at').eq('author_id', Number(authorId));
@@ -37,7 +36,6 @@ export default function AuthorBioTranslations({ authorId, bioTranslations, setBi
 
   // Bascule le statut de revue d'une traduction (RPC staff).
   async function toggleBioReview(lang, toReviewed) {
-    const authorId = authorId;
     if (!authorId) return;
     setBioReviewBusy(lang);
     try {

@@ -17,7 +17,6 @@ export default function AuthorDuplicatesPanel({ authorId, preferredName, arbitre
 
   // ── Doublons d'autorite : detection + fusion ────────────────────────────
   async function findAuthorDuplicates() {
-    const authorId = authorId;
     if (!authorId) return;
     setDupLoading(true); setDupMatches(null);
     try {
