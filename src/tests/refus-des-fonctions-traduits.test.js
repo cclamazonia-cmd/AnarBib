@@ -56,7 +56,9 @@ describe('E24 — les refus des fonctions de la page Importations', () => {
   });
 
   it("l'écran n'affiche plus le texte brut d'une fonction de la page", () => {
-    const page = readFileSync(path.join(RACINE, 'src/pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+    // La face Export (et ses trois appels de fonctions) vit dans ImportExportFace.jsx depuis le 23/10/2026 (E6).
+    const page = ['ImportacoesPage.jsx', 'ImportExportFace.jsx']
+      .map((f) => readFileSync(path.join(RACINE, 'src/pages/importacoes', f), 'utf8')).join('\n');
     expect(page).not.toMatch(/throw new Error\(out\?\.error/);
     expect((page.match(/throw erreurDeFonction\(out, res\.status\)/g) || []).length).toBe(3);
   });

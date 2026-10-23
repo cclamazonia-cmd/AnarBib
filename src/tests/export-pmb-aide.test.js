@@ -24,7 +24,9 @@ import path from 'node:path';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(here, '..', '..');
 const locale = (l) => JSON.parse(readFileSync(path.join(RACINE, 'src', 'i18n', 'locales', `${l}.json`), 'utf8'));
-const ecran = readFileSync(path.join(RACINE, 'src', 'pages', 'importacoes', 'ImportacoesPage.jsx'), 'utf8');
+// La face Export vit dans ImportExportFace.jsx depuis le 23/10/2026 (E6) : on lit les deux.
+const ecran = ['ImportacoesPage.jsx', 'ImportExportFace.jsx']
+  .map((f) => readFileSync(path.join(RACINE, 'src', 'pages', 'importacoes', f), 'utf8')).join('\n');
 
 const FR = ['Exemplaires UNIMARC', 'Notices UNIMARC', 'Générer les liens entre notices ?'];
 const PMB = {

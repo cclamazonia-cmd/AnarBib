@@ -40,7 +40,8 @@ describe('l’état de revue s’appelle review_state dans l’application et le
   it('ce qui lit digital_assets dit review_state', () => {
     expect(lire('src/components/library/LibraryDigitalSharesSection.jsx'))
       .toContain(".from('digital_assets')\n        .select('id, title, asset_kind, review_state, is_public')");
-    const imp = lire('src/pages/importacoes/ImportacoesPage.jsx');
+    // La face Export vit dans ImportExportFace.jsx depuis le 23/10/2026 (E6).
+    const imp = lire('src/pages/importacoes/ImportacoesPage.jsx') + '\n' + lire('src/pages/importacoes/ImportExportFace.jsx');
     expect(imp).not.toMatch(/a\.rights_status|rights_status: 'public_domain_confirmed'/);
     expect(imp.match(/a\.review_state === 'to_review'/g)).toHaveLength(3);
   });
