@@ -121,7 +121,7 @@ export const RESPONSABILITES: Record<Dialecte, ZoneResponsabilite[]> = {
 
 // Rôles AnarBib (BookDraftForm : ROLE_KEYS_TEXT, _AUDIOVISUAL, _AUDIO).
 export const ROLES_ANARBIB = ['autor', 'coautor', 'organizacao', 'organizador', 'tradutor', 'ilustrador',
-  'prefaciador', 'introdutor', 'prologuista', 'coordenador', 'editor', 'realizador', 'roteirista', 'ator', 'interprete', 'compositor',
+  'prefaciador', 'introdutor', 'prologuista', 'posfaciador', 'coordenador', 'editor', 'realizador', 'roteirista', 'ator', 'interprete', 'compositor',
   'narrador', 'produtor', 'locutor', 'outro'] as const;
 
 // Codes de fonction UNIMARC (annexe C) → rôle AnarBib. Inconnu : « outro »,
@@ -133,7 +133,7 @@ export const ROLE_UNIMARC: Record<string, string> = {
   '673': 'coordenador', '690': 'roteirista', '710': 'editor', '721': 'interprete', '730': 'tradutor',
   '755': 'interprete',
   // revue du 28/09 : postfacier, musicien, narrateur, présentateur
-  '075': 'prefaciador', '545': 'interprete', '550': 'narrador', '605': 'locutor',
+  '075': 'posfaciador', '545': 'interprete', '550': 'narrador', '605': 'locutor',
 };
 // Codes de relation MARC21 (liste LC) → rôle AnarBib.
 export const ROLE_MARC21: Record<string, string> = {
@@ -142,11 +142,12 @@ export const ROLE_MARC21: Record<string, string> = {
   orm: 'organizacao', pbd: 'coordenador', prf: 'interprete', pro: 'produtor', spk: 'locutor', trl: 'tradutor',
   wpr: 'prefaciador',
   // revue du 28/09
-  mus: 'interprete', sng: 'interprete', edc: 'organizador', aft: 'prefaciador',
-  // 17/10/2026 : introduction (win) et avant-propos (wfw) ont leur rôle ; la
-  // postface (waw) reste une préface. « aui » n'est plus un code de la LC
-  // (renvoi vers win, wfw, wpr) : il se lit encore, il ne s'écrit plus.
-  win: 'introdutor', wfw: 'prologuista', waw: 'prefaciador',
+  mus: 'interprete', sng: 'interprete', edc: 'organizador', aft: 'posfaciador',
+  // 17/10/2026 : introduction (win) et avant-propos (wfw) ont leur rôle ;
+  // 23/10/2026 (C31) : la postface (waw, et aft, auteur d'une postface) aussi.
+  // « aui » n'est plus un code de la LC (renvoi vers win, wfw, wpr) : il se
+  // lit encore, il ne s'écrit plus.
+  win: 'introdutor', wfw: 'prologuista', waw: 'posfaciador',
 };
 // Sens inverse (export) : le code le plus fidèle pour chaque rôle AnarBib.
 export const CODE_ROLE: Record<Dialecte, Record<string, string>> = {
@@ -155,11 +156,11 @@ export const CODE_ROLE: Record<Dialecte, Record<string, string>> = {
   // « introdutor » / « prologuista » en UNIMARC, qui n'a que 080 (préface,
   // introduction, etc.) pour les trois textes liminaires.
   unimarc: { autor: '070', coautor: '205', organizacao: '557', organizador: '340', tradutor: '730',
-    ilustrador: '440', prefaciador: '080', introdutor: '080', prologuista: '080', coordenador: '651', editor: '710', realizador: '300',
+    ilustrador: '440', prefaciador: '080', introdutor: '080', prologuista: '080', posfaciador: '075', coordenador: '651', editor: '710', realizador: '300',
     roteirista: '690', ator: '005', interprete: '590', compositor: '230', narrador: '550',
     produtor: '630', locutor: '605', outro: '570' },
   marc21: { autor: 'aut', coautor: 'ctb', organizacao: 'orm', organizador: 'edt', tradutor: 'trl',
-    ilustrador: 'ill', prefaciador: 'wpr', introdutor: 'win', prologuista: 'wfw', coordenador: 'pbd', editor: 'edt', realizador: 'drt',
+    ilustrador: 'ill', prefaciador: 'wpr', introdutor: 'win', prologuista: 'wfw', posfaciador: 'waw', coordenador: 'pbd', editor: 'edt', realizador: 'drt',
     roteirista: 'aus', ator: 'act', interprete: 'prf', compositor: 'cmp', narrador: 'nrt',
     produtor: 'pro', locutor: 'spk', outro: 'oth' },
 };
@@ -171,7 +172,8 @@ const TERMES_ROLE: [RegExp, string][] = [
   [/il+ustr|^il\.?$/i, 'ilustrador'],
   [/introdu[cz]|einleit|inleid|enkonduk/i, 'introdutor'],
   [/avant-?propos|foreword|apresenta|geleitwort|premessa|woord vooraf|antauvort/i, 'prologuista'],
-  [/prefa|preface|postfa/i, 'prefaciador'],
+  [/postfa|posfa[cs]|afterword|nachwort|nawoord|postfaz|postparol|epimetr/i, 'posfaciador'],
+  [/prefa|preface/i, 'prefaciador'],
   [/coord/i, 'coordenador'],
   [/compil|edit(eur|or|ora)\b|ed\.$|dir\.|organiz|\borg\b/i, 'organizador'],
   [/realis|director|diretor/i, 'realizador'],

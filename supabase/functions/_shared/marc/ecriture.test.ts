@@ -238,6 +238,11 @@ Deno.test('Revue H23 : langue en ISO 639-2 (101, 041, 008), traduction en ind1, 
   assertEquals(roleDepuisCode('marc21', 'aui'), 'prefaciador');   // ancien code, encore lu
   assertEquals(roleDepuisCode('marc21', null, 'Writer of foreword'), 'prologuista');
   assertEquals(roleDepuisCode('marc21', null, 'introduction'), 'introdutor');
+  // 23/10/2026 (C31) : la postface a son rôle — waw et aft en MARC21, 075 en UNIMARC
+  assertEquals(['waw', 'aft'].map((c) => roleDepuisCode('marc21', c)), ['posfaciador', 'posfaciador']);
+  assertEquals(roleDepuisCode('unimarc', '075'), 'posfaciador');
+  assertEquals([CODE_ROLE.marc21.posfaciador, CODE_ROLE.unimarc.posfaciador], ['waw', '075']);
+  assertEquals(roleDepuisCode('marc21', null, 'Writer of afterword'), 'posfaciador');
 });
 
 Deno.test('Revue H23 : congrès à qualificatifs manquants, dates MARC21, 245 sans vedette, 130, 856 selon sa provenance', () => {

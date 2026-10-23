@@ -24,8 +24,9 @@ export const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'materi
 // de ». Les lignes qui le portent encore restent lisibles (garde du menu).
 // « introdutor » (introduction) et « prologuista » (avant-propos) rejoignent
 // « prefaciador » le 17/10/2026 : trois textes liminaires distincts, comme
-// les distinguent les codes MARC21 win, wfw et wpr.
-export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','introdutor','prologuista','coordenador','outro'];
+// les distinguent les codes MARC21 win, wfw et wpr. La postface (« posfaciador »,
+// MARC21 waw) les rejoint le 23/10/2026 (C31).
+export const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','introdutor','prologuista','posfaciador','coordenador','outro'];
 export const ROLE_KEYS_AUDIOVISUAL = ['autor','realizador','roteirista','ator','interprete','compositor','narrador','produtor','tradutor','organizacao','coautor','outro'];
 export const ROLE_KEYS_AUDIO = ['autor','interprete','compositor','narrador','locutor','produtor','tradutor','organizacao','coautor','outro'];
 export function roleKeysForMaterial(materialType) {
@@ -65,7 +66,8 @@ export function inferContributorRole(marcRole = '') {
   if (/org|compil/.test(r)) return 'organizador';
   if (/introd|einleit|inleid|enkonduk/.test(r)) return 'introdutor';
   if (/avant-?propos|forew|apresenta|geleitwort|premessa|woord vooraf|antauvort/.test(r)) return 'prologuista';
-  if (/pref|postf/.test(r)) return 'prefaciador';
+  if (/postf|posfa[cs]|afterword|nachwort|nawoord|postfaz|postparol|epimetr/.test(r)) return 'posfaciador';
+  if (/pref/.test(r)) return 'prefaciador';
   if (/coaut/.test(r)) return 'coautor';
   return 'autor';
 }

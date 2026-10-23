@@ -116,8 +116,12 @@ describe('les petites fonctions', () => {
     expect(inferContributorRole('Avant-propos')).toBe('prologuista');
     expect(inferContributorRole('Foreword')).toBe('prologuista');
     expect(inferContributorRole('Préface')).toBe('prefaciador');
-    expect(inferContributorRole('Postface')).toBe('prefaciador');
-    expect(ROLE_KEYS_TEXT).toEqual(expect.arrayContaining(['prefaciador', 'introdutor', 'prologuista']));
+    // 23/10/2026 (C31) : la postface a son rôle
+    expect(inferContributorRole('Postface')).toBe('posfaciador');
+    expect(inferContributorRole('Posfácio')).toBe('posfaciador');
+    expect(inferContributorRole('Afterword')).toBe('posfaciador');
+    expect(inferContributorRole('Nachwort')).toBe('posfaciador');
+    expect(ROLE_KEYS_TEXT).toEqual(expect.arrayContaining(['prefaciador', 'introdutor', 'prologuista', 'posfaciador']));
   });
   it('identifiant VIAF', () => {
     expect(parseViafId('http://viaf.org/viaf/12345678')).toBe('12345678');
