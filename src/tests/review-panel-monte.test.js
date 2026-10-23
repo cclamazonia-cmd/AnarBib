@@ -19,11 +19,13 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
 
-const form = src('pages/catalogacao/BookDraftForm.jsx');
+const form = sourceNotice();
 const panel = src('pages/catalogacao/ReviewPanel.jsx');
 
 describe('panneau de révision de la fiche (E6 lot 5) — réellement monté', () => {

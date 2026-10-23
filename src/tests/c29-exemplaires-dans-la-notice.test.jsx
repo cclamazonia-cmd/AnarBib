@@ -40,6 +40,8 @@ import { IntlProvider } from 'react-intl';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { LOCALE_CODES } from '../i18n/locales.js';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 const RACINE = path.resolve(__dirname, '../..');
 const lire = (p) => readFileSync(path.join(RACINE, p), 'utf8');
@@ -345,7 +347,7 @@ describe('ExemplaresPanel — modifier sans voir le brouillon (lot 3)', () => {
 });
 
 describe('contrat de montage (source)', () => {
-  const form = lire('src/pages/catalogacao/BookDraftForm.jsx');
+  const form = sourceNotice();
   const page = (lire('src/pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('src/pages/catalogacao/BatchesPanel.jsx'));
   const editeur = lire('src/pages/catalogacao/ExemplarDraftForm.jsx');
   const panneau = lire('src/pages/catalogacao/ExemplaresPanel.jsx');
@@ -436,7 +438,7 @@ describe('ExemplaresPanel — un seul endroit (lot 4)', () => {
   });
 
   it('contrat de source : la fiche rouvre le brouillon publié et demande le formulaire ; la carte et le bandeau ont disparu, avec leurs clés', () => {
-    const form = lire('src/pages/catalogacao/BookDraftForm.jsx');
+    const form = sourceNotice();
     expect(form).toContain('setCopieDemandee({ bookId: lastPublished.bookId, nonce: Date.now() });');
     expect(form).toContain('onOpenDraft(lastPublished.draftId);');
     expect(form).toContain('ouvrirNouveau={copieDemandee}');

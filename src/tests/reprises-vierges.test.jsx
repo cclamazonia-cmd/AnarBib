@@ -13,6 +13,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 const rpc = vi.fn(() => Promise.resolve({ data: true, error: null }));
 vi.mock('@/lib/supabase', () => ({
@@ -117,7 +119,7 @@ describe('la file et les listes ne montrent pas les reprises vierges', () => {
 
   it('les trois éditeurs suivent la reprise chargée et confirment l\'enregistrement', () => {
     for (const [f, kind] of [['BookDraftForm.jsx', 'book'], ['AuthorDraftForm.jsx', 'author'], ['ExemplarDraftForm.jsx', 'exemplar']]) {
-      const s = src(f);
+      const s = f === 'BookDraftForm.jsx' ? sourceNotice() : src(f);
       expect(s).toContain(`useUntouchedRetake('${kind}', form.id)`);
       expect(s).toMatch(/function fillFromRecord\([^)]*\) \{[\s\S]{0,80}?trackRetake\(r\);/);
       // 04/10 : la confirmation vit dans la barre d'état collante.

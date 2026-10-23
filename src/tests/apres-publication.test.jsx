@@ -11,6 +11,8 @@ import { IntlProvider } from 'react-intl';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import AfterPublishPanel from '@/pages/catalogacao/AfterPublishPanel';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 afterEach(cleanup);
 const intl = (ui) => <IntlProvider locale="fr" messages={{ 'common.close': 'Fermer' }}>{ui}</IntlProvider>;
@@ -43,7 +45,7 @@ describe('AfterPublishPanel', () => {
 
 describe('les trois éditeurs', () => {
   it('Document : l’encadré remplace le bandeau, la fenêtre de création n’est plus rouverte d’office', () => {
-    const s = src('BookDraftForm.jsx');
+    const s = sourceNotice();
     expect(s).not.toContain("'catalogacao.postPublish.body'");
     expect(s).toContain("title={t({ id: 'catalogacao.next.title' }, { title: lastPublished.title })}");
     // Après publication, creationChoice reste non nul : la fenêtre œuvre/édition

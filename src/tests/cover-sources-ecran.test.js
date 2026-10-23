@@ -18,14 +18,15 @@
 //    galerie a proposé la couverture de 2004 sans rien signaler.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   sourcesEnPanne, messageRechercheCapas, accordEdition, motsEditeur, anneeDe,
   parIsbn, etiquetteCandidate, ordonnerCandidates,
 } from '../lib/coverSources.js';
 import { volumesDifferents } from '../lib/volumes.js';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
-const FORM = readFileSync(new URL('../pages/catalogacao/BookDraftForm.jsx', import.meta.url), 'utf8');
+const FORM = sourceNotice();
 
 describe('sourcesEnPanne — nommer ce qui a échoué, et seulement ça', () => {
   it('une source en échec est nommée avec son erreur', () => {

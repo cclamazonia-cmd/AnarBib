@@ -7,11 +7,12 @@
 // cote d'étiquette, candidat BN Brasil, rôles par type de matériel, rôle MARC.
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   construireZonesIsbd, paquetIsbd, buildShelfLabel, normalizeBnToCandidate, roleKeysForMaterial,
   inferContributorRole, parseViafId, EMPTY_FORM, SERIAL_TYPES, ROLE_KEYS_TEXT,
 } from '../lib/catalogacao/bookDraft.js';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 const t = ({ id }) => `‹${id}›`;
 
@@ -135,7 +136,7 @@ describe('les petites fonctions', () => {
 
 describe('le formulaire passe par le module', () => {
   it('BookDraftForm importe le module et ne redéfinit plus ses fonctions', () => {
-    const src = readFileSync('src/pages/catalogacao/BookDraftForm.jsx', 'utf8');
+    const src = sourceNotice();
     expect(src).toContain("from '@/lib/catalogacao/bookDraft'");
     expect(src).toContain("paquetIsbd({ ...form, autor: autorIsbd || f('autor') }, t, ZONE_LABELS)");
     for (const nom of ['function buildIsbdZone0', 'function normalizeBnToCandidate', 'function buildShelfLabel', 'const EMPTY_FORM']) {

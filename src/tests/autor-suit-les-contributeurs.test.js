@@ -5,10 +5,10 @@
 // recopiait sur la notice. Garde de source : la recomposition précède la charge utile, et la
 // charge utile la porte.
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
-const src = readFileSync(path.resolve(__dirname, '../pages/catalogacao/BookDraftForm.jsx'), 'utf8');
+const src = sourceNotice();
 const save = src.slice(src.indexOf('async function handleSave('), src.indexOf('async function handleSave(') + 9000);
 
 describe('le texte d\'auteur suit les contributeurs à l\'enregistrement', () => {

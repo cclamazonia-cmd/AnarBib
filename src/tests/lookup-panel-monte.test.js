@@ -20,22 +20,28 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+// E6 (23/10/2026) : le formulaire de notice se lit avec son hook et ses sections (sourceNotice).
+import { sourceNotice } from './helpers/noticeSource';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) => readFileSync(path.resolve(here, '..', rel), 'utf8');
 
-const form = src('pages/catalogacao/BookDraftForm.jsx');
+const form = sourceNotice();
 const panel = src('pages/catalogacao/LookupPanel.jsx');
 
 describe('panneau de recherche catalographique (E6 lot 3) — réellement monté', () => {
   it('est rendu dans la colonne du lookup, après la galerie de couvertures', () => {
-    const column = form.indexOf('Lookup panel (next to cover)');
-    const mount = form.indexOf('<LookupPanel');
-    const grid = form.indexOf('<div className="cat-book-grid">', column);
+    // E6 (23/10/2026) : la colonne vit dans l'en-tête couverture (BookCoverPanel),
+    // monté par la page juste avant la grille.
+    const couverture = src('pages/catalogacao/BookCoverPanel.jsx');
+    const page = src('pages/catalogacao/BookDraftForm.jsx');
+    const column = couverture.indexOf('Lookup panel (next to cover)');
+    const mount = couverture.indexOf('<LookupPanel');
     expect(column).toBeGreaterThan(-1);
     expect(mount).toBeGreaterThan(column);
-    expect(mount).toBeLessThan(grid);
-    expect(form.indexOf("import LookupPanel from './LookupPanel';")).toBeGreaterThan(-1);
+    expect(couverture.indexOf("import LookupPanel from './LookupPanel';")).toBeGreaterThan(-1);
+    expect(page.indexOf('<BookCoverPanel {...{')).toBeGreaterThan(-1);
+    expect(page.indexOf('<BookCoverPanel {...{')).toBeLessThan(page.indexOf('<div className="cat-book-grid">'));
   });
 
   it('câble ses deux rappels sur les écrivains du parent', () => {
