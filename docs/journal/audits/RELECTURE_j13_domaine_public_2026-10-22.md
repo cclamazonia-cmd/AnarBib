@@ -29,7 +29,7 @@
 | Schleuning, *A abolição do trabalho e outros mitos* (2011) | 71 | aucune justification | **Pas du domaine public** (autrice vivante). *(b)* si mention imprimée, sinon *(c)* |
 | *El Mundo libertario* (*Le Monde diplomatique*, 2009) | 39 | « à vérifier » | **Pas du domaine public** ; un titre de presse sous droits → *(c)*, restreint |
 
-Rien n'est écrit en base pour ces 30 : chaque proposition attend la décision de Xavier.
+*(Tableau du 22/10 ; lectures et décisions plus bas.)*
 
 ## Les décisions de Xavier (22/10/2026, questionnaire)
 
@@ -43,4 +43,40 @@ Rien n'est écrit en base pour ces 30 : chaque proposition attend la décision d
   **Le Monde diplomatique** : *(c)*.
 - **De Syndicalist, de Ligt, Delage/Goldsmith** : gardés publics ; fiches à corriger (année de la
   brochure de Ligt, deux autorités pour Delage et Goldsmith, articles signés de *De Syndicalist*).
+
+## Lectures du 23/10/2026 (les PDF ouverts un par un)
+
+| Ressource | Ce que dit le PDF | Cas retenu |
+|---|---|---|
+| *Dag van de anarchie : Leuven* (1332) | programme de la journée du 3-4 avril 1982 (collectif Mordi e Fuggi, La Cecilia), textes signés de personnes vivantes ; aucune mention de libre reproduction sur les 7 pages | **(c)** |
+| *Commune van Parijs* (1331) | texte « basé sur les articles des historiennes Denise De Weerdt et Catherine Oukhow », bibliographie jusqu'en 2007 ; aucune mention | **(c)** |
+| *Bart de Ligt 1883-1938* (868) | avant-propos : « il y a vingt ans que De Ligt est mort » → **1958** ; « divers collaborateurs » ; *Recht voor Allen*, Federatie van Vrije Socialisten, Groningue | **(c)** jusqu'au 1er janvier 2029 (œuvre collective) ; année corrigée |
+| *De Syndicalist* (19 numéros, janv.-mai 1940) | rédaction : Albert de Jong (†1970) ; articles signés d'initiales (R. T., L. S., J. R., L. M., P. O.…) et de noms sans date connue (W. Angenent, H. Lodewijks, P. Dekker, N. Middel, P. Ottens, J. Lambo, N. J. C. Schermerhorn, Theo Harsman, « A. Schweitzer ») | **(c)**, question à J/M |
+| Schleuning (71) | traduction de 2011, Ateneu Diego Giménez (COB-AIT) ; aucune mention | **(c)** |
+| *El mundo libertario* (39) | « © 2009, Editorial Aún Creemos en los Sueños » ; registre de propriété intellectuelle | **(c)** |
+| *La Parthénogénèse* (977) | Delage (†1920) et Goldsmith (†1933) | **(d)** tient ; autorités séparées |
+
+**Correction.** Le 22/10, j'avais proposé « (d) tient » pour la brochure de Ligt et pour *De Syndicalist*, sans
+les avoir ouverts ; Xavier avait décidé « garder ». La lecture a montré le contraire : la question lui a été
+reposée le 23/10, il a décidé de restreindre les deux.
+
+Migration : `20261023103937` (22 candidats d'Anarchief en `statut_inconnu`, décision écrite dans les
+ressources 39 et 71, trois fiches corrigées) ; puis la fonction de réalignement.
+
+## Question à J/M — brouillon, à envoyer par Xavier (rien n'est envoyé)
+
+> Bonjour J/M,
+>
+> En relisant les droits des PDF d'Anarchief versés dans AnarBib, nous avons mis en accès restreint, par
+> précaution, les 19 numéros de *De Syndicalist* de janvier à mai 1940 (NSV, rédaction d'Albert de Jong).
+> Les articles y sont souvent signés d'initiales (R. T., L. S., J. R., L. M., P. O.) ou de noms comme
+> W. Angenent, H. Lodewijks, P. Dekker, N. Middel, P. Ottens, J. Lambo, N. J. C. Schermerhorn ou Theo Harsman.
+>
+> Saurais-tu qui se cache derrière ces initiales, ou si certains de ces auteurs sont morts après 1955 ?
+> Si tous sont morts avant 1956, ou si les textes ont été publiés sans revendication de droits, nous
+> pourrons rendre ces numéros publics à nouveau. Albert de Jong étant mort en 1970, ses propres articles
+> resteraient protégés jusqu'en 2041.
+>
+> Merci,
+> Xavier
 
