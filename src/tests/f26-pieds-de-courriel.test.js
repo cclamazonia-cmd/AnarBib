@@ -413,7 +413,9 @@ describe('suite de F26 — notify-weekly-report n’a plus de texte portugais en
   });
 
   it('les clés wr.* : complètes dans les onze langues, aucune copie du pt-BR', () => {
-    expect(CLES_WR.length).toBeGreaterThanOrEqual(50);
+    // RET-1 (23/10/2026) : les libellés des tableaux de détail sont partis avec eux.
+    expect(CLES_WR.length).toBeGreaterThanOrEqual(15);
+    expect(CLES_WR.filter((k) => /^wr\.(tbl|col|role|flux|exit)\./.test(k))).toEqual([]);
     expect(CLES_WR.filter((k) => !mail._isComplete(k))).toEqual([]);
     const copies = [];
     for (const k of CLES_WR) {
@@ -427,11 +429,9 @@ describe('suite de F26 — notify-weekly-report n’a plus de texte portugais en
   it('chaque clé citée par la fonction existe, et chaque état a son libellé', () => {
     const src = code('notify-weekly-report/index.ts');
     const citees = [...src.matchAll(/["']((?:wr|net)\.[A-Za-z_.]+[A-Za-z_])["']/g)].map((m) => m[1]);
-    expect(citees.length).toBeGreaterThan(50);
+    expect(citees.length).toBeGreaterThan(20);
     const toutes = mail._allKeys();
     expect(citees.filter((k) => !toutes.includes(k))).toEqual([]);
-    for (const s of ['demande', 'accepte', 'refuse', 'indisponible', 'numerisation', 'transmis', 'cloture']) expect(CLES_WR, s).toContain(`wr.flux.${s}`);
-    for (const s of ['removed', 'inactive', 'terminated', 'left_with_pending_circulation']) expect(CLES_WR, s).toContain(`wr.exit.${s}`);
     for (const s of ['preparacao', 'aguardando_saida', 'emprestado', 'parcialmente_devolvido', 'em_devolucao', 'devolvido', 'cancelado', 'atrasado']) {
       expect(CLES_NET, s).toContain(`net.ill.${s}`);
     }
@@ -499,20 +499,23 @@ describe('suite de F26 — le rapport d’une bibliothèque part dans la langue 
       expect(e.subject.endsWith(mail.tMailTexte(l, 'wr.subject', { tag: '', ...periode }).trim())).toBe(true);
       expect(e.html).toContain(`<html lang="${l}">`);
       for (const cle of ['wr.kicker', 'wr.lbl.library', 'net.lbl.period', 'wr.sum.pendingRequests', 'net.sum.readersIn', 'wr.sum.digitalOngoing',
-        'wr.tbl.readersOut', 'wr.tbl.digital', 'wr.col.reader', 'wr.col.dueDate', 'wr.col.partner', 'net.col.createdAt',
-        'net.ill.emprestado', 'wr.flux.numerisation', 'wr.exit.left_with_pending_circulation', 'wr.role.lender', 'wr.role.provider',
-        'layout.footerText']) {
+        'net.sum.loans', 'wr.sum.illLent', 'wr.detail', 'wr.cta', 'layout.footerText']) {
         expect(e.html, cle).toContain(html(l, cle));
       }
       expect(e.html).toContain(html(l, 'wr.title', { brand: '' }).trim());
-      // dates de la langue : le jour seul, ou le jour et l'heure (UTC) d'un horodatage
-      expect(e.html).toContain(jour('2026-11-03', l));
-      expect(e.html).toContain(`${jour('2026-10-16', l)} 14:30 UTC`);
-      expect(e.html).toContain('L&#039;Anarchie &amp; l&#039;ordre');
+      expect(e.html).toContain(jour('2026-10-12', l));
+      // RET-1 : des compteurs et un lien vers le panneau, rien qui désigne une personne
+      expect(e.html).toContain('href="https://app.anarbib.org/painel"');
+      expect(e.text).toContain('https://app.anarbib.org/painel');
+      for (const trace of [LECTRICE.email, LECTRICE.first_name, LECTRICE.last_name, 'Dieu et', 'Anarchie', 'Bibliothèque B', 'EEB-7']) {
+        expect(e.html, trace).not.toContain(trace);
+        expect(e.text, trace).not.toContain(trace);
+      }
       expect(e.html).not.toMatch(/Relatório|Biblioteca:|Período|Leitor\(a\/e\)|Empréstimo|Devoluções|Compartilhamento|Emprestadora|Fornecedora|Rodapé|Digitalização/);
 
       expect(e.text).toContain(mail.tMailTexte(l, 'layout.footerText'));
       expect(e.text).toContain(mail.tMailTexte(l, 'wr.sum.pendingRequests'));
+      expect(e.text).toContain(mail.tMailTexte(l, 'wr.detail'));
       expect(e.text).not.toMatch(/&#0?39;|&amp;|Rodapé/);
       expect(e.html).not.toMatch(/Devise (globale|réseau)/);
       for (const repli of REPLIS_PT) expect(e.html).not.toContain(repli);
@@ -528,7 +531,8 @@ describe('suite de F26 — le rapport d’une bibliothèque part dans la langue 
       const e = mailA(ef.envois, 'rapport@exemplo.test');
       expect(e.html).toContain('<html lang="pt-BR">');
       expect(e.html).toContain(mail.tMailTexte('pt-BR', 'wr.kicker'));
-      expect(e.html).toContain(jour('2026-11-03', 'pt-BR'));
+      expect(e.html).toContain(jour('2026-10-12', 'pt-BR'));
+      expect(e.html).toContain(mail.tMailTexte('pt-BR', 'wr.cta'));
     }
   });
 });
