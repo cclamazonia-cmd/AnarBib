@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "En constitution",
   "rede.activateEarly": "Activer avant la fin de l'atelier",
   "rede.activateEarlyPrompt": "Pourquoi activer cette bibliothèque avant la fin de son atelier ? Le motif est obligatoire ; il reste attaché à l'atelier. L'atelier restera ouvert pour la coordination.",
-  "rede.activatedEarly": "Bibliothèque activée. Son atelier reste ouvert pour la coordination."
+  "rede.activatedEarly": "Bibliothèque activée. Son atelier reste ouvert pour la coordination.",
+  "auth.loginChallengeRequired": "Trop de tentatives pour ce compte. Fais la vérification anti-robot ci-dessous, puis réessaie."
 }

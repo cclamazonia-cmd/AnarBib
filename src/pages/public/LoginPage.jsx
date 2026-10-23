@@ -16,6 +16,7 @@ import { etapeDoubleFacteur, niveauDuJeton } from '@/lib/doubleFacteur';
 import DoubleFacteurDefi from '@/components/auth/DoubleFacteurDefi';
 import ContaDoubleFacteur from '@/pages/account/ContaDoubleFacteur';
 import { readSessionEndNotice, acknowledgeWhenSeen } from '@/lib/sessionEndNotice';
+import AltchaWidget from '@/components/ui/AltchaWidget';
 
 
 // Paquet 25.6 — destination apres login / force-change.
@@ -48,6 +49,7 @@ function messageRefusLogin(corps, t) {
   switch (corps?.code) {
     case 'LOGIN_INVALID': return t({ id: 'auth.loginInvalid' });
     case 'LOGIN_RATE_LIMITED': return t({ id: 'auth.loginRateLimited' });
+    case 'LOGIN_CHALLENGE_REQUIRED': return t({ id: 'auth.loginChallengeRequired' });
     case 'LOGIN_SERVER_ERROR': return t({ id: 'auth.loginServerError' });
     default: return corps?.error || null;
   }
@@ -114,6 +116,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loginMsg, setLoginMsg] = useState({ text: '', kind: '' });
   const [loginLoading, setLoginLoading] = useState(false);
+  // Défi anti-robots (23/10/2026) : demandé par la fonction `login` seulement
+  // quand ce compte a dépassé cinq essais — au lieu de le fermer une heure.
+  // Une preuve ne sert qu'une fois : le widget repart après chaque envoi.
+  const [defiExige, setDefiExige] = useState(false);
+  const [altchaCharge, setAltchaCharge] = useState('');
+  const [altchaReset, setAltchaReset] = useState(0);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotMsg, setForgotMsg] = useState({ text: '', kind: '' });
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -341,9 +349,13 @@ export default function LoginPage() {
       // l'identifiant + signInWithPassword serveur, puis renvoie la session.
       // Plus d'anti-robots ici depuis le 2026-08-20 (AR-2) : il ne protégeait
       // plus rien et excluait toute personne n'atteignant pas Cloudflare.
+      const charge = defiExige ? altchaCharge : '';
       const { data, error: invokeError } = await supabase.functions.invoke('login', {
-        body: { email, password },
+        body: charge ? { email, password, altcha_payload: charge } : { email, password },
       });
+      // Une preuve envoyée est consommée, qu'elle ait servi ou non : la suivante
+      // se recalcule.
+      if (charge) { setAltchaCharge(''); setAltchaReset((k) => k + 1); }
 
       // Erreur réseau ou erreur côté Edge Function (status 4xx/5xx)
       if (invokeError) {
@@ -353,6 +365,7 @@ export default function LoginPage() {
           const ctx = invokeError.context;
           if (ctx) {
             const body = await ctx.json?.();
+            if (body?.code === 'LOGIN_CHALLENGE_REQUIRED') setDefiExige(true);
             msg = messageRefusLogin(body, t) || msg;
           }
         } catch {}
@@ -700,8 +713,16 @@ export default function LoginPage() {
                   autoComplete="current-password"
                   required
                 />
+                {defiExige && (
+                  <AltchaWidget onSolved={setAltchaCharge} resetKey={altchaReset} />
+                )}
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <Button variant="primary" type="submit" loading={loginLoading}>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    loading={loginLoading}
+                    disabled={defiExige && !altchaCharge}
+                  >
                     {loginLoading ? t({ id: 'auth.loggingIn' }) : t({ id: 'auth.login' })}
                   </Button>
                   <Button

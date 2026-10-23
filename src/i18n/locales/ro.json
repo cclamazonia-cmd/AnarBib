@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "În constituire",
   "rede.activateEarly": "Activează înainte de încheierea atelierului",
   "rede.activateEarlyPrompt": "De ce activezi această bibliotecă înainte de încheierea atelierului ei? Motivul este obligatoriu și rămâne înregistrat la atelier. Atelierul va rămâne deschis pentru coordonare.",
-  "rede.activatedEarly": "Bibliotecă activată. Atelierul ei rămâne deschis pentru coordonare."
+  "rede.activatedEarly": "Bibliotecă activată. Atelierul ei rămâne deschis pentru coordonare.",
+  "auth.loginChallengeRequired": "Prea multe încercări pentru acest cont. Fă verificarea anti-robot de mai jos, apoi încearcă din nou."
 }

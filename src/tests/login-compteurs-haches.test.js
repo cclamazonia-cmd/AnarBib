@@ -27,7 +27,13 @@
 //      une heure ; une connexion réussie REND l'essai à l'IP (fn_compteur_rendre)
 //      et n'efface que le compteur du compte ; l'IP est celle de cf-connecting-ip,
 //      jamais le premier élément de x-forwarded-for ; un numéro de lecteur
-//      inconnu qui a épuisé ses essais répond 429 comme un compte.
+//      inconnu qui a épuisé ses essais répond comme un compte.
+//   6. (23/10/2026) Un compte au-delà de cinq essais n'est plus FERMÉ : chaque
+//      essai doit porter une preuve Altcha valide et neuve (usage « login »,
+//      anti-rejeu par fn_consume_altcha_challenge). Sans elle : 403
+//      LOGIN_CHALLENGE_REQUIRED, aucune tentative. Le frein par IP bloque
+//      toujours (429). `altcha.ts` est bouchonné ici : sa vérification a son
+//      propre banc.
 
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -50,7 +56,13 @@ const IP_FORGEE = '198.51.100.66';
 const EMAIL = 'louise@test.local';
 const HEX = /^[0-9a-f]{64}$/;
 
-function monterEF({ connexion = 'ok', erreurDelete = null, erreurCompteur = null, bloques = [], inconnu = false } = {}) {
+// Preuves Altcha bouchonnées : la charge 'valide' passe la vérification, toute autre échoue.
+const PREUVE_VALIDE = 'valide';
+const verifierSolutionBouchon = async (charge) => (charge === PREUVE_VALIDE
+  ? { ok: true, challenge: 'defi-1', expiresAt: new Date(Date.now() + 600_000) }
+  : { ok: false, motif: 'solution incorrecte' });
+
+function monterEF({ connexion = 'ok', erreurDelete = null, erreurCompteur = null, bloques = [], inconnu = false, rejeu = false } = {}) {
   const clients = [];
   const appels = []; // { client, table, chaine }
   const rpcs = [];   // { client, nom, args }
@@ -81,6 +93,7 @@ function monterEF({ connexion = 'ok', erreurDelete = null, erreurCompteur = null
         if (nom === 'fn_compteur_frapper') {
           return erreurCompteur ? { data: null, error: erreurCompteur } : { data: bloques.includes(args.p_kind), error: null };
         }
+        if (nom === 'fn_consume_altcha_challenge') return { data: !rejeu, error: null };
         return { data: null, error: null };
       },
       auth: {
@@ -107,6 +120,7 @@ function monterEF({ connexion = 'ok', erreurDelete = null, erreurCompteur = null
       return m.exports;
     }
     if (spec.endsWith('deps.ts')) return { createClient: () => fabriquerClient(clients.length) };
+    if (spec.endsWith('altcha.ts')) return { verifierSolution: verifierSolutionBouchon };
     throw new Error(`import inattendu : ${spec}`);
   };
   const mod = { exports: {} };
@@ -172,18 +186,71 @@ describe('login — les essais sont comptés d’avance, d’un seul geste', () 
     expect(r.clients.every((c) => c.auth.appels === 0)).toBe(true);
     expect(frappes(r).map((f) => f.p_kind)).toEqual(['ip']);
   });
-  it('numéro de lecteur inconnu : 401, essai compté sur son empreinte ; épuisé, 429 comme un compte', async () => {
+  it('numéro de lecteur inconnu : 401, essai compté sur son empreinte ; épuisé, le défi comme un compte', async () => {
     const libre = await monterEF({ inconnu: true })({ email: 'L-0042', password: 'x' });
     expect(libre.statut).toBe(401);
     expect(frappes(libre)[1]).toMatchObject({ p_kind: 'email', p_key: cleCompteur('l-0042') });
     const epuise = await monterEF({ inconnu: true, bloques: ['email'] })({ email: 'L-0042', password: 'x' });
-    expect(epuise.statut).toBe(429);
-    expect(epuise.corps.code).toBe('LOGIN_RATE_LIMITED');
-  }, 10_000);
+    expect(epuise.statut).toBe(403);
+    expect(epuise.corps.code).toBe('LOGIN_CHALLENGE_REQUIRED');
+    const avecPreuve = await monterEF({ inconnu: true, bloques: ['email'] })({ email: 'L-0042', password: 'x', altcha_payload: PREUVE_VALIDE });
+    expect(avecPreuve.statut).toBe(401);
+    expect(avecPreuve.corps.code).toBe('LOGIN_INVALID');
+  }, 15_000);
   it('l’IP comptée est celle de cf-connecting-ip, jamais le premier élément de x-forwarded-for', async () => {
     const r = await monterEF()({ email: EMAIL, password: 'secret' });
     expect(frappes(r)[0].p_key).toBe(cleCompteur(IP));
     expect(clesTouchees(r)).not.toContain(cleCompteur(IP_FORGEE));
+  });
+});
+
+describe('login — un tiers ne ferme plus un compte : le défi Altcha au-delà du plafond', () => {
+  const consommations = (r) => r.rpcs.filter((x) => x.nom === 'fn_consume_altcha_challenge').map((x) => x.args);
+
+  it('compte au plafond, sans preuve : 403 LOGIN_CHALLENGE_REQUIRED, aucune tentative', async () => {
+    const r = await monterEF({ bloques: ['email'] })({ email: EMAIL, password: 'secret' });
+    expect(r.statut).toBe(403);
+    expect(r.corps.code).toBe('LOGIN_CHALLENGE_REQUIRED');
+    expect(r.clients.every((c) => c.auth.appels === 0)).toBe(true);
+    expect(consommations(r)).toEqual([]);
+  }, 10_000);
+
+  it('compte au plafond, preuve fausse : 403, rien de consommé, aucune tentative', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const r = await monterEF({ bloques: ['email'] })({ email: EMAIL, password: 'secret', altcha_payload: 'forgee' });
+      expect(r.statut).toBe(403);
+      expect(consommations(r)).toEqual([]);
+      expect(r.clients.every((c) => c.auth.appels === 0)).toBe(true);
+    } finally { warn.mockRestore(); }
+  }, 10_000);
+
+  it('compte au plafond, preuve valide et neuve : la personne se connecte, le défi est consommé pour « login »', async () => {
+    const r = await monterEF({ bloques: ['email'] })({ email: EMAIL, password: 'secret', altcha_payload: PREUVE_VALIDE });
+    expect(r.statut).toBe(200);
+    expect(r.corps.session.access_token).toBe('jeton-es256');
+    expect(consommations(r)).toEqual([{ p_challenge: 'defi-1', p_expires_at: expect.any(String), p_purpose: 'login' }]);
+  });
+
+  it('compte au plafond, preuve déjà servie (rejeu) : 403, aucune tentative', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const r = await monterEF({ bloques: ['email'], rejeu: true })({ email: EMAIL, password: 'secret', altcha_payload: PREUVE_VALIDE });
+      expect(r.statut).toBe(403);
+      expect(r.clients.every((c) => c.auth.appels === 0)).toBe(true);
+    } finally { warn.mockRestore(); }
+  }, 10_000);
+
+  it('sous le plafond, une preuve n’est ni exigée ni consommée', async () => {
+    const r = await monterEF()({ email: EMAIL, password: 'secret', altcha_payload: PREUVE_VALIDE });
+    expect(r.statut).toBe(200);
+    expect(consommations(r)).toEqual([]);
+  });
+
+  it('IP bloquée : toujours 429, preuve ou pas', async () => {
+    const r = await monterEF({ bloques: ['ip', 'email'] })({ email: EMAIL, password: 'secret', altcha_payload: PREUVE_VALIDE });
+    expect(r.statut).toBe(429);
+    expect(r.corps.code).toBe('LOGIN_RATE_LIMITED');
   });
 });
 
@@ -234,6 +301,7 @@ describe('login — chaque refus porte un code que l’écran traduit', () => {
     ['identifiant vide', {}, { email: '', password: '' }, 400, 'LOGIN_INVALID'],
     ['mot de passe faux', { connexion: 'echec' }, { email: EMAIL, password: 'faux' }, 401, 'LOGIN_INVALID'],
     ['compteur bloqué', { bloques: ['ip', 'email'] }, { email: EMAIL, password: 'secret' }, 429, 'LOGIN_RATE_LIMITED'],
+    ['compte au plafond sans preuve', { bloques: ['email'] }, { email: EMAIL, password: 'secret' }, 403, 'LOGIN_CHALLENGE_REQUIRED'],
     ['compteur indisponible', { erreurCompteur: { code: '57P01', message: 'terminating connection' } },
       { email: EMAIL, password: 'secret' }, 500, 'LOGIN_SERVER_ERROR'],
   ];
@@ -257,7 +325,7 @@ describe('login — chaque refus porte un code que l’écran traduit', () => {
     const ecran = readFileSync(new URL('../pages/public/LoginPage.jsx', import.meta.url), 'utf8');
     const emis = [...ef.matchAll(/code:\s*"(LOGIN_[A-Z_]+)"/g)].map((m) => m[1]).sort();
     const traduits = [...ecran.matchAll(/case '(LOGIN_[A-Z_]+)':\s*return t\(\{ id: '([\w.]+)' \}\)/g)];
-    expect(emis).toEqual(['LOGIN_INVALID', 'LOGIN_RATE_LIMITED', 'LOGIN_SERVER_ERROR']);
+    expect(emis).toEqual(['LOGIN_CHALLENGE_REQUIRED', 'LOGIN_INVALID', 'LOGIN_RATE_LIMITED', 'LOGIN_SERVER_ERROR']);
     expect(traduits.map((m) => m[1]).sort()).toEqual(emis);
     for (const l of LOCALE_CODES) {
       const loc = JSON.parse(readFileSync(new URL(`../i18n/locales/${l}.json`, import.meta.url), 'utf8'));

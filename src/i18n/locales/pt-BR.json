@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "Em constituição",
   "rede.activateEarly": "Ativar antes do fim da oficina",
   "rede.activateEarlyPrompt": "Por que ativar esta biblioteca antes do fim da oficina? O motivo é obrigatório e fica registrado na oficina. A oficina continuará aberta para a coordenação.",
-  "rede.activatedEarly": "Biblioteca ativada. A oficina continua aberta para a coordenação."
+  "rede.activatedEarly": "Biblioteca ativada. A oficina continua aberta para a coordenação.",
+  "auth.loginChallengeRequired": "Muitas tentativas para esta conta. Faça a verificação anti-robô abaixo e tente novamente."
 }

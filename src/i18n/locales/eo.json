@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "En konstituiĝo",
   "rede.activateEarly": "Aktivigi antaŭ la fino de la metiejo",
   "rede.activateEarlyPrompt": "Kial aktivigi ĉi tiun bibliotekon antaŭ la fino de ĝia metiejo? La motivo estas deviga kaj restas registrita ĉe la metiejo. La metiejo restos malfermita por la kunordigo.",
-  "rede.activatedEarly": "Biblioteko aktivigita. Ĝia metiejo restas malfermita por la kunordigo."
+  "rede.activatedEarly": "Biblioteko aktivigita. Ĝia metiejo restas malfermita por la kunordigo.",
+  "auth.loginChallengeRequired": "Tro da provoj por ĉi tiu konto. Faru la kontrolon kontraŭ robotoj ĉi-sube, poste reprovu."
 }

@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "In oprichting",
   "rede.activateEarly": "Activeren voordat het atelier af is",
   "rede.activateEarlyPrompt": "Waarom deze bibliotheek activeren voordat haar atelier af is? Een reden is verplicht en blijft bij het atelier bewaard. Het atelier blijft open voor de coördinatie.",
-  "rede.activatedEarly": "Bibliotheek geactiveerd. Het atelier blijft open voor de coördinatie."
+  "rede.activatedEarly": "Bibliotheek geactiveerd. Het atelier blijft open voor de coördinatie.",
+  "auth.loginChallengeRequired": "Te veel pogingen voor dit account. Doe hieronder de anti-botcontrole en probeer het dan opnieuw."
 }

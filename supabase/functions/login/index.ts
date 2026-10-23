@@ -9,9 +9,22 @@
 //
 // Stratégie de rate limit :
 //   - IP    : 10 essais / 15 min → blocage 1h
-//   - Email : 5  essais / 30 min → blocage 1h
+//   - Email : 5  essais / 30 min → pendant 1h, chaque essai exige une preuve
+//     Altcha (plus de blocage, cf. point 5 du 23/10/2026 ci-dessous)
 //   - Login réussi → l'essai est rendu au compteur d'IP, le compteur du compte
 //     est remis à zéro (suppression de la ligne)
+//
+// 23/10/2026 — un tiers ne peut plus fermer un compte. Le blocage d'une heure
+// par adresse se déclenchait d'où que viennent les essais : cinq mots de passe
+// faux tapés par n'importe qui sur le courriel d'une personne l'empêchaient de
+// se connecter pendant une heure. Désormais, au-delà du plafond, l'adresse
+// n'est plus fermée : chaque essai doit porter une preuve de travail Altcha
+// (auto-hébergée, sans appel sortant), valide et jamais servie (anti-rejeu par
+// fn_consume_altcha_challenge, usage « login »). La personne légitime résout le
+// défi en quelques secondes et se connecte ; une attaque paie chaque essai. Le
+// frein par IP, lui, bloque toujours. Une connexion normale ne voit jamais le
+// défi : AR-2 (pas d'anti-robots à la connexion) tient pour tout le monde, sauf
+// pour une adresse déjà visée. Décision de Xavier, REGISTRE AR-2.
 //
 // B25 (16/09/2026) — deux règles apprises à quatre mois de 403 silencieux :
 //   - La clé des compteurs est une EMPREINTE (cleDeCompteur : HMAC à clé
@@ -42,6 +55,7 @@
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { cleDeCompteur, frapper, rendre } from "../_shared/core/rate-limit.ts";
 import { ipClient } from "../_shared/core/ip-client.ts";
+import { verifierSolution } from "../_shared/altcha.ts";
 import { createClient } from '../_shared/deps.ts';
 
 // ─── Configuration ──────────────────────────────────────────
@@ -68,6 +82,10 @@ const RATE_LIMIT_EMAIL = {
 const GENERIC_LOGIN_ERROR = { code: "LOGIN_INVALID",      error: "E-mail, ID public ou mot de passe incorrect." };
 const RATE_LIMITED_ERROR  = { code: "LOGIN_RATE_LIMITED", error: "Trop de tentatives. Réessaie dans une heure." };
 const SERVER_ERROR        = { code: "LOGIN_SERVER_ERROR", error: "Erreur serveur. Réessaie dans un instant." };
+// Trop d'essais pour ce compte : la vérification anti-robots est exigée. Même
+// réponse pour un numéro de lecteur inconnu (il a son propre compteur) : ce code
+// ne dit pas plus que LOGIN_INVALID si le compte existe.
+const CHALLENGE_REQUIRED  = { code: "LOGIN_CHALLENGE_REQUIRED", error: "Trop d'essais pour ce compte : fais la vérification anti-robots, puis réessaie." };
 
 // ─── CORS ──────────────────────────────────────────────────
 
@@ -136,6 +154,35 @@ async function apresSucces(
   }
 }
 
+/**
+ * Une preuve Altcha valide ET jamais servie (usage « login »). Toute autre issue
+ * — pas de charge, solution fausse, défi périmé ou rejoué, magasin indisponible —
+ * vaut refus : c'est le compte visé qu'on protège, on ne laisse pas passer sur
+ * un doute.
+ */
+async function preuveAcceptee(
+  supabase: ReturnType<typeof createClient>,
+  charge: string,
+): Promise<boolean> {
+  if (!charge) return false;
+  const preuve = await verifierSolution(charge);
+  if (!preuve.ok) {
+    console.warn("login: preuve de travail refusée —", preuve.motif);
+    return false;
+  }
+  const { data, error } = await supabase.rpc("fn_consume_altcha_challenge", {
+    p_challenge: preuve.challenge,
+    p_expires_at: preuve.expiresAt?.toISOString(),
+    p_purpose: "login",
+  });
+  if (error) {
+    console.error("login: consommation du défi impossible —", error.message ?? error);
+    return false;
+  }
+  if (data !== true) console.warn("login: défi déjà consommé (rejeu)");
+  return data === true;
+}
+
 // ─── Plancher de durée (AR-1, 2026-08-20) ──────────────────
 // Sans lui, `login` est un oracle temporel : un numéro de lecteur INCONNU
 // renvoie tout de suite (une frappe de compteur), tandis qu'un numéro CONNU avec un
@@ -179,6 +226,8 @@ Deno.serve(async (req: Request) => {
     // résolution se fait ici, plus côté client (cf. bloc « résolution » plus bas).
     const identifier = String(body?.email || "").trim();
     const password = String(body?.password || "");
+    // Preuve Altcha : présente seulement quand l'écran l'a demandée (compte au-delà du plafond).
+    const altchaCharge = String(body?.altcha_payload || "");
     const ip = ipClient(req);
 
     // Validation basique des inputs
@@ -236,6 +285,8 @@ Deno.serve(async (req: Request) => {
     //
     // Ce qui borne un attaquant ici, c'est le rate limit : 10 essais par IP,
     // 5 par compte. Cf. docs/journal/arbitrages/DECISION_anti_robots_2026-08-20.
+    // Depuis le 23/10/2026, au-delà de 5 essais pour un compte, la preuve Altcha
+    // remplace le blocage (voir l'en-tête) : seule une adresse déjà visée la voit.
 
     // ─── Résolution numéro de lecteur -> e-mail ────────────────
     // resolve_login_email est SECURITY DEFINER et n'est exécutable ni par anon
@@ -255,20 +306,23 @@ Deno.serve(async (req: Request) => {
       const found = Array.isArray(resolved) ? resolved[0]?.email : null;
       if (!found) {
         // Identifiant inconnu : même réponse et même comptage qu'un mot de passe
-        // faux, pour ne pas révéler l'existence d'un numéro de lecteur — 429
-        // compris, quand ce numéro a épuisé ses essais comme le ferait un compte.
-        const refuse = await essaiRefuse(supabase, "email", await cleDeCompteur(email), RATE_LIMIT_EMAIL);
+        // faux, pour ne pas révéler l'existence d'un numéro de lecteur — défi
+        // exigé compris, quand ce numéro a épuisé ses essais comme un compte.
+        const auPlafond = await essaiRefuse(supabase, "email", await cleDeCompteur(email), RATE_LIMIT_EMAIL);
+        const defiManquant = auPlafond && !(await preuveAcceptee(supabase, altchaCharge));
         await plancher(t0);
-        return refuse ? jsonResponse(RATE_LIMITED_ERROR, 429) : jsonResponse(GENERIC_LOGIN_ERROR, 401);
+        return defiManquant ? jsonResponse(CHALLENGE_REQUIRED, 403) : jsonResponse(GENERIC_LOGIN_ERROR, 401);
       }
       email = String(found).trim().toLowerCase();
     }
     const emailKey = await cleDeCompteur(email);
 
-    // ─── Rate limit par e-mail (après résolution), essai compté d'avance ──
-    if (await essaiRefuse(supabase, "email", emailKey, RATE_LIMIT_EMAIL)) {
+    // ─── Plafond par e-mail (après résolution), essai compté d'avance ──
+    // Au-delà, le compte n'est pas fermé : l'essai doit porter une preuve Altcha.
+    if (await essaiRefuse(supabase, "email", emailKey, RATE_LIMIT_EMAIL)
+        && !(await preuveAcceptee(supabase, altchaCharge))) {
       await plancher(t0);
-      return jsonResponse(RATE_LIMITED_ERROR, 429);
+      return jsonResponse(CHALLENGE_REQUIRED, 403);
     }
 
     // ─── Tentative de login — sur le client à part ─────────────

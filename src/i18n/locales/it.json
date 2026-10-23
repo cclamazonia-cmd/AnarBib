@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "In costituzione",
   "rede.activateEarly": "Attiva prima della fine del laboratorio",
   "rede.activateEarlyPrompt": "Perché attivare questa biblioteca prima della fine del suo laboratorio? Il motivo è obbligatorio e resta registrato nel laboratorio. Il laboratorio resterà aperto per la coordinazione.",
-  "rede.activatedEarly": "Biblioteca attivata. Il suo laboratorio resta aperto per la coordinazione."
+  "rede.activatedEarly": "Biblioteca attivata. Il suo laboratorio resta aperto per la coordinazione.",
+  "auth.loginChallengeRequired": "Troppi tentativi per questo account. Fai la verifica anti-bot qui sotto, poi riprova."
 }

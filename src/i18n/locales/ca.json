@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "En constitució",
   "rede.activateEarly": "Activar abans que acabi el taller",
   "rede.activateEarlyPrompt": "Per què activar aquesta biblioteca abans que acabi el seu taller? El motiu és obligatori i queda registrat al taller. El taller continuarà obert per a la coordinació.",
-  "rede.activatedEarly": "Biblioteca activada. El seu taller continua obert per a la coordinació."
+  "rede.activatedEarly": "Biblioteca activada. El seu taller continua obert per a la coordinació.",
+  "auth.loginChallengeRequired": "Massa intents per a aquest compte. Fes la verificació antirobot d’aquí sota i torna-ho a provar."
 }

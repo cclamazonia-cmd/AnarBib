@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "En constitución",
   "rede.activateEarly": "Activar antes de que termine el taller",
   "rede.activateEarlyPrompt": "¿Por qué activar esta biblioteca antes de que termine su taller? El motivo es obligatorio y queda registrado en el taller. El taller seguirá abierto para la coordinación.",
-  "rede.activatedEarly": "Biblioteca activada. Su taller sigue abierto para la coordinación."
+  "rede.activatedEarly": "Biblioteca activada. Su taller sigue abierto para la coordinación.",
+  "auth.loginChallengeRequired": "Demasiados intentos para esta cuenta. Haz la verificación antirrobot de abajo y vuelve a intentarlo."
 }

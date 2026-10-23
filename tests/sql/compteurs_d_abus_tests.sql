@@ -12,6 +12,7 @@
 -- T10 anon et authenticated n'exécutent ni l'une ni l'autre, service_role oui ;
 -- T11 une limite ou une fenêtre hors bornes lève 22023 ;
 -- T12 l'usage Altcha « gazette » est admis.
+-- T13 l'usage Altcha « login » est admis (23/10/2026), sans rejeu ni défi périmé.
 -- Rien n'est écrit : ROLLBACK par convention.
 BEGIN;
 
@@ -157,7 +158,20 @@ BEGIN
   END IF;
   v_ok := v_ok + 1; RAISE NOTICE 'TEST 12 OK — usage Altcha gazette admis, sans rejeu.';
 
-  RAISE NOTICE 'COMPTEURS D''ABUS OK : %/12', v_ok;
+  -- T13 (23/10/2026, migration 20261023162535) : l'usage « login », pour le
+  -- défi qui remplace le blocage d'un compte au-delà de cinq essais.
+  IF NOT public.fn_consume_altcha_challenge(repeat('8', 64), now() + interval '10 minutes', 'login') THEN
+    RAISE EXCEPTION 'TEST 13 ÉCHOUÉ : un défi neuf pour la connexion est refusé';
+  END IF;
+  IF public.fn_consume_altcha_challenge(repeat('8', 64), now() + interval '10 minutes', 'login') THEN
+    RAISE EXCEPTION 'TEST 13 ÉCHOUÉ : un défi de la connexion se rejoue';
+  END IF;
+  IF public.fn_consume_altcha_challenge(repeat('7', 64), now() - interval '1 minute', 'login') THEN
+    RAISE EXCEPTION 'TEST 13 ÉCHOUÉ : un défi de connexion périmé est accepté';
+  END IF;
+  v_ok := v_ok + 1; RAISE NOTICE 'TEST 13 OK — usage Altcha login admis, sans rejeu ni défi périmé.';
+
+  RAISE NOTICE 'COMPTEURS D''ABUS OK : %/13', v_ok;
 END
 $$;
 

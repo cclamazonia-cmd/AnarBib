@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "In constitution",
   "rede.activateEarly": "Activate before the workshop ends",
   "rede.activateEarlyPrompt": "Why activate this library before its workshop is finished? A reason is required; it stays recorded on the workshop. The workshop will remain open for the coordination.",
-  "rede.activatedEarly": "Library activated. Its workshop stays open for the coordination."
+  "rede.activatedEarly": "Library activated. Its workshop stays open for the coordination.",
+  "auth.loginChallengeRequired": "Too many attempts for this account. Complete the anti-bot check below, then try again."
 }

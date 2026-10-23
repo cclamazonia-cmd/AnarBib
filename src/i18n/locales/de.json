@@ -7798,5 +7798,6 @@
   "rede.libraryInConstitution": "In Gründung",
   "rede.activateEarly": "Vor Ende der Werkstatt aktivieren",
   "rede.activateEarlyPrompt": "Warum diese Bibliothek vor dem Ende ihrer Werkstatt aktivieren? Die Begründung ist Pflicht und bleibt an der Werkstatt vermerkt. Die Werkstatt bleibt für die Koordination offen.",
-  "rede.activatedEarly": "Bibliothek aktiviert. Ihre Werkstatt bleibt für die Koordination offen."
+  "rede.activatedEarly": "Bibliothek aktiviert. Ihre Werkstatt bleibt für die Koordination offen.",
+  "auth.loginChallengeRequired": "Zu viele Versuche für dieses Konto. Mach unten die Anti-Bot-Prüfung und versuche es dann erneut."
 }
