@@ -47,9 +47,10 @@ const css = lire('pages/account/AccountPage.css');
 // ContaDepot, ContaSuppression) : on relit l'onglet en remettant à la place de
 // chaque élément le JSX que rend son fichier, pour que les contrats ci-dessous
 // portent sur le même texte qu'avant le découpage.
-const debut = page.indexOf("activeTab === 'perfil' && profile");
-const fin = page.indexOf("activeTab === 'reservar'", debut);
-const ongletBrut = page.slice(debut, fin);
+// Depuis le 23/10/2026 (E6), l'onglet entier vit dans TabPerfil.jsx, que la
+// page monte : on le lit de son `return (` jusqu'au formulaire d'adresse.
+const perfil = lire('pages/account/TabPerfil.jsx');
+const ongletBrut = perfil.slice(perfil.indexOf('return ('), perfil.indexOf("// Formulaire d'adresse international"));
 const montes = [...ongletBrut.matchAll(/<(Conta[A-Z]\w*)\b[\s\S]*?\/>/g)];
 const sources = Object.fromEntries(montes.map(([, nom]) => {
   const src = lire(`pages/account/${nom}.jsx`);
@@ -59,8 +60,8 @@ const onglet = montes.reduce((txt, [element, nom]) => txt.replace(element, sourc
 
 describe('Mon compte, « Données personnelles » — les décisions sous le profil (E19)', () => {
   it("l'onglet se laisse découper", () => {
-    expect(debut).toBeGreaterThan(-1);
-    expect(fin).toBeGreaterThan(debut);
+    expect(page).toMatch(/\{activeTab === 'perfil' && profile && \(\s*<TabPerfil /);
+    expect(ongletBrut.length).toBeGreaterThan(2000);
     // chaque bloc sorti est monté une fois dans l'onglet, et son source se retrouve
     for (const nom of ['ContaDecisions', 'ContaMotDePasse', 'ContaCotisation', 'ContaDepot', 'ContaSuppression']) {
       expect(ongletBrut.match(new RegExp(`<${nom}\\b`, 'g'))?.length ?? 0, nom).toBe(1);

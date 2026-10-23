@@ -41,7 +41,9 @@ describe('le catalogue dit quand ses résultats sont approchés', () => {
 });
 
 describe('le formulaire d\'autorité', () => {
-  const src = lire('src/pages/catalogacao/AuthorDraftForm.jsx');
+  // Les champs de biographie par langue vivent dans AuthorBioTranslations.jsx
+  // depuis le 23/10/2026 (E6) ; on lit le formulaire et son panneau ensemble.
+  const src = lire('src/pages/catalogacao/AuthorDraftForm.jsx') + '\n' + lire('src/pages/catalogacao/AuthorBioTranslations.jsx');
 
   it('n\'a plus de liste de brouillons récents ni de bouton pour la rafraîchir', () => {
     expect(src).not.toContain('loadDrafts');

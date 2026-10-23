@@ -8,6 +8,9 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { useSaveConfirmation } from '@/hooks/useSaveConfirmation';
 import CatalogStatusBar from '@/components/catalog/CatalogStatusBar';
 import AfterPublishPanel from './AfterPublishPanel';
+import AuthorBioTranslations, { BIO_TITLE_KEYS, ALLOWED_BIO_LANGS } from './AuthorBioTranslations';
+import AuthorBookLinksPanel from './AuthorBookLinksPanel';
+import AuthorDuplicatesPanel from './AuthorDuplicatesPanel';
 import { useUntouchedRetake } from '@/hooks/useUntouchedRetake';
 import { useStaffLibraries, lotsProposables, libelleLot } from '@/lib/useStaffLibraries';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
@@ -17,7 +20,6 @@ import NameEntryAssist from '@/components/catalog/NameEntryAssist';
 import { proposerPointAcces } from '@/lib/nameEntry';
 import { languageOptions } from '@/lib/languages';
 import { fichierSansMetadonnees } from '@/lib/imageMetadata';
-import { LOCALE_CODES } from '@/i18n/locales';
 
 // ── Authority types ───────────────────────────────────────
 const AUTHORITY_TYPE_KEYS = {
@@ -29,17 +31,8 @@ const AUTHORITY_TYPE_KEYS = {
 };
 const AUTHORITY_TYPE_VALUES = ['person', 'collective', 'publisher_series', 'place_campaign_theme', 'other'];
 
-// Locales du widget bio multilingue (= CHECK author_translations.lang).
-const ALLOWED_BIO_LANGS = LOCALE_CODES;
-// Titre de chaque champ (11/10/2026) : « Biographie en français », etc. —
-// les dix champs par langue SONT la biographie ; plus de champ général au-dessus
-// une fois l'autorité publiée.
-export const BIO_TITLE_KEYS = {
-  'pt-BR': 'catalogacao.bio.titleIn.ptBR', fr: 'catalogacao.bio.titleIn.fr', es: 'catalogacao.bio.titleIn.es',
-  en: 'catalogacao.bio.titleIn.en', it: 'catalogacao.bio.titleIn.it', de: 'catalogacao.bio.titleIn.de',
-  ca: 'catalogacao.bio.titleIn.ca', eo: 'catalogacao.bio.titleIn.eo', nl: 'catalogacao.bio.titleIn.nl',
-  el: 'catalogacao.bio.titleIn.el', ro: 'catalogacao.bio.titleIn.ro',
-};
+// Titres et locales de la biographie : avec leur panneau (E6, 23/10/2026).
+export { BIO_TITLE_KEYS, ALLOWED_BIO_LANGS } from './AuthorBioTranslations';
 
 const SOURCE_KIND_KEYS = {
   '': 'catalogacao.author.sourceKind.select',
@@ -111,16 +104,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [cropState, setCropState] = useState(null);
   const [bioTranslations, setBioTranslations] = useState([]);
   const [bioDirty, setBioDirty] = useState(new Set()); // langues éditées (à upserter en status=draft)
-  const [bioReviewBusy, setBioReviewBusy] = useState(null); // lang en cours de bascule de revue
-  // Rattachement aux oeuvres (liaison autorite<->livres)
-  const [linkMatches, setLinkMatches] = useState(null); // null = pas cherche ; [] = cherche, vide
-  const [linkLoading, setLinkLoading] = useState(false);
-  const [linkSelected, setLinkSelected] = useState(new Set());
-  const [linkBusy, setLinkBusy] = useState(false);
-  // Doublons d'autorite
-  const [dupMatches, setDupMatches] = useState(null); // null = pas cherche
-  const [dupLoading, setDupLoading] = useState(false);
-  const [dupBusy, setDupBusy] = useState(null); // author_id en cours de fusion
   // Recherche d'autorite externe (Wikidata → VIAF/ISNI/variant_forms)
   const [authLookupResults, setAuthLookupResults] = useState(null);
   const [authLookupLoading, setAuthLookupLoading] = useState(false);
@@ -474,121 +457,6 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setPublishing(false); }
-  }
-
-  // Recharge les traductions bio (après save ou bascule de revue).
-  async function reloadBioTranslations() {
-    const authorId = f('published_author_id');
-    if (!authorId) return;
-    const { data } = await supabase.from('author_translations')
-      .select('lang, biography, author_id, status, reviewed_at').eq('author_id', Number(authorId));
-    if (data) setBioTranslations(data);
-    setBioDirty(new Set());
-  }
-
-  // Bascule le statut de revue d'une traduction (RPC staff).
-  async function toggleBioReview(lang, toReviewed) {
-    const authorId = f('published_author_id');
-    if (!authorId) return;
-    setBioReviewBusy(lang);
-    try {
-      const { error } = await supabase.rpc('set_author_translation_review', {
-        p_author_id: Number(authorId), p_lang: lang, p_reviewed: toReviewed,
-      });
-      if (error) throw error;
-      await reloadBioTranslations();
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setBioReviewBusy(null); }
-  }
-
-  // Note : la reprise d'un auteur publie (create_author_draft_from_author) est
-  // pilotee par CatalogPanel.retakeItem -> onEdit('author', draftId) -> openForEdit.
-  // Pas de duplication ici.
-
-  // ── Rattachement aux oeuvres (liaison autorite<->livres) ────────────────
-  async function findAuthorBookMatches() {
-    const authorId = f('published_author_id');
-    if (!authorId) return;
-    setLinkLoading(true); setLinkSelected(new Set());
-    try {
-      const { data, error } = await supabase.rpc('suggest_author_book_matches', { p_author_id: Number(authorId) });
-      if (error) throw error;
-      setLinkMatches(data || []);
-      // Pre-cocher les correspondances exactes (validation humaine = un clic global).
-      setLinkSelected(new Set((data || []).filter(m => m.match_kind === 'exact').map(m => m.contributor_id)));
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setLinkLoading(false); }
-  }
-
-  async function confirmAuthorLinks() {
-    const authorId = f('published_author_id');
-    if (!authorId || linkSelected.size === 0) return;
-    setLinkBusy(true);
-    let ok = 0;
-    try {
-      for (const cid of linkSelected) {
-        const { error } = await supabase.rpc('confirm_author_book_link', {
-          p_author_id: Number(authorId), p_contributor_id: Number(cid),
-        });
-        if (!error) ok++;
-      }
-      setMsg({ text: t({ id: 'catalogacao.link.confirmed' }, { count: ok }), kind: 'ok' });
-      await findAuthorBookMatches(); // rafraichir (les rattaches disparaissent de la liste)
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setLinkBusy(false); }
-  }
-
-  // ── Doublons d'autorite : detection + fusion ────────────────────────────
-  async function findAuthorDuplicates() {
-    const authorId = f('published_author_id');
-    if (!authorId) return;
-    setDupLoading(true); setDupMatches(null);
-    try {
-      const { data, error } = await supabase.rpc('suggest_author_duplicates', { p_author_id: Number(authorId) });
-      if (error) throw error;
-      setDupMatches(data || []);
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setDupLoading(false); }
-  }
-
-  // Fusionne le doublon `dupId` DANS l'autorite courante (= canonique).
-  async function mergeDuplicateIntoCurrent(dupId, dupName) {
-    const canonicalId = f('published_author_id');
-    if (!canonicalId) return;
-    if (!(await confirmer({ message: t({ id: 'catalogacao.dedup.confirm' }, { dup: dupName, canonical: f('preferred_name') }), confirmLabel: t({ id: 'confirm.action.merge' }), tone: 'danger' }))) return;
-    setDupBusy(dupId);
-    try {
-      const { error } = await supabase.rpc('merge_author', {
-        p_canonical_id: Number(canonicalId), p_duplicate_id: Number(dupId),
-      });
-      if (error) throw error;
-      setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupName }), kind: 'ok' });
-      await findAuthorDuplicates(); // rafraichir
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setDupBusy(null); }
-  }
-
-  // DOUBLONS P8 : ce qu'on rend au staff en echange de merge_author, qui lui a
-  // ete retire au paquet P4. Sans ce bouton, une bibliothecaire voyait la liste
-  // des doublons probables et n'avait aucun moyen de transmettre ce qu'elle sait.
-  async function reportAuthorityPair(dupId) {
-    const courant = f('published_author_id');
-    if (!courant) return;
-    setDupBusy(dupId);
-    try {
-      const { error } = await supabase.rpc('report_authority_pair', {
-        p_a: Number(courant), p_b: Number(dupId), p_note: null,
-      });
-      if (error) throw error;
-      setMsg({ text: t({ id: 'catalogacao.dedup.reported' }), kind: 'ok' });
-    } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setDupBusy(null); }
   }
 
   // ── State pill ──────────────────────────────────────────
@@ -967,169 +835,15 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               : t({ id: BIO_TITLE_KEYS[ALLOWED_BIO_LANGS.includes(locale) ? locale : 'pt-BR'] }),
             { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.bioPlaceholder'}) })}
 
-          {/* ── Biography translations widget (auteur publie uniquement) ─── */}
-          {/* Cle sur published_author_id : jamais l'id de brouillon (collision
-              avec les id d'auteurs reels). Editable seulement apres publication. */}
-          {!f('published_author_id') && (
-            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', fontStyle: 'italic' }}>
-                {t({id:'catalogacao.bio.translationsAfterPublish'})}
-              </div>
-            </div>
-          )}
-          {f('published_author_id') && (
-            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 8 }}>
-                  {ALLOWED_BIO_LANGS.map(lang => {
-                    const existing = bioTranslations.find(bt => bt.lang === lang);
-                    const isDirty = bioDirty.has(lang);
-                    const filled = !!existing?.biography?.trim();
-                    const reviewed = existing?.status === 'reviewed' && !isDirty;
-                    return (
-                      <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 6, flexWrap: 'wrap' }}>
-                          <label htmlFor={`bio-${lang}`} style={{ fontWeight: 700, fontSize: '.82rem' }}>{t({ id: BIO_TITLE_KEYS[lang] })}</label>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                            {isDirty ? (
-                              <span style={{ fontSize: '.66rem', color: '#fbbf24' }}>{t({id:'catalogacao.bio.statusModified'})}</span>
-                            ) : reviewed ? (
-                              <span style={{ fontSize: '.66rem', color: '#4ade80' }}>✓ {t({id:'catalogacao.bio.statusReviewed'})}</span>
-                            ) : filled ? (
-                              <span style={{ fontSize: '.66rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.bio.statusDraft'})}</span>
-                            ) : null}
-                            {filled && !isDirty && (
-                              <button type="button" disabled={bioReviewBusy === lang}
-                                onClick={() => toggleBioReview(lang, !reviewed)}
-                                style={{ background: 'none', border: '1px solid rgba(255,255,255,.15)', borderRadius: 5, color: 'var(--brand-muted, #aaa)', cursor: 'pointer', fontSize: '.62rem', padding: '2px 6px' }}
-                                title={reviewed ? t({id:'catalogacao.bio.markDraft'}) : t({id:'catalogacao.bio.markReviewed'})}>
-                                {bioReviewBusy === lang ? '…' : (reviewed ? '↺' : '✓')}
-                              </button>
-                            )}
-                          </span>
-                        </div>
-                        <textarea
-                          id={`bio-${lang}`}
-                          lang={lang}
-                          rows={3}
-                          style={{ width: '100%', fontSize: '.82rem', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.1)', background: 'rgba(0,0,0,.2)', color: '#f4f4f4', resize: 'vertical' }}
-                          value={existing?.biography || ''}
-                          placeholder={t({id:'catalogacao.bio.placeholder'}, {lang})}
-                          onChange={e => {
-                            const val = e.target.value;
-                            setBioDirty(prev => new Set(prev).add(lang));
-                            setBioTranslations(prev => {
-                              const copy = prev.filter(bt => bt.lang !== lang);
-                              copy.push({ ...(existing || {}), lang, biography: val, author_id: Number(f('published_author_id')) });
-                              return copy;
-                            });
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ marginTop: 8 }} disabled={bioDirty.size === 0} onClick={async () => {
-                  try {
-                    for (const lang of bioDirty) {
-                      const bt = bioTranslations.find(x => x.lang === lang);
-                      const bio = bt?.biography?.trim();
-                      if (!bio) continue;
-                      // Une édition (re)pose status=draft : une bio modifiée doit être re-revue (§3.1).
-                      await supabase.from('author_translations').upsert({
-                        author_id: Number(f('published_author_id')), lang, biography: bio,
-                        status: 'draft', reviewed_by: null, reviewed_at: null,
-                        updated_by: user?.id || null, updated_at: new Date().toISOString(),
-                      }, { onConflict: 'author_id,lang' });
-                    }
-                    await reloadBioTranslations();
-                    confirmSaved(t({id:'common.dataSaved'}));
-                  } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
-                }}>{t({id:'catalogacao.bio.save'})}</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── Rattacher aux oeuvres (liaison autorite<->livres) ─────── */}
-          {f('published_author_id') && (
-            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
-                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.link.title' })}</span>
-                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                  onClick={findAuthorBookMatches} disabled={linkLoading}>
-                  {linkLoading ? t({ id: 'catalogacao.link.finding' }) : t({ id: 'catalogacao.link.find' })}
-                </button>
-              </div>
-              {linkMatches !== null && linkMatches.length === 0 && (
-                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.link.none' })}</div>
-              )}
-              {linkMatches !== null && linkMatches.length > 0 && (
-                <>
-                  <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden', maxHeight: 280, overflowY: 'auto' }}>
-                    {linkMatches.map(m => {
-                      const sel = linkSelected.has(m.contributor_id);
-                      return (
-                        <label key={m.contributor_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: sel ? 'rgba(29,78,216,.1)' : 'transparent' }}>
-                          <input type="checkbox" checked={sel} onChange={() => setLinkSelected(prev => { const n = new Set(prev); n.has(m.contributor_id) ? n.delete(m.contributor_id) : n.add(m.contributor_id); return n; })} />
-                          <span style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{m.book_title}</span>
-                          <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{m.contributor_name}</span>
-                          <span className={`cat-pill ${m.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
-                            {t({ id: m.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(m.score * 100)}%
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                  <button type="button" className="ab-button ab-button--sm" style={{ marginTop: 8 }}
-                    onClick={confirmAuthorLinks} disabled={linkBusy || linkSelected.size === 0}>
-                    {linkBusy ? '…' : t({ id: 'catalogacao.link.confirm' }, { count: linkSelected.size })}
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* ── Doublons possibles (fusion d'autorites) ─────────────── */}
-          {f('published_author_id') && (
-            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
-                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
-                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                  onClick={findAuthorDuplicates} disabled={dupLoading}>
-                  {dupLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.dedup.find' })}
-                </button>
-              </div>
-              {dupMatches !== null && dupMatches.length === 0 && (
-                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.none' })}</div>
-              )}
-              {dupMatches !== null && dupMatches.length > 0 && (
-                <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden' }}>
-                  {dupMatches.map(d => (
-                    <div key={d.author_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
-                      <span style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{d.preferred_name}</span>
-                      <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.books' }, { count: d.linked_books })}</span>
-                      <span className={`cat-pill ${d.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
-                        {t({ id: d.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
-                      </span>
-                      {arbitreDoublons ? (
-                        <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                          onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}
-                          title={t({ id: 'catalogacao.dedup.deleteThisAuthorityHint' })}>
-                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.deleteThisAuthority' })}
-                        </button>
-                      ) : (
-                        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                          onClick={() => reportAuthorityPair(d.author_id)} disabled={dupBusy != null}
-                          title={t({ id: 'catalogacao.dedup.reportHint' })}>
-                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.report' })}
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          {/* ── Traductions de la biographie, rattachement aux œuvres, doublons :
+              trois panneaux (E6, 23/10/2026) ; chacun garde ce que lui seul lit,
+              ses messages remontent par onMessage. ── */}
+          <AuthorBioTranslations authorId={f('published_author_id')} bioTranslations={bioTranslations}
+            setBioTranslations={setBioTranslations} bioDirty={bioDirty} setBioDirty={setBioDirty}
+            user={user} onMessage={setMsg} confirmSaved={confirmSaved} />
+          <AuthorBookLinksPanel key={`liens-${f('published_author_id')}`} authorId={f('published_author_id')} onMessage={setMsg} />
+          <AuthorDuplicatesPanel key={`doublons-${f('published_author_id')}`} authorId={f('published_author_id')}
+            preferredName={f('preferred_name')} arbitreDoublons={arbitreDoublons} onMessage={setMsg} />
 
           {inp('notes', t({id:'catalogacao.author.notes'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.notesPlaceholder'}), hint: t({id:'catalogacao.ph.notesHint'}), completeOnly: true })}
 

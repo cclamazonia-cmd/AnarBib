@@ -17,7 +17,8 @@ describe('E41 — le nom de famille est facultatif', () => {
   });
 
   it('« Mes données » et le compte contributeur ne l’exigent plus', () => {
-    for (const f of ['src/pages/account/AccountPage.jsx', 'src/pages/account/ContributorAccountPage.jsx']) {
+    // L'onglet Profil de « Mes données » vit dans TabPerfil.jsx depuis le 23/10 (E6).
+    for (const f of ['src/pages/account/TabPerfil.jsx', 'src/pages/account/ContributorAccountPage.jsx']) {
       const ligne = lire(f).split('\n').find((l) => l.includes("'last_name'") && l.includes('<input'));
       expect(ligne, f).toBeTruthy();
       expect(ligne, f).not.toMatch(/\brequired\b/);

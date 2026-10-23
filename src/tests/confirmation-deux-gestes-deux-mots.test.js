@@ -46,7 +46,10 @@ describe('Mon compte — vider l’historique et supprimer le compte ne se confi
   it('chaque geste compare la saisie au mot de sa locale', () => {
     // Mon compte : depuis E6 lot 7 (07/10/2026), la suppression du compte vit dans
     // ContaSuppression.jsx, montée par la page — on lit les deux ensemble.
-    const page = readFileSync(path.resolve(racine, 'src/pages/account/AccountPage.jsx'), 'utf8');
+    // Depuis le 23/10/2026 (E6), l'onglet Profil qui monte ContaSuppression vit dans
+    // TabPerfil.jsx, et la fenêtre « vider l'historique » dans AccountModals.jsx.
+    const page = ['AccountPage', 'TabPerfil', 'AccountModals']
+      .map((f) => readFileSync(path.resolve(racine, `src/pages/account/${f}.jsx`), 'utf8')).join('\n');
     expect(page).toContain('<ContaSuppression ');
     const conta = page + '\n' + readFileSync(path.resolve(racine, 'src/pages/account/ContaSuppression.jsx'), 'utf8');
     const contrib = readFileSync(path.resolve(racine, 'src/pages/account/ContributorAccountPage.jsx'), 'utf8');
