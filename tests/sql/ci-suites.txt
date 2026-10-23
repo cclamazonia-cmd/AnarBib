@@ -927,3 +927,7 @@ tests/sql/retention_plafonds_purge_tests.sql
 # (inter-bibliothèques, audit de l'administration) — re-pointage exact vers le jeton sous
 # le drapeau de fn_delete_my_account, tout autre UPDATE/DELETE toujours refusé.
 tests/sql/effacement_journaux_reseau_tests.sql
+# 23/10/2026 : garde vivante — aucun déclencheur BEFORE UPDATE de refus ne bloque l'effacement
+# d'un compte (tables re-pointées par fn_delete_my_account ou mises à NULL par une FK SET NULL) ;
+# profil des bibliothèques au jeton, notes de lecture à NULL, refus hors du geste exact.
+tests/sql/effacement_declencheurs_garde_tests.sql
