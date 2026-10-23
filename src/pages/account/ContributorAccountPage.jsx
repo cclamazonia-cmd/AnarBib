@@ -233,7 +233,7 @@ export default function ContributorAccountPage({ nc }) {
             <form onSubmit={saveProfile} className="ab-conta-form">
               <div className="ab-conta-grid2">
                 <label>{t({ id: 'account.profile.firstName' })} <input type="text" value={form.first_name} onChange={e => set('first_name', e.target.value)} required /></label>
-                <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} required /></label>
+                <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} /></label>
               </div>
               <label>{t({ id: 'contributor.conta.profile.email', defaultMessage: 'E-mail' })} <input type="email" value={form.email} disabled readOnly /></label>
               <label>{t({ id: 'account.profile.phone' })}

@@ -94,7 +94,7 @@ export default function CriarContaPage() {
       setMsg({ text: t({id:'auth.create.intent.newLibrary.libNameRequired'}), kind: 'error' }); return;
     }
     if (step === 2) {
-      if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) {
+      if (!form.first_name.trim() || !form.email.trim() || !form.phone.trim()) {
         setMsg({ text: t({id:'auth.create.fillRequired'}), kind: 'error' }); return;
       }
       if (!isValidPhoneNumber(form.phone)) { setMsg({ text: t({id:'address.phone.invalid'}), kind: 'error' }); return; }
@@ -172,7 +172,7 @@ export default function CriarContaPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) {
+    if (!form.first_name.trim() || !form.email.trim() || !form.phone.trim()) {
       setMsg({ text: t({id:'auth.create.fillRequired'}), kind: 'error' });
       return;
     }
@@ -564,8 +564,9 @@ export default function CriarContaPage() {
               <input type="text" value={form.first_name} onChange={e => set('first_name', e.target.value)} required style={fs} autoComplete="given-name" />
             </div>
             <div>
-              <label style={ls}>{t({id:'auth.create.lastName'})} {req}</label>
-              <input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} required style={fs} autoComplete="family-name" />
+              {/* E41 (23/10/2026) : le nom est facultatif — une personne peut n'avoir qu'un pseudonyme */}
+              <label style={ls}>{t({id:'auth.create.lastName'})}</label>
+              <input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} style={fs} autoComplete="family-name" />
             </div>
           </div>
 

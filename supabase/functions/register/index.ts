@@ -648,7 +648,8 @@ serve(async (req)=>{
     // de l'app et que le type SupportedMailLocale : plus de copie à aligner.
     const requestedLocale = String(body?.locale || "").trim();
     const userLocale = isSupportedLocale(requestedLocale) ? requestedLocale : "pt-BR";
-    if (!email || !firstName || !lastName || !phone) {
+    // E41 (23/10/2026) : le nom de famille est facultatif (un pseudonyme suffit)
+    if (!email || !firstName || !phone) {
       return json({
         error: "MISSING_REQUIRED_FIELDS"
       }, 400);
@@ -907,7 +908,7 @@ serve(async (req)=>{
     const { data: profileUpdatedRow, error: profileUpdateError } = await admin.from("profiles").update({
       email,
       first_name: firstName,
-      last_name: lastName,
+      last_name: lastName || null,
       phone,
       gender: gender || null,
       affiliation_org: affiliationOrg || null,

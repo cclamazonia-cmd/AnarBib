@@ -970,7 +970,7 @@ export default function AccountPage() {
               <form onSubmit={handleSaveProfile} data-bloc="perfil" className="ab-conta-form">
                 <div className="ab-conta-grid2">
                   <label>{t({ id: 'account.profile.firstName' })} <input type="text" value={profile.first_name || ''} onChange={e => updateProfile('first_name', e.target.value)} required /></label>
-                  <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={profile.last_name || ''} onChange={e => updateProfile('last_name', e.target.value)} required /></label>
+                  <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={profile.last_name || ''} onChange={e => updateProfile('last_name', e.target.value)} /></label>
                 </div>
                 <label>{t({ id: 'account.profile.phone' })}
                   <PhoneInput
