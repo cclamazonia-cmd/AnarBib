@@ -157,6 +157,7 @@ export default function GazetteContributeForm({ onClose, resubmitToken }) {
         <button type="button" className="cat-btn ghost" onClick={onClose}>{t({ id: 'common.cancel' })}</button>
       </div>
       <p className="ab-gz-form-intro">{isResubmit ? t({ id: 'federacao.gazeta.resubmit.intro' }) : t({ id: 'federacao.gazeta.contribute.intro' })}</p>
+      <p className="ab-gz-form-intro">{t({ id: 'federacao.gazeta.contribute.thirdParty' })}</p>
 
       {isResubmit && reviewNote && (
         <div style={{ margin: '0 0 14px', padding: '10px 12px', borderLeft: '3px solid #cf1f27', background: 'rgba(207,31,39,.08)', borderRadius: 6 }}>

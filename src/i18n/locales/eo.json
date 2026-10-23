@@ -4398,7 +4398,7 @@
   "privacy.s5.right.portable": "Rajto pri porteblo: elŝuti viajn datumojn en reuzebla formato (.csv-elporto disponebla el via konto)",
   "privacy.s5.right.rectify": "Rajto de korekto: korekti la erarajn datumojn",
   "privacy.s5.title": "Viaj rajtoj pri viaj datumoj",
-  "privacy.s6.body": "Por funkcii teknike, AnarBib uzas tri servoprovizantojn (datumtraktantoj laŭ la senco de la RGPD):",
+  "privacy.s6.body": "Por funkcii teknike, AnarBib uzas kvar servoprovizantojn (datumtraktantoj laŭ la senco de la RGPD):",
   "privacy.s6.dpa": "Por la bibliotekoj kiuj aliĝas al la reto AnarBib, Interkonsento pri Datumtraktado (DPA) detaligas la kontraktajn respondecojn inter ĉiu aliĝinta biblioteko kaj AnarBib, konforme al la artikolo 28 de la RGPD kaj la artikolo 39 de la LGPD.",
   "privacy.s6.dpa.link": "Konsulti la DPA-modelon",
   "privacy.s6.noResale": "AnarBib neniam vendas, ludonas nek kunhavigas viajn datumojn por komercaj celoj. Neniam.",
@@ -4423,7 +4423,7 @@
   "privacy.s9.title": "Modifoj de ĉi tiu politiko",
   "privacy.subtitle": "Kiel AnarBib protektas viajn personajn datumojn",
   "privacy.title": "Politiko pri privateco",
-  "privacy.updated": "Laste ĝisdatigita: la 20-a de aŭgusto 2026",
+  "privacy.updated": "Laste ĝisdatigita: la 23-a de oktobro 2026",
   "reader.backToBook": "← Reen al la slipo",
   "reader.brand": "PDF-legilo",
   "reader.catalogs": "Katalogoj",
@@ -7799,5 +7799,7 @@
   "rede.activateEarly": "Aktivigi antaŭ la fino de la metiejo",
   "rede.activateEarlyPrompt": "Kial aktivigi ĉi tiun bibliotekon antaŭ la fino de ĝia metiejo? La motivo estas deviga kaj restas registrita ĉe la metiejo. La metiejo restos malfermita por la kunordigo.",
   "rede.activatedEarly": "Biblioteko aktivigita. Ĝia metiejo restas malfermita por la kunordigo.",
-  "auth.loginChallengeRequired": "Tro da provoj por ĉi tiu konto. Faru la kontrolon kontraŭ robotoj ĉi-sube, poste reprovu."
+  "auth.loginChallengeRequired": "Tro da provoj por ĉi tiu konto. Faru la kontrolon kontraŭ robotoj ĉi-sube, poste reprovu.",
+  "privacy.s6.subprocessor.anthropic": "Anthropic, PBC, San-Francisko, Usono — aŭtomata traduko de la gazeto «Fractale» kaj de la notoj de la reto, helpata redaktado de kelkaj numeroj, traduko de verktitoloj (API Claude). Ĝi ricevas nur tekstojn destinitajn al publikigo (titolo kaj teksto de la notoj, subskribo de la ĉefartikolo), neniam vian retadreson, vian konton aŭ viajn pruntojn. Usona firmao; la garantioj de ĉi tiu transdono estas kontrolataj. Ĝia anstataŭigo per memgastigita aŭ eŭropa servo estas planita.",
+  "federacao.gazeta.contribute.thirdParty": "Por aperi en ĉiuj lingvoj de la reto, la titolo kaj la teksto de via noto estas aŭtomate tradukataj de Anthropic (API Claude, Usono); se ĝi fariĝas la ĉefartikolo, ankaŭ via subskribo. Via retadreso kaj via konto neniam estas transdonataj al ĝi."
 }

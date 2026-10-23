@@ -38,7 +38,7 @@ Ce registre se compose de **deux couches** :
 | **Contact pour les questions de données personnelles** | anarbib@proton.me |
 | **Autorité de contrôle compétente** | Commission Nationale de l'Informatique et des Libertés (CNIL), 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France — www.cnil.fr |
 | **Délégué à la protection des données (DPO)** | Non désigné. La désignation n'est pas obligatoire au sens de l'art. 37 RGPD (AnarBib n'est ni autorité publique, ni traitement à grande échelle de données sensibles, ni profilage systématique). |
-| **Date de dernière mise à jour du registre** | 20 août 2026 *(précédente : 5 juin 2026 — mise à jour motivée par le retrait du sous-traitant Cloudflare, §§ 4.1, 5.1 et 6.3)* |
+| **Date de dernière mise à jour du registre** | 23 octobre 2026 *(mise à jour motivée par la déclaration du sous-traitant Anthropic pour la gazette « Fractale », §§ 2.7, 5.1 et 6.6 ; précédente : 20 août 2026, retrait du sous-traitant Cloudflare, §§ 4.1, 5.1 et 6.3)* |
 
 > **Note politique.** AnarBib n'a pas vocation à exiger une personnalité juridique formelle des bibliothèques adhérentes. Un collectif informel reste néanmoins responsable de traitement au sens RGPD dès lors qu'il opère un système de gestion de comptes lecteur·rices. La désignation d'au moins une personne contact est donc obligatoire, même sans structure formelle.
 
@@ -46,7 +46,7 @@ Ce registre se compose de **deux couches** :
 
 ## 2. Finalités de traitement
 
-AnarBib effectue **cinq traitements** distincts. Chacun est documenté ci-dessous selon la nomenclature article 30.
+AnarBib effectue **sept traitements** distincts. Chacun est documenté ci-dessous selon la nomenclature article 30.
 
 ### 2.1 — Gestion des comptes lecteur·rices
 
@@ -130,6 +130,23 @@ AnarBib effectue **cinq traitements** distincts. Chacun est documenté ci-dessou
 
 > Mise en œuvre : socle opt-in `profiles.consent_lettre[_at]` + `lettre_consent_tokens` + RPC `fn_lettre_request_optin`/`confirm`/`unsubscribe`/`cancel` (Lot 2) ; envoi des numéros `lettre_issues` → `lettre_notification_outbox` → `notify-event` (Lot 3). Foyer décisionnel : **REGISTRE §29 `GAZ`**.
 
+### 2.7 — Gazette « Fractale » : traduction automatique et rédaction assistée
+
+| Champ | Valeur |
+|---|---|
+| **Finalité** | Publier la gazette « Fractale » et les brèves du réseau dans les langues de l'application : **traduction automatique** de chaque numéro et de chaque brève acceptée, **composition assistée** d'un numéro (mode `assisted` uniquement), **complément des titres d'œuvres** dans d'autres langues (`work-titles-autofill`) |
+| **Base légale** | Intérêt légitime (art. 6.1.f) — rendre la communication du réseau lisible par toutes les bibliothèques adhérentes, quelle que soit leur langue |
+| **Personnes concernées** | Personnes qui proposent une brève ; personnes qui signent un éditorial (nom ou collectif) ; personnes éventuellement nommées dans le texte d'une brève, d'une date d'agenda ou d'un extrait de presse |
+| **Données transmises** | Titre et texte des brèves proposées (`translate-gazette-submission`) ; contenu du numéro en cours, **signature de l'éditorial comprise** (`contributor_collective`, à défaut `contributor_name`), dates d'agenda et extraits de presse déjà publics (`gazette-monthly-build`) ; titres d'œuvres (`work-titles-autofill`) |
+| **Données *non* transmises** | Adresse e-mail, identifiant de compte, rôle, bibliothèque d'inscription, emprunts, réservations, adresse IP des lecteur·rices. Les trois fonctions sont appelées par nos Edge Functions, jamais par le navigateur |
+| **Sous-traitant** | Anthropic, PBC (API Claude, `api.anthropic.com`), San Francisco, Californie, États-Unis. Voir section 5. Le transfert vers les États-Unis qui en résulte est documenté en §6.6 |
+| **Mode de publication** | La traduction passe par Anthropic **dans tous les modes** de fabrication (`revue` compris) ; seule la composition assistée est propre au mode `assisted` |
+| **Information des personnes** | Mention sur le formulaire « Proposer une brève » (clé `federacao.gazeta.contribute.thirdParty`, onze langues) et dans la politique de confidentialité (§6, liste des prestataires) |
+| **Durée de conservation côté Anthropic** | Selon les conditions commerciales de l'API : rétention limitée des requêtes et des réponses, pas d'entraînement des modèles sur ces données. *À vérifier sur pièce (durée exacte, DPA), cf. §6.6.* |
+| **Destinataires** | Le texte traduit est publié dans la gazette, comme l'original ; aucune autre copie à des tiers |
+
+> **Sortie prévue.** Ce traitement est le premier visé par la note « Sortir des services états-uniens » (ordonnance O2) : traduction confiée à un service auto-hébergé ou européen, puis composition par un modèle à poids ouverts hébergé chez nous ou dans l'UE. Le jour où Anthropic n'est plus appelé, cette fiche passe au statut *clos* comme §6.3, sans être effacée.
+
 ---
 
 ## 3. Droits des personnes concernées
@@ -142,7 +159,7 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 | **Rectification** | Art. 16 | Édition libre du profil par la lecteur·rice |
 | **Effacement (oubli)** | Art. 17 | Bouton « Supprimer mon compte » sur `/conta`, fonction `delete_user_account` (suppression cryptographique des données associées) |
 | **Portabilité** | Art. 20 | Bouton « Télécharger mes données » sur `/conta`, formats JSON et CSV au choix *(en cours d'implémentation — Phase 3 RGPD)* |
-| **Opposition** | Art. 21 | Sans objet pour les traitements basés sur l'exécution du contrat (2.1–2.4). Pour le traitement basé sur l'intérêt légitime (2.5), la lecteur·rice peut quitter le multi-membership à tout moment. |
+| **Opposition** | Art. 21 | Sans objet pour les traitements basés sur l'exécution du contrat (2.1–2.4). Pour le traitement basé sur l'intérêt légitime (2.5), la lecteur·rice peut quitter le multi-membership à tout moment. Pour la gazette (2.7), la personne peut demander que sa brève ne soit pas traduite, ou que sa signature soit retirée, par écrit à `[anarbib@proton.me]`. |
 | **Limitation** | Art. 18 | Sur demande écrite à `[anarbib@proton.me]`, traitement gelé pendant l'instruction |
 | **Réclamation** | Art. 77 | Auprès de l'autorité de contrôle nationale (voir section 7) |
 
@@ -187,6 +204,7 @@ Ce registre est honnête sur ce qui reste à faire (feuille de route 2026) :
 | **Supabase Inc.** | Hébergement base de données + Auth + Edge Functions | Région `sa-east-1` (São Paulo, Brésil) — voir section 6 | **Oui — 4 mai 2026** (réf. document `TFXNN-HUMKJ-3WKP8-MZMYW`, version DPA du 5 août 2025, CCT 2021/914 module 2 controller-to-processor) | Loi applicable au DPA : Irlande. Supabase Inc. siège à Singapour, structure UE en Irlande. |
 | **Codeberg e.V.** | Hébergement du frontend (Codeberg Pages) | Allemagne (UE) | DPA implicite via les CGU | Association allemande à but non lucratif, alignée sur le RGPD par construction. |
 | **Resend** (Plus Five Five, Inc.) | Envoi des mails transactionnels | États-Unis (San Francisco, CA) — voir section 6 | **Oui** — DPA Resend (mise à jour du 31 décembre 2025), accepté à l'ouverture du compte. Intègre les CCT 2021/914 module 2 controller-to-processor. | Société états-unienne. Conforme RGPD ; certifiée **EU-U.S. Data Privacy Framework** auprès du Département du Commerce des États-Unis. Conforme **SOC 2 Type II**. Suivi des ouvertures désactivé (cf. §2.4 et §4.2). DPA accessible sur resend.com/legal/dpa. |
+| **Anthropic, PBC** | Traduction automatique et composition assistée de la gazette « Fractale », complément des titres d'œuvres (API Claude), cf. §2.7 | États-Unis (San Francisco, CA) — voir §6.6 | **À vérifier sur pièce** : le DPA d'Anthropic est réputé incorporé aux conditions commerciales de l'API (CCT 2021/914) ; acceptation et version à constater dans la console Anthropic du compte AnarBib | Société états-unienne. Reçoit des textes destinés à la publication, jamais de données de compte. Sortie prévue (ordonnance O2 de la note « Sortir des services états-uniens »). |
 | **GitHub Inc.** | Miroir secondaire du dépôt (sans données personnelles) | États-Unis | Sans objet | Le miroir GitHub ne contient **aucune** donnée personnelle de lecteur·rice — uniquement le code source public. Pas de transfert RGPD-significatif. |
 | ~~**Cloudflare Inc.**~~ — ⛔ **sous-traitant retiré le 20/08/2026** | Protection anti-bot (Turnstile) sur les pages de connexion et d'inscription, **jusqu'au 20/08/2026** | États-Unis | DPA Cloudflare **v6.4 du 3 avril 2026** (`cloudflare.com/cloudflare-customer-dpa/`), **incorporé par référence** au Self-Serve Subscription Agreement ; CCT 2021/914 module 2. | **Ligne conservée pour la traçabilité** (art. 30 : le registre doit rendre compte des traitements passés). Turnstile a été **remplacé par Altcha auto-hébergé** (§4.1) : plus aucun appel sortant, donc plus de sous-traitance ni de transfert. À distinguer du rôle de Cloudflare comme sous-processeur *de Supabase* (§5.2), qui **subsiste**. |
 
@@ -220,7 +238,7 @@ Cette adhésion suppose la signature d'un **DPA entre la bibliothèque et Xavier
 
 ## 6. Transferts hors Union européenne (art. 44–49 RGPD)
 
-L'architecture d'AnarBib implique **trois transferts de données personnelles hors de l'Union européenne**, vers trois sous-traitants distincts. Chacun est documenté ci-dessous avec sa base juridique. Aucun des pays de destination (Brésil, États-Unis) ne bénéficie, à la date de ce registre, d'une décision d'adéquation générale de la Commission européenne au sens de l'article 45 RGPD ; les deux transferts reposent donc sur les garanties appropriées prévues par l'article 46.
+L'architecture d'AnarBib implique **trois transferts actifs de données personnelles hors de l'Union européenne**, vers trois sous-traitants distincts : Supabase (Brésil, §6.1), Resend (États-Unis, §6.2) et Anthropic (États-Unis, §6.6). Le transfert vers Cloudflare (§6.3) est clos depuis le 20/08/2026. Chacun est documenté ci-dessous avec sa base juridique. Aucun des pays de destination (Brésil, États-Unis) ne bénéficie, à la date de ce registre, d'une décision d'adéquation générale de la Commission européenne au sens de l'article 45 RGPD ; les transferts reposent donc sur les garanties appropriées prévues par l'article 46.
 
 ### 6.1 — Transfert vers le Brésil (hébergement de la base de données — Supabase)
 
@@ -262,7 +280,18 @@ Indépendamment des deux transferts ci-dessus, certains sous-processeurs ultéri
 
 Une migration de l'hébergement de la base de données vers une région européenne (`eu-west-1` ou `eu-central-1`) est **à l'étude**. La décision sera arbitrée avant l'élargissement du réseau au-delà de la bibliothèque pilote et de BLMF. Une telle migration supprimerait le transfert décrit en §6.1, mais pas celui décrit en §6.2 (le stockage des métadonnées d'envoi par Resend reste aux États-Unis quelle que soit la région d'envoi choisie).
 
-> **Pour les bibliothèques adhérentes** : si vous opérez votre propre instance Supabase, mentionnez ici **votre** région d'hébergement. Si elle est en UE, adaptez la section 6.1 en conséquence. Si vous utilisez l'instance hébergée par Xavier, les sections 6.1 à 6.4 s'appliquent telles quelles.
+> **Pour les bibliothèques adhérentes** : si vous opérez votre propre instance Supabase, mentionnez ici **votre** région d'hébergement. Si elle est en UE, adaptez la section 6.1 en conséquence. Si vous utilisez l'instance hébergée par Xavier, les sections 6.1 à 6.4 et 6.6 s'appliquent telles quelles.
+
+### 6.6 — Transfert vers les États-Unis (traduction et rédaction assistée de la gazette — Anthropic)
+
+Depuis la mise en service de la gazette « Fractale », trois Edge Functions (`gazette-monthly-build`, `translate-gazette-submission`, `work-titles-autofill`) appellent l'API Claude d'**Anthropic, PBC**, société établie à San Francisco, États-Unis. Le transfert porte sur des textes destinés à la publication : titre et texte des brèves, contenu du numéro (signature de l'éditorial comprise), dates d'agenda, extraits de presse déjà publics, titres d'œuvres (détail en §2.7). Aucune donnée de compte, d'emprunt ou de réservation n'est transmise.
+
+**Base juridique du transfert** : *à vérifier sur pièce.* Le DPA d'Anthropic est réputé incorporé aux conditions commerciales de l'API et fondé sur les CCT **2021/914** ; la certification d'Anthropic au titre de l'**EU-U.S. Data Privacy Framework** reste à constater sur la liste du Département du Commerce. Tant que ces deux points ne sont pas constatés et datés ici, ce transfert est déclaré mais **sa garantie n'est pas documentée**.
+
+**Garanties complémentaires** :
+- Minimisation : seuls des textes appelés à être publiés partent ; les appels sont faits par le serveur, jamais par le navigateur des lecteur·rices.
+- Information : mention sur le formulaire de proposition de brève et dans la politique de confidentialité.
+- Sortie prévue : remplacement par un service de traduction auto-hébergé ou européen, puis par un modèle à poids ouverts hébergé chez nous ou dans l'UE (note « Sortir des services états-uniens », ordonnance O2). Ce transfert sera alors clos comme §6.3.
 
 ---
 
@@ -297,6 +326,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | Hébergement frontend | Codeberg Pages (primaire) + GitHub Pages (miroir secondaire) |
 | Mail transactionnel | Resend (Plus Five Five, Inc.), États-Unis — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
 | Protection anti-bot | **Altcha, auto-hébergé** (depuis le 20/08/2026) — connexion, inscription et cartographie — calcul par le navigateur, vérification par nos Edge Functions, **aucun tiers, aucun transfert** *(auparavant : Cloudflare Turnstile, États-Unis — retiré)* |
+| Traduction et rédaction assistée de la gazette | Anthropic, PBC (API Claude), États-Unis — transfert déclaré en §6.6, garantie à documenter ; sortie prévue |
 | DPO | Non désigné (non requis par l'art. 37 RGPD) |
 | Bibliothèques opérées | Bibliothèque pilote (CCLA-portée, BLMF) |
 | DPA Supabase | Signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW) |
@@ -341,6 +371,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | 2026-06-05 | Xavier VAN WELDEN | Migration du sous-traitant mail : Brevo (UE) remplacé par Resend (Plus Five Five, Inc., États-Unis). Mise à jour des §2.4, §4.1, §5.1 et de l'annexe A. Ajout en §4.2 d'une note sur le choix d'un prestataire mail sans suivi des ouvertures. Réécriture de la §6 : documentation de deux transferts hors-UE distincts (Brésil/Supabase et États-Unis/Resend), le second encadré par les CCT 2021/914 module 2 et la certification EU-U.S. Data Privacy Framework de Resend. |
 | 2026-07-05 | Xavier VAN WELDEN | Intégration de Cloudflare Turnstile comme sous-traitant direct : protection anti-bot désormais **active** sur les pages de connexion et d'inscription (auparavant listée en §4.3 « en cours »). Passée en §4.1 (mesure active), ajoutée en §5.1 (sous-traitant direct, États-Unis), nouveau §6.3 (transfert US, CCT 2021/914 module 2 + EU-U.S. DPF), renumérotation des §6.4/6.5, mise à jour de l'annexe A. |
 | 2026-08-20 | Claude (assistant·e), session « Débordements mobile — champs de saisie » | **Retrait du sous-traitant Cloudflare.** La protection anti-bot est passée à **Altcha auto-hébergé** les 19-20/08/2026 (calcul navigateur + vérification par les Edge Functions, anti-rejeu ; étendue au formulaire public de cartographie) ; le code ne fait plus aucun appel à Cloudflare. Mise à jour des §4.1 (mesure active), §5.1 (ligne Cloudflare **barrée et datée**, conservée pour la traçabilité) et §6.3 (transfert US **clos**, texte historique conservé), plus l'annexe A. Conséquence : **plus aucune dépendance Cloudflare directe** — Cloudflare subsiste uniquement comme sous-processeur du CDN de Supabase (§5.2). Écart constaté puis corrigé : les locales de l'app (source unique de la politique de confidentialité, cf. `PRIV-1`) étaient déjà à jour, ce registre était resté en arrière. |
+| 2026-10-23 | Claude (assistant·e), session « Sortir des services états-uniens » (ordonnance O2a) | **Déclaration du sous-traitant Anthropic.** Les Edge Functions de la gazette « Fractale » et `work-titles-autofill` appellent l'API Claude depuis leur mise en service, sans que le registre ni la politique de confidentialité le disent. Ajout du traitement §2.7, de la ligne Anthropic en §5.1, du transfert §6.6 et d'une ligne à l'annexe A ; §2 passe à sept traitements, §3 (opposition) et l'introduction de §6 sont ajustés. La garantie du transfert (DPA, DPF) est marquée **à vérifier sur pièce**. Dans le même lot : Anthropic ajouté à la liste des prestataires de la politique de confidentialité (app et vitrine, onze langues) et mention sur le formulaire « Proposer une brève ». |
 
 ---
 

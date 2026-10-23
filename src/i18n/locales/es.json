@@ -4398,7 +4398,7 @@
   "privacy.s5.right.portable": "Derecho a la portabilidad: descargar tus datos en un formato reutilizable (exportación .csv disponible desde tu cuenta)",
   "privacy.s5.right.rectify": "Derecho de rectificación: corregir los datos erróneos",
   "privacy.s5.title": "Tus derechos sobre tus datos",
-  "privacy.s6.body": "Para funcionar técnicamente, AnarBib usa tres proveedores de servicios (subcontratados en el sentido del RGPD):",
+  "privacy.s6.body": "Para funcionar técnicamente, AnarBib usa cuatro proveedores de servicios (subcontratados en el sentido del RGPD):",
   "privacy.s6.dpa": "Para las bibliotecas que adhieren a la red AnarBib, un Acuerdo de Tratamiento de Datos (DPA) detalla las responsabilidades contractuales entre cada biblioteca adherente y AnarBib en conformidad con el artículo 28 del RGPD y el artículo 39 de la LGPD.",
   "privacy.s6.dpa.link": "Consultar el modelo de DPA",
   "privacy.s6.noResale": "AnarBib no vende, no alquila ni comparte nunca tus datos con fines comerciales. Nunca.",
@@ -4423,7 +4423,7 @@
   "privacy.s9.title": "Modificaciones de esta política",
   "privacy.subtitle": "Cómo AnarBib protege tus datos personales",
   "privacy.title": "Política de privacidad",
-  "privacy.updated": "Última actualización: 20 de agosto de 2026",
+  "privacy.updated": "Última actualización: 23 de octubre de 2026",
   "reader.backToBook": "← Volver a la ficha",
   "reader.brand": "Lector PDF",
   "reader.catalogs": "Catálogos",
@@ -7799,5 +7799,7 @@
   "rede.activateEarly": "Activar antes de que termine el taller",
   "rede.activateEarlyPrompt": "¿Por qué activar esta biblioteca antes de que termine su taller? El motivo es obligatorio y queda registrado en el taller. El taller seguirá abierto para la coordinación.",
   "rede.activatedEarly": "Biblioteca activada. Su taller sigue abierto para la coordinación.",
-  "auth.loginChallengeRequired": "Demasiados intentos para esta cuenta. Haz la verificación antirrobot de abajo y vuelve a intentarlo."
+  "auth.loginChallengeRequired": "Demasiados intentos para esta cuenta. Haz la verificación antirrobot de abajo y vuelve a intentarlo.",
+  "privacy.s6.subprocessor.anthropic": "Anthropic, PBC, San Francisco, Estados Unidos — traducción automática de la gaceta «Fractale» y de las notas de la red, redacción asistida de algunos números, traducción de títulos de obras (API Claude). Solo recibe textos destinados a publicarse (título y texto de las notas, firma del editorial), nunca tu dirección de correo, tu cuenta ni tus préstamos. Empresa estadounidense; las garantías de esta transferencia están en verificación. Está previsto sustituirla por un servicio autoalojado o europeo.",
+  "federacao.gazeta.contribute.thirdParty": "Para aparecer en todos los idiomas de la red, el título y el texto de tu nota se traducen automáticamente con Anthropic (API Claude, Estados Unidos); si se convierte en el editorial, también tu firma. Tu dirección de correo y tu cuenta nunca se le transmiten."
 }

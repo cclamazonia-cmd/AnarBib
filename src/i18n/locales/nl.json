@@ -4398,7 +4398,7 @@
   "privacy.s5.right.portable": "Recht op overdraagbaarheid: je gegevens downloaden in een herbruikbaar formaat (.csv-export beschikbaar vanuit je account)",
   "privacy.s5.right.rectify": "Recht op rectificatie: onjuiste gegevens corrigeren",
   "privacy.s5.title": "Je rechten over je gegevens",
-  "privacy.s6.body": "Om technisch te functioneren, maakt AnarBib gebruik van drie dienstverleners (verwerkers in de zin van de AVG):",
+  "privacy.s6.body": "Om technisch te functioneren, maakt AnarBib gebruik van vier dienstverleners (verwerkers in de zin van de AVG):",
   "privacy.s6.dpa": "Voor bibliotheken die zich bij het AnarBib-netwerk aansluiten, beschrijft een verwerkersovereenkomst (DPA) de contractuele verantwoordelijkheden tussen elke aangesloten bibliotheek en AnarBib, in overeenstemming met artikel 28 van de AVG en artikel 39 van de LGPD.",
   "privacy.s6.dpa.link": "Het model van verwerkersovereenkomst bekijken",
   "privacy.s6.noResale": "AnarBib verkoopt, verhuurt of deelt je gegevens nooit voor commerciële doeleinden. Nooit.",
@@ -4423,7 +4423,7 @@
   "privacy.s9.title": "Wijzigingen aan dit beleid",
   "privacy.subtitle": "Hoe AnarBib je persoonsgegevens beschermt",
   "privacy.title": "Privacybeleid",
-  "privacy.updated": "Laatst bijgewerkt: 20 augustus 2026",
+  "privacy.updated": "Laatst bijgewerkt: 23 oktober 2026",
   "reader.backToBook": "← Terug naar het boek",
   "reader.brand": "PDF-lezer",
   "reader.catalogs": "Catalogi",
@@ -7799,5 +7799,7 @@
   "rede.activateEarly": "Activeren voordat het atelier af is",
   "rede.activateEarlyPrompt": "Waarom deze bibliotheek activeren voordat haar atelier af is? Een reden is verplicht en blijft bij het atelier bewaard. Het atelier blijft open voor de coördinatie.",
   "rede.activatedEarly": "Bibliotheek geactiveerd. Het atelier blijft open voor de coördinatie.",
-  "auth.loginChallengeRequired": "Te veel pogingen voor dit account. Doe hieronder de anti-botcontrole en probeer het dan opnieuw."
+  "auth.loginChallengeRequired": "Te veel pogingen voor dit account. Doe hieronder de anti-botcontrole en probeer het dan opnieuw.",
+  "privacy.s6.subprocessor.anthropic": "Anthropic, PBC, San Francisco, Verenigde Staten — automatische vertaling van de gazet „Fractale” en van de berichten van het netwerk, ondersteunde redactie van sommige nummers, vertaling van titels van werken (Claude-API). Ontvangt alleen teksten die bestemd zijn om gepubliceerd te worden (titel en tekst van de berichten, ondertekening van het redactioneel), nooit je e-mailadres, je account of je uitleningen. Amerikaans bedrijf; de waarborgen voor deze doorgifte worden nog nagegaan. Vervanging door een zelfgehoste of Europese dienst is gepland.",
+  "federacao.gazeta.contribute.thirdParty": "Om in alle talen van het netwerk te verschijnen, worden de titel en de tekst van je bericht automatisch vertaald door Anthropic (Claude-API, Verenigde Staten); wordt het het redactioneel, dan ook je ondertekening. Je e-mailadres en je account worden er nooit aan doorgegeven."
 }

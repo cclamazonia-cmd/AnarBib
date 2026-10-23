@@ -196,6 +196,7 @@ export default function PrivacyPolicyPage() {
             <li>{t({ id: 'privacy.s6.subprocessor.supabase' })}</li>
             <li>{t({ id: 'privacy.s6.subprocessor.resend' })}</li>
             <li>{t({ id: 'privacy.s6.subprocessor.codeberg' })}</li>
+            <li>{t({ id: 'privacy.s6.subprocessor.anthropic' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.s6.transfer' })}</p>
           <p style={pStyle}>{t({ id: 'privacy.s6.maptiles' })}</p>

@@ -4398,7 +4398,7 @@
   "privacy.s5.right.portable": "Dreptul la portabilitate: să-ți descarci datele într-un format reutilizabil (export .csv disponibil din contul tău)",
   "privacy.s5.right.rectify": "Dreptul la rectificare: să corectezi datele greșite",
   "privacy.s5.title": "Drepturile tale asupra datelor",
-  "privacy.s6.body": "Pentru a funcționa tehnic, AnarBib folosește trei furnizori de servicii (persoane împuternicite în sensul RGPD):",
+  "privacy.s6.body": "Pentru a funcționa tehnic, AnarBib folosește patru furnizori de servicii (persoane împuternicite în sensul RGPD):",
   "privacy.s6.dpa": "Pentru bibliotecile care aderă la rețeaua AnarBib, un Acord de prelucrare a datelor (DPA) detaliază responsabilitățile contractuale dintre fiecare bibliotecă membră și AnarBib, în conformitate cu articolul 28 din RGPD și articolul 39 din LGPD.",
   "privacy.s6.dpa.link": "Consultă modelul de DPA",
   "privacy.s6.noResale": "AnarBib nu vinde, nu închiriază și nu împărtășește niciodată datele tale în scopuri comerciale. Niciodată.",
@@ -4423,7 +4423,7 @@
   "privacy.s9.title": "Modificările acestei politici",
   "privacy.subtitle": "Cum îți protejează AnarBib datele personale",
   "privacy.title": "Politica de confidențialitate",
-  "privacy.updated": "Ultima actualizare: 20 august 2026",
+  "privacy.updated": "Ultima actualizare: 23 octombrie 2026",
   "reader.backToBook": "← Înapoi la fișă",
   "reader.brand": "Vizualizator PDF",
   "reader.catalogs": "Cataloage",
@@ -7799,5 +7799,7 @@
   "rede.activateEarly": "Activează înainte de încheierea atelierului",
   "rede.activateEarlyPrompt": "De ce activezi această bibliotecă înainte de încheierea atelierului ei? Motivul este obligatoriu și rămâne înregistrat la atelier. Atelierul va rămâne deschis pentru coordonare.",
   "rede.activatedEarly": "Bibliotecă activată. Atelierul ei rămâne deschis pentru coordonare.",
-  "auth.loginChallengeRequired": "Prea multe încercări pentru acest cont. Fă verificarea anti-robot de mai jos, apoi încearcă din nou."
+  "auth.loginChallengeRequired": "Prea multe încercări pentru acest cont. Fă verificarea anti-robot de mai jos, apoi încearcă din nou.",
+  "privacy.s6.subprocessor.anthropic": "Anthropic, PBC, San Francisco, Statele Unite — traducerea automată a gazetei „Fractale” și a știrilor scurte ale rețelei, redactarea asistată a unor numere, traducerea titlurilor de opere (API Claude). Primește doar texte destinate publicării (titlul și textul știrilor, semnătura editorialului), niciodată adresa ta de e-mail, contul tău sau împrumuturile tale. Companie americană; garanțiile acestui transfer sunt în curs de verificare. Este prevăzută înlocuirea sa cu un serviciu autogăzduit sau european.",
+  "federacao.gazeta.contribute.thirdParty": "Pentru a apărea în toate limbile rețelei, titlul și textul știrii tale sunt traduse automat de Anthropic (API Claude, Statele Unite); dacă devine editorialul, la fel și semnătura ta. Adresa ta de e-mail și contul tău nu îi sunt transmise niciodată."
 }
