@@ -7,6 +7,7 @@
 --           supabase/migrations/20261021*_trente_cinq_descripteurs_de_plus (35, 21/10),
 --           supabase/migrations/20261022*_la_quatrieme_facette_les_langues (53, 22/10),
 --           supabase/migrations/20261022*_les_liens_que_la_liste_d_hotes_avait_jetes (520 UPDATE, 22/10),
+--           supabase/migrations/20261023*_les_cinquante_fiches_que_la_maintenance_avait_laissees (51 UPDATE, 23/10),
 --           scripts/ficedl_thesaurus_sync.mjs (le mapping), docs/journal/ficedl/
 --
 -- CE QUE CETTE SUITE PROUVE.
@@ -48,7 +49,7 @@ DO $$
 DECLARE
   ok int := 0; total int := 7;
   n int; d int; h int; empreinte text; sujet int; lien int;
-  attendu_empreinte constant text := '922544eb68a9396427fbe243328b1711';
+  attendu_empreinte constant text := '2ee407b1d3e7f494c4b3d9be813433cf';
   mot_date text;
 BEGIN
   -- T1 : 623 termes
