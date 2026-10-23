@@ -36,13 +36,77 @@ export function PageShell({ children }) {
 
 // ── Topbar ─────────────────────────────────────────────────
 
+// E20 : un groupe de la barre — un bouton qui ouvre (clic, Entrée, Espace) un
+// menu de liens. Le menu reste dans le DOM, masqué (`hidden`) quand il est
+// fermé. Le clic sur le bouton ne remonte pas au tiroir mobile, qui se
+// fermerait ; le clic sur un lien, si.
+function NavGroupe({ id, label, ouvert, actif, onBasculer, refBouton, children }) {
+  return (
+    <div className={`ab-topbar__groupe${ouvert ? ' ab-topbar__groupe--open' : ''}`}>
+      <button
+        type="button"
+        ref={(el) => { refBouton.current[id] = el; }}
+        className={`ab-topbar__groupe-btn${actif ? ' active' : ''}`}
+        aria-haspopup="true"
+        aria-expanded={ouvert}
+        aria-controls={`ab-topbar-menu-${id}`}
+        onClick={(e) => { e.stopPropagation(); onBasculer(id); }}
+      >
+        {label}
+        <span className="ab-topbar__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div id={`ab-topbar-menu-${id}`} className="ab-topbar__menu" hidden={!ouvert}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
   const { libraryName, libraryId, role, isNetworkAdmin } = useLibrary();
   const location = useLocation();
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  // Par segment : « /biblioteca » ne s'allume plus sur « /bibliotecas » (E20 —
+  // sinon le menu Travail se dirait actif sur l'annuaire public).
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+  // E20 : le menu ouvert (un seul à la fois), et les boutons pour y rendre le
+  // focus à Échap. Les entrées de Travail, chacune sous son `canSee*`.
+  const [groupe, setGroupe] = useState(null);
+  const refsBoutons = useRef({});
+  const basculer = (id) => setGroupe((g) => (g === id ? null : id));
+  const travail = [
+    canSeePainel(role) && { to: '/painel', label: 'nav.panel' },
+    canSeeCatalogacao(role) && { to: '/catalogacao', label: 'nav.catalogacao' },
+    canSeeImportacoes(role) && { to: '/importacoes', label: 'nav.importacoes' },
+    // Le lien porte le titre réel de la page (« Gestion de la bibliothèque »),
+    // pas « Bibliothèque » : à côté de « Bibliothèques » (l'annuaire public),
+    // un singulier seul ne disait pas ce qu'on y trouve (Xavier, 15/09/2026).
+    // `nav.library` reste en usage comme en-tête de colonne dans RedePage.
+    canSeeBiblioteca(role) && { to: '/biblioteca', label: 'nav.biblioteca' },
+    // Outils fédéralistes : tout membre rattaché (FED-2).
+    canSeeFederacao(role) && { to: '/federacao', label: 'nav.federacao' },
+    canSeeRede(isNetworkAdmin) && { to: '/rede', label: 'nav.network' },
+  ].filter(Boolean);
+
+  // Un menu se ferme à chaque navigation, à Échap (le focus revient à son
+  // bouton) et au clic hors des menus.
+  useEffect(() => { setGroupe(null); }, [location.pathname]);
+  useEffect(() => {
+    if (!groupe) return undefined;
+    const surTouche = (e) => {
+      if (e.key !== 'Escape') return;
+      const bouton = refsBoutons.current[groupe];
+      setGroupe(null);
+      bouton?.focus();
+    };
+    const surClic = (e) => { if (!e.target.closest?.('.ab-topbar__groupe')) setGroupe(null); };
+    document.addEventListener('keydown', surTouche);
+    document.addEventListener('mousedown', surClic);
+    return () => { document.removeEventListener('keydown', surTouche); document.removeEventListener('mousedown', surClic); };
+  }, [groupe]);
 
   // Logo de la bibliothèque de session, résolu data-driven depuis library_commons.
   const [logoSrc, setLogoSrc] = useState(null);
@@ -159,96 +223,60 @@ export function Topbar() {
         className={`ab-topbar__nav${menuOpen ? ' ab-topbar__nav--open' : ''}`}
         onClick={() => setMenuOpen(false)}
       >
-        {/* ── Groupe 1 : accessible à tout user ─────────────── */}
+        {/* E20 (Xavier, 08/09/2026) : la barre se regroupe par NATURE, pas par
+            rôle — une coordination est aussi bibliothécaire et lectrice, un
+            menu par rôle lui en montrerait deux pour elle seule. Le catalogue
+            reste un lien direct (la porte publique) ; puis trois menus, Public,
+            Moi, Travail, qui s'ouvrent au clic ou au clavier (Entrée, Espace),
+            se ferment à Échap, au clic ailleurs et à chaque navigation — jamais
+            au survol. Chaque entrée garde son `canSee*` ; un groupe sans
+            entrée n'apparaît pas. Aucun chemin ne change (les 51 intentions de
+            « Je veux… » et les liens du Manuel restent valides). Dans le
+            tiroir mobile, les menus se déplient sur place. */}
         <Link to="/" className={isActive('/catalogo') || location.pathname === '/' ? 'active' : ''}>
           {t({ id: 'nav.catalog' })}
         </Link>
 
-        {/* « Je veux… » : dire ce qu'on veut faire, et y être mené (05/09/2026).
-            Juste après le catalogue — la porte publique reste en tête, le geste
-            vient tout de suite pour qui est connecté (Xavier, 06/09). */}
+        <NavGroupe id="public" label={t({ id: 'nav.group.public' })} ouvert={groupe === 'public'} onBasculer={basculer}
+          actif={['/bibliotecas', '/cartografia', '/thesaurus-ficedl'].some(isActive)} refBouton={refsBoutons}>
+          {/* Annuaire public des bibliothèques (chantier PUBLIB) — visible de tout le monde, anon compris */}
+          <Link to="/bibliotecas" className={isActive('/bibliotecas') ? 'active' : ''}>
+            {t({ id: 'nav.bibliotecas' })}
+          </Link>
+          {/* Carte publique du réseau (cartographie, REGISTRE §34) — visible de tout le monde */}
+          <Link to="/cartografia" className={isActive('/cartografia') ? 'active' : ''}>
+            {t({ id: 'cartografia.nav' })}
+          </Link>
+          {/* Thésaurus partagé FICEDL (cache anti-fork, P3a) — visible de tout le monde */}
+          <Link to="/thesaurus-ficedl" className={isActive('/thesaurus-ficedl') ? 'active' : ''}>
+            {t({ id: 'nav.thesaurus' })}
+          </Link>
+        </NavGroupe>
+
         {user && (
-          <Link to="/inicio" className={isActive('/inicio') ? 'active' : ''}>
-            {t({ id: 'nav.inicio' })}
-          </Link>
-        )}
-
-        {/* Annuaire public des bibliothèques (chantier PUBLIB) — visible de tout le monde, anon compris */}
-        <Link to="/bibliotecas" className={isActive('/bibliotecas') ? 'active' : ''}>
-          {t({ id: 'nav.bibliotecas' })}
-        </Link>
-
-        {/* Carte publique du réseau (cartographie, REGISTRE §34) — visible de tout le monde */}
-        <Link to="/cartografia" className={isActive('/cartografia') ? 'active' : ''}>
-          {t({ id: 'cartografia.nav' })}
-        </Link>
-
-        {/* Thésaurus partagé FICEDL (cache anti-fork, P3a) — visible de tout le monde */}
-        <Link to="/thesaurus-ficedl" className={isActive('/thesaurus-ficedl') ? 'active' : ''}>
-          {t({ id: 'nav.thesaurus' })}
-        </Link>
-
-        {user && canSeeAccount(role) && (
-          <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
-            {t({ id: 'nav.account' })}
-          </Link>
-        )}
-
-        {/* ── Groupe 2 : ≥ librarian (Painel + Catalogação) ── */}
-        {canSeePainel(role) && (
-          <>
-            <span className="ab-topbar__sep" aria-hidden="true">|</span>
-            <Link to="/painel" className={isActive('/painel') ? 'active' : ''}>
-              {t({ id: 'nav.panel' })}
+          <NavGroupe id="moi" label={t({ id: 'nav.group.me' })} ouvert={groupe === 'moi'} onBasculer={basculer}
+            actif={['/conta', '/inicio'].some(isActive)} refBouton={refsBoutons}>
+            {user && canSeeAccount(role) && (
+              <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
+                {t({ id: 'nav.account' })}
+              </Link>
+            )}
+            {/* « Je veux… » : dire ce qu'on veut faire, et y être mené (05/09/2026). */}
+            <Link to="/inicio" className={isActive('/inicio') ? 'active' : ''}>
+              {t({ id: 'nav.inicio' })}
             </Link>
-          </>
+          </NavGroupe>
         )}
 
-        {canSeeCatalogacao(role) && (
-          <Link to="/catalogacao" className={isActive('/catalogacao') ? 'active' : ''}>
-            {t({ id: 'nav.catalogacao' })}
-          </Link>
-        )}
-
-        {/* ── Groupe 3 : ≥ coordenador (Importações + Biblioteca) ── */}
-        {canSeeImportacoes(role) && (
-          <>
-            <span className="ab-topbar__sep" aria-hidden="true">|</span>
-            <Link to="/importacoes" className={isActive('/importacoes') ? 'active' : ''}>
-              {t({ id: 'nav.importacoes' })}
-            </Link>
-          </>
-        )}
-
-        {/* Le lien porte le titre réel de la page (« Gestion de la bibliothèque »),
-            pas « Bibliothèque » : à côté de « Bibliothèques » (l'annuaire public),
-            un singulier seul ne disait pas ce qu'on y trouve (Xavier, 15/09/2026).
-            `nav.library` reste en usage comme en-tête de colonne dans RedePage. */}
-        {canSeeBiblioteca(role) && (
-          <Link to="/biblioteca" className={isActive('/biblioteca') ? 'active' : ''}>
-            {t({ id: 'nav.biblioteca' })}
-          </Link>
-        )}
-
-        {/* ── Ferramentas federalistas : tout membre rattache (FED-2),
-              entre biblioteca et rede (gradation d'echelle) ── */}
-        {canSeeFederacao(role) && (
-          <>
-            <span className="ab-topbar__sep" aria-hidden="true">|</span>
-            <Link to="/federacao" className={isActive('/federacao') ? 'active' : ''}>
-              {t({ id: 'nav.federacao' })}
-            </Link>
-          </>
-        )}
-
-        {/* ── Groupe 4 : administrador AnarBib uniquement (Rede) ── */}
-        {canSeeRede(isNetworkAdmin) && (
-          <>
-            <span className="ab-topbar__sep" aria-hidden="true">|</span>
-            <Link to="/rede" className={isActive('/rede') ? 'active' : ''}>
-              {t({ id: 'nav.network' })}
-            </Link>
-          </>
+        {travail.length > 0 && (
+          <NavGroupe id="travail" label={t({ id: 'nav.group.work' })} ouvert={groupe === 'travail'} onBasculer={basculer}
+            actif={travail.some((e) => isActive(e.to))} refBouton={refsBoutons}>
+            {travail.map((e) => (
+              <Link key={e.to} to={e.to} className={isActive(e.to) ? 'active' : ''}>
+                {t({ id: e.label })}
+              </Link>
+            ))}
+          </NavGroupe>
         )}
 
         {/* ── Sortie / Inscription ─────────────────────────── */}

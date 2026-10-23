@@ -153,7 +153,6 @@ html { scroll-padding-top: calc(var(--ab-topbar-h, 0px) + 8px); }
     display: flex;
     align-items: center;
   }
-  .ab-topbar__sep { display: none; }
 
   /* Tiroir ouvert : le bandeau collant ne doit pas dépasser l'écran (neuf liens
      de 44 px sur un téléphone en paysage) ; il défile dans sa hauteur. */
@@ -265,16 +264,80 @@ html { scroll-padding-top: calc(var(--ab-topbar-h, 0px) + 8px); }
   font-size: 0.88rem;
 }
 
-/* ── Séparateur visuel entre groupes de la topbar ─────────
-   Patch 04/05/2026 : structure la nav par groupe de rôle
-   (catalogue/conta | painel/catalogação | importações/biblioteca | rede).
-   Discret, ne crée pas d'effet de menu déroulant ou de bordure forte. */
+/* ── Groupes de la barre (E20, 23/10/2026) ────────────────
+   Public, Moi, Travail : un bouton par groupe, un menu qui s'ouvre au clic
+   (jamais au survol) sous le bouton. Les séparateurs « | » du 04/05, qui
+   rangeaient les liens par rôle sur une seule ligne, n'ont plus d'emploi.
+   z-index 110 : au-dessus du bandeau (100), sous les modales (1000). */
 
-.ab-topbar__sep {
+.ab-topbar__groupe { position: relative; }
+
+.ab-topbar__groupe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
   color: var(--brand-muted);
-  opacity: 0.35;
-  font-weight: 300;
-  user-select: none;
-  margin: 0 2px;
-  font-size: 0.95rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: var(--brand-radius-sm);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.ab-topbar__groupe-btn:hover,
+.ab-topbar__groupe-btn.active,
+.ab-topbar__groupe--open > .ab-topbar__groupe-btn {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ab-topbar__groupe-btn:focus-visible,
+.ab-topbar__nav a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.ab-topbar__chevron { font-size: 0.7rem; transition: transform 0.15s; }
+.ab-topbar__groupe--open .ab-topbar__chevron { transform: rotate(180deg); }
+
+.ab-topbar__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+  padding: 6px;
+  background: var(--brand-menu-bg, rgba(12, 12, 12, 0.97));
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--brand-radius-sm);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.ab-topbar__menu[hidden] { display: none; }
+.ab-topbar__menu a { white-space: nowrap; }
+
+/* Tiroir mobile : le menu se déplie sur place, en retrait, sans flotter. */
+@media (max-width: 640px) {
+  .ab-topbar__groupe-btn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 12px 14px;
+    min-height: 44px;
+  }
+  .ab-topbar__menu {
+    position: static;
+    min-width: 0;
+    padding: 0 0 0 12px;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+  .ab-topbar__menu a { white-space: normal; }
 }
