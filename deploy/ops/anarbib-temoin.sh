@@ -64,6 +64,8 @@ CLE_PUBLIABLE="${TEMOIN_CLE_PUBLIABLE:-sb_publishable_KJBytsICkVClr8iG26b0CQ_Bxs
 URL_REST="${TEMOIN_URL_REST:-$PROJET/rest/v1/public_libraries?select=slug&limit=1}"
 URL_AUTH="${TEMOIN_URL_AUTH:-$PROJET/auth/v1/health}"
 URL_CONTROLE="${TEMOIN_URL_CONTROLE:-https://codeberg.org/}"
+# La sonde de sante tourne-t-elle ? (23/10/2026) Un booleen par l'API publique.
+URL_SONDE="${TEMOIN_URL_SONDE:-$PROJET/rest/v1/rpc/sonde_a_jour}"
 SEUIL_ECHECS="${TEMOIN_SEUIL_ECHECS:-2}"
 DELAI_S="${TEMOIN_DELAI_S:-20}"
 TRANSPORT="${TEMOIN_TRANSPORT:-resend}"          # resend | fichier (banc)
@@ -160,6 +162,83 @@ envoyer() {   # $1 sujet, $2 texte ; retour 0 si parti
   esac
 }
 
+# --- La sonde de sante tourne-t-elle encore ? (23/10/2026) --------------------
+# health-probe est lancee par une tache planifiee de la base : si son adresse se
+# perd (secret Vault FUNCTIONS_BASE_URL efface), si la tache casse ou si la
+# fonction echoue avant d'ecrire, elle se TAIT — et c'est elle qui alerte.
+# api.sonde_a_jour() rend « true » si une tournee a ete ecrite dans les 15
+# dernieres minutes. Evaluee seulement quand l'API repond (sinon c'est la panne
+# qui parle) ; meme seuil, meme rythme : un courriel au silence, un au retour.
+# Etat a part (etat-sonde), le format de `etat` ne change pas.
+ETAT_SONDE="$ETAT_DIR/etat-sonde"
+verifier_sonde() {
+  local s_echecs=0 s_etat=ok s_depuis=0 k v reponse duree sujet texte
+  if [ -f "$ETAT_SONDE" ]; then
+    while IFS='=' read -r k v; do
+      case "$k" in echecs) s_echecs="$v" ;; etat) s_etat="$v" ;; depuis) s_depuis="$v" ;; esac
+    done < "$ETAT_SONDE"
+  fi
+  case "$s_echecs" in ''|*[!0-9]*) s_echecs=0 ;; esac
+  case "$s_depuis" in ''|*[!0-9]*) s_depuis=0 ;; esac
+  case "$s_etat" in ok|muette) ;; *) s_etat=ok ;; esac
+  reponse="$(curl -sS --max-time "$DELAI_S" -X POST "$URL_SONDE" \
+               -H "apikey: $CLE_PUBLIABLE" -H "Content-Profile: api" -H "Accept-Profile: api" \
+               -H "Content-Type: application/json" --data '{}' 2>/dev/null | tr -d '[:space:]')" || reponse=""
+  ecrire_sonde() { printf 'echecs=%s\netat=%s\ndepuis=%s\ndernier_passage=%s\nreponse=%s\n' \
+                     "$1" "$2" "$3" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$reponse" > "$ETAT_SONDE"; }
+  if [ "$reponse" = true ]; then
+    if [ "$s_etat" = muette ]; then
+      duree=$(( (maintenant - s_depuis) / 60 ))
+      sujet="AnarBib — la sonde de santé tourne de nouveau (silence de ${duree} min, témoin du poste)"
+      texte="La sonde de santé de la base (health-probe) écrit de nouveau ses tournées, constaté depuis le poste le $(heure_locale "$maintenant") ($FUSEAU).
+
+Silence constaté par le témoin : du $(heure_locale "$s_depuis") au $(heure_locale "$maintenant"), soit ${duree} minutes environ. Pendant ce temps, aucune alerte de la base n'a pu partir.
+
+À faire : chercher la cause dans le journal de la tâche anarbib-health-probe (cron.job_run_details) et la noter au backlog."
+      envoyer "$sujet" "$texte" || { ecrire_sonde 0 muette "$s_depuis"; return; }
+    fi
+    ecrire_sonde 0 ok 0
+    info "La sonde de sante tourne."
+    return
+  fi
+  # Seul un « false » explicite est un silence de la sonde. Toute autre reponse
+  # (fonction absente le temps d'un deploiement : 404 ; erreur passagere de
+  # PostgREST) est notee, pas comptee : on n'alerte pas sur ce qu'on n'a pas lu.
+  if [ "$reponse" != false ]; then
+    ecrire_sonde "$s_echecs" "$s_etat" "$s_depuis"
+    info "Reponse illisible de api.sonde_a_jour (${reponse:-aucune}) : rien compte."
+    return
+  fi
+  s_echecs=$((s_echecs + 1))
+  if [ "$s_etat" = muette ]; then
+    ecrire_sonde "$s_echecs" muette "$s_depuis"
+    info "SONDE MUETTE depuis $(heure_locale "$s_depuis") (reponse : ${reponse:-aucune})."
+    return
+  fi
+  if [ "$s_echecs" -lt "$SEUIL_ECHECS" ]; then
+    ecrire_sonde "$s_echecs" ok 0
+    info "La sonde de sante ne semble pas tourner (reponse : ${reponse:-aucune}) — echec $s_echecs sur $SEUIL_ECHECS avant d'ecrire."
+    return
+  fi
+  sujet="AnarBib — la sonde de santé ne tourne plus (témoin du poste, $(TZ="$FUSEAU" date -d "@$maintenant" '+%H:%M'))"
+  texte="L'API de production répond, mais la sonde de santé (health-probe) n'a écrit aucune tournée depuis plus de 15 minutes : ${s_echecs} passages de suite du témoin l'ont constaté, le dernier le $(heure_locale "$maintenant") ($FUSEAU). Réponse de api.sonde_a_jour : ${reponse:-aucune}.
+
+Ce que cela veut dire : la base ne se surveille plus elle-même. Ni panne de service, ni incident de sauvegarde, de courriel ou de vigilance ne peut être signalé tant que ce silence dure.
+
+Causes possibles, de la plus probable à la moins probable :
+- l'adresse des fonctions est perdue : select private.fn_functions_base_url(); doit rendre l'adresse du projet (secret Vault FUNCTIONS_BASE_URL) ;
+- la tâche anarbib-health-probe est désactivée ou en échec : voir cron.job et cron.job_run_details ;
+- la fonction health-probe échoue avant d'écrire : journaux des Edge Functions ($TABLEAU_DE_BORD).
+
+Le témoin écrira une seconde fois quand la sonde reprendra."
+  if envoyer "$sujet" "$texte"; then
+    ecrire_sonde "$s_echecs" muette "$(( maintenant - (s_echecs - 1) * 300 ))"
+    info "SONDE MUETTE DECLAREE — courriel envoye."
+  else
+    ecrire_sonde "$s_echecs" ok 0
+  fi
+}
+
 # --- Le verdict ---------------------------------------------------------------
 if [ $rest_ok = 1 ]; then
   if [ "$etat" = panne ]; then
@@ -182,6 +261,7 @@ Ce qui reste à faire : relire les journaux du projet sur le tableau de bord ($T
   fi
   [ $auth_ok = 1 ] || info "Auth ne repond pas ($code_auth) alors que REST repond : note au journal, pas d'alerte."
   info "L'API repond."
+  verifier_sonde
   exit 0
 fi
 

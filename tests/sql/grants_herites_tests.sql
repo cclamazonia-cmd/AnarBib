@@ -253,6 +253,8 @@ BEGIN
   -- moissonneur, pas pour la base. 22 -> 20.
   -- 23/10/2026 (D25, 20261023130916) : api.book_documents_v1 entre -- les
   -- fichiers Word/ODT d'une notice, listés sur sa page publique. 20 -> 21.
+  -- 23/10/2026 (20261023153155) : api.sonde_a_jour entre -- un booleen « la
+  -- sonde de sante tourne », lu par le temoin externe. 21 -> 22.
   v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
   BEGIN
     WITH nommees(fn) AS (VALUES
@@ -262,6 +264,7 @@ BEGIN
       -- n'est lisible que par fonction ; verdict dans AUDIT_execute_anon_2026-08-30.md.
       ('api.fn_catalog_networks_v1'),
       ('api.search_catalog_v1'),
+      ('api.sonde_a_jour'),
       ('api.subject_related_v1'),
       -- 04/10/2026 (20261004215035) : l'indicateur numérique du catalogue public.
       ('public.catalog_digital_access_v1'),
@@ -379,6 +382,7 @@ BEGIN
       ('api.serial_issues_v1'),
       ('api.similar_authors'),
       ('api.similar_books'),
+      ('api.sonde_a_jour'),             -- 23/10/2026 : un booléen « la sonde de santé tourne » (DEFINER), lu par le témoin externe
       ('api.subject_detail_v1'),
       ('api.subject_ficedl_links_v1'),
       ('api.subject_related_v1'),

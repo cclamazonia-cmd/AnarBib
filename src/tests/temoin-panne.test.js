@@ -19,6 +19,11 @@
 //   * sans configuration : le témoin refuse (sortie 2) au lieu de veiller en
 //     silence ;
 //   * les unités systemd pointent le script, toutes les cinq minutes.
+// 23/10/2026 — la sonde de santé muette : l'API répond mais api.sonde_a_jour
+// rend « false » (health-probe n'écrit plus de tournée). Deux passages : un
+// courriel « ne tourne plus » ; au retour, « tourne de nouveau ». Jamais
+// évaluée quand l'API est en panne. Le banc pointe TEMOIN_URL_SONDE sur son
+// faux serveur : jamais la production.
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawn } from 'node:child_process';
@@ -37,6 +42,7 @@ const posix = (p) => p.replace(/\\/g, '/');
 
 let ops; let api; let controle; let portApi; let portControle;
 let modeApi = 200;   // 200 | 522 | 'coupe'
+let modeSonde = 'true';   // réponse de api.sonde_a_jour quand l'API répond
 
 function ecouter(serveur) {
   return new Promise((ok) => serveur.listen(0, '127.0.0.1', () => ok(serveur.address().port)));
@@ -46,7 +52,12 @@ beforeAll(async () => {
   ops = mkdtempSync(path.join(tmpdir(), 'anarbib-temoin-'));
   api = createServer((req, res) => {
     if (modeApi === 'coupe') { req.socket.destroy(); return; }
-    res.statusCode = modeApi; res.end(modeApi === 200 ? '[{"slug":"btl"}]' : 'origin unreachable');
+    res.statusCode = modeApi;
+    if (modeApi !== 200) { res.end('origin unreachable'); return; }
+    if (req.url.startsWith('/sonde') && modeSonde === '404') {
+      res.statusCode = 404; res.end('{"code":"PGRST202","message":"Could not find the function"}'); return;
+    }
+    res.end(req.url.startsWith('/sonde') ? modeSonde : '[{"slug":"btl"}]');
   });
   controle = createServer((req, res) => { res.statusCode = 200; res.end('ok'); });
   portApi = await ecouter(api);
@@ -68,6 +79,7 @@ function passage(env = {}) {
         TEMOIN_URL_REST: `http://127.0.0.1:${portApi}/rest`,
         TEMOIN_URL_AUTH: `http://127.0.0.1:${portApi}/auth`,
         TEMOIN_URL_CONTROLE: `http://127.0.0.1:${portControle}/`,
+        TEMOIN_URL_SONDE: `http://127.0.0.1:${portApi}/sonde`,
         TEMOIN_DELAI_S: '5',
         ...env,
       },
@@ -138,6 +150,68 @@ describe.skipIf(!BASH)('le témoin de panne hors de la base (I31)', () => {
     expect(r.sortie).toContain('AVEUGLE');
     expect(etat()).toMatchObject({ echecs: '0', etat: 'ok' });
     expect(courriels()).toHaveLength(2);
+  });
+
+  const etatSonde = () => Object.fromEntries(readFileSync(path.join(ops, 'temoin/etat-sonde'), 'utf8').trim().split('\n').map((l) => l.split('=')));
+
+  it('fonction absente (404, le temps d’un déploiement) : rien compté, rien écrit', async () => {
+    modeApi = 200; modeSonde = '404';
+    const avant = courriels().length;
+    for (let i = 0; i < 3; i++) {
+      const r = await passage();
+      expect(r.rc, r.sortie).toBe(0);
+      expect(r.sortie).toContain('illisible');
+    }
+    expect(etatSonde()).toMatchObject({ echecs: '0', etat: 'ok' });
+    expect(courriels()).toHaveLength(avant);
+  });
+
+  it('sonde muette une fois : comptée, pas encore écrite ; l’API reste ok (sortie 0)', async () => {
+    modeApi = 200; modeSonde = 'false';
+    const avant = courriels().length;
+    const r = await passage();
+    expect(r.rc, r.sortie).toBe(0);
+    expect(etat().etat).toBe('ok');
+    expect(etatSonde()).toMatchObject({ echecs: '1', etat: 'ok', reponse: 'false' });
+    expect(courriels()).toHaveLength(avant);
+  });
+
+  it('sonde muette deux fois : un courriel « ne tourne plus » qui dit où chercher', async () => {
+    const avant = courriels().length;
+    const r = await passage();
+    expect(r.rc, r.sortie).toBe(0);
+    expect(etatSonde()).toMatchObject({ echecs: '2', etat: 'muette' });
+    expect(courriels()).toHaveLength(avant + 1);
+    const c = dernier();
+    expect(c.subject).toContain('la sonde de santé ne tourne plus');
+    expect(c.text).toContain('FUNCTIONS_BASE_URL');
+    expect(c.text).toContain('anarbib-health-probe');
+  });
+
+  it('une troisième fois : pas de second courriel', async () => {
+    const avant = courriels().length;
+    await passage();
+    expect(etatSonde()).toMatchObject({ echecs: '3', etat: 'muette' });
+    expect(courriels()).toHaveLength(avant);
+  });
+
+  it('la sonde reprend : un courriel « tourne de nouveau » avec la durée', async () => {
+    modeSonde = 'true';
+    const avant = courriels().length;
+    const r = await passage();
+    expect(r.rc, r.sortie).toBe(0);
+    expect(etatSonde()).toMatchObject({ echecs: '0', etat: 'ok' });
+    expect(courriels()).toHaveLength(avant + 1);
+    expect(dernier().subject).toMatch(/tourne de nouveau \(silence de \d+ min/);
+  });
+
+  it('API en panne : la sonde n’est pas évaluée (l’autre alerte parle)', async () => {
+    modeApi = 522; modeSonde = 'false';
+    const avantSonde = etatSonde();
+    await passage();
+    expect(etatSonde().dernier_passage).toBe(avantSonde.dernier_passage);
+    modeApi = 200; modeSonde = 'true';
+    await passage();   // remet l'état à zéro pour la suite
   });
 
   it('sans configuration, le témoin refuse de veiller en silence (sortie 2)', async () => {

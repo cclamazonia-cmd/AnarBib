@@ -487,6 +487,8 @@ tests/sql/compteurs_d_abus_tests.sql
 # 22/10/2026 (migration 20261022223116) : le journal des consultations nominatives compte sans nommer ;
 # les sondes abus et consultations de health-probe, leurs seuils, leurs droits, la purge à 12 mois.
 tests/sql/alertes_comportements_tests.sql
+# 23/10/2026 (migration 20261023153155) : api.sonde_a_jour, le booléen que lit le témoin externe.
+tests/sql/sonde_a_jour_tests.sql
 # B27 (21/09) : le catalogue par oeuvre repond au visiteur anonyme. La RPC depassait les 3 s du role anon
 # (sous-requete correlee par groupe de la page + fn_work_display_title par oeuvre du catalogue) ; recrite sans
 # changer son resultat. Garde les motifs couteux, la requete dynamique, et la cascade du titre dans ses 3 branches.

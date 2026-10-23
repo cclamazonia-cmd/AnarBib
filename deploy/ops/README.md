@@ -300,6 +300,17 @@ coupable :
 Son état vit dans `~/anarbib-ops/temoin/etat` (échecs de suite, état, début de
 la panne) ; les courriels partis dans `~/anarbib-ops/temoin/courriels.log`.
 
+**La sonde muette (23/10/2026).** Quand l'API répond, le témoin demande aussi à
+`api.sonde_a_jour()` si `health-probe` a écrit une tournée dans les 15
+dernières minutes (un booléen, rien d'autre). Une sonde qui se tait — adresse
+des fonctions perdue (secret Vault `FUNCTIONS_BASE_URL`), tâche
+`anarbib-health-probe` cassée, fonction en erreur — ne peut pas le dire
+elle-même : c'est elle qui alerte. Même seuil (deux passages), un courriel au
+silence, un au retour ; jamais évaluée pendant une panne de l'API. Seul un
+`false` explicite compte : une réponse illisible (fonction absente le temps d'un
+déploiement, erreur passagère) est notée au journal, pas comptée. État à part :
+`~/anarbib-ops/temoin/etat-sonde`.
+
 ### Le poser sur une machine
 
 La configuration ne vient **jamais** du dépôt : `~/anarbib-ops/temoin.env`, mode
