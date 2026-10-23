@@ -81,6 +81,34 @@ BEGIN
   IF v_txt = '' THEN v_passed := v_passed + 1;
   ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || v_txt); END IF;
 
+  -- ── T4 (migration 20261023154059) ───────────────────────────────────
+  v_t := 'T4 « Autres formats » : un EPUB qui n''est pas la ressource principale y figure, la principale non';
+  DECLARE v_livre bigint; v_pdf bigint; v_epub bigint; v_livre2 bigint; v_epub2 bigint; v_ids bigint[];
+  BEGIN
+    INSERT INTO public.books (titulo, bib_ref, tipo_material, circulation_default, loanable)
+    VALUES ('D24 avec PDF', 'TEST-D24-A-' || v_suf, 'livro', 'ambos', true) RETURNING id INTO v_livre;
+    INSERT INTO public.books (titulo, bib_ref, tipo_material, circulation_default, loanable)
+    VALUES ('D24 sans PDF', 'TEST-D24-B-' || v_suf, 'livro', 'ambos', true) RETURNING id INTO v_livre2;
+    INSERT INTO public.book_holdings (book_id, library_id, exemplares_total, available_count) VALUES (v_livre, v_lib, 1, 1), (v_livre2, v_lib, 1, 1);
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, is_primary, mime_type,
+                                               storage_bucket, storage_path, label, bibliographic_match_validated)
+    VALUES (v_livre, 'pdf_publico', 'leitura_online', 'publico', 'active', true, true, 'application/pdf',
+            'anarbib-pdf-public', 'books/' || v_livre || '/fac.pdf', 'Fac-similé', true) RETURNING id INTO v_pdf;
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, is_primary, mime_type,
+                                               storage_bucket, storage_path, label, bibliographic_match_validated)
+    VALUES (v_livre, 'epub', 'leitura_online', 'publico', 'active', true, false, 'application/epub+zip',
+            'anarbib-epub-public', 'books/' || v_livre || '/t.epub', 'Texte', true) RETURNING id INTO v_epub;
+    INSERT INTO public.book_digital_resources (book_id, resource_type, usage_type, access_scope, status, is_active, is_primary, mime_type,
+                                               storage_bucket, storage_path, label, bibliographic_match_validated)
+    VALUES (v_livre2, 'epub', 'leitura_online', 'publico', 'active', true, true, 'application/epub+zip',
+            'anarbib-epub-public', 'books/' || v_livre2 || '/t.epub', 'Texte', true) RETURNING id INTO v_epub2;
+    PERFORM set_config('request.jwt.claims', '{}', true);
+    SELECT array_agg(d.asset_id ORDER BY d.asset_id) INTO v_ids FROM api.book_documents_v1(v_livre) d;
+    IF v_ids = ARRAY[v_epub] AND NOT EXISTS (SELECT 1 FROM api.book_documents_v1(v_livre2)) THEN
+      v_passed := v_passed + 1;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || coalesce(v_ids::text, '(vide)')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'D24-EPUB-RESTREINT OK : %/% tests passés', v_passed, (v_passed + v_failed);
   ELSE

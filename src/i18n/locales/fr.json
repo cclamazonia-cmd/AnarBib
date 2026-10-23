@@ -1536,7 +1536,7 @@
   "book.digital.no": "NON",
   "book.digital.read": "Lire",
   "book.digital.reserved": "RÉSERVÉ",
-  "book.documents.label": "Fichiers à télécharger :",
+  "book.documents.label": "Autres formats :",
   "book.documents.size": "{size} Ko",
   "book.digital.reservedLogin": "connecte-toi avec un compte de l’une d’elles pour lire.",
   "book.digital.reservedNotMember": "ton compte n’appartient à aucune d’elles : la lecture en ligne t’est fermée, l’exemplaire physique reste empruntable.",

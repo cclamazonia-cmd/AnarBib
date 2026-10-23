@@ -1530,7 +1530,7 @@
   "book.digital.no": "NO",
   "book.digital.read": "Read",
   "book.digital.reserved": "RESERVED",
-  "book.documents.label": "Files to download:",
+  "book.documents.label": "Other formats:",
   "book.documents.size": "{size} KB",
   "book.digital.reservedLogin": "sign in with an account from one of them to read.",
   "book.digital.reservedNotMember": "your account belongs to none of them: online reading is closed to you, the physical copy can still be borrowed.",

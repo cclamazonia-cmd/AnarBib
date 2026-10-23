@@ -35,7 +35,9 @@ async function pageDeLaSource(assetId) {
 }
 
 // D25 : « DOCX · 41 Ko » — le format se lit au type MIME, la taille au versement.
+// D24 : la liste montre aussi les EPUB qui ne sont pas la ressource principale.
 const FORMATS_DOCUMENTS = {
+  'application/epub+zip': 'EPUB',
   'application/msword': 'DOC',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
   'application/vnd.oasis.opendocument.text': 'ODT',
@@ -701,8 +703,9 @@ export default function BookPage() {
               </div>
             )}
 
-            {/* D25 (23/10/2026) — fichiers Word/ODT : jamais lus en ligne, on les
-                télécharge par le lecteur (read-digital-asset signe l'URL). */}
+            {/* D25 puis D24 (23/10/2026) — « Autres formats » : fichiers Word/ODT
+                (téléchargés par le lecteur, read-digital-asset signe l'URL) et EPUB
+                (lus dans le lecteur), hors la ressource principale de « Lire ». */}
             {documents.length > 0 && (
               <div className="ab-livro-documents">
                 <span className="ab-livro-digital-label">{t({ id: 'book.documents.label' })}</span>
