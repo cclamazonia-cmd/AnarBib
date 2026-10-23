@@ -912,3 +912,6 @@ tests/sql/flux_appels_comptes_tests.sql
 # J13 (22/10/2026) : restreindre une ressource publique sans candidat NUMDIF (administration du réseau, décision écrite dans la ressource,
 # vers le restreint seulement) — garde, refus de l'enregistrement, restriction faite puis « aligned », chemin des candidats intact.
 tests/sql/numdif_restreindre_sans_candidat_tests.sql
+# D25 (23/10/2026) : les fichiers Word et ODT, en téléchargement — versement en « documento » (jamais principal), PDF inchangé,
+# réalignement qui garde le type, porte api.book_documents_v1 sous anon, contraintes et seaux.
+tests/sql/d25_documents_word_odt_tests.sql

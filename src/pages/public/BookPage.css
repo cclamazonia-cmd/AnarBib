@@ -345,6 +345,39 @@
   color: var(--brand-link);
 }
 
+/* ── D25 (23/10/2026) — fichiers Word/ODT à télécharger ─── */
+
+.ab-livro-documents {
+  margin: 6px 0 10px;
+}
+
+.ab-livro-documents__list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.ab-livro-documents__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ab-livro-documents__item a {
+  color: var(--brand-link);
+  font-weight: 700;
+}
+
+.ab-livro-documents__format {
+  font-size: 0.82rem;
+  color: var(--brand-muted);
+}
+
 /* ── #OPAC1 — Barre d'actions de notice ─────────────────── */
 
 .ab-livro-toolbar {

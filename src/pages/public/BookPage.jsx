@@ -34,6 +34,19 @@ async function pageDeLaSource(assetId) {
   } catch { return null; }
 }
 
+// D25 : « DOCX · 41 Ko » — le format se lit au type MIME, la taille au versement.
+const FORMATS_DOCUMENTS = {
+  'application/msword': 'DOC',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+  'application/vnd.oasis.opendocument.text': 'ODT',
+};
+function formatDocument(d, t) {
+  const format = FORMATS_DOCUMENTS[d?.mime_type] || '';
+  const octets = Number(d?.file_size_bytes) || 0;
+  const taille = octets > 0 ? t({ id: 'book.documents.size' }, { size: Math.max(1, Math.round(octets / 1024)) }) : '';
+  return [format, taille].filter(Boolean).join(' · ');
+}
+
 function parseJson(v) { if (!v) return null; if (typeof v === 'object') return v; try { return JSON.parse(v); } catch { return null; } }
 
 function getStatusInfo(book, sessionCtx, isAuth, t) {
@@ -149,6 +162,7 @@ export default function BookPage() {
   const [serialInfo, setSerialInfo] = useState(null);     // #périodiques P8 : titre de revue + désignation
   const [workId, setWorkId] = useState(null); // P4 v2 : œuvre du livre courant (lien page œuvre)
   const [audioTracks, setAudioTracks] = useState([]); // P3d : tracklist publique (#AUDIO-fonds)
+  const [documents, setDocuments] = useState([]);     // D25 : fichiers Word/ODT à télécharger
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -164,6 +178,7 @@ export default function BookPage() {
       setSessionCtx(null);
       setContributors([]);
       setSimilar([]);
+      setDocuments([]);
       setViewMode('standard');
       setReserveStatus('');
       try {
@@ -215,6 +230,12 @@ export default function BookPage() {
           try {
             const at = await supabase.schema('api').rpc('audio_tracklist_public', { p_book_id: bookId });
             if (Array.isArray(at.data) && at.data.length) setAudioTracks(at.data);
+          } catch { /* non-bloquant */ }
+          // D25 — fichiers Word/ODT, en téléchargement seulement. La porte rend
+          // aussi le restreint, marqué access_granted pour qui peut le lire.
+          try {
+            const docs = await supabase.schema('api').rpc('book_documents_v1', { p_book_id: bookId });
+            if (Array.isArray(docs.data)) setDocuments(docs.data);
           } catch { /* non-bloquant */ }
         }
 
@@ -677,6 +698,27 @@ export default function BookPage() {
                   ? <a href={digitalAccess.sourceUrl} target="_blank" rel="noopener noreferrer">{digitalAccess.sourceName}</a>
                   : digitalAccess.sourceName}
                 {digitalAccess.rights && <span> — {t({ id: `catalogacao.digital.rights.${digitalAccess.rights}`, defaultMessage: digitalAccess.rights })}</span>}
+              </div>
+            )}
+
+            {/* D25 (23/10/2026) — fichiers Word/ODT : jamais lus en ligne, on les
+                télécharge par le lecteur (read-digital-asset signe l'URL). */}
+            {documents.length > 0 && (
+              <div className="ab-livro-documents">
+                <span className="ab-livro-digital-label">{t({ id: 'book.documents.label' })}</span>
+                <ul className="ab-livro-documents__list">
+                  {documents.map((d) => (
+                    <li key={d.asset_id} className="ab-livro-documents__item">
+                      {d.access_granted
+                        ? <Link to={`/ler/${book.book_id || book.id}?asset_id=${d.asset_id}`}>{d.label || t({ id: 'book.documents.label' })}</Link>
+                        : <span>{d.label}</span>}
+                      <span className="ab-livro-documents__format">{formatDocument(d, t)}</span>
+                      {!d.access_granted && (
+                        <span className="ab-livro-digital-chip ab-livro-digital-chip--reserved">{t({ id: 'book.digital.reserved' })}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 

@@ -274,3 +274,36 @@ conservé ; listes T10 et T12 de `grants_herites_tests.sql` réduites
 d'autant. Le moissonnage ne change pas.
 
 Compte attendu au prochain relevé : **0028 = 20**.
+
+---
+
+## Addendum — 23/10/2026, après-midi : `api.book_documents_v1` (D25, 0028 : 20 → 21)
+
+Une porte neuve, ouverte à `anon` **par décision** : la page publique d'une
+notice liste ses fichiers Word et ODT (D25, décision de Xavier du 23/10 : admis
+en téléchargement seulement). Elle ne pouvait pas lire la table : la RLS de
+`book_digital_resources` ne montre au lectorat que le public du seau public, et
+un membre de la bibliothèque détentrice ne verrait pas le document restreint
+qu'il a le droit de lire.
+
+**Verdict : saine.** SQL, `STABLE`, `SET search_path`. Mêmes règles que
+`get_accessible_digital_asset_by_id_v2`, déjà ouverte à `anon` : notice d'un
+catalogue lisible par l'appelant (`private.fn_catalog_library_visible_to_caller`),
+ressource active de type `documento` avec un fichier stocké, publique **et**
+validée bibliographiquement, ou restreinte. Ce qu'elle rend : identifiant,
+libellé, type MIME, portée, taille, et `access_granted` (vrai pour le public ;
+pour le restreint, compte actif ET membre d'une bibliothèque détentrice). Ni
+seau, ni chemin, ni adresse de fichier, ni justification : la lecture passe par
+l'identifiant et `read-digital-asset`, qui refait la garde et signe l'URL.
+Ce qu'un visiteur apprend de plus qu'avant : qu'un document restreint existe
+sur une notice qu'il voit déjà, et son libellé (titre de la notice suivi de
+« (arquivo de texto) ») — la notice dit déjà « RÉSERVÉ » pour un PDF restreint
+(`catalog_digital_access_v1`, ouverte à `anon`), c'est la même information.
+
+Ouverture écrite dans la migration `20261023130916` (`REVOKE EXECUTE … FROM
+PUBLIC, anon, authenticated` puis `GRANT … TO anon, authenticated,
+service_role`, garde interne : ouverte à `anon` et `authenticated`, pas à
+`PUBLIC`), entrées **T10** et **T12** de `grants_herites_tests.sql`, banc
+`d25_documents_word_odt_tests.sql` T5 (sous le rôle `anon`) et T6 (droits).
+
+Compte attendu au prochain relevé : **0028 = 21**.

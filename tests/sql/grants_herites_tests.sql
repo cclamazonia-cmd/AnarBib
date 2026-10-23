@@ -251,10 +251,13 @@ BEGIN
   -- Function oai-pmh-provider les appelle avec la cle de service (secretKey),
   -- personne ne les appelle sous anon : l'OAI-PMH est anonyme pour le
   -- moissonneur, pas pour la base. 22 -> 20.
+  -- 23/10/2026 (D25, 20261023130916) : api.book_documents_v1 entre -- les
+  -- fichiers Word/ODT d'une notice, listés sur sa page publique. 20 -> 21.
   v_t := 'T10 les fonctions SECURITY DEFINER ouvertes a anon sont exactement celles de la liste nommee';
   BEGIN
     WITH nommees(fn) AS (VALUES
       ('api.audio_tracklist_public'),
+      ('api.book_documents_v1'),
       -- 05/10/2026 (G13) : le filtre « réseau » du catalogue public — la carte
       -- n'est lisible que par fonction ; verdict dans AUDIT_execute_anon_2026-08-30.md.
       ('api.fn_catalog_networks_v1'),
@@ -362,6 +365,7 @@ BEGIN
       ('api.audio_tracklist_public'),
       ('api.author_subjects_v1'),
       ('api.book_copies_by_library_v1'),
+      ('api.book_documents_v1'),         -- D25, 23/10/2026 : fichiers Word/ODT d'une notice (DEFINER, porte publique)
       ('api.book_other_editions'),
       ('api.book_serial_v1'),
       ('api.catalog_author_book_ids_v1'),   -- 12/10/2026 : notices du filtre auteur·rice en liste plate (INVOKER)

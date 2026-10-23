@@ -2188,3 +2188,23 @@ Comptes attendus au prochain relevé : **0029 = 441**, tous justifiés ;
 **0028 = 20** ; **0011 = 0** ; INFO = **33** (les quatre tables neuves,
 `private.flux_appels`, `private.mail_temoin_jour`, `private.mail_cadence`,
 `ingest.digital_candidates`, sont fermées à tous et lues par des DEFINER).
+
+
+## Complément du 23/10/2026, après-midi — D25 : `api.book_documents_v1` (441 → 442)
+
+Une DEFINER neuve exposée à `authenticated` (et à `anon`, verdict à l'addendum
+du 23/10 après-midi de `AUDIT_execute_anon_2026-08-30.md`) : la liste des
+fichiers Word/ODT d'une notice, pour sa page publique. **Saine** : bornée aux
+notices d'un catalogue lisible par l'appelant, aux ressources `documento`
+actives (publiques validées, ou restreintes signalées), sans seau ni chemin ;
+`access_granted` se calcule pour l'appelant (`fn_current_user_conta_ativa()`
+et `fn_current_user_is_member_of_holding_library`). Aucun paramètre de
+personne, aucune écriture.
+
+Les fonctions patchées par la même migration (`ingest.fn_digital_candidate_deposit_record`,
+`ingest.fn_digital_resource_realign_record`, `public.fn_digital_resource_realign_garde`,
+`public.get_book_primary_public_digital_asset_v2`) gardent leurs droits, vérifiés
+inchangés par la migration ; leurs gardes ne bougent pas.
+
+Comptes attendus au prochain relevé : **0029 = 442**, tous justifiés ;
+**0028 = 21**.

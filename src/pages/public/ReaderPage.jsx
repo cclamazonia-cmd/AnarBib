@@ -717,6 +717,23 @@ export default function ReaderPage() {
             onError={(msg) => setError(msg)}
           />
         </div>
+      ) : viewerKind === 'document' && accessUrl ? (
+        // ────────────────────────────────────────────────────
+        // Word / ODT (D25, 23/10/2026) : téléchargement seulement,
+        // l'URL signée porte Content-Disposition: attachment
+        // ────────────────────────────────────────────────────
+        <div className="ab-reader-external">
+          <h2>{t({id:'reader.document.title'})}</h2>
+          <p>{t({id:'reader.document.notice'})}</p>
+          <a href={accessUrl} className="ab-button" download>
+            {t({id:'reader.document.download'})}
+          </a>
+          {assetMeta?.source_name && (
+            <p className="ab-reader-external__attribution">
+              {t({id:'reader.source'}, { name: assetMeta.source_name })}
+            </p>
+          )}
+        </div>
       ) : viewerKind === 'external_link' && accessUrl ? (
         // ────────────────────────────────────────────────────
         // Lien externe

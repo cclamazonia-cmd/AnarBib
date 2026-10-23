@@ -35,6 +35,9 @@
 //      donc jamais public, pas même un instant ;
 //   5. enregistrement à la clé de service (ingest.fn_digital_candidate_deposit_record),
 //      qui revérifie tout et crée la ressource ; en cas d'échec, l'objet est retiré.
+// D25 (23/10/2026) : un fichier Word ou ODT (.doc, .docx, .odt, lu au nom) se
+// verse par le même chemin, signature du contenu vérifiée (format.ts), et garde
+// son extension : la base en fait un « documento » à télécharger.
 // Chaque refus porte un `code` que l'écran traduit (src/lib/edgeError.js →
 // error.edge.<code>) ou relaie le HINT de la base (error.digital_candidate.*).
 
@@ -43,6 +46,7 @@ import { createClient } from '../_shared/deps.ts';
 import { doubleFacteurManquant } from '../_shared/core/double-facteur.ts';
 import { Sha1, Sha256 } from './empreintes.ts';
 import { sanitize } from './nom.ts';
+import { estDocument, formatAttendu, LONGUEUR_TETE, signatureConforme } from './format.ts';
 import { AdresseRefusee, fetchSortant } from '../_shared/core/adresse-sortante.ts';
 
 const MAX_OCTETS = 500 * 1024 * 1024;        // file_size_limit de pdf-restrito et anarbib-pdf-public
@@ -179,22 +183,31 @@ Deno.serve(async (req) => {
     }
 
     // 3. les empreintes, au passage du flux vers la zone privée
+    // D25 : le format se lit au nom (PDF, ou Word/ODT en téléchargement) ; le
+    // contenu doit porter sa signature (format.ts).
+    const nomSource = g.original_filename || dernierSegment(g.file_url);
+    const format = formatAttendu(nomSource);
     const h256 = new Sha256();
     const h1 = new Sha1();
     let lu = 0;
     let tete = new Uint8Array(0);
-    let raisonFlux: 'not_a_pdf' | 'file_too_large' | null = null;
+    let raisonFlux: 'not_a_pdf' | 'not_a_document' | 'file_too_large' | null = null;
+    const pasLeFormat = estDocument(format) ? 'not_a_document' : 'not_a_pdf';
     const lecteur = reponse.body.getReader();
     const flux = new ReadableStream<Uint8Array>({
       async pull(ctl) {
         const { done, value } = await lecteur.read();
-        if (done) { ctl.close(); return; }
+        if (done) {
+          // un fichier plus court que la signature n'a jamais été jugé : il n'est pas du format
+          if (signatureConforme(format, tete) !== true) { raisonFlux = pasLeFormat; ctl.error(new Error('format')); return; }
+          ctl.close(); return;
+        }
         lu += value.byteLength;
         if (lu > Math.min(MAX_OCTETS, LIMITE_APPEL)) { raisonFlux = 'file_too_large'; await lecteur.cancel(); ctl.error(new Error('trop lourd')); return; }
-        if (tete.length < 5) {
-          const t = new Uint8Array(tete.length + value.byteLength); t.set(tete); t.set(value, tete.length); tete = t.subarray(0, 5);
-          if (tete.length >= 5 && new TextDecoder('latin1').decode(tete) !== '%PDF-') {
-            raisonFlux = 'not_a_pdf'; await lecteur.cancel(); ctl.error(new Error('pas un PDF')); return;
+        if (tete.length < LONGUEUR_TETE) {
+          const t = new Uint8Array(tete.length + value.byteLength); t.set(tete); t.set(value, tete.length); tete = t.subarray(0, LONGUEUR_TETE);
+          if (signatureConforme(format, tete) === false) {
+            raisonFlux = pasLeFormat; await lecteur.cancel(); ctl.error(new Error('pas du format attendu')); return;
           }
         }
         h256.update(value); h1.update(value);
@@ -205,13 +218,16 @@ Deno.serve(async (req) => {
 
     if (!service) service = createClient(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });
     const horodatage = Date.now();
-    const zone = `numdif-staging/${id}/${horodatage}.pdf`;
-    const { error: upErr } = await service.storage.from(ZONE_PRIVEE).upload(zone, flux, { contentType: 'application/pdf', upsert: false });
+    const zone = `numdif-staging/${id}/${horodatage}.${format.ext}`;
+    const { error: upErr } = await service.storage.from(ZONE_PRIVEE).upload(zone, flux, { contentType: format.mime, upsert: false });
     if (upErr || raisonFlux) {
       try { await service.storage.from(ZONE_PRIVEE).remove([zone]); } catch (_) { /* best-effort */ }
       if (raisonFlux === 'not_a_pdf') {
         await noterEchec('la réponse n\'est pas un PDF');
         issues.push(echec(id, 'not_a_pdf', 'La source ne rend pas un PDF.'));
+      } else if (raisonFlux === 'not_a_document') {
+        await noterEchec(`la réponse n'est pas un fichier .${format.ext}`);
+        issues.push(echec(id, 'not_a_document', `La source ne rend pas un fichier .${format.ext}.`, { format: format.ext }));
       } else if (raisonFlux === 'file_too_large') {
         await tropLourd(lu);
       } else {
@@ -233,7 +249,7 @@ Deno.serve(async (req) => {
 
     // 4. le fichier vérifié passe au seau que fixe le cas de source
     const bucket: string = g.destination.storage_bucket;
-    const nom = sanitize(g.original_filename || dernierSegment(g.file_url));
+    const nom = sanitize(nomSource, format.ext);
     const chemin = `books/${g.book_id}/${horodatage}_${nom}`;
     const { error: mvErr } = await service.storage.from(ZONE_PRIVEE).move(zone, chemin,
       bucket === ZONE_PRIVEE ? undefined : { destinationBucket: bucket });

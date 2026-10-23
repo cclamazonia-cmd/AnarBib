@@ -6,6 +6,7 @@
 // - stockage local ou lien externe
 import { secretKey } from "../_shared/core/secret-key.ts";
 import { createClient } from '../_shared/deps.ts';
+import { inferViewerKind, nomDeTelechargement } from './genre.ts';
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const SUPABASE_SERVICE_ROLE_KEY = secretKey() ?? "";
@@ -27,18 +28,6 @@ function parseAssetId(req) {
   const rawFromQuery = url.searchParams.get("asset_id") ?? url.searchParams.get("assetId");
   if (rawFromQuery && /^\d+$/.test(rawFromQuery)) return Number(rawFromQuery);
   return null;
-}
-function inferViewerKind(resourceType, mimeType, sourceUrl) {
-  const rt = String(resourceType || "").toLowerCase();
-  const mt = String(mimeType || "").toLowerCase();
-  const su = String(sourceUrl || "").toLowerCase();
-  if (rt === "link_externo") return "external_link";
-  if (rt === "audio" || mt.startsWith("audio/")) return "audio";
-  if (rt === "video" || mt.startsWith("video/")) return "video";
-  if (rt === "image" || mt.startsWith("image/")) return "image";
-  if (rt === "epub" || mt === "application/epub+zip" || su.endsWith(".epub")) return "epub";
-  if (rt === "pdf_publico" || rt === "pdf_restrito" || mt === "application/pdf" || su.endsWith(".pdf")) return "pdf";
-  return "generic";
 }
 Deno.serve(async (req)=>{
   if (req.method === "OPTIONS") return json({
@@ -111,7 +100,9 @@ Deno.serve(async (req)=>{
     let accessUrl = null;
     let accessMode = "metadata_only";
     if (storageBucket && storagePath) {
-      const { data: signed, error: signedError } = await serviceClient.storage.from(storageBucket).createSignedUrl(storagePath, SIGNED_URL_TTL_SECONDS);
+      // Un document Word/ODT se télécharge sous son nom (Content-Disposition: attachment).
+      const { data: signed, error: signedError } = await serviceClient.storage.from(storageBucket).createSignedUrl(storagePath, SIGNED_URL_TTL_SECONDS,
+        viewerKind === "document" ? { download: nomDeTelechargement(storagePath) } : undefined);
       if (signedError || !signed?.signedUrl) {
         return json({
           ok: false,

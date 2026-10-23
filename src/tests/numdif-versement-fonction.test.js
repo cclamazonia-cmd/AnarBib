@@ -39,7 +39,8 @@ describe('deposit-digital-candidate — l’ordre des gestes', () => {
 
   it('la zone avant vérification est privée : un fichier non vérifié n’est jamais public', () => {
     expect(SRC).toContain("const ZONE_PRIVEE = 'pdf-restrito';");
-    expect(SRC).toContain('const zone = `numdif-staging/${id}/${horodatage}.pdf`;');
+    // D25 (23/10/2026) : l'extension suit le format (PDF, ou Word/ODT), la zone reste privée
+    expect(SRC).toContain('const zone = `numdif-staging/${id}/${horodatage}.${format.ext}`;');
   });
 
   it('SHA-256 s’il est connu, sinon le SHA-1 de la source (MediaWiki), et le SHA-256 calculé est transmis', () => {
