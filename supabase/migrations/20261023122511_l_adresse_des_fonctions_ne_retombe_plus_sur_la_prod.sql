@@ -25,9 +25,17 @@
 -- ⚠️ ORDRE DE DÉPLOIEMENT. En production, le secret doit exister AVANT le push :
 --      select vault.create_secret('<adresse du projet>', 'FUNCTIONS_BASE_URL',
 --                                 'Adresse des Edge Functions de cette instance');
---    Le bloc de vérification refuse de s'appliquer sur une instance en service
---    (qui porte des secrets de webhook) sans adresse : la migration échoue, rien
---    ne change, plutôt que de couper les notifications en silence.
+--    Fait le 23/10/2026 avant l'application en production.
+--
+-- RETOUCHE DU 23/10/2026, APRÈS APPLICATION EN PRODUCTION (décision de Xavier).
+-- Le bloc de vérification refusait aussi de s'appliquer sur « une instance en
+-- service (qui porte des secrets WEBHOOK_SECRET_*) sans adresse ». Le critère
+-- était faux : trois migrations d'août (20260817034637, 20260817125212,
+-- 20260817142739) créent elles-mêmes des secrets WEBHOOK_SECRET_*, donc toute
+-- pile neuve à Vault réel les porte — le job `rejeu-image` (et une installation
+-- auto-hébergée neuve) s'arrêtait ici. Ce contrôle est retiré ; le reste du
+-- fichier est inchangé. Sans effet en production, où cette version est déjà
+-- appliquée et n'est pas rejouée ; seuls les rejeux à neuf en dépendent.
 --
 -- Tests : tests/sql/adresse_des_fonctions_tests.sql (T1, T3, T8 à T10).
 -- ═══════════════════════════════════════════════════════════════════════════
@@ -68,11 +76,6 @@ BEGIN
   IF has_function_privilege('anon', 'private.fn_functions_base_url()', 'EXECUTE')
      OR has_function_privilege('authenticated', 'private.fn_functions_base_url()', 'EXECUTE') THEN
     RAISE EXCEPTION 'le helper est exécutable par anon ou authenticated';
-  END IF;
-  -- Une instance en service porte des secrets de webhook : elle doit avoir son adresse.
-  IF EXISTS (SELECT 1 FROM vault.decrypted_secrets WHERE name LIKE 'WEBHOOK_SECRET_%')
-     AND private.fn_functions_base_url() IS NULL THEN
-    RAISE EXCEPTION 'instance en service sans adresse des fonctions : créer le secret Vault FUNCTIONS_BASE_URL avant cette migration (voir l''en-tête)';
   END IF;
 END $verif$;
 
