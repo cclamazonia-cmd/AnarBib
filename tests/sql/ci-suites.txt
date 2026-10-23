@@ -923,3 +923,7 @@ tests/sql/d24_epub_restreint_tests.sql
 # RET-2/RET-3 (23/10/2026) : plafonds réseau des durées de rétention (CHECK + fn_set_retention_policy) et purge complète
 # fn_purge_retention — essai à blanc sans effet, durée par bibliothèque, réseau, sortants, signalements, PEB, messagerie, journaux.
 tests/sql/retention_plafonds_purge_tests.sql
+# 23/10/2026 : l'effacement d'un compte traverse les deux journaux append-only du réseau
+# (inter-bibliothèques, audit de l'administration) — re-pointage exact vers le jeton sous
+# le drapeau de fn_delete_my_account, tout autre UPDATE/DELETE toujours refusé.
+tests/sql/effacement_journaux_reseau_tests.sql
