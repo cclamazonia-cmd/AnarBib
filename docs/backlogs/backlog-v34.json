@@ -360,8 +360,8 @@
   },
   "etat": {
     "photo_intro": {
-      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31, E41 et C16 clos le 23/10** ; **D25 clos le 23/10** (Word/ODT en téléchargement, 28 fichiers d'Anarchief versés) ; **E20 clos le 23/10** (la barre par nature) — **63 items, 282 clôtures**.",
-      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** ; **D25 fechado em 23/10** ; **E20 fechado em 23/10** — **63 itens, 282 fechamentos**."
+      "fr": "**Relevé du 22 octobre 2026 au soir** (production mesurée à 18 h 34 UTC, dépôt recompté sur `5e292baf`) — production interrogée en lecture seule ; **toutes les lignes ont été remesurées** (précédent relevé : le 20/10 au soir, `5c67ec55`). **547 migrations appliquées, 547 au dépôt.** Deux jours plus calmes : **+29 commits, +5 migrations**. Ce qui a bougé et pourquoi : **le catalogue** — aucune notice créée ; la page 1 des PDF versés devient une couverture, par lots (CAPAS-7) ; trente-cinq descripteurs FICEDL de plus (658) ; les 51 notices d'avant 1926 sans fichier cherchées sur les sources ouvertes (D22 : six trouvailles, le reste à une personne) ; **la base** — +10 fonctions, une table privée (le témoin de succès du courrier), l'avis 0011 disparu ; **le réseau** — l'atelier de constitution active enfin la bibliothèque (G25) ; **la CI** — verte, deux rouges du 20/10 au soir corrigés dans l'heure ; **l'exploitation** — `~/anarbib` aligné, mais une session y a encore committé le 20/10 à 23 h 18 (I36). **Le compte** : **69 items** et 275 lignes de clôture. **Ce qui presse** : **D3 (Solidaires, avant le 26/10 — rien n'a commencé)**, I38 (sauvegardes du 25/10, à lire le 26/10), B36 (index, le 28/10), A7 (la réunion à quatre, après laquelle la répartition amendée le 21/10 entrera au backlog), G23 (une API d'IA à déclarer), I35 (la voie (a) dans la CI) ; *à Xavier* : D28 (deux fichiers à supprimer dans Storage, et un ramassage à décider), K1 (le document signé de Belém). *Depuis le relevé* : **J10 clos le 22/10** (les sept domaines jugés, REGISTRE `DOC-GEL-2`) ; **J15 ouvert** pour en relire les échéances — **J13 clos le 23/10** (NUMDIF-2 à quatre cas, 39 PDF restreints) ; **C31, E41 et C16 clos le 23/10** ; **D25 clos le 23/10** (Word/ODT en téléchargement, 28 fichiers d'Anarchief versés) ; **E20 clos le 23/10** (la barre par nature) ; **D24 clos le 23/10** (494 textes d'Anarchief en EPUB) — **62 items, 283 clôtures**.",
+      "pt": "**Levantamento de 22 de outubro de 2026 à noite** (produção às 18h34 UTC, repositório em `5e292baf`) — **todas as linhas remedidas** (anterior: 20/10, `5c67ec55`). **547 migrações aplicadas, 547 no repositório.** Dois dias mais calmos: **+29 commits, +5 migrações**. O que mudou: a página 1 dos PDF vira capa (CAPAS-7); 35 descritores FICEDL; D22 (seis achados); +10 funções, a testemunha do correio; G25. **A conta**: **69 itens** e 275 linhas de fechamento. **O que aperta**: **D3 (Solidaires, antes de 26/10 — nada começou)**, I38, B36, A7, G23, I35; *a Xavier*: D28, K1. *Desde o levantamento*: **J10 fechado em 22/10** ; **J15 aberto** para os prazos — **J13 fechado em 23/10** ; **C31, E41 e C16 fechados em 23/10** ; **D25 fechado em 23/10** ; **E20 fechado em 23/10** ; **D24 fechado em 23/10** — **62 itens, 283 fechamentos**."
     },
     "photo": [
       {
@@ -3518,6 +3518,14 @@
           "fr": "**Clos le 23/10 : la barre se regroupe par nature** (`20a2b454`, puis `b6670e8a` pour la cloche). Catalogue en lien direct ; trois menus — Public (Bibliothèques, Carte, Thésaurus), Moi (Mon compte, Je veux…), Travail (Panneau, Catalogage, Importations, Gestion de la bibliothèque, Fédération, Réseau, chacun sous son `canSee*`) — ouverts au clic ou au clavier, fermés à Échap (focus rendu au bouton), au clic ailleurs et à la navigation ; un groupe vide n'apparaît pas ; aucun chemin ne change (`intentions.js` vert). `isActive` compare par segment (« /biblioteca » ne s'allume plus sur « /bibliotecas »). 3 clés × 11 langues. Test `e20-barre-par-nature` (9 : inconnue, sans bibliothèque, lectrice, bibliothécaire, coordination admin). Vu à 1366 et 360 px dans l'aperçu ; vu en production par Xavier, qui a signalé la cloche flottant au milieu — rangée contre les menus le jour même.",
           "pt": "**Fechado em 23/10: barra agrupada (Público, Eu, Trabalho).**"
         }
+      ],
+      [
+        "D24",
+        "2026-10-23",
+        {
+          "fr": "**Clos le 23/10 : 494 textes intégraux d'Anarchief en EPUB, lisibles depuis leur notice** — décisions de Xavier (questionnaires). 206 ouverts (lettre A ou A + B des lots de textes ; `a84f01eb`, migration `20261023154059`), publics, principaux là où la notice n'en avait pas (150) ; 288 restreints (lettre C : 80 ; lot sans lettre : 208 ; `6a794c39`, migration `20261023170613`), sous compte, jamais principaux. EPUB 3 fabriqués par pandoc (`epub-anarchief.py`, hors dépôt), versés depuis la session aal2 de Xavier, empreinte comparée au manifeste (7,1 + 12,2 Mo). Outillage : le seau EPUB restreint s'ouvre au versement par l'administration du réseau (`57c1ef72`) ; « Autres formats » sur la notice (EPUB non principaux, avec les fichiers Word/ODT) ; le lecteur EPUB, qui se lisait sur 0 px, a une hauteur (`28148ae2`). Pages sans EPUB : 322 et 1164 (sans notice ; 322 attend J/M, G21) ; trois textes vides une fois le wikitexte nettoyé. Vérifié en production : anonyme, l'EPUB restreint dit « RÉSERVÉ » (Giele, 3229) ; Xavier connecté l'ouvre dans le lecteur.",
+          "pt": "**Fechado em 23/10: 494 textos integrais da Anarchief em EPUB (206 abertos, 288 restritos sob conta).**"
+        }
       ]
     ]
   },
@@ -4361,6 +4369,10 @@
         {
           "fr": "**23/10 — trois écrans de plus sous 60 Ko** : catalogue public 66 → 57,5 Ko (`6215322d`, crochet `useCatalogQuickActions` : réservation rapide, consultation, favoris ; vu dans l'aperçu) ; **Mon compte** 74 → 56 Ko (`8e062783` : onglet Profil avec le formulaire d'adresse dans `TabPerfil.jsx`, quatre fenêtres de confirmation dans `AccountModals.jsx`, props tirées des variables libres par `@babel/parser`) ; **formulaire d'autorité** 71 → 54 Ko (même commit : `AuthorBioTranslations`, `AuthorBookLinksPanel`, `AuthorDuplicatesPanel`, montés avec `key={authorId}` — ils repartent de zéro pour une autre autorité, les résultats d'une autre restaient affichés). Vitest complet vert (3 474), lint, build ; en production par la CI (run 2001). **Reste** : Xavier voit Mon compte et le formulaire d'autorité connecté (la connexion à l'aperçu local n'a pas pris) ; `ImportacoesPage.jsx` (165 Ko) et `BookDraftForm.jsx` (133 Ko).",
           "pt": "**23/10 — catálogo 57,5 Ko, Minha conta 56 Ko, autoridade 54 Ko.** Falta: Xavier ver as duas telas; Importações e BookDraftForm."
+        },
+        {
+          "fr": "**23/10, soir — Mon compte et le formulaire d'autorité vus par Xavier en production : conformes**, sauf un défaut, corrigé le soir même (`baaefb73`) : « Chercher » (rattachements, doublons) ne rendait qu'un vide — le découpage avait produit `const authorId = authorId;`, une variable lue avant d'exister ; même défaut dans la bascule de revue des biographies. Test `autorite-panneaux-gestes` : les panneaux MONTÉS, les gestes joués (le test de source ne pouvait pas le voir). Revu par Xavier après correctif : « les deux fonctionnent ». **Reste d'E6** : `ImportacoesPage.jsx` (165 Ko) et `BookDraftForm.jsx` (133 Ko).",
+          "pt": "**23/10 — Minha conta e autoridade conferidas por Xavier (defeito « Buscar » corrigido, baaefb73).** Faltam Importações e BookDraftForm."
         }
       ]
     },
@@ -6240,54 +6252,6 @@
         {
           "fr": "**22/10 — cherché sur ce qui s'ouvre à un automate** (`5e292baf`, `docs/journal/audits/RECHERCHE_d22_sources_fermees_2026-10-22.md`). La liste du 16/10 se retrouve à l'identique : 58 notices, dont sept hors sujet (trois fixtures du bac à sable ; quatre années mal saisies — Hobsbawm « 0200 » ×2, Adolfo Lima « 0193 », Wilson de Faria « 0187 » — à corriger au formulaire). Sur les 51 : **rien à la BND** (Portugal, ouverte, 31 éditions portugaises et brésiliennes) ; **six trouvailles en plein écran sur Google Livres**, à juger PDF ouvert par la BTL — 1655 Guyau (même édition probable), 677 Elysio de Carvalho et 981 Hamon (même, à confirmer), 1297 Zoccoli, 1035 et 812 Proudhon (autres éditions) ; Google ne laisse pas un serveur télécharger ses PDF, le versement passe par le formulaire du brouillon. Recherche **arrêtée** à la vérification anti-robot de Google ; Gallica et HathiTrust demandent la même dès la première page (Cloudflare) : non cherchés. **Reste, pour une personne** : Gallica et HathiTrust (4 éditions françaises), la BDH (8 espagnoles), BN Digital depuis le Brésil (9 brésiliennes). Rocker († 1958) et Privat († 1962) ne sont pas à chercher.",
           "pt": "**22/10 — procurado no que se abre a um automato** (`5e292baf`): 51 fichas; nada na BND; seis achados no Google Livros, a julgar pela BTL com o PDF aberto; busca parada na verificação anti-robô. Falta, para uma pessoa: Gallica, HathiTrust, BDH, BN Digital."
-        }
-      ]
-    },
-    {
-      "id": "D24",
-      "d": "D",
-      "p": "P2",
-      "s": "ouvert",
-      "e": "L",
-      "sk": [
-        "deno",
-        "front"
-      ],
-      "t": {
-        "fr": "Publier les textes intégraux du wiki d'Anarchief en EPUB",
-        "pt": "Publicar os textos integrais do wiki da Anarchief em EPUB"
-      },
-      "v": {
-        "fr": "La feuille de route du 09/10 prévoit des EPUB chez AnarBib, filtrés par la lettre des lots de textes ; J/M l'a rendue le 19/10. Elle n'est appliquée qu'en local (208 textes ouverts, 294 restreints selon `droits-anarchief.py`) ; rien n'est publié, et aucune fiche ne portait ce travail.",
-        "pt": "EPUBs previstos desde 09/10, aplicados só localmente (208 abertos, 294 restritos)."
-      },
-      "w": {
-        "fr": "Produire les EPUB, les verser comme ressources numériques avec la portée qui découle des lots, les rattacher aux notices.",
-        "pt": "Produzir os EPUB, versá-los com o alcance dos lotes, ligá-los aos registros."
-      },
-      "y": {
-        "fr": "Relevé à la relecture des sessions du 16 au 19/10 : un reste laissé sans suite, que rien d'autre ne porte.",
-        "pt": "Levantado na releitura das sessões de 16 a 19/10: um resto sem sequência, que nada mais carrega."
-      },
-      "f": {
-        "fr": [
-          "Les textes ouverts sont lisibles en EPUB depuis leur notice ; les restreints sous compte."
-        ],
-        "pt": [
-          "Os textos abertos são legíveis em EPUB; os restritos com conta."
-        ]
-      },
-      "dep": {
-        "fr": "Après le feu vert de Xavier ; suit les réponses de J/M (G21).",
-        "pt": "Após o sinal de Xavier; segue G21."
-      },
-      "r": [
-        "Relecture des sessions du 16 au 19/10/2026"
-      ],
-      "verif": [
-        {
-          "fr": "**23/10 — les 206 textes ouverts sont en ligne** (décision de Xavier, questionnaire : pandoc installé par lui, les ouverts d'abord, règle pour l'admin réseau sur le seau restreint). 206 EPUB 3 fabriqués par `epub-anarchief.py` (hors dépôt, pandoc), versés dans `anarbib-epub-public` depuis la session aal2 de Xavier, empreinte comparée au manifeste (206 objets, 7,1 Mo) ; pages 322 et 1164 sans notice (322 : G21). Migrations `20261023152846` (le seau restreint s'ouvre au versement par l'administration du réseau, `57c1ef72`) et `20261023154059` (206 ressources, 150 principales ; `api.book_documents_v1` liste aussi les EPUB non principaux : « Autres formats » sur la notice, décision de Xavier, `a84f01eb`). Correctif du lecteur EPUB, qui se lisait sur 0 px (`28148ae2`). Vérifié en production : Malatesta (3160) montre l'ODT et l'EPUB en « Autres formats », Kropotkine (2801) se lit en EPUB. **Reste** : les 291 textes restreints (même chaîne, vers `anarbib-epub-restricted`).",
-          "pt": "**23/10 — 206 textos abertos em EPUB, em linha.** Faltam os 291 restritos."
         }
       ]
     },
