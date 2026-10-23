@@ -920,3 +920,6 @@ tests/sql/d25_documents_word_odt_tests.sql
 # D24 (23/10/2026) : le seau EPUB restreint s'ouvre au versement par l'administration du réseau (books/<n>/<nom>.epub) ;
 # lecture et gestion par la règle des espaces réservés (fn_objet_reserve_gerable). Expressions des politiques évaluées.
 tests/sql/d24_epub_restreint_tests.sql
+# RET-2/RET-3 (23/10/2026) : plafonds réseau des durées de rétention (CHECK + fn_set_retention_policy) et purge complète
+# fn_purge_retention — essai à blanc sans effet, durée par bibliothèque, réseau, sortants, signalements, PEB, messagerie, journaux.
+tests/sql/retention_plafonds_purge_tests.sql
