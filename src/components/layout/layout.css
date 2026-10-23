@@ -56,6 +56,10 @@ html { scroll-padding-top: calc(var(--ab-topbar-h, 0px) + 8px); }
   display: flex;
   align-items: center;
   gap: 12px;
+  /* Le logo prend l'espace libre : la cloche reste collée aux menus (à côté
+     du ☰ sur mobile) au lieu de flotter au milieu de la barre, devenue plus
+     courte depuis les menus groupés (E20, remarque de Xavier du 23/10). */
+  margin-right: auto;
   text-decoration: none;
   color: var(--brand-text);
 }
