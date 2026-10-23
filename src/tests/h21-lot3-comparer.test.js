@@ -41,6 +41,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { createElement as h } from 'react';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
@@ -81,7 +82,7 @@ vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
 const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
-const IMPORTACOES = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+const IMPORTACOES = sourceImportacoes();   // E6 : la page et ses sections
 const intl = createIntl({ locale: 'fr', messages: fr });
 const dire = (id, valeurs) => intl.formatMessage({ id }, valeurs);
 

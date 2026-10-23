@@ -34,6 +34,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { createElement as h } from 'react';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
@@ -56,7 +57,7 @@ const MIGRATION = readFileSync(path.join(MIGRATIONS,
 // H21 lot 8 (IMP-35) : le constat gagne « reattribue » dans la migration du lot 8
 const MIGRATION_L8 = readFileSync(path.join(MIGRATIONS,
   readdirSync(MIGRATIONS).find((f) => f.endsWith('_h21_lot8_un_lot_ouvert_par_run.sql'))), 'utf8');
-const IMPORTACOES = lire('../pages/importacoes/ImportacoesPage.jsx');
+const IMPORTACOES = sourceImportacoes();   // E6 : la page et ses sections
 const FILE = (lire('../pages/catalogacao/queueOutils.js') + '\n' + lire('../pages/catalogacao/QueuePanel.jsx'));
 const intl = createIntl({ locale: 'fr', messages: fr });
 const dire = (id, valeurs) => intl.formatMessage({ id }, valeurs);

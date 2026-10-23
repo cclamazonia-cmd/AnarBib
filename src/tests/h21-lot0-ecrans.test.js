@@ -126,6 +126,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { createElement as h } from 'react';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
@@ -172,7 +173,7 @@ vi.mock('@/components/HeroDocumentationActions', () => ({ default: () => null })
 const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, '..', rel), 'utf8');
-const IMPORTACOES = lire('pages/importacoes/ImportacoesPage.jsx');
+const IMPORTACOES = sourceImportacoes();   // E6 : la page et ses sections
 const WIZARD = lire('pages/importacoes/ImportWizard.jsx');
 const CATALOGACAO = (lire('pages/catalogacao/CatalogacaoPage.jsx') + '\n' + lire('pages/catalogacao/BatchesPanel.jsx'));
 const MIGRATION = readFileSync(path.resolve(__dirname, '../../supabase/migrations/20261001200931_h21_lot0_la_revision_suit_le_brouillon_importe.sql'), 'utf8');
@@ -199,7 +200,8 @@ function fonctionDuModule(src, nom) {
 // c'est-à-dire l'ordre des rendus.
 const FIN_GESTE = {
   handleReconcileSelected: '// Écarter des lignes',
-  handleRejectSelected: '// ── Supprimer un run',
+  // E6 (23/10/2026) : le geste est la dernière fonction d'ImportReviewQueue.jsx ; il finit au rendu.
+  handleRejectSelected: '\n  return (\n',
 };
 // Le faux t() des gestes exécutés : la clé et ses valeurs, en TEXTE (clés
 // triées), pour que deux messages mis bout à bout (cinquième passe,
@@ -404,7 +406,7 @@ describe('Importations — une ligne qui n\'est plus cochable sort de la sélect
 });
 
 describe('Importations — « Rejeter » lit skipped_rows et dit le rejet partiel', () => {
-  const rejeter = () => corps(IMPORTACOES, 'async function handleRejectSelected()', '// ── Supprimer un run');
+  const rejeter = () => corps(IMPORTACOES, 'async function handleRejectSelected()', '\n  return (\n');
 
   it('lit data.skipped_rows de fn_import_set_editorial, la clé que la migration rend', () => {
     const f = rejeter();

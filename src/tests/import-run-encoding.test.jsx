@@ -13,6 +13,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { readFileSync } from 'node:fs';
@@ -74,7 +75,7 @@ describe('RunEncodingPanel — ce que l\'écran dit de l\'encodage lu', () => {
   });
 
   it('la page câble le panneau et les deux RPC (encodage imposé, retraitement forcé)', () => {
-    const src = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+    const src = sourceImportacoes();   // E6 : la page et ses sections
     expect(src).toContain("import RunEncodingPanel from './RunEncodingPanel.jsx'");
     expect(src).toMatch(/p_forced_encoding:\s*adapterEncoding === 'auto' \? null : adapterEncoding/);
     expect(src).toMatch(/p_forced_encoding:\s*reprocessEncoding === 'auto' \? null : reprocessEncoding/);

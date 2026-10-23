@@ -50,7 +50,8 @@ describe('la page de la promotion', () => {
   });
 
   it('les deux appels de fn_import_promote passent par pagesDePromotion', () => {
-    for (const rel of ['src/pages/importacoes/ImportacoesPage.jsx', 'src/pages/importacoes/ImportWizard.jsx']) {
+    // E6 (23/10/2026) : l'appel de la page vit dans ImportReviewQueue.jsx
+    for (const rel of ['src/pages/importacoes/ImportReviewQueue.jsx', 'src/pages/importacoes/ImportWizard.jsx']) {
       const s = lire(rel);
       const appels = [...s.matchAll(/supabase\.rpc\('fn_import_promote'/g)];
       expect(appels.length, rel).toBe(1);

@@ -53,6 +53,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { LOCALE_CODES } from '../i18n/locales.js';
@@ -122,7 +123,7 @@ describe('H21 lot 0 — les chaînes d\'écran et leurs paramètres', () => {
   });
 
   it('les écrans emploient ces clés avec ces paramètres', () => {
-    const imp = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+    const imp = sourceImportacoes();   // E6 : la page et ses sections
     const cat = (readFileSync(path.resolve(__dirname, '../pages/catalogacao/CatalogacaoPage.jsx'), 'utf8') + '\n' + readFileSync(path.resolve(__dirname, '../pages/catalogacao/BatchesPanel.jsx'), 'utf8'));
     expect(imp).toMatch(/'importacoes\.fila\.promotedPartial' \}, \{ created, asked: ids\.length \}/);
     expect(cat).toMatch(/'catalogacao\.batch\.review\.afterReview' \}, \{ n: ajouts \}/);

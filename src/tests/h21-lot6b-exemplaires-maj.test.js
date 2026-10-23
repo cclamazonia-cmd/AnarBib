@@ -43,6 +43,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { createElement as h } from 'react';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
@@ -86,7 +87,7 @@ vi.mock('@/components/ui/AppIcon', () => ({ default: () => null }));
 
 const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
-const IMPORTACOES = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+const IMPORTACOES = sourceImportacoes();   // E6 : la page et ses sections
 const MIGRATIONS = path.resolve(__dirname, '../../supabase/migrations');
 const MIGRATION = readFileSync(path.join(MIGRATIONS,
   readdirSync(MIGRATIONS).find((f) => f.endsWith('_h21_lot6b_cote_et_note_comme_les_notices.sql'))), 'utf8');

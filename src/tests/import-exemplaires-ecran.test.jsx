@@ -12,6 +12,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { readFileSync } from 'node:fs';
@@ -95,7 +96,7 @@ describe('BatchReviewReport — exemplaires importés', () => {
 describe('H19 — clés dynamiques et HINT présents dans les 10 locales', () => {
   const migration = readFileSync(path.resolve(__dirname, '../../supabase/migrations/20260927113000_h19_exemplaires_importes.sql'), 'utf8');
   const hints = [...new Set([...migration.matchAll(/hint\s*=\s*'(error\.[A-Za-z0-9_.]+)'/gi)].map((m) => m[1]))];
-  const page = readFileSync(path.resolve(__dirname, '../pages/importacoes/ImportacoesPage.jsx'), 'utf8');
+  const page = sourceImportacoes();   // E6 : la page et ses sections
   const champs = JSON.parse(page.match(/const PROFILE_ITEM_KEYS = (\[[^\]]*\])/)[1].replace(/'/g, '"'));
   const RAISONS = ['without_library', 'library_mismatch', 'library_without_numbering', 'code_taken', 'code_twice', 'code_pending_elsewhere'];
   const raisons = [...new Set([...migration.matchAll(/then '([a-z_]+)'\s*$/gm)].map((m) => m[1]))]

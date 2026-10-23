@@ -72,7 +72,8 @@ describe('format d\'import : ce que le front et l\'EF écrivent est admis par la
   });
 
   it('la page et l\'assistant n\'ont plus leur propre copie, et acceptent le suffixe .iso', () => {
-    for (const rel of ['src/pages/importacoes/ImportacoesPage.jsx', 'src/pages/importacoes/ImportWizard.jsx']) {
+    // E6 (23/10/2026) : le dépôt de la page vit dans ImportAddRecords.jsx
+    for (const rel of ['src/pages/importacoes/ImportAddRecords.jsx', 'src/pages/importacoes/ImportWizard.jsx']) {
       const src = lire(rel);
       expect(src, rel).not.toMatch(/function detectFileKind/);
       expect(src, rel).toContain("from '../../lib/importFileKind.js'");

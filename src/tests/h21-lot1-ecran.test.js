@@ -39,6 +39,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { sourceImportacoes } from './helpers/importacoesSource.js';
 import { createElement as h } from 'react';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
@@ -78,7 +79,7 @@ vi.mock('@/components/HeroDocumentationActions', () => ({ default: () => null })
 const LOCALES = LOCALE_CODES;
 const dico = (loc) => JSON.parse(readFileSync(path.resolve(__dirname, `../i18n/locales/${loc}.json`), 'utf8'));
 const lire = (rel) => readFileSync(path.resolve(__dirname, '..', rel), 'utf8');
-const IMPORTACOES = lire('pages/importacoes/ImportacoesPage.jsx');
+const IMPORTACOES = sourceImportacoes();   // E6 : la page et ses sections
 const WIZARD = lire('pages/importacoes/ImportWizard.jsx');
 
 function corps(src, debut, fin) {
@@ -99,7 +100,8 @@ function fonctionDuModule(src, nom) {
 const FIN_GESTE = {
   handlePromoteSelected: 'async function handleReconcileSelected()',
   handleReconcileSelected: '// Écarter des lignes',
-  handleRejectSelected: '// ── Supprimer un run',
+  // E6 (23/10/2026) : le geste est la dernière fonction d'ImportReviewQueue.jsx ; il finit au rendu.
+  handleRejectSelected: '\n  return (\n',
 };
 const dit = (id, v) => (v ? `${id}(${Object.keys(v).sort().map((k) => `${k}=${v[k]}`).join(', ')})` : id);
 async function jouerGeste(nom, { lignes, selection, reponse = { data: {}, error: null }, confirmer = true }) {
