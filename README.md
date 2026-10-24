@@ -1,3 +1,10 @@
+> [!IMPORTANT]
+> **Ce dépôt GitHub est archivé (24 octobre 2026) et n'est plus mis à jour.** AnarBib vit sur Codeberg : <https://codeberg.org/anarbib/anarbib>. Copies de secours, tenues à jour automatiquement : [Framagit](https://framagit.org/AnarBib/anarbib) et [gitliberty](https://gitliberty.unionlibertaireanarchiste.org/anar/anarbib).
+>
+> **This GitHub repository is archived (24 October 2026) and no longer updated.** AnarBib lives on Codeberg: <https://codeberg.org/anarbib/anarbib>. Backup copies, kept up to date automatically: [Framagit](https://framagit.org/AnarBib/anarbib) and [gitliberty](https://gitliberty.unionlibertaireanarchiste.org/anar/anarbib).
+>
+> **Este repositório no GitHub está arquivado (24 de outubro de 2026) e não é mais atualizado.** O AnarBib vive no Codeberg: <https://codeberg.org/anarbib/anarbib>. Cópias de segurança, atualizadas automaticamente: [Framagit](https://framagit.org/AnarBib/anarbib) e [gitliberty](https://gitliberty.unionlibertaireanarchiste.org/anar/anarbib).
+
 # AnarBib
 
 **Français** · [English](README.en.md) · [Português](README.pt-BR.md)
