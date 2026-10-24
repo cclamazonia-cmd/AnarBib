@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "Le lot reste « Publication en cours » : « Reprendre la publication » relance la page refusée. Pour corriger un brouillon, il faut un nouveau tour de révision (l’administration du réseau rouvre la révision).",
   "error.batch.publishing_locked": "Ce lot est en cours de publication : rien ne s’y ajoute ni ne s’y retouche sans un nouveau tour de révision.",
   "error.batch.publication_busy": "Ce lot est déjà en train d’être publié par un autre appel (autre onglet ou autre personne) : attends la fin, puis recharge la page.",
+  "twoFactor.admin.mode.reseau": "l'administration du réseau et les comptes qui ont inscrit un appareil",
   "twoFactor.title": "Double authentification",
   "twoFactor.intro": "En plus du mot de passe, un code à six chiffres qui change toutes les 30 secondes. Il te faut une application d'authentification libre, qui marche hors ligne : Aegis ou FreeOTP+ sur téléphone, KeePassXC sur ordinateur. Aucun SMS, aucun service extérieur.",
   "twoFactor.status.on": "{n, plural, one {Active — # appareil inscrit} other {Active — # appareils inscrits}}",

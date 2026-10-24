@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "Het lot blijft op „Publicatie bezig”: „Publicatie hervatten” probeert de geweigerde pagina opnieuw. Om een concept te verbeteren is een nieuwe beoordelingsronde nodig (het netwerkbeheer heropent de beoordeling).",
   "error.batch.publishing_locked": "Dit lot wordt gepubliceerd: er wordt niets aan toegevoegd of aan veranderd zonder een nieuwe beoordelingsronde.",
   "error.batch.publication_busy": "Dit lot wordt al gepubliceerd door een andere aanroep (ander tabblad of iemand anders): wacht tot die klaar is en laad dan de pagina opnieuw.",
+  "twoFactor.admin.mode.reseau": "het netwerkbeheer en accounts die een apparaat hebben ingesteld",
   "twoFactor.title": "Tweestapsverificatie",
   "twoFactor.intro": "Naast je wachtwoord een code van zes cijfers die elke 30 seconden verandert. Je hebt een vrije authenticatie-app nodig die offline werkt: Aegis of FreeOTP+ op de telefoon, KeePassXC op de computer. Geen sms, geen externe dienst.",
   "twoFactor.status.on": "{n, plural, one {Actief — # apparaat ingesteld} other {Actief — # apparaten ingesteld}}",

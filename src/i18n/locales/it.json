@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "Il lotto resta in «Pubblicazione in corso»: «Riprendi la pubblicazione» ritenta la pagina rifiutata. Per correggere una bozza serve un nuovo giro di revisione (l’amministrazione della rete riapre la revisione).",
   "error.batch.publishing_locked": "Questo lotto è in pubblicazione: non vi si aggiunge né vi si ritocca nulla senza un nuovo giro di revisione.",
   "error.batch.publication_busy": "Questo lotto è già in pubblicazione da un’altra chiamata (un’altra scheda o un’altra persona): aspetta che finisca, poi ricarica la pagina.",
+  "twoFactor.admin.mode.reseau": "l'amministrazione della rete e gli account che hanno registrato un dispositivo",
   "twoFactor.title": "Autenticazione a due fattori",
   "twoFactor.intro": "Oltre alla password, un codice di sei cifre che cambia ogni 30 secondi. Ti serve un'app di autenticazione libera, che funzioni offline: Aegis o FreeOTP+ sul telefono, KeePassXC sul computer. Nessun SMS, nessun servizio esterno.",
   "twoFactor.status.on": "{n, plural, one {Attiva — # dispositivo registrato} other {Attiva — # dispositivi registrati}}",

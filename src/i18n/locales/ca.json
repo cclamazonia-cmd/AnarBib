@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "El lot continua en «Publicació en curs»: «Reprendre la publicació» torna a intentar la pàgina rebutjada. Per corregir un esborrany cal una nova volta de revisió (l’administració de la xarxa reobre la revisió).",
   "error.batch.publishing_locked": "Aquest lot s’està publicant: no s’hi afegeix ni s’hi retoca res sense una nova volta de revisió.",
   "error.batch.publication_busy": "Aquest lot ja s’està publicant des d’una altra crida (una altra pestanya o una altra persona): espera que acabi i després torna a carregar la pàgina.",
+  "twoFactor.admin.mode.reseau": "l'administració de la xarxa i els comptes que han registrat un aparell",
   "twoFactor.title": "Autenticació en dos passos",
   "twoFactor.intro": "A més de la contrasenya, un codi de sis xifres que canvia cada 30 segons. Necessites una aplicació d'autenticació lliure, que funcioni sense connexió: Aegis o FreeOTP+ al mòbil, KeePassXC a l'ordinador. Cap SMS, cap servei extern.",
   "twoFactor.status.on": "{n, plural, one {Activa — # aparell registrat} other {Activa — # aparells registrats}}",

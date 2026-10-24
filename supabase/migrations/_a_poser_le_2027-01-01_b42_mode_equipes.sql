@@ -17,12 +17,12 @@
 --          "supabase/migrations/$(date -u +%Y%m%d%H%M%S)_b42_mode_equipes.sql"
 --      et retirer ce bloc « FICHIER EN ATTENTE / LE JOUR VENU ».
 --   3. Dans tests/sql/b42_double_authentification_tests.sql, T1 : le mode
---      attendu après les migrations passe de 'facteurs' à 'equipes' (deux
---      endroits : l'en-tête et le IF … IS DISTINCT FROM 'facteurs').
+--      attendu après les migrations passe de 'reseau' à 'equipes' (deux
+--      endroits : l'en-tête et le IF … IS DISTINCT FROM 'reseau').
 --   4. Banc SQL complet (copie isolée), vitest, puis push ; vérifier en
 --      production : mode 'equipes', ligne de schema_migrations sans created_by.
---   Retour arrière : UPDATE … SET mode = 'facteurs' (les comptes à appareil
---   restent protégés, les autres retrouvent l'accès sans code).
+--   Retour arrière : UPDATE … SET mode = 'reseau' (depuis le 24/10/2026 : les comptes à appareil
+--   et l'administration du réseau restent protégés, les autres retrouvent l'accès sans code).
 --
 -- CE QUE CELA CHANGE. En plus des comptes qui ont un appareil, tout compte
 -- d'équipe — administration du réseau active, bibliothécaire ou coordination

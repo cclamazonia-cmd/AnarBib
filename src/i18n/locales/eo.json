@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "La loto restas „Publikigo daŭras“: „Daŭrigi la publikigon“ reprovas la rifuzitan paĝon. Por korekti malneton necesas nova revizia rondo (la reta administrado remalfermas la revizion).",
   "error.batch.publishing_locked": "Ĉi tiu loto estas publikigata: nenio aldoniĝas nek retuŝiĝas sen nova revizia rondo.",
   "error.batch.publication_busy": "Ĉi tiu loto jam estas publikigata de alia alvoko (alia langeto aŭ alia persono): atendu la finon, poste reŝargu la paĝon.",
+  "twoFactor.admin.mode.reseau": "la administrado de la reto kaj kontoj, kiuj registris aparaton",
   "twoFactor.title": "Dufaktora aŭtentigo",
   "twoFactor.intro": "Krom la pasvorto, sescifera kodo, kiu ŝanĝiĝas ĉiujn 30 sekundojn. Vi bezonas liberan aŭtentigan aplikaĵon, kiu funkcias senkonekte: Aegis aŭ FreeOTP+ en telefono, KeePassXC en komputilo. Neniu SMS, neniu ekstera servo.",
   "twoFactor.status.on": "{n, plural, one {Aktiva — # aparato registrita} other {Aktiva — # aparatoj registritaj}}",

@@ -2,8 +2,9 @@
 -- AnarBib — B42, lot 2 (13/10/2026) : la double authentification s'exige côté
 -- serveur (migration 20261013171710, livrée ÉTEINTE : mode 'off', fonction
 -- d'avant-requête non branchée).
---   T1  objets et droits : mode 'facteurs' et fonction branchée sur
---       authenticator depuis l'activation (20261013234826) ; fn_avant_requete
+--   T1  objets et droits : mode 'reseau' (20261024114524 ; 'facteurs' depuis
+--       l'activation 20261013234826) et fonction branchée sur
+--       authenticator ; fn_avant_requete
 --       INVOKER, exécutable par anon/authenticated ; fn_aal2_exige_pour_moi
 --       DEFINER, fermée à anon ; les trois RPC api fermées à anon ; les deux
 --       tables fermées à authenticated ;
@@ -34,7 +35,14 @@
 --       toutes commandes, lit private.fn_session_double_facteur_ok ; l'aide
 --       rend faux pour une coordination aal1 en 'equipes', vrai en aal2, en
 --       'off', pour un lecteur sans facteur, et sur un jeton illisible.
--- Fixtures : une bibliothèque et cinq comptes créés ici. Tout se fait sous
+--   T12 mode 'reseau' (24/10/2026) : l'administration du réseau SANS appareil
+--       en aal1 → refus, sauf la liste blanche ; un compte à appareil → refus
+--       en aal1, comme en 'facteurs' ; coordination et bibliothécaire sans
+--       appareil → passent (leur tour vient avec 'equipes') ;
+--   T13 api.fn_mon_etat_double_facteur en 'reseau' : l'administration sans
+--       appareil → exige, pas de facteur (le front ouvre l'inscription) ; une
+--       coordination sans appareil → rien d'exigé.
+-- Fixtures : une bibliothèque et sept comptes créés ici. Tout se fait sous
 -- postgres avec un JWT simulé (stub auth), sauf T7. La suite lève toujours
 -- (OK ou ECHEC) : rien ne reste, le mode revient à celui des migrations.
 -- Mutants éprouvés le 13/10 : refus jamais levé (« IF false AND v_bloque »)
@@ -53,12 +61,13 @@ DECLARE
   v_lect uuid := gen_random_uuid();    -- lecteur, facteur vérifié
   v_lect2 uuid := gen_random_uuid();   -- lecteur, facteur inachevé seul
   v_ancien uuid := gen_random_uuid();  -- ancienne coordination (adhésion inactive)
+  v_admin2 uuid := gen_random_uuid();  -- administration du réseau, SANS facteur
   v_u uuid; v_txt text; v_det text; v_state text; v_json jsonb; v_n int; v_b boolean;
   v_rec record;
 BEGIN
   INSERT INTO public.libraries (slug, name, network_mode, circulation_mode, is_active, visibility_level, membership_enabled)
   VALUES ('b42-' || v_suf, 'B42 (essai)', 'federated', 'full_sigb', true, 'public', false) RETURNING id INTO v_lib;
-  FOREACH v_u IN ARRAY ARRAY[v_coord, v_biblio, v_admin, v_lect, v_lect2, v_ancien] LOOP
+  FOREACH v_u IN ARRAY ARRAY[v_coord, v_biblio, v_admin, v_lect, v_lect2, v_ancien, v_admin2] LOOP
     INSERT INTO auth.users (instance_id, id, aud, role, email, email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data)
     VALUES ('00000000-0000-0000-0000-000000000000', v_u, 'authenticated', 'authenticated', 'b42-' || v_u || '@anarbib.local', now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}');
     INSERT INTO public.profiles (id, email, first_name, last_name, preferred_language)
@@ -70,7 +79,7 @@ BEGIN
     (v_lect, v_lib, 'reader', 'active', true),
     (v_lect2, v_lib, 'reader', 'active', true),
     (v_ancien, v_lib, 'coordenador', 'inactive', false);
-  INSERT INTO public.network_administrators (user_id, status) VALUES (v_admin, 'active');
+  INSERT INTO public.network_administrators (user_id, status) VALUES (v_admin, 'active'), (v_admin2, 'active');
   INSERT INTO auth.mfa_factors (id, user_id, friendly_name, factor_type, status, created_at, updated_at) VALUES
     (gen_random_uuid(), v_admin, 'Téléphone', 'totp', 'verified', now(), now()),
     (gen_random_uuid(), v_lect, 'Téléphone', 'totp', 'verified', now(), now()),
@@ -83,7 +92,7 @@ BEGIN
   v_t := 'T1 objets et droits';
   BEGIN
     SELECT mode INTO v_txt FROM private.double_facteur_reglage WHERE id;
-    IF v_txt IS DISTINCT FROM 'facteurs' THEN RAISE EXCEPTION 'mode après activation %', v_txt; END IF;
+    IF v_txt IS DISTINCT FROM 'reseau' THEN RAISE EXCEPTION 'mode après activation %', v_txt; END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_db_role_setting s JOIN pg_roles r ON r.oid = s.setrole
                     WHERE r.rolname = 'authenticator' AND s.setdatabase = 0
                       AND 'pgrst.db_pre_request=private.fn_avant_requete' = ANY (s.setconfig)) THEN
@@ -139,7 +148,15 @@ BEGIN
       ('T5 liste blanche, sans /',                     'equipes',  v_coord::text,  'authenticated', 'aal1', 'rpc/fn_mon_etat_double_facteur',  'passe'),
       ('T5 liste blanche, avec /',                     'equipes',  v_coord::text,  'authenticated', 'aal1', '/rpc/fn_mon_etat_double_facteur', 'passe'),
       ('T5 hors liste blanche',                        'equipes',  v_coord::text,  'authenticated', 'aal1', '/rpc/fn_admin_double_facteur_comptes', 'refus'),
-      ('T6 échec ouvert : sub illisible',              'equipes',  'pas-un-uuid',  'authenticated', 'aal1', 'books',                          'passe')
+      ('T6 échec ouvert : sub illisible',              'equipes',  'pas-un-uuid',  'authenticated', 'aal1', 'books',                          'passe'),
+      ('T12 reseau, administration sans facteur aal1', 'reseau',   v_admin2::text, 'authenticated', 'aal1', 'books',                          'refus'),
+      ('T12 reseau, administration sans facteur aal2', 'reseau',   v_admin2::text, 'authenticated', 'aal2', 'books',                          'passe'),
+      ('T12 reseau, liste blanche',                    'reseau',   v_admin2::text, 'authenticated', 'aal1', 'rpc/fn_mon_etat_double_facteur',  'passe'),
+      ('T12 reseau, lecteur à facteur en aal1',        'reseau',   v_lect::text,   'authenticated', 'aal1', 'books',                          'refus'),
+      ('T12 reseau, coordination sans facteur',        'reseau',   v_coord::text,  'authenticated', 'aal1', 'rpc/fn_v2_lister',               'passe'),
+      ('T12 reseau, bibliothécaire sans facteur',      'reseau',   v_biblio::text, 'authenticated', 'aal1', 'emprestimos_v2',                 'passe'),
+      ('T12 facteurs, administration sans facteur',    'facteurs', v_admin2::text, 'authenticated', 'aal1', 'books',                          'passe'),
+      ('T12 equipes, administration sans facteur',     'equipes',  v_admin2::text, 'authenticated', 'aal1', 'books',                          'refus')
     ) AS c(t, mode, sub, role, aal, chemin, attendu)
   LOOP
     v_t := v_rec.t;
@@ -211,6 +228,25 @@ BEGIN
     IF (v_json ->> 'exige')::boolean OR (v_json ->> 'equipe')::boolean OR (v_json ->> 'a_facteur')::boolean THEN
       RAISE EXCEPTION 'lecteur à facteur inachevé : %', v_json;
     END IF;
+    PERFORM set_config('request.jwt.claims', '', true);
+    v_passed := v_passed + 1;
+  EXCEPTION WHEN OTHERS THEN PERFORM set_config('request.jwt.claims', '', true); v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+  -- ───────────────────────────────────────────────────────
+  v_t := 'T13 api.fn_mon_etat_double_facteur en mode reseau';
+  BEGIN
+    UPDATE private.double_facteur_reglage SET mode = 'reseau' WHERE id;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_admin2, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    v_json := api.fn_mon_etat_double_facteur();
+    IF NOT (v_json ->> 'mode' = 'reseau' AND (v_json ->> 'exige')::boolean AND (v_json ->> 'equipe')::boolean
+            AND NOT (v_json ->> 'a_facteur')::boolean) THEN
+      RAISE EXCEPTION 'administration sans appareil : %', v_json;
+    END IF;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_coord, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    v_json := api.fn_mon_etat_double_facteur();
+    IF (v_json ->> 'exige')::boolean THEN RAISE EXCEPTION 'coordination sans appareil, exigée en reseau : %', v_json; END IF;
+    PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', v_admin2, 'role', 'authenticated', 'aal', 'aal1')::text, true);
+    IF private.fn_session_double_facteur_ok() THEN RAISE EXCEPTION 'Storage : administration sans appareil admise en reseau'; END IF;
     PERFORM set_config('request.jwt.claims', '', true);
     v_passed := v_passed + 1;
   EXCEPTION WHEN OTHERS THEN PERFORM set_config('request.jwt.claims', '', true); v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;

@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "El lote sigue en «Publicación en curso»: «Reanudar la publicación» vuelve a intentar la página rechazada. Para corregir un borrador hace falta una nueva vuelta de revisión (la administración de la red reabre la revisión).",
   "error.batch.publishing_locked": "Este lote se está publicando: no se le añade ni se retoca nada sin una nueva vuelta de revisión.",
   "error.batch.publication_busy": "Este lote ya se está publicando desde otra llamada (otra pestaña u otra persona): espera a que termine y luego recarga la página.",
+  "twoFactor.admin.mode.reseau": "la administración de la red y las cuentas que han registrado un dispositivo",
   "twoFactor.title": "Autenticación en dos pasos",
   "twoFactor.intro": "Además de la contraseña, un código de seis cifras que cambia cada 30 segundos. Necesitas una aplicación de autenticación libre, que funcione sin conexión: Aegis o FreeOTP+ en el móvil, KeePassXC en el ordenador. Ningún SMS, ningún servicio externo.",
   "twoFactor.status.on": "{n, plural, one {Activa — # dispositivo registrado} other {Activa — # dispositivos registrados}}",

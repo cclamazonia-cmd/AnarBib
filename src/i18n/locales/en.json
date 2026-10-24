@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "The batch stays “Publication in progress”: “Resume publication” retries the refused page. To fix a draft, a new review round is needed (the network administration reopens the review).",
   "error.batch.publishing_locked": "This batch is being published: nothing can be added to it or edited without a new review round.",
   "error.batch.publication_busy": "This batch is already being published by another call (another tab or another person): wait for it to finish, then reload the page.",
+  "twoFactor.admin.mode.reseau": "network administration and accounts that have enrolled a device",
   "twoFactor.title": "Two-factor authentication",
   "twoFactor.intro": "On top of your password, a six-digit code that changes every 30 seconds. You need a free-software authenticator app that works offline: Aegis or FreeOTP+ on a phone, KeePassXC on a computer. No SMS, no outside service.",
   "twoFactor.status.on": "{n, plural, one {On — # device enrolled} other {On — # devices enrolled}}",

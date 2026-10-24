@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "Lotul rămâne „Publicare în curs”: „Reia publicarea” reîncearcă pagina refuzată. Ca să corectezi o ciornă, e nevoie de o nouă rundă de revizuire (administrarea rețelei redeschide revizuirea).",
   "error.batch.publishing_locked": "Acest lot e în curs de publicare: nu i se adaugă și nu i se modifică nimic fără o nouă rundă de revizuire.",
   "error.batch.publication_busy": "Acest lot e deja publicat de un alt apel (altă filă sau altă persoană): așteaptă să se termine, apoi reîncarcă pagina.",
+  "twoFactor.admin.mode.reseau": "administrarea rețelei și conturile care au înregistrat un dispozitiv",
   "twoFactor.title": "Autentificare în doi pași",
   "twoFactor.intro": "Pe lângă parolă, un cod de șase cifre care se schimbă la fiecare 30 de secunde. Ai nevoie de o aplicație de autentificare liberă, care funcționează offline: Aegis sau FreeOTP+ pe telefon, KeePassXC pe calculator. Fără SMS, fără serviciu extern.",
   "twoFactor.status.on": "{n, plural, one {Activă — # dispozitiv înregistrat} few {Activă — # dispozitive înregistrate} other {Activă — # de dispozitive înregistrate}}",

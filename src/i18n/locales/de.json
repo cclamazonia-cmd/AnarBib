@@ -7572,6 +7572,7 @@
   "catalogacao.batch.publication.howToResume": "Der Stapel bleibt „Veröffentlichung läuft“: „Veröffentlichung fortsetzen“ versucht die abgelehnte Seite erneut. Um einen Entwurf zu korrigieren, braucht es eine neue Prüfrunde (die Netzwerkverwaltung öffnet die Prüfung wieder).",
   "error.batch.publishing_locked": "Dieser Stapel wird gerade veröffentlicht: Ohne neue Prüfrunde lässt sich nichts hinzufügen oder ändern.",
   "error.batch.publication_busy": "Dieser Stapel wird bereits durch einen anderen Aufruf veröffentlicht (anderer Tab oder andere Person): Warte, bis er fertig ist, und lade dann die Seite neu.",
+  "twoFactor.admin.mode.reseau": "die Netzwerkverwaltung und Konten, die ein Gerät eingerichtet haben",
   "twoFactor.title": "Zwei-Faktor-Authentifizierung",
   "twoFactor.intro": "Zusätzlich zum Passwort ein sechsstelliger Code, der sich alle 30 Sekunden ändert. Du brauchst eine freie Authentifizierungs-App, die offline funktioniert: Aegis oder FreeOTP+ auf dem Telefon, KeePassXC auf dem Computer. Keine SMS, kein externer Dienst.",
   "twoFactor.status.on": "{n, plural, one {Aktiv — # Gerät eingerichtet} other {Aktiv — # Geräte eingerichtet}}",
