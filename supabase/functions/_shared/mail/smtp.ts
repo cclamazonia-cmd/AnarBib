@@ -21,6 +21,9 @@ export interface SmtpOptions {
   allowInsecure?: boolean; // true pour autoriser l'absence de STARTTLS sur port 25/587
   timeoutMs?: number; // timeout par commande/connexion (défaut: 15000 ms)
   from: string;
+  // Adresse d'ENVELOPPE (MAIL FROM, futur Return-Path) : là où reviennent les
+  // refus. Absente, c'est l'adresse du From (24/10/2026).
+  envelopeFrom?: string;
   to: string[];
   replyTo?: string;
   subject: string;
@@ -256,7 +259,7 @@ export async function sendViaSmtp(opts: SmtpOptions): Promise<string> {
 
     // Enveloppe MAIL FROM
     etape = "mail_from";
-    const fromEmail = extractEmail(opts.from);
+    const fromEmail = extractEmail(opts.envelopeFrom || opts.from);
     const mailFromRes = await client.sendCommand(`MAIL FROM:<${fromEmail}>`);
     if (!mailFromRes.startsWith("250")) {
       throw echec(`Échec MAIL FROM : ${mailFromRes}`, mailFromRes);

@@ -298,6 +298,15 @@ async function sendViaConfiguredSmtp(opts) {
   const secure = (Deno.env.get("SMTP_SECURE") || "").trim() === "true" || port === 465;
   const allowInsecure = (Deno.env.get("SMTP_ALLOW_INSECURE") || "").trim().toLowerCase() === "true";
   const timeoutMs = resolveTimeout(Deno.env.get("SMTP_TIMEOUT_MS"));
+  // 24/10/2026 — l'enveloppe était l'adresse du From, no-reply@notifications.anarbib.org,
+  // dont le domaine n'a ni MX ni A : un serveur qui vérifie l'expéditeur peut refuser,
+  // et le refus ne revient nulle part (deux alertes acceptées par le relais pour
+  // admins@anarbib.org ne sont jamais arrivées). SMTP_MAIL_FROM (anarbib@nodo50.org)
+  // fait revenir les refus dans la boîte du relais ; le From ne change pas, et le DMARC
+  // reste aligné par la signature DKIM de notifications.anarbib.org. Absente ou
+  // illisible : l'enveloppe reste le From, comme avant.
+  const enveloppe = (Deno.env.get("SMTP_MAIL_FROM") || "").trim();
+  const envelopeFrom = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(enveloppe) ? enveloppe : undefined;
 
   const suspendue = await authSmtpSuspendue();
   if (suspendue) {
@@ -319,6 +328,7 @@ async function sendViaConfiguredSmtp(opts) {
         allowInsecure,
         timeoutMs,
         from: formatAddress(r.senderEmail, r.senderName),
+        envelopeFrom,
         to: destinataires(opts),
         replyTo: r.replyToEmail ? formatAddress(r.replyToEmail, r.replyToName) : undefined,
         subject: opts.subject,

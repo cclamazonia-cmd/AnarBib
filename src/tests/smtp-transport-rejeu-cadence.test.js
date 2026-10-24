@@ -74,6 +74,19 @@ describe('smtp.ts — chaque erreur porte son étape et son code', () => {
     expect(entetes).not.toContain('@relais.test>');
   });
 
+  // 24/10/2026 — deux alertes acceptées par le relais pour admins@anarbib.org ne
+  // sont jamais arrivées, et le refus éventuel repartait vers le From, dont le
+  // domaine ne reçoit pas de courrier. L'enveloppe peut désormais être une autre adresse.
+  it('l’enveloppe (MAIL FROM) peut différer du From ; le From du message ne bouge pas', async () => {
+    const { conn, commandes, brut } = fauxRelais(['220 relais', '250 relais', ...AUTH_OK, '250 ok', '250 ok', '354 go', '250 2.0.0 Ok: queued as Y']);
+    const { sendViaSmtp } = smtpReel(async () => conn);
+    await sendViaSmtp(envoi({ envelopeFrom: 'anarbib@relais.test' }));
+    expect(commandes).toContain('MAIL FROM:<anarbib@relais.test>');
+    const entetes = brut.find((t) => t.startsWith('From: ')).split('\r\n\r\n')[0];
+    expect(entetes).toMatch(/^From: AnarBib <no-reply@exemple\.invalid>$/m);
+    expect(entetes).toMatch(/^Message-ID: <\d+\.[a-z0-9]+@exemple\.invalid>$/m);
+  });
+
   it('535 au mot de passe : étape auth, code 535, message inchangé', async () => {
     const { conn } = fauxRelais(['220 relais', '250 relais', '334 VXNlcm5hbWU6', '334 UGFzc3dvcmQ6', '535 5.7.8 Error: authentication failed']);
     const { sendViaSmtp } = smtpReel(async () => conn);
@@ -168,7 +181,7 @@ function monter(env = {}, base = fausseBase(), scenario = []) {
     '../mail/smtp.ts': {
       resolveTimeout: () => 1000,
       sendViaSmtp: async (o) => {
-        appels.push({ t: Date.now(), to: o.to });
+        appels.push({ t: Date.now(), to: o.to, from: o.from, envelopeFrom: o.envelopeFrom });
         const issue = scenario.shift();
         if (issue) throw issue;
         return '250 2.0.0 Ok: queued as X';
@@ -186,6 +199,22 @@ function monter(env = {}, base = fausseBase(), scenario = []) {
   return { ...mod.exports, appels, notes: base.lignes, temoins: base.temoins };
 }
 const opts = (label = 'user_mail') => ({ toEmail: 'lectrice@exemple.invalid', subject: 'Essai', html: '<p>x</p>', text: 'x', label });
+
+describe('transport SMTP — adresse d’enveloppe (SMTP_MAIL_FROM, 24/10/2026)', () => {
+  it('posée : elle part en enveloppe, le From reste celui du routage', async () => {
+    const { sendEmail, appels } = monter({ SMTP_MAIL_FROM: 'anarbib@relais.test' });
+    await sendEmail(opts());
+    expect(appels[0]).toMatchObject({ envelopeFrom: 'anarbib@relais.test', from: 'AnarBib <no-reply@exemple.invalid>' });
+  });
+
+  it('absente ou illisible : pas d’enveloppe à part, comme avant', async () => {
+    for (const valeur of ['', 'anarbib', 'AnarBib <anarbib@relais.test>', 'a b@relais.test']) {
+      const { sendEmail, appels } = monter({ SMTP_MAIL_FROM: valeur });
+      await sendEmail(opts());
+      expect(appels[0].envelopeFrom, JSON.stringify(valeur)).toBeUndefined();
+    }
+  });
+});
 
 describe('transport SMTP — rejeu des échecs temporaires', () => {
   it('un 421 puis une connexion rompue, puis le succès : le courriel part, trois essais, rien de noté', async () => {
