@@ -97,6 +97,16 @@ const lab = (list, key, k) => { const e = list.find((x) => x.key === key); retur
 const slug = (s) => s.toLowerCase().replace(/[^\p{L}\p{N} _-]/gu, '').replace(/ /g, '-');
 
 const items = D.items;
+// `verif` est un texte, un {fr, pt}, ou une liste de {fr, pt} datés (une entrée
+// par vérification). La liste se rendait « [object Object] » (relevé le 24/10 :
+// 34 items) : elle se lit désormais comme la suite de ses entrées, et vide,
+// elle vaut « non revérifié ». En mémoire seulement — le JSON garde sa liste.
+for (const i of items) {
+  if (!Array.isArray(i.verif)) continue;
+  i.verif = i.verif.length
+    ? { fr: i.verif.map((v) => L(v, 'fr')).join(' '), pt: i.verif.map((v) => L(v, 'pt')).join(' ') }
+    : undefined;
+}
 const byDomain = (dk) => items.filter((i) => i.d === dk);
 
 // --------------------------------------------------------------- fraîcheur

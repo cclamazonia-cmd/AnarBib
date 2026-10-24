@@ -11,7 +11,7 @@
       "fr": "Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir",
       "pt": "Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir"
     },
-    "maj": "2026-10-23",
+    "maj": "2026-10-24",
     "releve": {
       "date": "2026-10-22",
       "commit": "5e292baf"
@@ -3534,6 +3534,39 @@
           "fr": "**Clos le 23/10 : les gros écrans passent tous sous 60 Ko**, code déplacé tel quel (variables libres calculées par `@babel/traverse`). Catalogue public 57,5 Ko (`6215322d`), Mon compte 56 Ko et formulaire d'autorité 54 Ko (`8e062783`, correctif `baaefb73` : `const authorId = authorId;` laissé par le découpage, « Chercher » rendait un vide — vu par Xavier ; depuis, chaque découpage a son test MONTÉ, gestes joués). **Importations** 165 → 25,5 Ko (`9aca2848`, `f72cc400` : face Export et face Import toujours montées, masquées hors de leur onglet ; `ImportReviewQueue`, `ImportAddRecords`, `ImportAdapterStrip`, `ImportRunsList`, aides dans `importacoesOutils.jsx`). **Formulaire de notice** 132,8 → 56,5 Ko (`645091d0`, couverture comprise, décision de Xavier au questionnaire) : `BookCoverPanel` (image, galerie capas, page 1 du PDF, retrait, colonne de recherche — il ne touche le formulaire que par ce que la page lui passe), `BookCreationChoice`, `BookWorkPanel`, `BookDuplicatesPanel`, et l'enregistrement dans `useNoticePersistance.js` ; tests `notice-couverture-montee` et `notice-sections-montees` (formulaire entier monté : dépôt OCR enregistré avec son PDF, capa cherchée/choisie/envoyée/page 1/retirée, pop-up, Œuvre, Doublons). Vitest complet vert, lint, build ; en production le 23/10 à 21 h 21 (clés du hook lues dans le fichier servi). Vu par Xavier en production : Mon compte, autorité, Importations, notice (couverture, OCR, le reste) ; la pop-up « Nouveau document » absente sur son chemin était le comportement voulu (fiche pré-remplie ou choix déjà fait), rejouée en test.",
           "pt": "**Fechado em 23/10: todas as telas grandes abaixo de 60 Ko** — Importações 25,5 Ko, ficha de documento 56,5 Ko (capa incluída), testes montados com gestos; visto por Xavier em produção."
         }
+      ],
+      [
+        {
+          "fr": "Alerter sur les comportements anormaux (point 1 de la suite sécurité ; FED-O2 en mode comptage)",
+          "pt": "Alertar sobre comportamentos anormais (ponto 1 da sequência de segurança; FED-O2 em modo contagem)"
+        },
+        "2026-10-22",
+        {
+          "fr": "**En production le 22/10 (`9b16942b..d489d706`, migration `20261022223116_les_comportements_anormaux_ouvrent_un_incident`).** Le journal `private.consultations_nominatives` note qui consulte, par quelle fonction, dans quelle bibliothèque, combien de fiches et quand. Il ne note **jamais la personne consultée**. Les sondes `abus` et `consultations` de `health-probe` ouvrent un incident au-delà d'un seuil. Les alertes partent ensemble aux admins du réseau et à la boîte collective. Le journal est gardé 12 mois et part au flux court des sauvegardes. Le témoin voit aussi si la sonde ne tourne plus (`20261023153155`).",
+          "pt": "**Em produção em 22/10** (`9b16942b..d489d706`). O diário `private.consultations_nominatives` registra quem consulta, por qual função, em qual biblioteca, quantas fichas e quando — **nunca a pessoa consultada**; as sondas `abus` e `consultations` abrem um incidente acima de um limite, com alerta às administrações da rede e à caixa coletiva."
+        }
+      ],
+      [
+        {
+          "fr": "Un tiers ne peut plus bloquer le compte d'une personne (CONNEX-1)",
+          "pt": "Um terceiro não pode mais bloquear a conta de uma pessoa (CONNEX-1)"
+        },
+        "2026-10-23",
+        {
+          "fr": "**En production le 23/10 (migration `20261023162535_le_defi_anti_robots_sert_aussi_la_connexion`, fonction `login`).** Au-delà de cinq essais pour un compte, la connexion n'est plus fermée une heure. Chaque essai exige désormais une preuve de travail Altcha, valide et jamais servie. Le frein par adresse IP bloque toujours. REGISTRE 1.03.",
+          "pt": "**Em produção em 23/10.** Depois de cinco tentativas para uma conta, o login não fica mais fechado por uma hora: cada tentativa exige uma prova de trabalho Altcha válida e nunca usada. O freio por IP continua bloqueando."
+        }
+      ],
+      [
+        {
+          "fr": "L'effacement d'un compte traverse les journaux en ajout seul, avec une garde vivante",
+          "pt": "O apagamento de uma conta atravessa os diários só de inclusão, com uma guarda viva"
+        },
+        "2026-10-24",
+        {
+          "fr": "**En production les 23-24/10 (`2ca2480f`, `bfdf8b62`, `330a765b`).** `fn_delete_my_account` échouait pour toute personne qui avait agi d'une bibliothèque à l'autre. Le journal inter-bibliothèques et l'audit de l'administration refusaient tout UPDATE. Sous le drapeau de l'effacement, l'acteur est désormais re-pointé vers le jeton pseudonyme ; tout autre UPDATE ou DELETE reste refusé. La garde `effacement_declencheurs_garde_tests.sql` passe en revue tout déclencheur de refus sur les tables que l'effacement touche. Elle a trouvé trois autres blocages latents, réparés : le profil des bibliothèques (au jeton), les propositions de profil, les notes de lecture (l'autrice passe à NULL, la note reste publiée sous son pseudonyme, décision de Xavier).",
+          "pt": "**Em produção em 23-24/10.** `fn_delete_my_account` falhava para quem tinha agido de uma biblioteca para outra (diários que recusam qualquer UPDATE). O ator é re-apontado para o token pseudônimo sob a bandeira do apagamento; uma guarda revisa todo gatilho de recusa e encontrou três outros bloqueios, consertados (perfil das bibliotecas, propostas de perfil, notas de leitura — a nota fica sob o pseudônimo, decisão de Xavier)."
+        }
       ]
     ]
   },
@@ -6022,6 +6055,10 @@
         {
           "fr": "**23/10 — relevé : P9 est en production depuis le 21/10**, la fiche était en retard. Le rapport hors dépôt (`~/anarbib/_handoff/securite/AUDIT_phase1_2026-10-17.md`, section « Suivi des corrections ») le date : quatre commits `8b909326..5be16393`, runs 1944 et 1945 verts — comparaison des secrets en temps constant (onze `===` remplacés), garde avant lecture du corps et erreur interne générique, injection CSV, identifiant Wikidata borné, imports Deno épinglés, `react-router-dom` à jour, `.gitignore` des secrets, migration `20261021052640` (huit écritures fermées à `anon`), `search_path` de `fn_locale_from_idioma` ; banc `hygiene-p9` (10 tests). **Critère 1 tenu.** Critère 2 : le canal privé existe de fait — ce rapport, hors dépôt, tenu par la session « Sécurité et résistance d'AnarBib », qui y cadre la phase 2 (`PHASE2_cadrage_2026-10-23.md`) ; reste à le faire connaître de qui doit le lire (Xavier ne savait pas où il était).",
           "pt": "**23/10 — P9 em produção desde 21/10** (`8b909326..5be16393`, runs 1944/1945). Critério 1 cumprido. Canal privado: o relatório fora do repositório (`_handoff/securite/`); falta torná-lo conhecido."
+        },
+        {
+          "fr": "**24/10 — suite sécurité :** le rapport hors dépôt (`~/anarbib/_handoff/securite/AUDIT_phase1_2026-10-17.md`) est le canal de suivi des constats ouverts. Il a été tenu à chaque livraison des 22-24/10, et Xavier y a été renvoyé plusieurs fois. Le critère 2 se lit donc tenu. Clôture à prononcer par Xavier.",
+          "pt": "**24/10 — sequência de segurança:** o relatório fora do repositório (`_handoff/securite/`) é o canal de acompanhamento, mantido a cada entrega de 22-24/10 e conhecido de Xavier. Critério 2 cumprido; o fechamento cabe a Xavier."
         }
       ]
     },
@@ -6361,7 +6398,7 @@
       "id": "G24",
       "d": "G",
       "p": "P2",
-      "s": "ouvert",
+      "s": "en-cours",
       "e": "M",
       "sk": [
         "collectif"
@@ -6397,7 +6434,12 @@
       "r": [
         "Relecture des sessions du 16 au 19/10/2026"
       ],
-      "verif": []
+      "verif": [
+        {
+          "fr": "**24/10 — suite sécurité : deux des trois questions sont tranchées et appliquées ; la troisième reste à l'assemblée.** Les trois questions ont été instruites et inscrites au REGISTRE §48 (`RET-1` à `RET-5`, 21/10). Xavier a tranché lui-même la deuxième et la troisième ; la première est renvoyée à l'assemblée. *(1) Ce que l'administration du réseau peut lire* : `RET-5`, **ouvert**, porté à l'assemblée (proposition B + C, avec le journal de A). *(2) Le contenu du rapport hebdomadaire* : `RET-1`, **livré le 23/10** (`8da59aa5`) — dix-huit compteurs et un lien vers le panneau, plus aucun nom, courriel ni titre rattaché à une personne ; la bibliothèque abonnée a été prévenue avant la bascule. *(3) Les données jamais purgées* : `RET-2`/`RET-3`, **livrés et activés le 23-24/10**. Les plafonds du réseau sont posés dans la table et dans `fn_set_retention_policy` (`30e05f5c`). La purge complète `fn_purge_retention` a été essayée à blanc en production, puis activée chaque dimanche à 3 h UTC (`9dc10e5f`, retour arrière dans le fichier `_rollback_`). Elle couvre toutes les bibliothèques, y compris les inactives. Le préavis à 30 jours suit la purge (`77a93715` : messagerie, lecture en cours et liste d'envies). La page de confidentialité est à jour dans l'app et sur la vitrine, sauvegardes comprises (`53fdfc4d`, `5fc97412`) ; la file d'envoi des signalements sort des sauvegardes. Restent : `RET-4` (correspondance entre bibliothèques, cotisations : au collectif, avec une vérification juridique) et `RET-5`. Premier passage réel de la purge : dimanche 25/10.",
+          "pt": "**24/10 — sequência de segurança: duas das três questões foram decididas e aplicadas; a terceira fica para a assembleia.** As três questões foram instruídas e inscritas no REGISTRO §48 (`RET-1` a `RET-5`, 21/10). Xavier decidiu ele mesmo a segunda e a terceira; a primeira foi remetida à assembleia. *(1) O que a administração da rede pode ler*: `RET-5`, **aberto**, levado à assembleia. *(2) O conteúdo do relatório semanal*: `RET-1`, **entregue em 23/10** (`8da59aa5`) — dezoito contadores e um link para o painel, nenhum nome, e-mail ou título ligado a uma pessoa. *(3) Os dados nunca purgados*: `RET-2`/`RET-3`, **entregues e ativados em 23-24/10**. Os tetos da rede estão na tabela e em `fn_set_retention_policy`. A purga completa `fn_purge_retention` foi testada a seco em produção e depois ativada todo domingo às 3h UTC; ela cobre todas as bibliotecas, inclusive as inativas. O aviso de 30 dias acompanha a purga (`77a93715`), e a página de privacidade está atualizada, cópias de segurança incluídas. Restam `RET-4` (ao coletivo) e `RET-5`."
+        }
+      ]
     },
     {
       "id": "H35",
