@@ -10,8 +10,9 @@
 # Par défaut le script MONTRE seulement : le commit retenu, le nom, les notes.
 # Avec --publier, il pose le tag annoté, le pousse sur Codeberg, crée la
 # release (notes, sans fichier), puis recopie le miroir de l'ISO du camarade
-# (scripts/miroirs/miroir-iso.sh, convenu le 17/10). Le tag sur GitHub se pousse
-# ensuite depuis Windows (le jeton GitHub est dans wincred).
+# (scripts/miroirs/miroir-iso.sh, convenu le 17/10). Les miroirs Framagit
+# (poussé par Codeberg) et gitliberty (tiré toutes les 8 h) suivent seuls : plus
+# de tag à pousser sur GitHub, dont le dépôt est archivé (O6, 24/10/2026).
 #
 #   bash scripts/versions/publier-version.sh             # aperçu
 #   bash scripts/versions/publier-version.sh --publier   # publication
@@ -109,4 +110,3 @@ rm -f "$NOTES.json"
 [ "$code" = "201" ] && echo "✓ Release $NOM créée." || echo "⚠ Release non créée (HTTP $code) — le tag existe, la créer à la main."
 
 bash scripts/miroirs/miroir-iso.sh || echo "⚠ Miroir de l'ISO non recopié — relancer scripts/miroirs/miroir-iso.sh."
-echo "Reste : pousser le tag sur GitHub depuis Windows (refs/tags/$NOM)."

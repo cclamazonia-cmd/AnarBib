@@ -110,7 +110,7 @@ jobs:
         # Épinglé par commit (v4.4.0, 19/10/2026) ; persist-credentials: false :
         # npm ci, lint, tests et build exécutent du code tiers, qui n'a pas à
         # trouver le jeton du dépôt dans .git/config.
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        uses: https://data.forgejo.org/actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 1
           persist-credentials: false
@@ -414,7 +414,7 @@ jobs:
 
       - name: Checkout (shallow)
         # Épinglé par commit (v4.4.0, 19/10/2026). Jeton gardé : le script pousse le tag deployed-functions.
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        uses: https://data.forgejo.org/actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 1
 

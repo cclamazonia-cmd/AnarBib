@@ -84,7 +84,7 @@ jobs:
           echo "✓ outils prêts ($(psql --version))"
 
       - name: Checkout (shallow)
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
+        uses: https://data.forgejo.org/actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
         with:
           fetch-depth: 1
           persist-credentials: false
@@ -131,7 +131,7 @@ jobs:
           echo "✓ outils prêts ($(psql --version))"
 
       - name: Checkout (shallow)
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
+        uses: https://data.forgejo.org/actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0, épinglé le 19/10/2026
         with:
           fetch-depth: 1
           persist-credentials: false

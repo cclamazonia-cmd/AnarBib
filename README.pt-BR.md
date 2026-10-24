@@ -83,7 +83,7 @@ npm test
 - [`docs/specs/REGISTRE_decisions.md`](docs/specs/REGISTRE_decisions.md) — o registro de decisões, que é a referência.
 - [`docs/backlogs/`](docs/backlogs/INDEX.md) — o que está em andamento, o que falta fazer e os números do projeto, datados.
 
-O repositório de referência está no Codeberg; cada envio para a branch `main` dispara ali a integração contínua (testes, depois implantação). O espelho no GitHub não é mais sincronizado. A maior parte da documentação do projeto está escrita em francês.
+O repositório de referência está no Codeberg; cada envio para a branch `main` dispara ali a integração contínua (testes, depois implantação). Se o Codeberg estiver fora do ar, duas cópias fora dos Estados Unidos acompanham o repositório automaticamente: o [Framagit](https://framagit.org/AnarBib/anarbib) (Framasoft), atualizado pelo Codeberg a cada envio, e o [gitliberty](https://gitliberty.unionlibertaireanarchiste.org/anar/anarbib), atualizado a cada 8 horas. O repositório no GitHub será arquivado. A maior parte da documentação do projeto está escrita em francês.
 
 ## Licenças
 

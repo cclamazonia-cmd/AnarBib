@@ -83,7 +83,7 @@ npm test
 - [`docs/specs/REGISTRE_decisions.md`](docs/specs/REGISTRE_decisions.md) — le registre des décisions, qui fait foi.
 - [`docs/backlogs/`](docs/backlogs/INDEX.md) — ce qui est en cours, ce qui reste à faire, et l'état chiffré du projet, daté.
 
-Le dépôt de référence est sur Codeberg ; chaque envoi sur la branche `main` y déclenche l'intégration continue (tests, puis déploiement). Le miroir GitHub n'est plus synchronisé.
+Le dépôt de référence est sur Codeberg ; chaque envoi sur la branche `main` y déclenche l'intégration continue (tests, puis déploiement). Si Codeberg est indisponible, deux copies hors des États-Unis suivent le dépôt automatiquement : [Framagit](https://framagit.org/AnarBib/anarbib) (Framasoft), poussée par Codeberg à chaque envoi, et [gitliberty](https://gitliberty.unionlibertaireanarchiste.org/anar/anarbib), rafraîchie toutes les 8 heures. Le dépôt GitHub sera archivé.
 
 ## Licences
 
