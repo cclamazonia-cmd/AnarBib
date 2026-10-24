@@ -35,26 +35,36 @@ export type TacheForgejo = {
 export const SEUIL_ATTENTE_MIN = 120;
 export const SEUIL_ECHEC_MIN = 30;
 const TERMINEES = new Set(['success', 'failure', 'cancelled', 'skipped']);
-const JOBS_DEPLOIEMENT = new Set(['app', 'backend']);
+// Lu par tâche (`actions/tasks`) : les jobs app et backend ; lu par exécution
+// (`actions/runs`) : le workflow ci.yml, qui les porte tous deux.
+const JOBS_DEPLOIEMENT = new Set(['app', 'backend', 'ci.yml']);
 
-/** Lit les tâches par l'API de la forge. `null` = on ne sait rien (504, réseau). */
+// 24/10/2026 — `actions/tasks` répond 504 au bout de 30 s (même `limit=5`) ;
+// l'appel planifié de health-probe coupe lui aussi à 30 s : la sonde était
+// aveugle cinq heures sur six. `actions/runs` répond en ~10 s : c'est lui
+// qu'on lit par défaut (health-probe, FORGE_TASKS_URL). Ses éléments ont
+// d'autres noms de champs (workflow_id, commit_sha, created, updated) ; les
+// deux formes sont acceptées. Le délai reste sous les 30 s de l'appel.
+export const DELAI_FORGE_MS = 20_000;
+
+/** Lit les tâches (ou exécutions) par l'API de la forge. `null` = on ne sait rien (504, réseau). */
 export async function lireTachesForgejo(
   url: string,
   fetchFn: typeof fetch = fetch,
 ): Promise<TacheForgejo[] | null> {
   try {
-    const r = await fetchFn(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(40_000) });
+    const r = await fetchFn(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(DELAI_FORGE_MS) });
     if (!r.ok) return null;
     const j = await r.json();
     const liste = Array.isArray(j?.workflow_runs) ? j.workflow_runs : null;
     if (!liste) return null;
     return liste.map((t: Record<string, unknown>) => ({
       id: Number(t.id),
-      name: String(t.name ?? ''),
+      name: String(t.name ?? t.workflow_id ?? ''),
       status: String(t.status ?? ''),
-      head_sha: String(t.head_sha ?? ''),
-      created_at: String(t.created_at ?? ''),
-      updated_at: String(t.updated_at ?? ''),
+      head_sha: String(t.head_sha ?? t.commit_sha ?? ''),
+      created_at: String(t.created_at ?? t.created ?? ''),
+      updated_at: String(t.updated_at ?? t.updated ?? ''),
     }));
   } catch {
     return null;
@@ -97,7 +107,7 @@ export function diagnostiquerCi(
     raisons.push(`${enAttente.length} tâche(s) non terminée(s) depuis plus de ${seuils.attente} min (la plus ancienne : ${plusVieille.name}, commit ${court(plusVieille.head_sha)}, ${heure(plusVieille.created_at)})`);
   }
   for (const e of echecs) {
-    raisons.push(`dernier job ${e.name} en échec (commit ${court(e.head_sha)}, ${heure(e.updated_at)}), rien de plus récent`);
+    raisons.push(`${e.name.endsWith('.yml') ? 'dernière exécution' : 'dernier job'} ${e.name} en échec (commit ${court(e.head_sha)}, ${heure(e.updated_at)}), rien de plus récent`);
   }
   return { ok: raisons.length === 0, raison: raisons.join(' ; '), enAttente, echecs };
 }

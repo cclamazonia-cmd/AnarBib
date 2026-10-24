@@ -41,8 +41,13 @@ const SEUIL_LENT_MS = 3000;
 const RETENTION_JOURS = 30;
 // A3 — la liste des tâches de la forge (API publique, sans jeton). Vide : sonde
 // coupée (une instance sans CI Forgejo). Jamais en dur ailleurs qu'ici.
+// 24/10/2026 : les EXÉCUTIONS (`actions/runs`), plus les tâches — `actions/tasks`
+// répond 504 au bout de 30 s (_shared/ci/forgejo-tasks.ts). Dix suffisent d'ordinaire
+// (deux par push) ; si une panne en accumule davantage, les plus récentes passent
+// le seuil à leur tour, une heure plus tard. Chaque élément porte son
+// `event_payload` (~130 Ko) : ne pas monter `limit` sans raison.
 const FORGE_TASKS_URL = Deno.env.get('FORGE_TASKS_URL')
-  ?? 'https://codeberg.org/api/v1/repos/anarbib/anarbib/actions/tasks?limit=40';
+  ?? 'https://codeberg.org/api/v1/repos/anarbib/anarbib/actions/runs?limit=10';
 
 const NETWORK_CTX = {
   use_library_logo: false,

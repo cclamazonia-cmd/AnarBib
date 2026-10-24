@@ -78,6 +78,50 @@ describe('diagnostiquerCi — la règle', () => {
   });
 });
 
+// 24/10/2026 — `actions/tasks` répondait 504 au bout de 30 s ; la sonde lit
+// désormais `actions/runs`, dont les éléments ont d'autres noms de champs
+// (extrait réel du 24/10, `event_payload` et `repository` retirés).
+describe('lireTachesForgejo — les exécutions (`actions/runs`)', () => {
+  const r = (id, workflow_id, status, commit_sha, created, updated) => ({ id, workflow_id, status, commit_sha, created, updated, event: 'push', prettyref: 'main' });
+  const RUNS = {
+    total_count: 2042,
+    workflow_runs: [
+      r(7986224, 'ci.yml', 'failure', '76b159e694bc44e661ac3526c284f46732ea01d2', '2026-10-24T14:52:44+02:00', '2026-10-24T15:05:04+02:00'),
+      r(7986146, 'sql-tests.yml', 'failure', 'df6ea581959908d8659673e899cdbaa096e9207d', '2026-10-24T14:45:53+02:00', '2026-10-24T15:04:07+02:00'),
+      r(7986143, 'ci.yml', 'success', 'df6ea581959908d8659673e899cdbaa096e9207d', '2026-10-24T14:45:52+02:00', '2026-10-24T15:04:36+02:00'),
+    ],
+  };
+  const repondre = (corps, ok = true) => async () => ({ ok, json: async () => corps });
+
+  it('les champs des exécutions sont lus comme ceux des tâches', async () => {
+    const lues = await reel.lireTachesForgejo('https://forge/runs', repondre(RUNS));
+    expect(lues[0]).toEqual({ id: 7986224, name: 'ci.yml', status: 'failure', head_sha: '76b159e694bc44e661ac3526c284f46732ea01d2', created_at: '2026-10-24T14:52:44+02:00', updated_at: '2026-10-24T15:05:04+02:00' });
+  });
+
+  it('un ci.yml en échec depuis plus de 30 min est un déploiement en retard ; un sql-tests.yml rouge, non', async () => {
+    const lues = await reel.lireTachesForgejo('https://forge/runs', repondre(RUNS));
+    const d = diagnostiquerCi(lues, new Date('2026-10-24T16:00:00+02:00'));
+    expect(d.ok).toBe(false);
+    expect(d.echecs.map((e) => e.name)).toEqual(['ci.yml']);
+    expect(d.raison).toMatch(/dernière exécution ci\.yml en échec \(commit 76b159e6/);
+    // un ci.yml vert plus récent efface l'échec
+    const vert = [{ ...lues[0], id: 7986300, status: 'success' }, ...lues];
+    expect(diagnostiquerCi(vert, new Date('2026-10-24T16:00:00+02:00')).ok).toBe(true);
+  });
+
+  it('504 de la forge : on ne sait rien (null)', async () => {
+    expect(await reel.lireTachesForgejo('https://forge/tasks', repondre({}, false))).toBeNull();
+  });
+
+  it('la lecture abandonne avant les 30 s de l’appel planifié', async () => {
+    expect(reel.DELAI_FORGE_MS).toBeLessThan(30_000);
+    let signal;
+    const pendue = (_u, init) => { signal = init.signal; return new Promise(() => {}); };
+    reel.lireTachesForgejo('https://forge/runs', pendue);
+    expect(signal).toBeInstanceOf(AbortSignal);
+  });
+});
+
 describe('decisionSondeCi', () => {
   const rouge = { ok: false, raison: 'x', enAttente: [], echecs: [] };
   const vert = { ok: true, raison: '', enAttente: [], echecs: [] };
