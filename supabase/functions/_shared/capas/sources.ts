@@ -367,25 +367,42 @@ export async function sonderSourcesCapas(): Promise<BilanCapas> {
 }
 
 /**
- * Que faire de ce tour de sonde ? On n'alerte qu'au DEUXIÈME échec consécutif :
- * Open Library a des pannes passagères, et un courriel pour une heure de
- * maintenance chez une association serait du bruit. L'état entre deux tours
- * vit dans l'incident lui-même (`notified_at`).
- *   - échec, aucun incident            → l'ouvrir SANS alerter (premier échec) ;
- *   - échec, incident non signalé      → alerter (second échec d'affilée) ;
- *   - échec, incident déjà signalé     → rien ;
- *   - succès, incident non signalé     → le clore sans rien envoyer (hoquet) ;
- *   - succès, incident signalé         → le clore et prévenir.
+ * Que faire de ce tour de sonde ? On n'alerte qu'au TROISIÈME échec horaire
+ * consécutif, soit deux heures de panne : Open Library a des lenteurs passagères
+ * (23-24/10/2026 : trois fois en deux jours, des réponses en 19-20 s pour un
+ * délai de 9 s), et un courriel pour une heure de lenteur chez une association
+ * serait du bruit (décision de Xavier, 24/10 : « rends la sonde plus patiente »).
+ * Le tour ne peut pas réessayer lui-même : l'appel planifié coupe à 30 s, et un
+ * tour en échec en prend déjà ~26 (attente + courriels). L'état entre deux tours
+ * vit dans l'incident lui-même : son ÂGE compte les échecs (`opened_at`, ouvert
+ * au premier), `notified_at` dit si l'on a alerté — une sonde lancée à la main
+ * entre deux heures (`capas: true`) n'avance donc pas l'alerte.
+ *   - échec, aucun incident                   → l'ouvrir SANS alerter (premier échec) ;
+ *   - échec, incident non signalé, < 2 h      → patienter (deuxième échec) ;
+ *   - échec, incident non signalé, ≥ 2 h      → alerter (troisième échec d'affilée) ;
+ *   - échec, incident déjà signalé            → rien ;
+ *   - succès, incident non signalé            → le clore sans rien envoyer (hoquet) ;
+ *   - succès, incident signalé                → le clore et prévenir.
  */
-export type DecisionSondeCapas = 'ouvrir' | 'alerter' | 'rien' | 'clore' | 'clore_et_prevenir';
+export type DecisionSondeCapas = 'ouvrir' | 'patienter' | 'alerter' | 'rien' | 'clore' | 'clore_et_prevenir';
+
+export const ECHECS_AVANT_ALERTE_CAPAS = 3;
+// Les tours tombent aux minutes 0 à 4 de chaque heure : le troisième arrive
+// ~120 min après l'ouverture ; un quart d'heure de marge pour leur dérive.
+export const AGE_ALERTE_CAPAS_MS = ((ECHECS_AVANT_ALERTE_CAPAS - 1) * 60 - 15) * 60_000;
 
 export function decisionSondeCapas(
   ok: boolean,
-  incident: { notified_at: string | null } | null,
+  incident: { notified_at: string | null; opened_at?: string | null } | null,
+  maintenant: number = Date.now(),
 ): DecisionSondeCapas {
   if (!ok) {
     if (!incident) return 'ouvrir';
-    return incident.notified_at ? 'rien' : 'alerter';
+    if (incident.notified_at) return 'rien';
+    const ouvert = Date.parse(incident.opened_at ?? '');
+    // Sans date lisible, on ne retient pas l'alerte indéfiniment.
+    if (Number.isFinite(ouvert) && maintenant - ouvert < AGE_ALERTE_CAPAS_MS) return 'patienter';
+    return 'alerter';
   }
   if (!incident) return 'rien';
   return incident.notified_at ? 'clore_et_prevenir' : 'clore';

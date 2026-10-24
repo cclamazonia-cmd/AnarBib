@@ -846,9 +846,9 @@ Deno.serve(async (req: Request) => {
   // Une fois par heure — le tick des minutes 0 à 4, le cron passant toutes les
   // cinq minutes — ou sur demande (`capas: true`, protégé par le secret comme
   // le reste) : ce sont des communs associatifs, pas des services à marteler.
-  // Et l'on n'alerte qu'au DEUXIÈME échec d'affilée (decisionSondeCapas) :
-  // Open Library a des pannes passagères. L'état entre deux heures vit dans
-  // l'incident lui-même (`notified_at`).
+  // Et l'on n'alerte qu'au TROISIÈME échec horaire d'affilée (decisionSondeCapas,
+  // 24/10/2026 ; c'était le deuxième) : Open Library a des lenteurs passagères.
+  // L'état entre deux heures vit dans l'incident lui-même (`opened_at`, `notified_at`).
   let actionCapas = 'pas de mesure à ce tour (une par heure)';
   let bilanCapas: BilanCapas | null = null;
   if (charge?.capas === true || new Date().getUTCMinutes() < 5) {
@@ -874,12 +874,14 @@ Deno.serve(async (req: Request) => {
         .insert({ kind: 'capas_sources', reason: raisonCapas });
       actionCapas = errCapas
         ? `incident NON enregistré (${errCapas.message})`
-        : 'premier échec : incident ouvert sans alerte, confirmation à l’heure suivante';
+        : 'premier échec : incident ouvert sans alerte, confirmation dans deux heures';
+    } else if (decision === 'patienter') {
+      actionCapas = 'deuxième échec d’affilée : pas encore d’alerte, une heure de plus';
     } else if (decision === 'alerter' && incCapas) {
       const n = await alerter(
         'AnarBib — une source de couvertures ne répond plus',
         'Capas : une source témoin ne rend plus sa couverture',
-        `<p style="margin:0 0 10px">La sonde horaire des sources de couvertures a échoué deux fois de suite. <strong>Ce n'est pas une panne du service :</strong> le catalogue répond. C'est la recherche de couvertures de l'écran de catalogage qui ne trouve plus rien par les voies nommées ci-dessous — et l'écran, lui, dit seulement que la source ne répond pas.</p>
+        `<p style="margin:0 0 10px">La sonde horaire des sources de couvertures a échoué trois fois de suite, soit depuis plus de deux heures. <strong>Ce n'est pas une panne du service :</strong> le catalogue répond. C'est la recherche de couvertures de l'écran de catalogage qui ne trouve plus rien par les voies nommées ci-dessous — et l'écran, lui, dit seulement que la source ne répond pas.</p>
          <p style="margin:0 0 10px">Voies en échec : ${esc(raisonCapas)}</p>
          <p style="margin:0 0 10px"><strong>Que faire :</strong> ouvrir à la main l'adresse de la voie (Open Library : https://openlibrary.org/api/books.json?bibkeys=ISBN:1904859062&amp;jscmd=data — Inventaire : https://inventaire.io/api/entities/by-uris?uris=isbn:9782296035072). Un 404 ou une réponse de forme nouvelle : la source a changé son contrat, à reprendre dans supabase/functions/_shared/capas/sources.ts. Une réponse correcte sans couverture : le témoin a bougé, en choisir un autre (TEMOINS_CAPAS). Une panne longue de la source se refermera d'elle-même à son retour.</p>
          <p style="margin:0">Un e-mail suivra quand les voies répondront de nouveau.</p>`,
@@ -888,7 +890,7 @@ Deno.serve(async (req: Request) => {
         .from('service_health_incidents')
         .update({ notified_at: new Date().toISOString(), reason: raisonCapas })
         .eq('id', incCapas.id);
-      actionCapas = `second échec d'affilée : incident signalé, ${n} destinataire(s) alerté(s)`;
+      actionCapas = `troisième échec d'affilée : incident signalé, ${n} destinataire(s) alerté(s)`;
     } else if ((decision === 'clore' || decision === 'clore_et_prevenir') && incCapas) {
       await supabaseAdmin
         .from('service_health_incidents')
@@ -904,7 +906,7 @@ Deno.serve(async (req: Request) => {
         );
         actionCapas = `incident clos, ${n} destinataire(s) prévenu(s)`;
       } else {
-        actionCapas = 'hoquet d’une heure : incident clos sans alerte';
+        actionCapas = 'hoquet de moins de deux heures : incident clos sans alerte';
       }
     } else {
       actionCapas = bilanCapas.ok ? 'sources témoins vertes' : 'incident déjà signalé, toujours ouvert';

@@ -489,9 +489,18 @@ describe('_shared/capas/sources.ts', () => {
     expect(bilan.sources.filter((s) => s.ok)).toHaveLength(2);
   });
 
-  it('décision de la sonde : on n’alerte qu’au DEUXIÈME échec consécutif', () => {
+  it('décision de la sonde : on n’alerte qu’au TROISIÈME échec horaire consécutif (24/10/2026)', () => {
     const { decisionSondeCapas: d } = mod();
+    const ouvert = '2026-10-24T11:00:14Z';
+    const a = (hhmm) => Date.parse(`2026-10-24T${hhmm}:00Z`);
     expect(d(false, null)).toBe('ouvrir');
+    // deuxième tour (12:00), une sonde à la main entre deux (12:40) : on patiente
+    expect(d(false, { notified_at: null, opened_at: ouvert }, a('12:00'))).toBe('patienter');
+    expect(d(false, { notified_at: null, opened_at: ouvert }, a('12:40'))).toBe('patienter');
+    // troisième tour (13:00, voire 13:02) : on alerte
+    expect(d(false, { notified_at: null, opened_at: ouvert }, a('13:00'))).toBe('alerter');
+    expect(d(false, { notified_at: null, opened_at: ouvert }, a('13:02'))).toBe('alerter');
+    // sans date lisible, l'alerte n'est pas retenue indéfiniment
     expect(d(false, { notified_at: null })).toBe('alerter');
     expect(d(false, { notified_at: '2026-09-27T10:00:00Z' })).toBe('rien');
     expect(d(true, null)).toBe('rien');

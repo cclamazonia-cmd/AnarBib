@@ -8,9 +8,10 @@
 // POURQUOI. La voie ISBN de cover_lookup est restée en 404 chez Open Library
 // pendant une durée inconnue sans que rien ne le dise. health-probe appelle
 // désormais les sources une fois par heure, par le même code que cover_lookup.
-// Ce banc tient la règle d'alerte : RIEN au premier échec (Open Library a des
-// pannes passagères), l'alerte au deuxième d'affilée, la clôture au retour —
-// avec un courriel seulement si l'on avait alerté.
+// Ce banc tient la règle d'alerte : RIEN aux deux premiers échecs (Open Library
+// a des lenteurs passagères), l'alerte au troisième d'affilée (24/10/2026 ;
+// c'était le deuxième), la clôture au retour — avec un courriel seulement si
+// l'on avait alerté.
 //
 // Harnais : helpers/monter-ef.js démarre health-probe avec ses vrais modules
 // partagés (courriel, destinataires, transport). Remplacé ici, par suffixe
@@ -82,15 +83,30 @@ describe('health-probe — sonde témoin des sources de capas', () => {
     expect(corps.sources_capas).toEqual(ROUGE);
   });
 
-  it('deuxième échec d’affilée : les admins sont alerté·es, l’incident est marqué signalé', async () => {
+  // 24/10/2026 (décision de Xavier) : une heure de lenteur d'Open Library
+  // n'alerte plus — l'alerte attend le troisième tour en échec.
+  it('deuxième échec d’affilée : toujours pas de courriel, l’incident reste tel quel', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-09-27T13:01:00Z'));
+    const s = monter({ bilan: ROUGE, incident: { id: 7, opened_at: '2026-09-27T12:00:00Z', reason: 'openlibrary : HTTP 404', notified_at: null } });
+    const { corps } = await s.appeler({ capas: true });
+    expect(s.sujets()).toEqual([]);
+    expect(s.incidentsCapas()).toEqual([]);
+    expect(corps.action_capas).toMatch(/^deuxième échec/);
+  });
+
+  it('troisième échec d’affilée : les admins sont alerté·es, l’incident est marqué signalé', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-09-27T14:01:00Z'));
     const s = monter({ bilan: ROUGE, incident: { id: 7, opened_at: '2026-09-27T12:00:00Z', reason: 'openlibrary : HTTP 404', notified_at: null } });
     const { corps } = await s.appeler({ capas: true });
     expect(s.sujets()).toContain(SUJET_ALERTE);
+    expect(s.ef.envois.find((e) => e.subject === SUJET_ALERTE).html).toContain('trois fois de suite');
     const maj = s.incidentsCapas().find((e) => e.op === 'update');
     expect(maj.donnees.notified_at).toBeTruthy();
     expect(maj.chaine.find((c) => c.op === 'eq').args).toEqual(['id', 7]);
     expect(s.incidentsCapas().some((e) => e.op === 'insert')).toBe(false);
-    expect(corps.action_capas).toMatch(/^second échec/);
+    expect(corps.action_capas).toMatch(/^troisième échec/);
   });
 
   it('échec persistant, déjà signalé : ni nouvel incident, ni nouveau courriel', async () => {
