@@ -58,10 +58,14 @@ describe('backlog v34 — les fichiers engendrés correspondent au JSON', () => 
 
   it('la ligne de fraîcheur compte les items vérifiés du JSON', () => {
     const D = JSON.parse(readFileSync(path.join(DOCS, 'backlog-v34.json'), 'utf8'));
-    const verifies = D.items.filter((i) => i.verif).map((i) => i.id);
+    // 24/10/2026 : une liste de vérifications vide ne compte pas — même règle
+    // que scripts/build-backlog.cjs, qui rend désormais les listes datées.
+    const aVerif = (v) => (Array.isArray(v) ? v.length > 0 : Boolean(v));
+    const verifies = D.items.filter((i) => aVerif(i.verif)).map((i) => i.id);
     const md = readFileSync(path.join(bac, 'AnarBib-Backlog-2026-08-29-v34.md'), 'utf8');
     expect(md).toContain(`**${verifies.length} items sur ${D.items.length}**`);
     for (const id of verifies) expect(md).toContain(id);
+    expect(md).not.toContain('[object Object]');
   });
 });
 
